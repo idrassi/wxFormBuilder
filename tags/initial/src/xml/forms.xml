@@ -1,0 +1,32 @@
+<package name="forms" desc="wxWidgets windows">
+  <objectinfo class="Frame" icon="frame.xpm" type="form">
+    <inherits class="wxWindow" />
+    <property name="name" type="text" hidden="1">MyFrame</property>
+    <property name="size" type="wxSize">500,300</property>
+    <codegen language="C++">
+      <template name="base">public wxFrame</template>
+      <template name="cons_decl">$name(wxWindow *parent, int id = -1);</template>
+      <template name="cons_def">$name::$name(wxWindow *parent, int id) : wxFrame(parent,id)</template>
+    </codegen>
+  </objectinfo>
+  <objectinfo class="Panel" icon="panel.xpm" type="form">
+    <inherits class="wxWindow" />
+    <property name="name" type="text" hidden="1">MyPanel</property>
+    <property name="size" type="wxSize">500,300</property>
+    <codegen language="C++">
+      <template name="base">public wxPanel</template>
+      <template name="cons_decl">$name(wxWindow *parent, int id = -1);</template>
+      <template name="cons_def">$name::$name(wxWindow *parent, int id) : wxPanel(parent,id)</template>
+    </codegen>
+  </objectinfo>
+  <objectinfo class="Dialog" icon="dialog.xpm" type="form" base="wxDialog">
+    <inherits class="wxWindow" />
+    <property name="name" type="text" hidden="1">MyDialog</property>
+    <property name="size" type="wxSize" />
+    <codegen language="C++">
+      <template name="base">public wxDialog</template>
+      <template name="cons_decl">$name(wxWindow *parent, int id = -1);</template>
+      <template name="cons_def">$name::$name(wxWindow *parent, int id) : wxDialog(parent,id,wxString("MyDialog"))</template>
+    </codegen>
+  </objectinfo>
+</package>

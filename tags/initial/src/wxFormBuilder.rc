@@ -1,0 +1,3 @@
+//rcinclude "wx/msw/wx.rc"
+
+wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
