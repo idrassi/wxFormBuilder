@@ -1,0 +1,6 @@
+<packages>
+  <package file="common.xml" />
+  <package file="layout.xml" />
+  <package file="forms.xml" />
+  <package file="mmwx.xml" />
+</packages>
