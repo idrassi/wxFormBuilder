@@ -146,7 +146,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   
   // la paleta de componentes, no es un observador propiamente dicho, ya
   // que no responde ante los eventos de la aplicación
-  m_palette = new Palette(right,-1);
+  m_palette = new wxFbPalette(right,-1);
   m_palette->SetData(data);
   m_palette->Create();
   

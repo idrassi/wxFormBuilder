@@ -28,13 +28,13 @@
 #include <wx/notebook.h>
 #include "rad/appobserver.h"
 
-class Palette : public DataObserver, public wxPanel
+class wxFbPalette : public DataObserver, public wxPanel
 {
  private:
   wxNotebook *m_notebook;
    
  public:
-  Palette(wxWindow *parent,int id);
+  wxFbPalette(wxWindow *parent,int id);
 
   /**
    * Crea la paleta, previamente se ha debido configurar el objeto

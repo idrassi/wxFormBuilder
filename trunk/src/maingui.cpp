@@ -59,7 +59,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
   wxInitAllImageHandlers();
-  
+
   wxBitmap bitmap;    
   if (bitmap.LoadFile(wxT("splash.png"), wxBITMAP_TYPE_PNG))
   {

@@ -46,7 +46,7 @@ class MainFrame : public DataObserver, public wxFrame
   #endif //__WXFB_DEBUG__
 
   wxNotebook *m_notebook;
-  Palette *m_palette;
+  wxFbPalette *m_palette;
   ObjectTree *m_objTree;
   ObjectInspector *m_objInsp;
   ToolPanel *m_toolPanel;

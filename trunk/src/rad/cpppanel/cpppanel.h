@@ -20,6 +20,8 @@
 // Written by José Antonio Hurtado - joseantonio.hurtado@hispalinux.es
 //
 ///////////////////////////////////////////////////////////////////////////////
+// Sustituir wxTextCtrl por wxStyledTextCtrl
+// Juan Antonio Ortega (jortegalalmolda@gmail.com)
 
 #ifndef __CPP_PANEL__
 #define __CPP_PANEL__
@@ -29,7 +31,7 @@
 #include "codegen/cppcg.h"
 #include "rad/appobserver.h"
 #include "wx/file.h"
-
+#include "wx/stc/stc.h"
 
 #include <boost/smart_ptr.hpp>
 
@@ -38,15 +40,15 @@ using namespace boost;
 class TCCodeWriter : public CodeWriter
 {
  private: 
-  wxTextCtrl *m_tc;
+  wxStyledTextCtrl *m_tc;
  protected:
   void DoWrite(string code);
   
  public:
   TCCodeWriter();
-  TCCodeWriter(wxTextCtrl *tc);
+  TCCodeWriter(wxStyledTextCtrl *tc);
   
-  void SetTextCtrl (wxTextCtrl *tc) { m_tc = tc; }
+  void SetTextCtrl (wxStyledTextCtrl *tc) { m_tc = tc; }
   void Clear();
 };
 
@@ -70,10 +72,10 @@ typedef shared_ptr<TCCodeWriter> PTCCodeWriter;
 class CodeEditor : public wxPanel
 {
  private:
-  wxTextCtrl *m_code; 
+  wxStyledTextCtrl *m_code; 
  public:
   CodeEditor(wxWindow *parent, int id);   
-  wxTextCtrl *GetTextCtrl() { return m_code; }
+  wxStyledTextCtrl *GetTextCtrl() { return m_code; }
 };
 
 
@@ -85,6 +87,7 @@ class CppPanel : public wxPanel, public DataObserver
   PTCCodeWriter m_hCW;
   PTCCodeWriter m_cppCW;
   
+  void InitStyledTextCtrl(wxStyledTextCtrl *stc);
  public:
   CppPanel(wxWindow *parent, int id);   
   

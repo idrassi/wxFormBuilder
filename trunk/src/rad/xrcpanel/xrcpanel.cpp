@@ -21,6 +21,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 // Panel para código XRC (basado en el panel de CPP)
+// Código de inicialización de wxStyledTextCtrl
 // Juan Antonio Ortega (jortegalalmolda@gmail.com)
 
 #include "xrcpanel.h"
@@ -34,6 +35,7 @@ XrcPanel::XrcPanel(wxWindow *parent, int id)
   wxBoxSizer *top_sizer = new wxBoxSizer(wxVERTICAL);
 
   m_xrcPanel = new CodeEditor(this,-1);
+  InitStyledTextCtrl(m_xrcPanel->GetTextCtrl());
 
   top_sizer->Add(m_xrcPanel,1,wxEXPAND,0);
   
@@ -44,6 +46,27 @@ XrcPanel::XrcPanel(wxWindow *parent, int id)
   top_sizer->Layout();
 
   m_cw = PTCCodeWriter(new TCCodeWriter(m_xrcPanel->GetTextCtrl()));
+}
+
+void XrcPanel::InitStyledTextCtrl(wxStyledTextCtrl *stc)
+{
+  stc->SetLexer(wxSTC_LEX_XML);
+    
+  wxFont font(10, wxMODERN, wxNORMAL, wxNORMAL);
+  stc->StyleSetFont(wxSTC_STYLE_DEFAULT, font);
+  stc->StyleClearAll();
+  stc->StyleSetForeground(wxSTC_H_DOUBLESTRING, *wxRED);
+  stc->StyleSetForeground(wxSTC_H_TAG, wxColour(0, 0, 128));
+  stc->StyleSetForeground(wxSTC_H_ATTRIBUTE, wxColour(128, 0, 128));
+  stc->SetUseTabs(false);
+  stc->SetTabWidth(4);
+  stc->SetTabIndents(true);
+  stc->SetBackSpaceUnIndents(true);
+  stc->SetIndent(4);
+  stc->SetSelBackground(true, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+  stc->SetSelForeground(true, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+
+  stc->SetCaretWidth(2);   
 }
 
 void XrcPanel::CodeGeneration()

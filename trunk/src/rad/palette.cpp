@@ -32,12 +32,12 @@
 #define ID_ABOUT 100
 #define ID_QUIT  101 
 
-Palette::Palette(wxWindow *parent,int id)
+wxFbPalette::wxFbPalette(wxWindow *parent,int id)
   : wxPanel(parent,id)
 {
 }
 
-void Palette::Create()
+void wxFbPalette::Create()
 {
   wxBoxSizer *top_sizer = new wxBoxSizer(wxVERTICAL);
   

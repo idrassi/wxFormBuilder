@@ -36,9 +36,11 @@ CppPanel::CppPanel(wxWindow *parent, int id)
   wxNotebook *notebook = new wxNotebook(this,-1);
 
   m_hPanel = new CodeEditor(notebook,-1);
+  InitStyledTextCtrl(m_hPanel->GetTextCtrl());
   notebook->AddPage( m_hPanel, wxT("h") );
 
   m_cppPanel = new CodeEditor(notebook,-1);
+  InitStyledTextCtrl(m_cppPanel->GetTextCtrl());
   notebook->AddPage( m_cppPanel, wxT("cpp") );
 
 //  top_sizer->Add(toolbar,0,wxEXPAND,0); 
@@ -54,6 +56,41 @@ CppPanel::CppPanel(wxWindow *parent, int id)
   m_hCW = PTCCodeWriter(new TCCodeWriter(m_hPanel->GetTextCtrl()));
   m_cppCW = PTCCodeWriter(new TCCodeWriter(m_cppPanel->GetTextCtrl()));
 };
+
+void CppPanel::InitStyledTextCtrl(wxStyledTextCtrl *stc)
+{
+    stc->SetLexer(wxSTC_LEX_CPP);
+    stc->SetKeyWords(0, _T("asm auto bool break case catch char class const const_cast \
+       continue default delete do double dynamic_cast else enum explicit \
+       export extern false float for friend goto if inline int long \
+       mutable namespace new operator private protected public register \
+       reinterpret_cast return short signed sizeof static static_cast \
+       struct switch template this throw true try typedef typeid \
+       typename union unsigned using virtual void volatile wchar_t \
+       while")); 
+    
+    wxFont font(10, wxMODERN, wxNORMAL, wxNORMAL);
+    stc->StyleSetFont(wxSTC_STYLE_DEFAULT, font);
+    stc->StyleClearAll();
+    stc->StyleSetBold(wxSTC_C_WORD, true);
+    stc->StyleSetForeground(wxSTC_C_STRING, *wxRED);
+    stc->StyleSetForeground(wxSTC_C_STRINGEOL, *wxRED);
+    stc->StyleSetForeground(wxSTC_C_PREPROCESSOR, wxColour(0, 128, 0));
+    stc->StyleSetForeground(wxSTC_C_COMMENT, wxColour(49, 106, 197));
+    stc->StyleSetForeground(wxSTC_C_COMMENTLINE, wxColour(49, 106, 197));
+    stc->StyleSetForeground(wxSTC_C_COMMENTDOC, wxColour(49, 106, 197));
+    stc->StyleSetForeground(wxSTC_C_COMMENTLINEDOC, wxColour(49, 106, 197));
+    stc->StyleSetForeground(wxSTC_C_NUMBER, wxColour(128, 0, 128));
+    stc->SetUseTabs(false);
+    stc->SetTabWidth(4);
+    stc->SetTabIndents(true);
+    stc->SetBackSpaceUnIndents(true);
+    stc->SetIndent(4);
+    stc->SetSelBackground(true, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+    stc->SetSelForeground(true, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+    
+    stc->SetCaretWidth(2);   
+}
 
 void CppPanel::CodeGeneration()
 {
@@ -103,8 +140,9 @@ CodeEditor::CodeEditor(wxWindow *parent, int id)
   : wxPanel(parent,id)
 {
   wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-  m_code = new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_DONTWRAP|wxTE_READONLY);
-  m_code->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("Courier New")));
+  m_code = new wxStyledTextCtrl(this, -1);
+  wxFont font(10, wxMODERN, wxNORMAL, wxNORMAL);
+  m_code->StyleSetFont(wxSTC_STYLE_DEFAULT, font);
   sizer->Add(m_code,1,wxEXPAND|wxALL,5);
   SetSizer(sizer);
   sizer->SetSizeHints(this);
@@ -132,7 +170,7 @@ TCCodeWriter::TCCodeWriter()
   m_tc = NULL;
 }
 
-TCCodeWriter::TCCodeWriter(wxTextCtrl *tc )
+TCCodeWriter::TCCodeWriter(wxStyledTextCtrl *tc )
 {
   SetTextCtrl(tc); 
 }
@@ -140,7 +178,7 @@ TCCodeWriter::TCCodeWriter(wxTextCtrl *tc )
 void TCCodeWriter::DoWrite(string code)
 {
   if (m_tc)  
-    m_tc->AppendText(wxString(code.c_str(),wxConvUTF8));
+    m_tc->AddText(wxString(code.c_str(),wxConvUTF8));
 }
 
 void TCCodeWriter::Clear()

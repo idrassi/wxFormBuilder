@@ -38,6 +38,7 @@ class XrcPanel : public wxPanel, public DataObserver
   CodeEditor *m_xrcPanel;
   PTCCodeWriter m_cw;
   
+  void InitStyledTextCtrl(wxStyledTextCtrl *stc);
  public:
   XrcPanel(wxWindow *parent, int id);   
   

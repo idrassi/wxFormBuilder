@@ -20,6 +20,8 @@
 // Written by José Antonio Hurtado - joseantonio.hurtado@hispalinux.es
 //
 ///////////////////////////////////////////////////////////////////////////////
+// Añadir IsShown() al hacer Freeze y Thaw en Create
+// Juan Antonio Ortega (jortegalalmolda@gmail.com)
 
 #include "visualeditor.h"
 
@@ -113,7 +115,7 @@ void VisualEditor::Create()
   m_form = root;
 
   #ifdef __WX24__
-    Freeze(); // Freeze no funciona como en wxWidgets 2.4!
+    if (IsShown()) Freeze(); // Freeze no funciona como en wxWidgets 2.4!
   #endif 
 
   
@@ -158,7 +160,7 @@ void VisualEditor::Create()
   m_back->Layout();
 
   #ifdef __WX24__
-    Thaw(); // Freeze no funciona como en wxWidgets 2.4!
+    if (IsShown()) Thaw(); // Freeze no funciona como en wxWidgets 2.4!
   #endif   
 }  
 
