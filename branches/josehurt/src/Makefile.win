@@ -1,0 +1,110 @@
+# Project: wxFormBuilder
+# Makefile created by Dev-C++ 4.9.9.1
+
+CPP  = g++.exe -D__DEBUG__
+CC   = gcc.exe -D__DEBUG__
+WINDRES = windres.exe
+RES  = wxFormBuilder_private.res
+OBJ  = model/database.o model/objectbase.o model/objects.o rad/bitmaps.o rad/guirad.o rad/mainframe.o rad/palette.o utils/stringutils.o utils/typeconv.o maingui.o rad/designer/visualobj.o utils/debug.o rad/cpppanel/cpppanel.o rad/appobserver.o rad/objecttree/objecttree.o rad/inspector/objinspect.o rad/inspector/propeditor.o rad/designer/visualeditor.o rad/appdata.o rad/customkeys.o codegen/codegen.o codegen/cppcg.o rad/title.o rad/genericpanel.o model/types.o codegen/xrccg.o rad/xrcpanel/xrcpanel.o $(RES)
+LINKOBJ  = model/database.o model/objectbase.o model/objects.o rad/bitmaps.o rad/guirad.o rad/mainframe.o rad/palette.o utils/stringutils.o utils/typeconv.o maingui.o rad/designer/visualobj.o utils/debug.o rad/cpppanel/cpppanel.o rad/appobserver.o rad/objecttree/objecttree.o rad/inspector/objinspect.o rad/inspector/propeditor.o rad/designer/visualeditor.o rad/appdata.o rad/customkeys.o codegen/codegen.o codegen/cppcg.o rad/title.o rad/genericpanel.o model/types.o codegen/xrccg.o rad/xrcpanel/xrcpanel.o $(RES)
+LIBS =  -L"C:/GNU/Dev-Cpp/lib" -L"C:/wx-2.4.2_compiled_as_dll/lib" -mwindows -mthreads -Wl,--subsystem,windows -mwindows -lwxmsw242 -lpng -ljpeg -lregex -ltiff -lzlib -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32 -ltinyxml -lstdc++  -g3 
+INCS =  -I"C:/GNU/Dev-Cpp/include"  -I"C:/GNU/MinGW32/include"  -I"C:/GNU/proyectos/wxFormBuilder/src"  -I"C:/wx-2.4.2_compiled_as_dll/include" 
+CXXINCS =  -I"C:/GNU/Dev-Cpp/include"  -I"C:/GNU/MinGW32/include/c++/3.4.2"  -I"C:/GNU/boost_1_31_0"  -I"C:/GNU/MinGW32/include/c++/3.4.2/ext"  -I"C:/GNU/proyectos/wxFormBuilder/src"  -I"C:/wx-2.4.2_compiled_as_dll/include" 
+BIN  = ../bin/wxFormBuilder.exe
+CXXFLAGS = $(CXXINCS) -DWINVER=0x0400 -D__WIN95__ -D__GNUWIN32__ -D__WIN32__ -DHAVE_W32API_H -D__WXMSW__ -D__WINDOWS__ -Wall -fno-pcc-struct-return  -O2 -Os -DTIXML_USE_STL  -D__WXFB_DEBUG__  -D__WX24__  -DWXUSINGDLL   -g3
+CFLAGS = $(INCS)   -g3
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before ../bin/wxFormBuilder.exe all-after
+
+
+clean: clean-custom
+	rm -f $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o "..\bin\wxFormBuilder.exe" $(LIBS)
+
+model/database.o: model/database.cpp
+	$(CPP) -c model/database.cpp -o model/database.o $(CXXFLAGS)
+
+model/objectbase.o: model/objectbase.cpp
+	$(CPP) -c model/objectbase.cpp -o model/objectbase.o $(CXXFLAGS)
+
+model/objects.o: model/objects.cpp
+	$(CPP) -c model/objects.cpp -o model/objects.o $(CXXFLAGS)
+
+rad/bitmaps.o: rad/bitmaps.cpp
+	$(CPP) -c rad/bitmaps.cpp -o rad/bitmaps.o $(CXXFLAGS)
+
+rad/guirad.o: rad/guirad.cpp
+	$(CPP) -c rad/guirad.cpp -o rad/guirad.o $(CXXFLAGS)
+
+rad/mainframe.o: rad/mainframe.cpp
+	$(CPP) -c rad/mainframe.cpp -o rad/mainframe.o $(CXXFLAGS)
+
+rad/palette.o: rad/palette.cpp
+	$(CPP) -c rad/palette.cpp -o rad/palette.o $(CXXFLAGS)
+
+utils/stringutils.o: utils/stringutils.cpp
+	$(CPP) -c utils/stringutils.cpp -o utils/stringutils.o $(CXXFLAGS)
+
+utils/typeconv.o: utils/typeconv.cpp
+	$(CPP) -c utils/typeconv.cpp -o utils/typeconv.o $(CXXFLAGS)
+
+maingui.o: maingui.cpp
+	$(CPP) -c maingui.cpp -o maingui.o $(CXXFLAGS)
+
+rad/designer/visualobj.o: rad/designer/visualobj.cpp
+	$(CPP) -c rad/designer/visualobj.cpp -o rad/designer/visualobj.o $(CXXFLAGS)
+
+utils/debug.o: utils/debug.cpp
+	$(CPP) -c utils/debug.cpp -o utils/debug.o $(CXXFLAGS)
+
+rad/cpppanel/cpppanel.o: rad/cpppanel/cpppanel.cpp
+	$(CPP) -c rad/cpppanel/cpppanel.cpp -o rad/cpppanel/cpppanel.o $(CXXFLAGS)
+
+rad/appobserver.o: rad/appobserver.cpp
+	$(CPP) -c rad/appobserver.cpp -o rad/appobserver.o $(CXXFLAGS)
+
+rad/objecttree/objecttree.o: rad/objecttree/objecttree.cpp
+	$(CPP) -c rad/objecttree/objecttree.cpp -o rad/objecttree/objecttree.o $(CXXFLAGS)
+
+rad/inspector/objinspect.o: rad/inspector/objinspect.cpp
+	$(CPP) -c rad/inspector/objinspect.cpp -o rad/inspector/objinspect.o $(CXXFLAGS)
+
+rad/inspector/propeditor.o: rad/inspector/propeditor.cpp
+	$(CPP) -c rad/inspector/propeditor.cpp -o rad/inspector/propeditor.o $(CXXFLAGS)
+
+rad/designer/visualeditor.o: rad/designer/visualeditor.cpp
+	$(CPP) -c rad/designer/visualeditor.cpp -o rad/designer/visualeditor.o $(CXXFLAGS)
+
+rad/appdata.o: rad/appdata.cpp
+	$(CPP) -c rad/appdata.cpp -o rad/appdata.o $(CXXFLAGS)
+
+rad/customkeys.o: rad/customkeys.cpp
+	$(CPP) -c rad/customkeys.cpp -o rad/customkeys.o $(CXXFLAGS)
+
+codegen/codegen.o: codegen/codegen.cpp
+	$(CPP) -c codegen/codegen.cpp -o codegen/codegen.o $(CXXFLAGS)
+
+codegen/cppcg.o: codegen/cppcg.cpp
+	$(CPP) -c codegen/cppcg.cpp -o codegen/cppcg.o $(CXXFLAGS)
+
+rad/title.o: rad/title.cpp
+	$(CPP) -c rad/title.cpp -o rad/title.o $(CXXFLAGS)
+
+rad/genericpanel.o: rad/genericpanel.cpp
+	$(CPP) -c rad/genericpanel.cpp -o rad/genericpanel.o $(CXXFLAGS)
+
+model/types.o: model/types.cpp
+	$(CPP) -c model/types.cpp -o model/types.o $(CXXFLAGS)
+
+codegen/xrccg.o: codegen/xrccg.cpp
+	$(CPP) -c codegen/xrccg.cpp -o codegen/xrccg.o $(CXXFLAGS)
+
+rad/xrcpanel/xrcpanel.o: rad/xrcpanel/xrcpanel.cpp
+	$(CPP) -c rad/xrcpanel/xrcpanel.cpp -o rad/xrcpanel/xrcpanel.o $(CXXFLAGS)
+
+wxFormBuilder_private.res: wxFormBuilder_private.rc ../src/wxFormBuilder.rc 
+	$(WINDRES) -i wxFormBuilder_private.rc --input-format=rc -o wxFormBuilder_private.res -O coff  --include-dir C:/GNU/PROYEC~1/WX41A8~1 --include-dir C:/GNU/Dev-Cpp/Include --include-dir C:/WX-24~1.2_C/include
