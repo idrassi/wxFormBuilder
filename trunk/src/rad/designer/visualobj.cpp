@@ -26,7 +26,7 @@
 // Juan Antonio Ortega (jortegalalmolda@gmail.com)
 
 #include "visualobj.h"
-//#include "visualeditor.h"
+#include "visualeditor.h"
 
 #include "utils/typeconv.h"
 #include "utils/debug.h"
@@ -204,9 +204,10 @@ BEGIN_EVENT_TABLE(VObjEvtHandler,wxEvtHandler)
   EVT_PAINT(VObjEvtHandler::OnPaint)
 END_EVENT_TABLE()
 
-VObjEvtHandler::VObjEvtHandler(wxWindow *win, PObjectBase obj, DataObservable *data)
+VObjEvtHandler::VObjEvtHandler(wxWindow *win, wxSizer *sizer, PObjectBase obj, DataObservable *data)
 {
   m_window = win;
+  m_sizer = sizer;
   m_object = obj;
   m_data = data;
 };
@@ -218,6 +219,25 @@ void VObjEvtHandler::OnLeftClick(wxMouseEvent &event)
   m_pos.x = m_pos.y = 0;*/
   
   PObjectBase obj = m_object.lock();
+  
+  wxWindow *aux = m_window;
+  while (!aux->IsKindOf(CLASSINFO(wxPanel)) && !aux->IsKindOf(CLASSINFO(GridPanel))) 
+    aux = aux->GetParent();
+
+  if (aux && aux->IsKindOf(CLASSINFO(GridPanel)))
+  {
+    ((GridPanel*)aux)->SetSelectedSizer(m_sizer);
+    ((GridPanel*)aux)->SetSelectedWindow(m_window);
+    ((GridPanel*)aux)->SetSelectedObject(m_object.lock());
+    aux->Refresh();
+  }
+  else
+  {
+    ((GridPanel*)aux)->SetSelectedSizer(NULL);
+    ((GridPanel*)aux)->SetSelectedWindow(NULL);
+    //FIXME ((GridPanel*)aux)->SetSelectedObject(PObjectBase());
+    aux->Refresh();
+  }
 
   if (obj)
     m_data->SelectObject(obj);

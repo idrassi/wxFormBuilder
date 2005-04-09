@@ -156,6 +156,7 @@ class VObjEvtHandler : public wxEvtHandler
    WPObjectBase m_object; 
    wxWindow *m_window;
    DataObservable *m_data;
+   wxSizer *m_sizer;
 //   wxPoint m_pos;
 
 //   long m_mouseX, m_mouseY;
@@ -165,7 +166,7 @@ class VObjEvtHandler : public wxEvtHandler
   DECLARE_EVENT_TABLE()   
   
  public:
-   VObjEvtHandler(wxWindow *win, PObjectBase obj, DataObservable *data);
+   VObjEvtHandler(wxWindow *win, wxSizer *sizer, PObjectBase obj, DataObservable *data);
    void OnLeftClick(wxMouseEvent &event);
 //   void OnMouseMove(wxMouseEvent &event);
    void OnPaint(wxPaintEvent &event);

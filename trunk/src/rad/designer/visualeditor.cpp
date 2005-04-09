@@ -118,6 +118,9 @@ void VisualEditor::Create()
     if (IsShown()) Freeze(); // Freeze no funciona como en wxWidgets 2.4!
   #endif 
 
+  m_back->SetSelectedWindow(NULL);
+  m_back->SetSelectedSizer(NULL);
+  m_back->SetSelectedObject(PObjectBase());
   
   m_back->DestroyChildren();
   m_back->SetSizer(NULL);  /* ! */
@@ -193,7 +196,7 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *parent,
       {
         PVisualWindow winobj(shared_dynamic_cast<VisualWindow>(vobj));
         wxWindow *window = winobj->GetWindow();
-        window->PushEventHandler(new VObjEvtHandler(window,obj,GetData()));
+        window->PushEventHandler(new VObjEvtHandler(window,sizer,obj,GetData()));
         #ifdef __WXFB_EXPERIMENTAL__
         window->PushEventHandler(new EditorHandler(GetData()));
         #endif //__WXFB_EXPERIMENTAL__
@@ -238,7 +241,7 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *parent,
     case T_SIZERITEM:
     {
       // un sizeritem sólo podrá tener 1 hijo
-      PVisualObject vchild = Generate(obj->GetChild(0), parent,NULL,false);
+      PVisualObject vchild = Generate(obj->GetChild(0), parent,sizer,false);
       assert(sizer);
       vchild->AddToSizer(sizer,obj);
       break;
@@ -255,6 +258,7 @@ BEGIN_EVENT_TABLE(GridPanel, wxSashWindow)
 //  EVT_MOTION(GridPanel::OnMouseMove)	
 END_EVENT_TABLE()
 
+IMPLEMENT_CLASS(GridPanel, wxSashWindow)
 
 GridPanel::GridPanel(wxWindow *parent, int id, const wxPoint& pos,
 
@@ -262,7 +266,8 @@ GridPanel::GridPanel(wxWindow *parent, int id, const wxPoint& pos,
   : wxSashWindow(parent,id,pos,size,style,name)
 {
   SetGrid(10,10);
-  
+  m_selSizer = NULL;
+  m_selWindow = NULL;
 }
 void GridPanel::SetGrid(int x, int y)
 {
@@ -277,6 +282,35 @@ void GridPanel::OnPaint(wxPaintEvent &event)
   for (int i=0;i<size.GetWidth();i += m_x)
     for (int j=0;j<size.GetHeight();j += m_y)
       dc.DrawPoint(i-1,j-1);
+      
+  PObjectBase object = m_selObj.lock();
+ 
+  if (m_selSizer)
+  {
+    wxPoint point = m_selSizer->GetPosition();
+    size = m_selSizer->GetSize();
+    wxPen redPen(*wxBLUE, 2, wxSOLID);
+    dc.SetPen(redPen);
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
+    PObjectBase sizerParent = object->FindNearAncestor(T_SIZER);
+    if (sizerParent && sizerParent->GetParent())
+    {
+        int border = sizerParent->GetParent()->GetPropertyAsInteger("border");
+        dc.DrawRectangle(point.x - border + 1, point.y - border + 1, 
+                        size.x + 2 * border - 1, size.y + 2 * border - 1);
+    }
+  }
+  if (m_selWindow)
+  {
+    wxPoint point = m_selWindow->GetPosition();
+    size = m_selWindow->GetSize();
+    wxPen bluePen(*wxRED, 2, wxSOLID);
+    dc.SetPen(bluePen);
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
+    int border = object->GetParent()->GetPropertyAsInteger("border");
+    dc.DrawRectangle(point.x - border + 1, point.y - border + 1, 
+                    size.x + 2 * border - 1, size.y + 2 * border - 1);
+  }
 }   
 /*
 void GridPanel::OnMouseMove(wxMouseEvent &event)

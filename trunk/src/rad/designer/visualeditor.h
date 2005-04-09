@@ -35,11 +35,17 @@
 /**
  * Redefine el manjedor OnPaint para dibujar una rejilla.
  */
+
 class GridPanel : public wxSashWindow //wxPanel
 {
  private:
    int m_x;
    int m_y;
+   wxSizer *m_selSizer;
+   wxWindow *m_selWindow;
+   WPObjectBase m_selObj;
+   
+   DECLARE_CLASS(GridPanel)
    
  protected:
    DECLARE_EVENT_TABLE()
@@ -49,9 +55,12 @@ class GridPanel : public wxSashWindow //wxPanel
      long style, const wxString &name = wxT("gridpanel"));
 
    void SetGrid(int x, int y);
+   void SetSelectedSizer(wxSizer *sizer) { m_selSizer = sizer; }
+   void SetSelectedWindow(wxWindow *window) { m_selWindow = window; }
+   void SetSelectedObject(PObjectBase object) { m_selObj = object; }
    void OnPaint(wxPaintEvent &event);
 //   void OnMouseMove(wxMouseEvent &event);
-};  
+}; 
 
 class VisualEditor : public DataObserver, public wxPanel
 {
