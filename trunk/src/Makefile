@@ -7,13 +7,13 @@ LINKOBJ  = model/database.o model/objectbase.o model/objects.o rad/bitmaps.o rad
 LIBS = `wx-config --libs`   ../libs/tinyxml/tinyxml.a -lwx_gtk2u_stc-2.4
 INCS = 
 CXXINCS =
-BIN  = wxFormBuilder
+BIN  = ../bin/wxFormBuilder
 CXXFLAGS = `wx-config --cxxflags` -I"../libs/tinyxml/" -I"." -I"../libs/boost_1_31_0" -DTIXML_USE_STL -D__WXFB_DEBUG__ -g
 CFLAGS = `wx-config --cflags` -I"../libs/tinyxml/" -I"." -I"../libs/boost_1_31_0" -DTIXML_USE_STL -D__WXFB_DEBUG__ -g
 
 .PHONY: all all-before all-after clean clean-custom
 
-all: all-before wxFormBuilder all-after
+all: all-before $(BIN) all-after
 
 
 clean: clean-custom
@@ -21,7 +21,7 @@ clean: clean-custom
 
 
 $(BIN): $(OBJ)
-	$(CPP) $(LINKOBJ) -o "wxFormBuilder" $(LIBS)
+	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
 
 
 model/types.o: model/types.cpp

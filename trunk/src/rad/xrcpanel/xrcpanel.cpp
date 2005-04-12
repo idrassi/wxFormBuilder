@@ -52,7 +52,14 @@ void XrcPanel::InitStyledTextCtrl(wxStyledTextCtrl *stc)
 {
   stc->SetLexer(wxSTC_LEX_XML);
     
+  #ifdef __WXMSW__
   wxFont font(10, wxMODERN, wxNORMAL, wxNORMAL);
+  #elif defined(__WXGTK__)
+  // Debe haber un bug en wxGTK ya que la familia wxMODERN no es de ancho fijo.
+  wxFont font(12, wxMODERN, wxNORMAL, wxNORMAL);
+  font.SetFaceName(_T("Monospace"));
+  #endif
+    
   stc->StyleSetFont(wxSTC_STYLE_DEFAULT, font);
   stc->StyleClearAll();
   stc->StyleSetForeground(wxSTC_H_DOUBLESTRING, *wxRED);
