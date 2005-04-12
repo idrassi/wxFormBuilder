@@ -142,6 +142,7 @@ class StaticLineComponent : public ComponentBase
       obj->GetPropertyAsInteger(_("style")));
   }	
 };
+
 ///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()

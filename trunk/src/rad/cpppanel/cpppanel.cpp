@@ -184,7 +184,7 @@ void TCCodeWriter::DoWrite(string code)
 void TCCodeWriter::Clear()
 {
   if (m_tc)
-    m_tc->Clear();
+    m_tc->ClearAll(); //*!*
 }
 
 
