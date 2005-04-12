@@ -295,7 +295,7 @@ void GridPanel::OnPaint(wxPaintEvent &event)
     PObjectBase sizerParent = object->FindNearAncestor(T_SIZER);
     if (sizerParent && sizerParent->GetParent())
     {
-        int border = sizerParent->GetParent()->GetPropertyAsInteger("border");
+        int border = sizerParent->GetParent()->GetPropertyAsInteger(_("border"));
         dc.DrawRectangle(point.x - border + 1, point.y - border + 1, 
                         size.x + 2 * border - 1, size.y + 2 * border - 1);
     }
@@ -307,7 +307,7 @@ void GridPanel::OnPaint(wxPaintEvent &event)
     wxPen bluePen(*wxRED, 2, wxSOLID);
     dc.SetPen(bluePen);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
-    int border = object->GetParent()->GetPropertyAsInteger("border");
+    int border = object->GetParent()->GetPropertyAsInteger(_T("border"));
     dc.DrawRectangle(point.x - border + 1, point.y - border + 1, 
                     size.x + 2 * border - 1, size.y + 2 * border - 1);
   }

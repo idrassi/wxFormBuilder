@@ -28,7 +28,7 @@
 
 void Debug::Print(char *format,...)
 {
-//#ifdef DEBUG_WRAPPER
+#ifdef DEBUG_WRAPPER
   va_list argptr;
   va_start(argptr, format);
 
@@ -38,6 +38,6 @@ void Debug::Print(char *format,...)
   wxLogMessage(s);
 
   va_end(argptr);     
-//#endif // DEBUG_WRAPPER
+#endif // DEBUG_WRAPPER
 
 }

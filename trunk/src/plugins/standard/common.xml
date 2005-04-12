@@ -139,9 +139,20 @@
       <template name="include">#include &lt;wx/statbmp.h&gt;</template>
     </codegen>
   </objectinfo>
+  <objectinfo class="wxStaticLine" icon="static_line.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="style" type="bitlist">
+      <option name="wxLI_HORIZONTAL" />
+      <option name="wxLI_VERTICAL" />wxLI_HORIZONTAL</property>
+    <codegen language="C++">
+      <template name="declaration">wxStaticLine *$name;</template>
+      <template name="construction">$name = new wxStaticLine(#wxparent $name,$id,$pos,$size,$style);</template>
+    </codegen>
+  </objectinfo>
   <objectinfo class="spacer" icon="spacer.xpm" type="spacer">
     <property name="height" type="text">20</property>
     <property name="width" type="text">20</property>
+    
   </objectinfo>
   
 </package>

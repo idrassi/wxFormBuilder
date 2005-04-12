@@ -26,6 +26,7 @@
 #include "../component.h"
 #include "../plugin.h"
 #include "wx/grid.h"
+#include "wx/statline.h"
 
 class ButtonComponent : public ComponentBase
 {
@@ -80,9 +81,9 @@ class GridComponent : public ComponentBase
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     wxGrid *grid = new wxGrid((wxWindow *)parent,-1,
-      obj->GetPropertyAsPoint("pos"),
-      obj->GetPropertyAsSize("size"),
-      obj->GetPropertyAsInteger("style"));
+      obj->GetPropertyAsPoint(_("pos")),
+      obj->GetPropertyAsSize(_("size")),
+      obj->GetPropertyAsInteger(_("style")));
       
       grid->CreateGrid(
         obj->GetPropertyAsInteger(_("rows")),
@@ -98,12 +99,12 @@ class ComboBoxComponent : public ComponentBase
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxComboBox((wxWindow *)parent,-1,
-      obj->GetPropertyAsString("value"),
-    obj->GetPropertyAsPoint("pos"),
-    obj->GetPropertyAsSize("size"),
+      obj->GetPropertyAsString(_("value")),
+    obj->GetPropertyAsPoint(_("pos")),
+    obj->GetPropertyAsSize(_("size")),
     0,
     NULL,
-    obj->GetPropertyAsInteger("style"));
+    obj->GetPropertyAsInteger(_("style")));
   }
 };
 
@@ -112,10 +113,10 @@ class CheckBoxComponent : public ComponentBase
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxCheckBox((wxWindow *)parent,-1,
-      obj->GetPropertyAsString("label"),
-      obj->GetPropertyAsPoint("pos"),
-      obj->GetPropertyAsSize("size"),
-      obj->GetPropertyAsInteger("style"));
+      obj->GetPropertyAsString(_("label")),
+      obj->GetPropertyAsPoint(_("pos")),
+      obj->GetPropertyAsSize(_("size")),
+      obj->GetPropertyAsInteger(_("style")));
   }
 };
 
@@ -124,13 +125,23 @@ class StaticBitmapComponent : public ComponentBase
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxStaticBitmap((wxWindow *)parent,-1,
-      obj->GetPropertyAsBitmap("bitmap"),
-      obj->GetPropertyAsPoint("pos"),
-      obj->GetPropertyAsSize("size"),
-      obj->GetPropertyAsInteger("style"));
+      obj->GetPropertyAsBitmap(_("bitmap")),
+      obj->GetPropertyAsPoint(_("pos")),
+      obj->GetPropertyAsSize(_("size")),
+      obj->GetPropertyAsInteger(_("style")));
   }
 };	
 
+class StaticLineComponent : public ComponentBase
+{
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    return new wxStaticLine((wxWindow *)parent,-1,
+      obj->GetPropertyAsPoint(_("pos")),
+      obj->GetPropertyAsSize(_("size")),
+      obj->GetPropertyAsInteger(_("style")));
+  }	
+};
 ///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()
@@ -142,6 +153,7 @@ BEGIN_LIBRARY()
   COMPONENT("wxComboBox", ComboBoxComponent)
   COMPONENT("wxCheckBox", CheckBoxComponent)
   COMPONENT("wxStaticBitmap", StaticBitmapComponent)
+  COMPONENT("wxStaticLine", StaticLineComponent)
 
   // wxWindow style macros
   MACRO(wxSIMPLE_BORDER)
@@ -167,5 +179,9 @@ BEGIN_LIBRARY()
   MACRO(wxTE_MULTILINE)
   MACRO(wxTE_READONLY)
   MACRO(wxTE_RICH)  
+  
+  // wxStaticLine
+  MACRO(wxLI_HORIZONTAL)
+  MACRO(wxLI_VERTICAL)
 END_LIBRARY()
 

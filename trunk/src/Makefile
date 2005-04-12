@@ -2,9 +2,9 @@ CPP  = g++
 CC   = gcc
 
 RES  = 
-OBJ  = model/database.o model/objectbase.o model/objects.o rad/bitmaps.o rad/guirad.o rad/mainframe.o rad/palette.o utils/stringutils.o utils/typeconv.o maingui.o rad/designer/visualobj.o utils/debug.o rad/cpppanel/cpppanel.o rad/appobserver.o rad/objecttree/objecttree.o rad/inspector/objinspect.o rad/inspector/propeditor.o rad/designer/visualeditor.o rad/appdata.o rad/customkeys.o codegen/codegen.o codegen/cppcg.o rad/title.o rad/genericpanel.o model/types.o
-LINKOBJ  = model/database.o model/objectbase.o model/objects.o rad/bitmaps.o rad/guirad.o rad/mainframe.o rad/palette.o utils/stringutils.o utils/typeconv.o maingui.o rad/designer/visualobj.o utils/debug.o rad/cpppanel/cpppanel.o rad/appobserver.o rad/objecttree/objecttree.o rad/inspector/objinspect.o rad/inspector/propeditor.o rad/designer/visualeditor.o rad/appdata.o rad/customkeys.o codegen/codegen.o codegen/cppcg.o rad/title.o rad/genericpanel.o model/types.o
-LIBS = `wx-config --libs`   ../libs/tinyxml/tinyxml.a
+OBJ  = model/database.o model/objectbase.o model/objects.o rad/bitmaps.o rad/guirad.o rad/mainframe.o rad/palette.o utils/stringutils.o utils/typeconv.o maingui.o rad/designer/visualobj.o utils/debug.o rad/cpppanel/cpppanel.o rad/appobserver.o rad/objecttree/objecttree.o rad/inspector/objinspect.o rad/inspector/propeditor.o rad/designer/visualeditor.o rad/appdata.o rad/customkeys.o codegen/codegen.o codegen/cppcg.o rad/title.o rad/genericpanel.o model/types.o rad/xrcpanel/xrcpanel.o codegen/xrccg.o
+LINKOBJ  = model/database.o model/objectbase.o model/objects.o rad/bitmaps.o rad/guirad.o rad/mainframe.o rad/palette.o utils/stringutils.o utils/typeconv.o maingui.o rad/designer/visualobj.o utils/debug.o rad/cpppanel/cpppanel.o rad/appobserver.o rad/objecttree/objecttree.o rad/inspector/objinspect.o rad/inspector/propeditor.o rad/designer/visualeditor.o rad/appdata.o rad/customkeys.o codegen/codegen.o codegen/cppcg.o rad/title.o rad/genericpanel.o model/types.o rad/xrcpanel/xrcpanel.o codegen/xrccg.o
+LIBS = `wx-config --libs`   ../libs/tinyxml/tinyxml.a -lwx_gtk2u_stc-2.4
 INCS = 
 CXXINCS =
 BIN  = wxFormBuilder
@@ -72,6 +72,9 @@ utils/debug.o: utils/debug.cpp
 rad/cpppanel/cpppanel.o: rad/cpppanel/cpppanel.cpp
 	$(CPP) -c rad/cpppanel/cpppanel.cpp -o rad/cpppanel/cpppanel.o $(CXXFLAGS)
 
+rad/xrcpanel/xrcpanel.o: rad/xrcpanel/xrcpanel.cpp
+	$(CPP) -c rad/xrcpanel/xrcpanel.cpp -o rad/xrcpanel/xrcpanel.o $(CXXFLAGS)
+
 rad/appobserver.o: rad/appobserver.cpp
 	$(CPP) -c rad/appobserver.cpp -o rad/appobserver.o $(CXXFLAGS)
 
@@ -98,3 +101,6 @@ codegen/codegen.o: codegen/codegen.cpp
 
 codegen/cppcg.o: codegen/cppcg.cpp
 	$(CPP) -c codegen/cppcg.cpp -o codegen/cppcg.o $(CXXFLAGS)
+
+codegen/xrccg.o: codegen/xrccg.cpp
+	$(CPP) -c codegen/xrccg.cpp -o codegen/xrccg.o $(CXXFLAGS)

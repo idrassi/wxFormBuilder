@@ -3,13 +3,14 @@ CXX = g++
 LIBCOMMON = libcommon.so
 LIBLAYOUT = liblayout.so
 
-CXXFLAGS = `wx-config --cxxflags` -I. -g
+CXXFLAGS = `wx-config --cxxflags` -I. -g -D__WX24__
 CFLAGS = `wx-config --cflags` -I. -g
 LDFLAGS = `wx-config --libs`
 
 all: $(LIBCOMMON) $(LIBLAYOUT)
 
 $(LIBCOMMON): common.o
+
 	$(CXX) -L. -shared -o $(LIBCOMMON) common.o $(LDFLAGS)
 	strip $(LIBCOMMON)
 
