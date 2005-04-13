@@ -1,7 +1,7 @@
 [Project]
 FileName=wxFB_wx242.dev
 Name=wxFormBuilder
-UnitCount=55
+UnitCount=57
 Type=0
 Ver=1
 ObjFiles=
@@ -558,22 +558,24 @@ BuildCmd=
 CompileCpp=1
 
 [Unit56]
-FileName=xml\layout.xml
-Folder=xml
-Compile=0
-Link=0
+FileName=model\xrcfilter.h
+Folder=model
+Compile=1
+Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
+CompileCpp=1
 
 [Unit57]
-FileName=xml\packages.xml
-Folder=xml
-Compile=0
-Link=0
+FileName=model\xrcfilter.cpp
+Folder=model
+Compile=1
+Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
+CompileCpp=1
 
 [Unit53]
 FileName=codegen\xrccg.h

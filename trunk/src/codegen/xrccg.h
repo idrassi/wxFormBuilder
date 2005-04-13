@@ -37,63 +37,8 @@ class XrcCodeGenerator : public CodeGenerator
 {
  private:
   PCodeWriter m_cw;
-  
-  /**
-   * Documento XML que contiene la información de todos los componentes
-   * contemplados en el formato XRC (xrc.xml)
-   */
-  TiXmlDocument m_xrcDb;
-  
-  TiXmlElement* GetXrcClassInfo(const string &classname);
-  void LinkValues(TiXmlElement *element, TiXmlElement *xrcInfo,
-                  const PObjectBase obj);
-  
-  /**
-   * Dado un objeto, crea un árbol XML en formato XRC
-   */
-  TiXmlElement* GetElement(PObjectBase project);
-  
-  /**
-   * Determina si XRC soporta la clase "className"
-   */
-  bool IsSupported(const string& className);
-  
-  /**
-   * Devuelve el nombre de la clase. Será el resultado de GetClassName()
-   * salvo para Dialog, Frame y Panel, que devolverá wxDialog, wxFrame y
-   * wxPanel respectivamente.
-   */
-  string GetClassName(const PObjectBase obj);
-  
-  /**
-   * Devuelve un nodo de TinyXml con el nombre de la propiedad traducida
-   * a XRC.
-   */
-  TiXmlElement* GetPropNameElement(const PProperty prop);
-  
-  /**
-   * "Cuelga" de propElement el valor de la propiedad prop.
-   */
-  void LinkValue(const PProperty prop, TiXmlElement *propElement);
-  
-  /**
-   * "Cuelga" de propElement la descripción de la fuente font en el formato
-   * XRC
-   */
-  void LinkFont(const wxFont &font, TiXmlElement *propElement);
-  
-  /**
-   * Determina si la propiedad prop debe aparecer en el código XRC. Devuelve
-   * falso para propiedades inexistentes en XRC y para propiedades sin valor
-   */
-  bool IsHidden(const PProperty prop);
-  
+ 
  public:
-    
-  /**
-   * Constructor.
-   */
-  XrcCodeGenerator();
 
   /**
    * Configura el escritor de código para el fichero XML.
