@@ -43,6 +43,7 @@ BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_SAVE_PRJ,MainFrame::OnSaveProject)
   EVT_MENU(ID_OPEN_PRJ,MainFrame::OnOpenProject)
   EVT_MENU(ID_ABOUT,MainFrame::OnAbout)
+  EVT_MENU(ID_QUIT,MainFrame::OnExit)
   EVT_MENU(ID_GENERATE_CODE,MainFrame::OnGenerateCode)
 END_EVENT_TABLE()
 
@@ -58,9 +59,12 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   // the "About" item should be in the help menu
   wxMenu *helpMenu = new wxMenu;
   helpMenu->Append(ID_ABOUT, _T("&About...\tF1"), _T("Show about dialog"));
-
-  menuFile->Append(ID_OPEN_PRJ, _T("&Open project...\tF2"), _T("Load a project"));
-  menuFile->Append(ID_SAVE_PRJ, _T("&Save project...\tF3"), _T("Save the project"));
+  menuFile->Append(ID_OPEN_PRJ, _T("&Open...\tF2"), _T("Load a project"));
+  menuFile->Append(10,          _T("&Save"), _T("Save current project"));
+  menuFile->Append(ID_SAVE_PRJ, _T("Save &As...\tF3"), _T("Save the project"));
+  menuFile->AppendSeparator();
+  menuFile->Append(10,          _T("&Import XRC..."), _T("Save current project"));
+  menuFile->AppendSeparator();
   menuFile->Append(ID_QUIT, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
   // now append the freshly created menu to the menu bar...
@@ -288,6 +292,11 @@ void MainFrame::OnAbout(wxCommandEvent &event)
         "code generation for wxWidgets Framework\n"
         "(C) 2005 - José Antonio Hurtado"),
     wxT("About of wxFormBuilder..."),wxOK);
+}
+
+void MainFrame::OnExit(wxCommandEvent &event)
+{
+  Close();
 }
 
 void MainFrame::ProjectLoaded()
