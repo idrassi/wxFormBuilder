@@ -1,6 +1,6 @@
 <package name="layout" lib="liblayout" desc="wxWidgets sizer layouts">
   <objectinfo class="wxBoxSizer" icon="sizer.xpm" type="sizer">
-    <property name="name" type="text" hidden="1">sizer</property>
+    <property name="name" type="text">sizer</property>
     <property name="orient" type="option">
       <option name="wxVERTICAL" />
       <option name="wxHORIZONTAL" />wxVERTICAL</property>
@@ -11,7 +11,7 @@
   </objectinfo>
   
   <objectinfo class="wxStaticBoxSizer" icon="sizer.xpm" type="sizer">
-    <property name="name" type="text" hidden="1">sizer</property>
+    <property name="name" type="text">sizer</property>
     <property name="orient" type="option">
       <option name="wxVERTICAL" />
       <option name="wxHORIZONTAL" />wxVERTICAL</property>
@@ -25,7 +25,7 @@
   </objectinfo>
   
   <objectinfo class="wxGridSizer" icon="grid_sizer.xpm" type="sizer">
-    <property name="name" type="text" hidden="1">sizer</property>
+    <property name="name" type="text">sizer</property>
     <property name="rows" type="text">2</property>
     <property name="cols" type="text">2</property>
     <property name="vgap" type="text">0</property>
@@ -37,7 +37,7 @@
   </objectinfo>
   
 <objectinfo class="wxFlexGridSizer" icon="grid_sizer.xpm" type="sizer">
-    <property name="name" type="text" hidden="1">sizer</property>
+    <property name="name" type="text">sizer</property>
     <property name="rows" type="text">2</property>
     <property name="cols" type="text">2</property>
     <property name="vgap" type="text">0</property>

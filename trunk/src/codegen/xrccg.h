@@ -39,6 +39,16 @@ class XrcCodeGenerator : public CodeGenerator
   PCodeWriter m_cw;
   
   /**
+   * Documento XML que contiene la información de todos los componentes
+   * contemplados en el formato XRC (xrc.xml)
+   */
+  TiXmlDocument m_xrcDb;
+  
+  TiXmlElement* GetXrcClassInfo(const string &classname);
+  void LinkValues(TiXmlElement *element, TiXmlElement *xrcInfo,
+                  const PObjectBase obj);
+  
+  /**
    * Dado un objeto, crea un árbol XML en formato XRC
    */
   TiXmlElement* GetElement(PObjectBase project);
@@ -79,6 +89,11 @@ class XrcCodeGenerator : public CodeGenerator
   bool IsHidden(const PProperty prop);
   
  public:
+    
+  /**
+   * Constructor.
+   */
+  XrcCodeGenerator();
 
   /**
    * Configura el escritor de código para el fichero XML.

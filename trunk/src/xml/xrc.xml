@@ -1,0 +1,254 @@
+<xrc>
+  <object class="wxWindow">
+    <element name="exstyle" />
+    <element name="bg" />
+    <element name="fg" />
+    <element name="enabled" />
+    <element name="focused" />
+    <element name="hidden" />
+    <element name="tooltip" />
+    <element name="font" />
+  </object>
+  <object class="sizeritem">
+    <element name="option" />
+    <element name="flag" />
+    <element name="border" />
+  </object>
+  <object class="wxBoxSizer">
+    <element name="orient" />
+  </object>
+  <object class="wxStaticBoxSizer">
+    <element name="orient" />
+    <element name="label" />
+  </object>
+  <object class="wxGridSizer">
+    <element name="rows" />
+    <element name="cols" />
+    <element name="vgap" />
+    <element name="hgap" />
+  </object>
+  <object class="wxFlexGridSizer">
+    <element name="rows" />
+    <element name="cols" />
+    <element name="vgap" />
+    <element name="hgap" />
+    <element name="growablecols" />
+    <element name="growablerows" />
+  </object>  
+  
+  <object class="wxBitmapButton">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="bitmap" />
+    <element name="default" />
+    <element name="selected" />
+    <element name="focus" />
+    <element name="disabled" />
+  </object>
+  <object class="wxButton">
+    <attribute name="name"/>
+    <element name="style" />
+    <element name="label" />
+    <element name="default" />
+  </object>  
+  <object class="wxCalendarCtrl">
+    <attribute name="name" />
+    <element name="style" />
+  </object>
+  <object class="wxCheckBox">
+    <attribute name="name" />
+    <element name="label" />
+    <element name="checked" />
+  </object>
+  <object class="wxCheckList">
+    <attribute name="name" />
+    <element name="content" />
+  </object>
+  <object class="wxChoice">
+    <attribute name="name" />
+    <element name="selection" />
+    <element name="content" />
+  </object>
+  <object class="wxComboBox">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="value" />
+    <element name="selection" />
+    <element name="content" />
+  </object>
+  <object class="wxDialog">
+    <attribute name="name" />
+    <element name="title" />
+    <element name="style" />
+    <element name="centered" />
+  </object>
+  <object class="wxFrame">
+    <attribute name="name" />
+    <element name="title" />
+    <element name="style" />
+    <element name="centered" />
+  </object>
+  <object class="wxGauge">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="range" />
+    <element name="value" />
+    <element name="shadow" />
+    <element name="bezel" />
+  </object>
+  <object class="wxGenericDirCtrl">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="defaultfolder" />
+    <element name="filter" />
+    <element name="defaultfilter" />
+  </object>
+  <object class="wxHtmlWindow">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="borders" />
+    <element name="htmlcode" />
+    <element name="url" />
+  </object>  
+  <object class="wxListBox">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="selection" />
+    <element name="content" />
+  </object>
+  <object class="wxListCtrl">
+    <attribute name="name" />
+    <element name="style" />
+  </object>
+  <object class="wxMenuBar">
+    <attribute name="name" />
+    <element name="style" />
+  </object>
+  <object class="wxMenu">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="label" />
+    <element name="help" />
+  </object>
+  <object class="wxMenuItem">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="label" />
+    <element name="accel" />
+    <element name="help" />
+    <element name="radio" />
+    <element name="checkable" />
+    <element name="enabled" />
+    <element name="checked" />
+    <element name="bitmap" />
+  </object>
+  <object class="wxNoteBook">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="usenotebooksizer" />
+  </object>
+  <object class="notebookpage">
+    <element name="label" />
+    <element name="selected" />
+  </object>
+  <object class="wxPanel">
+    <attribute name="name" />
+    <element name="style" />
+  </object>
+  <object class="wxRadioButton">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="label" />
+    <element name="value" />
+  </object>
+  <object class="wxRadioBox">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="selection" />
+    <element name="content" />
+  </object>
+  <object class="wxScrollBar">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="value" />
+    <element name="thumbsize" />
+    <element name="range" />
+    <element name="pagesize" />
+  </object>
+  <object class="wxScrolledWindow">
+    <attribute name="name" />
+    <element name="style" />
+  </object>
+  <object class="wxSlider">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="value" />
+    <element name="min" />
+    <element name="max" />
+    <element name="tickfreq" />
+    <element name="pagesize" />
+    <element name="linesize" />
+    <element name="thumb" />
+    <element name="tick" />
+    <element name="selmin" />
+    <element name="selmax" />
+  </object>
+  <object class="wxSpinButton">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="value" />
+    <element name="min" />
+    <element name="max" />
+  </object>
+  <object class="wxSpinCtrl">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="value" />
+    <element name="min" />
+    <element name="max" />
+  </object>
+  <object class="wxStaticBitmap">
+    <attribute name="name" />
+    <element name="bitmap" />
+  </object>
+  <object class="wxStaticBox">
+    <attribute name="name" />
+    <element name="label" />
+  </object>
+  <object class="wxStaticLine">
+    <attribute name="name" />
+    <element name="style" />
+  </object>
+  <object class="wxStaticText">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="label" />
+  </object>
+  <object class="wxTextCtrl">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="value" />
+  </object>
+  <object class="wxToolBar">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="bitmapsize" />
+    <element name="margins" />
+    <element name="packing" />
+    <element name="separation" />
+  </object>
+  <object class="tool">
+    <attribute name="name" />
+    <element name="style" />
+    <element name="bitmap" />
+    <element name="bitmap2" />
+    <element name="toggle" />
+    <element name="tooltip" />
+    <element name="longhelp" />
+  </object>  
+  <object class="separator" />
+  <object class="wxTreeCtrl">
+    <attribute name="name" />
+    <element name="style" />
+  </object>  
+</xrc>

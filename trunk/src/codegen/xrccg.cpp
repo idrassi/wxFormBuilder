@@ -25,6 +25,7 @@
 
 #include "xrccg.h"
 #include "utils/typeconv.h"
+#include "utils/debug.h"
 #include "tinyxml.h"
 #include <wx/filename.h>
 #include <wx/wfstream.h>
@@ -42,73 +43,86 @@ public:
     }
 };
 
-TiXmlElement* XrcCodeGenerator::GetElement(const PObjectBase obj)
+TiXmlElement* XrcCodeGenerator::GetXrcClassInfo(const string &classname)
 {
-    TiXmlElement *element = new TiXmlElement("object"); 
-    element->SetAttribute("class", GetClassName(obj));
-    
-    // (!) según la especificacion XRC, name contiene el id del objeto y ademas
-    //     es opcional
-    if (obj->GetProperty("id"))
-      element->SetAttribute("name", _STDSTR(obj->GetPropertyAsString(_T("id"))));
-      
-    for (unsigned int i = 0; i < obj->GetPropertyCount(); i++)
-    {
-        PProperty prop = obj->GetProperty(i);
-        if (IsHidden(prop)) continue;
-        TiXmlElement *propElement = new TiXmlElement(prop->GetName());
-        LinkValue(prop, propElement);
-        element->LinkEndChild(propElement);
-    }
-    for (unsigned int i = 0; i < obj->GetChildCount(); i++)
-    {
-        element->LinkEndChild(GetElement(obj->GetChild(i)));
-    }
-    return element;
+  TiXmlElement *result = NULL;
+  TiXmlElement *root = m_xrcDb.FirstChildElement("xrc");
+  if (root)
+  {
+    result = root->FirstChildElement("object");
+    while (result && result->Attribute("class") != classname)
+      result = result->NextSiblingElement("object");
+  }
+  
+  return result;
 }
 
-bool XrcCodeGenerator::IsSupported(const string& className){
-    return className == "sizeritem" ||
-           className == "wxBoxSizer" ||
-           className == "wxStaticBoxSizer" ||
-           className == "wxGridSizer" ||
-           className == "wxFlexGridSizer" ||
-           className == "wxBitmapButton" ||
-           className == "wxButton" ||
-           className == "wxCalendarCtrl" ||
-           className == "wxCheckBox" ||
-           className == "wxCheckList" ||
-           className == "wxChoice" ||
-           className == "wxComboBox" ||
-           className == "wxDialog" ||
-           className == "wxFrame" ||
-           className == "wxGauge" ||
-           className == "wxGenericDirCtrl" ||
-           className == "wxHtmlWindow" ||
-           className == "wxListBox" ||
-           className == "wxListCtrl" ||
-           className == "wxMenuBar" ||
-           className == "wxMenu" ||
-           className == "wxMenuItem" ||
-           className == "wxNotebook" ||
-           className == "notebookpage" ||
-           className == "wxPanel" ||
-           className == "wxRadioButton" ||
-           className == "wxRadioBox" ||
-           className == "wxScrollBar" ||
-           className == "wxScrolledWindow" ||
-           className == "wxSlider" ||
-           className == "wxSpinButton" ||
-           className == "wxSpinCtrl" ||
-           className == "wxStaticBitmap" ||
-           className == "wxStaticBox" ||
-           className == "wxStaticLine" ||
-           className == "wxStaticText" ||
-           className == "wxTextCtrl" ||
-           className == "wxToolBar" ||
-           className == "tool" ||
-           className == "separator" ||
-           className == "wxTreeCtrl"; 
+TiXmlElement* XrcCodeGenerator::GetElement(const PObjectBase obj)
+{
+  TiXmlElement *element = new TiXmlElement("object"); 
+  TiXmlElement *xrcInfo = GetXrcClassInfo(GetClassName(obj));
+  
+  if (xrcInfo)
+  {
+    element->SetAttribute("class", GetClassName(obj));
+
+    // enlazamos los atributos
+    TiXmlElement *attr = xrcInfo->FirstChildElement("attribute");
+    while (attr)
+    {
+      string attrName = attr->Attribute("name");
+      string propName = (attr->Attribute("property") ?
+                         attr->Attribute("property") : attrName);
+      element->SetAttribute(attrName, _STDSTR(obj->GetPropertyAsString(_WXSTR(propName))));
+      attr = attr->NextSiblingElement("attribute");
+    }
+    
+    // enlazamos los sub-elementos
+
+    // FIXME! no todos los objetos xrc heredan de wxWindow...
+    if (obj->GetObjectType() == T_WIDGET)
+      LinkValues(element,GetXrcClassInfo("wxWindow"),obj);
+          
+    LinkValues(element,xrcInfo,obj); // los propios del objeto
+  }
+  else
+  {
+    // clase no soportada por XRC.
+    element->SetAttribute("class", "unknown");
+  }
+  
+  for (unsigned int i = 0; i < obj->GetChildCount(); i++)
+      element->LinkEndChild(GetElement(obj->GetChild(i)));
+
+  return element;
+}
+
+void XrcCodeGenerator::LinkValues(TiXmlElement *element, TiXmlElement *xrcInfo,
+  const PObjectBase obj)
+{
+  TiXmlElement *attr = xrcInfo->FirstChildElement("element");
+  while (attr)
+  {
+    // los subelementos se corresponden con la propiedad cuyo nombre
+    // viene dado en el atributo "property" o en su defecto por "name"
+    PProperty prop = (attr->Attribute("property")  ?
+      obj->GetProperty(attr->Attribute("property")) :
+      obj->GetProperty(attr->Attribute("name")));
+    
+    if (prop && prop->GetValue() != "")
+    {  
+      TiXmlElement *propElement = new TiXmlElement(attr->Attribute("name"));
+      LinkValue(prop,propElement);
+      element->LinkEndChild(propElement);
+    }
+    
+    attr = attr->NextSiblingElement("element");
+  }
+}
+
+bool XrcCodeGenerator::IsSupported(const string& className)
+{
+  return (GetXrcClassInfo(className) != NULL);
 }
 
 string XrcCodeGenerator::GetClassName(const PObjectBase obj)
@@ -222,6 +236,13 @@ bool XrcCodeGenerator::IsHidden(const PProperty prop)
         default:
             return prop->GetValue().empty();
     }
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+XrcCodeGenerator::XrcCodeGenerator()
+{
+  assert (m_xrcDb.LoadFile("./xml/xrc.xml"));
 }
 
 bool XrcCodeGenerator::GenerateCode(PObjectBase project)

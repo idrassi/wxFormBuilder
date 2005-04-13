@@ -11,12 +11,12 @@ PrivateResource=wxFormBuilder_private.rc
 ResourceIncludes=C:\GNU\proyectos\wxFormBuilder;C:\GNU\Dev-Cpp\Include;C:\wx-2.4.2_compiled_as_dll\include
 MakeIncludes=
 Compiler=
-CppCompiler=-DWINVER=0x0400_@@_-D__WIN95___@@_-D__GNUWIN32___@@_-D__WIN32___@@_-DHAVE_W32API_H_@@_-D__WXMSW___@@_-D__WINDOWS___@@_-Wall -fno-pcc-struct-return _@@_-O2 -Os_@@_-DTIXML_USE_STL _@@_-D__WXFB_DEBUG__ _@@_-D__WX24__ _@@_-DWXUSINGDLL_@@_
+CppCompiler=-DWINVER=0x0400_@@_-D__WIN95___@@_-D__GNUWIN32___@@_-D__WIN32___@@_-DHAVE_W32API_H_@@_-D__WXMSW___@@_-D__WINDOWS___@@_-Wall -fno-pcc-struct-return _@@_-O2 -Os_@@_-DTIXML_USE_STL _@@_-D__WXFB_DEBUG__ _@@_-D__WX24__ _@@_-DWXUSINGDLL_@@_-DDEBUG_WRAPPER_@@_
 Linker=-mthreads -Wl,--subsystem,windows -mwindows -lstc -lwxmsw242 -lpng -ljpeg -lregex -ltiff -lzlib -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32 -ltinyxml -lstdc++_@@_
 IsCpp=1
 Icon=wxFB_wx242.ico
 ExeOutput=..\bin
-ObjectOutput=
+ObjectOutput=.\_objs
 OverrideOutput=1
 OverrideOutputName=wxFormBuilder.exe
 HostApplication=

@@ -1,7 +1,7 @@
 <package name="forms" desc="wxWidgets windows">
   <objectinfo class="Frame" icon="frame.xpm" type="form">
     <inherits class="wxWindow" />
-    <property name="name" type="text" hidden="1">MyFrame</property>
+    <property name="name" type="text">MyFrame</property>
     <property name="size" type="wxSize">500,300</property>
     <codegen language="C++">
       <template name="base">public wxFrame</template>
@@ -11,7 +11,7 @@
   </objectinfo>
   <objectinfo class="Panel" icon="panel.xpm" type="form">
     <inherits class="wxWindow" />
-    <property name="name" type="text" hidden="1">MyPanel</property>
+    <property name="name" type="text">MyPanel</property>
     <property name="size" type="wxSize">500,300</property>
     <codegen language="C++">
       <template name="base">public wxPanel</template>
@@ -21,7 +21,7 @@
   </objectinfo>
   <objectinfo class="Dialog" icon="dialog.xpm" type="form" base="wxDialog">
     <inherits class="wxWindow" />
-    <property name="name" type="text" hidden="1">MyDialog</property>
+    <property name="name" type="text">MyDialog</property>
     <property name="size" type="wxSize" />
     <codegen language="C++">
       <template name="base">public wxDialog</template>
