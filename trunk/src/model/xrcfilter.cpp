@@ -28,6 +28,7 @@
 #include <wx/filename.h>
 #include <wx/wfstream.h>
 #include <wx/txtstrm.h>
+#include <sstream>
 
 TiXmlElement* XrcFilter::GetXrcClassInfo(const string &classname)
 {
@@ -46,11 +47,11 @@ TiXmlElement* XrcFilter::GetXrcClassInfo(const string &classname)
 TiXmlElement* XrcFilter::GetElement(const PObjectBase obj)
 {
   TiXmlElement *element = new TiXmlElement("object"); 
-  TiXmlElement *xrcInfo = GetXrcClassInfo(GetClassName(obj));
+  TiXmlElement *xrcInfo = GetXrcClassInfo(GetXrcClassName(obj));
   
   if (xrcInfo)
   {
-    element->SetAttribute("class", GetClassName(obj));
+    element->SetAttribute("class", GetXrcClassName(obj));
 
     // enlazamos los atributos
     TiXmlElement *attr = xrcInfo->FirstChildElement("attribute");
@@ -66,7 +67,7 @@ TiXmlElement* XrcFilter::GetElement(const PObjectBase obj)
     // enlazamos los sub-elementos
 
     // FIXME! no todos los objetos xrc heredan de wxWindow...
-    if (obj->GetObjectType() == T_WIDGET)
+    if (obj->GetObjectType() == T_WIDGET || obj->GetObjectType() == T_FORM)
       LinkValues(element,GetXrcClassInfo("wxWindow"),obj);
           
     LinkValues(element,xrcInfo,obj); // los propios del objeto
@@ -111,7 +112,7 @@ bool XrcFilter::IsSupported(const string& className)
   return (GetXrcClassInfo(className) != NULL);
 }*/
 
-string XrcFilter::GetClassName(const PObjectBase obj)
+string XrcFilter::GetXrcClassName(const PObjectBase obj)
 {
   string className = obj->GetObjectInfo()->GetClassName();
   
@@ -120,6 +121,7 @@ string XrcFilter::GetClassName(const PObjectBase obj)
 
   return className;
 }
+
 
 void XrcFilter::LinkValue(const PProperty prop, TiXmlElement *propElement)
 {
@@ -205,6 +207,148 @@ void XrcFilter::LinkFont(const wxFont &font, TiXmlElement *propElement)
     propElement->LinkEndChild(element);
 }
 
+
+
+void XrcFilter::ImportXrcProperty(TiXmlElement *xrcProperty, PProperty property)
+{
+  if (!xrcProperty)
+    return;
+    
+  if (property->GetType() == PT_WXCOLOUR)
+  {
+    ImportColour(xrcProperty, property);
+  }
+  else if (property->GetType() == PT_WXFONT)
+  {
+    ImportFont(xrcProperty, property);
+  }
+  else // es texto equivalente
+  {
+    TiXmlNode *xmlValue = xrcProperty->FirstChild();
+    if (xmlValue && xmlValue->ToText())
+    {
+      string value = xmlValue->ToText()->Value();
+      property->SetValue(value);
+    }
+  }
+}
+
+void XrcFilter::ImportColour(TiXmlElement *xrcProperty, PProperty property)
+{
+  TiXmlNode *xmlValue = xrcProperty->FirstChild();
+  if (xmlValue && xmlValue->ToText())
+  {
+    string value = xmlValue->ToText()->Value();
+    
+    // convertimos el formato "#rrggbb" a "rrr,ggg,bbb"
+    string hexColour = "0x" + value.substr(1,2) + " 0x" + value.substr(3,2) +
+                       " 0x" + value.substr(5,2);
+    istringstream strIn;
+    ostringstream strOut;
+    unsigned int red,green,blue;
+    
+    strIn.str(hexColour);
+    strIn >> hex;
+    
+    strIn >> red;
+    strIn >> green;
+    strIn >> blue;
+    
+    strOut << red << "," << green << "," << blue;
+    property->SetValue(strOut.str());
+  }
+}
+
+void XrcFilter::ImportFont(TiXmlElement *xrcProperty, PProperty property)
+{
+  //TODO
+}
+
+void XrcFilter::ImportXrcElements(TiXmlElement *xrcObj, TiXmlElement *xrcInfo,
+                                  PObjectBase obj)
+{
+  TiXmlElement *element = xrcInfo->FirstChildElement("element");
+  while (element)
+  {
+    string propName = ( element->Attribute("property") ?
+                        element->Attribute("property") : element->Attribute("name"));
+
+    PProperty property = obj->GetProperty(propName);
+
+    if (property)
+      ImportXrcProperty(xrcObj->FirstChildElement(element->Attribute("name")),property);
+
+    element = element->NextSiblingElement("element");
+  }
+}
+
+void XrcFilter::ImportXrcProperties(TiXmlElement *xrcObj, PObjectBase obj)
+{
+  assert(xrcObj->Attribute("class"));
+  TiXmlElement *xrcInfo = GetXrcClassInfo(xrcObj->Attribute("class"));
+  assert(xrcInfo);
+  
+
+  // comenzamos por los atributos
+  TiXmlElement *attr = xrcInfo->FirstChildElement("attribute");
+  while (attr)
+  {
+    string propName = ( attr->Attribute("property") ?
+                        attr->Attribute("property") : attr->Attribute("name"));
+
+    PProperty property = obj->GetProperty(propName);
+
+    // los atributos siempre son texto 
+    if (property && xrcObj->Attribute(attr->Attribute("name")))
+      property->SetValue(string(xrcObj->Attribute(attr->Attribute("name"))));
+
+    attr = attr->NextSiblingElement("attribute");
+  }
+  
+  // y seguimos por los sub-elementos
+  ImportXrcElements(xrcObj,xrcInfo,obj);
+
+  // si es un widget o un form importamos los subelementos comunes
+  if (obj->GetObjectType() == T_WIDGET || obj->GetObjectType() == T_FORM )
+    ImportXrcElements(xrcObj,GetXrcClassInfo("wxWindow"),obj);
+}
+
+PObjectBase XrcFilter::GetObject(TiXmlElement *xrcObj, PObjectBase parent,
+                                 bool is_form)
+{
+  // La estrategia será construir el objeto a partir del nombre
+  // para posteriormente modificar las propiedades.
+  // Con el atributo is_form intentaremos arreglar el problema del conflicto
+  // de nombres (wxPanel como form o como widget).
+  
+  string className = xrcObj->Attribute("class");
+  
+  if (is_form)
+  {
+    // hay que quitarle el "wx" del principio
+    className = className.substr(2,className.size() - 2);
+  }
+  
+  Debug::Print("[XrcFilter::GetObject] importing %s",className.c_str());
+  
+  PObjectBase obj = m_objDb->CreateObject(className,parent);
+  
+  if (obj)
+  {
+    // ahora hay que importar todas las propiedades del objeto xrc
+    ImportXrcProperties(xrcObj,obj);
+    
+    TiXmlElement *element = xrcObj->FirstChildElement("object");
+    while (element)
+    {
+      PObjectBase child = GetObject(element,obj);
+      element = element->NextSiblingElement("object");
+    }
+  }
+  else
+    Debug::Print("[XrcFilter::GetObject] Error!! importing %s",className.c_str());
+  return obj;
+};
 ///////////////////////////////////////////////////////////////////////////////
 
 XrcFilter::XrcFilter()
@@ -228,3 +372,21 @@ TiXmlDocument *XrcFilter::GetXrcDocument (PObjectBase project)
   return doc;  
 }
 
+PObjectBase XrcFilter::GetProject(TiXmlDocument *xrcDoc)
+{
+  assert(m_objDb);
+  Debug::Print("[XrcFilter::GetProject]");
+  
+  PObjectBase project(m_objDb->CreateObject("Project"));
+  
+  
+  TiXmlElement *root = xrcDoc->FirstChildElement("resource");
+  TiXmlElement *element = root->FirstChildElement("object");
+  while (element)
+  {
+    PObjectBase obj = GetObject(element,project,true);
+    element = element->NextSiblingElement("object");
+  }
+  
+  return project;
+}

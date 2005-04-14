@@ -30,6 +30,7 @@
 #include "rad/bitmaps.h"
 #include "icons/wxwin16x16.xpm"
 #include "icons/system.xpm"
+#include "model/xrcfilter.h"
 
 #define ID_ABOUT 100
 #define ID_QUIT  101 
@@ -37,6 +38,7 @@
 #define ID_OPEN_PRJ  103
 #define ID_NEW_PRJ  104
 #define ID_GENERATE_CODE 105
+#define ID_IMPORT_XRC 106
 
 BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_NEW_PRJ,MainFrame::OnNewProject)
@@ -44,6 +46,7 @@ BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_OPEN_PRJ,MainFrame::OnOpenProject)
   EVT_MENU(ID_ABOUT,MainFrame::OnAbout)
   EVT_MENU(ID_QUIT,MainFrame::OnExit)
+  EVT_MENU(ID_IMPORT_XRC,MainFrame::OnImportXrc)
   EVT_MENU(ID_GENERATE_CODE,MainFrame::OnGenerateCode)
 END_EVENT_TABLE()
 
@@ -63,7 +66,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   menuFile->Append(10,          _T("&Save"), _T("Save current project"));
   menuFile->Append(ID_SAVE_PRJ, _T("Save &As...\tF3"), _T("Save the project"));
   menuFile->AppendSeparator();
-  menuFile->Append(10,          _T("&Import XRC..."), _T("Save current project"));
+  menuFile->Append(ID_IMPORT_XRC, _T("&Import XRC..."), _T("Save current project"));
   menuFile->AppendSeparator();
   menuFile->Append(ID_QUIT, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
@@ -273,6 +276,34 @@ void MainFrame::OnOpenProject(wxCommandEvent &event)
   
   dialog->Destroy();
 }  
+
+void MainFrame::OnImportXrc(wxCommandEvent &event)
+{
+  wxFileDialog *dialog = new wxFileDialog(this,wxT("Import XRC file"),wxT("projects/example"),
+  wxT("example.xrc"),wxT("*.xrc"),wxOPEN);
+
+  if (dialog->ShowModal() == wxID_OK)
+  {
+    TiXmlDocument doc(_STDSTR(dialog->GetPath()));
+    if (doc.LoadFile())
+    {
+      XrcFilter xrc;
+      xrc.SetObjectDatabase(GetData()->GetObjectDatabase());
+      PObjectBase project = xrc.GetProject(&doc);
+      if (project)
+      {
+        GetData()->MergeProject(project);
+      }
+      else
+        wxLogMessage("Error al importar XRC");
+    }
+    else
+      wxLogMessage("Error al cargar archivo XRC");
+  }
+  
+  dialog->Destroy();
+}
+
 
 void MainFrame::OnNewProject(wxCommandEvent &event)
 {

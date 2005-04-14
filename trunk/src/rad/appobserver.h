@@ -72,6 +72,8 @@ class DataObservable
   virtual void RemoveObject(PObjectBase obj) = 0;
   virtual void CutObject(PObjectBase obj) = 0;
   virtual void PasteObject(PObjectBase parent) = 0;
+  virtual void InsertObject(PObjectBase obj, PObjectBase parent) = 0;
+  virtual void MergeProject(PObjectBase project) = 0;
   virtual void ModifyProperty(PProperty prop, wxString value) = 0;
   virtual void GenerateCode() = 0;
   virtual void MovePosition(PObjectBase, bool right, unsigned int num = 1) = 0;
@@ -79,6 +81,7 @@ class DataObservable
   // Obtienen información del modelo de datos
   virtual PObjectPackage GetPackage(unsigned int idx) = 0;
   virtual unsigned int GetPackageCount() = 0;
+  virtual PObjectDatabase GetObjectDatabase() = 0;
 
   virtual PObjectBase GetSelectedObject() = 0;
   virtual PObjectBase GetSelectedForm() = 0;

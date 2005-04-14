@@ -67,6 +67,7 @@ class MainFrame : public DataObserver, public wxFrame
   void OnGenerateCode(wxCommandEvent &event);
   void OnAbout(wxCommandEvent &event);
   void OnExit(wxCommandEvent &event);
+  void OnImportXrc(wxCommandEvent &event);
   
   void ProjectLoaded();
   void ProjectSaved();

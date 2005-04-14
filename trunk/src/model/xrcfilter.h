@@ -25,6 +25,7 @@
 #define __XRC_FILTER__
 
 #include "model/objectbase.h"
+#include "model/database.h"
 
 /**
  * Filtro de conversión de/a formato XRC.
@@ -37,6 +38,11 @@ class XrcFilter
    * contemplados en el formato XRC (xrc.xml)
    */
   TiXmlDocument m_xrcDb;  
+  
+  /**
+   * ObjectDatabase
+   */
+  PObjectDatabase m_objDb;
   
   /**
    * Dado el nombre de una clase obtiene la información XRC para dicha clase,
@@ -65,17 +71,28 @@ class XrcFilter
    * salvo para Dialog, Frame y Panel, que devolverá wxDialog, wxFrame y
    * wxPanel respectivamente.
    */
-  string GetClassName(const PObjectBase obj);
+  string GetXrcClassName(const PObjectBase obj);
 
   /**
    * Dado un objeto, crea un árbol XML en formato XRC
    */
   TiXmlElement* GetElement(PObjectBase project);
-
-  
+  void ImportXrcProperties(TiXmlElement *xrcObj, PObjectBase obj);
+  void ImportXrcProperty(TiXmlElement *xrcProperty, PProperty property);
+  void ImportColour(TiXmlElement *xrcProperty, PProperty property);
+  void ImportFont(TiXmlElement *xrcProperty, PProperty property);
+  void ImportXrcElements(TiXmlElement *xrcObj, TiXmlElement *xrcInfo, PObjectBase obj);
+                                  
+  PObjectBase GetObject(TiXmlElement *xrcObj, PObjectBase parent,
+                        bool is_form = false);
  public: 
     
    XrcFilter(); 
+   
+  /**
+   * Para importar un XRC hay que configurar la base de datos de wxFB
+   */
+  void SetObjectDatabase(PObjectDatabase db) { m_objDb = db; }
     
   /**
    * Obtiene el documento XML en formato XRC de un proyecto wxFB.
@@ -86,7 +103,7 @@ class XrcFilter
   /**
    * Dado un árbol XML en formato XRC, crea el arbol de objetos asociado.
    */
-  PObjectBase GetObject(TiXmlElement *xrcObj);
+  PObjectBase GetProject(TiXmlDocument *xrcDoc);
 
 };
 

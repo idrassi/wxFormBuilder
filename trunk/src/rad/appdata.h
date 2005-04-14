@@ -52,6 +52,8 @@ class ApplicationData : public DataObservable
   void RemoveObject(PObjectBase obj);
   void CutObject(PObjectBase obj);
   void PasteObject(PObjectBase parent);
+  void InsertObject(PObjectBase obj, PObjectBase parent);
+  void MergeProject(PObjectBase project);
   void ModifyProperty(PProperty prop, wxString value); 
   void GenerateCode();
   void MovePosition(PObjectBase, bool right, unsigned int num = 1);
@@ -69,6 +71,9 @@ class ApplicationData : public DataObservable
   
   unsigned int GetPackageCount()
     { return m_objDb->GetPackageCount(); }
+  
+  PObjectDatabase GetObjectDatabase()
+    { return m_objDb; }
   
 };
 

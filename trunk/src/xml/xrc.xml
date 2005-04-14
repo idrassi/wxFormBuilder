@@ -1,5 +1,6 @@
 <xrc>
   <object class="wxWindow">
+    <element name="size" />
     <element name="exstyle" />
     <element name="bg" />
     <element name="fg" />

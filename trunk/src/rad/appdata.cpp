@@ -160,6 +160,25 @@ void ApplicationData::PasteObject(PObjectBase parent)
   }
   DataObservable::NotifyProjectRefresh();  
 }
+
+void ApplicationData::InsertObject(PObjectBase obj, PObjectBase parent)
+{
+  // FIXME! comprobar obj se puede colgar de parent
+  parent->AddChild(obj);
+  obj->SetParent(parent);
+  DataObservable::NotifyProjectRefresh(); 
+}
+
+void ApplicationData::MergeProject(PObjectBase project)
+{
+  // FIXME! comprobar obj se puede colgar de parent
+  for (unsigned int i=0; i<project->GetChildCount(); i++)
+  {
+    m_project->AddChild(project->GetChild(i));
+    project->GetChild(i)->SetParent(m_project);
+  }
+  DataObservable::NotifyProjectRefresh(); 
+}
   
 void ApplicationData::ModifyProperty(PProperty prop, wxString str)
 {
