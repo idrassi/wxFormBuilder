@@ -219,25 +219,6 @@ void VObjEvtHandler::OnLeftClick(wxMouseEvent &event)
   m_pos.x = m_pos.y = 0;*/
   
   PObjectBase obj = m_object.lock();
-  
-  wxWindow *aux = m_window;
-  while (!aux->IsKindOf(CLASSINFO(wxPanel)) && !aux->IsKindOf(CLASSINFO(GridPanel))) 
-    aux = aux->GetParent();
-
-  if (aux && aux->IsKindOf(CLASSINFO(GridPanel)))
-  {
-    ((GridPanel*)aux)->SetSelectedSizer(m_sizer);
-    ((GridPanel*)aux)->SetSelectedWindow(m_window);
-    ((GridPanel*)aux)->SetSelectedObject(m_object.lock());
-    aux->Refresh();
-  }
-  else
-  {
-    ((GridPanel*)aux)->SetSelectedSizer(NULL);
-    ((GridPanel*)aux)->SetSelectedWindow(NULL);
-    //FIXME ((GridPanel*)aux)->SetSelectedObject(PObjectBase());
-    aux->Refresh();
-  }
 
   if (obj)
     m_data->SelectObject(obj);

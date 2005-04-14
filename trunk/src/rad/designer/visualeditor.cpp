@@ -118,14 +118,14 @@ void VisualEditor::Create()
     if (IsShown()) Freeze(); // Freeze no funciona como en wxWidgets 2.4!
   #endif 
 
-  m_back->SetSelectedWindow(NULL);
+  m_back->SetSelectedItem(NULL);
   m_back->SetSelectedSizer(NULL);
   m_back->SetSelectedObject(PObjectBase());
   
   m_back->DestroyChildren();
   m_back->SetSizer(NULL);  /* ! */
   
-  //m_map.erase(m_map.begin(),m_map.end());
+  m_map.erase(m_map.begin(),m_map.end());
   
   if (root)
   { 
@@ -185,7 +185,7 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *parent,
   if (!vobj)
     return vobj;
  
-  //m_map.insert(VisualObjectMap::value_type(obj,vobj));
+  m_map.insert(VisualObjectMap::value_type(obj,vobj));
 
   ObjectType type = obj->GetObjectType();
 
@@ -267,7 +267,7 @@ GridPanel::GridPanel(wxWindow *parent, int id, const wxPoint& pos,
 {
   SetGrid(10,10);
   m_selSizer = NULL;
-  m_selWindow = NULL;
+  m_selItem = NULL;
 }
 void GridPanel::SetGrid(int x, int y)
 {
@@ -300,10 +300,16 @@ void GridPanel::OnPaint(wxPaintEvent &event)
                         size.x + 2 * border - 1, size.y + 2 * border - 1);
     }
   }
-  if (m_selWindow)
+  if (m_selItem)
   {
-    wxPoint point = m_selWindow->GetPosition();
-    size = m_selWindow->GetSize();
+    wxPoint point;
+    if (m_selItem->IsKindOf(CLASSINFO(wxWindow))){
+        point = ((wxWindow*)m_selItem)->GetPosition();
+        size = ((wxWindow*)m_selItem)->GetSize();
+    }else{
+        point = ((wxSizer*)m_selItem)->GetPosition();
+        size = ((wxSizer*)m_selItem)->GetSize();
+    }
     wxPen bluePen(*wxRED, 2, wxSOLID);
     dc.SetPen(bluePen);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
@@ -339,9 +345,63 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
 {
   // sólo es necesario regenerar la vista si el objeto
   // seleccionado pertenece a otro form
-  
+
   if (GetData()->GetSelectedForm() != m_form)
     Create();
+    
+  PVisualObject visualObj;
+  PObjectBase objAux;
+  VisualObjectMap::iterator it = m_map.find(obj);
+
+  bool validPanel = it != m_map.end();
+  if (validPanel)
+  {
+      visualObj = it->second;
+      objAux = obj;
+      if (objAux->GetObjectType() != T_WIDGET)
+        objAux = objAux->FindNearAncestor(T_WIDGET);
+        
+      validPanel = objAux == 0;
+    
+      wxWindow *aux = NULL;
+      if (!validPanel)
+      {
+        it = m_map.find(objAux);
+        aux = shared_dynamic_cast<VisualWindow>(it->second)->GetWindow();  
+        while (!aux->IsKindOf(CLASSINFO(wxPanel)) && !aux->IsKindOf(CLASSINFO(GridPanel))) 
+          aux = aux->GetParent();
+        validPanel = aux && aux->IsKindOf(CLASSINFO(GridPanel));
+      }
+  }
+  
+  if (validPanel)
+  {
+    wxObject *item = NULL;
+    wxSizer *sizer = NULL;
+    if (obj->GetObjectType() == T_WIDGET)
+      item = shared_dynamic_cast<VisualWindow>(visualObj)->GetWindow();
+    else if (obj->GetObjectType() == T_SIZER)
+      item = shared_dynamic_cast<VisualSizer>(visualObj)->GetSizer();
+    
+    objAux = obj->FindNearAncestor(T_SIZER);
+    if (objAux)
+    {
+      it = m_map.find(objAux);
+      sizer = shared_dynamic_cast<VisualSizer>(it->second)->GetSizer(); 
+    }
+    
+    m_back->SetSelectedSizer(sizer);
+    m_back->SetSelectedItem(item);
+    m_back->SetSelectedObject(obj);
+    m_back->Refresh();
+  }
+  else
+  {
+    m_back->SetSelectedSizer(NULL);
+    m_back->SetSelectedItem(NULL);
+    m_back->SetSelectedObject(PObjectBase());
+    m_back->Refresh();
+  }
 }
 
 void VisualEditor::ObjectCreated(PObjectBase obj)
