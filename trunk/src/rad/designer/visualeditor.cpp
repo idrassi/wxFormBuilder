@@ -196,7 +196,7 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *parent,
       {
         PVisualWindow winobj(shared_dynamic_cast<VisualWindow>(vobj));
         wxWindow *window = winobj->GetWindow();
-        window->PushEventHandler(new VObjEvtHandler(window,sizer,obj,GetData()));
+        window->PushEventHandler(new VObjEvtHandler(window,obj,GetData()));
         #ifdef __WXFB_EXPERIMENTAL__
         window->PushEventHandler(new EditorHandler(GetData()));
         #endif //__WXFB_EXPERIMENTAL__
@@ -270,21 +270,16 @@ GridPanel::GridPanel(wxWindow *parent, int id, const wxPoint& pos,
   m_selItem = NULL;
   m_actPanel = NULL;
 }
+
 void GridPanel::SetGrid(int x, int y)
 {
   m_x = x;
   m_y = y;
 }  
-void GridPanel::OnPaint(wxPaintEvent &event)
+
+void GridPanel::HighlightSelection(wxDC& dc)
 {
-  wxPaintDC dc(this);
-  wxSize size = GetSize();
-  dc.SetPen(*wxBLACK_PEN);
-  for (int i=0;i<size.GetWidth();i += m_x)
-    for (int j=0;j<size.GetHeight();j += m_y)
-      dc.DrawPoint(i-1,j-1);
-      
-  if (m_actPanel != this) return;
+  wxSize size;
   PObjectBase object = m_selObj.lock();
  
   if (m_selSizer)
@@ -308,7 +303,9 @@ void GridPanel::OnPaint(wxPaintEvent &event)
     if (m_selItem->IsKindOf(CLASSINFO(wxWindow))){
         point = ((wxWindow*)m_selItem)->GetPosition();
         size = ((wxWindow*)m_selItem)->GetSize();
-    }else{
+    }
+    else
+    {
         point = ((wxSizer*)m_selItem)->GetPosition();
         size = ((wxSizer*)m_selItem)->GetSize();
     }
@@ -319,6 +316,19 @@ void GridPanel::OnPaint(wxPaintEvent &event)
     dc.DrawRectangle(point.x - border + 1, point.y - border + 1, 
                     size.x + 2 * border - 1, size.y + 2 * border - 1);
   }
+}
+
+void GridPanel::OnPaint(wxPaintEvent &event)
+{
+  wxPaintDC dc(this);
+  wxSize size = GetSize();
+  dc.SetPen(*wxBLACK_PEN);
+  for (int i=0;i<size.GetWidth();i += m_x)
+    for (int j=0;j<size.GetHeight();j += m_y)
+      dc.DrawPoint(i-1,j-1);
+      
+  if (m_actPanel != this) return;
+  HighlightSelection(dc);
 }   
 /*
 void GridPanel::OnMouseMove(wxMouseEvent &event)
