@@ -279,6 +279,54 @@ void VObjEvtHandler::OnMouseMove(wxMouseEvent &event)
 
 void VObjEvtHandler::OnPaint(wxPaintEvent &event)
 {
+  PWidgetObject wo = shared_dynamic_cast<WidgetObject>(m_object.lock());
+  if (wo->IsContainer())
+  {
+    wxPaintDC dc(m_window);
+    wxWindow *aux = m_window;
+    wxSize size;
+    while (!aux->IsKindOf(CLASSINFO(GridPanel))) aux = aux->GetParent();
+    GridPanel *gp = (GridPanel*) aux;
+    if (gp->GetActivePanel() == m_window)
+    {
+      PObjectBase object = gp->GetSelectedObject();
+      wxSizer *sizer = gp->GetSelectedSizer();
+      wxObject *item = gp->GetSelectedItem();
+      
+      if (sizer)
+      {
+        wxPoint point = sizer->GetPosition();
+        size = sizer->GetSize();
+        wxPen redPen(*wxBLUE, 2, wxSOLID);
+        dc.SetPen(redPen);
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        PObjectBase sizerParent = object->FindNearAncestor(T_SIZER);
+        if (sizerParent && sizerParent->GetParent())
+        {
+            int border = sizerParent->GetParent()->GetPropertyAsInteger(_("border"));
+            dc.DrawRectangle(point.x - border + 1, point.y - border + 1, 
+                            size.x + 2 * border - 1, size.y + 2 * border - 1);
+        }
+      }
+      if (item)
+      {
+        wxPoint point;
+        if (item->IsKindOf(CLASSINFO(wxWindow))){
+            point = ((wxWindow*)item)->GetPosition();
+            size = ((wxWindow*)item)->GetSize();
+        }else{
+            point = ((wxSizer*)item)->GetPosition();
+            size = ((wxSizer*)item)->GetSize();
+        }
+        wxPen bluePen(*wxRED, 2, wxSOLID);
+        dc.SetPen(bluePen);
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        int border = object->GetParent()->GetPropertyAsInteger(_T("border"));
+        dc.DrawRectangle(point.x - border + 1, point.y - border + 1, 
+                        size.x + 2 * border - 1, size.y + 2 * border - 1);
+      }
+    }
+  }
   event.Skip();  
 }
 

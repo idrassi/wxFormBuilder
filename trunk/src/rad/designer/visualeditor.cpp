@@ -268,6 +268,7 @@ GridPanel::GridPanel(wxWindow *parent, int id, const wxPoint& pos,
   SetGrid(10,10);
   m_selSizer = NULL;
   m_selItem = NULL;
+  m_actPanel = NULL;
 }
 void GridPanel::SetGrid(int x, int y)
 {
@@ -283,6 +284,7 @@ void GridPanel::OnPaint(wxPaintEvent &event)
     for (int j=0;j<size.GetHeight();j += m_y)
       dc.DrawPoint(i-1,j-1);
       
+  if (m_actPanel != this) return;
   PObjectBase object = m_selObj.lock();
  
   if (m_selSizer)
@@ -352,30 +354,21 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
   PVisualObject visualObj;
   PObjectBase objAux;
   VisualObjectMap::iterator it = m_map.find(obj);
-
-  bool validPanel = it != m_map.end();
-  if (validPanel)
-  {
-      visualObj = it->second;
-      objAux = obj;
-      if (objAux->GetObjectType() != T_WIDGET)
-        objAux = objAux->FindNearAncestor(T_WIDGET);
-        
-      validPanel = objAux == 0;
-    
-      wxWindow *aux = NULL;
-      if (!validPanel)
-      {
-        it = m_map.find(objAux);
-        aux = shared_dynamic_cast<VisualWindow>(it->second)->GetWindow();  
-        while (!aux->IsKindOf(CLASSINFO(wxPanel)) && !aux->IsKindOf(CLASSINFO(GridPanel))) 
-          aux = aux->GetParent();
-        validPanel = aux && aux->IsKindOf(CLASSINFO(GridPanel));
-      }
-  }
   
-  if (validPanel)
+  if (it != m_map.end())
   {
+    wxWindow *selPanel = NULL;
+    visualObj = it->second;
+    objAux = obj->FindNearAncestor(T_WIDGET);
+      
+    if (objAux)  // Un padre de tipo T_WIDGET es siempre un contenedor
+    {
+      it = m_map.find(objAux);
+      selPanel = shared_dynamic_cast<VisualWindow>(it->second)->GetWindow();
+    }
+    else
+      selPanel = m_back;
+        
     wxObject *item = NULL;
     wxSizer *sizer = NULL;
     if (obj->GetObjectType() == T_WIDGET)
@@ -393,6 +386,7 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
     m_back->SetSelectedSizer(sizer);
     m_back->SetSelectedItem(item);
     m_back->SetSelectedObject(obj);
+    m_back->SetSelectedPanel(selPanel);
     m_back->Refresh();
   }
   else
@@ -400,6 +394,7 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
     m_back->SetSelectedSizer(NULL);
     m_back->SetSelectedItem(NULL);
     m_back->SetSelectedObject(PObjectBase());
+    m_back->SetSelectedPanel(NULL);
     m_back->Refresh();
   }
 }

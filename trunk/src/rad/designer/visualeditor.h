@@ -44,6 +44,7 @@ class GridPanel : public wxSashWindow //wxPanel
    wxSizer *m_selSizer;
    wxObject *m_selItem;
    WPObjectBase m_selObj;
+   wxWindow *m_actPanel;
    
    DECLARE_CLASS(GridPanel)
    
@@ -58,6 +59,11 @@ class GridPanel : public wxSashWindow //wxPanel
    void SetSelectedSizer(wxSizer *sizer) { m_selSizer = sizer; }
    void SetSelectedItem(wxObject *item) { m_selItem = item; }
    void SetSelectedObject(PObjectBase object) { m_selObj = object; }
+   void SetSelectedPanel(wxWindow *actPanel) { m_actPanel = actPanel; }
+   wxSizer *GetSelectedSizer() { return m_selSizer; }
+   wxObject* GetSelectedItem() { return m_selItem; }
+   PObjectBase GetSelectedObject() { return m_selObj.lock(); }
+   wxWindow* GetActivePanel() { return m_actPanel; }
    void OnPaint(wxPaintEvent &event);
 //   void OnMouseMove(wxMouseEvent &event);
 }; 
