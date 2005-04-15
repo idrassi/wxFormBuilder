@@ -40,8 +40,6 @@ class ObjectInspector : public DataObserver, public wxPanel
   PObjectBase m_currentSel;
   wxNotebook *m_notebook;
   
-
-
   void CreatePropertyPanel(const wxString& name, PObjectBase obj,
                            PObjectInfo obj_info, PropertyMap &map);
   

@@ -44,6 +44,11 @@ void ObjectInspector::Create()
     #endif
     
     m_currentSel = sel_obj;
+    
+    wxString pageName;
+    
+    if (GetChildren().GetCount() > 0)
+      pageName = m_notebook->GetPageText(m_notebook->GetSelection());
    
     DestroyChildren();
         
@@ -83,7 +88,27 @@ void ObjectInspector::Create()
       {
         Debug::Print("[ObjectInspector::Update] Has layout properties");
         CreatePropertyPanel(wxT("Layout"), layout ,layout->GetObjectInfo(),dummy);
-      }  
+      }
+      
+      // vamos a intentar seleccionar la misma página que había seleccionada
+      if (pageName != wxT("") && GetChildren().GetCount() > 0)
+      {
+        int page = -1;
+        int i=0;
+
+        while (page < 0 && i < m_notebook->GetPageCount())
+        {
+          if (m_notebook->GetPageText(i) == pageName)
+            page = i;
+          else 
+            i++;
+        }
+        
+        if (page >= 0)
+          m_notebook->SetSelection(page);
+        
+      }
+        
       #ifndef __WX24__
       Thaw();
       #endif

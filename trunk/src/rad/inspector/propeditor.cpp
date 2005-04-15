@@ -333,7 +333,7 @@ FontEditor::FontEditor(DataObservable *data, PProperty prop, wxWindow *parent, i
     wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 
     m_text = new wxTextCtrl(this,-1,wxT(""));
-    m_text->Disable();
+//    m_text->Disable();
     m_button = new wxButton(this,BUTTON_CHOOSE_FONT,wxT("Choose..."));
     
     sizer->Add(m_text,1,wxADJUST_MINSIZE,0);
@@ -392,7 +392,7 @@ ColourEditor::ColourEditor(DataObservable *data, PProperty prop, wxWindow *paren
     wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 
     m_text = new wxTextCtrl(this,-1,wxT(""));
-    m_text->Disable();
+//    m_text->Disable();
     
     m_button = new wxButton(this,BUTTON_CHOOSE_COLOUR,wxT("Choose..."));
     
