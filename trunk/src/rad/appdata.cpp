@@ -112,6 +112,9 @@ void ApplicationData::CreateObject(wxString name)
   }  
   
   DataObservable::NotifyObjectCreated(obj);
+  
+  if (obj)
+    SelectObject(obj);
 }
   
 void ApplicationData::RemoveObject(PObjectBase obj)

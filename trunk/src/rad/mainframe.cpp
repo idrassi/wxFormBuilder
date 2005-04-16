@@ -295,10 +295,10 @@ void MainFrame::OnImportXrc(wxCommandEvent &event)
         GetData()->MergeProject(project);
       }
       else
-        wxLogMessage("Error al importar XRC");
+        wxLogMessage(wxT("Error al importar XRC"));
     }
     else
-      wxLogMessage("Error al cargar archivo XRC");
+      wxLogMessage(wxT("Error al cargar archivo XRC"));
   }
   
   dialog->Destroy();
