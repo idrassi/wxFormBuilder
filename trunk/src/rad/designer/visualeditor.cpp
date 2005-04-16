@@ -300,15 +300,22 @@ void GridPanel::HighlightSelection(wxDC& dc)
   if (m_selItem)
   {
     wxPoint point;
-    if (m_selItem->IsKindOf(CLASSINFO(wxWindow))){
+    if (m_selItem->IsKindOf(CLASSINFO(wxWindow)))
+    {
         point = ((wxWindow*)m_selItem)->GetPosition();
         size = ((wxWindow*)m_selItem)->GetSize();
     }
-    else
+    else if (m_selItem->IsKindOf(CLASSINFO(wxSizer)))
     {
         point = ((wxSizer*)m_selItem)->GetPosition();
         size = ((wxSizer*)m_selItem)->GetSize();
     }
+    else
+    {
+        Debug::Print("Unknown class: %s", m_selItem->GetClassInfo()->GetClassName());
+        return;
+    }
+        
     wxPen bluePen(*wxRED, 2, wxSOLID);
     dc.SetPen(bluePen);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
