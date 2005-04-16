@@ -300,12 +300,14 @@ void GridPanel::HighlightSelection(wxDC& dc)
   if (m_selItem)
   {
     wxPoint point;
-    if (m_selItem->IsKindOf(CLASSINFO(wxWindow)))
+    //if (m_selItem->IsKindOf(CLASSINFO(wxWindow)))
+    if (dynamic_cast<wxWindow *>(m_selItem))
     {
         point = ((wxWindow*)m_selItem)->GetPosition();
         size = ((wxWindow*)m_selItem)->GetSize();
     }
-    else if (m_selItem->IsKindOf(CLASSINFO(wxSizer)))
+//    else if (m_selItem->IsKindOf(CLASSINFO(wxSizer)))
+    else if (dynamic_cast<wxSizer *>(m_selItem))
     {
         point = ((wxSizer*)m_selItem)->GetPosition();
         size = ((wxSizer*)m_selItem)->GetSize();
