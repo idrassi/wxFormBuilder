@@ -261,7 +261,109 @@ void XrcFilter::ImportColour(TiXmlElement *xrcProperty, PProperty property)
 
 void XrcFilter::ImportFont(TiXmlElement *xrcProperty, PProperty property)
 {
-  //TODO
+  TiXmlElement *element;
+  TiXmlNode *xmlValue;
+  wxFont font;
+  
+  
+  // el tamaño
+  element = xrcProperty->FirstChildElement("size");
+  if (element)
+  {
+    wxString size_str;
+    xmlValue = element->FirstChild();
+    if (xmlValue && xmlValue->ToText())
+      size_str = _WXSTR(xmlValue->ToText()->Value());
+      
+    long size;
+    if (size_str.ToLong(&size))
+      font.SetPointSize(size);
+  }
+
+  // la familia
+  element = xrcProperty->FirstChildElement("family");
+  if (element)
+  {
+    string family_str;
+    xmlValue = element->FirstChild();
+    if (xmlValue && xmlValue->ToText())
+      family_str = xmlValue->ToText()->Value();
+      
+    if (family_str == "decorative")
+      font.SetFamily(wxDECORATIVE);
+    else if (family_str == "roman")
+      font.SetFamily(wxROMAN);
+    else if (family_str == "swiss")
+      font.SetFamily(wxSWISS);
+    else if (family_str == "modern")
+      font.SetFamily(wxMODERN);
+    else //if (family_str == "default")
+      font.SetFamily(wxDEFAULT);
+  }
+  
+  // el estilo
+  element = xrcProperty->FirstChildElement("style");
+  if (element)
+  {
+    string style_str;
+    xmlValue = element->FirstChild();
+    if (xmlValue && xmlValue->ToText())
+      style_str = xmlValue->ToText()->Value();
+      
+    if (style_str == "slant")
+      font.SetStyle(wxSLANT);
+    else if (style_str == "italic")
+      font.SetStyle(wxITALIC);
+    else //if (style_str == "normal")
+      font.SetStyle(wxNORMAL);
+  }    
+  
+  
+  // grosor
+  element = xrcProperty->FirstChildElement("weight");
+  if (element)
+  {
+    string weight_str;
+    xmlValue = element->FirstChild();
+    if (xmlValue && xmlValue->ToText())
+      weight_str = xmlValue->ToText()->Value();
+      
+    if (weight_str == "light")
+      font.SetWeight(wxLIGHT);
+    else if (weight_str == "bold")
+      font.SetWeight(wxBOLD);
+    else //if (sweight_str == "normal")
+      font.SetWeight(wxNORMAL);
+  }    
+  
+  // subrayado
+  element = xrcProperty->FirstChildElement("underlined");
+  if (element)
+  {
+    string underlined_str;
+    xmlValue = element->FirstChild();
+    if (xmlValue && xmlValue->ToText())
+      underlined_str = xmlValue->ToText()->Value();
+      
+    if (underlined_str == "1")
+      font.SetUnderlined(TRUE);
+    else
+      font.SetUnderlined(FALSE);
+  }
+  
+  // tipo de letra
+  element = xrcProperty->FirstChildElement("face");
+  if (element)
+  {
+    wxString face;
+    xmlValue = element->FirstChild();
+    if (xmlValue && xmlValue->ToText())
+      face = _WXSTR(xmlValue->ToText()->Value());
+      
+    font.SetFaceName(face);
+  }
+  
+  property->SetValue(font);
 }
 
 void XrcFilter::ImportXrcElements(TiXmlElement *xrcObj, TiXmlElement *xrcInfo,
