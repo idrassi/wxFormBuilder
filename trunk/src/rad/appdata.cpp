@@ -34,33 +34,6 @@ ApplicationData::ApplicationData()
   m_objDb->SetXmlPath("./xml/");
   m_objDb->SetIconPath("./xpm/");
   m_objDb->LoadFile();
-  /*
-  PObjectInfo obj = m_objDb->GetObjectInfo("wxButton");
-  PCodeInfo code_info = obj->GetCodeInfo("C++");
-  
-  Debug::Print((char *)(code_info->GetTemplate("construction").c_str()));
-  Debug::Print((char *)(code_info->GetTemplate("declaration").c_str()));  
-  
-  {
-    TemplateParser parser(PObjectBase(),code_info->GetTemplate("construction"));
-    Debug::Print((char *)parser.ParseTemplate().c_str());
-  }
-  {
-    TemplateParser parser(PObjectBase(),code_info->GetTemplate("declaration"));
-    Debug::Print((char *)parser.ParseTemplate().c_str());
-  }*/
-
-  // creamos un arbol provisional
-  
-/*  PObjectBase project = m_objDb->CreateObject("Project");
-  assert(project);
-  PObjectBase form = m_objDb->CreateObject("Panel",project);
-  PObjectBase os = m_objDb->CreateObject("wxBoxSizer",form);
-  
-  PObjectBase ob1 = m_objDb->CreateObject("wxButton",os);
-  PObjectBase ob2 = m_objDb->CreateObject("wxButton",os);
-  
-  m_project = shared_dynamic_cast<ProjectObject>(project);*/
 }  
   
 PObjectBase ApplicationData::GetSelectedObject()
@@ -123,12 +96,13 @@ void ApplicationData::RemoveObject(PObjectBase obj)
   if (parent && parent->GetObjectType() == T_SIZERITEM)
     obj = parent;
 
-  SelectObject(obj->GetParent());
+  PObjectBase newSelected = obj->GetParent();
 
   obj->GetParent()->RemoveChild(obj);
   obj->SetParent(PObjectBase());
   
   DataObservable::NotifyObjectRemoved(obj);
+  SelectObject(newSelected);
 }
 
 void ApplicationData::CutObject(PObjectBase obj)

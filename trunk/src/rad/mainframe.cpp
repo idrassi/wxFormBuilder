@@ -31,6 +31,7 @@
 #include "icons/wxwin16x16.xpm"
 #include "icons/system.xpm"
 #include "model/xrcfilter.h"
+#include "rad/about.h"
 
 #define ID_ABOUT 100
 #define ID_QUIT  101 
@@ -317,12 +318,17 @@ void MainFrame::OnGenerateCode(wxCommandEvent &event)
 
 void MainFrame::OnAbout(wxCommandEvent &event)
 {
+  AboutDialog *dlg = new AboutDialog(this);
+  dlg->ShowModal();
+  dlg->Destroy();
+  
+  /*
   wxMessageBox(
     wxT("wxFormBuilder v.0.1\n"
         "wxFormBuilder is a visual dialog editor with\n"
         "code generation for wxWidgets Framework\n"
         "(C) 2005 - José Antonio Hurtado"),
-    wxT("About of wxFormBuilder..."),wxOK);
+    wxT("About of wxFormBuilder..."),wxOK);*/
 }
 
 void MainFrame::OnExit(wxCommandEvent &event)
