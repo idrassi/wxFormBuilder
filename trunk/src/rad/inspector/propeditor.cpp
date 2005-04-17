@@ -333,6 +333,7 @@ FontEditor::FontEditor(DataObservable *data, PProperty prop, wxWindow *parent, i
     wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 
     m_text = new wxTextCtrl(this,-1,wxT(""));
+    m_text->PushEventHandler(new UpdateEventHandler(this));
 //    m_text->Disable();
     m_button = new wxButton(this,BUTTON_CHOOSE_FONT,wxT("Choose..."));
     
@@ -392,6 +393,7 @@ ColourEditor::ColourEditor(DataObservable *data, PProperty prop, wxWindow *paren
     wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 
     m_text = new wxTextCtrl(this,-1,wxT(""));
+    m_text->PushEventHandler(new UpdateEventHandler(this));
 //    m_text->Disable();
     
     m_button = new wxButton(this,BUTTON_CHOOSE_COLOUR,wxT("Choose..."));
@@ -447,6 +449,7 @@ PathEditor::PathEditor(DataObservable *data, PProperty prop, wxWindow *parent, i
     wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 
     m_text = new wxTextCtrl(this,-1,wxT(""));
+    m_text->PushEventHandler(new UpdateEventHandler(this));
 //    m_text->Disable();
     
     m_button = new wxButton(this,BUTTON_SELECT_PATH,wxT("..."),
@@ -499,6 +502,7 @@ BitmapEditor::BitmapEditor(DataObservable *data, PProperty prop, wxWindow *paren
     wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 
     m_text = new wxTextCtrl(this,-1,wxT(""));
+    m_text->PushEventHandler(new UpdateEventHandler(this));
 //    m_text->Disable();
     
     m_button = new wxButton(this,BUTTON_SELECT_BITMAP,wxT("..."),
