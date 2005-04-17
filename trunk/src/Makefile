@@ -2,8 +2,8 @@ CPP  = g++
 CC   = gcc
 
 RES  = 
-OBJ  = model/database.o model/objectbase.o model/objects.o rad/bitmaps.o rad/guirad.o rad/mainframe.o rad/palette.o utils/stringutils.o utils/typeconv.o maingui.o rad/designer/visualobj.o utils/debug.o rad/cpppanel/cpppanel.o rad/appobserver.o rad/objecttree/objecttree.o rad/inspector/objinspect.o rad/inspector/propeditor.o rad/designer/visualeditor.o rad/appdata.o rad/customkeys.o codegen/codegen.o codegen/cppcg.o rad/title.o rad/genericpanel.o model/types.o rad/xrcpanel/xrcpanel.o codegen/xrccg.o model/xrcfilter.o
-LINKOBJ  = model/database.o model/objectbase.o model/objects.o rad/bitmaps.o rad/guirad.o rad/mainframe.o rad/palette.o utils/stringutils.o utils/typeconv.o maingui.o rad/designer/visualobj.o utils/debug.o rad/cpppanel/cpppanel.o rad/appobserver.o rad/objecttree/objecttree.o rad/inspector/objinspect.o rad/inspector/propeditor.o rad/designer/visualeditor.o rad/appdata.o rad/customkeys.o codegen/codegen.o codegen/cppcg.o rad/title.o rad/genericpanel.o model/types.o rad/xrcpanel/xrcpanel.o codegen/xrccg.o model/xrcfilter.o
+OBJ  = model/database.o model/objectbase.o model/objects.o rad/bitmaps.o rad/guirad.o rad/mainframe.o rad/palette.o utils/stringutils.o utils/typeconv.o maingui.o rad/designer/visualobj.o utils/debug.o rad/cpppanel/cpppanel.o rad/appobserver.o rad/objecttree/objecttree.o rad/inspector/objinspect.o rad/inspector/propeditor.o rad/designer/visualeditor.o rad/appdata.o rad/customkeys.o codegen/codegen.o codegen/cppcg.o rad/title.o rad/genericpanel.o model/types.o rad/xrcpanel/xrcpanel.o codegen/xrccg.o model/xrcfilter.o rad/about.o
+LINKOBJ  = model/database.o model/objectbase.o model/objects.o rad/bitmaps.o rad/guirad.o rad/mainframe.o rad/palette.o utils/stringutils.o utils/typeconv.o maingui.o rad/designer/visualobj.o utils/debug.o rad/cpppanel/cpppanel.o rad/appobserver.o rad/objecttree/objecttree.o rad/inspector/objinspect.o rad/inspector/propeditor.o rad/designer/visualeditor.o rad/appdata.o rad/customkeys.o codegen/codegen.o codegen/cppcg.o rad/title.o rad/genericpanel.o model/types.o rad/xrcpanel/xrcpanel.o codegen/xrccg.o model/xrcfilter.o rad/about.o
 LIBS = `wx-config --libs`   ../libs/tinyxml/tinyxml.a -lwx_gtk2u_stc-2.4
 INCS = 
 CXXINCS =
@@ -32,6 +32,9 @@ rad/genericpanel.o: rad/genericpanel.cpp
   
 rad/title.o: rad/title.cpp
 	$(CPP) -c rad/title.cpp -o rad/title.o $(CXXFLAGS)
+
+rad/about.o: rad/about.cpp
+	$(CPP) -c rad/about.cpp -o rad/about.o $(CXXFLAGS)
   
 model/database.o: model/database.cpp
 	$(CPP) -c model/database.cpp -o model/database.o $(CXXFLAGS)
