@@ -24,7 +24,7 @@
 // Juan Antonio Ortega (jortegalalmolda@gmail.com)
 
 #include "database.h"
-#include "objects.h"
+//#include "objects.h"
 #include "utils/stringutils.h"
 #include "utils/typeconv.h"
 #include "utils/debug.h"
@@ -95,79 +95,68 @@ PObjectPackage ObjectDatabase::GetPackage(unsigned int idx)
  */
 PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
 {
-  PObjectBase object;
+  PObjectBase object, sizeritem;
   bool valid_child = false;
   PObjectInfo obj_info = GetObjectInfo(class_name);
+   
+  if (!obj_info)
+  {
+    assert(false);
+    return PObjectBase();
+  }
 
-  
-  // veamos si podemos crear el objeto
   if (parent)
   {
-    if (parent->GetObjectType() == T_SIZER && 
-      (obj_info->GetObjectType() == T_WIDGET ||
-       obj_info->GetObjectType() == T_SIZER  ||
-       obj_info->GetObjectType() == T_SPACER))
-      valid_child = true;
-    else
-      valid_child = parent->ChildTypeOk(obj_info->GetObjectType());
-  }  
+    valid_child = parent->ChildTypeOk(obj_info->GetObjectType());
+    
+    if (!valid_child && parent->GetObjectType() == T_SIZER)
+    {
+      // Esto no debería comprobarse aquí ya que esto pertenece a la lógica
+      // de la aplicación, aunque de momento lo vamos a permitir.
+      // En el caso de que el objeto padre sea un T_SIZER vamos a comprobar
+      // si metiendolo en un T_SIZERITEM es un objeto válido.
+      
+      // *** NOTA: error de diseño ***
+      // la función ChildTypeOk debe ser de ObjectInfo en lugar de ObjectBase
+      // como "apaño" se va a crear un objeto temporal para usar la función
+      sizeritem = PObjectBase(new ObjectBase("sizeritem"));
+      sizeritem->SetObjectType(T_SIZERITEM);
+      valid_child = sizeritem->ChildTypeOk(obj_info->GetObjectType());
+      
+      if (valid_child)
+      {
+        // Pues hay que meterlo en un sizeritem, vamos a preparar el
+        // nuevo padre
+        sizeritem = CreateObject("sizeritem",parent);
+        assert(sizeritem);
+        
+        parent = sizeritem;
+      }
+    }
+  }
   else
-    valid_child = (obj_info->GetObjectType() == T_PROJECT ||
-                  obj_info->GetObjectType() == T_SIZERITEM );
+  {
+    // si no tiene padre sólo puede ser un objeto T_PROJECT
+    valid_child = obj_info->GetObjectType() == T_PROJECT;
+  }
 
   if (!valid_child)
     return PObjectBase();   
 
-       
-  if (obj_info)
-  { 
-    // Instanciamos el objeto concreto
-    
-    if (obj_info->GetObjectType() == T_WIDGET)
-      object = PObjectBase(new WidgetObject(class_name));
-    else if (obj_info->GetObjectType() == T_SIZER)
-      object = PObjectBase(new SizerObject(class_name));
-    else if (obj_info->GetObjectType() == T_FORM)
-      object = PObjectBase(new FormObject(class_name));
-    else if (obj_info->GetObjectType() == T_PROJECT)
-      object = PObjectBase(new ProjectObject(class_name));
-    else if (obj_info->GetObjectType() == T_COMPONENT)
-      object = PObjectBase(new ComponentObject(class_name));
-    else if (obj_info->GetObjectType() == T_SIZERITEM)
-    {
-      // un sizeritem no tiene nada de especial
-      object = PObjectBase(new ObjectBase(class_name));
-      object->SetObjectType(obj_info->GetObjectType()); 
-    }
-    else
-      return PObjectBase();
-  }  
-  else
-    return PObjectBase();
+
+  // Llagados aquí el objeto se crea seguro...
+  object = PObjectBase(new ObjectBase(class_name));
+  object->SetObjectType(obj_info->GetObjectType()); // *FIXME*
 
 
-  // lo insertamos en el arbol
+  // lo insertamos en el arbol si procede...
   if (parent)
   {    
-    // si el objeto padre es un sizer hay que crear un objeto sizeritem
-    if (parent->GetObjectType() == T_SIZER && object->GetObjectType() != T_SIZERITEM)
-    {
-      PObjectBase sizeritem(CreateObject("sizeritem"));
-      sizeritem->AddChild(object);
-      object->SetParent(sizeritem);
-
-      parent->AddChild(sizeritem);
-      sizeritem->SetParent(parent);
-    }  
-    else
-    {
-      parent->AddChild(object);
-      object->SetParent(parent);
-    }  
-      
-    
+    parent->AddChild(object);
+    object->SetParent(parent);
   }
-
+ 
+  // **** NOTA: esto debe ir en el constructor de ObjectBase ****      
   // le añadimos todas sus propiedades del objeto, incluyendo
   // las propiedades heredadas.
   
@@ -511,7 +500,9 @@ PObjectPackage ObjectDatabase::LoadPackage(string file)
         if (obj_info->GetObjectType() == T_FORM ||
             obj_info->GetObjectType() == T_WIDGET ||
             obj_info->GetObjectType() == T_SIZER ||
-            obj_info->GetObjectType() == T_COMPONENT)
+            obj_info->GetObjectType() == T_COMPONENT ||
+            obj_info->GetObjectType() == T_CONTAINER ||
+            obj_info->GetObjectType() == T_SPACER )
           package->Add(obj_info);
         
         elem_obj = elem_obj->NextSiblingElement(OBJINFO_TAG);
@@ -592,7 +583,10 @@ PropertyType ObjectDatabase::ParsePropertyType (string str)
   if (it != m_propTypes.end())
     result = it->second;
   else
+  {
     result = PT_ERROR;
+    assert(false);
+  }
   
   return result;
 
@@ -606,8 +600,10 @@ ObjectType  ObjectDatabase::ParseObjectType   (string str)
   if (it != m_objTypes.end())
     result = it->second;
   else
+  {
     result = T_ERROR;
-  
+    assert(false);
+  }  
   return result;
 
 }
@@ -637,6 +633,7 @@ void ObjectDatabase::InitObjectTypes()
  OT("interface",T_INTERFACE);
  OT("form",T_FORM);
  OT("spacer",T_SPACER);
+ OT("container",T_CONTAINER);
 }
 
 //#define WT(x,y) m_widgetTypes.insert(WTMap::value_type(x,y))

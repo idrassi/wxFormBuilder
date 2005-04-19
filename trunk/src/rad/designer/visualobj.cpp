@@ -44,6 +44,7 @@ PVisualObject VisualObject::CreateVisualObject
 
   switch (type)
   {
+    case T_CONTAINER:
     case T_WIDGET:
       vobj = PVisualObject(new VisualWindow(obj,wx_parent));
       break;
@@ -278,7 +279,8 @@ void VObjEvtHandler::OnMouseMove(wxMouseEvent &event)
 
 void VObjEvtHandler::OnPaint(wxPaintEvent &event)
 {
-  PWidgetObject wo = shared_dynamic_cast<WidgetObject>(m_object.lock());
+  //PWidgetObject wo = shared_dynamic_cast<WidgetObject>(m_object.lock());
+  PObjectBase wo = shared_dynamic_cast<ObjectBase>(m_object.lock());
   if (wo->IsContainer())
   {
     wxWindow *aux = m_window;

@@ -33,7 +33,7 @@ class ApplicationData : public DataObservable
   
   bool m_changeFlag;        // flag de proyecto modificado
   PObjectDatabase m_objDb;  // Base de datos de objetos  
-  PProjectObject m_project; // Proyecto
+  PObjectBase m_project; // Proyecto
   PObjectBase m_selObj;     // Objeto seleccionado
 
   PObjectBase m_clipboard;
@@ -60,7 +60,7 @@ class ApplicationData : public DataObservable
   
   // Servicios para los observadores  
   PObjectBase GetSelectedObject();
-  PProjectObject GetProjectData();
+  PObjectBase GetProjectData();
   PObjectBase GetSelectedForm();
   
 

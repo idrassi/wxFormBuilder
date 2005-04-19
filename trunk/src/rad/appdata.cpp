@@ -50,7 +50,7 @@ PObjectBase ApplicationData::GetSelectedForm()
 }
   
 
-PProjectObject ApplicationData::GetProjectData()
+PObjectBase ApplicationData::GetProjectData()
 {
   return m_project;
 }  
@@ -194,7 +194,8 @@ bool ApplicationData::LoadProject(const wxString &file)
     if (proj && proj->GetObjectType()== T_PROJECT)
     {
       PObjectBase old_proj = m_project;
-      m_project = shared_dynamic_cast<ProjectObject>(proj);
+      //m_project = shared_dynamic_cast<ProjectObject>(proj);
+      m_project = proj;
       m_selObj = m_project;
       result = true;
       DataObservable::NotifyProjectLoaded();
@@ -207,7 +208,7 @@ bool ApplicationData::LoadProject(const wxString &file)
 
 void ApplicationData::NewProject()
 {
-  m_project = shared_dynamic_cast<ProjectObject>(m_objDb->CreateObject("Project"));
+  m_project = m_objDb->CreateObject("Project");
   m_selObj = m_project;
   DataObservable::NotifyProjectRefresh();  
 }

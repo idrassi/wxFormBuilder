@@ -5,8 +5,8 @@ CPP  = g++.exe -D__DEBUG__
 CC   = gcc.exe -D__DEBUG__
 WINDRES = windres.exe
 RES  = ./_objs/wxFormBuilder_private.res
-OBJ  = ./_objs/database.o ./_objs/objectbase.o ./_objs/objects.o ./_objs/bitmaps.o ./_objs/guirad.o ./_objs/mainframe.o ./_objs/palette.o ./_objs/stringutils.o ./_objs/typeconv.o ./_objs/maingui.o ./_objs/visualobj.o ./_objs/debug.o ./_objs/cpppanel.o ./_objs/appobserver.o ./_objs/objecttree.o ./_objs/objinspect.o ./_objs/propeditor.o ./_objs/visualeditor.o ./_objs/appdata.o ./_objs/customkeys.o ./_objs/codegen.o ./_objs/cppcg.o ./_objs/title.o ./_objs/genericpanel.o ./_objs/types.o ./_objs/xrccg.o ./_objs/xrcpanel.o ./_objs/xrcfilter.o ./_objs/about.o $(RES)
-LINKOBJ  = ./_objs/database.o ./_objs/objectbase.o ./_objs/objects.o ./_objs/bitmaps.o ./_objs/guirad.o ./_objs/mainframe.o ./_objs/palette.o ./_objs/stringutils.o ./_objs/typeconv.o ./_objs/maingui.o ./_objs/visualobj.o ./_objs/debug.o ./_objs/cpppanel.o ./_objs/appobserver.o ./_objs/objecttree.o ./_objs/objinspect.o ./_objs/propeditor.o ./_objs/visualeditor.o ./_objs/appdata.o ./_objs/customkeys.o ./_objs/codegen.o ./_objs/cppcg.o ./_objs/title.o ./_objs/genericpanel.o ./_objs/types.o ./_objs/xrccg.o ./_objs/xrcpanel.o ./_objs/xrcfilter.o ./_objs/about.o $(RES)
+OBJ  = ./_objs/database.o ./_objs/objectbase.o ./_objs/bitmaps.o ./_objs/guirad.o ./_objs/mainframe.o ./_objs/palette.o ./_objs/stringutils.o ./_objs/typeconv.o ./_objs/maingui.o ./_objs/visualobj.o ./_objs/debug.o ./_objs/cpppanel.o ./_objs/appobserver.o ./_objs/objecttree.o ./_objs/objinspect.o ./_objs/propeditor.o ./_objs/visualeditor.o ./_objs/appdata.o ./_objs/customkeys.o ./_objs/codegen.o ./_objs/cppcg.o ./_objs/title.o ./_objs/genericpanel.o ./_objs/types.o ./_objs/xrccg.o ./_objs/xrcpanel.o ./_objs/xrcfilter.o ./_objs/about.o $(RES)
+LINKOBJ  = ./_objs/database.o ./_objs/objectbase.o ./_objs/bitmaps.o ./_objs/guirad.o ./_objs/mainframe.o ./_objs/palette.o ./_objs/stringutils.o ./_objs/typeconv.o ./_objs/maingui.o ./_objs/visualobj.o ./_objs/debug.o ./_objs/cpppanel.o ./_objs/appobserver.o ./_objs/objecttree.o ./_objs/objinspect.o ./_objs/propeditor.o ./_objs/visualeditor.o ./_objs/appdata.o ./_objs/customkeys.o ./_objs/codegen.o ./_objs/cppcg.o ./_objs/title.o ./_objs/genericpanel.o ./_objs/types.o ./_objs/xrccg.o ./_objs/xrcpanel.o ./_objs/xrcfilter.o ./_objs/about.o $(RES)
 LIBS =  -L"C:/GNU/Dev-Cpp/lib" -L"C:/wx-2.4.2_compiled_as_dll/lib" -mwindows -mthreads -Wl,--subsystem,windows -mwindows -lstc -lwxmsw242 -lpng -ljpeg -lregex -ltiff -lzlib -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32 -ltinyxml -lstdc++  -g3 
 INCS =  -I"C:/GNU/Dev-Cpp/include"  -I"C:/GNU/MinGW32/include"  -I"C:/GNU/proyectos/wxFormBuilder/src"  -I"C:/wx-2.4.2_compiled_as_dll/include" 
 CXXINCS =  -I"C:/GNU/Dev-Cpp/include"  -I"C:/GNU/MinGW32/include/c++/3.4.2"  -I"C:/GNU/boost_1_31_0"  -I"C:/GNU/MinGW32/include/c++/3.4.2/ext"  -I"C:/GNU/proyectos/wxFormBuilder/src"  -I"C:/wx-2.4.2_compiled_as_dll/include" 
@@ -30,9 +30,6 @@ $(BIN): $(OBJ)
 
 ./_objs/objectbase.o: model/objectbase.cpp
 	$(CPP) -c model/objectbase.cpp -o ./_objs/objectbase.o $(CXXFLAGS)
-
-./_objs/objects.o: model/objects.cpp
-	$(CPP) -c model/objects.cpp -o ./_objs/objects.o $(CXXFLAGS)
 
 ./_objs/bitmaps.o: rad/bitmaps.cpp
 	$(CPP) -c rad/bitmaps.cpp -o ./_objs/bitmaps.o $(CXXFLAGS)

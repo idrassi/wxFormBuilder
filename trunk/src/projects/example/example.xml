@@ -1,7 +1,7 @@
 <object class="Project">
     <property name="file">gui</property>
     <property name="name">Welcome</property>
-    <property name="path">C:\GNU\proyectos\prueba_wxfb</property>
+    <property name="path"></property>
     <object class="Panel">
         <property name="bg"></property>
         <property name="fg"></property>

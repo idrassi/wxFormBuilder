@@ -41,7 +41,8 @@ typedef enum
   T_SIZER,
   T_SIZERITEM,
   T_SPACER,
-  T_BITMAP
+  T_BITMAP,
+  T_CONTAINER
 } ObjectType;
 
 

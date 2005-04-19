@@ -166,7 +166,7 @@ wxFont TypeConv::StringToFont (const wxString &str)
   wxStringTokenizer tkz(str,wxT(","));
 
   wxString face_name;
-  int style, weight, size;
+  int style = wxNORMAL, weight = wxNORMAL, size = 12;
 
   bool set_face_name, set_style, set_weight, set_size;
 

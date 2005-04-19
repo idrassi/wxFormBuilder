@@ -191,6 +191,7 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *parent,
 
   switch (type)
   {
+    case T_CONTAINER:
     case T_WIDGET:
     {
       {
@@ -300,12 +301,22 @@ void GridPanel::HighlightSelection(wxDC& dc)
   if (m_selItem)
   {
     wxPoint point;
-    if (m_selItem->IsKindOf(CLASSINFO(wxWindow)))
+
+    // Tenemos un problema (de momento) con los wxClassInfo's de los
+    // componentes que no forman parte de wxWidgets, debido a que el componente
+    // se compila por separado en una librería compartida/dll 
+    // y parece ser que la información de tipo de wxWidgets se configura
+    // estáticamente.
+    // Por tanto, no vamos a usar la información de tipos de wxWidgets.
+
+    //if (m_selItem->IsKindOf(CLASSINFO(wxWindow)))
+    if (object->GetObjectType() == T_WIDGET || object->GetObjectType() == T_CONTAINER)
     {
         point = ((wxWindow*)m_selItem)->GetPosition();
         size = ((wxWindow*)m_selItem)->GetSize();
     }
-    else if (m_selItem->IsKindOf(CLASSINFO(wxSizer)))
+    //else if (m_selItem->IsKindOf(CLASSINFO(wxSizer)))
+    else if (object->GetObjectType() == T_SIZER)
     {
         point = ((wxSizer*)m_selItem)->GetPosition();
         size = ((wxSizer*)m_selItem)->GetSize();
@@ -376,8 +387,9 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
   {
     wxWindow *selPanel = NULL;
     visualObj = it->second;
-    objAux = obj->FindNearAncestor(T_WIDGET);
-      
+    //objAux = obj->FindNearAncestor(T_WIDGET);
+    objAux = obj->FindNearAncestor(T_CONTAINER);  
+    
     if (objAux)  // Un padre de tipo T_WIDGET es siempre un contenedor
     {
       it = m_map.find(objAux);
@@ -388,7 +400,7 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
         
     wxObject *item = NULL;
     wxSizer *sizer = NULL;
-    if (obj->GetObjectType() == T_WIDGET)
+    if (obj->GetObjectType() == T_WIDGET || obj->GetObjectType() == T_CONTAINER)
       item = shared_dynamic_cast<VisualWindow>(visualObj)->GetWindow();
     else if (obj->GetObjectType() == T_SIZER)
       item = shared_dynamic_cast<VisualSizer>(visualObj)->GetSizer();

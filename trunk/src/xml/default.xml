@@ -5,7 +5,7 @@
     <property name="file" type="text" />
   </objectinfo> 
   <objectinfo class="C++" type="interface">
-    <property name="permission" type="option">
+    <property name="permission" type="option" hidden="1">
       <option name="none" />
       <option name="private" />
       <option name="protected" />

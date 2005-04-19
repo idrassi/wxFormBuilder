@@ -67,6 +67,9 @@ ostream& operator << (ostream &s, ObjectType type)
     case T_PROJECT:
       s << "T_PROJECT";
       break;
+      
+    default:
+      break;
 
   }
   return s;
@@ -313,6 +316,61 @@ bool ObjectBase::AddChild (unsigned int idx, PObjectBase obj)
     result = true;
   }  
   
+  return result;
+}
+
+bool ObjectBase::DoChildTypeOk(ObjectType type_child, ObjectType type_parent)
+{
+  bool result;
+  
+  switch (type_parent)
+  {
+    case T_PROJECT:
+      result = ( type_child == T_FORM);
+      break;
+
+    case T_CONTAINER:
+    case T_FORM:
+      result = (type_child == T_SIZER);
+      break;
+        
+    case T_SIZER:
+      result = (type_child == T_SIZERITEM);
+      break;
+      
+    case T_SIZERITEM:
+      result = (type_child == T_WIDGET || type_child == T_CONTAINER ||
+                type_child == T_SIZER || type_child == T_SPACER);
+      break;
+
+//    case T_BITMAP:
+//    case T_SPACER:
+//    case T_WIDGET:
+//    case T_INTERFACE:
+//    case T_COMPONENT:
+//      result = false;
+//      break;
+          
+    default:
+      result = false;
+      break;
+  }
+  
+  return result;
+}
+
+bool ObjectBase::ChildTypeOk (ObjectType type)
+{
+  return DoChildTypeOk(type, GetObjectType());
+}
+
+PObjectBase ObjectBase::GetLayout()
+{
+  PObjectBase result;
+  
+  if (GetParent() && GetParent()->GetObjectType()==T_SIZERITEM)
+    result = GetParent();
+    
   return result;
 }
 

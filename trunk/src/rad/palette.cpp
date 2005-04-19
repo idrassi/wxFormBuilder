@@ -22,7 +22,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "palette.h"
-#include "model/objects.h"
+#include "model/objectbase.h"
 #include "bitmaps.h"
 #include "utils/debug.h"
 #include "rad/title.h"

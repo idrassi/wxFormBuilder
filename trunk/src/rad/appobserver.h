@@ -24,7 +24,7 @@
 #ifndef __APP_OBSERVER__
 #define __APP_OBSERVER__
 
-#include "model/objects.h"
+#include "model/objectbase.h"
 #include "model/database.h"
 #include "wx/wx.h"
 #include <vector>
@@ -85,7 +85,7 @@ class DataObservable
 
   virtual PObjectBase GetSelectedObject() = 0;
   virtual PObjectBase GetSelectedForm() = 0;
-  virtual PProjectObject GetProjectData() = 0;
+  virtual PObjectBase GetProjectData() = 0;
 };
 
 /**

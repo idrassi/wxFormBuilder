@@ -193,6 +193,8 @@ class ObjectBase : public IObject, public enable_shared_from_this<ObjectBase>
     return shared_from_this();
   }
 
+
+  bool DoChildTypeOk (ObjectType type_child ,ObjectType type_parent);
   /*
    * Configura la instancia en su creación.
    *
@@ -210,6 +212,9 @@ class ObjectBase : public IObject, public enable_shared_from_this<ObjectBase>
    * Constructor. (debe ser "protegido" -> NewInstance)
    */
   ObjectBase (string class_name);
+  
+  // Mejor es que sea el propio objeto quien construya todas sus propiedades...
+  //ObjectBase(PObjectInfo obj_info);
   
   /*
    * Pseudo-Constructor.
@@ -375,7 +380,11 @@ class ObjectBase : public IObject, public enable_shared_from_this<ObjectBase>
    * Comprueba si el tipo de objeto pasado es válido como hijo del objeto.
    * Esta rutina es importante, ya que define las restricciónes de ubicación.
    */
-  virtual bool ChildTypeOk (ObjectType type) { return true; };
+  bool ChildTypeOk (ObjectType type);
+  
+  bool IsContainer() { return (GetObjectType() == T_CONTAINER); }
+  
+  PObjectBase GetLayout();
 
   /**
    * Devuelve el tipo de objeto.

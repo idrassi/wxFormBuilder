@@ -22,7 +22,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "objinspect.h"
-#include "model/objects.h"
+#include "model/objectbase.h"
 #include "utils/debug.h"
 
 
@@ -78,11 +78,14 @@ void ObjectInspector::Create()
 
       PObjectBase layout;
 
-        
+      
+      /*  
       if (sel_obj->GetObjectType() == T_WIDGET)
         layout = (shared_dynamic_cast<WidgetObject>(sel_obj))->GetLayout();
       else if (sel_obj->GetObjectType() == T_SIZER)
-        layout = (shared_dynamic_cast<SizerObject>(sel_obj))->GetLayout();
+        layout = (shared_dynamic_cast<SizerObject>(sel_obj))->GetLayout();*/
+        
+      layout = sel_obj->GetLayout();  
 
       if (layout)
       {

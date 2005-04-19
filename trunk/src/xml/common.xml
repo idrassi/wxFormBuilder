@@ -50,7 +50,7 @@
       <template name="include">#include &lt;wx/button.h&gt;</template>
     </codegen>
   </objectinfo>
-  <objectinfo class="wxPanel" icon="panel.xpm" type="widget">
+  <objectinfo class="wxPanel" icon="panel.xpm" type="container">
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_panel</property>
     <property name="style" type="bitlist">

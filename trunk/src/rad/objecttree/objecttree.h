@@ -26,7 +26,7 @@
 
 #include "rad/appobserver.h"
 #include "rad/guirad.h"
-#include "model/objects.h"
+#include "model/objectbase.h"
 //#include <hash_map>
 #include <map>
 #include "rad/customkeys.h"
