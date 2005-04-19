@@ -248,7 +248,7 @@ bool TemplateParser::ParseWxParent()
   
   string propname = ParsePropertyName();
   
-  PObjectBase wxparent(m_obj->FindNearAncestor(T_WIDGET));
+  PObjectBase wxparent(m_obj->FindNearAncestor(T_CONTAINER));
   if (wxparent)
   {
     PProperty property = wxparent->GetProperty(propname);

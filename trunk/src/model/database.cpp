@@ -360,7 +360,8 @@ void ObjectDatabase::SetupPackage(string file)
         // vamos a añadir la interfaz "C++", predefinida para los componentes
         // y widgets
         if (class_info->GetObjectType() == T_COMPONENT ||
-            class_info->GetObjectType() == T_WIDGET )
+            class_info->GetObjectType() == T_WIDGET ||
+            class_info->GetObjectType() == T_CONTAINER)
         {
           PObjectInfo cpp_interface = GetObjectInfo("C++");
           if (cpp_interface)

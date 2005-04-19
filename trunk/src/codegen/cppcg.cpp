@@ -210,7 +210,9 @@ bool CppCodeGenerator::GenerateCode(PObjectBase project)
 
 void CppCodeGenerator::GenAttributeDeclaration(PObjectBase obj, Permission perm)
 {
-  if (obj->GetObjectType() == T_WIDGET || obj->GetObjectType() == T_COMPONENT)
+  if (obj->GetObjectType() == T_WIDGET || 
+      obj->GetObjectType() == T_COMPONENT ||
+      obj->GetObjectType() == T_CONTAINER)
   {
     string perm_str = obj->GetProperty("permission")->GetValue();
     
@@ -322,7 +324,7 @@ void CppCodeGenerator::FindDependencies(PObjectBase obj, set<PObjectInfo> &info_
     for (i = 0; i<ch_count; i++)
     {
       PObjectBase child = obj->GetChild(i);
-      if (child->GetObjectType() == T_WIDGET)
+      if (child->GetObjectType() == T_WIDGET || child->GetObjectType() == T_CONTAINER)
         info_set.insert(child->GetObjectInfo());
       FindDependencies(child, info_set);
     }
@@ -349,6 +351,7 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
   
   switch (type)
   {
+    case T_CONTAINER:
     case T_WIDGET:
     {
       // comprobamos si no se ha declarado como atributo de clase
@@ -405,6 +408,7 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
       string temp_name;
       switch (child_type)
       {
+        case T_CONTAINER:
         case T_WIDGET:
           temp_name = "window_add";
           break;
