@@ -200,6 +200,7 @@ int ObjectTree::GetImageIndex (ObjectType type)
       break;
     case T_SIZER: image = 2;
       break;
+    case T_CONTAINER:  
     case T_WIDGET: image = 3;
       break;
     default:
