@@ -1,6 +1,6 @@
 <package name="layout" lib="liblayout" desc="wxWidgets sizer layouts">
   <objectinfo class="wxBoxSizer" icon="sizer.xpm" type="sizer">
-    <property name="name" type="text">sizer</property>
+    <property name="name" type="text" hidden="1">sizer</property>
     <property name="orient" type="option">
       <option name="wxVERTICAL" />
       <option name="wxHORIZONTAL" />wxVERTICAL</property>
@@ -10,8 +10,8 @@
     </codegen>
   </objectinfo>
   
-  <objectinfo class="wxStaticBoxSizer" icon="sizer.xpm" type="sizer">
-    <property name="name" type="text">sizer</property>
+  <objectinfo class="wxStaticBoxSizer" icon="staticbox_sizer.xpm" type="sizer">
+    <property name="name" type="text" hidden="1">sizer</property>
     <property name="orient" type="option">
       <option name="wxVERTICAL" />
       <option name="wxHORIZONTAL" />wxVERTICAL</property>
@@ -25,7 +25,7 @@
   </objectinfo>
   
   <objectinfo class="wxGridSizer" icon="grid_sizer.xpm" type="sizer">
-    <property name="name" type="text">sizer</property>
+    <property name="name" type="text" hidden="1">sizer</property>
     <property name="rows" type="text">2</property>
     <property name="cols" type="text">2</property>
     <property name="vgap" type="text">0</property>
@@ -36,8 +36,8 @@
     </codegen>
   </objectinfo>
   
-<objectinfo class="wxFlexGridSizer" icon="grid_sizer.xpm" type="sizer">
-    <property name="name" type="text">sizer</property>
+<objectinfo class="wxFlexGridSizer" icon="flex_grid_sizer.xpm" type="sizer">
+    <property name="name" type="text" hidden="1">sizer</property>
     <property name="rows" type="text">2</property>
     <property name="cols" type="text">2</property>
     <property name="vgap" type="text">0</property>
@@ -59,6 +59,29 @@
           @{ $name->AddGrowableRow(#pred); @}
         @}
       </template>
+    </codegen>
+  </objectinfo>
+  <objectinfo class="spacer" icon="spacer.xpm" type="spacer">
+    <property name="border" type="text">5</property>
+    <property name="flag" type="bitlist">
+      <option name="wxALL" />
+      <option name="wxLEFT" />
+      <option name="wxRIGHT" />
+      <option name="wxTOP" />
+      <option name="wxBOTTOM" />
+      <option name="wxEXPAND" />
+      <option name="wxALIGN_RIGHT" />
+      <option name="wxALIGN_BOTTOM" />
+      <option name="wxALIGN_CENTER_HORIZONTAL" />
+      <option name="wxALIGN_CENTER_VERTICAL" />
+      <option name="wxSHAPED" />
+      <option name="wxADJUST_MINSIZE" />
+      <option name="wxFIXED_MINSIZE" />wxALL</property>
+    <property name="option" type="text">0</property>
+    <property name="width" type="text">10</property>
+    <property name="height" type="text">10</property>
+    <codegen language="C++">
+      <template name="spacer_add">#parent $name->Add($width, $height, $option, $flag, $border);</template>
     </codegen>
   </objectinfo>
 </package>
