@@ -146,6 +146,7 @@ class Property
   void SetValue(const wxString &str);
   void SetValue(const wxPoint &point);
   void SetValue(const wxSize &size);
+  void SetValue(const int integer);
   
   wxFont GetValueAsFont();
   wxColour GetValueAsColour();

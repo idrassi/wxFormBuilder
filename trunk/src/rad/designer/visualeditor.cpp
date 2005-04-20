@@ -212,10 +212,6 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *parent,
     }
     break;
 
-    case T_SPACER:
-      // nada que hacer
-      break;
-      
     case T_SIZER:
     {
       wxSizer *new_sizer =
@@ -245,8 +241,15 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *parent,
       PVisualObject vchild = Generate(obj->GetChild(0), parent,sizer,false);
       assert(sizer);
       vchild->AddToSizer(sizer,obj);
-      break;
     }  
+    break;
+    
+    case T_SPACER:
+      
+      assert(sizer);
+      vobj->AddToSizer(sizer,obj);
+      break;
+      
     default:
       assert(false);
       break;

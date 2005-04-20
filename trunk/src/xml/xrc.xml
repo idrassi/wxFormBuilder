@@ -15,6 +15,12 @@
     <element name="flag" />
     <element name="border" />
   </object>
+  <object class="spacer">
+    <element name="size" />
+    <element name="option" />
+    <element name="flag" />
+    <element name="border" />
+  </object>
   <object class="wxBoxSizer">
     <element name="orient" />
   </object>

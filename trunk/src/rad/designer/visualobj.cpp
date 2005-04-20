@@ -56,6 +56,11 @@ PVisualObject VisualObject::CreateVisualObject
     case T_SIZERITEM:
       vobj = PVisualObject(new VisualLayout(obj));
       break;
+      
+    case T_SPACER:
+      vobj = PVisualObject(new VisualSpacer(obj));
+      break;
+
     default:
       break;
   }
@@ -176,13 +181,24 @@ void VisualWindow::SetupWindow()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-VisualSpacer::VisualSpacer(PObjectBase obj, wxWindow *parent)
+VisualSpacer::VisualSpacer(PObjectBase obj)
   : VisualObject(obj)
 {
+  PProperty propHeight = obj->GetProperty("height");
+  PProperty propWidth = obj->GetProperty("width");
+  
+  m_height = (propHeight ? propHeight->GetValueAsInteger() : 0);
+  m_width = (propWidth ? propWidth->GetValueAsInteger() : 0);
 }  
 
 void VisualSpacer::AddToSizer(wxSizer *sizer, PObjectBase obj)
 {
+  sizer->Add(m_width, m_height,
+    obj->GetProperty("option")->GetValueAsInteger(),
+    obj->GetProperty("flag")->GetValueAsInteger(),
+    obj->GetProperty("border")->GetValueAsInteger());
+    
+  Debug::Print("Add spacer to sizer");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -190,11 +206,6 @@ VisualLayout::VisualLayout (PObjectBase obj)
   : VisualObject(obj)
 {
 }
-
-bool VisualLayout::Update()
-{
-  return false;
-}  
 
 ///////////////////////////////////////////////////////////////////////////////
 

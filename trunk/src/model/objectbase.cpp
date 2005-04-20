@@ -25,6 +25,7 @@
 #include "wx/wx.h"
 #include "utils/debug.h"
 #include "utils/typeconv.h"
+#include "utils/stringutils.h"
 
 #include <sstream>
 int ObjectBase::s_instances = 0;
@@ -128,6 +129,12 @@ void Property::SetValue(const wxSize &size)
 {
   m_value = _STDSTR(TypeConv::SizeToString(size));
 }
+
+void Property::SetValue(const int integer)
+{
+  m_value = StringUtils::IntToStr(integer);
+}
+
 
 wxFont Property::GetValueAsFont()
 {
@@ -335,12 +342,12 @@ bool ObjectBase::DoChildTypeOk(ObjectType type_child, ObjectType type_parent)
       break;
         
     case T_SIZER:
-      result = (type_child == T_SIZERITEM);
+      result = (type_child == T_SIZERITEM || type_child == T_SPACER);
       break;
       
     case T_SIZERITEM:
       result = (type_child == T_WIDGET || type_child == T_CONTAINER ||
-                type_child == T_SIZER || type_child == T_SPACER);
+                type_child == T_SIZER);
       break;
 
 //    case T_BITMAP:

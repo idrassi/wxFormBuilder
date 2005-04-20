@@ -149,11 +149,5 @@
       <template name="construction">$name = new wxStaticLine(#wxparent $name,$id,$pos,$size,$style);</template>
       <template name="include">#include &lt;wx/statline.h&gt;</template>
     </codegen>
-  </objectinfo>
-  <objectinfo class="spacer" icon="spacer.xpm" type="spacer">
-    <property name="height" type="text">20</property>
-    <property name="width" type="text">20</property>
-    
-  </objectinfo>
-  
+  </objectinfo>  
 </package>

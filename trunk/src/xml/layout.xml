@@ -61,4 +61,27 @@
       </template>
     </codegen>
   </objectinfo>
+  <objectinfo class="spacer" icon="spacer.xpm" type="spacer">
+    <property name="border" type="text">5</property>
+    <property name="flag" type="bitlist">
+      <option name="wxALL" />
+      <option name="wxLEFT" />
+      <option name="wxRIGHT" />
+      <option name="wxTOP" />
+      <option name="wxBOTTOM" />
+      <option name="wxEXPAND" />
+      <option name="wxALIGN_RIGHT" />
+      <option name="wxALIGN_BOTTOM" />
+      <option name="wxALIGN_CENTER_HORIZONTAL" />
+      <option name="wxALIGN_CENTER_VERTICAL" />
+      <option name="wxSHAPED" />
+      <option name="wxADJUST_MINSIZE" />
+      <option name="wxFIXED_MINSIZE" />wxALL</property>
+    <property name="option" type="text">0</property>
+    <property name="width" type="text">10</property>
+    <property name="height" type="text">10</property>
+    <codegen language="C++">
+      <template name="spacer_add">#parent $name->Add($width, $height, $option, $flag, $border);</template>
+    </codegen>
+  </objectinfo>
 </package>

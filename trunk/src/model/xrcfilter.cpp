@@ -67,7 +67,8 @@ TiXmlElement* XrcFilter::GetElement(const PObjectBase obj)
     // enlazamos los sub-elementos
 
     // FIXME! no todos los objetos xrc heredan de wxWindow...
-    if (obj->GetObjectType() == T_WIDGET || obj->GetObjectType() == T_FORM)
+    if (obj->GetObjectType() == T_CONTAINER || obj->GetObjectType() == T_WIDGET || 
+        obj->GetObjectType() == T_FORM)
       LinkValues(element,GetXrcClassInfo("wxWindow"),obj);
           
     LinkValues(element,xrcInfo,obj); // los propios del objeto
@@ -95,13 +96,33 @@ void XrcFilter::LinkValues(TiXmlElement *element, TiXmlElement *xrcInfo,
     PProperty prop = (attr->Attribute("property")  ?
       obj->GetProperty(attr->Attribute("property")) :
       obj->GetProperty(attr->Attribute("name")));
-    
+      
     if (prop && prop->GetValue() != "")
     {  
       TiXmlElement *propElement = new TiXmlElement(attr->Attribute("name"));
       LinkValue(prop,propElement);
       element->LinkEndChild(propElement);
     }
+    ///************************************************************************
+    else if (!prop && xrcInfo->Attribute("class") == string("spacer") &&
+                      attr->Attribute("name")== string("size") )
+    {
+      // Sé que esto duele a la vista, pero no hay otra... el objeto de tipo
+      // "spacer" está especificado de una forma que no concuerda con el resto
+      // de objetos.
+      // Me refiero a las propiedades width y height, las cuales están mapeadas
+      // como una propiedad wxSize (llamada "size") en XRC, mientras que en la
+      // interfaz wxSizer son dos propiedades de tipo "int" separadas.
+      int width = obj->GetPropertyAsInteger("width");
+      int height = obj->GetPropertyAsInteger("height");
+      
+      TiXmlElement *propElement = new TiXmlElement("size");
+      
+      string sizeValue = _STDSTR(TypeConv::SizeToString(wxSize(width,height)));
+      propElement->LinkEndChild(new TiXmlText(sizeValue));
+      element->LinkEndChild(propElement);
+    }
+    ///************************************************************************
     
     attr = attr->NextSiblingElement("element");
   }
@@ -379,6 +400,32 @@ void XrcFilter::ImportXrcElements(TiXmlElement *xrcObj, TiXmlElement *xrcInfo,
 
     if (property)
       ImportXrcProperty(xrcObj->FirstChildElement(element->Attribute("name")),property);
+      
+    else if (!property && xrcInfo->Attribute("class") == string("spacer") &&
+                          element->Attribute("name") == string("size"))
+    {
+      ///***********************************************************************
+      // Vale la misma nota que LinkValues :-(
+      string str_size;
+      TiXmlElement* xrcProperty = xrcObj->FirstChildElement("size");
+
+      assert(xrcProperty);
+      
+      TiXmlNode *xmlValue = xrcProperty->FirstChild();
+      if (xmlValue && xmlValue->ToText())
+      {
+        str_size = xmlValue->ToText()->Value();
+        
+        PProperty propWidth = obj->GetProperty("width");
+        PProperty propHeight = obj->GetProperty("height");
+        assert (propWidth && propHeight);
+ 
+        wxSize size = TypeConv::StringToSize(_WXSTR(str_size));
+        propWidth->SetValue(size.GetWidth());
+        propHeight->SetValue(size.GetHeight());      
+      }
+      ///***********************************************************************
+    }
 
     element = element->NextSiblingElement("element");
   }
@@ -411,7 +458,8 @@ void XrcFilter::ImportXrcProperties(TiXmlElement *xrcObj, PObjectBase obj)
   ImportXrcElements(xrcObj,xrcInfo,obj);
 
   // si es un widget o un form importamos los subelementos comunes
-  if (obj->GetObjectType() == T_WIDGET || obj->GetObjectType() == T_FORM )
+  if (obj->GetObjectType() == T_WIDGET || obj->GetObjectType() == T_FORM  ||
+      obj->GetObjectType() == T_CONTAINER)
     ImportXrcElements(xrcObj,GetXrcClassInfo("wxWindow"),obj);
 }
 

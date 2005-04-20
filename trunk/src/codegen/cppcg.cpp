@@ -395,9 +395,15 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
     break;
 
     case T_SPACER:
-      // nada que hacer
-      break;
-    
+    {
+      // En lugar de modelar un "spacer" como un objeto que se incluye en
+      // un sizer item, los vamos a considerar un como un tipo de
+      // de "sizeritem" capaz de existir por sí solo. De esta forma será
+      // más facil la exportación XRC.
+      m_source->WriteLn(GetCode(obj,"spacer_add"));
+    }
+    break;
+
     case T_SIZERITEM:
     {
       // El hijo, hay que añadirlo al sizer teniendo en cuenta el tipo
@@ -417,10 +423,6 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
           temp_name = "sizer_add";
           break;
 
-        case T_SPACER:
-          temp_name = "spacer_add";
-          break;
-
         default:
           assert(false);
           break;
@@ -430,6 +432,7 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
     break;
     
     default:
+    assert(false);
     break;
   }
 }

@@ -122,8 +122,9 @@ class VisualWindow : public VisualObject
 class VisualSpacer : public VisualObject
 {
  private: 
+  int m_height, m_width;  
  public:  
-  VisualSpacer(PObjectBase obj, wxWindow *parent);
+  VisualSpacer(PObjectBase obj);
   void AddToSizer(wxSizer *sizer, PObjectBase sizeritem); 
 };    
 
@@ -142,9 +143,6 @@ class VisualLayout : public VisualObject
   // no hace nada, ya que es un objeto ficticio
   void AddToSizer(wxSizer *sizer, PObjectBase sizeritem) {}; 
 
-  // fuerza la notificación de la aplicación ya que cambiará
-  // la previsualización
-  bool Update();
 };
 
 // Procesa los eventos asociados a un objeto

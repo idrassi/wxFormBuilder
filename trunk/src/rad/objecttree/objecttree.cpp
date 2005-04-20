@@ -25,6 +25,7 @@
 #include "icons/ot_sizer.xpm"
 #include "icons/ot_widget.xpm"
 #include "icons/ot_form.xpm"
+#include "icons/ot_spacer.xpm"
 #include "icons/ot_project.xpm"
 #include "utils/debug.h"
 #include <wx/imaglist.h>
@@ -43,7 +44,8 @@ ObjectTree::ObjectTree(wxWindow *parent, int id)
   img_list->Add(wxBitmap(ot_form_xpm));
   img_list->Add(wxBitmap(ot_sizer_xpm));
   img_list->Add(wxBitmap(ot_widget_xpm));
-
+  img_list->Add(wxBitmap(ot_spacer_xpm));
+  
   m_tcObjects->AssignImageList(img_list);
 }
 
@@ -202,6 +204,8 @@ int ObjectTree::GetImageIndex (ObjectType type)
       break;
     case T_CONTAINER:  
     case T_WIDGET: image = 3;
+      break;
+    case T_SPACER:  image = 4;
       break;
     default:
       break;
