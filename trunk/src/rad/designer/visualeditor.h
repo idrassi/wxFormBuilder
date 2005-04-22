@@ -46,6 +46,8 @@ class GridPanel : public wxSashWindow //wxPanel
    WPObjectBase m_selObj;
    wxWindow *m_actPanel;
    
+   void DrawRectangle(wxDC& dc, const wxPoint& point, const wxSize& size, PObjectBase object);
+   
    DECLARE_CLASS(GridPanel)
    
  protected:

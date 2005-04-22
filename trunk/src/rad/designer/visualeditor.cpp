@@ -279,6 +279,23 @@ void GridPanel::SetGrid(int x, int y)
 {
   m_x = x;
   m_y = y;
+}
+
+void GridPanel::DrawRectangle(wxDC& dc, const wxPoint& point, const wxSize& size, PObjectBase object)
+{
+  int border = object->GetParent()->GetPropertyAsInteger(_T("border"));
+  if (border == 0) border = 1;
+  int flag = object->GetParent()->GetPropertyAsInteger(_T("flag"));
+  int topBorder = (flag & wxTOP) == 0 ? 1 : border;
+  int bottomBorder = (flag & wxBOTTOM) == 0 ? 1 : border;
+  int rightBorder = (flag & wxRIGHT) == 0 ? 1 : border;
+  int leftBorder = (flag & wxLEFT) == 0 ? 1 : border;
+  dc.DrawRectangle(point.x - leftBorder + 1, point.y - topBorder + 1, 
+                    size.x + leftBorder + rightBorder - 2, 
+                    size.y + topBorder + bottomBorder - 2);
+  dc.DrawRectangle(point.x - leftBorder, point.y - topBorder, 
+                    size.x + leftBorder + rightBorder, 
+                    size.y + topBorder + bottomBorder);    
 }  
 
 void GridPanel::HighlightSelection(wxDC& dc)
@@ -290,16 +307,12 @@ void GridPanel::HighlightSelection(wxDC& dc)
   {
     wxPoint point = m_selSizer->GetPosition();
     size = m_selSizer->GetSize();
-    wxPen redPen(*wxBLUE, 2, wxSOLID);
-    dc.SetPen(redPen);
+    wxPen bluePen(*wxBLUE, 1, wxSOLID);
+    dc.SetPen(bluePen);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     PObjectBase sizerParent = object->FindNearAncestor(T_SIZER);
     if (sizerParent && sizerParent->GetParent())
-    {
-        int border = sizerParent->GetParent()->GetPropertyAsInteger(_("border"));
-        dc.DrawRectangle(point.x - border + 1, point.y - border + 1, 
-                        size.x + 2 * border - 1, size.y + 2 * border - 1);
-    }
+        DrawRectangle(dc, point, size, sizerParent);
   }
   if (m_selItem)
   {
@@ -330,12 +343,10 @@ void GridPanel::HighlightSelection(wxDC& dc)
         return;
     }
         
-    wxPen bluePen(*wxRED, 2, wxSOLID);
-    dc.SetPen(bluePen);
+    wxPen redPen(*wxRED, 1, wxSOLID);
+    dc.SetPen(redPen);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
-    int border = object->GetParent()->GetPropertyAsInteger(_T("border"));
-    dc.DrawRectangle(point.x - border + 1, point.y - border + 1, 
-                    size.x + 2 * border - 1, size.y + 2 * border - 1);
+    DrawRectangle(dc, point, size, object);
   }
 }
 
