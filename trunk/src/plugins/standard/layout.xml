@@ -19,7 +19,7 @@
     <codegen language="C++">
       <template name="declaration">wxStaticBoxSizer *$name;</template>
       <template name="construction">
-        $name = new wxGridSizer(new wxStaticBox(#wxparent $name, -1, $label), $orient);
+        $name = new wxStaticBoxSizer(new wxStaticBox(#wxparent $name, -1, $label), $orient);
       </template>
     </codegen>
   </objectinfo>
