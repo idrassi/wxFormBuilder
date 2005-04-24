@@ -7,7 +7,7 @@ Open=0
 Top=0
 [Editors]
 Focused=-1
-Order=
+Order=-1
 [Editor_0]
 Open=0
 Top=0
@@ -226,11 +226,11 @@ CursorRow=69
 TopLine=41
 LeftChar=1
 [Editor_32]
-Open=0
-Top=0
-CursorCol=7
-CursorRow=219
-TopLine=193
+Open=1
+Top=1
+CursorCol=25
+CursorRow=232
+TopLine=301
 LeftChar=1
 [Editor_33]
 Open=0
