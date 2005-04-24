@@ -454,7 +454,9 @@ void VisualEditor::ObjectRemoved(PObjectBase obj)
 
 void VisualEditor::PropertyModified(PProperty prop)
 {
+  PObjectBase aux = m_back->GetSelectedObject();
   Create();
+  ObjectSelected(aux);
 }
 
 

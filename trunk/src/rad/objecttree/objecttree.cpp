@@ -52,7 +52,7 @@ ObjectTree::ObjectTree(wxWindow *parent, int id)
 void ObjectTree::Create()
 {
   m_tcObjects->Freeze();
-  
+
   // borramos toda la información previa
   m_tcObjects->DeleteAllItems();
   m_map.erase(m_map.begin(),m_map.end());
@@ -117,7 +117,7 @@ void ObjectTree::ObjectSelected(PObjectBase obj)
   // buscamos el item asociado al objeto lo marcamos
   // como seleccionado
   ObjectItemMap::iterator it = m_map.find(obj);
-  if (it != m_map.end())
+  if (it != m_map.end() && m_tcObjects->GetSelection() != it->second)
   {
     m_tcObjects->SelectItem(it->second);
   }
