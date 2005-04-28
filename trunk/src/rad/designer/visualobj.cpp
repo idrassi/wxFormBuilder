@@ -236,7 +236,7 @@ void VObjEvtHandler::OnLeftClick(wxMouseEvent &event)
   else
     wxLogMessage(wxT("Hay algun problema en VObjEvtHandler"));
     
-//  event.Skip();
+  //event.Skip();
 }  
 
 /*void VObjEvtHandler::OnMouseMove(wxMouseEvent &event)

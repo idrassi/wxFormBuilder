@@ -29,7 +29,8 @@
 #include "visualobj.h"
 #include "utils/typeconv.h"
 #include "utils/debug.h"
-
+#include "menubar.h"
+#include "wx/statline.h"
 
 #ifdef __WX24__
   #define wxFULL_REPAINT_ON_RESIZE 0
@@ -159,6 +160,31 @@ void VisualEditor::Create()
   {
     m_back->SetSize(10,10);
   }
+  
+  Menubar *dummy = new Menubar(m_back, -1);
+  //dummy->SetSize(-1, 15);
+  
+  wxMenu *menu = new wxMenu;
+  menu->Append(wxNewId(), _T("Nuevo"));
+  menu->Append(wxNewId(), _T("Abrir"));
+  menu->Append(wxNewId(), _T("Guardar"));
+  menu->Append(wxNewId(), _T("Salir"));
+  dummy->AppendMenu(_T("File"), menu);
+  
+  menu = new wxMenu;
+  menu->Append(wxNewId(), _T("Copiar"));
+  menu->Append(wxNewId(), _T("Pegar"));
+  menu->Append(wxNewId(), _T("Cortar"));
+  menu->Append(wxNewId(), _T("Eliminar"));
+  dummy->AppendMenu(_T("Edit"), menu);
+  dummy->Fit();
+  
+  wxSizer *mainSizer = m_back->GetSizer();
+  wxSizer *dummySizer = new wxBoxSizer(wxVERTICAL);
+  dummySizer->Add(dummy, 0, wxEXPAND | wxTOP | wxBOTTOM, 3);
+  dummySizer->Add(new wxStaticLine(m_back, -1), 0, wxEXPAND | wxALL, 0);
+  dummySizer->Add(mainSizer, 1, wxEXPAND | wxALL, 0);
+  m_back->SetSizer(dummySizer, false);
   
   m_back->Layout();
 
