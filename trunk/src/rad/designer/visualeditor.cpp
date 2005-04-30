@@ -49,12 +49,14 @@ BEGIN_EVENT_TABLE(VisualEditor,wxPanel)
 END_EVENT_TABLE()
 
 VisualEditor::VisualEditor(wxWindow *parent)
-  : wxPanel(parent,-1,wxDefaultPosition,wxDefaultSize,wxSIMPLE_BORDER)
+  : wxPanel(parent,-1,wxDefaultPosition,wxDefaultSize,wxSUNKEN_BORDER)
 {
 
 // Parece ser que han modificado el comportamiento en wxMSW 2.5.x ya que al
 // poner un color de background, este es aplicado a los hijos también.  
 // SetBackgroundColour(wxColour(150,150,150));
+  
+  SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
   
   m_back = new GridPanel(this,-1,wxPoint(10,10),wxSize(350,200),VISUAL_EDITOR_BORDER);
   m_back->SetAutoLayout(true);
@@ -115,9 +117,9 @@ void VisualEditor::Create()
   PObjectBase root = GetData()->GetSelectedForm();
   m_form = root;
 
-  #ifdef __WX24__
+  //#ifdef __WX24__
     if (IsShown()) Freeze(); // Freeze no funciona como en wxWidgets 2.4!
-  #endif 
+  //#endif 
 
   m_back->SetSelectedItem(NULL);
   m_back->SetSelectedSizer(NULL);
@@ -161,36 +163,39 @@ void VisualEditor::Create()
     m_back->SetSize(10,10);
   }
   
-  Menubar *dummy = new Menubar(m_back, -1);
-  //dummy->SetSize(-1, 15);
-  
-  wxMenu *menu = new wxMenu;
-  menu->Append(wxNewId(), _T("Nuevo"));
-  menu->Append(wxNewId(), _T("Abrir"));
-  menu->Append(wxNewId(), _T("Guardar"));
-  menu->Append(wxNewId(), _T("Salir"));
-  dummy->AppendMenu(_T("File"), menu);
-  
-  menu = new wxMenu;
-  menu->Append(wxNewId(), _T("Copiar"));
-  menu->Append(wxNewId(), _T("Pegar"));
-  menu->Append(wxNewId(), _T("Cortar"));
-  menu->Append(wxNewId(), _T("Eliminar"));
-  dummy->AppendMenu(_T("Edit"), menu);
-  dummy->Fit();
-  
   wxSizer *mainSizer = m_back->GetSizer();
-  wxSizer *dummySizer = new wxBoxSizer(wxVERTICAL);
-  dummySizer->Add(dummy, 0, wxEXPAND | wxTOP | wxBOTTOM, 3);
-  dummySizer->Add(new wxStaticLine(m_back, -1), 0, wxEXPAND | wxALL, 0);
-  dummySizer->Add(mainSizer, 1, wxEXPAND | wxALL, 0);
-  m_back->SetSizer(dummySizer, false);
   
-  m_back->Layout();
+  if (mainSizer)
+  {
+      Menubar *dummy = new Menubar(m_back, -1);
+      
+      wxMenu *menu = new wxMenu;
+      menu->Append(wxNewId(), _T("Nuevo"));
+      menu->Append(wxNewId(), _T("Abrir"));
+      menu->Append(wxNewId(), _T("Guardar"));
+      menu->Append(wxNewId(), _T("Salir"));
+      dummy->AppendMenu(_T("File"), menu);
+      
+      menu = new wxMenu;
+      menu->Append(wxNewId(), _T("Copiar"));
+      menu->Append(wxNewId(), _T("Pegar"));
+      menu->Append(wxNewId(), _T("Cortar"));
+      menu->Append(wxNewId(), _T("Eliminar"));
+      dummy->AppendMenu(_T("Edit"), menu);
+      dummy->Fit();
+      
+      wxSizer *dummySizer = new wxBoxSizer(wxVERTICAL);
+      dummySizer->Add(dummy, 0, wxEXPAND | wxTOP | wxBOTTOM, 3);
+      dummySizer->Add(new wxStaticLine(m_back, -1), 0, wxEXPAND | wxALL, 0);
+      dummySizer->Add(mainSizer, 1, wxEXPAND | wxALL, 0);
+      m_back->SetSizer(dummySizer, false);
+      
+      m_back->Layout();
+  }
 
-  #ifdef __WX24__
+  //#ifdef __WX24__
     if (IsShown()) Thaw(); // Freeze no funciona como en wxWidgets 2.4!
-  #endif   
+  //#endif   
 }  
 
 
@@ -299,6 +304,7 @@ GridPanel::GridPanel(wxWindow *parent, int id, const wxPoint& pos,
   m_selSizer = NULL;
   m_selItem = NULL;
   m_actPanel = NULL;
+  SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
 }
 
 void GridPanel::SetGrid(int x, int y)
