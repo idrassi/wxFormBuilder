@@ -108,7 +108,7 @@ PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
   if (parent)
   {
     valid_child = parent->ChildTypeOk(obj_info->GetObjectType());
-    
+
     if (!valid_child && parent->GetObjectType() == T_SIZER)
     {
       // Esto no debería comprobarse aquí ya que esto pertenece a la lógica

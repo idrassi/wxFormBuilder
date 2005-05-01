@@ -74,6 +74,7 @@ void ObjectTree::Create()
 void ObjectTree::OnSelChanged(wxTreeEvent &event)
 {
   wxTreeItemId id = event.GetItem();
+  if (!id.IsOk()) return;
   wxTreeItemData *item_data = m_tcObjects->GetItemData(id);
 
   if (item_data)
