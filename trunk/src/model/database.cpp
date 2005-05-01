@@ -108,6 +108,13 @@ PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
   if (parent)
   {
     valid_child = parent->ChildTypeOk(obj_info->GetObjectType());
+    
+    if (!valid_child && parent->GetParent() && parent->GetObjectType() != T_SIZER)
+    {
+      parent = parent->FindNearAncestor(T_SIZER);
+      if (!parent) return PObjectBase();
+      valid_child = parent->ChildTypeOk(obj_info->GetObjectType());
+    }
 
     if (!valid_child && parent->GetObjectType() == T_SIZER)
     {
