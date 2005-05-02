@@ -65,10 +65,9 @@ void ObjectInspector::Create()
       wxBoxSizer *top_sizer = new wxBoxSizer(wxVERTICAL);
       m_notebook = new wxNotebook(this, -1, wxDefaultPosition, wxDefaultSize, 0);
       
-      Debug::Print("[ObjectInspector::Update]");
-      // Cargamos las propiedades del objeto
+      // Creamos los panales con las propiedades del objeto organizados por
+      // "clases"
       CreatePropertyPanel(wxString(obj_desc->GetClassName().c_str(),wxConvUTF8), sel_obj,obj_desc,map);
-//      top_sizer->Add(new wxNotebookSizer(m_notebook), 1, wxEXPAND, 0);
       top_sizer->Add(m_notebook, 1, wxEXPAND, 0);
       for (unsigned int i=0; i<obj_desc->GetBaseClassCount() ; i++)
       {
@@ -76,13 +75,21 @@ void ObjectInspector::Create()
         CreatePropertyPanel(wxString(info_base->GetClassName().c_str(),wxConvUTF8), sel_obj,info_base,map);
       }  
 
+      // Añadimos el panel "layout" si el objeto está contenido en un sizer
       PObjectBase layout;
       layout = sel_obj->GetLayout();  
-
       if (layout)
       {
         Debug::Print("[ObjectInspector::Update] Has layout properties");
         CreatePropertyPanel(wxT("Layout"), layout ,layout->GetObjectInfo(),dummy);
+      }
+      
+      // Añadirmos el panel "Notebook Page" si el objeto está contenido
+      // en un Notebook (no me gusta)
+      if (sel_obj->GetParent() && sel_obj->GetParent()->GetObjectType()==T_NOTEBOOK_PAGE)
+      {
+        CreatePropertyPanel(wxT("Page"), sel_obj->GetParent(),
+          sel_obj->GetParent()->GetObjectInfo(),dummy);
       }
       
       // vamos a intentar seleccionar la misma página que había seleccionada

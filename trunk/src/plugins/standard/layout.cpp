@@ -70,13 +70,6 @@ class FlexGridSizerComponent : public ComponentBase
  public:
   wxObject* Create(IObject *obj, wxObject *parent)
   {
-    return new wxFlexGridSizer(
-      obj->GetPropertyAsInteger(_("rows")),
-      obj->GetPropertyAsInteger(_("cols")),
-      obj->GetPropertyAsInteger(_("vgap")),
-      obj->GetPropertyAsInteger(_("hgap")));
-      
-      
     wxFlexGridSizer *sizer = new wxFlexGridSizer(
       obj->GetPropertyAsInteger(_("rows")),
       obj->GetPropertyAsInteger(_("cols")),

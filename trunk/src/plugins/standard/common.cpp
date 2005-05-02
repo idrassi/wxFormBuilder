@@ -27,6 +27,7 @@
 #include "../plugin.h"
 #include "wx/grid.h"
 #include "wx/statline.h"
+#include "wx/notebook.h"
 
 class ButtonComponent : public ComponentBase
 {
@@ -143,6 +144,17 @@ class StaticLineComponent : public ComponentBase
   }	
 };
 
+class NotebookComponent : public ComponentBase
+{
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    return new wxNotebook((wxWindow *)parent,-1,
+      obj->GetPropertyAsPoint(_("pos")),
+      obj->GetPropertyAsSize(_("size")),
+      obj->GetPropertyAsInteger(_("style")));
+  }	
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()
@@ -155,6 +167,7 @@ BEGIN_LIBRARY()
   COMPONENT("wxCheckBox", CheckBoxComponent)
   COMPONENT("wxStaticBitmap", StaticBitmapComponent)
   COMPONENT("wxStaticLine", StaticLineComponent)
+  COMPONENT("wxNotebook", NotebookComponent)
 
   // wxWindow style macros
   MACRO(wxSIMPLE_BORDER)
@@ -184,5 +197,16 @@ BEGIN_LIBRARY()
   // wxStaticLine
   MACRO(wxLI_HORIZONTAL)
   MACRO(wxLI_VERTICAL)
+  
+  // wxNotebook
+  MACRO(wxNB_TOP)
+  MACRO(wxNB_LEFT)
+  MACRO(wxNB_RIGHT)
+  MACRO(wxNB_BOTTOM)
+  MACRO(wxNB_FIXEDWIDTH)
+  MACRO(wxNB_MULTILINE)
+  MACRO(wxNB_NOPAGETHEME)
+  MACRO(wxNB_FLAT)
+      
 END_LIBRARY()
 

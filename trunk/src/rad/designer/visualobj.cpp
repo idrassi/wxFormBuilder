@@ -44,6 +44,7 @@ PVisualObject VisualObject::CreateVisualObject
 
   switch (type)
   {
+    case T_NOTEBOOK:
     case T_CONTAINER:
     case T_WIDGET:
       vobj = PVisualObject(new VisualWindow(obj,wx_parent));
@@ -59,6 +60,10 @@ PVisualObject VisualObject::CreateVisualObject
       
     case T_SPACER:
       vobj = PVisualObject(new VisualSpacer(obj));
+      break;
+      
+    case T_NOTEBOOK_PAGE:
+      vobj = PVisualObject(new VisualObject(obj)); // **dummy**  
       break;
 
     default:

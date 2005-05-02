@@ -150,4 +150,21 @@
       <template name="include">#include &lt;wx/statline.h&gt;</template>
     </codegen>
   </objectinfo>  
+  <objectinfo class="wxNotebook" icon="notebook.xpm" type="notebook">
+    <inherits class="wxWindow" />
+    <property name="style" type="bitlist">
+      <option name="wxNB_TOP" />
+      <option name="wxNB_LEFT" />
+      <option name="wxNB_RIGHT" />
+      <option name="wxNB_BOTTOM" />
+      <option name="wxNB_FIXEDWIDTH" />
+      <option name="wxNB_MULTILINE" />
+      <option name="wxNB_NOPAGETHEME" />
+      <option name="wxNB_FLAT" /></property>
+    <codegen language="C++">
+      <template name="declaration">wxNotebook *$name;</template>
+      <template name="construction">$name = new wxNotebook(#wxparent $name,$id,$pos,$size,$style);</template>
+      <template name="include">#include &lt;wx/notebook.h&gt;</template>
+    </codegen>
+  </objectinfo>
 </package>

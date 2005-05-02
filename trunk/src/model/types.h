@@ -42,7 +42,9 @@ typedef enum
   T_SIZERITEM,
   T_SPACER,
   T_BITMAP,
-  T_CONTAINER
+  T_CONTAINER,
+  T_NOTEBOOK,    // de momento lo trataremos como un tipo especial
+  T_NOTEBOOK_PAGE
 } ObjectType;
 
 

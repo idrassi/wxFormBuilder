@@ -71,20 +71,10 @@ class VisualObject
   /**
    * Añade el objeto visual (wxSizer* /wxWindow* /spacer) asociado,  al sizer que
    * se pasa como parámetro. Será redefinida según el objeto que sea.
-   * obj -> Objeto de tipo T_SIZER_ITEM con las propiedades de layout
+   * obj -> Objeto de tipo T_SIZERITEM con las propiedades de layout
    */
   virtual void AddToSizer(wxSizer *sizer, PObjectBase sizeritem){};
-  
-  /**
-   * Este método actualiza el objeto leyendo todas las propiedades, existen
-   * objetos que no permiten cambiar las propiedades una vez construidos, en
-   * este caso el método devolverá false, y se regenerará nuevamente la
-   * vista del form.
-   * @note en la práctica se ve que no tiene mucho sentido, ya que no supone
-   *       mucho coste forzar la regeneración. Esta rutina está condenada a
-   *       morir!!.
-   */
-//  virtual bool Update();
+
 };  
 
 
@@ -132,8 +122,7 @@ class VisualSpacer : public VisualObject
  * VisualLayout es un objeto ficticio que representa al objeto T_SIZERITEM.
  *
  * Cuando se modifican las propiedades de layout de un objeto, el designer
- * captura el evento obteniendo el objeto asiciado. El método Update siempre
- * devuelve false, y por tanto se regenerará la vista por completo.
+ * captura el evento obteniendo el objeto asiciado.
  */
 class VisualLayout : public VisualObject
 {
@@ -145,9 +134,11 @@ class VisualLayout : public VisualObject
 
 };
 
-// Procesa los eventos asociados a un objeto
-// En principio vamos a querer seleccionar el objeto
-// al poner el foco
+/**
+ * Procesa los eventos asociados a un objeto.
+ * En principio vamos a querer seleccionar el objeto
+ * al poner el foco
+ */
 class VObjEvtHandler : public wxEvtHandler
 {
  private:

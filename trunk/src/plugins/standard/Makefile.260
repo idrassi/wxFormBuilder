@@ -1,0 +1,32 @@
+CXX = g++
+
+LIBCOMMON = libcommon.dll
+LIBLAYOUT = liblayout.dll
+
+
+LDFLAGS = -L. -LC:/wx-2.5.4_compiled_as_dll_release/lib -mthreads -mwindows
+EXTRALIBS =  -mthreads -lrpcrt4 -loleaut32 -lole32 -luuid -lodbc32 -lole32 -loleaut32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -lctl3d32 -ladvapi32 -lwsock32 -lgdi32
+# -mthreads -Wl,--subsystem,windows -mwindows -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32_@@_
+
+DEBUG = -g
+CXXINCS = -IC:/wx-2.6.0_compiled_as_dll_release/include
+CXXFLAGS = -Wall -g -O0 -mthreads -DHAVE_W32API_H -D__WXMSW__ -DWXUSINGDLL -DNOPCH -Wno-ctor-dtor-privacy -DNO_GCC_PRAGMA -DTIXML_USE_STL -D__WXFB_DEBUG__ $(CXXINCS) $(DEBUG)
+
+LIBINCS = -L"C:/GNU/Dev-Cpp/lib" -L"C:/wx-2.6.0_compiled_as_dll_release/lib"
+LIBS = -mwindows -mthreads -Wl,--subsystem,windows -mwindows -lwxmsw26 -lwxtiff -lwxjpeg -lwxpng -lwxzlib -lwxregex -lwxexpat -lwxmsw26_stc -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32 -ltinyxml -lstdc++ $(LIBINCS) $(DEBUG)
+all: $(LIBCOMMON) $(LIBLAYOUT)
+
+$(LIBCOMMON): common.o
+	$(CXX) -L. -shared -o $(LIBCOMMON) common.o -lstdc++ $(LDFLAGS)  $(LIBS)
+	strip $(LIBCOMMON)
+
+common.o: common.cpp
+	$(CXX) -c $(CXXFLAGS) -o common.o common.cpp
+
+$(LIBLAYOUT): layout.o
+	$(CXX) -L. -shared -o $(LIBLAYOUT) layout.o -lstdc++ $(LDFLAGS)  $(LIBS)
+	strip $(LIBLAYOUT)
+
+layout.o: layout.cpp
+	$(CXX) -c $(CXXFLAGS) -o layout.o layout.cpp
+

@@ -85,7 +85,7 @@ class VisualEditor : public DataObserver, public wxPanel
   
  protected:
   PVisualObject Generate(PObjectBase obj, wxWindow *parent, wxSizer *sizer,
-                         bool is_widget);
+                         ObjectType parentType);
   void Create();
   
  public:

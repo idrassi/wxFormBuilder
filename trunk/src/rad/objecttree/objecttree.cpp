@@ -27,6 +27,7 @@
 #include "icons/ot_form.xpm"
 #include "icons/ot_spacer.xpm"
 #include "icons/ot_project.xpm"
+#include "icons/ot_notebook.xpm"
 #include "utils/debug.h"
 #include <wx/imaglist.h>
 
@@ -45,6 +46,7 @@ ObjectTree::ObjectTree(wxWindow *parent, int id)
   img_list->Add(wxBitmap(ot_sizer_xpm));
   img_list->Add(wxBitmap(ot_widget_xpm));
   img_list->Add(wxBitmap(ot_spacer_xpm));
+  img_list->Add(wxBitmap(ot_notebook_xpm));
   
   m_tcObjects->AssignImageList(img_list);
 }
@@ -153,7 +155,7 @@ void ObjectTree::PropertyModified(PProperty prop)
 void ObjectTree::AddChildren(PObjectBase obj, wxTreeItemId &parent, bool is_root)
 {
   // los sizeritems son objetos "ficticios", y no se deben mostrar en el árbol
-  if (obj->GetObjectType() == T_SIZERITEM)
+  if (obj->GetObjectType() == T_SIZERITEM || obj->GetObjectType() == T_NOTEBOOK_PAGE)
     AddChildren(obj->GetChild(0),parent);
   else
   {
@@ -208,6 +210,8 @@ int ObjectTree::GetImageIndex (ObjectType type)
       break;
     case T_SPACER:  image = 4;
       break;
+    case T_NOTEBOOK:  image = 5;
+      break;    
     default:
       break;
   }  

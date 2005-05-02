@@ -112,7 +112,6 @@ class ObjectDatabase
    * Inicializa el dicctionario de tipos de objetos.
    */
   void InitObjectTypes();
-//  void InitWidgetTypes();
   void InitPropertyTypes();
     
   /**
@@ -132,6 +131,12 @@ class ObjectDatabase
    */
   void SetupPackage(string file);
   
+  /**
+   * Determina si el tipo de objeto hay que incluirlo en la paleta de 
+   * componentes.
+   */
+  bool ShowInPalette(ObjectType type);
+  bool HasCppProperties(ObjectType type);
   
   // rutinas de conversión
   PropertyType ParsePropertyType (string str);

@@ -152,7 +152,7 @@ void VisualEditor::Create()
     for (unsigned int i=0; i < root->GetChildCount(); i++)
     {
       PObjectBase child = root->GetChild(i);
-      Generate(child,m_back,NULL,true); 
+      Generate(child,m_back,NULL,T_CONTAINER); 
     }
     
     if (need_fit)
@@ -209,7 +209,7 @@ void VisualEditor::Create()
  *                  hemos de establecer este como su sizer.
  */
 PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *parent,
-  wxSizer *sizer, bool is_widget)
+  wxSizer *sizer, ObjectType parentType)
 {
   PVisualObject vobj = VisualObject::CreateVisualObject(obj,parent);
   
@@ -222,13 +222,16 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *parent,
 
   switch (type)
   {
+    case T_NOTEBOOK:
     case T_CONTAINER:
     case T_WIDGET:
     {
       {
         PVisualWindow winobj(shared_dynamic_cast<VisualWindow>(vobj));
         wxWindow *window = winobj->GetWindow();
-        window->PushEventHandler(new VObjEvtHandler(window,obj,GetData()));
+        
+        if (type != T_NOTEBOOK)
+          window->PushEventHandler(new VObjEvtHandler(window,obj,GetData()));
         #ifdef __WXFB_EXPERIMENTAL__
         window->PushEventHandler(new EditorHandler(GetData()));
         #endif //__WXFB_EXPERIMENTAL__
@@ -239,9 +242,29 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *parent,
 
       // generamos los hijos pasando el widget creado como nuevo padre.
       for (unsigned int i=0; i<obj->GetChildCount() ; i++)
-        Generate(obj->GetChild(i),new_parent,NULL,true);
+        Generate(obj->GetChild(i),new_parent,NULL,type);
+        
     }
     break;
+
+
+    case T_NOTEBOOK_PAGE:
+    {
+      if (obj->GetChildCount() > 0)
+      {
+        PVisualObject vchild = Generate(obj->GetChild(0), parent,sizer,type);
+        wxWindow *page =
+          shared_dynamic_cast<VisualWindow>(vchild)->GetWindow();
+  
+        // parent se supone wxNotebook
+        assert(parent->IsKindOf(CLASSINFO(wxNotebook)));
+        assert(page);
+       
+        ((wxNotebook *)parent)->AddPage(page,obj->GetPropertyAsString(_T("label")));
+      }
+    }  
+    break;
+
 
     case T_SIZER:
     {
@@ -250,9 +273,9 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *parent,
            
       // generamos los hijos pasando el sizer creado.
       for (unsigned int i=0; i<obj->GetChildCount() ; i++)
-        Generate(obj->GetChild(i),parent,new_sizer,false);
+        Generate(obj->GetChild(i),parent,new_sizer,type);
       
-      if (is_widget)
+      if (parentType == T_WIDGET || parentType == T_CONTAINER)
       {
         // Si el nodo padre es un widget, entonces hay que asociarle el
         // sizer.
@@ -269,7 +292,7 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *parent,
     case T_SIZERITEM:
     {
       // un sizeritem sólo podrá tener 1 hijo
-      PVisualObject vchild = Generate(obj->GetChild(0), parent,sizer,false);
+      PVisualObject vchild = Generate(obj->GetChild(0), parent,sizer,type);
       assert(sizer);
       vchild->AddToSizer(sizer,obj);
     }  

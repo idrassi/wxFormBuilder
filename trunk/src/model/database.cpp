@@ -95,7 +95,7 @@ PObjectPackage ObjectDatabase::GetPackage(unsigned int idx)
  */
 PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
 {
-  PObjectBase object, sizeritem;
+  PObjectBase object;
   bool valid_child = false;
   PObjectInfo obj_info = GetObjectInfo(class_name);
    
@@ -118,6 +118,8 @@ PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
 
     if (!valid_child && parent->GetObjectType() == T_SIZER)
     {
+      PObjectBase sizeritem;
+    
       // Esto no debería comprobarse aquí ya que esto pertenece a la lógica
       // de la aplicación, aunque de momento lo vamos a permitir.
       // En el caso de que el objeto padre sea un T_SIZER vamos a comprobar
@@ -138,6 +140,23 @@ PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
         assert(sizeritem);
         
         parent = sizeritem;
+      }
+    }
+    else if (!valid_child && parent->GetObjectType() == T_NOTEBOOK)
+    {
+      PObjectBase nbpage;
+      Debug::Print("new notebook page");
+      nbpage = PObjectBase(new ObjectBase("wxNotebookPage"));
+      nbpage->SetObjectType(T_NOTEBOOK_PAGE);
+      valid_child = nbpage->ChildTypeOk(obj_info->GetObjectType());
+      if (valid_child)
+      {
+        // Pues hay que meterlo en un sizeritem, vamos a preparar el
+        // nuevo padre
+        nbpage = CreateObject("wxNotebookPage",parent);
+        assert(nbpage);
+        
+        parent = nbpage;
       }
     }
   }
@@ -268,17 +287,10 @@ PObjectBase  ObjectDatabase::CreateObject(TiXmlElement *xml_obj, PObjectBase par
 }
 
 //////////////////////////////
-/*PVisualObject ObjectDatabase::CreateVisualObject(PObjectBase obj, wxObject *parent)
+
+bool IncludeInPalette(ObjectType type)
 {
-  PVisualObject result;
-  ComponentMap::iterator it = m_components.find(obj->GetClassName());
-  if (it != m_compoenent.end())
-  {
-    // creamos el objeto y la instancia
-    result = PVisualObject(new 
-  }
-}*/
-//////////////////////////////
+}
 
 bool ObjectDatabase::LoadFile(string file)
 {
@@ -366,9 +378,7 @@ void ObjectDatabase::SetupPackage(string file)
         
         // vamos a añadir la interfaz "C++", predefinida para los componentes
         // y widgets
-        if (class_info->GetObjectType() == T_COMPONENT ||
-            class_info->GetObjectType() == T_WIDGET ||
-            class_info->GetObjectType() == T_CONTAINER)
+        if (HasCppProperties(class_info->GetObjectType()))
         {
           PObjectInfo cpp_interface = GetObjectInfo("C++");
           if (cpp_interface)
@@ -380,6 +390,13 @@ void ObjectDatabase::SetupPackage(string file)
     }      
   }  
 }  
+
+bool ObjectDatabase::HasCppProperties(ObjectType type)
+{
+   return (type == T_COMPONENT || type == T_WIDGET || type == T_CONTAINER ||
+           type == T_NOTEBOOK);
+}
+
 
 PObjectPackage ObjectDatabase::LoadPackage(string file)
 {
@@ -505,27 +522,24 @@ PObjectPackage ObjectDatabase::LoadPackage(string file)
         m_objs.insert(ObjectInfoMap::value_type(class_name,obj_info));
         
         // y al grupo
-        if (obj_info->GetObjectType() == T_FORM ||
-            obj_info->GetObjectType() == T_WIDGET ||
-            obj_info->GetObjectType() == T_SIZER ||
-            obj_info->GetObjectType() == T_COMPONENT ||
-            obj_info->GetObjectType() == T_CONTAINER ||
-            obj_info->GetObjectType() == T_SPACER )
+        if (ShowInPalette(obj_info->GetObjectType()))
           package->Add(obj_info);
         
         elem_obj = elem_obj->NextSiblingElement(OBJINFO_TAG);
       }
     }
   }
-//  else
-//  {
-//    cout << "Loading error on "<< file <<" file." << endl;
-//    system("pause");
-//  }
-  
-  
+
   return package;
 }
+
+bool ObjectDatabase::ShowInPalette(ObjectType type)
+{
+  return ( type == T_FORM || type == T_WIDGET || type == T_SIZER ||
+           type == T_COMPONENT || type == T_CONTAINER || type == T_SPACER ||
+           type == T_NOTEBOOK );
+}
+
 
 void ObjectDatabase::ImportComponentLibrary(string libfile)
 {
@@ -616,19 +630,6 @@ ObjectType  ObjectDatabase::ParseObjectType   (string str)
 
 }
 
-//WidgetType  ObjectDatabase::ParseWidgetType   (string str)
-//{
-//  WidgetType result;
-//  
-//  WTMap::iterator it = m_widgetTypes.find(str);
-//  if (it != m_widgetTypes.end())
-//    result = it->second;
-//  else
-//    result = W_GENERIC;
-//    
-//  return result;
-//}
-
 
 #define OT(x,y) m_objTypes.insert(OTMap::value_type(x,y))
 void ObjectDatabase::InitObjectTypes()
@@ -642,25 +643,9 @@ void ObjectDatabase::InitObjectTypes()
  OT("form",T_FORM);
  OT("spacer",T_SPACER);
  OT("container",T_CONTAINER);
+ OT("notebook",T_NOTEBOOK);
+ OT("notebookpage",T_NOTEBOOK_PAGE);
 }
-
-//#define WT(x,y) m_widgetTypes.insert(WTMap::value_type(x,y))
-//void ObjectDatabase::InitWidgetTypes()
-//{
-//  WT("wxPanel",W_PANEL);
-//  WT("wxButton",W_BUTTON);
-//  WT("wxComboBox",W_COMBO_BOX);
-//  WT("wxTextCtrl",W_TEXT_CTRL);
-//  WT("wxStaticText",W_STATIC_TEXT);
-//  WT("wxBoxSizer",W_BOX_SIZER);
-//  WT("wxFlexGridSizer",W_FLEX_GRID_SIZER);
-//  WT("wxGridSizer",W_GRID_SIZER);
-//  WT("spacer",W_SPACER);
-//  WT("sizeritem",W_SIZERITEM);
-//  WT("wxCheckBox",W_CHECK_BOX);
-//  WT("wxGrid",W_GRID);
-//  WT("wxStaticBitmap",W_STATIC_BITMAP);
-//}
 
 #define PT(x,y) m_propTypes.insert(PTMap::value_type(x,y))
 void ObjectDatabase::InitPropertyTypes()
