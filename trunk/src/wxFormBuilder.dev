@@ -1,7 +1,7 @@
 [Project]
 FileName=wxFormBuilder.dev
 Name=wxFormBuilder
-UnitCount=56
+UnitCount=59
 Type=0
 Ver=1
 ObjFiles=
@@ -568,8 +568,8 @@ BuildCmd=
 CompileCpp=1
 
 [Unit57]
-FileName=codegen\xrccg.h
-Folder=codegen
+FileName=rad\designer\menubar.cpp
+Folder=rad/designer
 Compile=1
 Link=1
 Priority=1000
@@ -611,6 +611,26 @@ BuildCmd=
 FileName=rad\xrcpanel\xrcpanel.h
 CompileCpp=1
 Folder=rad/cpppanel
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit58]
+FileName=rad\designer\menubar.h
+CompileCpp=1
+Folder=rad/designer
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit59]
+FileName=utils\debug.cpp
+CompileCpp=1
+Folder=utils
 Compile=1
 Link=1
 Priority=1000
