@@ -109,7 +109,9 @@ PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
   {
     valid_child = parent->ChildTypeOk(obj_info->GetObjectType());
     
-    if (!valid_child && parent->GetParent() && parent->GetObjectType() != T_SIZER)
+    if (!valid_child && parent->GetParent() && 
+         parent->GetObjectType() != T_SIZER &&
+         parent->GetObjectType() != T_NOTEBOOK)
     {
       parent = parent->FindNearAncestor(T_SIZER);
       if (!parent) return PObjectBase();
@@ -140,6 +142,27 @@ PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
         assert(sizeritem);
         
         parent = sizeritem;
+        
+        // Vamos a darle unos valores a las propiedades de layout
+        // predeterminados según el tipo de objeto
+        switch (obj_info->GetObjectType())
+        {
+          case T_CONTAINER:
+          case T_NOTEBOOK:
+            sizeritem->GetProperty("option")->SetValue(string("1"));
+            sizeritem->GetProperty("flag")->SetValue(string("wxEXPAND | wxALL"));
+            break;
+          case T_WIDGET:
+            sizeritem->GetProperty("option")->SetValue(string("0"));
+            sizeritem->GetProperty("flag")->SetValue(string("wxALL"));
+            break;
+          case T_SIZER:
+            sizeritem->GetProperty("option")->SetValue(string("1"));
+            sizeritem->GetProperty("flag")->SetValue(string("wxEXPAND"));
+            break;
+          default:
+            break;
+        }        
       }
     }
     else if (!valid_child && parent->GetObjectType() == T_NOTEBOOK)
