@@ -248,7 +248,23 @@ bool TemplateParser::ParseWxParent()
   
   string propname = ParsePropertyName();
   
-  PObjectBase wxparent(m_obj->FindNearAncestor(T_CONTAINER));
+  // llegamos a uno de los inconvenientes del diseño elegido
+  // y es que el padre puede ser T_CONTAINER o T_NOTEBOOK
+  //PObjectBase wxparent(m_obj->FindNearAncestor(T_CONTAINER));
+
+  PObjectBase wxparent;
+  
+  PObjectBase cont_parent (m_obj->FindNearAncestor(T_CONTAINER));
+  PObjectBase nbook_parent (m_obj->FindNearAncestor(T_NOTEBOOK));
+  
+  if (cont_parent && nbook_parent)
+
+    wxparent = (cont_parent->Deep() > nbook_parent->Deep() ?
+                cont_parent : nbook_parent);
+
+  else
+    wxparent = (cont_parent ? cont_parent : nbook_parent);
+  
   if (wxparent)
   {
     PProperty property = wxparent->GetProperty(propname);

@@ -141,6 +141,7 @@
   </objectinfo>
   <objectinfo class="wxStaticLine" icon="static_line.xpm" type="widget">
     <inherits class="wxWindow" />
+    <property name="name" type="text" hidden="1">m_staticline</property>
     <property name="style" type="bitlist">
       <option name="wxLI_HORIZONTAL" />
       <option name="wxLI_VERTICAL" />wxLI_HORIZONTAL</property>
@@ -152,6 +153,7 @@
   </objectinfo>  
   <objectinfo class="wxNotebook" icon="notebook.xpm" type="notebook">
     <inherits class="wxWindow" />
+    <property name="name" type="text" hidden="1">m_notebook</property>
     <property name="style" type="bitlist">
       <option name="wxNB_TOP" />
       <option name="wxNB_LEFT" />

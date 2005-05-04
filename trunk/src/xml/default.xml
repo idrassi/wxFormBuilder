@@ -34,6 +34,10 @@
     </codegen>
   </objectinfo>
   <objectinfo class="wxNotebookPage" icon="panel.xpm" type="notebookpage">
-    <property name="label" type="text">a page</property>
-  </objectinfo>
+    <property name="label" type="wxString">a page</property>
+    <property name="select" type="bool">0</property>
+    <codegen language="C++">
+      <template name="page_add">#parent $name->AddPage(#child $name, $label, $select);</template>
+    </codegen>
+</objectinfo>
 </package>

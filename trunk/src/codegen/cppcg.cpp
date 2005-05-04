@@ -210,7 +210,8 @@ bool CppCodeGenerator::GenerateCode(PObjectBase project)
 
 void CppCodeGenerator::GenAttributeDeclaration(PObjectBase obj, Permission perm)
 {
-  if (obj->GetObjectType() == T_WIDGET || 
+  if (obj->GetObjectType() == T_NOTEBOOK ||
+      obj->GetObjectType() == T_WIDGET || 
       obj->GetObjectType() == T_COMPONENT ||
       obj->GetObjectType() == T_CONTAINER)
   {
@@ -324,7 +325,7 @@ void CppCodeGenerator::FindDependencies(PObjectBase obj, set<PObjectInfo> &info_
     for (i = 0; i<ch_count; i++)
     {
       PObjectBase child = obj->GetChild(i);
-      if (child->GetObjectType() == T_WIDGET || child->GetObjectType() == T_CONTAINER)
+      //if (child->GetObjectType() == T_WIDGET || child->GetObjectType() == T_CONTAINER)
         info_set.insert(child->GetObjectInfo());
       FindDependencies(child, info_set);
     }
@@ -351,6 +352,7 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
   
   switch (type)
   {
+    case T_NOTEBOOK:
     case T_CONTAINER:
     case T_WIDGET:
     {
@@ -414,6 +416,7 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
       string temp_name;
       switch (child_type)
       {
+        case T_NOTEBOOK:
         case T_CONTAINER:
         case T_WIDGET:
           temp_name = "window_add";
@@ -422,12 +425,19 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
         case T_SIZER:
           temp_name = "sizer_add";
           break;
-
+          
         default:
           assert(false);
           break;
       }
       m_source->WriteLn(GetCode(obj,temp_name));
+    }
+    break;
+    
+    case T_NOTEBOOK_PAGE:
+    {
+      GenConstruction(obj->GetChild(0),false);
+      m_source->WriteLn(GetCode(obj,"page_add"));
     }
     break;
     

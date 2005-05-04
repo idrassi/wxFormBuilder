@@ -402,6 +402,11 @@ class ObjectBase : public IObject, public enable_shared_from_this<ObjectBase>
   void SetObjectInfo(PObjectInfo info) { m_info = info; };
   
   /**
+   * Devuelve la profundidad  del objeto en el arbol.
+   */
+  int Deep();
+  
+  /**
    * Imprime el arbol en un stream.
    */
   virtual void PrintOut(ostream &s, int indent);

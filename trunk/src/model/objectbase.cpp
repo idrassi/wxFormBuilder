@@ -415,6 +415,21 @@ PObjectBase ObjectBase::GetChild (unsigned int idx)
   return m_children[idx];
 }
 
+int ObjectBase::Deep()
+{
+  int deep = 0;
+  PObjectBase obj(GetParent());
+  while (obj)
+  {
+    obj = obj->GetParent();
+    deep++;
+    
+    if (deep > 1000)
+      assert(false);
+  }
+  return deep;
+}
+
 void ObjectBase::PrintOut(ostream &s, int indent)
 {
   string ind_str = GetIndentString(indent);
