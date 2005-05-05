@@ -449,7 +449,7 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
     Create();
     
   PVisualObject visualObj;
-  PObjectBase objAux;
+  PObjectBase objAuxCt, objAuxNb, objAux;
   VisualObjectMap::iterator it = m_map.find(obj);
   
   if (it != m_map.end())
@@ -457,7 +457,15 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
     wxWindow *selPanel = NULL;
     visualObj = it->second;
     //objAux = obj->FindNearAncestor(T_WIDGET);
-    objAux = obj->FindNearAncestor(T_CONTAINER);  
+    objAuxCt = obj->FindNearAncestor(T_CONTAINER);  
+    objAuxNb = obj->FindNearAncestor(T_NOTEBOOK);
+    
+    if (!objAuxCt)
+      objAux = objAuxNb;
+    else if (!objAuxNb)
+      objAux = objAuxCt;
+    else
+      objAux = objAuxNb->Deep() > objAuxCt->Deep() ? objAuxNb : objAuxCt;
     
     if (objAux)  // Un padre de tipo T_WIDGET es siempre un contenedor
     {
@@ -469,13 +477,14 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
         
     wxObject *item = NULL;
     wxSizer *sizer = NULL;
-    if (obj->GetObjectType() == T_WIDGET || obj->GetObjectType() == T_CONTAINER)
+    if (obj->GetObjectType() == T_WIDGET || obj->GetObjectType() == T_CONTAINER || obj->GetObjectType() == T_NOTEBOOK)
       item = shared_dynamic_cast<VisualWindow>(visualObj)->GetWindow();
     else if (obj->GetObjectType() == T_SIZER)
       item = shared_dynamic_cast<VisualSizer>(visualObj)->GetSizer();
     
     objAux = obj->FindNearAncestor(T_SIZER);
-    if (objAux)
+    objAuxCt = obj->FindNearAncestor(T_CONTAINER);
+    if (objAux && (!objAuxCt || objAux->Deep() > objAuxCt->Deep()))
     {
       it = m_map.find(objAux);
       sizer = shared_dynamic_cast<VisualSizer>(it->second)->GetSizer(); 

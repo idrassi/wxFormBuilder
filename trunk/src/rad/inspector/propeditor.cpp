@@ -517,7 +517,7 @@ BitmapEditor::BitmapEditor(DataObservable *data, PProperty prop, wxWindow *paren
 void BitmapEditor::OnSelectBitmap(wxCommandEvent &event)
 {
   wxFileDialog *dialog = new wxFileDialog(this,wxT("Open Image"),wxT(""),
-    wxT(""),wxT("*.xpm"),wxOPEN);
+    wxT(""),wxT("*.xpm"),wxOPEN | wxHIDE_READONLY);
 
   if (dialog->ShowModal() == wxID_OK)
   {

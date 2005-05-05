@@ -268,7 +268,7 @@ void MainFrame::OnOpenProject(wxCommandEvent &event)
 {
   //GetData()->LoadProject(wxT("hola.xml"));
   wxFileDialog *dialog = new wxFileDialog(this,wxT("Open Project"),wxT("projects/example"),
-    wxT("example.xml"),wxT("*.xml"),wxOPEN);
+    wxT("example.xml"),wxT("*.xml"),wxOPEN | wxHIDE_READONLY);
 
   if (dialog->ShowModal() == wxID_OK)
   {
@@ -281,7 +281,7 @@ void MainFrame::OnOpenProject(wxCommandEvent &event)
 void MainFrame::OnImportXrc(wxCommandEvent &event)
 {
   wxFileDialog *dialog = new wxFileDialog(this,wxT("Import XRC file"),wxT("projects/example"),
-  wxT("example.xrc"),wxT("*.xrc"),wxOPEN);
+  wxT("example.xrc"),wxT("*.xrc"),wxOPEN | wxHIDE_READONLY);
 
   if (dialog->ShowModal() == wxID_OK)
   {
