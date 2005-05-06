@@ -155,6 +155,30 @@ class NotebookComponent : public ComponentBase
   }	
 };
 
+class MenuBarComponent : public ComponentBase
+{
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    return NULL;
+  }	
+};
+
+class MenuComponent : public ComponentBase
+{
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    return NULL;
+  }	
+};
+
+class MenuItemComponent : public ComponentBase
+{
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    return NULL;
+  }	
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()
@@ -168,6 +192,9 @@ BEGIN_LIBRARY()
   COMPONENT("wxStaticBitmap", StaticBitmapComponent)
   COMPONENT("wxStaticLine", StaticLineComponent)
   COMPONENT("wxNotebook", NotebookComponent)
+  COMPONENT("wxMenuBar", MenuBarComponent)
+  COMPONENT("wxMenu", MenuComponent)
+  COMPONENT("wxMenuItem", MenuItemComponent)
 
   // wxWindow style macros
   MACRO(wxSIMPLE_BORDER)

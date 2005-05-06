@@ -66,6 +66,7 @@ class GridPanel : public wxSashWindow //wxPanel
    wxObject* GetSelectedItem() { return m_selItem; }
    PObjectBase GetSelectedObject() { return m_selObj.lock(); }
    wxWindow* GetActivePanel() { return m_actPanel; }
+   void SetMenubar(PObjectBase menubar);
    void HighlightSelection(wxDC& dc);
    void OnPaint(wxPaintEvent &event);
 //   void OnMouseMove(wxMouseEvent &event);

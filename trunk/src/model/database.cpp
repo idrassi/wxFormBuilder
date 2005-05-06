@@ -313,6 +313,7 @@ PObjectBase  ObjectDatabase::CreateObject(TiXmlElement *xml_obj, PObjectBase par
 
 bool IncludeInPalette(ObjectType type)
 {
+  return true;
 }
 
 bool ObjectDatabase::LoadFile(string file)
@@ -560,7 +561,8 @@ bool ObjectDatabase::ShowInPalette(ObjectType type)
 {
   return ( type == T_FORM || type == T_WIDGET || type == T_SIZER ||
            type == T_COMPONENT || type == T_CONTAINER || type == T_SPACER ||
-           type == T_NOTEBOOK );
+           type == T_NOTEBOOK || type == T_MENUBAR || type == T_MENU ||
+           type == T_MENUITEM);
 }
 
 
@@ -668,6 +670,9 @@ void ObjectDatabase::InitObjectTypes()
  OT("container",T_CONTAINER);
  OT("notebook",T_NOTEBOOK);
  OT("notebookpage",T_NOTEBOOK_PAGE);
+ OT("menubar",T_MENUBAR);
+ OT("menu",T_MENU);
+ OT("menuitem",T_MENUITEM);
 }
 
 #define PT(x,y) m_propTypes.insert(PTMap::value_type(x,y))

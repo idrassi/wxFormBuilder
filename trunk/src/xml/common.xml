@@ -169,4 +169,34 @@
       <template name="include">#include &lt;wx/notebook.h&gt;</template>
     </codegen>
   </objectinfo>
+  <objectinfo class="wxMenuBar" icon="menubar.xpm" type="menubar">
+    <inherits class="wxWindow" />
+    <property name="name" type="text" hidden="1">m_menubar</property>
+    <property name="label" type="wxString">MyMenuBar</property>
+    <codegen language="C++">
+      <template name="declaration">wxNotebook *$name;</template>
+      <template name="construction">$name = new wxNotebook(#wxparent $name,$id,$pos,$size,$style);</template>
+      <template name="include">#include &lt;wx/notebook.h&gt;</template>
+    </codegen>
+  </objectinfo>
+  <objectinfo class="wxMenu" icon="menubar.xpm" type="menu">
+    <inherits class="wxWindow" />
+    <property name="name" type="text" hidden="1">m_menu</property>
+    <property name="label" type="wxString">MyMenu</property>
+    <codegen language="C++">
+      <template name="declaration">wxNotebook *$name;</template>
+      <template name="construction">$name = new wxNotebook(#wxparent $name,$id,$pos,$size,$style);</template>
+      <template name="include">#include &lt;wx/notebook.h&gt;</template>
+    </codegen>
+  </objectinfo>
+  <objectinfo class="wxMenuItem" icon="menubar.xpm" type="menuitem">
+    <inherits class="wxWindow" />
+    <property name="name" type="text" hidden="1">m_menuitem</property>
+    <property name="label" type="wxString">MyMenuItem</property>
+    <codegen language="C++">
+      <template name="declaration">wxNotebook *$name;</template>
+      <template name="construction">$name = new wxNotebook(#wxparent $name,$id,$pos,$size,$style);</template>
+      <template name="include">#include &lt;wx/notebook.h&gt;</template>
+    </codegen>
+  </objectinfo>
 </package>

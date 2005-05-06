@@ -338,7 +338,7 @@ bool ObjectBase::DoChildTypeOk(ObjectType type_child, ObjectType type_parent)
 
     case T_CONTAINER:
     case T_FORM:
-      result = (type_child == T_SIZER); // sólo puede haber uno
+      result = (type_child == T_SIZER || type_child == T_MENUBAR); // sólo puede haber uno
       break;
 
 
@@ -359,6 +359,13 @@ bool ObjectBase::DoChildTypeOk(ObjectType type_child, ObjectType type_parent)
                 type_child == T_SIZER || type_child == T_NOTEBOOK);
       break;
 
+    case T_MENUBAR:
+      result = (type_child == T_MENU);
+      break;
+      
+    case T_MENU:
+      result = (type_child == T_MENUITEM);
+      break;
 //    case T_BITMAP:
 //    case T_SPACER:
 //    case T_WIDGET:

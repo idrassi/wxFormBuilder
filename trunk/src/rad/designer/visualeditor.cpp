@@ -112,6 +112,7 @@ void VisualEditor::OnResizeBackPanel (wxSashEvent &event)
 void VisualEditor::Create()
 {
   bool need_fit = false;
+  PObjectBase menubar;
   
   Debug::Print("[VisualEditor::Update] Generating preview...");
   PObjectBase root = GetData()->GetSelectedForm();
@@ -152,7 +153,10 @@ void VisualEditor::Create()
     for (unsigned int i=0; i < root->GetChildCount(); i++)
     {
       PObjectBase child = root->GetChild(i);
-      Generate(child,m_back,NULL,T_CONTAINER); 
+      if (child->GetObjectType() == T_MENUBAR)
+        menubar = child;
+      else
+        Generate(child,m_back,NULL,T_CONTAINER); 
     }
     
     if (need_fit)
@@ -163,7 +167,7 @@ void VisualEditor::Create()
     m_back->SetSize(10,10);
   }
   
-  wxSizer *mainSizer = m_back->GetSizer();
+  /*wxSizer *mainSizer = m_back->GetSizer();
   
   if (mainSizer)
   {
@@ -191,7 +195,8 @@ void VisualEditor::Create()
       m_back->SetSizer(dummySizer, false);
       
       m_back->Layout();
-  }
+  }*/
+  if (menubar) m_back->SetMenubar(menubar);
 
   //#ifdef __WX24__
     if (IsShown()) Thaw(); // Freeze no funciona como en wxWidgets 2.4!
@@ -403,6 +408,31 @@ void GridPanel::HighlightSelection(wxDC& dc)
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     DrawRectangle(dc, point, size, object);
   }
+}
+
+void GridPanel::SetMenubar(PObjectBase menubar)
+{
+  /* Falta soporte para submenús, pero es un comienzo */
+  assert(menubar->GetObjectType() == T_MENUBAR);
+  Menubar *mbWidget = new Menubar(this, -1);
+  for (int i = 0; i < menubar->GetChildCount(); i++)
+  {
+    PObjectBase menu = menubar->GetChild(i);
+    wxMenu *menuWidget = new wxMenu();
+    for (int j = 0; j < menu->GetChildCount(); j++)
+    {
+      PObjectBase menuItem = menu->GetChild(j);
+      menuWidget->Append(wxNewId(), menuItem->GetPropertyAsString(_T("label")));
+    }
+    mbWidget->AppendMenu(menu->GetPropertyAsString(_T("label")), menuWidget);
+  }
+  wxSizer *mainSizer = GetSizer();
+  wxSizer *dummySizer = new wxBoxSizer(wxVERTICAL);
+  dummySizer->Add(mbWidget, 0, wxEXPAND | wxTOP | wxBOTTOM, 3);
+  dummySizer->Add(new wxStaticLine(this, -1), 0, wxEXPAND | wxALL, 0);
+  if (mainSizer) dummySizer->Add(mainSizer, 1, wxEXPAND | wxALL, 0);
+  SetSizer(dummySizer, false);
+  Layout();
 }
 
 void GridPanel::OnPaint(wxPaintEvent &event)

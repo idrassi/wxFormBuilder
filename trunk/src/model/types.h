@@ -44,7 +44,10 @@ typedef enum
   T_BITMAP,
   T_CONTAINER,
   T_NOTEBOOK,    // de momento lo trataremos como un tipo especial
-  T_NOTEBOOK_PAGE
+  T_NOTEBOOK_PAGE,
+  T_MENUBAR,
+  T_MENU,
+  T_MENUITEM
 } ObjectType;
 
 
