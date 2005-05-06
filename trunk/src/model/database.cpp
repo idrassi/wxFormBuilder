@@ -418,7 +418,7 @@ void ObjectDatabase::SetupPackage(string file)
 bool ObjectDatabase::HasCppProperties(ObjectType type)
 {
    return (type == T_COMPONENT || type == T_WIDGET || type == T_CONTAINER ||
-           type == T_NOTEBOOK);
+           type == T_NOTEBOOK || type == T_MENUBAR);
 }
 
 

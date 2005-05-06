@@ -213,7 +213,8 @@ void CppCodeGenerator::GenAttributeDeclaration(PObjectBase obj, Permission perm)
   if (obj->GetObjectType() == T_NOTEBOOK ||
       obj->GetObjectType() == T_WIDGET || 
       obj->GetObjectType() == T_COMPONENT ||
-      obj->GetObjectType() == T_CONTAINER)
+      obj->GetObjectType() == T_CONTAINER ||
+      obj->GetObjectType() == T_MENUBAR)
   {
     string perm_str = obj->GetProperty("permission")->GetValue();
     
@@ -355,9 +356,11 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
     case T_NOTEBOOK:
     case T_CONTAINER:
     case T_WIDGET:
+    case T_MENUBAR:
     {
       // comprobamos si no se ha declarado como atributo de clase
       // en cuyo caso lo declaramos en el constructor
+      
       string perm_str = obj->GetProperty("permission")->GetValue();
       if (perm_str == "none")
         m_source->WriteLn(GetCode(obj,"declaration"));
@@ -392,6 +395,22 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
         CppTemplateParser parser(obj,_template);
         m_source->WriteLn(parser.ParseTemplate());
       } 
+      
+    }
+    break;
+    
+    case T_MENU:
+    {
+      m_source->WriteLn(GetCode(obj,"declaration"));
+      m_source->WriteLn(GetCode(obj,"construction"));
+      GenSettings(obj->GetObjectInfo(), obj);
+      
+      for (unsigned int i=0; i<obj->GetChildCount() ; i++)
+        GenConstruction(obj->GetChild(i),false);
+    
+      //TODO: #wxparent devuelve el primer padre de tipo T_WIDGET y la barra
+      //de menús no lo es...
+      m_source->WriteLn(GetCode(obj,"menu_add"));
       
     }
     break;
@@ -440,6 +459,9 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
       m_source->WriteLn(GetCode(obj,"page_add"));
     }
     break;
+    
+    case T_MENUITEM:
+        break;
     
     default:
     assert(false);
