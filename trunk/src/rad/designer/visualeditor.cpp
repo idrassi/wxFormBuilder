@@ -412,7 +412,7 @@ void GridPanel::HighlightSelection(wxDC& dc)
 
 void GridPanel::SetMenubar(PObjectBase menubar)
 {
-  /* Falta soporte para submenús, pero es un comienzo */
+  /* Falta soporte para submenús y separadores, pero es un comienzo */
   assert(menubar->GetObjectType() == T_MENUBAR);
   Menubar *mbWidget = new Menubar(this, -1);
   for (int i = 0; i < menubar->GetChildCount(); i++)
@@ -422,7 +422,9 @@ void GridPanel::SetMenubar(PObjectBase menubar)
     for (int j = 0; j < menu->GetChildCount(); j++)
     {
       PObjectBase menuItem = menu->GetChild(j);
-      menuWidget->Append(wxNewId(), menuItem->GetPropertyAsString(_T("label")));
+      wxString label = menuItem->GetPropertyAsString(_T("label"));
+      label.Replace(_T("\\t"), _T("\t"));
+      menuWidget->Append(5000, label);
     }
     mbWidget->AppendMenu(menu->GetPropertyAsString(_T("label")), menuWidget);
   }
