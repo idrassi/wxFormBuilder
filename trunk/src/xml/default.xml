@@ -33,7 +33,7 @@
       <template name="sizer_add">#parent $name->Add(#child $name, $option, $flag, $border);</template>
     </codegen>
   </objectinfo>
-  <objectinfo class="wxNotebookPage" icon="panel.xpm" type="notebookpage">
+  <objectinfo class="notebookpage" icon="panel.xpm" type="notebookpage">
     <property name="label" type="wxString">a page</property>
     <property name="select" type="bool">0</property>
     <codegen language="C++">

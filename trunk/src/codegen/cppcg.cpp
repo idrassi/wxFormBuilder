@@ -370,6 +370,12 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
       
       for (unsigned int i=0; i<obj->GetChildCount() ; i++)
         GenConstruction(obj->GetChild(i),true);
+        
+      if (type == T_MENUBAR)
+      {
+        m_source->WriteLn(GetCode(obj,"menubar_add")); 
+        m_source->WriteLn("");
+      }
     }
     break;
 
@@ -403,13 +409,10 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
     {
       m_source->WriteLn(GetCode(obj,"declaration"));
       m_source->WriteLn(GetCode(obj,"construction"));
-      GenSettings(obj->GetObjectInfo(), obj);
       
       for (unsigned int i=0; i<obj->GetChildCount() ; i++)
         GenConstruction(obj->GetChild(i),false);
     
-      //TODO: #wxparent devuelve el primer padre de tipo T_WIDGET y la barra
-      //de menús no lo es...
       m_source->WriteLn(GetCode(obj,"menu_add"));
       
     }
@@ -461,7 +464,12 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
     break;
     
     case T_MENUITEM:
-        break;
+    {
+      m_source->WriteLn(GetCode(obj,"construction"));
+      GenSettings(obj->GetObjectInfo(), obj);
+      m_source->WriteLn(GetCode(obj,"menuitem_add"));
+    }
+    break;
     
     default:
     assert(false);

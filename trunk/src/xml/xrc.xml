@@ -149,7 +149,7 @@
     <element name="checked" />
     <element name="bitmap" />
   </object>
-  <object class="wxNoteBook">
+  <object class="wxNotebook">
     <attribute name="name" />
     <element name="style" />
     <element name="usenotebooksizer" />

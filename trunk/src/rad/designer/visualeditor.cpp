@@ -424,7 +424,10 @@ void GridPanel::SetMenubar(PObjectBase menubar)
       PObjectBase menuItem = menu->GetChild(j);
       wxString label = menuItem->GetPropertyAsString(_T("label"));
       label.Replace(_T("\\t"), _T("\t"));
-      menuWidget->Append(5000, label);
+      wxMenuItem *item = new wxMenuItem(menuWidget, 5000, label, menuItem->GetPropertyAsString(_T("help")));
+      if (!menuItem->GetProperty("bitmap")->IsDefaultValue())
+        item->SetBitmap(menuItem->GetPropertyAsBitmap("bitmap"));
+      menuWidget->Append(item);
     }
     mbWidget->AppendMenu(menu->GetPropertyAsString(_T("label")), menuWidget);
   }

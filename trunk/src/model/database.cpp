@@ -169,14 +169,14 @@ PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
     {
       PObjectBase nbpage;
       Debug::Print("new notebook page");
-      nbpage = PObjectBase(new ObjectBase("wxNotebookPage"));
+      nbpage = PObjectBase(new ObjectBase("notebookpage"));
       nbpage->SetObjectType(T_NOTEBOOK_PAGE);
       valid_child = nbpage->ChildTypeOk(obj_info->GetObjectType());
       if (valid_child)
       {
         // Pues hay que meterlo en un sizeritem, vamos a preparar el
         // nuevo padre
-        nbpage = CreateObject("wxNotebookPage",parent);
+        nbpage = CreateObject("notebookpage",parent);
         assert(nbpage);
         
         parent = nbpage;
