@@ -212,4 +212,12 @@
       <template name="include">#include &lt;wx/menu.h&gt;</template>
     </codegen>
   </objectinfo>
+  <objectinfo class="separator" icon="menuitem.xpm" type="menuitem">
+    <codegen language="C++">
+      <template name="construction"></template>
+      <template name="settings"></template>
+      <template name="menuitem_add">#parent $name->AppendSeparator();</template>
+      <template name="include">#include &lt;wx/menu.h&gt;</template>
+    </codegen>
+  </objectinfo>
 </package>

@@ -32,12 +32,12 @@ Title::Title(wxWindow *parent,const wxString &title) : wxPanel(parent,-1)
   wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
   
   wxStaticText *text = new wxStaticText(this,-1,title);//,wxDefaultPosition,wxDefaultSize,wxSIMPLE_BORDER);
-  SetBackgroundColour(wxColour(100,100,100));
-  text->SetBackgroundColour(wxColour(100,100,100));
+  SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
+  text->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
   text->SetForegroundColour(*wxWHITE);
-  text->SetFont(wxFont(8, wxSWISS, wxNORMAL, wxBOLD, 0, wxT("")));
+  //text->SetFont(wxFont(8, wxSWISS, wxNORMAL, wxBOLD, 0, wxT("")));
 
-  sizer->Add(text,0,0,0);
+  sizer->Add(text,0,wxALL,2);
   SetSizer(sizer);
   Fit();
 }

@@ -161,42 +161,14 @@ void VisualEditor::Create()
     
     if (need_fit)
       m_back->Fit();
+      
+    if (menubar) m_back->SetMenubar(menubar);
+    
   }
   else
   {
     m_back->SetSize(10,10);
   }
-  
-  /*wxSizer *mainSizer = m_back->GetSizer();
-  
-  if (mainSizer)
-  {
-      Menubar *dummy = new Menubar(m_back, -1);
-      
-      wxMenu *menu = new wxMenu;
-      menu->Append(wxNewId(), _T("Nuevo"));
-      menu->Append(wxNewId(), _T("Abrir"));
-      menu->Append(wxNewId(), _T("Guardar"));
-      menu->Append(wxNewId(), _T("Salir"));
-      dummy->AppendMenu(_T("File"), menu);
-      
-      menu = new wxMenu;
-      menu->Append(wxNewId(), _T("Copiar"));
-      menu->Append(wxNewId(), _T("Pegar"));
-      menu->Append(wxNewId(), _T("Cortar"));
-      menu->Append(wxNewId(), _T("Eliminar"));
-      dummy->AppendMenu(_T("Edit"), menu);
-      dummy->Fit();
-      
-      wxSizer *dummySizer = new wxBoxSizer(wxVERTICAL);
-      dummySizer->Add(dummy, 0, wxEXPAND | wxTOP | wxBOTTOM, 3);
-      dummySizer->Add(new wxStaticLine(m_back, -1), 0, wxEXPAND | wxALL, 0);
-      dummySizer->Add(mainSizer, 1, wxEXPAND | wxALL, 0);
-      m_back->SetSizer(dummySizer, false);
-      
-      m_back->Layout();
-  }*/
-  if (menubar) m_back->SetMenubar(menubar);
 
   //#ifdef __WX24__
     if (IsShown()) Thaw(); // Freeze no funciona como en wxWidgets 2.4!
@@ -412,7 +384,7 @@ void GridPanel::HighlightSelection(wxDC& dc)
 
 void GridPanel::SetMenubar(PObjectBase menubar)
 {
-  /* Falta soporte para submenús y separadores, pero es un comienzo */
+  /* Falta soporte para submenús, pero es un comienzo */
   assert(menubar->GetObjectType() == T_MENUBAR);
   Menubar *mbWidget = new Menubar(this, -1);
   for (int i = 0; i < menubar->GetChildCount(); i++)
@@ -422,12 +394,17 @@ void GridPanel::SetMenubar(PObjectBase menubar)
     for (int j = 0; j < menu->GetChildCount(); j++)
     {
       PObjectBase menuItem = menu->GetChild(j);
-      wxString label = menuItem->GetPropertyAsString(_T("label"));
-      label.Replace(_T("\\t"), _T("\t"));
-      wxMenuItem *item = new wxMenuItem(menuWidget, wxID_HIGHEST + 1, label, menuItem->GetPropertyAsString(_T("help")));
-      if (!menuItem->GetProperty("bitmap")->IsDefaultValue())
-        item->SetBitmap(menuItem->GetPropertyAsBitmap("bitmap"));
-      menuWidget->Append(item);
+      if (menuItem->GetClassName() == "separator")
+        menuWidget->AppendSeparator();
+      else
+      {
+        wxString label = menuItem->GetPropertyAsString(_T("label"));
+        label.Replace(_T("\\t"), _T("\t"));
+        wxMenuItem *item = new wxMenuItem(menuWidget, wxID_HIGHEST + 1, label, menuItem->GetPropertyAsString(_T("help")));
+        if (!menuItem->GetProperty("bitmap")->IsDefaultValue())
+          item->SetBitmap(menuItem->GetPropertyAsBitmap("bitmap"));
+        menuWidget->Append(item);
+      }
     }
     mbWidget->AppendMenu(menu->GetPropertyAsString(_T("label")), menuWidget);
   }

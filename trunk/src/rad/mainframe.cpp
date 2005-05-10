@@ -58,6 +58,8 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   wxString time(wxT(__TIME__));
   SetTitle(wxT("wxFormBuilder (Build on ") + date +wxT(" - ")+ time + wxT(")"));
   
+  SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+  
   wxMenu *menuFile = new wxMenu;
 
   // the "About" item should be in the help menu
@@ -110,7 +112,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   tree_text->SetBackgroundColour(wxColour(100,100,100));
   tree_text->SetForegroundColour(*wxWHITE);
   tree_text->SetFont(wxFont(8, wxSWISS, wxNORMAL, wxBOLD, 0, wxT("")));*/
-  Title *tree_title = new Title(tree_panel,wxT("OBJECT TREE"));
+  Title *tree_title = new Title(tree_panel,wxT("Object Tree"));
 
   m_objTree = new ObjectTree(tree_panel,-1);
   data->AddDataObserver(m_objTree);
@@ -130,7 +132,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   text_obj_insp->SetBackgroundColour(wxColour(100,100,100));
   text_obj_insp->SetForegroundColour(*wxWHITE);
   text_obj_insp->SetFont(wxFont(8, wxSWISS, wxNORMAL, wxBOLD, 0, wxT("")));*/
-  Title *obj_insp_title = new Title(obj_inspPanel,wxT("OBJECT PROPERTIES"));
+  Title *obj_insp_title = new Title(obj_inspPanel,wxT("Object Properties"));
     
   m_objInsp = new ObjectInspector(obj_inspPanel,-1);
   data->AddDataObserver(m_objInsp);
@@ -192,7 +194,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   text->SetBackgroundColour(wxColour(100,100,100));
   text->SetForegroundColour(*wxWHITE);
   text->SetFont(wxFont(8, wxSWISS, wxNORMAL, wxBOLD, 0, wxT("")));*/
-  Title *ed_title = new Title(right,wxT("EDITOR"));
+  Title *ed_title = new Title(right,wxT("Editor"));
   
   right_sizer->Add(m_palette,0,wxEXPAND,0);
   right_sizer->Add(ed_title,0,wxEXPAND,0);
