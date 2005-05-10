@@ -28,6 +28,9 @@
 #include "icons/ot_spacer.xpm"
 #include "icons/ot_project.xpm"
 #include "icons/ot_notebook.xpm"
+#include "icons/ot_menubar.xpm"
+#include "icons/ot_menu.xpm"
+#include "icons/ot_menuitem.xpm"
 #include "utils/debug.h"
 #include <wx/imaglist.h>
 
@@ -47,6 +50,9 @@ ObjectTree::ObjectTree(wxWindow *parent, int id)
   img_list->Add(wxBitmap(ot_widget_xpm));
   img_list->Add(wxBitmap(ot_spacer_xpm));
   img_list->Add(wxBitmap(ot_notebook_xpm));
+  img_list->Add(wxBitmap(ot_menubar_xpm));
+  img_list->Add(wxBitmap(ot_menu_xpm));
+  img_list->Add(wxBitmap(ot_menuitem_xpm));
   
   m_tcObjects->AssignImageList(img_list);
 }
@@ -211,7 +217,13 @@ int ObjectTree::GetImageIndex (ObjectType type)
     case T_SPACER:  image = 4;
       break;
     case T_NOTEBOOK:  image = 5;
-      break;    
+      break;
+    case T_MENUBAR: image = 6;
+      break;
+    case T_MENU: image = 7;
+      break;
+    case T_MENUITEM: image = 8;
+      break;  
     default:
       break;
   }  

@@ -32,8 +32,14 @@
 #define ID_ABOUT 100
 #define ID_QUIT  101 
 
+wxWindowID wxFbPalette::nextId = wxID_HIGHEST + 2;
+
+BEGIN_EVENT_TABLE(wxFbPalette, wxPanel)
+    EVT_TOOL(-1, wxFbPalette::OnButtonClick)
+END_EVENT_TABLE()
+
 wxFbPalette::wxFbPalette(wxWindow *parent,int id)
-  : wxPanel(parent,id)
+  : wxPanel(parent,id), m_notebook(NULL)
 {
 }
 
@@ -57,6 +63,8 @@ void wxFbPalette::Create()
 
     wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
     Debug::Print("[Palette] Page %s Items %d",pkg_name.c_str(), pkg->GetObjectCount());
+    wxToolBar *toolbar = new wxToolBar(panel, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
+    toolbar->SetToolBitmapSize(wxSize(22, 22));
     
     unsigned int j;
     for (j=0;j<pkg->GetObjectCount();j++)
@@ -67,12 +75,16 @@ void wxFbPalette::Create()
       wxBitmap icon;
       icon.LoadFile(icon_file,wxBITMAP_TYPE_XPM);
       
-      wxBitmapButton *button = new wxBitmapButton(panel,-1,icon,wxDefaultPosition,wxSize(32,32));
-      button->SetToolTip(widget);
+      //wxBitmapButton *button = new wxBitmapButton(panel,-1,icon,wxDefaultPosition,wxSize(32,32));
+      //button->SetToolTip(widget);
+      toolbar->AddTool(nextId++, widget, icon, widget);
 
-      button->PushEventHandler(new PaletteButtonEventHandler(widget,GetData()));
-      sizer->Add(button,0, wxALL, 2);
+      //button->PushEventHandler(new PaletteButtonEventHandler(widget,GetData()));
+      //sizer->Add(button,0, wxALL, 2);
     }
+    toolbar->Realize();
+    m_tv.push_back(toolbar);
+    sizer->Add(toolbar, 0, wxALL | wxALIGN_CENTER_VERTICAL, 2);
     panel->SetAutoLayout(true);
     panel->SetSizer(sizer);
     sizer->Fit(panel);
@@ -95,6 +107,19 @@ void wxFbPalette::Create()
   top_sizer->SetSizeHints(this);
 
 }
+
+void wxFbPalette::OnButtonClick(wxCommandEvent &event)
+{
+  for (int i = 0; i < m_tv.size(); i++)
+  {
+    if (m_tv[i]->FindById(event.GetId()))
+    {
+      wxString name = m_tv[i]->GetToolShortHelp(event.GetId());
+      GetData()->CreateObject(name);
+      return;
+    }
+  }
+}  
 
 
 #define ID_FILE_OPEN 1000

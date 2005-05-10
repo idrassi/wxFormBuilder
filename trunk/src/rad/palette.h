@@ -28,10 +28,16 @@
 #include <wx/notebook.h>
 #include "rad/appobserver.h"
 
+typedef vector<wxToolBar*> ToolbarVector;
+
 class wxFbPalette : public DataObserver, public wxPanel
 {
  private:
+  ToolbarVector m_tv;
   wxNotebook *m_notebook;
+  static wxWindowID nextId;
+  
+  DECLARE_EVENT_TABLE()
    
  public:
   wxFbPalette(wxWindow *parent,int id);
@@ -42,7 +48,7 @@ class wxFbPalette : public DataObserver, public wxPanel
    */
   void Create();
   
-
+  void OnButtonClick(wxCommandEvent &event);
 };
 /*
 class PaletteButton : public wxBitmapButton
