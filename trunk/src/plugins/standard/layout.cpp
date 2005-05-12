@@ -27,6 +27,53 @@
 #ifdef __WX24__
   #define wxFIXED_MINSIZE wxADJUST_MINSIZE  
 #endif
+class SpacerComponent : public ComponentBase
+{
+ public:
+  void OnCreated(IObjectView *objview, wxWindow *wxparent, IObjectView *parent,
+                 IObjectView *first_child)
+  {
+    IObject *obj = objview->Object();
+    wxSizer *sizer = parent->Sizer();
+    
+    sizer->Add(
+      obj->GetPropertyAsInteger("width"),
+      obj->GetPropertyAsInteger("height"),
+      obj->GetPropertyAsInteger("option"),
+      obj->GetPropertyAsInteger("flag"),
+      obj->GetPropertyAsInteger("border"));
+  }
+};
+
+class SizerItemComponent : public ComponentBase
+{
+ public:
+  void OnCreated(IObjectView *objview, wxWindow *wxparent, IObjectView *parent,
+                 IObjectView *first_child)
+  {
+    IObject *obj = objview->Object();
+    wxSizer *sizer = parent->Sizer();
+    
+    if (first_child->Window())
+    {
+      sizer->Add(first_child->Window(),
+        obj->GetPropertyAsInteger("option"),
+        obj->GetPropertyAsInteger("flag"),
+        obj->GetPropertyAsInteger("border"));
+      
+      wxLogMessage("sizeritem to window");
+    }
+    else if (first_child->Sizer())
+    {
+      sizer->Add(first_child->Sizer(),
+        obj->GetPropertyAsInteger("option"),
+        obj->GetPropertyAsInteger("flag"),
+        obj->GetPropertyAsInteger("border"));
+        
+      wxLogMessage("sizeritem to sizer");
+    }
+  }
+};
 
 class BoxSizerComponent : public ComponentBase
 {
@@ -86,6 +133,8 @@ class FlexGridSizerComponent : public ComponentBase
 
     for (i=0; i < grows.GetCount() ; i++)
       sizer->AddGrowableRow(grows[i]);  
+      
+    return sizer;
   }
 };
 
@@ -94,6 +143,8 @@ class FlexGridSizerComponent : public ComponentBase
 ///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()
+  COMPONENT("spacer",SpacerComponent)
+  COMPONENT("sizeritem",SizerItemComponent)
   COMPONENT("wxBoxSizer",BoxSizerComponent)
   COMPONENT("wxStaticBoxSizer",StaticBoxSizerComponent)
   COMPONENT("wxGridSizer",GridSizerComponent)

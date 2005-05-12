@@ -27,8 +27,9 @@
 
 #include "wx/wx.h"
 #include <wx/dynarray.h>
+//#include "tinyxml.h"
 
-class ComponentBase;
+class IComponent;
 
 // interfaz para plugins
 // la idea es proporcionar una interfaz para acceder a las propiedades del
@@ -47,51 +48,85 @@ class IObject
   virtual wxArrayInt GetPropertyAsIntegerArray(const wxString& pname) = 0;
 };
 
+// interfaz para manejar la vista de un objeto
+
+class IObjectView
+{
+ public:
+  virtual wxWindow* Window() = 0;
+  virtual wxSizer*  Sizer() = 0;
+  virtual IObject*  Object() = 0;   
+};
+
 // Interfaz para almacenar todos los componentes de un plugin
 // es una clase abstracta y será el objeto que exportará la DLL.
-class ComponentLibraryBase
+class IComponentLibrary
 {
  public:
     
   // usadas por el plugin para registrar los componentes y macros
-  virtual void RegisterComponent(const wxString &text, ComponentBase *c) = 0;
+  virtual void RegisterComponent(const wxString &text, IComponent *c) = 0;
   virtual void RegisterMacro(const wxString &text, const int value) = 0;
 
   // usadas por wxFormBuilder para extraer los componentes y macros
-  virtual ComponentBase* GetComponent(unsigned int idx) = 0;
-  virtual wxString       GetComponentName(unsigned int idx) = 0;
-  virtual wxString       GetMacroName(unsigned int i) = 0;
-  virtual int            GetMacroValue(unsigned int i) = 0; 
+  virtual IComponent* GetComponent(unsigned int idx) = 0;
+  virtual wxString    GetComponentName(unsigned int idx) = 0;
+  virtual wxString    GetMacroName(unsigned int i) = 0;
+  virtual int         GetMacroValue(unsigned int i) = 0; 
   
   virtual unsigned int GetMacroCount() = 0;
   virtual unsigned int GetComponentCount() = 0;
 };
 
-class ComponentBase
+/**
+ * Interfaz para componentes
+ */
+class IComponent
 {
  public:
   /**
-   * Crea la instancia del objeto, bien sea un wxWindow* o un wxSizer*
+   * Crea la instancia del objeto-wx, bien sea un wxWindow* o un wxSizer*
    */  
   virtual wxObject* Create(IObject *obj, wxObject *parent) = 0;
+  
+  /**
+   * Es llamada una vez creado el objeto y sus respectivos hijos.
+   * Esta función será de utilidad en los objetos "ficticios" tales 
+   * como "sizeritem" o "notebookpage", gracias al puntero al primer_hijo 
+   * (y único) podremos añadir el objeto al sizer o al notebook.
+   *
+   * @param obj vista del objeto que se ha creado.
+   * @param wxparent widget padre.
+   * @param parent vista del objeto padre
+   * @param first_child vista del primer hijo.
+   */
+  virtual void OnCreated(IObjectView *obj, wxWindow *wxparent, 
+                         IObjectView *parent,
+                         IObjectView *first_child) = 0;
 
-   // de momento sólo nos hace falta que cree la instancia, el resto
-   // de información lo toma del archivo XML.
+  /**
+   * Dada una instancia del objeto obtenemos un nodo XRC.
+   */
+  //virtual TiXmlElement* ObjectToXrc(IObject *obj) = 0;
+  
+  // To-Do: XrcToObject
 };
+
+
 
 // función que nos devolverá la librería para ser usada dentro de la aplicación
 extern "C" 
 {
-  ComponentLibraryBase * GetComponentLibrary();
+  IComponentLibrary * GetComponentLibrary();
 };
 
 
 
 #define BEGIN_LIBRARY()  \
 \
-extern "C" WXEXPORT ComponentLibraryBase * GetComponentLibrary()  \
+extern "C" WXEXPORT IComponentLibrary * GetComponentLibrary()  \
 { \
-  ComponentLibraryBase * lib = new ComponentLibrary();
+  IComponentLibrary * lib = new ComponentLibrary();
   
 #define COMPONENT(name,class)  \
   lib->RegisterComponent(_T(name),new class());

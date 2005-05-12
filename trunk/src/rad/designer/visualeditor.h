@@ -85,8 +85,10 @@ class VisualEditor : public DataObserver, public wxPanel
   DECLARE_EVENT_TABLE()  
   
  protected:
+  //PVisualObject Generate(PObjectBase obj, wxWindow *parent, wxSizer *sizer,
+  //                       ObjectType parentType);
   PVisualObject Generate(PObjectBase obj, wxWindow *parent, wxSizer *sizer,
-                         ObjectType parentType);
+                         PVisualObject vobj_parent);
   void Create();
   
  public:

@@ -37,13 +37,13 @@
 
 using namespace std;
 
-class ComponentLibrary : public ComponentLibraryBase
+class ComponentLibrary : public IComponentLibrary
 {
  private:
   typedef struct
   {
     wxString name;
-    ComponentBase *component;
+    IComponent *component;
   }AComponent;
   
   typedef struct 
@@ -58,7 +58,7 @@ class ComponentLibrary : public ComponentLibraryBase
  public:
   virtual ~ComponentLibrary() {};
 
-  void RegisterComponent(const wxString &text, ComponentBase *c)
+  void RegisterComponent(const wxString &text, IComponent *c)
   {
     AComponent comp;
     comp.component = c;
@@ -76,7 +76,7 @@ class ComponentLibrary : public ComponentLibraryBase
     m_macros.push_back(macro);
   }
 
-  ComponentBase* GetComponent(unsigned int idx)
+  IComponent* GetComponent(unsigned int idx)
   {
     if (idx < m_components.size())
       return m_components[idx].component;
@@ -118,5 +118,22 @@ class ComponentLibrary : public ComponentLibraryBase
   }
 };
 
+/**
+ * Clase base para componentes.
+ */
+class ComponentBase : public IComponent
+{
+ public:
+
+  wxObject* Create(IObject *obj, wxObject *parent) { return NULL; }
+  void OnCreated(IObjectView *obj, wxWindow *wxparent,
+                 IObjectView *parent,
+                 IObjectView *first_child) { /* nada */ };
+
+  /**
+   * Dada una instancia del objeto obtenemos su respectivo XRC-XML.
+   */
+  //TiXmlElement* GetXrcElement(IObject *obj) { return NULL; };
+};
 
 #endif // __PLUGIN_H__

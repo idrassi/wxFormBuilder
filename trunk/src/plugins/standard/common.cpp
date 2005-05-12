@@ -155,6 +155,26 @@ class NotebookComponent : public ComponentBase
   }	
 };
 
+class NotebookPageComponent : public ComponentBase
+{
+ public:
+  void OnCreated(IObjectView *objview, wxWindow *wxparent, IObjectView *parent,
+                 IObjectView *first_child)
+  {
+    IObject *obj = objview->Object();
+    wxNotebook *nb = (wxNotebook *)parent->Window();
+    wxWindow *page = first_child->Window();
+
+    int selection = nb->GetSelection();
+    nb->AddPage(page,obj->GetPropertyAsString(_("label")));
+
+    if (obj->GetPropertyAsString(_("select"))==wxT("0") && selection >= 0)
+      nb->SetSelection(selection);
+    else
+      nb->SetSelection(nb->GetPageCount()-1);
+  }
+};
+
 class MenuBarComponent : public ComponentBase
 {
   wxObject* Create(IObject *obj, wxObject *parent)
@@ -182,6 +202,7 @@ class MenuItemComponent : public ComponentBase
 ///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()
+  COMPONENT("notebookpage",NotebookPageComponent)
   COMPONENT("wxButton",ButtonComponent)
   COMPONENT("wxTextCtrl",TextCtrlComponent)
   COMPONENT("wxStaticText",StaticTextComponent)

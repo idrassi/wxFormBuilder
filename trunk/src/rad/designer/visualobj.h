@@ -30,22 +30,18 @@
 
 class VisualObject;
 class VisualWindow;
+class VisualSizer;
 
 typedef shared_ptr<VisualObject> PVisualObject;
 typedef shared_ptr<VisualWindow> PVisualWindow;
+typedef shared_ptr<VisualSizer> PVisualSizer;
 
 /**
  * Objeto Visual.
  *
  * La vista preliminar (Designer), tiene un conjunto de objetos de esta clase.
- * Define una interfaz para abstraer los detalles de la creación o actualización
- * de cada componente visual.
- *
- * @todo Hay que evaluar la posibilidad de crear una clase del tipo
- *       VisualObjectPlugin, que pueda cargar una DLL para poder extender el
- *       conjunto de widgets.
- *       Los plugins podrían ser una pequeña interfaz en "C" (para facilitar
- *       la importación) para crear/actualizar/destruir el widget).
+ * Esta clase además de contener una referencia al objeto-wx que representa,
+ * es la responsable de crear la instancia de dicho objeto-wx.
  */
 class VisualObject
 {
@@ -73,11 +69,14 @@ class VisualObject
    * se pasa como parámetro. Será redefinida según el objeto que sea.
    * obj -> Objeto de tipo T_SIZERITEM con las propiedades de layout
    */
-  virtual void AddToSizer(wxSizer *sizer, PObjectBase sizeritem){};
+  //virtual void AddToSizer(wxSizer *sizer, PObjectBase sizeritem){};
 
 };  
 
 
+/**
+ * Objeto que representa un sizer.
+ */
 class VisualSizer : public VisualObject
 {
  private:
@@ -87,9 +86,12 @@ class VisualSizer : public VisualObject
   VisualSizer(PObjectBase obj, wxWindow *parent);
   wxSizer *GetSizer() { return m_sizer; }
   void SetSizer(wxSizer *sizer) { m_sizer = sizer; }
-  void AddToSizer(wxSizer *sizer, PObjectBase sizeritem);
+//  void AddToSizer(wxSizer *sizer, PObjectBase sizeritem);
 };  
 
+/**
+ * Objeto que representa una ventana.
+ */
 class VisualWindow : public VisualObject
 {
  private:
@@ -100,38 +102,14 @@ class VisualWindow : public VisualObject
   VisualWindow(PObjectBase obj, wxWindow *parent);
   wxWindow *GetWindow() { return m_window; }
   void SetWindow(wxWindow *window) { m_window = window; }
-  void AddToSizer(wxSizer *sizer, PObjectBase sizeritem);
+//  void AddToSizer(wxSizer *sizer, PObjectBase sizeritem);
 
   /**
-   * Automáticamente carga la configuración wxWindow
+   * Configura la ventana con las propiedades comunes definias en la interfaz
+   * wxWindow.
    */
   void SetupWindow();
  
-};
-
-class VisualSpacer : public VisualObject
-{
- private: 
-  int m_height, m_width;  
- public:  
-  VisualSpacer(PObjectBase obj);
-  void AddToSizer(wxSizer *sizer, PObjectBase sizeritem); 
-};    
-
-/**
- * VisualLayout es un objeto ficticio que representa al objeto T_SIZERITEM.
- *
- * Cuando se modifican las propiedades de layout de un objeto, el designer
- * captura el evento obteniendo el objeto asiciado.
- */
-class VisualLayout : public VisualObject
-{
- public:
-  VisualLayout(PObjectBase obj);
-
-  // no hace nada, ya que es un objeto ficticio
-  void AddToSizer(wxSizer *sizer, PObjectBase sizeritem) {}; 
-
 };
 
 /**
@@ -145,9 +123,7 @@ class VObjEvtHandler : public wxEvtHandler
    WPObjectBase m_object; 
    wxWindow *m_window;
    DataObservable *m_data;
-//   wxPoint m_pos;
 
-//   long m_mouseX, m_mouseY;
    VObjEvtHandler() {};
 
  protected:
@@ -156,38 +132,61 @@ class VObjEvtHandler : public wxEvtHandler
  public:
    VObjEvtHandler(wxWindow *win, PObjectBase obj, DataObservable *data);
    void OnLeftClick(wxMouseEvent &event);
-//   void OnMouseMove(wxMouseEvent &event);
    void OnPaint(wxPaintEvent &event);
 }; 
 
 
-#ifdef __WXFB_EXPERIMENTAL__
-
-class EditorHandler : public wxEvtHandler
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * Implementación de la interfaz IObjectView como envoltorio de VisualObject.
+ *
+ * Se ha diseñado la interfaz IObjectView para acceder a estos objetos
+ * desde los plugins y por tanto usa punteros "raw" en lugar de
+ * punteros inteligentes (smart pointers) para así no depender de la librería 
+ * "boost".
+ *
+ * @note se requiere activar RTTI. 
+ *
+ * @todo refactorizar la clase VisualObject.
+ *       Tras las modificaciones realizadas en la generación del designer,
+ *       no tiene mucho sentido la jerarquía de clases
+ *       (VisualWindow,VisualSizer...) ya que se ha suprimido el método
+ *       AddToSizer.
+ *       
+ */
+class VisualObjectAdapter : public IObjectView
 {
  private:
-  typedef enum { ST_IDLE, ST_MOVING } MouseState;
-  static wxPoint s_pos;  
-  static WPObjectBase s_object;
-  static long s_mouseX, s_mouseY;
-  static MouseState s_state;
-  static wxWindow *s_editor;
-  static wxPoint s_boundPos;
-  static wxSize s_boundSize;
-  DataObservable *m_data;
+  PVisualObject m_vObj;
   
- protected:
-  DECLARE_EVENT_TABLE()
- 
- public: 
-  EditorHandler(DataObservable *data);
-  void SetWindow(wxWindow *win) {s_editor = win; }
-  void SetObject(PObjectBase obj);
-  void OnLeftClick(wxMouseEvent &event);
-  void OnMouseMove(wxMouseEvent &event);
+ public:
+  VisualObjectAdapter(PVisualObject vobj) : m_vObj(vobj) {};
+  virtual ~VisualObjectAdapter() {};
+  
+  wxWindow* Window()
+  {
+    PVisualWindow winobj(shared_dynamic_cast<VisualWindow>(m_vObj));
+    if (winobj)
+      return winobj->GetWindow();
+
+    return NULL;
+  }
+  
+  wxSizer*  Sizer()
+  {
+    PVisualSizer sizerobj(shared_dynamic_cast<VisualSizer>(m_vObj));
+    if (sizerobj)
+      return sizerobj->GetSizer();
+
+    return NULL;
+  }
+  
+  IObject*  Object()
+  {
+    return m_vObj->GetObject().get();
+  }
 };
 
-#endif // __WXFB_EXPERIMENTAL__
 
 #endif //__VISUAL_OBJS__
 

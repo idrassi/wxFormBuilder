@@ -1,7 +1,7 @@
 [Project]
 FileName=wxFormBuilder.dev
 Name=wxFormBuilder
-UnitCount=59
+UnitCount=61
 Type=0
 Ver=1
 ObjFiles=
@@ -12,7 +12,7 @@ ResourceIncludes=C:\GNU\proyectos\wxFormBuilder;C:\GNU\Dev-Cpp\Include;C:\wx-2.6
 MakeIncludes=
 Compiler=
 CppCompiler=-Wall_@@_-g_@@_-O0_@@_-mthreads_@@_-DHAVE_W32API_H_@@_-D__WXMSW___@@_-DWXUSINGDLL_@@_-DNOPCH_@@_-Wno-ctor-dtor-privacy_@@_-DNO_GCC_PRAGMA_@@_-DTIXML_USE_STL_@@_-D__WXFB_DEBUG___@@_
-Linker=-mthreads_@@_-Wl,--subsystem,windows_@@_-mwindows_@@_-lwxmsw26_@@_-lwxtiff_@@_-lwxjpeg_@@_-lwxpng_@@_-lwxzlib_@@_-lwxregex_@@_-lwxexpat_@@_-lwxmsw26_stc_@@_-lkernel32_@@_-luser32_@@_-lgdi32_@@_-lcomdlg32_@@_-lwinspool_@@_-lwinmm_@@_-lshell32_@@_-lcomctl32_@@_-lole32_@@_-loleaut32_@@_-luuid_@@_-lrpcrt4_@@_-ladvapi32_@@_-lwsock32_@@_-lodbc32_@@_-ltinyxml_@@_-lstdc++_@@_
+Linker=-mthreads_@@_-Wl,--subsystem,windows_@@_-mwindows_@@_-lwxmsw26_@@_-lwxtiff_@@_-lwxjpeg_@@_-lwxpng_@@_-lwxzlib_@@_-lwxregex_@@_-lwxexpat_@@_-lwxmsw26_stc_@@_-lwxmsw26_propgrid_@@_-lkernel32_@@_-luser32_@@_-lgdi32_@@_-lcomdlg32_@@_-lwinspool_@@_-lwinmm_@@_-lshell32_@@_-lcomctl32_@@_-lole32_@@_-loleaut32_@@_-luuid_@@_-lrpcrt4_@@_-ladvapi32_@@_-lwsock32_@@_-lodbc32_@@_-ltinyxml_@@_-lstdc++_@@__@@_
 IsCpp=1
 Icon=wxFormBuilder.ico
 ExeOutput=..\bin
@@ -525,7 +525,7 @@ Compile=1
 Link=1
 Priority=1000
 OverrideBuildCmd=0
-BuildCmd=
+BuildCmd=$(CPP) -c objinspect.cpp -o _objs/objinspect.o $(CXXFLAGS)
 
 [Unit35]
 FileName=rad\appdata.cpp
@@ -631,6 +631,26 @@ BuildCmd=
 FileName=utils\debug.cpp
 CompileCpp=1
 Folder=utils
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit60]
+FileName=rad\inspector\objinspect2.cpp
+CompileCpp=1
+Folder=rad/inspector
+Compile=0
+Link=0
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=$(CPP) -c objinspect2.cpp -o _objs/objinspect2.o $(CXXFLAGS)
+
+[Unit61]
+FileName=rad\inspector\objinspect2.h
+CompileCpp=1
+Folder=rad/inspector
 Compile=1
 Link=1
 Priority=1000

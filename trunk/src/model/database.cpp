@@ -568,7 +568,7 @@ bool ObjectDatabase::ShowInPalette(ObjectType type)
 
 void ObjectDatabase::ImportComponentLibrary(string libfile)
 {
-  typedef ComponentLibraryBase* (*PFGetComponentLibrary)();
+  typedef IComponentLibrary* (*PFGetComponentLibrary)();
   wxString path = _WXSTR(m_xmlPath) + wxT('/') + _WXSTR(libfile);
   
   // intentamos cargar la DLL
@@ -585,13 +585,13 @@ void ObjectDatabase::ImportComponentLibrary(string libfile)
       Debug::Print("[Database::ImportComponentLibrary] Importing %s library",
         libfile.c_str());
         
-      ComponentLibraryBase *comp_lib = GetComponentLibrary();
+      IComponentLibrary *comp_lib = GetComponentLibrary();
     
       // importamos todos los componentes
       for (unsigned int i=0; i<comp_lib->GetComponentCount(); i++)
       {
         wxString class_name = comp_lib->GetComponentName(i);
-        ComponentBase *comp = comp_lib->GetComponent(i);
+        IComponent *comp = comp_lib->GetComponent(i);
         
         // buscamos la clase
         PObjectInfo class_info = GetObjectInfo(_STDSTR(class_name));

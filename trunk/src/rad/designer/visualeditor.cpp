@@ -156,7 +156,8 @@ void VisualEditor::Create()
       if (child->GetObjectType() == T_MENUBAR)
         menubar = child;
       else
-        Generate(child,m_back,NULL,T_CONTAINER); 
+        //Generate(child,m_back,NULL,T_CONTAINER); 
+        Generate(child,m_back,NULL,PVisualObject()); 
     }
     
     if (need_fit)
@@ -178,6 +179,7 @@ void VisualEditor::Create()
 
 /**
  * ALGORITMO PARA GENERAR LA VISTA PRELIMINAR
+ *
  * @param obj ObjectBase a generar.
  * @param parent wxWindow padre, necesario para instanciar un widget.
  * @param sizer sizer más próximo, para poder incluir el objeto creado.
@@ -185,106 +187,67 @@ void VisualEditor::Create()
  *                  a crear un sizer y resulta que el padre es un widget
  *                  hemos de establecer este como su sizer.
  */
-PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *parent,
-  wxSizer *sizer, ObjectType parentType)
+PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *wxparent,
+  wxSizer *sizer, PVisualObject vparent)//ObjectType parentType)
 {
-  PVisualObject vobj = VisualObject::CreateVisualObject(obj,parent);
-  
-  if (!vobj)
-    return vobj;
- 
-  m_map.insert(VisualObjectMap::value_type(obj,vobj));
-
-  ObjectType type = obj->GetObjectType();
-
-  switch (type)
-  {
-    case T_NOTEBOOK:
-    case T_CONTAINER:
-    case T_WIDGET:
-    {
-      {
-        PVisualWindow winobj(shared_dynamic_cast<VisualWindow>(vobj));
-        wxWindow *window = winobj->GetWindow();
-        
-        if (type != T_NOTEBOOK)
-          window->PushEventHandler(new VObjEvtHandler(window,obj,GetData()));
-        #ifdef __WXFB_EXPERIMENTAL__
-        window->PushEventHandler(new EditorHandler(GetData()));
-        #endif //__WXFB_EXPERIMENTAL__
-      }
-      
-      wxWindow *new_parent =
-        shared_dynamic_cast<VisualWindow>(vobj)->GetWindow();
-
-      // generamos los hijos pasando el widget creado como nuevo padre.
-      for (unsigned int i=0; i<obj->GetChildCount() ; i++)
-        Generate(obj->GetChild(i),new_parent,NULL,type);
-        
-    }
-    break;
-
-
-    case T_NOTEBOOK_PAGE:
-    {
-      if (obj->GetChildCount() > 0)
-      {
-        PVisualObject vchild = Generate(obj->GetChild(0), parent,sizer,type);
-        wxWindow *page =
-          shared_dynamic_cast<VisualWindow>(vchild)->GetWindow();
-  
-        // parent se supone wxNotebook
-        assert(parent->IsKindOf(CLASSINFO(wxNotebook)));
-        assert(page);
-       
-        ((wxNotebook *)parent)->AddPage(page,obj->GetPropertyAsString(_T("label")));
-      }
-    }  
-    break;
-
-
-    case T_SIZER:
-    {
-      wxSizer *new_sizer =
-        shared_dynamic_cast<VisualSizer>(vobj)->GetSizer();
-           
-      // generamos los hijos pasando el sizer creado.
-      for (unsigned int i=0; i<obj->GetChildCount() ; i++)
-        Generate(obj->GetChild(i),parent,new_sizer,type);
-      
-      if (parentType == T_WIDGET || parentType == T_CONTAINER)
-      {
-        // Si el nodo padre es un widget, entonces hay que asociarle el
-        // sizer.
-        Debug::Print("SetSizer");
-        parent->SetSizer(new_sizer);
-        //new_sizer->SetSizeHints(parent);
-        parent->SetAutoLayout(true);
-        //parent->Fit();
-        parent->Layout();
-      }  
-    }    
-    break;
-      
-    case T_SIZERITEM:
-    {
-      // un sizeritem sólo podrá tener 1 hijo
-      PVisualObject vchild = Generate(obj->GetChild(0), parent,sizer,type);
-      assert(sizer);
-      vchild->AddToSizer(sizer,obj);
-    }  
-    break;
+  // en primer lugar creamos la instancia del objeto-wx que nos ocupa
+  PVisualObject vobj(VisualObject::CreateVisualObject(obj,wxparent));
     
-    case T_SPACER:
-      
-      assert(sizer);
-      vobj->AddToSizer(sizer,obj);
-      break;
-      
-    default:
-      assert(false);
-      break;
+  if (!vobj)
+    return vobj; // no se debe dar nunca
+ 
+  // registramos el objeto para poder obtener la referencia a VisualObject a
+  // partir de un ObjectBase
+  m_map.insert(VisualObjectMap::value_type(obj,vobj));
+  
+  VisualObjectAdapter obj_view(vobj); // Adaptador IObjectView para obj
+  
+  // Si el objeto es un widget, le añadimos el menejador de eventos para
+  // poder seleccionarlo desde el designer y que se dibujen los recuadros...
+  // FIXME: eliminar dependencias con ObjectType
+  //        (quizá con una función en el plugin: bool IsContainer()
+  if (obj_view.Window() &&
+      (obj->GetObjectType() == T_WIDGET || obj->GetObjectType() == T_CONTAINER))
+  {
+    obj_view.Window()->PushEventHandler(
+      new VObjEvtHandler(obj_view.Window(),obj,GetData()));
   }
+    
+  // nuevo padre para las ventanas que se encuentren por debajo
+  wxWindow *new_wxparent = (obj_view.Window() ? obj_view.Window() : wxparent);
+
+  // Generamos recursivamente todos los hijos conservando la refenrencia 
+  // del primero, ya que será pasado como parámetros en la función del
+  // plugin OnCreated.
+
+  PVisualObject first_child;
+
+  if (obj->GetChildCount()>0)
+    first_child = Generate(obj->GetChild(0),new_wxparent,NULL,vobj);
+    
+  for (unsigned int i=1; i<obj->GetChildCount() ; i++)
+    Generate(obj->GetChild(i),new_wxparent,NULL,vobj);
+
+
+  // Procesamos el evento OnCreated
+  VisualObjectAdapter parent_view(vparent);
+  VisualObjectAdapter first_child_view(first_child);
+  
+  IComponent *comp = obj->GetObjectInfo()->GetComponent();  
+  if (comp)
+    comp->OnCreated(&obj_view,new_wxparent,&parent_view, &first_child_view);
+  
+  // Por último, debemos asignar el sizer al widget, en los siguientes casos:
+  // 1. El objeto creado sea un sizer y el objeto padre sea una ventana.
+  // 2. No objeto padre (wxparent == m_back).
+  
+  if ((obj_view.Sizer() && parent_view.Window()) || !vparent)
+  {
+    wxparent->SetSizer(obj_view.Sizer());
+    wxparent->SetAutoLayout(true);
+    wxparent->Layout();
+  }
+    
   return vobj;
 }  
 
@@ -387,11 +350,11 @@ void GridPanel::SetMenubar(PObjectBase menubar)
   /* Falta soporte para submenús, pero es un comienzo */
   assert(menubar->GetObjectType() == T_MENUBAR);
   Menubar *mbWidget = new Menubar(this, -1);
-  for (int i = 0; i < menubar->GetChildCount(); i++)
+  for (unsigned int i = 0; i < menubar->GetChildCount(); i++)
   {
     PObjectBase menu = menubar->GetChild(i);
     wxMenu *menuWidget = new wxMenu();
-    for (int j = 0; j < menu->GetChildCount(); j++)
+    for (unsigned int j = 0; j < menu->GetChildCount(); j++)
     {
       PObjectBase menuItem = menu->GetChild(j);
       if (menuItem->GetClassName() == "separator")

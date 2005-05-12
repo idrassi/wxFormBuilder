@@ -93,14 +93,10 @@ void wxFbPalette::Create()
     m_notebook->AddPage(panel,wxString(pkg_name.c_str(),wxConvUTF8));
 
   }
-/*
-  wxStaticText *text = new wxStaticText(this,-1,wxT("COMPONENT PALETTE"),wxDefaultPosition,wxDefaultSize,wxSIMPLE_BORDER);
-  text->SetBackgroundColour(wxColour(100,100,100));
-  text->SetForegroundColour(*wxWHITE);
-  text->SetFont(wxFont(8, wxSWISS, wxNORMAL, wxBOLD, 0, wxT("")));*/
   Title *title = new Title(this,wxT("Component Palette"));
   top_sizer->Add(title,0,wxEXPAND,0);
-  top_sizer->Add(new wxNotebookSizer(m_notebook),1,wxEXPAND,0);
+  //top_sizer->Add(new wxNotebookSizer(m_notebook),1,wxEXPAND,0);
+  top_sizer->Add(m_notebook,1,wxEXPAND,0);
   SetAutoLayout(true);
   SetSizer(top_sizer);
   top_sizer->Fit(this);

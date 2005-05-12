@@ -531,8 +531,8 @@ class ObjectInfo
   /**
    * Le asigna un componente a la clase.
    */
-  void SetComponent(ComponentBase *c) { m_component = c; };
-  ComponentBase* GetComponent() { return m_component; };
+  void SetComponent(IComponent *c) { m_component = c; };
+  IComponent* GetComponent() { return m_component; };
   
  private:
   typedef map<string,PCodeInfo> CodeInfoMap;  
@@ -547,7 +547,7 @@ class ObjectInfo
 
   PropertyInfoMap m_properties;
   ObjectInfoVector m_base; // clases base
-  ComponentBase* m_component;  // componente asociado a la clase los objetos del
+  IComponent* m_component;  // componente asociado a la clase los objetos del
                                // designer
 };
 
