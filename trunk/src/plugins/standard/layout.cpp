@@ -61,7 +61,7 @@ class SizerItemComponent : public ComponentBase
         obj->GetPropertyAsInteger("flag"),
         obj->GetPropertyAsInteger("border"));
       
-      wxLogMessage("sizeritem to window");
+      //wxLogMessage("sizeritem to window");
     }
     else if (first_child->Sizer())
     {
@@ -70,7 +70,7 @@ class SizerItemComponent : public ComponentBase
         obj->GetPropertyAsInteger("flag"),
         obj->GetPropertyAsInteger("border"));
         
-      wxLogMessage("sizeritem to sizer");
+      //wxLogMessage("sizeritem to sizer");
     }
   }
 };

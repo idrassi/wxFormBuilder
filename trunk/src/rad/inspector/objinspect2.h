@@ -28,16 +28,31 @@
 #include "wx/grid.h"
 #include <wx/notebook.h>
 #include <wx/propgrid/propgrid.h>
+#include <wx/propgrid/propdev.h>
 
 #include "propeditor.h"
 #include "rad/appobserver.h"
 
+// -----------------------------------------------------------------------
+
+WX_PG_DECLARE_VALUE_TYPE_VOIDP(wxPoint)
+
+WX_PG_DECLARE_PROPERTY(wxPointProperty,const wxPoint&,wxPoint(0,0))
+
+// -----------------------------------------------------------------------
+
+WX_PG_DECLARE_VALUE_TYPE_VOIDP(wxSize)
+
+WX_PG_DECLARE_PROPERTY(wxSizeProperty,const wxSize&,wxSize(0,0))
+
+// -----------------------------------------------------------------------
+
 class ObjectInspector : public DataObserver, public wxPanel
 {
  private:
-  typedef map<PProperty,PropertyEditor *> ObjInspectorMap;
-  ObjInspectorMap m_map;
-  
+  typedef map<wxPGProperty*,PProperty> ObjInspectorMap;
+  ObjInspectorMap m_propmap;
+
   PObjectBase m_currentSel;
   wxPropertyGrid *m_pg;
   
@@ -46,6 +61,8 @@ class ObjectInspector : public DataObserver, public wxPanel
   wxPGProperty* GetProperty(PProperty prop);
   
   void Create();
+  
+  void OnPropertyGridChange(wxPropertyGridEvent& event);
  protected:
    
  public:
@@ -57,6 +74,8 @@ class ObjectInspector : public DataObserver, public wxPanel
   void ObjectCreated(PObjectBase obj);
   void ObjectRemoved(PObjectBase obj);
   void PropertyModified(PProperty prop);
+  
+  DECLARE_EVENT_TABLE()
 };
 
 #endif //__OBJ_INSPECT__

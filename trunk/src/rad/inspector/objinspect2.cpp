@@ -26,6 +26,139 @@
 #include "model/objectbase.h"
 #include "utils/debug.h"
 
+// -----------------------------------------------------------------------
+// wxSizeProperty
+// -----------------------------------------------------------------------
+
+WX_PG_IMPLEMENT_VALUE_TYPE_VOIDP(wxSize,wxSizeProperty,wxSize(0,0))
+
+class wxSizePropertyClass : public wxPGPropertyWithChildren
+{
+    WX_PG_DECLARE_PROPERTY_CLASS()
+public:
+
+    wxSizePropertyClass ( const wxString& label, const wxString& name,
+        const wxSize& value );
+    virtual ~wxSizePropertyClass ();
+
+    WX_PG_DECLARE_PARENTAL_TYPE_METHODS()
+    WX_PG_DECLARE_PARENTAL_METHODS()
+
+protected:
+    wxSize                  m_value;
+};
+
+WX_PG_IMPLEMENT_PROPERTY_CLASS(wxSizeProperty,wxSize,const wxSize&,TextCtrl)
+
+wxSizePropertyClass::wxSizePropertyClass ( const wxString& label, const wxString& name,
+    const wxSize& value) : wxPGPropertyWithChildren(label,name)
+{
+    wxPG_INIT_REQUIRED_TYPE(wxSize)
+    DoSetValue((void*)&value);
+    AddChild( wxIntProperty(wxT("Width"),wxPG_LABEL,value.x) );
+    AddChild( wxIntProperty(wxT("Height"),wxPG_LABEL,value.y) );
+}
+
+wxSizePropertyClass::~wxSizePropertyClass () { }
+
+void wxSizePropertyClass::DoSetValue ( wxPGVariant value )
+{
+    wxSize* pObj = (wxSize*)wxPGVariantToVoidPtr(value);
+    m_value = *pObj;
+    RefreshChildren();
+}
+
+wxPGVariant wxSizePropertyClass::DoGetValue () const
+{
+    return wxPGVariant((void*)&m_value);
+}
+
+void wxSizePropertyClass::RefreshChildren()
+{
+    if ( !GetCount() ) return;
+    Item(0)->DoSetValue( (long)m_value.x );
+    Item(1)->DoSetValue( (long)m_value.y );
+}
+
+void wxSizePropertyClass::ChildChanged ( wxPGProperty* p )
+{
+    switch ( p->GetIndexInParent() )
+    {
+        case 0: m_value.x = p->DoGetValue().GetLong(); break;
+        case 1: m_value.y = p->DoGetValue().GetLong(); break;
+    }
+}
+
+// -----------------------------------------------------------------------
+// wxPointProperty
+// -----------------------------------------------------------------------
+
+WX_PG_IMPLEMENT_VALUE_TYPE_VOIDP(wxPoint,wxPointProperty,wxPoint(0,0))
+
+class wxPointPropertyClass : public wxPGPropertyWithChildren
+{
+    WX_PG_DECLARE_PROPERTY_CLASS()
+public:
+
+    wxPointPropertyClass( const wxString& label, const wxString& name,
+        const wxPoint& value );
+    virtual ~wxPointPropertyClass ();
+
+    WX_PG_DECLARE_PARENTAL_TYPE_METHODS()
+    WX_PG_DECLARE_PARENTAL_METHODS()
+
+protected:
+    wxPoint                  m_value;
+};
+
+WX_PG_IMPLEMENT_PROPERTY_CLASS(wxPointProperty,wxPoint,const wxPoint&,TextCtrl)
+
+wxPointPropertyClass::wxPointPropertyClass ( const wxString& label, const wxString& name,
+    const wxPoint& value) : wxPGPropertyWithChildren(label,name)
+{
+    wxPG_INIT_REQUIRED_TYPE(wxPoint)
+    DoSetValue((void*)&value);
+    AddChild( wxIntProperty(wxT("X"),wxPG_LABEL,value.x) );
+    AddChild( wxIntProperty(wxT("Y"),wxPG_LABEL,value.y) );
+}
+
+wxPointPropertyClass::~wxPointPropertyClass () { }
+
+void wxPointPropertyClass::DoSetValue ( wxPGVariant value )
+{
+    wxPoint* pObj = (wxPoint*)wxPGVariantToVoidPtr(value);
+    m_value = *pObj;
+    RefreshChildren();
+}
+
+wxPGVariant wxPointPropertyClass::DoGetValue () const
+{
+    return wxPGVariant((void*)&m_value);
+}
+
+void wxPointPropertyClass::RefreshChildren()
+{
+    if ( !GetCount() ) return;
+    Item(0)->DoSetValue( m_value.x );
+    Item(1)->DoSetValue( m_value.y );
+}
+
+void wxPointPropertyClass::ChildChanged ( wxPGProperty* p )
+{
+    switch ( p->GetIndexInParent() )
+    {
+        case 0: m_value.x = p->DoGetValue().GetLong(); break;
+        case 1: m_value.y = p->DoGetValue().GetLong(); break;
+    }
+}
+
+// -----------------------------------------------------------------------
+// ObjectInspector
+// -----------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(ObjectInspector, wxPanel)
+    EVT_PG_CHANGED(-1, ObjectInspector::OnPropertyGridChange)
+END_EVENT_TABLE()
 
 ObjectInspector::ObjectInspector(wxWindow *parent, int id)
   : wxPanel(parent,id)
@@ -37,44 +170,27 @@ ObjectInspector::ObjectInspector(wxWindow *parent, int id)
   SetSizer(topSizer);
 }
 
-
-
 void ObjectInspector::Create()
 {
   PObjectBase sel_obj = GetData()->GetSelectedObject();
   if (sel_obj && sel_obj != m_currentSel)
   {
-    #ifdef __WX24__ 
-    Freeze();    // No va en wxWidgets 2.5.4
-    #endif
+    Freeze();
     
     m_currentSel = sel_obj;
-    
-    /*wxString pageName;
-    
-    if (GetChildren().GetCount() > 0)
-      pageName = m_notebook->GetPageText(m_notebook->GetSelection());
-   
-    DestroyChildren();*/
         
     m_pg->Clear();
-    m_map.erase(m_map.begin(),m_map.end());
+    m_propmap.clear();
     
     PObjectInfo obj_desc = sel_obj->GetObjectInfo();
     if (obj_desc)
     {
-      #ifndef __WX24__
-      Freeze();
-      #endif 
       
       PropertyMap map, dummy;
-      /*wxBoxSizer *top_sizer = new wxBoxSizer(wxVERTICAL);
-      m_notebook = new wxNotebook(this, -1, wxDefaultPosition, wxDefaultSize, 0);*/
       
-      // Creamos los panales con las propiedades del objeto organizados por
+      // Creamos las categorías con las propiedades del objeto organizados por
       // "clases"
       CreateCategory(wxString(obj_desc->GetClassName().c_str(),wxConvUTF8), sel_obj,obj_desc,map);
-      //top_sizer->Add(m_notebook, 1, wxEXPAND, 0);
 
       for (unsigned int i=0; i<obj_desc->GetBaseClassCount() ; i++)
       {
@@ -82,7 +198,7 @@ void ObjectInspector::Create()
         CreateCategory(wxString(info_base->GetClassName().c_str(),wxConvUTF8), sel_obj,info_base,map);
       }  
 
-      // Añadimos el panel "layout" si el objeto está contenido en un sizer
+      // Añadimos la categoría "layout" si el objeto está contenido en un sizer
       PObjectBase layout;
       layout = sel_obj->GetLayout();  
       if (layout)
@@ -91,7 +207,7 @@ void ObjectInspector::Create()
         CreateCategory(wxT("Layout"), layout ,layout->GetObjectInfo(),dummy);
       }
       
-      // Añadirmos el panel "Notebook Page" si el objeto está contenido
+      // Añadirmos la categoría "Notebook Page" si el objeto está contenido
       // en un Notebook (no me gusta)
       if (sel_obj->GetParent() && sel_obj->GetParent()->GetObjectType()==T_NOTEBOOK_PAGE)
       {
@@ -99,34 +215,8 @@ void ObjectInspector::Create()
           sel_obj->GetParent()->GetObjectInfo(),dummy);
       }
       
-      // vamos a intentar seleccionar la misma página que había seleccionada
-      /*if (pageName != wxT("") && GetChildren().GetCount() > 0)
-      {
-        int page = -1;
-        int i=0;
-
-        while (page < 0 && i < m_notebook->GetPageCount())
-        {
-          if (m_notebook->GetPageText(i) == pageName)
-            page = i;
-          else 
-            i++;
-        }
-        
-        if (page >= 0)
-          m_notebook->SetSelection(page);
-        
-      }*/
-        
-      #ifndef __WX24__
-      Thaw();
-      #endif
-      //SetSizer(top_sizer);
-      //Layout();
     }
-    #ifdef __WX24__
     Thaw();
-    #endif
   }
 }
 
@@ -153,13 +243,17 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
     
     wxPGConstants constants;
     for (unsigned int i=0; i<opt_list->GetOptionCount() ;i++)
-      constants.Add(wxString(opt_list->GetOption(i).c_str(),wxConvUTF8), i);
+      constants.Add(wxString(opt_list->GetOption(i).c_str(),wxConvUTF8), 1 << i);
       
-    result = wxFlagsProperty(name, wxPG_LABEL, constants);
+    wxString aux = prop->GetValueAsString();
+    aux.Replace(_T("|"), _T(", "));
+    result = wxFlagsProperty(name, wxPG_LABEL, constants, 0);
+    if (aux != _T("0"))
+        result->SetValueFromString(aux, 0);
     
   }
   else if (type == PT_INTLIST)
-    result = wxStringProperty(name);
+    result = wxStringProperty(name, wxPG_LABEL, _WXSTR(IntList(_STDSTR(prop->GetValueAsString())).ToString()));
 
   else if (type == PT_OPTION)
   {
@@ -176,23 +270,22 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
   }
 
   else if (type == PT_WXPOINT)
-    result = wxStringProperty(name);
+    result = wxPointProperty(name, wxPG_LABEL, prop->GetValueAsPoint());
 
   else if (type == PT_WXSIZE)
-    result = wxStringProperty(name);
+    result = wxSizeProperty(name, wxPG_LABEL, prop->GetValueAsSize());
   
   else if (type == PT_WXFONT)
-    result = wxStringProperty(name);
+    result = wxFontProperty(name, wxPG_LABEL, prop->GetValueAsFont());
 
   else if (type == PT_WXCOLOUR)
-  {
     result = wxColourProperty(name, wxPG_LABEL, prop->GetValueAsColour());
-  }
+
   else if (type == PT_PATH)
-    result = wxStringProperty(name);
+    result = wxDirProperty(name, wxPG_LABEL, prop->GetValueAsString());
   
   else if (type == PT_BITMAP)
-    result = wxStringProperty(name);
+    result = wxImageFileProperty(name, wxPG_LABEL, prop->GetValueAsString());
     
   return result;
 }
@@ -215,38 +308,69 @@ void ObjectInspector::CreateCategory(const wxString& name, PObjectBase obj, PObj
 
       wxString prop_name(prop_desc->GetName().c_str(),wxConvUTF8);
       Debug::Print("[ObjectInspector::CreatePropertyPanel] Creating Property Editor");
+      
       // no queremos duplicar propiedades heredadas
       if (map.find(prop_desc->GetName()) == map.end())
       {
-        //wxStaticText *text = new wxStaticText(panel, -1, prop_name);
-        //sizer->Add(text,  0, wxALL|wxADJUST_MINSIZE, 5);
-
-        m_pg->Append(GetProperty(prop));
-        
-        /*if (prop_editor)
-          m_map.insert(ObjInspectorMap::value_type(prop,
-                              dynamic_cast<PropertyEditor *>(prop_editor)));*/
-
-        
-        /*if (!prop_editor)
-          sizer->Add(20,20,0, wxALL| wxEXPAND | wxADJUST_MINSIZE, 5);
-        else
-          sizer->Add(prop_editor,  0, wxALL| wxEXPAND | wxADJUST_MINSIZE, 5);*/
+        wxPGId id = m_pg->Append(GetProperty(prop));
           
         map.insert(PropertyMap::value_type(prop_desc->GetName(),prop));
+        m_propmap.insert(ObjInspectorMap::value_type(id.GetPropertyPtr(), prop));
       }  
     }
-    //sizer->AddGrowableCol(1);
-    //panel->SetAutoLayout(true);
-    //panel->SetSizer(sizer);
-  //        sizer->SetSizeHints(panel);
-    //panel->SetScrollRate(10, 10);
-    //panel->Fit();
+
   }  
-  //m_notebook->AddPage(panel, name);
                 
 }  
 
+void ObjectInspector::OnPropertyGridChange(wxPropertyGridEvent& event)
+{
+    ObjInspectorMap::iterator it = m_propmap.find(event.GetPropertyPtr());
+
+    if (it != m_propmap.end())
+    {
+        PProperty prop = it->second;
+        switch (prop->GetType())
+        {
+            case PT_TEXT: case PT_MACRO: case PT_WXSTRING: case PT_OPTION:
+                GetData()->ModifyProperty(prop, event.GetPropertyValueAsString());
+                break;
+            case PT_BOOL:
+                GetData()->ModifyProperty(prop, event.GetPropertyValueAsBool() ? _T("1") : _T("0"));
+                break;
+            case PT_BITLIST:
+                {
+                    wxString aux = event.GetPropertyValueAsString();
+                    aux.Replace(_T(" "), _T(""));
+                    aux.Replace(_T(","), _T("|"));
+                    GetData()->ModifyProperty(prop, aux);
+                }
+                break;
+            case PT_WXPOINT: case PT_WXSIZE:
+                {
+                    wxString aux = event.GetPropertyValueAsString();
+                    aux.Replace(_T(" "), _T(""));
+                    aux.Replace(_T(";"), _T(","));
+                    GetData()->ModifyProperty(prop, aux);
+                }
+                break;
+            case PT_WXFONT:
+                {
+                    wxFont *font = wxPGVariantToWxObjectPtr(event.GetPropertyPtr()->DoGetValue(), wxFont);
+                    GetData()->ModifyProperty(prop, TypeConv::FontToString(*font));
+                }
+                break;
+            case PT_WXCOLOUR:
+                {
+                    wxColour *colour = wxPGVariantToWxObjectPtr(event.GetPropertyPtr()->DoGetValue(), wxColour);
+                    GetData()->ModifyProperty(prop, TypeConv::ColourToString(*colour));
+                }
+                break;
+            default:
+                GetData()->ModifyProperty(prop, event.GetPropertyValueAsString());
+        }
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -273,6 +397,7 @@ void ObjectInspector::ObjectRemoved(PObjectBase obj)
 
 void ObjectInspector::PropertyModified(PProperty prop)
 {
+    //TODO: Implementar ObjectInspector(2)::PropertyModified
   /*ObjInspectorMap::iterator it = m_map.find(prop);
   
   if (it != m_map.end())
