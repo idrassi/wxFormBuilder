@@ -28,6 +28,7 @@
 #include "wx/grid.h"
 #include "wx/statline.h"
 #include "wx/notebook.h"
+#include "wx/listctrl.h"
 
 class ButtonComponent : public ComponentBase
 {
@@ -38,6 +39,13 @@ class ButtonComponent : public ComponentBase
       obj->GetPropertyAsPoint(_("pos")),
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
+  }
+  
+  TiXmlElement* ObjectToXrcElement(IObject *obj)
+  {
+    TiXmlElement *element = new TiXmlElement("object");
+    element->SetAttribute("class", "wxButton");
+    return element;
   }
 };
 
@@ -199,6 +207,17 @@ class MenuItemComponent : public ComponentBase
   }	
 };
 
+class ListCtrlComponent : public ComponentBase
+{
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    return new wxListCtrl((wxWindow*)parent, -1,
+      obj->GetPropertyAsPoint(_("pos")),
+      obj->GetPropertyAsSize(_("size")),
+      obj->GetPropertyAsInteger(_("style")));
+  }
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()
@@ -216,6 +235,7 @@ BEGIN_LIBRARY()
   COMPONENT("wxMenuBar", MenuBarComponent)
   COMPONENT("wxMenu", MenuComponent)
   COMPONENT("wxMenuItem", MenuItemComponent)
+  COMPONENT("wxListCtrl", ListCtrlComponent)
 
   // wxWindow style macros
   MACRO(wxSIMPLE_BORDER)
@@ -255,6 +275,23 @@ BEGIN_LIBRARY()
   MACRO(wxNB_MULTILINE)
   MACRO(wxNB_NOPAGETHEME)
   MACRO(wxNB_FLAT)
-      
+  
+  // wxListCtrl
+  MACRO(wxLC_LIST)
+  MACRO(wxLC_REPORT)
+  MACRO(wxLC_VIRTUAL)
+  MACRO(wxLC_ICON)
+  MACRO(wxLC_SMALL_ICON)
+  MACRO(wxLC_ALIGN_TOP)
+  MACRO(wxLC_ALIGN_LEFT)
+  MACRO(wxLC_AUTOARRANGE)
+  MACRO(wxLC_EDIT_LABELS)
+  MACRO(wxLC_NO_HEADER)
+  MACRO(wxLC_SINGLE_SEL)
+  MACRO(wxLC_SORT_ASCENDING)
+  MACRO(wxLC_SORT_DESCENDING)
+  MACRO(wxLC_HRULES)
+  MACRO(wxLC_VRULES)
+  
 END_LIBRARY()
 

@@ -191,7 +191,7 @@
     </codegen>
   </objectinfo>
   <objectinfo class="wxMenuItem" icon="menuitem.xpm" type="menuitem">
-  	<property name="name" type="text" hidden="1">menuItem</property>
+    <property name="name" type="text" hidden="1">menuItem</property>
     <property name="label" type="wxString">MyMenuItem</property>
     <property name="help" type="wxString"></property>
     <property name="id" type="macro" hidden="1">ID_DEFAULT</property>
@@ -220,4 +220,25 @@
       <template name="include">#include &lt;wx/menu.h&gt;</template>
     </codegen>
   </objectinfo>
+  <objectinfo class="wxListCtrl" icon="list_ctrl.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_listCtrl</property>
+    <property name="style" type="bitlist">
+      <option name="wxLC_LIST" />
+      <option name="wxLC_REPORT" />
+      <option name="wxLC_VIRTUAL" />
+      <option name="wxLC_ICON" />
+      <option name="wxLC_SMALL_ICON" />
+      <option name="wxLC_ALIGN_TOP" />
+      <option name="wxLC_ALIGN_LEFT" />
+      <option name="wxLC_AUTOARRANGE" />
+      <option name="wxLC_EDIT_LABELS" />
+      <option name="wxLC_NO_HEADER" />
+      <option name="wxLC_SINGLE_SEL" />
+      <option name="wxLC_SORT_ASCENDING" />
+      <option name="wxLC_SORT_DESCENDING" />
+      <option name="wxLC_HRULES" />
+      <option name="wxLC_VRULES" />wxLC_ICON</property>
+  </objectinfo>
+  
 </package>

@@ -27,7 +27,7 @@
 
 #include "wx/wx.h"
 #include <wx/dynarray.h>
-//#include "tinyxml.h"
+#include "tinyxml.h"
 
 class IComponent;
 
@@ -107,7 +107,7 @@ class IComponent
   /**
    * Dada una instancia del objeto obtenemos un nodo XRC.
    */
-  //virtual TiXmlElement* ObjectToXrc(IObject *obj) = 0;
+  virtual TiXmlElement* ObjectToXrcElement(IObject *obj) = 0;
   
   // To-Do: XrcToObject
 };

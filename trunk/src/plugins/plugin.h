@@ -133,7 +133,7 @@ class ComponentBase : public IComponent
   /**
    * Dada una instancia del objeto obtenemos su respectivo XRC-XML.
    */
-  //TiXmlElement* GetXrcElement(IObject *obj) { return NULL; };
+  TiXmlElement* ObjectToXrcElement(IObject *obj) { return NULL; };
 };
 
 #endif // __PLUGIN_H__

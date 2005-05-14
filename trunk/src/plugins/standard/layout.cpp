@@ -23,6 +23,7 @@
 
 #include "../component.h"
 #include "../plugin.h"
+#include "tinyxml.h"
 
 #ifdef __WX24__
   #define wxFIXED_MINSIZE wxADJUST_MINSIZE  
@@ -37,11 +38,11 @@ class SpacerComponent : public ComponentBase
     wxSizer *sizer = parent->Sizer();
     
     sizer->Add(
-      obj->GetPropertyAsInteger("width"),
-      obj->GetPropertyAsInteger("height"),
-      obj->GetPropertyAsInteger("option"),
-      obj->GetPropertyAsInteger("flag"),
-      obj->GetPropertyAsInteger("border"));
+      obj->GetPropertyAsInteger(_("width")),
+      obj->GetPropertyAsInteger(_("height")),
+      obj->GetPropertyAsInteger(_("option")),
+      obj->GetPropertyAsInteger(_("flag")),
+      obj->GetPropertyAsInteger(_("border")));
   }
 };
 
@@ -57,21 +58,24 @@ class SizerItemComponent : public ComponentBase
     if (first_child->Window())
     {
       sizer->Add(first_child->Window(),
-        obj->GetPropertyAsInteger("option"),
-        obj->GetPropertyAsInteger("flag"),
-        obj->GetPropertyAsInteger("border"));
-      
-      //wxLogMessage("sizeritem to window");
+        obj->GetPropertyAsInteger(_("option")),
+        obj->GetPropertyAsInteger(_("flag")),
+        obj->GetPropertyAsInteger(_("border")));
     }
     else if (first_child->Sizer())
     {
       sizer->Add(first_child->Sizer(),
-        obj->GetPropertyAsInteger("option"),
-        obj->GetPropertyAsInteger("flag"),
-        obj->GetPropertyAsInteger("border"));
-        
-      //wxLogMessage("sizeritem to sizer");
+        obj->GetPropertyAsInteger(_("option")),
+        obj->GetPropertyAsInteger(_("flag")),
+        obj->GetPropertyAsInteger(_("border")));
     }
+  }
+  
+  TiXmlElement* ObjectToXrcElement(IObject *obj)
+  {
+    TiXmlElement *element = new TiXmlElement("object");
+    element->SetAttribute("class", "sizeritem");
+    return element;
   }
 };
 
@@ -81,6 +85,13 @@ class BoxSizerComponent : public ComponentBase
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxBoxSizer(obj->GetPropertyAsInteger(_("orient")));
+  }
+  
+  TiXmlElement* ObjectToXrcElement(IObject *obj)
+  {
+    TiXmlElement *element = new TiXmlElement("object");
+    element->SetAttribute("class", "wxBoxSizer");
+    return element;
   }
 };
 

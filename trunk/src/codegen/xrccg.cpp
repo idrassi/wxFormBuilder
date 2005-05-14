@@ -47,7 +47,7 @@ public:
 
 
 ///////////////////////////////////////////////////////////////////////////////
-
+/*
 bool XrcCodeGenerator::GenerateCode(PObjectBase project)
 {
   m_cw->Clear();
@@ -79,3 +79,64 @@ bool XrcCodeGenerator::GenerateCode(PObjectBase project)
   
   return true;
 }
+*/
+
+bool XrcCodeGenerator::GenerateCode(PObjectBase project)
+{
+  m_cw->Clear();
+
+  TiXmlDocument *doc = new TiXmlDocument();
+  
+  TiXmlElement *element = new TiXmlElement("resource");
+  element->SetAttribute("xmlns", "http://www.wxwindows.org/wxxrc");
+  element->SetAttribute("version", "2.3.0.1");
+  /*
+  for (unsigned int i=0; i<project->GetChildCount(); i++)
+  {
+    TiXmlElement *child = GetElement(project->GetChild(i));
+    if (child)
+      element->LinkEndChild(child);
+  }*/
+  
+  TiXmlElement *child = GetElement(project->GetChild(0));
+  if (child)
+    element->LinkEndChild(child);
+  
+  doc->LinkEndChild(element);
+
+  string tmpFileName = _STDSTR(wxFileName::CreateTempFileName(_T("wxfb")));    
+  doc->SaveFile(tmpFileName);
+  delete doc;
+
+  {
+      wxString line;
+      wxFileInputStream input(_WXSTR(tmpFileName));
+      wxTextInputStream text(input);
+  
+      while (!input.Eof())
+          m_cw->WriteLn(_STDSTR(text.ReadLine()));
+  }
+  ::wxRemoveFile(_WXSTR(tmpFileName));
+  
+  return true;
+
+}
+
+
+TiXmlElement* XrcCodeGenerator::GetElement(PObjectBase obj)
+{
+  TiXmlElement *element = NULL;
+  
+  IComponent *comp = obj->GetObjectInfo()->GetComponent();  
+  if (comp)
+    element = comp->ObjectToXrcElement(obj.get());
+    
+  if (element)
+  {
+    for (unsigned int i=0; i<obj->GetChildCount(); i++)
+      element->LinkEndChild(GetElement(obj->GetChild(i)));
+  }
+  
+  return element;
+}
+
