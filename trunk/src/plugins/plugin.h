@@ -130,10 +130,9 @@ class ComponentBase : public IComponent
                  IObjectView *parent,
                  IObjectView *first_child) { /* nada */ };
 
-  /**
-   * Dada una instancia del objeto obtenemos su respectivo XRC-XML.
-   */
-  TiXmlElement* ObjectToXrcElement(IObject *obj) { return NULL; };
+  TiXmlElement* ExportToXrc(IObject *obj) { return NULL; };
+  
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj) { return NULL; };
 };
 
 #endif // __PLUGIN_H__

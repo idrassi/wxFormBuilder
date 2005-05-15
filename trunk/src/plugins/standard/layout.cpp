@@ -21,8 +21,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "../component.h"
-#include "../plugin.h"
+#include "plugins/component.h"
+#include "plugins/plugin.h"
+#include "utils/xrcconv.h"
 #include "tinyxml.h"
 
 #ifdef __WX24__
@@ -71,11 +72,13 @@ class SizerItemComponent : public ComponentBase
     }
   }
   
-  TiXmlElement* ObjectToXrcElement(IObject *obj)
+  TiXmlElement* ExportToXrc(IObject *obj)
   {
-    TiXmlElement *element = new TiXmlElement("object");
-    element->SetAttribute("class", "sizeritem");
-    return element;
+    ObjectToXrcFilter xrc(obj, _("sizeritem"));
+    xrc.AddProperty(_("option"), _("option"), XRC_TYPE_INTEGER);
+    xrc.AddProperty(_("flag"),   _("flag"),   XRC_TYPE_BITLIST);
+    xrc.AddProperty(_("border"), _("border"), XRC_TYPE_INTEGER);
+    return xrc.GetXrcObject();
   }
 };
 
@@ -87,11 +90,11 @@ class BoxSizerComponent : public ComponentBase
     return new wxBoxSizer(obj->GetPropertyAsInteger(_("orient")));
   }
   
-  TiXmlElement* ObjectToXrcElement(IObject *obj)
+  TiXmlElement* ExportToXrc(IObject *obj)
   {
-    TiXmlElement *element = new TiXmlElement("object");
-    element->SetAttribute("class", "wxBoxSizer");
-    return element;
+    ObjectToXrcFilter xrc(obj, _("wxBoxSizer"));
+    xrc.AddProperty(_("orient"), _("orient"), XRC_TYPE_TEXT);
+    return xrc.GetXrcObject();
   }
 };
 

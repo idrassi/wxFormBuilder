@@ -107,9 +107,13 @@ class IComponent
   /**
    * Dada una instancia del objeto obtenemos un nodo XRC.
    */
-  virtual TiXmlElement* ObjectToXrcElement(IObject *obj) = 0;
+  virtual TiXmlElement* ExportToXrc(IObject *obj) = 0;
   
-  // To-Do: XrcToObject
+  /**
+   * Dado un objeto XML en formato XRC devuelve otro objeto XML en formato
+   * wxFormBuilder.
+   */
+  virtual TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj) = 0;
 };
 
 

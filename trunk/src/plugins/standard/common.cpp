@@ -23,8 +23,10 @@
 // Sustituir "label" por "bitmap" en wxStaticBitmap
 // Juan Antonio Ortega (jortegalalmolda@gmail.com)
 
-#include "../component.h"
-#include "../plugin.h"
+#include "plugins/component.h"
+#include "plugins/plugin.h"
+#include "utils/xrcconv.h"
+
 #include "wx/grid.h"
 #include "wx/statline.h"
 #include "wx/notebook.h"
@@ -41,11 +43,17 @@ class ButtonComponent : public ComponentBase
       obj->GetPropertyAsInteger(_("style")));
   }
   
-  TiXmlElement* ObjectToXrcElement(IObject *obj)
+  TiXmlElement* ExportToXrc(IObject *obj)
   {
-    TiXmlElement *element = new TiXmlElement("object");
-    element->SetAttribute("class", "wxButton");
-    return element;
+    //TiXmlElement *element = new TiXmlElement("object");
+    //element->SetAttribute("class", "wxButton");
+    //return element;
+    ObjectToXrcFilter xrc(obj,
+                          _("wxButton"),
+                          obj->GetPropertyAsString(_("name")));
+    xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+    xrc.AddPropertyValue(_("default"),_("0"));
+    return xrc.GetXrcObject();
   }
 };
 
