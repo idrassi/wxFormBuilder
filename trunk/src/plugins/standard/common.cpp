@@ -32,6 +32,42 @@
 #include "wx/notebook.h"
 #include "wx/listctrl.h"
 
+///////////////////////////////////////////////////////////////////////////////
+// FORMS
+///////////////////////////////////////////////////////////////////////////////
+
+// TO-DO: El componente de tipo "Form" se dibujará en el designer, para así
+//        por ejemplo, dibujar un panel oscuro para el caso de wxFrame
+class FrameFormComponent : public ComponentBase
+{
+ public:
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxFrame"), obj->GetPropertyAsString(_("name")));                       
+    xrc.AddProperty( _("title"), _("title"), XRC_TYPE_TEXT);
+    return xrc.GetXrcObject();
+  } 
+};
+
+class PanelFormComponent : public ComponentBase
+{
+};
+
+class DialogFormComponent : public ComponentBase
+{
+ public:
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxDialog"), obj->GetPropertyAsString(_("name")));
+    xrc.AddProperty( _("title"), _("title"), XRC_TYPE_TEXT);
+    return xrc.GetXrcObject();
+  }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// WIDGETS
+///////////////////////////////////////////////////////////////////////////////
+
 class ButtonComponent : public ComponentBase
 {
   wxObject* Create(IObject *obj, wxObject *parent)
@@ -45,9 +81,6 @@ class ButtonComponent : public ComponentBase
   
   TiXmlElement* ExportToXrc(IObject *obj)
   {
-    //TiXmlElement *element = new TiXmlElement("object");
-    //element->SetAttribute("class", "wxButton");
-    //return element;
     ObjectToXrcFilter xrc(obj,
                           _("wxButton"),
                           obj->GetPropertyAsString(_("name")));
@@ -229,6 +262,10 @@ class ListCtrlComponent : public ComponentBase
 ///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()
+  COMPONENT("Frame",FrameFormComponent)
+  COMPONENT("Panel",PanelFormComponent)
+  COMPONENT("Dialog",DialogFormComponent)
+    
   COMPONENT("notebookpage",NotebookPageComponent)
   COMPONENT("wxButton",ButtonComponent)
   COMPONENT("wxTextCtrl",TextCtrlComponent)

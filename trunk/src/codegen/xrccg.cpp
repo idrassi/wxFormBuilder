@@ -98,7 +98,7 @@ bool XrcCodeGenerator::GenerateCode(PObjectBase project)
       element->LinkEndChild(child);
   }*/
   
-  TiXmlElement *child = GetElement(project->GetChild(0)->GetChild(0));
+  TiXmlElement *child = GetElement(project->GetChild(0));
   if (child)
     element->LinkEndChild(child);
   
