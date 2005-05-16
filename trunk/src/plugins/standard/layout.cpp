@@ -45,6 +45,21 @@ class SpacerComponent : public ComponentBase
       obj->GetPropertyAsInteger(_("flag")),
       obj->GetPropertyAsInteger(_("border")));
   }
+
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("spacer"));
+    
+    // las propiedades weight y height se mapean como size
+    xrc.AddPropertyValue(_("size"),
+      wxString::Format(_("%d,%d"),obj->GetPropertyAsInteger(_("weight")),
+                                  obj->GetPropertyAsInteger(_("height"))));
+    
+    xrc.AddProperty(_("option"), _("option"), XRC_TYPE_INTEGER);
+    xrc.AddProperty(_("flag"),   _("flag"),   XRC_TYPE_BITLIST);
+    xrc.AddProperty(_("border"), _("border"), XRC_TYPE_INTEGER);
+    return xrc.GetXrcObject();
+  }
 };
 
 class SizerItemComponent : public ComponentBase
@@ -110,7 +125,15 @@ class StaticBoxSizerComponent : public ComponentBase
       obj->GetPropertyAsInteger(_("orient")));
      
     return sizer;
-  }  
+  }
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxStaticBoxSizer"));
+    xrc.AddProperty(_("orient"), _("orient"), XRC_TYPE_TEXT);
+    xrc.AddProperty(_("label"), _("label"), XRC_TYPE_TEXT);
+    return xrc.GetXrcObject();
+  }
 };
 
 class GridSizerComponent : public ComponentBase
@@ -123,6 +146,16 @@ class GridSizerComponent : public ComponentBase
       obj->GetPropertyAsInteger(_("cols")),
       obj->GetPropertyAsInteger(_("vgap")),
       obj->GetPropertyAsInteger(_("hgap")));
+  }
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxGridSizer"));
+    xrc.AddProperty(_("rows"), _("rows"), XRC_TYPE_INTEGER);
+    xrc.AddProperty(_("cols"), _("cols"), XRC_TYPE_INTEGER);    
+    xrc.AddProperty(_("vgap"), _("vgap"), XRC_TYPE_INTEGER);
+    xrc.AddProperty(_("hgap"), _("hgap"), XRC_TYPE_INTEGER);
+    return xrc.GetXrcObject();
   }
 };
 
@@ -149,6 +182,19 @@ class FlexGridSizerComponent : public ComponentBase
       sizer->AddGrowableRow(grows[i]);  
       
     return sizer;
+  }
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxGridSizer"));
+    xrc.AddProperty(_("rows"), _("rows"), XRC_TYPE_INTEGER);
+    xrc.AddProperty(_("cols"), _("cols"), XRC_TYPE_INTEGER);    
+    xrc.AddProperty(_("vgap"), _("vgap"), XRC_TYPE_INTEGER);
+    xrc.AddProperty(_("hgap"), _("hgap"), XRC_TYPE_INTEGER);
+    
+    xrc.AddPropertyValue(_("growablecols"), obj->GetPropertyAsString(_("growablecols")));
+    xrc.AddPropertyValue(_("growablerows"), obj->GetPropertyAsString(_("growablerows")));
+    return xrc.GetXrcObject();
   }
 };
 

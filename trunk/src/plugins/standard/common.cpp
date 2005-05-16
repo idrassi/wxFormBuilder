@@ -51,6 +51,13 @@ class FrameFormComponent : public ComponentBase
 
 class PanelFormComponent : public ComponentBase
 {
+ public:
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxPanel"), obj->GetPropertyAsString(_("name")));
+    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    return xrc.GetXrcObject();
+  } 
 };
 
 class DialogFormComponent : public ComponentBase
@@ -70,6 +77,8 @@ class DialogFormComponent : public ComponentBase
 
 class ButtonComponent : public ComponentBase
 {
+ public: 
+    
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxButton((wxWindow*)parent,-1,
@@ -81,9 +90,8 @@ class ButtonComponent : public ComponentBase
   
   TiXmlElement* ExportToXrc(IObject *obj)
   {
-    ObjectToXrcFilter xrc(obj,
-                          _("wxButton"),
-                          obj->GetPropertyAsString(_("name")));
+    ObjectToXrcFilter xrc(obj, _("wxButton"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();
     xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
     xrc.AddPropertyValue(_("default"),_("0"));
     return xrc.GetXrcObject();
@@ -93,6 +101,8 @@ class ButtonComponent : public ComponentBase
 
 class TextCtrlComponent : public ComponentBase
 {
+ public:
+     
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxTextCtrl((wxWindow *)parent,-1,
@@ -101,10 +111,21 @@ class TextCtrlComponent : public ComponentBase
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
   }
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxTextCtrl"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();    
+    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    xrc.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
+    return xrc.GetXrcObject();
+  }
 };
 
 class StaticTextComponent : public ComponentBase
 {
+ public:
+     
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return  new wxStaticText((wxWindow *)parent,-1,
@@ -113,10 +134,21 @@ class StaticTextComponent : public ComponentBase
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
   }
+
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxStaticText"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();    
+    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+    return xrc.GetXrcObject();
+  }
 };
 
 class PanelComponent : public ComponentBase
 {
+ public:
+     
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxPanel((wxWindow *)parent,-1,
@@ -124,10 +156,20 @@ class PanelComponent : public ComponentBase
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
   }
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxPanel"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();    
+    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    return xrc.GetXrcObject();
+  }
 };
 
 class GridComponent : public ComponentBase
 {
+ public:
+     
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     wxGrid *grid = new wxGrid((wxWindow *)parent,-1,
@@ -146,6 +188,7 @@ class GridComponent : public ComponentBase
 
 class ComboBoxComponent : public ComponentBase
 {
+ public: 
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxComboBox((wxWindow *)parent,-1,
@@ -156,10 +199,21 @@ class ComboBoxComponent : public ComponentBase
     NULL,
     obj->GetPropertyAsInteger(_("style")));
   }
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxComboBox"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();    
+    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    xrc.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
+    //xrc.AddProperty(_("value"),_("value"),XRC_TYPE_INTEGER);
+    return xrc.GetXrcObject();
+  }
 };
 
 class CheckBoxComponent : public ComponentBase
 {
+ public:  
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxCheckBox((wxWindow *)parent,-1,
@@ -172,6 +226,7 @@ class CheckBoxComponent : public ComponentBase
 
 class StaticBitmapComponent : public ComponentBase
 {
+ public: 
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxStaticBitmap((wxWindow *)parent,-1,
@@ -180,10 +235,19 @@ class StaticBitmapComponent : public ComponentBase
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
   }
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxStaticBitmap"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();    
+    xrc.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_TEXT);
+    return xrc.GetXrcObject();
+  }
 };	
 
 class StaticLineComponent : public ComponentBase
 {
+ public:
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxStaticLine((wxWindow *)parent,-1,
@@ -191,17 +255,34 @@ class StaticLineComponent : public ComponentBase
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
   }	
+
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxStaticLine"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();    
+    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    return xrc.GetXrcObject();
+  }
 };
 
 class NotebookComponent : public ComponentBase
 {
+ public: 
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxNotebook((wxWindow *)parent,-1,
       obj->GetPropertyAsPoint(_("pos")),
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
-  }	
+  }
+
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxNotebook"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();    
+    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    return xrc.GetXrcObject();
+  }  
 };
 
 class NotebookPageComponent : public ComponentBase
@@ -222,10 +303,39 @@ class NotebookPageComponent : public ComponentBase
     else
       nb->SetSelection(nb->GetPageCount()-1);
   }
+
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("notebookpage"));
+    xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+    xrc.AddProperty(_("selected"),_("selected"),XRC_TYPE_BOOL);
+    return xrc.GetXrcObject();
+  }
+};
+
+class ListCtrlComponent : public ComponentBase
+{
+ public: 
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    return new wxListCtrl((wxWindow*)parent, -1,
+      obj->GetPropertyAsPoint(_("pos")),
+      obj->GetPropertyAsSize(_("size")),
+      obj->GetPropertyAsInteger(_("style")));
+  }
+
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxListCtrl"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();    
+    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    return xrc.GetXrcObject();
+  } 
 };
 
 class MenuBarComponent : public ComponentBase
 {
+ public:
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return NULL;
@@ -234,6 +344,7 @@ class MenuBarComponent : public ComponentBase
 
 class MenuComponent : public ComponentBase
 {
+ public:
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return NULL;
@@ -242,22 +353,14 @@ class MenuComponent : public ComponentBase
 
 class MenuItemComponent : public ComponentBase
 {
+ public:
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return NULL;
   }	
 };
 
-class ListCtrlComponent : public ComponentBase
-{
-  wxObject* Create(IObject *obj, wxObject *parent)
-  {
-    return new wxListCtrl((wxWindow*)parent, -1,
-      obj->GetPropertyAsPoint(_("pos")),
-      obj->GetPropertyAsSize(_("size")),
-      obj->GetPropertyAsInteger(_("style")));
-  }
-};
+
 
 ///////////////////////////////////////////////////////////////////////////////
 

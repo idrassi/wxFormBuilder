@@ -68,6 +68,8 @@ class ObjectToXrcFilter
 
   void AddPropertyValue (const wxString &xrcPropName,
                          const wxString &xrcPropValue);
+                  
+  void AddWindowProperties();
                       
   TiXmlElement* GetXrcObject();
   

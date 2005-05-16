@@ -38,6 +38,7 @@ class IComponent;
 class IObject
 {
  public:
+  virtual bool     IsNull (const wxString& pname) = 0;
   virtual int      GetPropertyAsInteger (const wxString& pname) = 0;
   virtual wxFont   GetPropertyAsFont    (const wxString& pname) = 0;
   virtual wxColour GetPropertyAsColour  (const wxString& pname) = 0;

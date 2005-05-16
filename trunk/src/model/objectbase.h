@@ -419,7 +419,7 @@ class ObjectBase : public IObject, public enable_shared_from_this<ObjectBase>
   /////////////////////////
   // Implementación de la interfaz IObject para su uso dentro de los
   // plugins
-  
+  bool     IsNull (const wxString& pname);
   int      GetPropertyAsInteger (const wxString& pname);
   wxFont   GetPropertyAsFont    (const wxString& pname);
   wxColour GetPropertyAsColour  (const wxString& pname);

@@ -524,6 +524,16 @@ bool ObjectBase::ChangeChildPosition(PObjectBase obj, unsigned int pos)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+
+bool ObjectBase::IsNull (const wxString& pname)
+{
+  PProperty property = GetProperty(_STDSTR(pname));
+  if (property)
+    return property->GetValueAsString() == wxT("");
+  else
+    return true;
+}
+
 int ObjectBase::GetPropertyAsInteger (const wxString& pname)
 {
   PProperty property = GetProperty(_STDSTR(pname));

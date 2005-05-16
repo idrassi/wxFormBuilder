@@ -178,3 +178,28 @@ void ObjectToXrcFilter::LinkFont(const wxFont &font, TiXmlElement *propElement)
   element->LinkEndChild(new TiXmlText(font.GetFaceName().mb_str()));
   propElement->LinkEndChild(element);
 } 
+
+void ObjectToXrcFilter::AddWindowProperties()
+{
+  // falta exstyle
+  if (!m_obj->IsNull(_("size")))
+    AddProperty(_("size"), _("size"), XRC_TYPE_SIZE);
+    
+  if (!m_obj->IsNull(_("bg")))  
+    AddProperty(_("bg"), _("bg"), XRC_TYPE_COLOUR);
+  
+  if (!m_obj->IsNull(_("fg")))  
+    AddProperty(_("fg"), _("fg"), XRC_TYPE_COLOUR);  
+
+  if (!m_obj->IsNull(_("enabled")))
+    AddPropertyValue(_("enabled"),_("1"));
+  
+  if (!m_obj->IsNull(_("focused")))  
+    AddPropertyValue(_("focused"),_("0"));
+  
+  if (!m_obj->IsNull(_("hidden")))
+    AddPropertyValue(_("hidden"),_("0"));  
+  
+  if (!m_obj->IsNull(_("font")))
+    AddProperty(_("font"), _("font"), XRC_TYPE_FONT);  
+};
