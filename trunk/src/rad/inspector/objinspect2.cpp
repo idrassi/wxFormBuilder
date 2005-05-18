@@ -22,6 +22,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "objinspect2.h"
+#include <wx/propgrid/propgrid.h>
+#include <wx/propgrid/propdev.h>
 #include <wx/propgrid/advprops.h>
 #include "model/objectbase.h"
 #include "utils/debug.h"
@@ -153,6 +155,72 @@ void wxPointPropertyClass::ChildChanged ( wxPGProperty* p )
 }
 
 // -----------------------------------------------------------------------
+// wxMyColourProperty
+// -----------------------------------------------------------------------
+
+// Colour labels. Last (before NULL, if any) must be Custom.
+static const wxChar* mycolprop_labels[] = {
+    wxT("Default"),
+    wxT("Black"),
+    wxT("Maroon"),
+    wxT("Navy"),
+    wxT("Purple"),
+    wxT("Teal"),
+    wxT("Gray"),
+    wxT("Green"),
+    wxT("Olive"),
+    wxT("Brown"),
+    wxT("Blue"),
+    wxT("Fuchsia"),
+    wxT("Red"),
+    wxT("Orange"),
+    wxT("Silver"),
+    wxT("Lime"),
+    wxT("Aqua"),
+    wxT("Yellow"),
+    wxT("White"),
+    wxT("Custom"),
+    (const wxChar*) NULL
+};
+
+// Relevant colour values as unsigned longs.
+static unsigned long mycolprop_colours[] = {
+    wxPG_COLOUR(255,255,255),
+    wxPG_COLOUR(0,0,0),
+    wxPG_COLOUR(128,0,0),
+    wxPG_COLOUR(0,0,128),
+    wxPG_COLOUR(128,0,128),
+    wxPG_COLOUR(0,128,128),
+    wxPG_COLOUR(128,128,128),
+    wxPG_COLOUR(0,128,0),
+    wxPG_COLOUR(128,128,0),
+    wxPG_COLOUR(166,124,81),
+    wxPG_COLOUR(0,0,255),
+    wxPG_COLOUR(255,0,255),
+    wxPG_COLOUR(255,0,0),
+    wxPG_COLOUR(247,148,28),
+    wxPG_COLOUR(192,192,192),
+    wxPG_COLOUR(0,255,0),
+    wxPG_COLOUR(0,255,255),
+    wxPG_COLOUR(255,255,0),
+    wxPG_COLOUR(255,255,255),
+    wxPG_COLOUR(0,0,0)
+};
+
+// ¡¡Está definido en un .cpp!!
+#define wxPG_PROP_TRANSLATE_CUSTOM      wxPG_PROP_CLASS_SPECIFIC_1
+
+// Implement property class. Third argument is optional values array,
+// but in this example we are only interested in creating a shortcut
+// for user to access the colour values. Last arg is itemcount, but
+// that's not necessary because our label array is NULL-terminated.
+/*WX_PG_IMPLEMENT_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR(wxMyColourProperty,
+                                                     mycolprop_labels,
+                                                     (long*)NULL,
+                                                     mycolprop_colours,
+                                                     0)*/
+
+// -----------------------------------------------------------------------
 // ObjectInspector
 // -----------------------------------------------------------------------
 
@@ -278,8 +346,16 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
   else if (type == PT_WXFONT)
     result = wxFontProperty(name, wxPG_LABEL, prop->GetValueAsFont());
 
-  else if (type == PT_WXCOLOUR)
+  else if (type == PT_WXCOLOUR){
+        
     result = wxColourProperty(name, wxPG_LABEL, prop->GetValueAsColour());
+    wxPGConstants& pgc = ((wxEnumPropertyClass*)result)->GetChoices();
+    /*wxArrayString& as = pgc.GetLabels();
+    as.Insert(_T("Prueba"), 0);
+    wxArrayInt& ai = pgc.GetValues();
+    ai.Insert(0, 0);*/
+    //pgc.Set(mycolprop_labels, (const long int*)mycolprop_colours, 0);
+}
 
   else if (type == PT_PATH)
     result = wxDirProperty(name, wxPG_LABEL, prop->GetValueAsString());
@@ -362,8 +438,13 @@ void ObjectInspector::OnPropertyGridChange(wxPropertyGridEvent& event)
                 break;
             case PT_WXCOLOUR:
                 {
-                    wxColour *colour = wxPGVariantToWxObjectPtr(event.GetPropertyPtr()->DoGetValue(), wxColour);
-                    GetData()->ModifyProperty(prop, TypeConv::ColourToString(*colour));
+                    if (event.GetPropertyValueAsString() == _T("Default"))
+                        GetData()->ModifyProperty(prop, _T(""));
+                    else
+                    {
+                        wxColour *colour = wxPGVariantToWxObjectPtr(event.GetPropertyPtr()->DoGetValue(), wxColour);
+                        GetData()->ModifyProperty(prop, TypeConv::ColourToString(*colour));
+                    }
                 }
                 break;
             default:
@@ -397,9 +478,57 @@ void ObjectInspector::ObjectRemoved(PObjectBase obj)
 
 void ObjectInspector::PropertyModified(PProperty prop)
 {
-    //TODO: Implementar ObjectInspector(2)::PropertyModified
-  /*ObjInspectorMap::iterator it = m_map.find(prop);
-  
-  if (it != m_map.end())
-    (it->second)->RetrieveValue();*/
+  wxPGId pgid = m_pg->GetPropertyByLabel(_WXSTR(prop->GetName()));
+  wxASSERT(pgid.IsOk());
+  wxPGProperty *pgProp = pgid.GetPropertyPtr();
+
+  switch (prop->GetType())
+  {
+    case PT_TEXT: case PT_MACRO: case PT_WXSTRING: case PT_OPTION:
+        pgProp->SetValueFromString(prop->GetValueAsString(), 0);
+        break;
+    case PT_BOOL:
+        pgProp->SetValueFromInt(prop->GetValueAsString() == _T("0") ? 0 : 1, 0);
+        break;
+    case PT_BITLIST:
+        {
+            wxString aux = prop->GetValueAsString();
+            aux.Replace(_T("|"), _T(", "));
+            if (aux != _T("0"))
+                pgProp->SetValueFromString(aux, 0);
+        }
+        break;
+    case PT_WXPOINT:
+        {
+            wxPoint val = prop->GetValueAsPoint();
+            //pgProp->DoSetValue((void*)&val);
+            pgProp->SetValueFromString(wxString::Format(_T("%d; %d"), val.x, val.y), 0);
+        }
+        break;
+    case PT_WXSIZE:
+        {
+            wxSize val = prop->GetValueAsSize();
+            //pgProp->DoSetValue((void*)&val);
+            //m_pg->SetPropertyValue(pgid, val);   casca!!
+            pgProp->SetValueFromString(wxString::Format(_T("%d; %d"), val.x, val.y), 0);
+        }
+        break;
+    case PT_WXFONT:
+        {
+            wxFont val = prop->GetValueAsFont();
+            pgProp->DoSetValue((void*)&val);
+        }
+        break;
+    case PT_WXCOLOUR:
+        if (prop->GetValueAsString() == wxT(""))
+            pgProp->SetValueFromString(_T("Default"), 0);
+        else{
+            wxColour val = prop->GetValueAsColour();
+            pgProp->DoSetValue((void*)&val);
+        }
+        break;
+    default:
+        pgProp->SetValueFromString(prop->GetValueAsString(), 0);
+  }
+  m_pg->Refresh();
 }
