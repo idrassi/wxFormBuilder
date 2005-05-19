@@ -25,6 +25,7 @@
 
 #include "mainframe.h"
 #include "wx/splitter.h"
+#include "wx/config.h"
 #include "utils/debug.h"
 #include "rad/title.h"
 #include "rad/bitmaps.h"
@@ -49,6 +50,7 @@ BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_QUIT,MainFrame::OnExit)
   EVT_MENU(ID_IMPORT_XRC,MainFrame::OnImportXrc)
   EVT_MENU(ID_GENERATE_CODE,MainFrame::OnGenerateCode)
+  EVT_CLOSE(MainFrame::OnClose)
 END_EVENT_TABLE()
 
 MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
@@ -98,14 +100,14 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   
   ///////////////
 
-  wxSplitterWindow *v_splitter = new wxSplitterWindow(this,-1,wxDefaultPosition,wxDefaultSize, wxSP_3DSASH);
+  wxSplitterWindow *v_splitter = new wxSplitterWindow(this,-1,wxDefaultPosition,wxDefaultSize, wxSP_3DSASH | wxSP_LIVE_UPDATE);
   wxPanel *left = new wxPanel(v_splitter,-1);//,wxDefaultPosition, wxDefaultSize,wxSIMPLE_BORDER);
   wxBoxSizer *left_sizer = new wxBoxSizer(wxVERTICAL);
     
   wxPanel *right = new wxPanel(v_splitter,-1);
   v_splitter->SplitVertically(left,right,300);
 
-  wxSplitterWindow *h_splitter = new wxSplitterWindow(left,-1,wxDefaultPosition,wxDefaultSize, wxSP_3D);//wxSP_BORDER);
+  wxSplitterWindow *h_splitter = new wxSplitterWindow(left,-1,wxDefaultPosition,wxDefaultSize, wxSP_3D | wxSP_LIVE_UPDATE);//wxSP_BORDER);
 
   wxPanel *tree_panel = new wxPanel(h_splitter,-1);
 /*  wxStaticText *tree_text = new wxStaticText(tree_panel,-1,wxT("OBJECT TREE"),wxDefaultPosition,wxDefaultSize,wxSIMPLE_BORDER);
@@ -160,7 +162,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   m_palette->SetData(data);
   m_palette->Create();
   
-  m_notebook = new wxNotebook(right,-1);
+  m_notebook = new wxNotebook(right, -1, wxDefaultPosition, wxDefaultSize, wxNB_NOPAGETHEME);
 
 /*  wxPanel *panel = new wxPanel(notebook,-1);
   panel->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)	);
@@ -207,6 +209,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
 
   CreateStatusBar();
   wxToolBar* toolbar = CreateToolBar();
+  toolbar->SetToolBitmapSize(wxSize(22, 22));
   toolbar->AddTool(ID_NEW_PRJ,wxT("New Project"),AppBitmaps::GetBitmap(wxT("new")));
   toolbar->AddTool(ID_OPEN_PRJ,wxT("Open Project"),AppBitmaps::GetBitmap(wxT("open")));
   toolbar->AddTool(ID_SAVE_PRJ,wxT("Save Project"),AppBitmaps::GetBitmap(wxT("save")));
@@ -221,8 +224,9 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   Layout();
   Fit();
 
-  SetSize(wxSize(1000,800));
-  Centre();
+  //SetSize(wxSize(1000,800));
+  RestorePosition(_T("mainframe"));
+  //Centre();
   Refresh();
 
 
@@ -233,7 +237,6 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
 
   data->AddDataObserver(this);
 };  
-
 
 
 MainFrame::~MainFrame()
@@ -250,6 +253,48 @@ MainFrame::~MainFrame()
   m_objTree->GetData()->RemoveDataObserver(m_objTree);
   m_objInsp->GetData()->RemoveDataObserver(m_objInsp);
   m_visualEdit->GetData()->RemoveDataObserver(m_visualEdit);
+} 
+
+void MainFrame::RestorePosition(const wxString &name)
+{
+    bool maximized;
+    int x, y, w, h;
+    wxConfigBase *config = wxConfigBase::Get();
+    
+    config->SetPath(name);
+    if (config->Read(_T("IsMaximized"), &maximized))
+    {
+        Maximize(maximized);
+    	x = y = w = h = -1;
+        config->Read(_T("PosX"), &x);
+        config->Read(_T("PosY"), &y);
+        config->Read(_T("SizeW"), &w);
+        config->Read(_T("SizeH"), &h);
+        SetSize(x, y, w, h);
+        bool iconized = false;
+        config->Read(_T("IsIconized"), &iconized);
+        if (iconized) Iconize(iconized);
+    }
+    config->SetPath(_T(".."));
+}
+
+void MainFrame::SavePosition(const wxString &name)
+{
+    wxConfigBase *config = wxConfigBase::Get();
+    bool isIconized = IsIconized();
+    bool isMaximized = IsMaximized();
+    
+    config->SetPath(name);
+    if (!isMaximized)
+    {
+        config->Write(_T("PosX"), isIconized ? -1 : GetPosition().x);
+        config->Write(_T("PosY"), isIconized ? -1 : GetPosition().y);
+        config->Write(_T("SizeW"), isIconized ? -1 : GetSize().GetWidth());
+        config->Write(_T("SizeH"), isIconized ? -1 : GetSize().GetHeight());
+    }    
+    config->Write(_T("IsMaximized"), isMaximized);
+    config->Write(_T("IsIconized"), isIconized);
+    config->SetPath(_T(".."));
 } 
 
 void MainFrame::OnSaveProject(wxCommandEvent &event)
@@ -336,6 +381,12 @@ void MainFrame::OnAbout(wxCommandEvent &event)
 void MainFrame::OnExit(wxCommandEvent &event)
 {
   Close();
+}
+
+void MainFrame::OnClose(wxCloseEvent &event)
+{
+    SavePosition(_T("mainframe"));
+    event.Skip();
 }
 
 void MainFrame::ProjectLoaded()

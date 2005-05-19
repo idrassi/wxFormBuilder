@@ -67,6 +67,9 @@ bool MyApp::OnInit()
           2000, NULL, -1, wxDefaultPosition, wxDefaultSize,
           wxSIMPLE_BORDER|wxSTAY_ON_TOP);
   }
+  
+  SetVendorName(_T("wxFormBuilder"));
+  SetAppName(_T("wxFormBuilder"));
 
   #ifndef __WXMSW__
   wxSleep(2);

@@ -61,12 +61,15 @@ class MainFrame : public DataObserver, public wxFrame
  public:
   MainFrame(DataObservable *data,wxWindow *parent, int id = -1);
   ~MainFrame();
+  void RestorePosition(const wxString &name);
+  void SavePosition(const wxString &name);
   void OnSaveProject(wxCommandEvent &event);
   void OnOpenProject(wxCommandEvent &event);
   void OnNewProject(wxCommandEvent &event);
   void OnGenerateCode(wxCommandEvent &event);
   void OnAbout(wxCommandEvent &event);
   void OnExit(wxCommandEvent &event);
+  void OnClose(wxCloseEvent &event);
   void OnImportXrc(wxCommandEvent &event);
   
   void ProjectLoaded();

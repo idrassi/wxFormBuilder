@@ -22,9 +22,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "bitmaps.h"
-#include "icons/open.xpm"
-#include "icons/save.xpm"
-#include "icons/new.xpm"
+#include "icons/open22.xpm"
+#include "icons/save22.xpm"
+#include "icons/new22.xpm"
 #include "icons/unknown.xpm"
 
 
