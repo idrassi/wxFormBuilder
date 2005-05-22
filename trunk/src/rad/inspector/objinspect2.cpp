@@ -22,11 +22,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "objinspect2.h"
-#include <wx/propgrid/propgrid.h>
-#include <wx/propgrid/propdev.h>
-#include <wx/propgrid/advprops.h>
 #include "model/objectbase.h"
 #include "utils/debug.h"
+#include "utils/typeconv.h"
 
 // -----------------------------------------------------------------------
 // wxSizeProperty
@@ -207,18 +205,16 @@ static unsigned long mycolprop_colours[] = {
     wxPG_COLOUR(0,0,0)
 };
 
-// ¡¡Está definido en un .cpp!!
-#define wxPG_PROP_TRANSLATE_CUSTOM      wxPG_PROP_CLASS_SPECIFIC_1
 
 // Implement property class. Third argument is optional values array,
 // but in this example we are only interested in creating a shortcut
 // for user to access the colour values. Last arg is itemcount, but
 // that's not necessary because our label array is NULL-terminated.
-/*WX_PG_IMPLEMENT_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR(wxMyColourProperty,
+WX_PG_IMPLEMENT_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR(fbColourProperty,
                                                      mycolprop_labels,
                                                      (long*)NULL,
                                                      mycolprop_colours,
-                                                     0)*/
+                                                     0)
 
 // -----------------------------------------------------------------------
 // ObjectInspector
@@ -346,16 +342,14 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
   else if (type == PT_WXFONT)
     result = wxFontProperty(name, wxPG_LABEL, prop->GetValueAsFont());
 
-  else if (type == PT_WXCOLOUR){
-        
-    result = wxColourProperty(name, wxPG_LABEL, prop->GetValueAsColour());
-    wxPGConstants& pgc = ((wxEnumPropertyClass*)result)->GetChoices();
-    /*wxArrayString& as = pgc.GetLabels();
-    as.Insert(_T("Prueba"), 0);
-    wxArrayInt& ai = pgc.GetValues();
-    ai.Insert(0, 0);*/
-    //pgc.Set(mycolprop_labels, (const long int*)mycolprop_colours, 0);
-}
+  else if (type == PT_WXCOLOUR)
+  {
+    wxColour col = prop->GetValueAsColour();
+    if (prop->GetValueAsString() == _T(""))
+        result = fbColourProperty(name, wxPG_LABEL, _T("Default"));
+    else
+        result = fbColourProperty(name, wxPG_LABEL, prop->GetValueAsColour());
+  }
 
   else if (type == PT_PATH)
     result = wxDirProperty(name, wxPG_LABEL, prop->GetValueAsString());

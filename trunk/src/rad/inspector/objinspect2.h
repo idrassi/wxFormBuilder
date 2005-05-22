@@ -30,8 +30,9 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/propdev.h>
 #include <wx/propgrid/advprops.h>
+#include <wx/propgrid/manager.h>
 
-#include "propeditor.h"
+//#include "propeditor.h"
 #include "rad/appobserver.h"
 
 // -----------------------------------------------------------------------
@@ -48,9 +49,7 @@ WX_PG_DECLARE_PROPERTY(wxSizeProperty,const wxSize&,wxSize(0,0))
 
 // -----------------------------------------------------------------------
 
-//WX_PG_DECLARE_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR(wxMyColourProperty)
-//WX_PG_DECLARE_PROPERTY(wxMyColourProperty,const wxColour&,*wxBLACK)
-//WX_PG_DECLARE_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR_WITH_DECL(wxMyColourProperty,WXDLLIMPEXP_PG)
+WX_PG_DECLARE_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR(fbColourProperty)
 
 // -----------------------------------------------------------------------
 
