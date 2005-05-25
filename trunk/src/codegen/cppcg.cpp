@@ -210,11 +210,11 @@ bool CppCodeGenerator::GenerateCode(PObjectBase project)
 
 void CppCodeGenerator::GenAttributeDeclaration(PObjectBase obj, Permission perm)
 {
-  if (obj->GetObjectType() == T_NOTEBOOK ||
-      obj->GetObjectType() == T_WIDGET || 
-      obj->GetObjectType() == T_COMPONENT ||
-      obj->GetObjectType() == T_CONTAINER ||
-      obj->GetObjectType() == T_MENUBAR)
+  if (obj->GetObjectTypeName() == "notebook" ||
+      obj->GetObjectTypeName() == "widget" || 
+      obj->GetObjectTypeName() == "component" ||
+      obj->GetObjectTypeName() == "container" ||
+      obj->GetObjectTypeName() == "menubar")
   {
     string perm_str = obj->GetProperty("permission")->GetValue();
     
@@ -349,15 +349,11 @@ void CppCodeGenerator::GenConstructor(PObjectBase class_obj)
 
 void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
 {
-  ObjectType type = obj->GetObjectType();
+  string type = obj->GetObjectTypeName();
   
-  switch (type)
+  if (type == "notebook" || type == "container" || type == "widget" ||
+      type == "menubar")
   {
-    case T_NOTEBOOK:
-    case T_CONTAINER:
-    case T_WIDGET:
-    case T_MENUBAR:
-    {
       // comprobamos si no se ha declarado como atributo de clase
       // en cuyo caso lo declaramos en el constructor
       
@@ -371,16 +367,14 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
       for (unsigned int i=0; i<obj->GetChildCount() ; i++)
         GenConstruction(obj->GetChild(i),true);
         
-      if (type == T_MENUBAR)
+      if (type == "menubar")
       {
         m_source->WriteLn(GetCode(obj,"menubar_add")); 
         m_source->WriteLn("");
       }
-    }
-    break;
-
-    case T_SIZER:
-    {
+  }
+  else if (type == "sizer")
+  {
       m_source->WriteLn(GetCode(obj,"declaration"));
       m_source->WriteLn(GetCode(obj,"construction"));
       GenSettings(obj->GetObjectInfo(), obj);
@@ -402,11 +396,9 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
         m_source->WriteLn(parser.ParseTemplate());
       } 
       
-    }
-    break;
-    
-    case T_MENU:
-    {
+  }
+  else if (type == "menu")
+  {
       m_source->WriteLn(GetCode(obj,"declaration"));
       m_source->WriteLn(GetCode(obj,"construction"));
       
@@ -415,66 +407,50 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
     
       m_source->WriteLn(GetCode(obj,"menu_add"));
       
-    }
-    break;
-
-    case T_SPACER:
-    {
+  }
+  else if (type == "spacer")
+  {
       // En lugar de modelar un "spacer" como un objeto que se incluye en
       // un sizer item, los vamos a considerar un como un tipo de
       // de "sizeritem" capaz de existir por sí solo. De esta forma será
       // más facil la exportación XRC.
       m_source->WriteLn(GetCode(obj,"spacer_add"));
-    }
-    break;
-
-    case T_SIZERITEM:
-    {
+  }
+  else if (type == "sizeritem")
+  {
       // El hijo, hay que añadirlo al sizer teniendo en cuenta el tipo
       // del objeto hijo (hay 3 rutinas diferentes)
       GenConstruction(obj->GetChild(0),false);
       
-      ObjectType child_type = obj->GetChild(0)->GetObjectType();
+      string child_type = obj->GetChild(0)->GetObjectTypeName();
       string temp_name;
-      switch (child_type)
+      if (child_type == "notebook" || child_type == "container" ||
+          child_type == "widget")
       {
-        case T_NOTEBOOK:
-        case T_CONTAINER:
-        case T_WIDGET:
-          temp_name = "window_add";
-          break;
-
-        case T_SIZER:
-          temp_name = "sizer_add";
-          break;
-          
-        default:
-          assert(false);
-          break;
+        temp_name = "window_add";
       }
+      else if (child_type == "sizer")
+      {  
+        temp_name = "sizer_add";
+      }
+      else
+        assert(false);
+          
       m_source->WriteLn(GetCode(obj,temp_name));
-    }
-    break;
-    
-    case T_NOTEBOOK_PAGE:
-    {
-      GenConstruction(obj->GetChild(0),false);
-      m_source->WriteLn(GetCode(obj,"page_add"));
-    }
-    break;
-    
-    case T_MENUITEM:
-    {
-      m_source->WriteLn(GetCode(obj,"construction"));
-      GenSettings(obj->GetObjectInfo(), obj);
-      m_source->WriteLn(GetCode(obj,"menuitem_add"));
-    }
-    break;
-    
-    default:
-    assert(false);
-    break;
   }
+  else if (type == "notebookpage")
+  {
+    GenConstruction(obj->GetChild(0),false);
+    m_source->WriteLn(GetCode(obj,"page_add"));
+  }
+  else if (type == "menuitem")
+  {  
+    m_source->WriteLn(GetCode(obj,"construction"));
+    GenSettings(obj->GetObjectInfo(), obj);
+    m_source->WriteLn(GetCode(obj,"menuitem_add"));
+  }
+  else  
+    assert(false);
 }
 
 void CppCodeGenerator::FindMacros(PObjectBase obj, set<string> &macro_set)

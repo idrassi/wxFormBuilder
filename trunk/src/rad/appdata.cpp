@@ -43,10 +43,10 @@ PObjectBase ApplicationData::GetSelectedObject()
 
 PObjectBase ApplicationData::GetSelectedForm()
 {
-  if (m_selObj->GetObjectType() == T_FORM)
+  if (m_selObj->GetObjectTypeName() == "form")
     return m_selObj;
   else
-    return m_selObj->FindNearAncestor(T_FORM);
+    return m_selObj->FindNearAncestor("form");
 }
   
 
@@ -93,7 +93,7 @@ void ApplicationData::CreateObject(wxString name)
 void ApplicationData::RemoveObject(PObjectBase obj)
 {
   PObjectBase parent = obj->GetParent();
-  if (parent && parent->GetObjectType() == T_SIZERITEM)
+  if (parent && parent->GetObjectTypeName() == "sizeritem")
     obj = parent;
 
   PObjectBase newSelected = obj->GetParent();
@@ -118,7 +118,8 @@ void ApplicationData::PasteObject(PObjectBase parent)
     // no me gusta este código, es una copia de un trozo del método
     // CreateObject de la clase ObjectDatabase. De momento
     // es solo un apaño
-    if (parent->GetObjectType() == T_SIZER && m_clipboard->GetObjectType() != T_SIZERITEM)
+    if (parent->GetObjectTypeName() == "sizer" && 
+        m_clipboard->GetObjectTypeName() != "sizeritem")
     {
       PObjectBase sizeritem(m_objDb->CreateObject("sizeritem"));
       sizeritem->AddChild(m_clipboard);
@@ -191,7 +192,7 @@ bool ApplicationData::LoadProject(const wxString &file)
     
     TiXmlElement *root = doc->RootElement();
     PObjectBase proj = m_objDb->CreateObject(root);
-    if (proj && proj->GetObjectType()== T_PROJECT)
+    if (proj && proj->GetObjectTypeName()== "project")
     {
       PObjectBase old_proj = m_project;
       //m_project = shared_dynamic_cast<ProjectObject>(proj);
@@ -224,7 +225,7 @@ void ApplicationData::MovePosition(PObjectBase obj, bool right, unsigned int num
   PObjectBase parent = obj->GetParent();
   if (parent)
   {
-    if (parent->GetObjectType() == T_SIZERITEM)
+    if (parent->GetObjectTypeName() == "sizeritem")
     {
       obj = parent;
       parent = parent->GetParent();

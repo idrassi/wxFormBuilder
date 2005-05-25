@@ -161,7 +161,8 @@ void ObjectTree::PropertyModified(PProperty prop)
 void ObjectTree::AddChildren(PObjectBase obj, wxTreeItemId &parent, bool is_root)
 {
   // los sizeritems son objetos "ficticios", y no se deben mostrar en el árbol
-  if (obj->GetObjectType() == T_SIZERITEM || obj->GetObjectType() == T_NOTEBOOK_PAGE)
+  if (obj->GetObjectTypeName() == "sizeritem" ||
+      obj->GetObjectTypeName() == "notebookpage")
     AddChildren(obj->GetChild(0),parent);
   else
   {
@@ -180,7 +181,7 @@ void ObjectTree::AddChildren(PObjectBase obj, wxTreeItemId &parent, bool is_root
     m_map.insert(ObjectItemMap::value_type(obj,new_parent));
     
     // configuramos su imagen
-    int image_idx = GetImageIndex(obj->GetObjectType());
+    int image_idx = GetImageIndex(obj->GetObjectTypeName());
     
     m_tcObjects->SetItemImage(new_parent,image_idx);
     m_tcObjects->SetItemSelectedImage(new_parent,image_idx);
@@ -200,33 +201,30 @@ void ObjectTree::AddChildren(PObjectBase obj, wxTreeItemId &parent, bool is_root
   }  
 }
 
-int ObjectTree::GetImageIndex (ObjectType type)
+int ObjectTree::GetImageIndex (string type)
 {
+  // TO-DO: eliminar dependencias con el tipo usando el icono
+  // definido para el componente en el fichero XML (el de la paleta)
+  
   int image = 0;
-  switch (type)
-  {
-    case T_PROJECT:  image = 0;    
-      break;
-    case T_FORM: image = 1;
-      break;
-    case T_SIZER: image = 2;
-      break;
-    case T_CONTAINER:  
-    case T_WIDGET: image = 3;
-      break;
-    case T_SPACER:  image = 4;
-      break;
-    case T_NOTEBOOK:  image = 5;
-      break;
-    case T_MENUBAR: image = 6;
-      break;
-    case T_MENU: image = 7;
-      break;
-    case T_MENUITEM: image = 8;
-      break;  
-    default:
-      break;
-  }  
+  if (type == "project")
+    image = 0;
+  else if (type == "form")
+    image = 1;
+  else if (type == "sizer")
+    image = 2;
+  else if (type == "container" || type == "widget")
+    image = 3;
+  else if (type == "spacer")
+    image = 4;
+  else if (type == "notebook")
+    image = 5;
+  else if (type == "menubar")
+    image = 6;
+  else if (type == "menu")
+    image = 7;
+  else if (type == "menuitem")
+    image = 8;
   
   return image;
 }

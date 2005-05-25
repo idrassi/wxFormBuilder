@@ -42,7 +42,7 @@ class ObjectTree : public DataObserver, public ObjectTreeGUI
     */
    void Create();
    void AddChildren(PObjectBase child, wxTreeItemId &parent, bool is_root = false);
-   int GetImageIndex (ObjectType type);
+   int GetImageIndex (string type);
    void UpdateItem(wxTreeItemId id, PObjectBase obj);
    
    DECLARE_EVENT_TABLE()

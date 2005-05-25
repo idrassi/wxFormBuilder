@@ -183,7 +183,7 @@ static const wxChar* mycolprop_labels[] = {
 
 // Relevant colour values as unsigned longs.
 static unsigned long mycolprop_colours[] = {
-    wxPG_COLOUR(255,255,255),
+    wxPG_COLOUR(255,255,254),
     wxPG_COLOUR(0,0,0),
     wxPG_COLOUR(128,0,0),
     wxPG_COLOUR(0,0,128),
@@ -273,7 +273,7 @@ void ObjectInspector::Create()
       
       // Añadirmos la categoría "Notebook Page" si el objeto está contenido
       // en un Notebook (no me gusta)
-      if (sel_obj->GetParent() && sel_obj->GetParent()->GetObjectType()==T_NOTEBOOK_PAGE)
+      if (sel_obj->GetParent() && sel_obj->GetParent()->GetObjectTypeName()=="notebookpage")
       {
         CreateCategory(wxT("Page"), sel_obj->GetParent(),
           sel_obj->GetParent()->GetObjectInfo(),dummy);

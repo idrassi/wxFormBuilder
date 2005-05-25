@@ -153,10 +153,9 @@ void VisualEditor::Create()
     for (unsigned int i=0; i < root->GetChildCount(); i++)
     {
       PObjectBase child = root->GetChild(i);
-      if (child->GetObjectType() == T_MENUBAR)
+      if (child->GetObjectTypeName() == "menubar")
         menubar = child;
       else
-        //Generate(child,m_back,NULL,T_CONTAINER); 
         Generate(child,m_back,NULL,PVisualObject()); 
     }
     
@@ -207,7 +206,7 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *wxparent,
   // FIXME: eliminar dependencias con ObjectType
   //        (quizá con una función en el plugin: bool IsContainer()
   if (obj_view.Window() &&
-      (obj->GetObjectType() == T_WIDGET || obj->GetObjectType() == T_CONTAINER))
+      (obj->GetObjectTypeName() == "widget" || obj->GetObjectTypeName() == "container"))
   {
     obj_view.Window()->PushEventHandler(
       new VObjEvtHandler(obj_view.Window(),obj,GetData()));
@@ -305,7 +304,7 @@ void GridPanel::HighlightSelection(wxDC& dc)
     wxPen bluePen(*wxBLUE, 1, wxSOLID);
     dc.SetPen(bluePen);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
-    PObjectBase sizerParent = object->FindNearAncestor(T_SIZER);
+    PObjectBase sizerParent = object->FindNearAncestor("sizer");
     if (sizerParent && sizerParent->GetParent())
         DrawRectangle(dc, point, size, sizerParent);
   }
@@ -348,7 +347,7 @@ void GridPanel::HighlightSelection(wxDC& dc)
 void GridPanel::SetMenubar(PObjectBase menubar)
 {
   /* Falta soporte para submenús, pero es un comienzo */
-  assert(menubar->GetObjectType() == T_MENUBAR);
+  assert(menubar->GetObjectTypeName() == "menubar");
   Menubar *mbWidget = new Menubar(this, -1);
   for (unsigned int i = 0; i < menubar->GetChildCount(); i++)
   {
@@ -431,9 +430,8 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
   {
     wxWindow *selPanel = NULL;
     visualObj = it->second;
-    //objAux = obj->FindNearAncestor(T_WIDGET);
-    objAuxCt = obj->FindNearAncestor(T_CONTAINER);  
-    objAuxNb = obj->FindNearAncestor(T_NOTEBOOK);
+    objAuxCt = obj->FindNearAncestor("container");  
+    objAuxNb = obj->FindNearAncestor("notebook");
     
     if (!objAuxCt)
       objAux = objAuxNb;
@@ -452,13 +450,16 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
         
     wxObject *item = NULL;
     wxSizer *sizer = NULL;
-    if (obj->GetObjectType() == T_WIDGET || obj->GetObjectType() == T_CONTAINER || obj->GetObjectType() == T_NOTEBOOK)
+    string typeName = obj->GetObjectTypeName();
+    if ( typeName == "widget" || typeName == "container" ||
+         typeName == "notebook")
       item = shared_dynamic_cast<VisualWindow>(visualObj)->GetWindow();
-    else if (obj->GetObjectType() == T_SIZER)
+      
+    else if (typeName == "sizer")
       item = shared_dynamic_cast<VisualSizer>(visualObj)->GetSizer();
     
-    objAux = obj->FindNearAncestor(T_SIZER);
-    objAuxCt = obj->FindNearAncestor(T_CONTAINER);
+    objAux = obj->FindNearAncestor("sizer");
+    objAuxCt = obj->FindNearAncestor("container");
     if (objAux && (!objAuxCt || objAux->Deep() > objAuxCt->Deep()))
     {
       it = m_map.find(objAux);

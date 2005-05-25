@@ -67,8 +67,8 @@ TiXmlElement* XrcFilter::GetElement(const PObjectBase obj)
     // enlazamos los sub-elementos
 
     // FIXME! no todos los objetos xrc heredan de wxWindow...
-    if (obj->GetObjectType() == T_CONTAINER || obj->GetObjectType() == T_WIDGET || 
-        obj->GetObjectType() == T_FORM)
+    string typeName = obj->GetObjectTypeName();
+    if ( typeName == "container" || typeName == "widget" || typeName == "form")
       LinkValues(element,GetXrcClassInfo("wxWindow"),obj);
           
     LinkValues(element,xrcInfo,obj); // los propios del objeto
@@ -458,8 +458,8 @@ void XrcFilter::ImportXrcProperties(TiXmlElement *xrcObj, PObjectBase obj)
   ImportXrcElements(xrcObj,xrcInfo,obj);
 
   // si es un widget o un form importamos los subelementos comunes
-  if (obj->GetObjectType() == T_WIDGET || obj->GetObjectType() == T_FORM  ||
-      obj->GetObjectType() == T_CONTAINER)
+  string typeName = obj->GetObjectTypeName();
+  if ( typeName == "container" || typeName == "widget" || typeName == "form")
     ImportXrcElements(xrcObj,GetXrcClassInfo("wxWindow"),obj);
 }
 

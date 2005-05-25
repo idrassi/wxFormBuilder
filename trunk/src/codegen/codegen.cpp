@@ -254,8 +254,8 @@ bool TemplateParser::ParseWxParent()
 
   PObjectBase wxparent;
   
-  PObjectBase cont_parent (m_obj->FindNearAncestor(T_CONTAINER));
-  PObjectBase nbook_parent (m_obj->FindNearAncestor(T_NOTEBOOK));
+  PObjectBase cont_parent (m_obj->FindNearAncestor("container"));
+  PObjectBase nbook_parent (m_obj->FindNearAncestor("notebook"));
   
   if (cont_parent && nbook_parent)
 

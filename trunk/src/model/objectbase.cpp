@@ -37,44 +37,44 @@ string OptionList::GetOption(unsigned int idx)
   return m_options[idx];
 }
 
-ostream& operator << (ostream &s, ObjectType type)
-{
-  switch (type)
-  {
-    case T_WIDGET:
-      s << "T_WIDGET";
-      break;
-    case T_SIZER:
-      s << "T_SIZER";
-      break;
-    case T_FORM:
-      s << "T_FORM";
-      break;
-    case T_SPACER:
-      s << "T_SPACER";
-      break;
-    case T_SIZERITEM:
-      s << "T_SIZERITEM";
-      break;
-    case T_ERROR:
-      s << "T_ERROR";
-      break;
-    case T_INTERFACE:
-      s << "T_INTERFACE";
-      break;
-    case T_COMPONENT:
-      s << "T_COMPONENT";
-      break;
-    case T_PROJECT:
-      s << "T_PROJECT";
-      break;
-      
-    default:
-      break;
-
-  }
-  return s;
-}
+//ostream& operator << (ostream &s, ObjectType type)
+//{
+//  switch (type)
+//  {
+//    case T_WIDGET:
+//      s << "T_WIDGET";
+//      break;
+//    case T_SIZER:
+//      s << "T_SIZER";
+//      break;
+//    case T_FORM:
+//      s << "T_FORM";
+//      break;
+//    case T_SPACER:
+//      s << "T_SPACER";
+//      break;
+//    case T_SIZERITEM:
+//      s << "T_SIZERITEM";
+//      break;
+//    case T_ERROR:
+//      s << "T_ERROR";
+//      break;
+//    case T_INTERFACE:
+//      s << "T_INTERFACE";
+//      break;
+//    case T_COMPONENT:
+//      s << "T_COMPONENT";
+//      break;
+//    case T_PROJECT:
+//      s << "T_PROJECT";
+//      break;
+//      
+//    default:
+//      break;
+//
+//  }
+//  return s;
+//}
 
 
 
@@ -287,13 +287,13 @@ void ObjectBase::AddProperty (string propname, PProperty value)
 }
 
 
-PObjectBase ObjectBase::FindNearAncestor(ObjectType type)
+PObjectBase ObjectBase::FindNearAncestor(string type)
 {
   PObjectBase result;
   PObjectBase parent = GetParent();
   if (parent)
   {
-    if (parent->GetObjectType() == type)
+    if (parent->GetObjectTypeName() == type)
       result = parent;
     else
       result = parent->FindNearAncestor(type);
@@ -305,7 +305,7 @@ PObjectBase ObjectBase::FindNearAncestor(ObjectType type)
 bool ObjectBase::AddChild (PObjectBase obj)
 {
   bool result = false;
-  if (ChildTypeOk(obj->GetObjectType()))
+  if (ChildTypeOk(obj->GetObjectTypeName()))
   {
     m_children.push_back(obj);
     result = true;
@@ -317,7 +317,7 @@ bool ObjectBase::AddChild (PObjectBase obj)
 bool ObjectBase::AddChild (unsigned int idx, PObjectBase obj)
 {
   bool result = false;
-  if (ChildTypeOk(obj->GetObjectType()) && idx <= m_children.size())
+  if (ChildTypeOk(obj->GetObjectTypeName()) && idx <= m_children.size())
   {
     m_children.insert(m_children.begin() + idx,obj);
     result = true;
@@ -326,72 +326,51 @@ bool ObjectBase::AddChild (unsigned int idx, PObjectBase obj)
   return result;
 }
 
-bool ObjectBase::DoChildTypeOk(ObjectType type_child, ObjectType type_parent)
+bool ObjectBase::DoChildTypeOk(string type_child, string type_parent)
 {
   bool result;
   
-  switch (type_parent)
-  {
-    case T_PROJECT:
-      result = ( type_child == T_FORM);
-      break;
-
-    case T_CONTAINER:
-    case T_FORM:
-      result = (type_child == T_SIZER || type_child == T_MENUBAR); // sólo puede haber uno
-      break;
-
-
-    case T_NOTEBOOK:
-      result = (type_child == T_NOTEBOOK_PAGE);
-      break;
+  if (type_parent == "project")
+    result = ( type_child == "form");
+    
+  else if (type_parent == "container" || type_parent == "form")
+    result = (type_child == "sizer" || type_child == "menubar"); // sólo puede haber uno
+    
+  else if (type_parent == "notebook")
+    result = (type_child == "notebookpage");
+    
+  else if (type_parent == "notebookpage")
+    result = (type_child == "container"); // sólo puede haber uno
+    
+  else if (type_parent == "sizer")
+    result = (type_child == "sizeritem" || type_child == "spacer");
+    
+  else if (type_parent == "sizeritem")
+    result = (type_child == "widget" || type_child == "container" ||
+              type_child == "sizer" || type_child == "notebook");
+                
+  else if (type_parent == "menubar")
+    result = (type_child == "menu");
+    
+  else if (type_parent == "menu")
+    result = (type_child == "menuitem");
       
-    case T_NOTEBOOK_PAGE:
-      result = (type_child == T_CONTAINER); // sólo puede haber uno
-      break;
-        
-    case T_SIZER:
-      result = (type_child == T_SIZERITEM || type_child == T_SPACER);
-      break;
+  else
+    result = false;
       
-    case T_SIZERITEM:
-      result = (type_child == T_WIDGET || type_child == T_CONTAINER ||
-                type_child == T_SIZER || type_child == T_NOTEBOOK);
-      break;
-
-    case T_MENUBAR:
-      result = (type_child == T_MENU);
-      break;
-      
-    case T_MENU:
-      result = (type_child == T_MENUITEM);
-      break;
-//    case T_BITMAP:
-//    case T_SPACER:
-//    case T_WIDGET:
-//    case T_INTERFACE:
-//    case T_COMPONENT:
-//      result = false;
-//      break;
-          
-    default:
-      result = false;
-      break;
-  }
-  
   return result;
 }
 
-bool ObjectBase::ChildTypeOk (ObjectType type)
+bool ObjectBase::ChildTypeOk (string type)
 {
-  return DoChildTypeOk(type, GetObjectType());
+  return DoChildTypeOk(type, GetObjectTypeName());
 }
 
 PObjectBase ObjectBase::GetLayout()
 {
   PObjectBase result;
   
-  if (GetParent() && GetParent()->GetObjectType()==T_SIZERITEM)
+  if (GetParent() && GetParent()->GetObjectTypeName()=="sizeritem")
     result = GetParent();
     
   return result;
@@ -437,30 +416,30 @@ int ObjectBase::Deep()
   return deep;
 }
 
-void ObjectBase::PrintOut(ostream &s, int indent)
-{
-  string ind_str = GetIndentString(indent);
-    
-  s << ind_str << "[ " << GetClassName() << " ] " << GetObjectType() << endl;
-  PropertyMap::const_iterator it_prop;
-  for (it_prop = m_properties.begin(); it_prop!= m_properties.end(); it_prop++)
-  {
-    s << ind_str << "property '" << it_prop->first << "' = '" <<
-      it_prop->second->GetValue() << "'" << endl;
-  }  
-
-  ObjectVector::const_iterator it_ch;
-  for (it_ch = m_children.begin() ; it_ch != m_children.end(); it_ch++)
-  {
-    (*it_ch)->PrintOut(s,INDENT + indent);
-  }  
-}
-
-ostream& operator << (ostream &s, PObjectBase obj)
-{
-  obj->PrintOut(s,0);
-  return s;
-}
+//void ObjectBase::PrintOut(ostream &s, int indent)
+//{
+//  string ind_str = GetIndentString(indent);
+//    
+//  s << ind_str << "[ " << GetClassName() << " ] " << GetObjectType() << endl;
+//  PropertyMap::const_iterator it_prop;
+//  for (it_prop = m_properties.begin(); it_prop!= m_properties.end(); it_prop++)
+//  {
+//    s << ind_str << "property '" << it_prop->first << "' = '" <<
+//      it_prop->second->GetValue() << "'" << endl;
+//  }  
+//
+//  ObjectVector::const_iterator it_ch;
+//  for (it_ch = m_children.begin() ; it_ch != m_children.end(); it_ch++)
+//  {
+//    (*it_ch)->PrintOut(s,INDENT + indent);
+//  }  
+//}
+//
+//ostream& operator << (ostream &s, PObjectBase obj)
+//{
+//  obj->PrintOut(s,0);
+//  return s;
+//}
 
 TiXmlElement* ObjectBase::SerializeObject()
 {
@@ -614,12 +593,9 @@ wxArrayInt ObjectBase::GetPropertyAsIntegerArray(const wxString& pname)
           
 ///////////////////////////////////////////////////////////////////////////////
 
-ObjectInfo::ObjectInfo(string class_name,
-                       ObjectType type)
-//                       WidgetType widget)
+ObjectInfo::ObjectInfo(string class_name, string type)
 {
   m_class = class_name;
-//  m_widget = widget;
   m_type = type;
   m_numIns = 0;
   m_component = NULL;
@@ -671,22 +647,22 @@ unsigned int ObjectInfo::GetBaseClassCount()
   return m_base.size();
 }
 
-
-void ObjectInfo::PrintOut(ostream &s, int indent)
-{
-  string ind_str = "";
-  for (int i=0;i<indent;i++)
-    ind_str = ind_str + " ";
-  
-  s << ind_str << "[ " << GetClassName() << " ] " << GetObjectType() << endl;
-  PropertyInfoMap::const_iterator it_prop;
-  for (it_prop = m_properties.begin(); it_prop!= m_properties.end(); it_prop++)
-  {
-    s << ind_str << "property '" << it_prop->first << "' type = '" <<
-      it_prop->second->GetType() << "' with value = '" <<
-      it_prop->second->GetDefaultValue() << "' by default" << endl;
-  }  
-}
+//
+//void ObjectInfo::PrintOut(ostream &s, int indent)
+//{
+//  string ind_str = "";
+//  for (int i=0;i<indent;i++)
+//    ind_str = ind_str + " ";
+//  
+//  s << ind_str << "[ " << GetClassName() << " ] " << GetObjectType() << endl;
+//  PropertyInfoMap::const_iterator it_prop;
+//  for (it_prop = m_properties.begin(); it_prop!= m_properties.end(); it_prop++)
+//  {
+//    s << ind_str << "property '" << it_prop->first << "' type = '" <<
+//      it_prop->second->GetType() << "' with value = '" <<
+//      it_prop->second->GetDefaultValue() << "' by default" << endl;
+//  }  
+//}
 
 void ObjectInfo::AddCodeInfo(string lang, PCodeInfo codeinfo)
 {
@@ -703,11 +679,11 @@ PCodeInfo ObjectInfo::GetCodeInfo(string lang)
   return result;
 }
 
-ostream& operator << (ostream &s, PObjectInfo obj)
-{
-  obj->PrintOut(s,0);
-  return s;
-}
+//ostream& operator << (ostream &s, PObjectInfo obj)
+//{
+//  obj->PrintOut(s,0);
+//  return s;
+//}
 
 ///////////////////////////////////////////////////////////////////////////////
 string CodeInfo::GetTemplate(string name)

@@ -94,7 +94,7 @@ class ObjectDatabase
   
   // diccionarios para obtener el valor numérico a partir de la cadena
   // de texto del archivo XML.
-  typedef map<string,ObjectType> OTMap;
+  //typedef map<string,ObjectType> OTMap;
 //  typedef map<string,WidgetType> WTMap;
   typedef map<string,PropertyType> PTMap;
   typedef vector<wxDynamicLibrary *> CLibraryVector;
@@ -103,15 +103,13 @@ class ObjectDatabase
   string m_iconPath;
   ObjectInfoMap m_objs;
   PackageVector m_pkgs;
-  OTMap m_objTypes;
-//  WTMap m_widgetTypes;
   PTMap m_propTypes;
   CLibraryVector m_libs;
   
   /**
    * Inicializa el dicctionario de tipos de objetos.
    */
-  void InitObjectTypes();
+  //void InitObjectTypes();
   void InitPropertyTypes();
     
   /**
@@ -135,13 +133,12 @@ class ObjectDatabase
    * Determina si el tipo de objeto hay que incluirlo en la paleta de 
    * componentes.
    */
-  bool ShowInPalette(ObjectType type);
-  bool HasCppProperties(ObjectType type);
+  bool ShowInPalette(string type);
+  bool HasCppProperties(string type);
   
   // rutinas de conversión
   PropertyType ParsePropertyType (string str);
-  ObjectType   ParseObjectType   (string str); 
-//  WidgetType   ParseWidgetType   (string str);
+  string   ParseObjectType   (string str); 
   
   
  public:    

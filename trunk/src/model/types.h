@@ -29,7 +29,7 @@
 #include "wx/wx.h"
 
 using namespace std;
-
+/*
 typedef enum
 {
   T_ERROR,
@@ -49,7 +49,7 @@ typedef enum
   T_MENU,
   T_MENUITEM
 } ObjectType;
-
+*/
 
 /**
  * Tipos de propiedades.

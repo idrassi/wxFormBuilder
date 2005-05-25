@@ -61,7 +61,7 @@ PObjectInfo ObjectPackage::GetObjectInfo(unsigned int idx)
 
 ObjectDatabase::ObjectDatabase()
 {
-  InitObjectTypes();
+  //InitObjectTypes();
 //  InitWidgetTypes();
   InitPropertyTypes();
 }
@@ -107,18 +107,18 @@ PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
 
   if (parent)
   {
-    valid_child = parent->ChildTypeOk(obj_info->GetObjectType());
+    valid_child = parent->ChildTypeOk(obj_info->GetObjectTypeName());
     
     if (!valid_child && parent->GetParent() && 
-         parent->GetObjectType() != T_SIZER &&
-         parent->GetObjectType() != T_NOTEBOOK)
+         parent->GetObjectTypeName() != "sizer" &&
+         parent->GetObjectTypeName() != "notebook")
     {
-      parent = parent->FindNearAncestor(T_SIZER);
+      parent = parent->FindNearAncestor("sizer");
       if (!parent) return PObjectBase();
-      valid_child = parent->ChildTypeOk(obj_info->GetObjectType());
+      valid_child = parent->ChildTypeOk(obj_info->GetObjectTypeName());
     }
 
-    if (!valid_child && parent->GetObjectType() == T_SIZER)
+    if (!valid_child && parent->GetObjectTypeName() == "sizer")
     {
       PObjectBase sizeritem;
     
@@ -131,8 +131,8 @@ PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
       // la función ChildTypeOk debe ser de ObjectInfo en lugar de ObjectBase
       // como "apaño" se va a crear un objeto temporal para usar la función
       sizeritem = PObjectBase(new ObjectBase("sizeritem"));
-      sizeritem->SetObjectType(T_SIZERITEM);
-      valid_child = sizeritem->ChildTypeOk(obj_info->GetObjectType());
+      sizeritem->SetObjectTypeName("sizeritem");
+      valid_child = sizeritem->ChildTypeOk(obj_info->GetObjectTypeName());
       
       if (valid_child)
       {
@@ -145,33 +145,31 @@ PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
         
         // Vamos a darle unos valores a las propiedades de layout
         // predeterminados según el tipo de objeto
-        switch (obj_info->GetObjectType())
+        string obj_type = obj_info->GetObjectTypeName();
+        if (obj_type == "container" || obj_type == "notebook")
         {
-          case T_CONTAINER:
-          case T_NOTEBOOK:
             sizeritem->GetProperty("option")->SetValue(string("1"));
             sizeritem->GetProperty("flag")->SetValue(string("wxEXPAND | wxALL"));
-            break;
-          case T_WIDGET:
+        }
+        else if (obj_type == "widget")
+        {
             sizeritem->GetProperty("option")->SetValue(string("0"));
             sizeritem->GetProperty("flag")->SetValue(string("wxALL"));
-            break;
-          case T_SIZER:
+        }
+        else if (obj_type == "sizer")
+        {  
             sizeritem->GetProperty("option")->SetValue(string("1"));
             sizeritem->GetProperty("flag")->SetValue(string("wxEXPAND"));
-            break;
-          default:
-            break;
-        }        
+        }
       }
     }
-    else if (!valid_child && parent->GetObjectType() == T_NOTEBOOK)
+    else if (!valid_child && parent->GetObjectTypeName() == "notebook")
     {
       PObjectBase nbpage;
       Debug::Print("new notebook page");
       nbpage = PObjectBase(new ObjectBase("notebookpage"));
-      nbpage->SetObjectType(T_NOTEBOOK_PAGE);
-      valid_child = nbpage->ChildTypeOk(obj_info->GetObjectType());
+      nbpage->SetObjectTypeName("notebookpage");
+      valid_child = nbpage->ChildTypeOk(obj_info->GetObjectTypeName());
       if (valid_child)
       {
         // Pues hay que meterlo en un sizeritem, vamos a preparar el
@@ -186,7 +184,7 @@ PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
   else
   {
     // si no tiene padre sólo puede ser un objeto T_PROJECT
-    valid_child = obj_info->GetObjectType() == T_PROJECT;
+    valid_child = obj_info->GetObjectTypeName() == "project";
   }
 
   if (!valid_child)
@@ -195,7 +193,7 @@ PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
 
   // Llagados aquí el objeto se crea seguro...
   object = PObjectBase(new ObjectBase(class_name));
-  object->SetObjectType(obj_info->GetObjectType()); // *FIXME*
+  object->SetObjectTypeName(obj_info->GetObjectTypeName()); // *FIXME*
 
 
   // lo insertamos en el arbol si procede...
@@ -223,7 +221,6 @@ PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
       prop_info = class_info->GetPropertyInfo(i);
     
       PProperty property(new Property(prop_info, object));
-//      property->SetValue(TVariant(prop_info->GetType(),prop_info->GetDefaultValue()));
       property->SetValue(prop_info->GetDefaultValue());
       
       // Las propiedades están implementadas con una estructura "map",
@@ -311,7 +308,7 @@ PObjectBase  ObjectDatabase::CreateObject(TiXmlElement *xml_obj, PObjectBase par
 
 //////////////////////////////
 
-bool IncludeInPalette(ObjectType type)
+bool IncludeInPalette(string type)
 {
   return true;
 }
@@ -402,7 +399,7 @@ void ObjectDatabase::SetupPackage(string file)
         
         // vamos a añadir la interfaz "C++", predefinida para los componentes
         // y widgets
-        if (HasCppProperties(class_info->GetObjectType()))
+        if (HasCppProperties(class_info->GetObjectTypeName()))
         {
           PObjectInfo cpp_interface = GetObjectInfo("C++");
           if (cpp_interface)
@@ -415,10 +412,10 @@ void ObjectDatabase::SetupPackage(string file)
   }  
 }  
 
-bool ObjectDatabase::HasCppProperties(ObjectType type)
+bool ObjectDatabase::HasCppProperties(string type)
 {
-   return (type == T_COMPONENT || type == T_WIDGET || type == T_CONTAINER ||
-           type == T_NOTEBOOK || type == T_MENUBAR);
+   return (type == "component" || type == "widget" ||
+           type == "container" || type == "notebook" || type == "menubar");
 }
 
 
@@ -454,11 +451,7 @@ PObjectPackage ObjectDatabase::LoadPackage(string file)
         if (elem_obj->Attribute("icon"))
           icon = elem_obj->Attribute("icon");
 
-
-//        DEBUG_PRINT("  OBJ: '" + class_name + "' TYPE: '" + type + "'\n"); 
-        PObjectInfo obj_info(new ObjectInfo(class_name,
-                                            ParseObjectType(type)));
-//                                            ParseWidgetType(widget)));
+        PObjectInfo obj_info(new ObjectInfo(class_name, ParseObjectType(type)));
         if (icon != "")
           obj_info->SetIconFile(m_iconPath + '/' +icon);
         // parseamos las propiedades
@@ -546,7 +539,7 @@ PObjectPackage ObjectDatabase::LoadPackage(string file)
         m_objs.insert(ObjectInfoMap::value_type(class_name,obj_info));
         
         // y al grupo
-        if (ShowInPalette(obj_info->GetObjectType()))
+        if (ShowInPalette(obj_info->GetObjectTypeName()))
           package->Add(obj_info);
         
         elem_obj = elem_obj->NextSiblingElement(OBJINFO_TAG);
@@ -557,12 +550,12 @@ PObjectPackage ObjectDatabase::LoadPackage(string file)
   return package;
 }
 
-bool ObjectDatabase::ShowInPalette(ObjectType type)
+bool ObjectDatabase::ShowInPalette(string type)
 {
-  return ( type == T_FORM || type == T_WIDGET || type == T_SIZER ||
-           type == T_COMPONENT || type == T_CONTAINER || type == T_SPACER ||
-           type == T_NOTEBOOK || type == T_MENUBAR || type == T_MENU ||
-           type == T_MENUITEM);
+  return ( type == "form" || type == "widget" || type == "sizer" ||
+           type == "component" || type == "container" || type == "spacer" ||
+           type == "notebook" || type == "menubar" || type == "menu" ||
+           type == "menuitem");
 }
 
 
@@ -639,41 +632,11 @@ PropertyType ObjectDatabase::ParsePropertyType (string str)
 
 }
 
-ObjectType  ObjectDatabase::ParseObjectType   (string str)
+string  ObjectDatabase::ParseObjectType   (string str)
 {
-  ObjectType result;
-  
-  OTMap::iterator it = m_objTypes.find(str);
-  if (it != m_objTypes.end())
-    result = it->second;
-  else
-  {
-    result = T_ERROR;
-    assert(false);
-  }  
-  return result;
-
+  return str;
 }
 
-
-#define OT(x,y) m_objTypes.insert(OTMap::value_type(x,y))
-void ObjectDatabase::InitObjectTypes()
-{
- OT("widget",T_WIDGET);
- OT("project",T_PROJECT);
- OT("sizer",T_SIZER);
- OT("sizeritem",T_SIZERITEM);
- OT("component",T_COMPONENT);
- OT("interface",T_INTERFACE);
- OT("form",T_FORM);
- OT("spacer",T_SPACER);
- OT("container",T_CONTAINER);
- OT("notebook",T_NOTEBOOK);
- OT("notebookpage",T_NOTEBOOK_PAGE);
- OT("menubar",T_MENUBAR);
- OT("menu",T_MENU);
- OT("menuitem",T_MENUITEM);
-}
 
 #define PT(x,y) m_propTypes.insert(PTMap::value_type(x,y))
 void ObjectDatabase::InitPropertyTypes()

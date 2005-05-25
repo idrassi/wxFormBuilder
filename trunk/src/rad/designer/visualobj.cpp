@@ -40,23 +40,16 @@ PVisualObject VisualObject::CreateVisualObject
   PVisualObject vobj;
   
   PObjectInfo obj_info = obj->GetObjectInfo();
-  ObjectType type = obj->GetObjectType();
+  string type = obj->GetObjectTypeName();
 
-  switch (type)
-  {
-    case T_NOTEBOOK:
-    case T_CONTAINER:
-    case T_WIDGET:
-      vobj = PVisualObject(new VisualWindow(obj,wx_parent));
-      break;
-    case T_SIZER:
-      vobj = PVisualObject(new VisualSizer(obj,wx_parent));
-      break;
-
-    default:
-      vobj = PVisualObject(new VisualObject(obj));
-      break;
-  }
+  if (type == "notebook" || type == "container" || type == "widget")
+    vobj = PVisualObject(new VisualWindow(obj,wx_parent));
+    
+  else if (type == "sizer")
+    vobj = PVisualObject(new VisualSizer(obj,wx_parent));
+    
+  else
+    vobj = PVisualObject(new VisualObject(obj));
 
   return vobj;
 }   

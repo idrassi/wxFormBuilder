@@ -36,18 +36,8 @@
 #include "wx/wx.h"
 #include "plugins/component.h"
 
-//#include "utils/typeconv.h" // sustituir por variant
 using namespace std;
 using namespace boost;
-
-
-///////////////////////////////////////////////////////////////////////////////
-
-
-ostream& operator << (ostream &s, ObjectType type);
-
-///////////////////////////////////////////////////////////////////////////////
-
 
 class ObjectBase;
 class ObjectInfo;
@@ -169,7 +159,7 @@ class ObjectBase : public IObject, public enable_shared_from_this<ObjectBase>
   static int s_instances;
     
   string m_class;            // clase que repesenta el objeto
-  ObjectType m_type;         // RTTI
+  string m_type; //ObjectType m_type;         // RTTI
   WPObjectBase m_parent;     // nodo padre
         
   ObjectVector m_children;   // hijos        
@@ -195,7 +185,7 @@ class ObjectBase : public IObject, public enable_shared_from_this<ObjectBase>
   }
 
 
-  bool DoChildTypeOk (ObjectType type_child ,ObjectType type_parent);
+  bool DoChildTypeOk (string type_child ,string type_parent);
   /*
    * Configura la instancia en su creación.
    *
@@ -331,7 +321,7 @@ class ObjectBase : public IObject, public enable_shared_from_this<ObjectBase>
    *
    * Será útil para encontrar el widget padre.
    */
-  PObjectBase FindNearAncestor(ObjectType type);
+  PObjectBase FindNearAncestor(string type);
   
   /**
    * Obtiene el documento xml del arbol tomando como raíz el nodo actual.
@@ -381,9 +371,9 @@ class ObjectBase : public IObject, public enable_shared_from_this<ObjectBase>
    * Comprueba si el tipo de objeto pasado es válido como hijo del objeto.
    * Esta rutina es importante, ya que define las restricciónes de ubicación.
    */
-  bool ChildTypeOk (ObjectType type);
+  bool ChildTypeOk (string type);
   
-  bool IsContainer() { return (GetObjectType() == T_CONTAINER); }
+  bool IsContainer() { return (GetObjectTypeName() == "container"); }
   
   PObjectBase GetLayout();
 
@@ -392,8 +382,8 @@ class ObjectBase : public IObject, public enable_shared_from_this<ObjectBase>
    *
    * Deberá ser redefinida en cada clase derivada.
    */
-  ObjectType GetObjectType() { return m_type; }
-  void SetObjectType(ObjectType type) { m_type = type; }
+  string GetObjectTypeName() { return m_type; }
+  void SetObjectTypeName(string type) { m_type = type; }
   
   /**
    * Devuelve el descriptor del objeto.
@@ -409,7 +399,7 @@ class ObjectBase : public IObject, public enable_shared_from_this<ObjectBase>
   /**
    * Imprime el arbol en un stream.
    */
-  virtual void PrintOut(ostream &s, int indent);
+  //virtual void PrintOut(ostream &s, int indent);
   
   /**
    * Sobrecarga del operador inserción.
@@ -459,10 +449,8 @@ class ObjectInfo
   /**
    * Constructor.
    */
-  ObjectInfo(string class_name,
-             ObjectType type = T_WIDGET);
-             //WidgetType widget = W_GENERIC);
-
+  ObjectInfo(string class_name, string type = "widget");
+             
   virtual ~ObjectInfo() {};
   
   unsigned int GetPropertyCount() { return m_properties.size(); }
@@ -492,14 +480,14 @@ class ObjectInfo
    * sepa la clase derivada de ObjectBase que ha de crear a partir del
    * descriptor.
    */
-  ObjectType GetObjectType() { return m_type;   }
+  string GetObjectTypeName() { return m_type;   }
   
   string GetClassName () { return m_class;  } 
 
   /**
    * Imprime el descriptor en un stream.
    */  
-  virtual void PrintOut(ostream &s, int indent);
+  //virtual void PrintOut(ostream &s, int indent);
     
   
   /**
@@ -537,8 +525,7 @@ class ObjectInfo
  private:
   typedef map<string,PCodeInfo> CodeInfoMap;  
   string m_class;         // nombre de la clase (tipo de objeto)
-//  WidgetType m_widget;    // tipo de widget     (para una preview)
-  ObjectType m_type;      // tipo del objeto [widget, sizer, sizeritem]
+  string m_type;      // tipo del objeto [widget, sizer, sizeritem]
   string m_icon;
 
   CodeInfoMap m_codeTemp;  // plantillas de codigo K=language_name T=PCodeInfo
