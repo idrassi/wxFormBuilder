@@ -26,6 +26,40 @@
 #include "utils/stringutils.h"
 #include "utils/debug.h"
 
+ObjectType::ObjectType(string name, int id, bool hidden, bool item)
+{
+  m_id = id;
+  m_name = name;
+  m_hidden = hidden;
+  m_item = item;
+}
+
+void ObjectType::AddChildType(PObjectType type, int max)
+{
+  assert(max != 0);
+  m_childTypes.insert(ChildTypeMap::value_type(type,max));
+}
+
+int ObjectType::FindChildType(int type_id)
+{
+  int max = 0;
+  ChildTypeMap::iterator it;
+  for (it = m_childTypes.begin(); it != m_childTypes.end() && max == 0; it++)
+  {
+    PObjectType type(it->first);
+    if (type && type_id == type->GetId())
+      max = it->second;
+  }
+  return max;
+}
+
+int ObjectType::FindChildType(PObjectType type)
+{
+  int type_id = type->GetId();
+  return FindChildType(type_id);
+}
+///////////////////////////////////////////////////////////////////////////////
+
 IntList::IntList(string value)
 {
   SetList(value);

@@ -92,24 +92,25 @@ class ObjectDatabase
  private:
   typedef vector<PObjectPackage> PackageVector; 
   
-  // diccionarios para obtener el valor numérico a partir de la cadena
+  // diccionario para obtener el valor numérico a partir de la cadena
   // de texto del archivo XML.
-  //typedef map<string,ObjectType> OTMap;
-//  typedef map<string,WidgetType> WTMap;
   typedef map<string,PropertyType> PTMap;
+  
+  typedef map<string,PObjectType> ObjectTypeMap;
   typedef vector<wxDynamicLibrary *> CLibraryVector;
   
+    
   string m_xmlPath; // directorio donde se encuentran los archivos xml
   string m_iconPath;
   ObjectInfoMap m_objs;
   PackageVector m_pkgs;
   PTMap m_propTypes;
   CLibraryVector m_libs;
+  ObjectTypeMap m_types; // registro de tipos de objetos.
   
   /**
-   * Inicializa el dicctionario de tipos de objetos.
+   * Inicializa el dicctionario de tipos de propiedades.
    */
-  //void InitObjectTypes();
   void InitPropertyTypes();
     
   /**
@@ -139,8 +140,9 @@ class ObjectDatabase
   // rutinas de conversión
   PropertyType ParsePropertyType (string str);
   string   ParseObjectType   (string str); 
+
   
-  
+    PObjectType GetObjectType(string name);
  public:    
   ObjectDatabase();
   ~ObjectDatabase();
@@ -171,6 +173,11 @@ class ObjectDatabase
    * todos los paquetes.
    */
   bool LoadFile(string file="packages.xml");
+
+  /**
+   * Carga las definiciones de tipos de objetos.
+   */
+  bool LoadObjectTypes();  
   
   /**
    * Fabrica de objetos.

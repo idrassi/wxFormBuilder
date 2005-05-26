@@ -449,7 +449,7 @@ class ObjectInfo
   /**
    * Constructor.
    */
-  ObjectInfo(string class_name, string type = "widget");
+  ObjectInfo(string class_name, PObjectType type);
              
   virtual ~ObjectInfo() {};
   
@@ -467,20 +467,13 @@ class ObjectInfo
   void AddPropertyInfo(PPropertyInfo pinfo);
 
   /**
-   * Devuelve el tipo de widget asociado al objeto.
-   *
-   * Este atributo será util para saber como se representa el objeto,
-   * permitiendo así, añadir widgets propios derivados de los widgets
-   * originales.
-   */
-//  WidgetType GetWidgetType() { return m_widget; }
-  
-  /**
    * Devuelve el tipo de objeto, será util para que el constructor de objetos
    * sepa la clase derivada de ObjectBase que ha de crear a partir del
    * descriptor.
    */
-  string GetObjectTypeName() { return m_type;   }
+  string GetObjectTypeName() { return m_type->GetName();   }
+  
+  PObjectType GetObjectType() { return m_type; }
   
   string GetClassName () { return m_class;  } 
 
@@ -525,7 +518,9 @@ class ObjectInfo
  private:
   typedef map<string,PCodeInfo> CodeInfoMap;  
   string m_class;         // nombre de la clase (tipo de objeto)
-  string m_type;      // tipo del objeto [widget, sizer, sizeritem]
+                         
+  PObjectType m_type;     // tipo del objeto
+  
   string m_icon;
 
   CodeInfoMap m_codeTemp;  // plantillas de codigo K=language_name T=PCodeInfo

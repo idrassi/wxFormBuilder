@@ -26,30 +26,89 @@
 
 #include <vector>
 #include <string>
+#include <map>
+#include <boost/smart_ptr.hpp>
+
 #include "wx/wx.h"
 
 using namespace std;
-/*
-typedef enum
+using namespace boost;
+
+class ObjectType;
+
+typedef shared_ptr<ObjectType> PObjectType;
+typedef weak_ptr<ObjectType> WPObjectType;
+
+/**
+ * Representa el tipo de objeto.
+ *
+ * Los tipos de objetos son necesarios para controlar las restricciones de
+ * ubicación de los objetos dentro del árbol. Dichas restricciones vendrán 
+ * establecidas en el fichero objtypes.xml, y en principio se pueden definir 
+ * tantos tipos de objetos como sean necesarios.
+ *
+ * Aunque el conjunto de tipos está pensado para que sea fácilmente modificable,
+ * actualmente, en el código hay muchas dependencias con los nombres de tipos 
+ * concretos. Así que una modificación en el nombre de un tipo casi con toda 
+ * seguridad causará fallos en el funcionamiento de la aplicación.
+ * 
+ * @todo hay que eliminar las dependencias en el código con los nombres de los
+ *       tipos. Para ello lo mejor será definir una serie de atributos asociados
+ *       al tipo. 
+ *       Por ejemplo, los objetos que sean "items" (objetos ficticios
+ *       que añaden ciertas propiedades al objeto que contiene como puede ser
+ *       un sizeritem), no deben aparecer en el "object tree" y deben mostrar
+ *       las propiedades junto con las del objeto que contiene en el "object 
+ *       inspector". En ese caso, tanto el "object tree" como el
+ *        "object inspector" consultarán al tipo si éste tiene el
+ *       atributo item a true.
+ */
+class ObjectType
 {
-  T_ERROR,
-  T_PROJECT,
-  T_FORM,
-  T_INTERFACE,
-  T_COMPONENT,
-  T_WIDGET,    
-  T_SIZER,
-  T_SIZERITEM,
-  T_SPACER,
-  T_BITMAP,
-  T_CONTAINER,
-  T_NOTEBOOK,    // de momento lo trataremos como un tipo especial
-  T_NOTEBOOK_PAGE,
-  T_MENUBAR,
-  T_MENU,
-  T_MENUITEM
-} ObjectType;
-*/
+ public:
+ 
+  ObjectType(string name, int id, bool hidden = false, bool item = false);
+  
+  int    GetId()     { return m_id;     }
+  string GetName()   { return m_name;   }
+  bool   IsHidden()  { return m_hidden; }
+  bool   IsItem()    { return m_item;   }
+
+  
+  /**
+   * Añade el tipo de objeto a la lista de posibles hijos.
+   */
+  void AddChildType(PObjectType type, int max = -1);
+  
+  /**
+   * Busca si el tipo pasado como parámetros está entre sus posibles
+   * hijos.
+   * @return numero máximo de ocurrencias del objeto como hijo.
+   *         -1 = numero ilimitado, 0 = ninguna
+   */
+  int FindChildType(int type_id);
+  int FindChildType(PObjectType type);
+  
+ private: 
+  
+  /**
+   * Registro con los tipos de los hijos posibles y el número máximo
+   * de estos.
+   * @note vamos a usar smart-pointers de tipo "weak" ya que puede haber muchas
+   *       referencias cruzadas.
+   */
+  typedef map<WPObjectType, int> ChildTypeMap;
+  
+  int m_id;        /**< identificador numérico del tipo de objeto */
+  string m_name;   /**< cadena de texto asociado al tipo */
+  bool m_hidden;   /**< indica si está oculto en el ObjectTree */
+  bool m_item;     /**< indica si es un "item". Los objetos contenidos en
+                     *  en un item, muestran las propiedades de éste junto
+                     *  con las propias del objeto.
+                     */
+
+  ChildTypeMap m_childTypes; /**< registro de posibles hijos */
+};
 
 /**
  * Tipos de propiedades.

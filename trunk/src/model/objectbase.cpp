@@ -593,7 +593,7 @@ wxArrayInt ObjectBase::GetPropertyAsIntegerArray(const wxString& pname)
           
 ///////////////////////////////////////////////////////////////////////////////
 
-ObjectInfo::ObjectInfo(string class_name, string type)
+ObjectInfo::ObjectInfo(string class_name, PObjectType type)
 {
   m_class = class_name;
   m_type = type;

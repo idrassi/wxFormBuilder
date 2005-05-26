@@ -451,7 +451,7 @@ PObjectPackage ObjectDatabase::LoadPackage(string file)
         if (elem_obj->Attribute("icon"))
           icon = elem_obj->Attribute("icon");
 
-        PObjectInfo obj_info(new ObjectInfo(class_name, ParseObjectType(type)));
+        PObjectInfo obj_info(new ObjectInfo(class_name, GetObjectType(type)));
         if (icon != "")
           obj_info->SetIconFile(m_iconPath + '/' +icon);
         // parseamos las propiedades
@@ -655,3 +655,83 @@ void ObjectDatabase::InitPropertyTypes()
   PT("wxColour",PT_WXCOLOUR);
   PT("bitmap",PT_BITMAP);
 }
+
+bool ObjectDatabase::LoadObjectTypes()
+{
+  bool result = false;
+  TiXmlDocument doc(m_xmlPath + '/' + "objtypes.xml");
+  result = doc.LoadFile();
+  
+  if (result)
+  {
+    // se realizará en dos pasos, primero importamos cada uno de los ObjectTypes
+    // definidos y a continuación se añadirán los posibles ObjectTypes hijos
+    // de cada uno.
+    TiXmlElement* root = doc.FirstChildElement("definitions");
+    if (root)
+    {
+      TiXmlElement* elem = root->FirstChildElement("objtype");
+      while (elem)
+      {
+        bool hidden = false, item = false;
+        string name = elem->Attribute("name");
+        if (elem->Attribute("hidden") && string(elem->Attribute("hidden"))=="1")
+          hidden = true;
+        if (elem->Attribute("item") && string(elem->Attribute("item"))=="1")
+          item = true;
+          
+        int id = m_types.size();  
+        PObjectType objType(new ObjectType(name,id,hidden,item));
+        m_types.insert(ObjectTypeMap::value_type(name,objType));
+        
+        elem = elem->NextSiblingElement("objtype");
+      }
+        
+      // ahora continuamos registrando añadiendo las referencias de cada
+      // posible hijo
+      elem = root->FirstChildElement("objtype");
+      while (elem)
+      {
+        string name = elem->Attribute("name");
+        
+        // obtenemos el objType
+        PObjectType objType = GetObjectType(name);
+        wxLogMessage(wxString::Format(_("ObjectType %s can be parent of..."),name.c_str()));
+        TiXmlElement *child = elem->FirstChildElement("childtype");
+        while (child)
+        {
+          int nmax = -1; // sin límite
+          string childname = child->Attribute("name");
+          wxLogMessage(wxString::Format(_("%s"),childname.c_str()));
+          
+          
+          if (child->Attribute("nmax"))
+            //nmax = StringUtils::StrToInt(child->Attribute("nmax"));
+            nmax = 1;
+          
+          PObjectType childType = GetObjectType(childname);
+          assert(childType);
+          
+          objType->AddChildType(childType, nmax);
+          
+          child = child->NextSiblingElement("childtype");
+        }
+        elem = elem->NextSiblingElement("objtype");
+      }
+    }
+  }
+  else
+    wxLogError("Error loading object types");
+  return true;
+}
+
+PObjectType ObjectDatabase::GetObjectType(string name)
+{
+  PObjectType type;
+  ObjectTypeMap::iterator it = m_types.find(name);
+  if (it != m_types.end())
+    type = it->second;
+    
+  return type;
+}
+

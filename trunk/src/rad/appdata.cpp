@@ -33,6 +33,7 @@ ApplicationData::ApplicationData()
   m_objDb = PObjectDatabase(new ObjectDatabase());
   m_objDb->SetXmlPath("./xml/");
   m_objDb->SetIconPath("./xpm/");
+  m_objDb->LoadObjectTypes();
   m_objDb->LoadFile();
 }  
   
