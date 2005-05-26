@@ -346,7 +346,7 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
   {
     wxColour col = prop->GetValueAsColour();
     if (prop->GetValueAsString() == _T(""))
-        result = fbColourProperty(name, wxPG_LABEL, _T("Default"));
+        result = fbColourProperty(name, wxPG_LABEL, wxColour(255, 255, 254));
     else
         result = fbColourProperty(name, wxPG_LABEL, prop->GetValueAsColour());
   }
