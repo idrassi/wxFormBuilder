@@ -222,6 +222,14 @@ class CheckBoxComponent : public ComponentBase
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
   }
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxCheckBox"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();    
+    xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+    return xrc.GetXrcObject();
+  }
 };
 
 class StaticBitmapComponent : public ComponentBase
@@ -340,6 +348,13 @@ class MenuBarComponent : public ComponentBase
   {
     return NULL;
   }	
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxMenuBar"), obj->GetPropertyAsString(_("name")));
+    xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+    return xrc.GetXrcObject();
+  }
 };
 
 class MenuComponent : public ComponentBase
@@ -349,6 +364,13 @@ class MenuComponent : public ComponentBase
   {
     return NULL;
   }	
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxMenu"), obj->GetPropertyAsString(_("name")));
+    xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+    return xrc.GetXrcObject();
+  }
 };
 
 class MenuItemComponent : public ComponentBase
@@ -358,6 +380,15 @@ class MenuItemComponent : public ComponentBase
   {
     return NULL;
   }	
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxMenuItem"), obj->GetPropertyAsString(_("name")));
+    xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+    xrc.AddProperty(_("help"),_("help"),XRC_TYPE_TEXT);
+    xrc.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_TEXT);
+    return xrc.GetXrcObject();
+  }
 };
 
 
