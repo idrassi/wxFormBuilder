@@ -139,10 +139,11 @@ class ObjectDatabase
   
   // rutinas de conversión
   PropertyType ParsePropertyType (string str);
-  string   ParseObjectType   (string str); 
+  string       ParseObjectType   (string str); 
 
   
-    PObjectType GetObjectType(string name);
+  PObjectType GetObjectType(string name);
+  
  public:    
   ObjectDatabase();
   ~ObjectDatabase();
@@ -209,11 +210,6 @@ class ObjectDatabase
    * (p.e. m_button1, m_button2 ...)
    */
   void ResetObjectCounters();
-  
-  /**
-   * Fabrica de objetos del editor visual.
-   */
-//  PVisualObject CreateVisualObject(PObjectBase obj, wxObject *parent);
 };
 
 

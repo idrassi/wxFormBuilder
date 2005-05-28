@@ -161,8 +161,10 @@ void ObjectTree::PropertyModified(PProperty prop)
 void ObjectTree::AddChildren(PObjectBase obj, wxTreeItemId &parent, bool is_root)
 {
   // los sizeritems son objetos "ficticios", y no se deben mostrar en el árbol
-  if (obj->GetObjectTypeName() == "sizeritem" ||
-      obj->GetObjectTypeName() == "notebookpage")
+  //if (obj->GetObjectTypeName() == "sizeritem" ||
+  //    obj->GetObjectTypeName() == "notebookpage")
+  
+  if (obj->GetObjectInfo()->GetObjectType()->IsItem())
     AddChildren(obj->GetChild(0),parent);
   else
   {

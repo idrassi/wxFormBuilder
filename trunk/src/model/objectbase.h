@@ -372,6 +372,7 @@ class ObjectBase : public IObject, public enable_shared_from_this<ObjectBase>
    * Esta rutina es importante, ya que define las restricciónes de ubicación.
    */
   bool ChildTypeOk (string type);
+  bool ChildTypeOk (PObjectType type);
   
   bool IsContainer() { return (GetObjectTypeName() == "container"); }
   
@@ -514,7 +515,7 @@ class ObjectInfo
    */
   void SetComponent(IComponent *c) { m_component = c; };
   IComponent* GetComponent() { return m_component; };
-  
+   
  private:
   typedef map<string,PCodeInfo> CodeInfoMap;  
   string m_class;         // nombre de la clase (tipo de objeto)

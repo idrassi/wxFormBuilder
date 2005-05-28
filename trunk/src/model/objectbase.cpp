@@ -366,6 +366,33 @@ bool ObjectBase::ChildTypeOk (string type)
   return DoChildTypeOk(type, GetObjectTypeName());
 }
 
+bool ObjectBase::ChildTypeOk (PObjectType type)
+{
+  // buscamos si puede haber objectos del tipo "type" como hijos
+  // del actual objeto tipo.
+  int nmax = GetObjectInfo()->GetObjectType()->FindChildType(type);
+  
+  if (nmax == 0)
+    return false;
+    
+  if (nmax < 0)
+    return true;
+    
+  // llegados aquí hay que comprobar el número de hijos del tipo pasado
+  int count = 0;
+  for (unsigned int i=0; i < GetChildCount() && count <= nmax; i++)
+  {
+    if (GetChild(i)->GetObjectInfo()->GetObjectType() == type)
+      count++;
+  }
+  
+  if (count > nmax)
+    return false;
+  
+  return true;
+  
+}
+
 PObjectBase ObjectBase::GetLayout()
 {
   PObjectBase result;

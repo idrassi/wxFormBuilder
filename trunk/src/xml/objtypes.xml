@@ -23,7 +23,7 @@
     <childtype name="sizer" nmax="1" />
   </objtype>
   
-  <objtype name="sizeritem">
+  <objtype name="sizeritem" item="1">
     <childtype name="widget" nmax="1" />
     <childtype name="container" nmax="1" />
     <childtype name="sizer" nmax="1" />
@@ -36,7 +36,7 @@
     <childtype name="notebookpage" />
   </objtype>
   
-  <objtype name="notebookpage">
+  <objtype name="notebookpage" item="1">
     <childtype name="container" nmax="1" />
   </objtype>
   
