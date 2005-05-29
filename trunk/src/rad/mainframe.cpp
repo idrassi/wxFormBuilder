@@ -92,11 +92,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   
   wxBoxSizer *top_sizer = new wxBoxSizer(wxVERTICAL);
   
-//  wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-//  m_toolPanel = new ToolPanel(this,-1);
-//  m_palette = new Palette(doc, this,-1);
-//  sizer->Add(m_toolPanel,0,wxEXPAND,0); 
-//  sizer->Add(m_palette,1,wxEXPAND,0);
+
   
   ///////////////
 
@@ -110,17 +106,14 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   wxSplitterWindow *h_splitter = new wxSplitterWindow(left,-1,wxDefaultPosition,wxDefaultSize, wxSP_3D | wxSP_LIVE_UPDATE);//wxSP_BORDER);
 
   wxPanel *tree_panel = new wxPanel(h_splitter,-1);
-/*  wxStaticText *tree_text = new wxStaticText(tree_panel,-1,wxT("OBJECT TREE"),wxDefaultPosition,wxDefaultSize,wxSIMPLE_BORDER);
-  tree_text->SetBackgroundColour(wxColour(100,100,100));
-  tree_text->SetForegroundColour(*wxWHITE);
-  tree_text->SetFont(wxFont(8, wxSWISS, wxNORMAL, wxBOLD, 0, wxT("")));*/
   Title *tree_title = new Title(tree_panel,wxT("Object Tree"));
 
   m_objTree = new ObjectTree(tree_panel,-1);
   data->AddDataObserver(m_objTree);
+  m_objTree->SetData(data);
+  m_objTree->Create();
   
   wxBoxSizer *tree_sizer = new wxBoxSizer(wxVERTICAL);
-//  tree_sizer->Add(tree_text,0,wxEXPAND,0);
   tree_sizer->Add(tree_title,0,wxEXPAND,0);
   tree_sizer->Add(m_objTree,1,wxEXPAND,0);
   
@@ -130,21 +123,16 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
 
   wxPanel *obj_inspPanel = new wxPanel(h_splitter,-1);
   wxBoxSizer *obj_insp_sizer = new wxBoxSizer(wxVERTICAL);
-/*  wxStaticText *text_obj_insp = new wxStaticText(obj_inspPanel,-1,wxT("OBJECT PROPERTIES"),wxDefaultPosition,wxDefaultSize,wxSIMPLE_BORDER);
-  text_obj_insp->SetBackgroundColour(wxColour(100,100,100));
-  text_obj_insp->SetForegroundColour(*wxWHITE);
-  text_obj_insp->SetFont(wxFont(8, wxSWISS, wxNORMAL, wxBOLD, 0, wxT("")));*/
+
   Title *obj_insp_title = new Title(obj_inspPanel,wxT("Object Properties"));
     
   m_objInsp = new ObjectInspector(obj_inspPanel,-1);
   data->AddDataObserver(m_objInsp);
 
-//  obj_insp_sizer->Add(text_obj_insp,0,wxEXPAND,0);
   obj_insp_sizer->Add(obj_insp_title,0,wxEXPAND,0);
 
   obj_insp_sizer->Add(m_objInsp,1,wxEXPAND,0);
-  
-  //h_splitter->SplitHorizontally(m_objTree,m_objInsp,0);
+
   h_splitter->SplitHorizontally(tree_panel,obj_inspPanel,400);
   obj_inspPanel->SetSizer(obj_insp_sizer);
   obj_inspPanel->SetAutoLayout(true);

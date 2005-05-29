@@ -33,7 +33,7 @@
 #include "icons/ot_menuitem.xpm"
 #include "utils/debug.h"
 #include <wx/imaglist.h>
-
+#include <wx/image.h>
 
 BEGIN_EVENT_TABLE(ObjectTree,ObjectTreeGUI)
   EVT_TREE_SEL_CHANGED(-1, ObjectTree::OnSelChanged)
@@ -43,7 +43,7 @@ END_EVENT_TABLE()
 ObjectTree::ObjectTree(wxWindow *parent, int id)
   : ObjectTreeGUI(parent,id)
 {
-  wxImageList *img_list = new wxImageList(16,16);
+ /* wxImageList *img_list = new wxImageList(16,16);
   img_list->Add(wxBitmap(ot_project_xpm));
   img_list->Add(wxBitmap(ot_form_xpm));
   img_list->Add(wxBitmap(ot_sizer_xpm));
@@ -53,11 +53,11 @@ ObjectTree::ObjectTree(wxWindow *parent, int id)
   img_list->Add(wxBitmap(ot_menubar_xpm));
   img_list->Add(wxBitmap(ot_menu_xpm));
   img_list->Add(wxBitmap(ot_menuitem_xpm));
-  
-  m_tcObjects->AssignImageList(img_list);
+
+  m_tcObjects->AssignImageList(img_list);*/
 }
 
-void ObjectTree::Create()
+void ObjectTree::RebuildTree()
 {
   m_tcObjects->Freeze();
 
@@ -109,12 +109,12 @@ void ObjectTree::OnRightClick(wxTreeEvent &event)
 
 void ObjectTree::ProjectLoaded()
 {
-  Create();
+  RebuildTree();
 }
 
 void ObjectTree::ProjectRefresh()
 {
-  Create();
+  RebuildTree();
 }
   
 void ObjectTree::ProjectSaved()
@@ -137,13 +137,13 @@ void ObjectTree::ObjectSelected(PObjectBase obj)
 void ObjectTree::ObjectCreated(PObjectBase obj)
 {
   // seguro que se puede optimizar
-  Create();
+  RebuildTree();
 }
 
 void ObjectTree::ObjectRemoved(PObjectBase obj)
 {
   // seguro que se puede optimizar
-  Create();
+  RebuildTree();
 }
 
 void ObjectTree::PropertyModified(PProperty prop)
@@ -183,7 +183,8 @@ void ObjectTree::AddChildren(PObjectBase obj, wxTreeItemId &parent, bool is_root
     m_map.insert(ObjectItemMap::value_type(obj,new_parent));
     
     // configuramos su imagen
-    int image_idx = GetImageIndex(obj->GetObjectTypeName());
+    //int image_idx = GetImageIndex(obj->GetObjectTypeName());
+    int image_idx = GetImageIndex(obj->GetObjectInfo()->GetClassName());
     
     m_tcObjects->SetItemImage(new_parent,image_idx);
     m_tcObjects->SetItemSelectedImage(new_parent,image_idx);
@@ -203,7 +204,7 @@ void ObjectTree::AddChildren(PObjectBase obj, wxTreeItemId &parent, bool is_root
   }  
 }
 
-int ObjectTree::GetImageIndex (string type)
+/*int ObjectTree::GetImageIndex (string type)
 {
   // TO-DO: eliminar dependencias con el tipo usando el icono
   // definido para el componente en el fichero XML (el de la paleta)
@@ -229,6 +230,17 @@ int ObjectTree::GetImageIndex (string type)
     image = 8;
   
   return image;
+}*/
+
+int ObjectTree::GetImageIndex (string name)
+{
+  int index = 0; //default icon
+  
+  IconIndexMap::iterator it = m_iconIdx.find(name);
+  if (it != m_iconIdx.end())
+    index = it->second;
+  
+  return index;
 }
 
 void ObjectTree::UpdateItem(wxTreeItemId id, PObjectBase obj)
@@ -244,6 +256,51 @@ void ObjectTree::UpdateItem(wxTreeItemId id, PObjectBase obj)
   
   // actualizamos el item
   m_tcObjects->SetItemText(id,text);
+}
+
+void ObjectTree::Create()
+{
+  // Cramos la lista de iconos obteniendo los iconos de los paquetes.
+  unsigned int index = 0;
+  m_iconList = new wxImageList(21,21);
+  
+  {
+    wxBitmap icon(ot_project_xpm);
+    wxImage img = icon.ConvertToImage();
+    //img.Rescale(21,21);
+    img.Resize(wxSize(21,21),wxPoint(0,0));
+    m_iconList->Add(wxBitmap(img));
+    m_iconIdx.insert(IconIndexMap::value_type("_default_",index++));
+  }
+  
+  unsigned int pkg_count = GetData()->GetPackageCount();
+  for (unsigned int i = 0; i< pkg_count;i++)
+  {
+    PObjectPackage pkg = GetData()->GetPackage(i);
+
+    unsigned int j;
+    for (j=0;j<pkg->GetObjectCount();j++)
+    {
+      string comp_name(pkg->GetObjectInfo(j)->GetClassName());
+      wxString icon_file(pkg->GetObjectInfo(j)->GetIconFile().c_str(),wxConvUTF8);
+
+      wxBitmap icon;
+      if (icon.LoadFile(icon_file,wxBITMAP_TYPE_XPM))
+      {
+        // todas las imagenes deben tener el mismo tamaño, en caso contrario
+        // el control hace cosas raras
+        wxImage img = icon.ConvertToImage();
+        //img.Rescale(21,21);
+        img.Resize(wxSize(21,21),wxPoint(0,0));
+        
+        wxLogMessage(wxString::Format("Adding icon %s,%d",comp_name.c_str(), index));
+        m_iconList->Add(wxBitmap(img));
+        m_iconIdx.insert(IconIndexMap::value_type(comp_name,index++));
+      }
+    }
+  }
+  
+  m_tcObjects->AssignImageList(m_iconList);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
