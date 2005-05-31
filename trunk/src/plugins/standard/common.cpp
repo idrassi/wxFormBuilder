@@ -341,6 +341,24 @@ class ListCtrlComponent : public ComponentBase
   } 
 };
 
+class StatusBarComponent : public ComponentBase
+{
+ public: 
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    return new wxStatusBar((wxWindow*)parent, -1,
+      obj->GetPropertyAsInteger(_("style")));
+  }
+
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxStatusBar"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();    
+    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    return xrc.GetXrcObject();
+  } 
+};
+
 class MenuBarComponent : public ComponentBase
 {
  public:
@@ -391,7 +409,20 @@ class MenuItemComponent : public ComponentBase
   }
 };
 
-
+class SeparatorComponent : public ComponentBase
+{
+ public:
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    return NULL;
+  }	
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("separator"));
+    return xrc.GetXrcObject();
+  }
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -414,7 +445,9 @@ BEGIN_LIBRARY()
   COMPONENT("wxMenuBar", MenuBarComponent)
   COMPONENT("wxMenu", MenuComponent)
   COMPONENT("wxMenuItem", MenuItemComponent)
+  COMPONENT("separator", SeparatorComponent)
   COMPONENT("wxListCtrl", ListCtrlComponent)
+  COMPONENT("wxStatusBar", StatusBarComponent)
 
   // wxWindow style macros
   MACRO(wxSIMPLE_BORDER)
@@ -471,6 +504,9 @@ BEGIN_LIBRARY()
   MACRO(wxLC_SORT_DESCENDING)
   MACRO(wxLC_HRULES)
   MACRO(wxLC_VRULES)
+  
+  // wxStatusBar
+  MACRO(wxST_SIZEGRIP)
   
 END_LIBRARY()
 

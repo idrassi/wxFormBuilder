@@ -127,14 +127,18 @@ TiXmlElement* XrcCodeGenerator::GetElement(PObjectBase obj)
 {
   TiXmlElement *element = NULL;
   
-  IComponent *comp = obj->GetObjectInfo()->GetComponent();  
+  IComponent *comp = obj->GetObjectInfo()->GetComponent(); 
+
   if (comp)
     element = comp->ExportToXrc(obj.get());
     
   if (element)
   {
     for (unsigned int i=0; i<obj->GetChildCount(); i++)
-      element->LinkEndChild(GetElement(obj->GetChild(i)));
+    {
+      TiXmlElement *aux = GetElement(obj->GetChild(i));
+      if (aux) element->LinkEndChild(aux);
+    }
   }
   
   return element;

@@ -240,5 +240,11 @@
       <option name="wxLC_HRULES" />
       <option name="wxLC_VRULES" />wxLC_ICON</property>
   </objectinfo>
+  <objectinfo class="wxStatusBar" icon="statusbar.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_statusBar</property>
+    <property name="style" type="bitlist">
+      <option name="wxST_SIZEGRIP" />wxST_SIZEGRIP</property>
+  </objectinfo>
   
 </package>

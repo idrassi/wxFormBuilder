@@ -113,6 +113,7 @@ void VisualEditor::Create()
 {
   bool need_fit = false;
   PObjectBase menubar;
+  wxWindow *statusbar = NULL;
   
   Debug::Print("[VisualEditor::Update] Generating preview...");
   PObjectBase root = GetData()->GetSelectedForm();
@@ -157,12 +158,18 @@ void VisualEditor::Create()
         menubar = child;
       else
         Generate(child,m_back,NULL,PVisualObject()); 
+      
+      if (child->GetClassName() == "wxStatusBar")
+      {
+        VisualObjectMap::iterator it = m_map.find(child);
+        statusbar = shared_dynamic_cast<VisualWindow>(it->second)->GetWindow();
+      }
     }
     
     if (need_fit)
       m_back->Fit();
       
-    if (menubar) m_back->SetMenubar(menubar);
+    if (menubar) m_back->SetFrameWidgets(menubar, statusbar);
     
   }
   else
@@ -240,7 +247,7 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *wxparent,
   // 1. El objeto creado sea un sizer y el objeto padre sea una ventana.
   // 2. No objeto padre (wxparent == m_back).
   
-  if ((obj_view.Sizer() && parent_view.Window()) || !vparent)
+  if ((obj_view.Sizer() && parent_view.Window()) || (!vparent && obj_view.Sizer()))
   {
     wxparent->SetSizer(obj_view.Sizer());
     wxparent->SetAutoLayout(true);
@@ -344,37 +351,55 @@ void GridPanel::HighlightSelection(wxDC& dc)
   }
 }
 
-void GridPanel::SetMenubar(PObjectBase menubar)
+wxMenu* GridPanel::GetMenuFromObject(PObjectBase menu)
 {
-  /* Falta soporte para submenús, pero es un comienzo */
+  wxMenu *menuWidget = new wxMenu();
+  for (unsigned int j = 0; j < menu->GetChildCount(); j++)
+  {
+    PObjectBase menuItem = menu->GetChild(j);
+    if (menuItem->GetObjectTypeName() == "menu")
+      menuWidget->Append(wxID_HIGHEST + 1, menuItem->GetPropertyAsString(_T("label")), GetMenuFromObject(menuItem));
+    else if (menuItem->GetClassName() == "separator")
+      menuWidget->AppendSeparator();
+    else
+    {
+      wxString label = menuItem->GetPropertyAsString(_T("label"));
+      label.Replace(_T("\\t"), _T("\t"));
+      wxMenuItem *item = new wxMenuItem(menuWidget, wxID_HIGHEST + 1, label, menuItem->GetPropertyAsString(_T("help")));
+      if (!menuItem->GetProperty("bitmap")->IsDefaultValue())
+        item->SetBitmap(menuItem->GetPropertyAsBitmap("bitmap"));
+      menuWidget->Append(item);
+    }
+  }
+  return menuWidget; 
+}
+
+void GridPanel::SetFrameWidgets(PObjectBase menubar, wxWindow *statusbar)
+{
   assert(menubar->GetObjectTypeName() == "menubar");
   Menubar *mbWidget = new Menubar(this, -1);
   for (unsigned int i = 0; i < menubar->GetChildCount(); i++)
   {
     PObjectBase menu = menubar->GetChild(i);
-    wxMenu *menuWidget = new wxMenu();
-    for (unsigned int j = 0; j < menu->GetChildCount(); j++)
-    {
-      PObjectBase menuItem = menu->GetChild(j);
-      if (menuItem->GetClassName() == "separator")
-        menuWidget->AppendSeparator();
-      else
-      {
-        wxString label = menuItem->GetPropertyAsString(_T("label"));
-        label.Replace(_T("\\t"), _T("\t"));
-        wxMenuItem *item = new wxMenuItem(menuWidget, wxID_HIGHEST + 1, label, menuItem->GetPropertyAsString(_T("help")));
-        if (!menuItem->GetProperty("bitmap")->IsDefaultValue())
-          item->SetBitmap(menuItem->GetPropertyAsBitmap("bitmap"));
-        menuWidget->Append(item);
-      }
-    }
+    wxMenu *menuWidget = GetMenuFromObject(menu);
     mbWidget->AppendMenu(menu->GetPropertyAsString(_T("label")), menuWidget);
   }
+  
   wxSizer *mainSizer = GetSizer();
+  
+  SetSizer(NULL, false);
+  
   wxSizer *dummySizer = new wxBoxSizer(wxVERTICAL);
   dummySizer->Add(mbWidget, 0, wxEXPAND | wxTOP | wxBOTTOM, 3);
   dummySizer->Add(new wxStaticLine(this, -1), 0, wxEXPAND | wxALL, 0);
-  if (mainSizer) dummySizer->Add(mainSizer, 1, wxEXPAND | wxALL, 0);
+  
+  if (mainSizer)
+    dummySizer->Add(mainSizer, 1, wxEXPAND | wxALL, 0);
+  else
+    dummySizer->AddStretchSpacer(1);
+    
+  if (statusbar) dummySizer->Add(statusbar, 0, wxEXPAND | wxALL, 0);
+  
   SetSizer(dummySizer, false);
   Layout();
 }
