@@ -305,7 +305,7 @@ PObjectBase ObjectDatabase::CreateObject(string classname, PObjectBase parent)
   {
     // Comprobamos si el tipo es válido
     PObjectType parentType = parent->GetObjectInfo()->GetObjectType();
-    int max = parentType->FindChildType(objInfo->GetObjectType());
+    int max = parentType->FindChildType(objType);
     
     if (max != 0) // tipo válido
     {
@@ -330,6 +330,8 @@ PObjectBase ObjectDatabase::CreateObject(string classname, PObjectBase parent)
         
         if (childType->IsItem() && max != 0)
         {
+          max = parentType->FindChildType(childType);
+          
           // si el tipo es un item y además el tipo del objeto a crear
           // puede ser hijo del tipo del item vamos a intentar crear la
           // instancia del item para crear el objeto como hijo de este

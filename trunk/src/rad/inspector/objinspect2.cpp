@@ -262,6 +262,7 @@ void ObjectInspector::Create()
         CreateCategory(wxString(info_base->GetClassName().c_str(),wxConvUTF8), sel_obj,info_base,map);
       }  
 
+      /*
       // Añadimos la categoría "layout" si el objeto está contenido en un sizer
       PObjectBase layout;
       layout = sel_obj->GetLayout();  
@@ -277,6 +278,13 @@ void ObjectInspector::Create()
       {
         CreateCategory(wxT("Page"), sel_obj->GetParent(),
           sel_obj->GetParent()->GetObjectInfo(),dummy);
+      }
+      */
+      
+      PObjectBase parent = sel_obj->GetParent();
+      if (parent && parent->GetObjectInfo()->GetObjectType()->IsItem())
+      {
+        CreateCategory(_WXSTR(parent->GetObjectInfo()->GetClassName()), parent, parent->GetObjectInfo(),dummy);
       }
       
     }
