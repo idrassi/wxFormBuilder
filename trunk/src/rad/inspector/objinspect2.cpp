@@ -473,7 +473,7 @@ void ObjectInspector::ObjectRemoved(PObjectBase obj)
 void ObjectInspector::PropertyModified(PProperty prop)
 {
   wxPGId pgid = m_pg->GetPropertyByLabel(_WXSTR(prop->GetName()));
-  wxASSERT(pgid.IsOk());
+  if (!pgid.IsOk()) return; // Puede que no se esté mostrando ahora esa página
   wxPGProperty *pgProp = pgid.GetPropertyPtr();
 
   switch (prop->GetType())

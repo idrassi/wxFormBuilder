@@ -42,7 +42,7 @@ PVisualObject VisualObject::CreateVisualObject
   PObjectInfo obj_info = obj->GetObjectInfo();
   string type = obj->GetObjectTypeName();
 
-  if (type == "notebook" || type == "container" || type == "widget")
+  if (type == "notebook" || type == "container" || type == "widget" || type == "statusbar")
     vobj = PVisualObject(new VisualWindow(obj,wx_parent));
     
   else if (type == "sizer")

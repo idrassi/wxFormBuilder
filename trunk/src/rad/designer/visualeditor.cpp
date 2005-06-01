@@ -213,7 +213,8 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *wxparent,
   // FIXME: eliminar dependencias con ObjectType
   //        (quizá con una función en el plugin: bool IsContainer()
   if (obj_view.Window() &&
-      (obj->GetObjectTypeName() == "widget" || obj->GetObjectTypeName() == "container"))
+      (obj->GetObjectTypeName() == "widget" || obj->GetObjectTypeName() == "container")
+      || obj->GetObjectTypeName() == "statusbar")
   {
     obj_view.Window()->PushEventHandler(
       new VObjEvtHandler(obj_view.Window(),obj,GetData()));
@@ -477,7 +478,7 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
     wxSizer *sizer = NULL;
     string typeName = obj->GetObjectTypeName();
     if ( typeName == "widget" || typeName == "container" ||
-         typeName == "notebook")
+         typeName == "notebook" || typeName == "statusbar")
       item = shared_dynamic_cast<VisualWindow>(visualObj)->GetWindow();
       
     else if (typeName == "sizer")

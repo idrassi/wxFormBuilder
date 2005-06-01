@@ -151,7 +151,7 @@ PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
             sizeritem->GetProperty("option")->SetValue(string("1"));
             sizeritem->GetProperty("flag")->SetValue(string("wxEXPAND | wxALL"));
         }
-        else if (obj_type == "widget")
+        else if (obj_type == "widget" || obj_type == "statusbar")
         {
             sizeritem->GetProperty("option")->SetValue(string("0"));
             sizeritem->GetProperty("flag")->SetValue(string("wxALL"));
@@ -415,7 +415,8 @@ void ObjectDatabase::SetupPackage(string file)
 bool ObjectDatabase::HasCppProperties(string type)
 {
    return (type == "component" || type == "widget" ||
-           type == "container" || type == "notebook" || type == "menubar");
+           type == "container" || type == "notebook" || type == "menubar" ||
+           type == "statusbar");
 }
 
 
@@ -555,7 +556,7 @@ bool ObjectDatabase::ShowInPalette(string type)
   return ( type == "form" || type == "widget" || type == "sizer" ||
            type == "component" || type == "container" || type == "spacer" ||
            type == "notebook" || type == "menubar" || type == "menu" ||
-           type == "menuitem");
+           type == "menuitem" || type == "statusbar");
 }
 
 

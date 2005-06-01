@@ -212,6 +212,7 @@ void CppCodeGenerator::GenAttributeDeclaration(PObjectBase obj, Permission perm)
 {
   if (obj->GetObjectTypeName() == "notebook" ||
       obj->GetObjectTypeName() == "widget" || 
+      obj->GetObjectTypeName() == "statusbar" || 
       obj->GetObjectTypeName() == "component" ||
       obj->GetObjectTypeName() == "container" ||
       obj->GetObjectTypeName() == "menubar")
@@ -352,7 +353,7 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
   string type = obj->GetObjectTypeName();
   
   if (type == "notebook" || type == "container" || type == "widget" ||
-      type == "menubar")
+      type == "menubar" || type == "statusbar")
   {
       // comprobamos si no se ha declarado como atributo de clase
       // en cuyo caso lo declaramos en el constructor
@@ -425,7 +426,7 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
       string child_type = obj->GetChild(0)->GetObjectTypeName();
       string temp_name;
       if (child_type == "notebook" || child_type == "container" ||
-          child_type == "widget")
+          child_type == "widget" || child_type == "statusbar")
       {
         temp_name = "window_add";
       }
