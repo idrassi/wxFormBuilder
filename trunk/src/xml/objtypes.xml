@@ -1,4 +1,24 @@
-
+<!--
+  Definiciones de los tipos de clases
+  -----------------------------------
+  
+  En este fichero se especifican las definiciones de los tipos
+  de objetos de wxFormBuilder. A cada componente (ObjectInfo) se
+  le especifica un tipo definido aquí.
+  
+  Los tipos determinan las reglas de ubicación dentro del árbol de
+  objetos, y mediante ciertos atributos se indica a wxFormBuilder
+  cómo debe tratar el objeto.
+  
+  name [text]    : identificador del tipo
+  item ["0"/"1"] : flag que indica si el tipo de objeto es un item o un objeto normal.
+                        Los items son objetos ficticios que encapsulan otro objeto (p.e. "sizeritem").
+                        Los items no se muestran en el arbol de objetos, ni en la paleta de componentes
+                        son creados automáticamente.
+			Nota: el nombre del tipo item ha de coincidir con el nombre de la clase.
+		   
+  
+  -->
 <definitions>
 
   <objtype name="project">
@@ -26,7 +46,6 @@
   
   <objtype name="sizeritem" item="1">
     <childtype name="widget" nmax="1" />
-    <childtype name="statusbar" nmax="1" />
     <childtype name="container" nmax="1" />
     <childtype name="sizer" nmax="1" />
     <childtype name="notebook" nmax="1" />
@@ -34,7 +53,7 @@
   
   <objtype name="spacer" />
   
-  <objtype name="notebook">
+  <objtype name="notebook" >
     <childtype name="notebookpage" />
   </objtype>
   

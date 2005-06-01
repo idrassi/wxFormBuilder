@@ -93,6 +93,7 @@ PObjectPackage ObjectDatabase::GetPackage(unsigned int idx)
 /**
  * @todo La herencia de propiedades ha de ser de forma recursiva.
  */
+/*
 PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
 {
   PObjectBase object;
@@ -192,9 +193,8 @@ PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
 
 
   // Llagados aquí el objeto se crea seguro...
-  object = PObjectBase(new ObjectBase(class_name));
-  object->SetObjectTypeName(obj_info->GetObjectTypeName()); // *FIXME*
-
+  
+  object = NewObject(obj_info);
 
   // lo insertamos en el arbol si procede...
   if (parent)
@@ -203,10 +203,17 @@ PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
     object->SetParent(parent);
   }
  
-  // **** NOTA: esto debe ir en el constructor de ObjectBase ****      
-  // le añadimos todas sus propiedades del objeto, incluyendo
-  // las propiedades heredadas.
+  return object;
+}*/
+
+PObjectBase ObjectDatabase::NewObject(PObjectInfo obj_info)
+{
+  PObjectBase object;
   
+  // Llagados aquí el objeto se crea seguro...
+  object = PObjectBase(new ObjectBase(obj_info->GetClassName()));
+  object->SetObjectTypeName(obj_info->GetObjectTypeName()); // *FIXME*
+
   object->SetObjectInfo(obj_info);
   
   PPropertyInfo prop_info;
@@ -246,9 +253,124 @@ PObjectBase ObjectDatabase::CreateObject(string class_name, PObjectBase parent)
   PProperty pname = object->GetProperty(NAME_TAG);
   if (pname)
   {
-//    pname->SetValue(TVariant(PT_TEXT,pname->GetValue().AsStdString() + StringUtils::IntToStr(ins))); 
     pname->SetValue(pname->GetValue() + StringUtils::IntToStr(ins)); 
   }  
+  
+  return object;
+}
+
+
+int ObjectDatabase::CountChildrenWithSameType(PObjectBase parent,PObjectType type)
+{
+  unsigned int count = 0;
+  unsigned int numChildren = parent->GetChildCount();
+  for (unsigned int i=0; i < numChildren ; i++)
+  {
+    if (type == parent->GetChild(i)->GetObjectInfo()->GetObjectType())
+      count++;
+  }
+  
+  return count;
+}
+
+/**
+ * Crea una instancia de classname por debajo de parent.
+ * La función realiza la comprobación de tipos para crear el objeto:
+ * - Comprueba si el tipo es un tipo-hijo válido de "parent", en cuyo caso
+ *   se comprobará también que el número de hijos del mismo tipo no sobrepase
+     el máximo definido. El objeto no se crea si supera el máximo permitido.
+ * - Si el tipo-hijo no se encuentra entre los definidos para el tipo de 
+ *   "parent" se intentará crearlo como hijo de alguno de los tipos hijos con el
+ *   flag item a "1". Para ello va recorriendo todos los tipos con flag item,
+ *   si no puede crear el objeto, bien por que el tipo no es válido o porque
+ *   sobrepasa el máximo permitido si intenta con el siguiente hasta que no queden
+ *   más.
+ *
+ * Nota: quizá sea conveniente que el método cree el objeto sin enlazarlo
+ *       en el árbol, para facilitar el undo-redo.
+ */
+PObjectBase ObjectDatabase::CreateObject(string classname, PObjectBase parent)
+{
+  PObjectBase object;
+  PObjectInfo objInfo = GetObjectInfo(classname);
+  PObjectType objType = objInfo->GetObjectType();
+   
+  if (!objInfo)
+  {
+    assert(false);
+    return PObjectBase();
+  }
+
+  if (parent)
+  {
+    // Comprobamos si el tipo es válido
+    PObjectType parentType = parent->GetObjectInfo()->GetObjectType();
+    int max = parentType->FindChildType(objInfo->GetObjectType());
+    
+    if (max != 0) // tipo válido
+    {
+      bool create = true;
+      
+      // comprobamos el número de instancias
+      if (max > 0 && CountChildrenWithSameType(parent, objType) >= max) 
+        create = false;
+     
+      if (create)
+        object = NewObject(objInfo);
+    }
+    else // max == 0
+    {
+      // el tipo no es válido, vamos a comprobar si podemos insertarlo
+      // como hijo de un "item"
+      bool created = false;
+      for (unsigned int i=0; !created && i < parentType->GetChildTypeCount(); i++)
+      {
+        PObjectType childType = parentType->GetChildType(i);
+        int max = childType->FindChildType(objType);
+        
+        if (childType->IsItem() && max != 0)
+        {
+          // si el tipo es un item y además el tipo del objeto a crear
+          // puede ser hijo del tipo del item vamos a intentar crear la
+          // instancia del item para crear el objeto como hijo de este
+          if (max < 0 || CountChildrenWithSameType(parent, childType) < max)
+          {
+            // No hay problemas para crear el item debajo de parent
+            PObjectBase item = NewObject(GetObjectInfo(childType->GetName()));
+            
+            //PObjectBase obj = CreateObject(classname,item);
+            PObjectBase obj = NewObject(objInfo);
+            
+            // la siguiente condición debe cumplirse siempre
+            // ya que un item debe siempre contener a otro objeto
+            if (obj)
+            {
+              // enlazamos item y obj
+              item->AddChild(obj);
+              obj->SetParent(item);
+              object = item;
+              created = true;
+            }
+            else
+              wxLogMessage(_("Oh my God! review your definitions (objtypes.xml)"));
+          }
+        }
+      }
+    }
+    ///////////////////////////////////////////////////////////////////////
+    // Nota: provisionalmente vamos a enlazar el objeto al padre pero
+    //       esto debería hacerse fuera para poder implementar el Undo-Redo
+    ///////////////////////////////////////////////////////////////////////
+    if (object)
+    {
+      parent->AddChild(object);
+      object->SetParent(parent);
+    }
+  }
+  else // parent == NULL;
+  {
+    object = NewObject(objInfo);
+  }
   
   return object;
 }

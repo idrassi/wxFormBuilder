@@ -498,6 +498,11 @@ class ObjectInfo
    * Añade la información de un objeto al conjunto de clases base.
    */
   void AddBaseClass(PObjectInfo base) {  m_base.push_back(base); }
+  
+  /**
+   * Comprueba si el tipo es derivado del que se pasa como parámetro.
+   */
+  bool IsSubclassOf(string classname);
 
   PObjectInfo GetBaseClass(unsigned int idx);
   unsigned int GetBaseClassCount();

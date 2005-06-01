@@ -144,6 +144,11 @@ class ObjectDatabase
   
   PObjectType GetObjectType(string name);
   
+  
+  PObjectBase NewObject(PObjectInfo obj_info);
+  
+  int CountChildrenWithSameType(PObjectBase parent,PObjectType type);
+  
  public:    
   ObjectDatabase();
   ~ObjectDatabase();

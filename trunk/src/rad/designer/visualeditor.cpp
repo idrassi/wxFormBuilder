@@ -104,6 +104,8 @@ void VisualEditor::OnResizeBackPanel (wxSashEvent &event)
       GetData()->ModifyProperty(prop, value);
     }
   }
+  
+  event.Skip();
 }  
 
 /**
@@ -328,13 +330,11 @@ void GridPanel::HighlightSelection(wxDC& dc)
     // Por tanto, no vamos a usar la información de tipos de wxWidgets.
 
     if (m_selItem->IsKindOf(CLASSINFO(wxWindow)))
-    //if (object->GetObjectType() == T_WIDGET || object->GetObjectType() == T_CONTAINER)
     {
         point = ((wxWindow*)m_selItem)->GetPosition();
         size = ((wxWindow*)m_selItem)->GetSize();
     }
     else if (m_selItem->IsKindOf(CLASSINFO(wxSizer)))
-    //else if (object->GetObjectType() == T_SIZER)
     {
         point = ((wxSizer*)m_selItem)->GetPosition();
         size = ((wxSizer*)m_selItem)->GetSize();

@@ -89,6 +89,9 @@ class ObjectType
   int FindChildType(int type_id);
   int FindChildType(PObjectType type);
   
+  unsigned int GetChildTypeCount();
+  PObjectType GetChildType(unsigned int idx);
+  
  private: 
   
   /**

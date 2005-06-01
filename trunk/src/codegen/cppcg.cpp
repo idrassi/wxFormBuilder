@@ -24,6 +24,8 @@
 #include "cppcg.h"
 #include "utils/typeconv.h"
 
+#define FIRST_ID 1000
+
 CppTemplateParser::CppTemplateParser(PObjectBase obj, string _template)
   : TemplateParser(obj,_template)
 {
@@ -210,6 +212,7 @@ bool CppCodeGenerator::GenerateCode(PObjectBase project)
 
 void CppCodeGenerator::GenAttributeDeclaration(PObjectBase obj, Permission perm)
 {
+//  if (obj->GetObjectInfo()->IsSubclassOf("C++"))
   if (obj->GetObjectTypeName() == "notebook" ||
       obj->GetObjectTypeName() == "widget" || 
       obj->GetObjectTypeName() == "statusbar" || 
@@ -327,8 +330,7 @@ void CppCodeGenerator::FindDependencies(PObjectBase obj, set<PObjectInfo> &info_
     for (i = 0; i<ch_count; i++)
     {
       PObjectBase child = obj->GetChild(i);
-      //if (child->GetObjectType() == T_WIDGET || child->GetObjectType() == T_CONTAINER)
-        info_set.insert(child->GetObjectInfo());
+      info_set.insert(child->GetObjectInfo());
       FindDependencies(child, info_set);
     }
   }
@@ -491,7 +493,7 @@ void CppCodeGenerator::GenDefines(PObjectBase project)
   
   for (it = macro_set.begin() ; it != macro_set.end(); it++)
   {
-    unsigned int id = 1000;
+    unsigned int id = FIRST_ID;
     ostringstream define;
     define << "#define " << *it << " " << id;
     m_source->WriteLn(define.str());

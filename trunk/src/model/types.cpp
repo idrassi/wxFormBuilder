@@ -58,6 +58,34 @@ int ObjectType::FindChildType(PObjectType type)
   int type_id = type->GetId();
   return FindChildType(type_id);
 }
+
+unsigned int ObjectType::GetChildTypeCount()
+{
+  return m_childTypes.size();
+}
+
+PObjectType ObjectType::GetChildType(unsigned int idx)
+{
+  PObjectType result;
+  
+  assert (idx < GetChildTypeCount());
+  
+  unsigned int i = 0;
+  ChildTypeMap::iterator it = m_childTypes.begin();
+  
+  while (i < idx && it != m_childTypes.end())
+  {
+    i++;
+    it++;
+  }
+  
+  if (i == idx)
+    result = PObjectType(it->first);
+    
+    
+  return result;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 IntList::IntList(string value)
