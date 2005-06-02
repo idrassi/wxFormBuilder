@@ -92,6 +92,9 @@ void ApplicationData::CreateObject(wxString name)
   
   DataObservable::NotifyObjectCreated(obj);
   
+  while (obj && obj->GetObjectInfo()->GetObjectType()->IsItem())
+    obj = ( obj->GetChildCount() > 0 ? obj->GetChild(0) : PObjectBase());
+  
   if (obj)
     SelectObject(obj);
 }
