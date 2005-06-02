@@ -22,15 +22,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "objecttree.h"
-#include "icons/ot_sizer.xpm"
-#include "icons/ot_widget.xpm"
-#include "icons/ot_form.xpm"
-#include "icons/ot_spacer.xpm"
-#include "icons/ot_project.xpm"
-#include "icons/ot_notebook.xpm"
-#include "icons/ot_menubar.xpm"
-#include "icons/ot_menu.xpm"
-#include "icons/ot_menuitem.xpm"
+#include "icons/project.xpm"
 #include "utils/debug.h"
 #include <wx/imaglist.h>
 #include <wx/image.h>
@@ -265,7 +257,7 @@ void ObjectTree::Create()
   m_iconList = new wxImageList(21,21);
   
   {
-    wxBitmap icon(ot_project_xpm);
+    wxBitmap icon(project_xpm);
     wxImage img = icon.ConvertToImage();
     //img.Rescale(21,21);
     img.Resize(wxSize(21,21),wxPoint(0,0));

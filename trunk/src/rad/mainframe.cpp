@@ -41,6 +41,9 @@
 #define ID_NEW_PRJ  104
 #define ID_GENERATE_CODE 105
 #define ID_IMPORT_XRC 106
+#define ID_UNDO 107
+#define ID_REDO 108
+
 
 BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_NEW_PRJ,MainFrame::OnNewProject)
@@ -50,6 +53,8 @@ BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_QUIT,MainFrame::OnExit)
   EVT_MENU(ID_IMPORT_XRC,MainFrame::OnImportXrc)
   EVT_MENU(ID_GENERATE_CODE,MainFrame::OnGenerateCode)
+  EVT_MENU(ID_UNDO,MainFrame::OnUndo)
+  EVT_MENU(ID_REDO,MainFrame::OnRedo)
   EVT_CLOSE(MainFrame::OnClose)
 END_EVENT_TABLE()
 
@@ -63,10 +68,6 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
   
   wxMenu *menuFile = new wxMenu;
-
-  // the "About" item should be in the help menu
-  wxMenu *helpMenu = new wxMenu;
-  helpMenu->Append(ID_ABOUT, _T("&About...\tF1"), _T("Show about dialog"));
   menuFile->Append(ID_OPEN_PRJ, _T("&Open...\tF2"), _T("Load a project"));
   menuFile->Append(10,          _T("&Save"), _T("Save current project"));
   menuFile->Append(ID_SAVE_PRJ, _T("Save &As...\tF3"), _T("Save the project"));
@@ -75,10 +76,19 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   menuFile->AppendSeparator();
   menuFile->Append(ID_QUIT, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
+  wxMenu *menuEdit = new wxMenu;
+  menuEdit->Append(ID_UNDO, _T("&Undo \tCTRL+Z"), _T("Undo"));
+  menuEdit->Append(ID_REDO, _T("&Redo \tCTRL+Y"), _T("Redo"));
+  
+  wxMenu *menuHelp = new wxMenu;
+  menuHelp->Append(ID_ABOUT, _T("&About...\tF1"), _T("Show about dialog"));
+  
+
   // now append the freshly created menu to the menu bar...
   wxMenuBar *menuBar = new wxMenuBar();
   menuBar->Append(menuFile, _T("&File"));
-  menuBar->Append(helpMenu, _T("&Help"));
+  menuBar->Append(menuEdit, _T("&Edit"));
+  menuBar->Append(menuHelp, _T("&Help"));
 
   // ... and attach this menu bar to the frame
   SetMenuBar(menuBar);
@@ -417,4 +427,13 @@ void MainFrame::PropertyModified(PProperty prop)
 void MainFrame::CodeGeneration()
 {
   GetStatusBar()->SetStatusText(wxT("Code Generated!"));
+}
+
+void MainFrame::OnUndo(wxCommandEvent &event)
+{
+  GetData()->Undo();
+}
+void MainFrame::OnRedo(wxCommandEvent &event)
+{
+  GetData()->Redo();
 }

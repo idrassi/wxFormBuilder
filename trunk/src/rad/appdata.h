@@ -26,6 +26,7 @@
 
 #include "rad/appobserver.h"
 #include "model/database.h"
+#include "rad/cmdproc.h"
 
 class ApplicationData : public DataObservable
 {
@@ -38,7 +39,7 @@ class ApplicationData : public DataObservable
 
   PObjectBase m_clipboard;
   
-  
+  CommandProcessor m_cmdProc;
   
  public:
   ApplicationData();
@@ -57,6 +58,8 @@ class ApplicationData : public DataObservable
   void ModifyProperty(PProperty prop, wxString value); 
   void GenerateCode();
   void MovePosition(PObjectBase, bool right, unsigned int num = 1);
+  void Undo();
+  void Redo();
   
   // Servicios para los observadores  
   PObjectBase GetSelectedObject();
@@ -75,6 +78,38 @@ class ApplicationData : public DataObservable
   PObjectDatabase GetObjectDatabase()
     { return m_objDb; }
   
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// Comandos
+///////////////////////////////////////////////////////////////////////////////
+
+class InsertObjectCmd : public Command
+{
+ private:
+  PObjectBase m_parent;
+  PObjectBase m_object;
+  
+ protected:
+  void DoExecute();
+  void DoRestore();
+ 
+ public:
+   InsertObjectCmd(PObjectBase object, PObjectBase parent);
+};
+
+class ModifyPropertyCmd : public Command
+{
+ private:
+  PProperty m_property;
+  string m_oldValue, m_newValue;
+ 
+ protected:
+  void DoExecute();
+  void DoRestore();
+  
+ public:
+  ModifyPropertyCmd(PProperty prop, string value);
 };
 
 #endif //__APP_DATA__

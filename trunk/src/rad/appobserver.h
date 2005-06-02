@@ -77,6 +77,8 @@ class DataObservable
   virtual void ModifyProperty(PProperty prop, wxString value) = 0;
   virtual void GenerateCode() = 0;
   virtual void MovePosition(PObjectBase, bool right, unsigned int num = 1) = 0;
+  virtual void Undo() = 0;
+  virtual void Redo() = 0;
   
   // Obtienen información del modelo de datos
   virtual PObjectPackage GetPackage(unsigned int idx) = 0;

@@ -363,11 +363,11 @@ PObjectBase ObjectDatabase::CreateObject(string classname, PObjectBase parent)
     // Nota: provisionalmente vamos a enlazar el objeto al padre pero
     //       esto debería hacerse fuera para poder implementar el Undo-Redo
     ///////////////////////////////////////////////////////////////////////
-    if (object)
-    {
-      parent->AddChild(object);
-      object->SetParent(parent);
-    }
+    //if (object)
+    //{
+    //  parent->AddChild(object);
+    //  object->SetParent(parent);
+    //}
   }
   else // parent == NULL;
   {

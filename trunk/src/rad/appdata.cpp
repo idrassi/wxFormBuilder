@@ -83,6 +83,11 @@ void ApplicationData::CreateObject(wxString name)
   if (parent)
   {
     obj = m_objDb->CreateObject(string(name.mb_str()),parent);
+    if (obj)
+    {
+      PCommand command(new InsertObjectCmd(obj,parent));
+      m_cmdProc.Execute(command);
+    }    
   }  
   
   DataObservable::NotifyObjectCreated(obj);
@@ -165,7 +170,9 @@ void ApplicationData::ModifyProperty(PProperty prop, wxString str)
   
   if (_STDSTR(str) != prop->GetValue())
   {
-    prop->SetValue(string(str.mb_str()));
+    PCommand command(new ModifyPropertyCmd(prop,_STDSTR(str)));
+    m_cmdProc.Execute(command);
+
     DataObservable::NotifyPropertyModified(prop);
   }  
 }
@@ -249,3 +256,48 @@ void ApplicationData::MovePosition(PObjectBase obj, bool right, unsigned int num
   }
 }
 
+void ApplicationData::Undo()
+{
+  m_cmdProc.Undo();
+  DataObservable::NotifyProjectRefresh();
+}
+
+void ApplicationData::Redo()
+{
+  m_cmdProc.Redo();
+  DataObservable::NotifyProjectRefresh();
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+InsertObjectCmd::InsertObjectCmd(PObjectBase object, PObjectBase parent)
+  : m_parent(parent), m_object(object)
+{}
+
+void InsertObjectCmd::DoExecute()
+{
+  m_parent->AddChild(m_object);
+  m_object->SetParent(m_parent);
+}
+
+void InsertObjectCmd::DoRestore()
+{
+  m_parent->RemoveChild(m_object);
+  m_object->SetParent(PObjectBase());
+}
+
+ModifyPropertyCmd::ModifyPropertyCmd(PProperty prop, string value)
+  : m_property(prop), m_newValue(value)
+{
+  m_oldValue = prop->GetValue();
+}
+
+void ModifyPropertyCmd::DoExecute()
+{
+  m_property->SetValue(m_newValue);
+}
+
+void ModifyPropertyCmd::DoRestore()
+{
+  m_property->SetValue(m_oldValue);
+}
