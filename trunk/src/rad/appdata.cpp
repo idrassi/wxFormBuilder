@@ -98,17 +98,23 @@ void ApplicationData::CreateObject(wxString name)
   
 void ApplicationData::RemoveObject(PObjectBase obj)
 {
+  // Nota:
+  //  cuando se va a eliminar un objeto es importante que no se dejen
+  //  nodos ficticios ("items") en las hojas del árbol.
   PObjectBase parent = obj->GetParent();
-  if (parent && parent->GetObjectTypeName() == "sizeritem")
+  while (parent && parent->GetObjectInfo()->GetObjectType()->IsItem())
+  {
     obj = parent;
+    parent = obj->GetParent();
+  }
 
-  PObjectBase newSelected = obj->GetParent();
+  PCommand command(new RemoveObjectCmd(obj));
+  m_cmdProc.Execute(command);
 
-  obj->GetParent()->RemoveChild(obj);
-  obj->SetParent(PObjectBase());
-  
   DataObservable::NotifyObjectRemoved(obj);
-  SelectObject(newSelected);
+  
+  // "parent" será el nuevo objeto seleccionado tras eliminar obj.
+  SelectObject(parent);
 }
 
 void ApplicationData::CutObject(PObjectBase obj)
@@ -118,38 +124,65 @@ void ApplicationData::CutObject(PObjectBase obj)
 }
 
 void ApplicationData::PasteObject(PObjectBase parent)
-{
+{ 
   if (m_clipboard)
   {
-    // no me gusta este código, es una copia de un trozo del método
-    // CreateObject de la clase ObjectDatabase. De momento
-    // es solo un apaño
-    if (parent->GetObjectTypeName() == "sizer" && 
-        m_clipboard->GetObjectTypeName() != "sizeritem")
-    {
-      PObjectBase sizeritem(m_objDb->CreateObject("sizeritem"));
-      sizeritem->AddChild(m_clipboard);
-      m_clipboard->SetParent(sizeritem);
-
-      parent->AddChild(sizeritem);
-      sizeritem->SetParent(parent);
-    }
-    else
-    {
-      parent->AddChild(m_clipboard);
-      m_clipboard->SetParent(parent);
-    }
+    // Vamos a hacer un pequeño truco, intentaremos crear un objeto nuevo
+    // del mismo tipo que el guardado en m_clipboard debajo de parent.
+    // El objeto devuelto quizá no sea de la misma clase que m_clipboard debido
+    // a que esté incluido dentro de un "item".
+    // Por tanto, si el objeto devuelto es no-nulo, entonces vamos a descender
+    // en el arbol hasta que el objeto sea de la misma clase que m_clipboard,
+    // momento en que cambiaremos dicho objeto por m_clipboard.
+    //
+    // Ejemplo:
+    //
+    //  m_clipboard :: wxButton
+    //  parent      :: wxBoxSizer
+    //
+    //  obj = CreateObject(m_clipboard->GetObjectInfo()->GetClassName(), parent)
+    //
+    //  obj :: sizeritem
+    //              /
+    //           wxButton   <- Cambiamos este por m_clipboard
+    PObjectBase obj = 
+      m_objDb->CreateObject(m_clipboard->GetObjectInfo()->GetClassName(), parent);
     
-    m_clipboard.reset();
+    if (obj)
+    {
+      PObjectBase aux = obj;
+      while (aux && aux->GetObjectInfo() != m_clipboard->GetObjectInfo())
+        aux = ( aux->GetChildCount() > 0 ? aux->GetChild(0) : PObjectBase());
+        
+      if (aux && aux != obj)
+      {
+        // sustituimos aux por m_clipboard
+        PObjectBase auxParent = aux->GetParent();
+        auxParent->RemoveChild(aux);
+        aux->SetParent(PObjectBase());
+        
+        auxParent->AddChild(m_clipboard);
+        m_clipboard->SetParent(auxParent);
+      }
+      else
+        obj = m_clipboard;
+        
+      // y finalmente insertamos en el arbol        
+      PCommand command(new InsertObjectCmd(obj,parent));
+      m_cmdProc.Execute(command);
+        
+      m_clipboard.reset();
+      
+    }
+    DataObservable::NotifyProjectRefresh();
   }
-  DataObservable::NotifyProjectRefresh();  
 }
 
 void ApplicationData::InsertObject(PObjectBase obj, PObjectBase parent)
 {
   // FIXME! comprobar obj se puede colgar de parent
-  parent->AddChild(obj);
-  obj->SetParent(parent);
+  PCommand command(new InsertObjectCmd(obj,parent));
+  m_cmdProc.Execute(command);  
   DataObservable::NotifyProjectRefresh(); 
 }
 
@@ -158,8 +191,9 @@ void ApplicationData::MergeProject(PObjectBase project)
   // FIXME! comprobar obj se puede colgar de parent
   for (unsigned int i=0; i<project->GetChildCount(); i++)
   {
-    m_project->AddChild(project->GetChild(i));
-    project->GetChild(i)->SetParent(m_project);
+    //m_project->AddChild(project->GetChild(i));
+    //project->GetChild(i)->SetParent(m_project);
+    InsertObject(project->GetChild(i),m_project);
   }
   DataObservable::NotifyProjectRefresh(); 
 }
@@ -207,6 +241,7 @@ bool ApplicationData::LoadProject(const wxString &file)
       m_project = proj;
       m_selObj = m_project;
       result = true;
+      m_cmdProc.Reset();
       DataObservable::NotifyProjectLoaded();
     }
   }
@@ -219,6 +254,7 @@ void ApplicationData::NewProject()
 {
   m_project = m_objDb->CreateObject("Project");
   m_selObj = m_project;
+  m_cmdProc.Reset();
   DataObservable::NotifyProjectRefresh();  
 }
 
@@ -233,12 +269,14 @@ void ApplicationData::MovePosition(PObjectBase obj, bool right, unsigned int num
   PObjectBase parent = obj->GetParent();
   if (parent)
   {
-    if (parent->GetObjectTypeName() == "sizeritem")
+    // Si el objeto está incluido dentro de un item hay que desplazar
+    // el item
+    while (parent && parent->GetObjectInfo()->GetObjectType()->IsItem())
     {
       obj = parent;
-      parent = parent->GetParent();
+      parent = obj->GetParent();
     }
-      
+        
     unsigned int pos = parent->GetChildPosition(obj);
     
     // nos aseguramos de que los límites son correctos
@@ -250,7 +288,9 @@ void ApplicationData::MovePosition(PObjectBase obj, bool right, unsigned int num
     {
       pos = (right ? pos+num : pos-num);
       
-      parent->ChangeChildPosition(obj,pos);
+      PCommand command(new ShiftChildCmd(obj,pos));
+      m_cmdProc.Execute(command);
+      
       DataObservable::NotifyProjectRefresh();
     }
   }
@@ -286,6 +326,28 @@ void InsertObjectCmd::DoRestore()
   m_object->SetParent(PObjectBase());
 }
 
+//-----------------
+
+RemoveObjectCmd::RemoveObjectCmd(PObjectBase object)
+{
+  m_object = object;
+  m_parent = object->GetParent();
+}
+
+void RemoveObjectCmd::DoExecute()
+{
+  m_parent->RemoveChild(m_object);
+  m_object->SetParent(PObjectBase());
+}
+
+void RemoveObjectCmd::DoRestore()
+{
+  m_parent->AddChild(m_object);
+  m_object->SetParent(m_parent);
+}
+
+//-----------------
+
 ModifyPropertyCmd::ModifyPropertyCmd(PProperty prop, string value)
   : m_property(prop), m_newValue(value)
 {
@@ -300,4 +362,35 @@ void ModifyPropertyCmd::DoExecute()
 void ModifyPropertyCmd::DoRestore()
 {
   m_property->SetValue(m_oldValue);
+}
+
+//-----------------
+
+ShiftChildCmd::ShiftChildCmd(PObjectBase object, int pos)
+{
+  m_object = object;
+  PObjectBase parent = object->GetParent();
+  
+  assert(parent);
+  
+  m_oldPos = parent->GetChildPosition(object);
+  m_newPos = pos;
+}
+
+void ShiftChildCmd::DoExecute()
+{
+  if (m_oldPos != m_newPos)
+  {
+    PObjectBase parent (m_object->GetParent());
+    parent->ChangeChildPosition(m_object,m_newPos);
+  }
+}
+
+void ShiftChildCmd::DoRestore()
+{
+  if (m_oldPos != m_newPos)
+  {
+    PObjectBase parent (m_object->GetParent());
+    parent->ChangeChildPosition(m_object,m_oldPos);
+  }
 }

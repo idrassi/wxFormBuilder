@@ -98,6 +98,20 @@ class InsertObjectCmd : public Command
    InsertObjectCmd(PObjectBase object, PObjectBase parent);
 };
 
+class RemoveObjectCmd : public Command
+{
+private:
+  PObjectBase m_parent;
+  PObjectBase m_object;
+  
+ protected:
+  void DoExecute();
+  void DoRestore();
+ 
+ public:
+   RemoveObjectCmd(PObjectBase object);
+};
+
 class ModifyPropertyCmd : public Command
 {
  private:
@@ -110,6 +124,21 @@ class ModifyPropertyCmd : public Command
   
  public:
   ModifyPropertyCmd(PProperty prop, string value);
+};
+
+class ShiftChildCmd : public Command
+{
+ private:
+  PObjectBase m_object;
+  int m_oldPos, m_newPos;
+
+ protected:
+  void DoExecute();
+  void DoRestore();
+  
+ public:
+  ShiftChildCmd(PObjectBase object, int pos);
+
 };
 
 #endif //__APP_DATA__

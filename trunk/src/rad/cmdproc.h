@@ -24,6 +24,7 @@ class CommandProcessor
    
    void Undo();
    void Redo();
+   void Reset();
 };
 
 

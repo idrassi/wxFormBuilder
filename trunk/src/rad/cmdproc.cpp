@@ -35,6 +35,15 @@ void CommandProcessor::Redo()
   }
 }
 
+void CommandProcessor::Reset()
+{
+  while (!m_redoStack.empty())
+    m_redoStack.pop();
+    
+  while (!m_undoStack.empty())
+    m_undoStack.pop();  
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 Command::Command()
 {
