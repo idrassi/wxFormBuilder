@@ -344,10 +344,17 @@ PObjectBase ObjectDatabase::CreateObject(string classname, PObjectBase parent)
             // la siguiente condición debe cumplirse siempre
             // ya que un item debe siempre contener a otro objeto
             if (obj)
-            {
+            {            
               // enlazamos item y obj
               item->AddChild(obj);
               obj->SetParent(item);
+              
+              // sizeritem es un tipo de objeto reservado, para que el uso sea
+              // más práctico se asignan unos valores por defecto en función 
+              // del tipo de objeto creado
+              if (item->GetObjectTypeName() == "sizeritem")
+                SetDefaultLayoutProperties(item);
+           
               object = item;
               created = true;
             }
@@ -371,12 +378,6 @@ PObjectBase ObjectDatabase::CreateObject(string classname, PObjectBase parent)
   {
     object = NewObject(objInfo);
   }
-  
-  // sizeritem es un tipo de objeto reservado, para que el uso sea más práctico
-  // se asignan unos valores por defecto en función del tipo de objeto creado
-  if (object && object->GetObjectTypeName() == "sizeritem" && object->GetChildCount() > 0)
-    SetDefaultLayoutProperties(object);
-
   
   return object;
 }
