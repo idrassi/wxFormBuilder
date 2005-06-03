@@ -375,12 +375,12 @@ void ObjectInspector::CreateCategory(const wxString& name, PObjectBase obj, PObj
   
   if (prop_count > 0)
   {
-    wxFlexGridSizer* sizer = new wxFlexGridSizer(prop_count, 2, 0, 0);
+    //wxFlexGridSizer* sizer = new wxFlexGridSizer(prop_count, 2, 0, 0);
     for (unsigned int i=0; i<prop_count ; i++)
     {
       PPropertyInfo prop_desc = obj_info->GetPropertyInfo(i);
       PProperty     prop      = obj->GetProperty(prop_desc->GetName());
-      wxWindow *prop_editor = NULL;
+      //wxWindow *prop_editor = NULL;
       
       assert(prop_desc && prop);
 

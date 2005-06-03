@@ -179,7 +179,7 @@ void ObjectTree::AddChildren(PObjectBase obj, wxTreeItemId &parent, bool is_root
     int image_idx = GetImageIndex(obj->GetObjectInfo()->GetClassName());
     
     m_tcObjects->SetItemImage(new_parent,image_idx);
-    m_tcObjects->SetItemSelectedImage(new_parent,image_idx);
+    //m_tcObjects->SetItemSelectedImage(new_parent,image_idx);
     
     // y su contenido
     UpdateItem(new_parent,obj);

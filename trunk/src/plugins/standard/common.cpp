@@ -291,6 +291,8 @@ class NotebookComponent : public ComponentBase
     xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     return xrc.GetXrcObject();
   }  
+  
+  bool KeepEvtHandler() { return true; }
 };
 
 class NotebookPageComponent : public ComponentBase

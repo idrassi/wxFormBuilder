@@ -106,7 +106,7 @@ void wxFbPalette::Create()
 
 void wxFbPalette::OnButtonClick(wxCommandEvent &event)
 {
-  for (int i = 0; i < m_tv.size(); i++)
+  for (unsigned int i = 0; i < m_tv.size(); i++)
   {
     if (m_tv[i]->FindById(event.GetId()))
     {

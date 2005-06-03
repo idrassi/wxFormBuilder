@@ -82,12 +82,29 @@ void ApplicationData::CreateObject(wxString name)
   PObjectBase obj;
   if (parent)
   {
-    obj = m_objDb->CreateObject(string(name.mb_str()),parent);
-    if (obj)
-    {    
-      PCommand command(new InsertObjectCmd(obj,parent));
-      m_cmdProc.Execute(command);
-    }    
+    bool created = false;
+    
+    // Para que sea más práctico, si el objeto no se puede crear debajo
+    // del objeto seleccionado vamos a intentarlo en el padre del seleccionado
+    // y seguiremos subiendo hasta que ya no podamos crear el objeto.
+    while (parent && !created)
+    {
+      obj = m_objDb->CreateObject(string(name.mb_str()),parent);
+      if (obj)
+      {    
+        PCommand command(new InsertObjectCmd(obj,parent));
+        m_cmdProc.Execute(command);
+        created = true;
+      }
+      else
+      {
+        // lo vamos a seguir intentando con el padre, pero cuidado, el padre
+        // no puede ser un item!
+        parent = parent->GetParent();
+        while (parent->GetObjectInfo()->GetObjectType()->IsItem())
+          parent = parent->GetParent();
+      }
+    }
   }  
   
   DataObservable::NotifyObjectCreated(obj);

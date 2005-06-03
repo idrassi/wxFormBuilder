@@ -133,6 +133,8 @@ class ComponentBase : public IComponent
   TiXmlElement* ExportToXrc(IObject *obj) { return NULL; };
   
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj) { return NULL; };
+  
+  bool KeepEvtHandler() { return false; }
 };
 
 #endif // __PLUGIN_H__

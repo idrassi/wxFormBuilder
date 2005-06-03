@@ -204,6 +204,9 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *wxparent,
   if (!vobj)
     return vobj; // no se debe dar nunca
  
+  IComponent *comp = obj->GetObjectInfo()->GetComponent();  
+  assert(comp);
+  
   // registramos el objeto para poder obtener la referencia a VisualObject a
   // partir de un ObjectBase
   m_map.insert(VisualObjectMap::value_type(obj,vobj));
@@ -214,9 +217,10 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *wxparent,
   // poder seleccionarlo desde el designer y que se dibujen los recuadros...
   // FIXME: eliminar dependencias con ObjectType
   //        (quizá con una función en el plugin: bool IsContainer()
-  if (obj_view.Window() &&
-      (obj->GetObjectTypeName() == "widget" || obj->GetObjectTypeName() == "container")
-      || obj->GetObjectTypeName() == "statusbar")
+  //if (obj_view.Window() &&
+  //    (obj->GetObjectTypeName() == "widget" || obj->GetObjectTypeName() == "container")
+  //    || obj->GetObjectTypeName() == "statusbar")
+  if (obj_view.Window() && !comp->KeepEvtHandler())
   {
     obj_view.Window()->PushEventHandler(
       new VObjEvtHandler(obj_view.Window(),obj,GetData()));
@@ -242,9 +246,7 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *wxparent,
   VisualObjectAdapter parent_view(vparent);
   VisualObjectAdapter first_child_view(first_child);
   
-  IComponent *comp = obj->GetObjectInfo()->GetComponent();  
-  if (comp)
-    comp->OnCreated(&obj_view,new_wxparent,&parent_view, &first_child_view);
+  comp->OnCreated(&obj_view,new_wxparent,&parent_view, &first_child_view);
   
   // Por último, debemos asignar el sizer al widget, en los siguientes casos:
   // 1. El objeto creado sea un sizer y el objeto padre sea una ventana.

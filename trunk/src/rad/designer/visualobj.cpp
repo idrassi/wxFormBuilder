@@ -42,13 +42,23 @@ PVisualObject VisualObject::CreateVisualObject
   PObjectInfo obj_info = obj->GetObjectInfo();
   string type = obj->GetObjectTypeName();
 
+  // TO-DO: arreglar esto! 
+  //
+  // El tipo de objeto se deberá indicar en el plugin
+  // quizá sea conveniente dividir la macro COMPONENT("name",component)
+  // estas tres:
+  //   WINDOW_COMPONENT
+  //   SIZER_COMPONENT
+  //   ABSTRACT_COMPONENT
+  // y que se pueda consultar el tipo.
+  
   if (type == "notebook" || type == "container" || type == "widget" || type == "statusbar")
     vobj = PVisualObject(new VisualWindow(obj,wx_parent));
     
   else if (type == "sizer")
     vobj = PVisualObject(new VisualSizer(obj,wx_parent));
     
-  else
+  else // items
     vobj = PVisualObject(new VisualObject(obj));
 
   return vobj;

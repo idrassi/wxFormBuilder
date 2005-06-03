@@ -115,6 +115,14 @@ class IComponent
    * wxFormBuilder.
    */
   virtual TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj) = 0;
+  
+  /**
+   * Conservar la tabla de manejadores de eventos original del componente.
+   *
+   * Algunos componentes no deben dejar a wxFormBuilder redefinir su tabla
+   * de manejadores de eventos, en aquellos casos devolver "true"
+   */
+  virtual bool KeepEvtHandler() = 0;
 };
 
 
