@@ -84,14 +84,16 @@ void ApplicationData::CreateObject(wxString name)
   {
     obj = m_objDb->CreateObject(string(name.mb_str()),parent);
     if (obj)
-    {
+    {    
       PCommand command(new InsertObjectCmd(obj,parent));
       m_cmdProc.Execute(command);
     }    
   }  
   
   DataObservable::NotifyObjectCreated(obj);
-  
+
+  // Seleccionamos el objeto, si este es un item entonces se selecciona
+  // el objeto contenido. ¿Tiene sentido tener un item debajo de un item?
   while (obj && obj->GetObjectInfo()->GetObjectType()->IsItem())
     obj = ( obj->GetChildCount() > 0 ? obj->GetChild(0) : PObjectBase());
   

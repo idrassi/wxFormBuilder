@@ -390,10 +390,12 @@ void MainFrame::OnClose(wxCloseEvent &event)
 void MainFrame::ProjectLoaded()
 {
   GetStatusBar()->SetStatusText(wxT("Project Loaded!"));
+  UpdateMenuBar();
 }
 void MainFrame::ProjectSaved()
 {
   GetStatusBar()->SetStatusText(wxT("Project Saved!"));
+  UpdateMenuBar();
 }
 void MainFrame::ObjectSelected(PObjectBase obj)
 {
@@ -412,16 +414,19 @@ void MainFrame::ObjectSelected(PObjectBase obj)
 void MainFrame::ObjectCreated(PObjectBase obj)
 {
   GetStatusBar()->SetStatusText(wxT("Object Created!"));
+  UpdateMenuBar();
 }
 
 void MainFrame::ObjectRemoved(PObjectBase obj)
 {
   GetStatusBar()->SetStatusText(wxT("Object Removed!"));
+  UpdateMenuBar();
 }
 
 void MainFrame::PropertyModified(PProperty prop)
 {
   GetStatusBar()->SetStatusText(wxT("Property Modified!"));
+  UpdateMenuBar();
 }
 
 void MainFrame::CodeGeneration()
@@ -436,4 +441,17 @@ void MainFrame::OnUndo(wxCommandEvent &event)
 void MainFrame::OnRedo(wxCommandEvent &event)
 {
   GetData()->Redo();
+}
+
+void MainFrame::UpdateMenuBar()
+{
+  wxMenu *menuEdit = GetMenuBar()->GetMenu(GetMenuBar()->FindMenu(_("Edit")));
+  
+  menuEdit->Enable(ID_REDO,GetData()->CanRedo());
+  menuEdit->Enable(ID_UNDO,GetData()->CanUndo());
+}
+
+void MainFrame::ProjectRefresh()
+{
+  UpdateMenuBar();
 }

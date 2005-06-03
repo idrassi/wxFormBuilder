@@ -252,9 +252,7 @@ PObjectBase ObjectDatabase::NewObject(PObjectInfo obj_info)
   unsigned int ins = obj_info->GetInstanceCount();
   PProperty pname = object->GetProperty(NAME_TAG);
   if (pname)
-  {
     pname->SetValue(pname->GetValue() + StringUtils::IntToStr(ins)); 
-  }  
   
   return object;
 }
@@ -374,7 +372,36 @@ PObjectBase ObjectDatabase::CreateObject(string classname, PObjectBase parent)
     object = NewObject(objInfo);
   }
   
+  // sizeritem es un tipo de objeto reservado, para que el uso sea más práctico
+  // se asignan unos valores por defecto en función del tipo de objeto creado
+  if (object && object->GetObjectTypeName() == "sizeritem")
+    SetDefaultLayoutProperties(object);
+
+  
   return object;
+}
+
+void ObjectDatabase::SetDefaultLayoutProperties(PObjectBase sizeritem)
+{
+  assert(sizeritem->GetObjectTypeName() == "sizeritem");
+  
+  string obj_type = sizeritem->GetChild(0)->GetObjectTypeName();
+  
+  if (obj_type == "container" || obj_type == "notebook")
+  {
+    sizeritem->GetProperty("option")->SetValue(string("1"));
+    sizeritem->GetProperty("flag")->SetValue(string("wxEXPAND | wxALL"));
+  }
+  else if (obj_type == "widget" || obj_type == "statusbar")
+  {
+    sizeritem->GetProperty("option")->SetValue(string("0"));
+    sizeritem->GetProperty("flag")->SetValue(string("wxALL"));
+  }
+  else if (obj_type == "sizer")
+  {  
+    sizeritem->GetProperty("option")->SetValue(string("1"));
+    sizeritem->GetProperty("flag")->SetValue(string("wxEXPAND"));
+  }  
 }
 
 void ObjectDatabase::ResetObjectCounters()

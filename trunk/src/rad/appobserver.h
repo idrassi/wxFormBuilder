@@ -88,6 +88,9 @@ class DataObservable
   virtual PObjectBase GetSelectedObject() = 0;
   virtual PObjectBase GetSelectedForm() = 0;
   virtual PObjectBase GetProjectData() = 0;
+  
+  virtual bool CanUndo() = 0;
+  virtual bool CanRedo() = 0;
 };
 
 /**

@@ -65,6 +65,8 @@ class ApplicationData : public DataObservable
   PObjectBase GetSelectedObject();
   PObjectBase GetProjectData();
   PObjectBase GetSelectedForm();
+  bool CanUndo() { return m_cmdProc.CanUndo(); }
+  bool CanRedo() { return m_cmdProc.CanRedo(); }
   
 
   

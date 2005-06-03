@@ -149,6 +149,8 @@ class ObjectDatabase
   
   int CountChildrenWithSameType(PObjectBase parent,PObjectType type);
   
+  void SetDefaultLayoutProperties(PObjectBase obj);
+  
  public:    
   ObjectDatabase();
   ~ObjectDatabase();

@@ -50,12 +50,11 @@ class MainFrame : public DataObserver, public wxFrame
   ObjectTree *m_objTree;
   ObjectInspector *m_objInsp;
   ToolPanel *m_toolPanel;
-//  DesignPanel *m_design;
   VisualEditor *m_visualEdit;
-//  CodeEditorPanel *m_h;
-//  CodeEditorPanel *m_cpp;
   CppPanel *m_cpp;
   XrcPanel *m_xrc;
+  
+  void UpdateMenuBar();
   
   DECLARE_EVENT_TABLE()
  public:
@@ -81,6 +80,7 @@ class MainFrame : public DataObserver, public wxFrame
   void ObjectRemoved(PObjectBase obj);
   void PropertyModified(PProperty prop);
   void CodeGeneration();
+  void ProjectRefresh();
 };  
 
 
