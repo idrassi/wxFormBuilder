@@ -374,7 +374,7 @@ PObjectBase ObjectDatabase::CreateObject(string classname, PObjectBase parent)
   
   // sizeritem es un tipo de objeto reservado, para que el uso sea más práctico
   // se asignan unos valores por defecto en función del tipo de objeto creado
-  if (object && object->GetObjectTypeName() == "sizeritem")
+  if (object && object->GetObjectTypeName() == "sizeritem" && object->GetChildCount() > 0)
     SetDefaultLayoutProperties(object);
 
   
