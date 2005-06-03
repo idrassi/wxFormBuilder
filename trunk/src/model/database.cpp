@@ -423,7 +423,11 @@ PObjectBase  ObjectDatabase::CreateObject(TiXmlElement *xml_obj, PObjectBase par
     TiXmlElement *child = xml_obj->FirstChildElement(OBJECT_TAG);
     while (child)
     {
-      CreateObject(child,object);
+      PObjectBase childObj = CreateObject(child,object);
+      // enlazamos
+      object->AddChild(childObj);
+      childObj->SetParent(object);
+      
       child = child->NextSiblingElement(OBJECT_TAG);
     }
   }
