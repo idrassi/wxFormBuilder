@@ -339,6 +339,7 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
       constants.Add(wxString(opt_list->GetOption(i).c_str(),wxConvUTF8), i);
       
     result = wxEnumProperty(name, wxPG_LABEL, constants);
+    result->SetValueFromString(prop->GetValueAsString(), 0);
   }
 
   else if (type == PT_WXPOINT)

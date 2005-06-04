@@ -101,7 +101,7 @@ void ApplicationData::CreateObject(wxString name)
         // lo vamos a seguir intentando con el padre, pero cuidado, el padre
         // no puede ser un item!
         parent = parent->GetParent();
-        while (parent->GetObjectInfo()->GetObjectType()->IsItem())
+        while (parent && parent->GetObjectInfo()->GetObjectType()->IsItem())
           parent = parent->GetParent();
       }
     }
