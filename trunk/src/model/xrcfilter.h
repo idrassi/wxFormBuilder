@@ -110,10 +110,21 @@ class XrcFilter
 /**
  * Filtro de importación de un fichero XRC.
  */
-//class XrcLoader
-//{
-// public:
-//  void LoadFile(string file, PObjectBase parent);
-//};
+class XrcLoader
+{
+ private:
+  PObjectDatabase m_objDb;
+  
+  PObjectBase GetObject(TiXmlElement *xrcObj, PObjectBase parent);
+  
+ public:
+   
+  void SetObjectDatabase(PObjectDatabase db) { m_objDb = db; }
+  
+  /**
+   * Dado un árbol XML en formato XRC, crea el arbol de objetos asociado.
+   */
+  PObjectBase GetProject(TiXmlDocument *xrcDoc);
+};
 
 #endif //__XRC_FILTER__

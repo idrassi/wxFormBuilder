@@ -25,7 +25,8 @@ common.o: common.cpp
 	
 xrcconv.o: ../../utils/xrcconv.cpp
 	$(CXX) -c $(CXXFLAGS) -o xrcconv.o ../../utils/xrcconv.cpp
-	
+
+
 $(LIBLAYOUT): layout.o
 	$(CXX) -L. -shared -o $(LIBLAYOUT) layout.o xrcconv.o -lstdc++ $(LDFLAGS)  $(LIBS)
 	strip $(LIBLAYOUT)

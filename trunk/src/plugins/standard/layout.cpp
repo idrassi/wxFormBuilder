@@ -25,12 +25,37 @@
 #include "plugins/plugin.h"
 #include "utils/xrcconv.h"
 #include "tinyxml.h"
+#include <wx/tokenzr.h>
 
 #ifdef __WX24__
   #define wxFIXED_MINSIZE wxADJUST_MINSIZE  
 #endif
 class SpacerComponent : public ComponentBase
 {
+ private:
+  void AddSizeProperty(XrcToXfbFilter &filter, TiXmlElement *xrcObj)
+  {
+    TiXmlElement *sizeProp = xrcObj->FirstChildElement("size");
+    if (sizeProp)
+    {
+      TiXmlText *xmlValue = sizeProp->FirstChild()->ToText();
+      if (xmlValue)
+      {
+        wxString width = wxT("");
+        wxString height = wxT("");
+        wxStringTokenizer tkz(wxString(xmlValue->Value(),wxConvUTF8),wxT(","));
+        if (tkz.HasMoreTokens())
+        {
+          width = tkz.GetNextToken();
+          if (tkz.HasMoreTokens())
+            height = tkz.GetNextToken();
+        }
+        filter.AddPropertyValue(_("width"),width);
+        filter.AddPropertyValue(_("height"),height);
+      }
+    }
+  }
+  
  public:
   void OnCreated(IObjectView *objview, wxWindow *wxparent, IObjectView *parent,
                  IObjectView *first_child)
@@ -59,6 +84,19 @@ class SpacerComponent : public ComponentBase
     xrc.AddProperty(_("flag"),   _("flag"),   XRC_TYPE_BITLIST);
     xrc.AddProperty(_("border"), _("border"), XRC_TYPE_INTEGER);
     return xrc.GetXrcObject();
+  }
+  
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxMenuItem"));
+    
+    // la propiedad "size" hay que descomponerla en weight y height
+    AddSizeProperty(filter, xrcObj);
+    
+    filter.AddProperty(_("option"), _("option"), XRC_TYPE_INTEGER);
+    filter.AddProperty(_("flag"),   _("flag"),   XRC_TYPE_BITLIST);
+    filter.AddProperty(_("border"), _("border"), XRC_TYPE_INTEGER);
+    return filter.GetXfbObject();
   }
 };
 
@@ -95,6 +133,15 @@ class SizerItemComponent : public ComponentBase
     xrc.AddProperty(_("border"), _("border"), XRC_TYPE_INTEGER);
     return xrc.GetXrcObject();
   }
+  
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("sizeritem"));
+    filter.AddProperty(_("option"), _("option"), XRC_TYPE_INTEGER);
+    filter.AddProperty(_("flag"),   _("flag"),   XRC_TYPE_BITLIST);
+    filter.AddProperty(_("border"), _("border"), XRC_TYPE_INTEGER);
+    return filter.GetXfbObject();
+  }
 };
 
 class BoxSizerComponent : public ComponentBase
@@ -110,6 +157,13 @@ class BoxSizerComponent : public ComponentBase
     ObjectToXrcFilter xrc(obj, _("wxBoxSizer"));
     xrc.AddProperty(_("orient"), _("orient"), XRC_TYPE_TEXT);
     return xrc.GetXrcObject();
+  }
+  
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxBoxSizer"));
+    filter.AddProperty(_("orient"),_("orient"),XRC_TYPE_TEXT);
+    return filter.GetXfbObject();
   }
 };
 
@@ -134,6 +188,14 @@ class StaticBoxSizerComponent : public ComponentBase
     xrc.AddProperty(_("label"), _("label"), XRC_TYPE_TEXT);
     return xrc.GetXrcObject();
   }
+
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxStaticBoxSizer"));
+    filter.AddProperty(_("orient"),_("orient"),XRC_TYPE_TEXT);
+    filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+    return filter.GetXfbObject();
+  }
 };
 
 class GridSizerComponent : public ComponentBase
@@ -156,6 +218,16 @@ class GridSizerComponent : public ComponentBase
     xrc.AddProperty(_("vgap"), _("vgap"), XRC_TYPE_INTEGER);
     xrc.AddProperty(_("hgap"), _("hgap"), XRC_TYPE_INTEGER);
     return xrc.GetXrcObject();
+  }
+  
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxGridSizer"));
+    filter.AddProperty(_("rows"), _("rows"), XRC_TYPE_INTEGER);
+    filter.AddProperty(_("cols"), _("cols"), XRC_TYPE_INTEGER);    
+    filter.AddProperty(_("vgap"), _("vgap"), XRC_TYPE_INTEGER);
+    filter.AddProperty(_("hgap"), _("hgap"), XRC_TYPE_INTEGER);
+    return filter.GetXfbObject();
   }
 };
 
@@ -195,6 +267,18 @@ class FlexGridSizerComponent : public ComponentBase
     xrc.AddPropertyValue(_("growablecols"), obj->GetPropertyAsString(_("growablecols")));
     xrc.AddPropertyValue(_("growablerows"), obj->GetPropertyAsString(_("growablerows")));
     return xrc.GetXrcObject();
+  }
+
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxBoxSizer"));
+    filter.AddProperty(_("rows"), _("rows"), XRC_TYPE_INTEGER);
+    filter.AddProperty(_("cols"), _("cols"), XRC_TYPE_INTEGER);    
+    filter.AddProperty(_("vgap"), _("vgap"), XRC_TYPE_INTEGER);
+    filter.AddProperty(_("hgap"), _("hgap"), XRC_TYPE_INTEGER);
+    filter.AddProperty(_("growablecols"),_("growablecols"),XRC_TYPE_TEXT);
+    filter.AddProperty(_("growablerows"),_("growablerows"),XRC_TYPE_TEXT);
+    return filter.GetXfbObject();
   }
 };
 

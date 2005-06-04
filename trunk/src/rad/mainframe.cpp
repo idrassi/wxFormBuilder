@@ -333,7 +333,7 @@ void MainFrame::OnImportXrc(wxCommandEvent &event)
     TiXmlDocument doc(_STDSTR(dialog->GetPath()));
     if (doc.LoadFile())
     {
-      XrcFilter xrc;
+      /*XrcFilter xrc;
       xrc.SetObjectDatabase(GetData()->GetObjectDatabase());
       PObjectBase project = xrc.GetProject(&doc);
       if (project)
@@ -341,7 +341,17 @@ void MainFrame::OnImportXrc(wxCommandEvent &event)
         GetData()->MergeProject(project);
       }
       else
-        wxLogMessage(wxT("Error al importar XRC"));
+        wxLogMessage(wxT("Error al importar XRC"));*/
+        
+      XrcLoader xrc;
+      xrc.SetObjectDatabase(GetData()->GetObjectDatabase());
+      PObjectBase project = xrc.GetProject(&doc);
+      if (project)
+      {
+        GetData()->MergeProject(project);
+      }
+      else
+        wxLogMessage(wxT("Error al importar XRC"));  
     }
     else
       wxLogMessage(wxT("Error al cargar archivo XRC"));

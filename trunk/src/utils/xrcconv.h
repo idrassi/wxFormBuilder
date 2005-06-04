@@ -83,4 +83,43 @@ class ObjectToXrcFilter
   void LinkInteger(const int &integer, TiXmlElement *propElement);
 };
 
+/**
+ * Filtro para exportar un objeto de formato XRC a formato XFB (Xml-FormBuilder)
+ *
+ * La forma de uso es muy similar al filtro ObjectToXrcFilter, basta con ir
+ * añadiendo las propiedades con su tipo.
+ *
+ */
+class XrcToXfbFilter
+{
+ public:
+ 
+  XrcToXfbFilter(TiXmlElement *obj,
+                 const wxString &classname);
+
+  XrcToXfbFilter(TiXmlElement *obj,
+                 const wxString &classname,
+                 const wxString &objname);
+  ~XrcToXfbFilter();
+  
+  void AddProperty (const wxString &xrcPropName,
+                    const wxString &xfbPropName, const int &propType);
+
+  void AddPropertyValue (const wxString &xfbPropName,
+                         const wxString &xfbPropValue);
+
+  void AddWindowProperties();
+  
+  TiXmlElement* GetXfbObject();
+
+ private:
+  TiXmlElement *m_xfbObj;
+  TiXmlElement *m_xrcObj;
+  
+  void ImportTextProperty(const wxString &xrcPropName, TiXmlElement *property);
+  void ImportColourProperty(const wxString &xrcPropName, TiXmlElement *property);
+  void ImportFontProperty(const wxString &xrcPropName, TiXmlElement *property);
+  
+  TiXmlElement *GetXrcProperty(const wxString &name);
+};
 

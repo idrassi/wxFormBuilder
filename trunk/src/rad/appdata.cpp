@@ -215,6 +215,8 @@ void ApplicationData::MergeProject(PObjectBase project)
   {
     //m_project->AddChild(project->GetChild(i));
     //project->GetChild(i)->SetParent(m_project);
+    PObjectBase child = project->GetChild(i);
+    
     InsertObject(project->GetChild(i),m_project);
   }
   DataObservable::NotifyProjectRefresh(); 

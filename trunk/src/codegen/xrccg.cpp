@@ -140,6 +140,12 @@ TiXmlElement* XrcCodeGenerator::GetElement(PObjectBase obj)
       if (aux) element->LinkEndChild(aux);
     }
   }
+  else
+  {
+    // El componente no soporta XRC
+    element = new TiXmlElement("object");
+    element->SetAttribute("class","unknown");
+  }
   
   return element;
 }

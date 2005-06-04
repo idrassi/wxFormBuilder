@@ -540,3 +540,76 @@ PObjectBase XrcFilter::GetProject(TiXmlDocument *xrcDoc)
   
   return project;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+PObjectBase XrcLoader::GetProject(TiXmlDocument *xrcDoc)
+{
+  assert(m_objDb);
+  Debug::Print("[XrcFilter::GetProject]");
+  
+  PObjectBase project(m_objDb->CreateObject("Project"));
+  
+  
+  TiXmlElement *root = xrcDoc->FirstChildElement("resource");
+  TiXmlElement *element = root->FirstChildElement("object");
+  while (element)
+  {
+    PObjectBase obj = GetObject(element,project);
+    element = element->NextSiblingElement("object");
+  }
+  
+  return project;
+}
+
+PObjectBase XrcLoader::GetObject(TiXmlElement *xrcObj, PObjectBase parent)
+{
+  // La estrategia será construir el objeto a partir del nombre
+  // para posteriormente modificar las propiedades.
+
+  string className = xrcObj->Attribute("class");
+  if (parent->GetObjectTypeName() == "project")
+  {
+    // hay que quitarle el "wx" del principio
+    // esto es un apaño que aún no se como arreglarlo porque "wxPanel" es llamada
+    // como "Panel" para distinguirlo de un "form" y un "container"
+    className = className.substr(2,className.size() - 2);
+  }
+
+  PObjectBase object;
+  PObjectInfo objInfo = m_objDb->GetObjectInfo(className);
+  if (objInfo)
+  {
+    IComponent *comp = objInfo->GetComponent();
+    if (comp)
+    {
+      TiXmlElement *fbObj = comp->ImportFromXrc(xrcObj);
+      if (fbObj)
+      {
+        object = m_objDb->CreateObject(fbObj,parent);
+        if (object)
+        {  
+          // recursivamente importamos los objetos que están por debajo
+          TiXmlElement *element = xrcObj->FirstChildElement("object");
+          while (element)
+          {
+            GetObject(element,object);
+            element = element->NextSiblingElement("object");
+          }
+        }
+      }
+    }
+  }
+  else
+  {
+    // es una clase desconocida, vamos a crear un wxPanel porque de lo
+    // contrario es muy posible que se produzca un fallo debido a que
+    // haya un sizeritem sin objeto incluido él.
+    object = m_objDb->CreateObject("wxPanel",parent);
+    parent->AddChild(object);
+    object->SetParent(parent);
+  }
+  
+  return object;
+}
