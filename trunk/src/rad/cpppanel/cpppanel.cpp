@@ -130,7 +130,7 @@ void CppPanel::CodeGeneration()
       file = _WXSTR(pfile->GetValue());
       
     if (file == wxT(""))
-      file = wxT("wxfb_code");
+      file = wxT("noname");
     
     
     PCodeWriter h_cw(new FileCodeWriter(path + wxFILE_SEP_PATH + file + wxT(".h")));

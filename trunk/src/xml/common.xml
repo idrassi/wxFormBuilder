@@ -139,6 +139,16 @@
       <template name="include">#include &lt;wx/statbmp.h&gt;</template>
     </codegen>
   </objectinfo>
+<objectinfo class="wxXpmStaticBitmap" icon="xpm_static_bitmap.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text" hidden="1">m_bitmap</property>
+    <property name="bitmap" type="xpm_bitmap" />
+    <codegen language="C++">
+      <template name="declaration">wxStaticBitmap *$name;</template>
+      <template name="construction">$name = new wxStaticBitmap(#wxparent $name,$id,$bitmap,$pos,$size,$style);</template>
+      <template name="include">#include &lt;wx/statbmp.h&gt;</template>
+    </codegen>
+  </objectinfo>  
   <objectinfo class="wxStaticLine" icon="static_line.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_staticline</property>

@@ -359,6 +359,10 @@ class StaticBitmapComponent : public ComponentBase
   }
 };	
 
+class XpmStaticBitmapComponent : public StaticBitmapComponent
+{
+};
+
 class StaticLineComponent : public ComponentBase
 {
  public:
@@ -602,6 +606,7 @@ BEGIN_LIBRARY()
   COMPONENT("wxComboBox", ComboBoxComponent)
   COMPONENT("wxCheckBox", CheckBoxComponent)
   COMPONENT("wxStaticBitmap", StaticBitmapComponent)
+  COMPONENT("wxXpmStaticBitmap", XpmStaticBitmapComponent)
   COMPONENT("wxStaticLine", StaticLineComponent)
   COMPONENT("wxNotebook", NotebookComponent)
   COMPONENT("wxMenuBar", MenuBarComponent)

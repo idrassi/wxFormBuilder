@@ -34,12 +34,6 @@ using namespace std;
  */
 class CppTemplateParser : public TemplateParser
 {
- protected:
-  /**
-   * Convierte una cadena de texto a formato "C/C++"
-   */
-  string ConvertCppString(string text); 
-  
  public:
   CppTemplateParser(PObjectBase obj, string _template); 
   
@@ -72,6 +66,12 @@ class CppCodeGenerator : public CodeGenerator
   void FindDependencies(PObjectBase obj, set<PObjectInfo> &info_set);
   
   /**
+   * Guarda el conjunto de "includes" que hay que generar para las propiedades
+   * PT_XPM_BITMAP.
+   */
+  void FindXpmProperties(PObjectBase obj, set<string> &set);
+  
+  /**
    * Guarda todos las propiedades de objetos de tipo "macro" para generar
    * su posterior '#define'.
    */
@@ -92,6 +92,11 @@ class CppCodeGenerator : public CodeGenerator
    * Genera la sección de '#include' fichero.
    */
   void GenIncludes(PObjectBase project);
+  
+  /**
+   * Genera la sección de '#include' para las propiedades XPM.
+   */
+  void GenXpmIncludes(PObjectBase project);
   
   /**
    * Genera la sección de '#define' macro.
@@ -118,6 +123,16 @@ class CppCodeGenerator : public CodeGenerator
   void GenSettings(PObjectInfo info, PObjectBase obj);
   
  public:
+  /**
+   * Convierte una cadena de texto a formato "C/C++"
+   */
+  static string ConvertCppString(string text); 
+  
+  /**
+   * Convierte una cadena de texto con el nombre de un fichero XPM
+   * y genera el nombre del identificador de "C/C++" asociado.
+   */
+  static string ConvertXpmName(string text);
     
   /**
    * Configura el escritor de código para el fichero de cabecera.

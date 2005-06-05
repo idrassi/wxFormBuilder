@@ -242,7 +242,8 @@ wxString TypeConv::FontToString (const wxFont &font)
 
 wxBitmap TypeConv::StringToBitmap(const wxString &str)
 {
-  wxBitmap bitmap(str,wxBITMAP_TYPE_XPM);
+  //wxImage image(str,
+  wxBitmap bitmap(str,wxBITMAP_TYPE_ANY);
   if (bitmap.Ok())
     return bitmap;
 

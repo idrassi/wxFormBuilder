@@ -366,6 +366,13 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
   else if (type == PT_BITMAP)
     result = wxImageFileProperty(name, wxPG_LABEL, prop->GetValueAsString());
     
+  else if (type == PT_XPM_BITMAP)
+    // Juan Antonio, te he marcado este error a posta para ver si puedes 
+    // crear una propiedad igual que BITMAP pero que sólo deje cargar
+    // ficheros XPM
+    - error -
+    result = wxImageFileProperty(name, wxPG_LABEL, prop->GetValueAsString());
+    
   return result;
 }
 

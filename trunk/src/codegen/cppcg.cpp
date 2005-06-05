@@ -41,31 +41,6 @@ PTemplateParser CppTemplateParser::CreateParser(PObjectBase obj, string _templat
   return newparser;
 }
 
-string CppTemplateParser::ConvertCppString(string text)
-{
-  string result;
-  
-  for (unsigned int i=0; i<text.length() ; i++)
-  {
-    char c = text[i];
-    
-    switch (c)
-    {
-      case '"':
-        result = result + "\\\"";
-        break;
-
-      case '\\':
-        result = result + "\\\\";
-        break;
-        
-      default:
-        result = result + c;
-        break;
-    }
-  }
-  return result;
-}
 
 /**
  * Convierte el valor de una propiedad a código C++.
@@ -83,7 +58,7 @@ string CppTemplateParser::PropertyToCode(PProperty property)
     // TO-DO's
     // Las cadenas de caracteres (wxString) hay que pasarlas a cadenas tipo "C"
     // "Hola" -> wxT("\"Hola\"")
-      result = "wxT(\"" + ConvertCppString(value) + "\")"; 
+      result = "wxT(\"" + CppCodeGenerator::ConvertCppString(value) + "\")"; 
       break;
     case PT_MACRO:
     case PT_TEXT:
@@ -153,12 +128,20 @@ string CppTemplateParser::PropertyToCode(PProperty property)
       break;  
       
     case PT_BITMAP:
-      // La generación de esta propiedad es provisional ya que la idea
-      // principal es que los archivos xpm se incluyan (#include) en el
-      // fichero cpp y no cargarlo de un fichero.
-      result = "wxBitmap(wxT(\"" + ConvertCppString(value)
-                       + "\"), wxBITMAP_TYPE_XPM)";
+      result = "wxBitmap(wxT(\"" + CppCodeGenerator::ConvertCppString(value)
+                       + "\"), wxBITMAP_TYPE_ANY)";
       break;
+      
+    case PT_XPM_BITMAP:
+      // A diferencia de PT_BITMAP, estos bitmaps se compilan dentro del
+      // módulo cpp, por lo que el programa ejecutable no requerirá dicho
+      // fichero.     
+      result = "wxBitmap(" + CppCodeGenerator::ConvertXpmName(value) + ")";
+      
+      //result = "wxBitmap(wxT(\"" + ConvertCppString(value)
+      //                 + "\"), wxBITMAP_TYPE_XPM)";
+      break;
+      
     default:
       
       break;  
@@ -169,6 +152,52 @@ string CppTemplateParser::PropertyToCode(PProperty property)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+string CppCodeGenerator::ConvertCppString(string text)
+{
+  string result;
+  
+  for (unsigned int i=0; i<text.length() ; i++)
+  {
+    char c = text[i];
+    
+    switch (c)
+    {
+      case '"':
+        result = result + "\\\"";
+        break;
+
+      case '\\':
+        result = result + "\\\\";
+        break;
+        
+      default:
+        result = result + c;
+        break;
+    }
+  }
+  return result;
+}
+
+string CppCodeGenerator::ConvertXpmName(string text)
+{
+  string name = text;
+  // el nombre consiste en extraer el nombre del fichero (sin el directorio)
+  // y sustituir el caracter '.' por '_'.
+  
+  int last_slash = name.size() - 1;
+  while (last_slash >= 0 && name[last_slash] != '\\' && name[last_slash] != '/')
+  {
+    if (name[last_slash] == '.')
+      name[last_slash] = '_';
+    last_slash--;
+  }
+    
+  // quitamos el directorio
+  if (last_slash >= 0 && last_slash < (int)name.size() - 1)
+    name = name.substr(last_slash+1,name.size() - last_slash + 1);
+  
+  return name;
+}
 
 bool CppCodeGenerator::GenerateCode(PObjectBase project)
 {
@@ -188,14 +217,21 @@ bool CppCodeGenerator::GenerateCode(PObjectBase project)
   m_source->WriteLn(code_header);
   
   string file = project->GetProperty("file")->GetValue();
+  if (file == "")
+    file = "noname";
   
   m_header->WriteLn("#ifndef __" + file + "__");
   m_header->WriteLn("#define __" + file + "__");
 
+  // en el cpp generamos el include del .h generado y los xpm
   m_source->WriteLn("#include \""+file+".h\"");
+  m_source->WriteLn("");
+  GenXpmIncludes(project);
   
-  
+  // generamos en el h los includes de las dependencias de los componentes.
   GenIncludes(project);
+  
+  // generamos los defines de las macros
   GenDefines(project);
   
   for (unsigned int i=0; i<project->GetChildCount(); i++)
@@ -526,5 +562,54 @@ void CppCodeGenerator::GenSettings(PObjectInfo info, PObjectBase obj)
   {
     PObjectInfo base_info = info->GetBaseClass(i);
     GenSettings(base_info,obj);
+  }
+}
+
+///////////////////////////////////////////////////////////////////////
+
+
+void CppCodeGenerator::GenXpmIncludes(PObjectBase project)
+{
+  set<string> include_set;
+
+  // lo primero es obtener la lista de includes
+  FindXpmProperties(project,include_set);
+  
+  // y los generamos
+  set<string>::iterator it;
+  for (it = include_set.begin() ; it != include_set.end() ; it++)
+  {
+    string include = *it;
+    if (include != "")
+      m_source->WriteLn(include);
+  }
+  
+  m_source->WriteLn("");
+}
+
+void CppCodeGenerator::FindXpmProperties(PObjectBase obj, set<string> &set)
+{
+  // recorremos cada una de las propiedades del objeto obj, si damos con
+  // alguna que sea de tipo PT_XPM_BITMAP añadimos la cadena del "include"
+  // en set. Luego recursivamente hacemos lo mismo con los hijos.
+  unsigned int i, count;
+  
+  count = obj->GetPropertyCount();
+  
+  for (i = 0; i < count; i++)
+  {
+    PProperty property = obj->GetProperty(i);
+    if (property->GetType() == PT_XPM_BITMAP)
+    {
+      string inc = "#include \"" + ConvertCppString(property->GetValue()) + "\"";
+      set.insert(inc);
+    }
+  }
+  
+  count = obj->GetChildCount();
+  for (i = 0; i< count; i++)
+  {
+    PObjectBase child = obj->GetChild(i);
+    FindXpmProperties(child, set);
   }
 }
