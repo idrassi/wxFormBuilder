@@ -84,7 +84,7 @@ void ObjectToXrcFilter::AddPropertyValue (const wxString &xrcPropName,
                                           const wxString &xrcPropValue)
 {
   TiXmlElement *propElement = new TiXmlElement(xrcPropName.mb_str());
-  LinkText(m_obj->GetPropertyAsString(xrcPropName), propElement);
+  LinkText(xrcPropValue, propElement);
   m_xrcObj->LinkEndChild(propElement);  
 }
                      

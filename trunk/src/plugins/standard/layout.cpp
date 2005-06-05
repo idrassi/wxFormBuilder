@@ -75,11 +75,11 @@ class SpacerComponent : public ComponentBase
   {
     ObjectToXrcFilter xrc(obj, _("spacer"));
     
-    // las propiedades weight y height se mapean como size
+    // las propiedades width y height se mapean como size
     xrc.AddPropertyValue(_("size"),
-      wxString::Format(_("%d,%d"),obj->GetPropertyAsInteger(_("weight")),
+      wxString::Format(_("%d,%d"),obj->GetPropertyAsInteger(_("width")),
                                   obj->GetPropertyAsInteger(_("height"))));
-    
+                                  
     xrc.AddProperty(_("option"), _("option"), XRC_TYPE_INTEGER);
     xrc.AddProperty(_("flag"),   _("flag"),   XRC_TYPE_BITLIST);
     xrc.AddProperty(_("border"), _("border"), XRC_TYPE_INTEGER);
