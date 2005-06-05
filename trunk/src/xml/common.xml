@@ -239,6 +239,11 @@
       <option name="wxLC_SORT_DESCENDING" />
       <option name="wxLC_HRULES" />
       <option name="wxLC_VRULES" />wxLC_ICON</property>
+    <codegen language="C++">
+      <template name="declaration">wxListCtrl *$name;</template>
+      <template name="construction">$name = new wxListCtrl(#wxparent $name,$id,$pos,$size,$style);</template>
+      <template name="include">#include &lt;wx/listctrl.h&gt;</template>
+    </codegen>
   </objectinfo>
   <objectinfo class="wxStatusBar" icon="statusbar.xpm" type="statusbar">
     <inherits class="wxWindow" />
