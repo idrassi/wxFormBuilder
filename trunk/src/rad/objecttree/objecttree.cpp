@@ -26,6 +26,7 @@
 #include "utils/debug.h"
 #include <wx/imaglist.h>
 #include <wx/image.h>
+#include "rad/menueditor.h"
 
 BEGIN_EVENT_TABLE(ObjectTree,ObjectTreeGUI)
   EVT_TREE_SEL_CHANGED(-1, ObjectTree::OnSelChanged)
@@ -306,6 +307,7 @@ ObjectTreeItemData::ObjectTreeItemData(PObjectBase obj) : m_object(obj)
 #define MENU_MOVE_DOWN  101
 #define MENU_CUT        102
 #define MENU_PASTE      103
+#define MENU_EDIT_MENUS 104
 
 BEGIN_EVENT_TABLE(ItemPopupMenu,wxMenu)
   EVT_MENU(-1, ItemPopupMenu::OnMenuEvent)
@@ -319,7 +321,8 @@ ItemPopupMenu::ItemPopupMenu(DataObservable *data, PObjectBase obj)
   AppendSeparator();
   Append(MENU_MOVE_UP,   wxT("Move Up"));
   Append(MENU_MOVE_DOWN, wxT("Move Down"));
-
+  AppendSeparator();
+  Append(MENU_EDIT_MENUS, wxT("Edit menus..."));
 }
 
 void ItemPopupMenu::OnMenuEvent (wxCommandEvent & event)
@@ -339,6 +342,12 @@ void ItemPopupMenu::OnMenuEvent (wxCommandEvent & event)
       break;
     case MENU_MOVE_DOWN:
       m_data->MovePosition(m_object,true);
+      break;
+    case MENU_EDIT_MENUS:
+      {
+        MenuEditor me(NULL);
+        me.ShowModal();
+      }
       break;
     default:
       break;
