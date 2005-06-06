@@ -31,6 +31,8 @@
 #include "rad/bitmaps.h"
 #include "icons/wxwin16x16.xpm"
 #include "icons/system.xpm"
+#include "icons/undo.xpm"
+#include "icons/redo.xpm"
 #include "model/xrcfilter.h"
 #include "rad/about.h"
 
@@ -211,6 +213,9 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   toolbar->AddTool(ID_NEW_PRJ,wxT("New Project"),AppBitmaps::GetBitmap(wxT("new")));
   toolbar->AddTool(ID_OPEN_PRJ,wxT("Open Project"),AppBitmaps::GetBitmap(wxT("open")));
   toolbar->AddTool(ID_SAVE_PRJ,wxT("Save Project"),AppBitmaps::GetBitmap(wxT("save")));
+  toolbar->AddSeparator();
+  toolbar->AddTool(ID_UNDO, _T("Undo"), undo_xpm);
+  toolbar->AddTool(ID_REDO, _T("Redo"), redo_xpm);
   toolbar->AddSeparator();
   toolbar->AddTool(ID_GENERATE_CODE,wxT("Generate Code"),system_xpm);
 
@@ -459,6 +464,8 @@ void MainFrame::UpdateMenuBar()
   
   menuEdit->Enable(ID_REDO,GetData()->CanRedo());
   menuEdit->Enable(ID_UNDO,GetData()->CanUndo());
+  GetToolBar()->EnableTool(ID_REDO,GetData()->CanRedo());
+  GetToolBar()->EnableTool(ID_UNDO,GetData()->CanUndo());
 }
 
 void MainFrame::ProjectRefresh()
