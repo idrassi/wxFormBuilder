@@ -54,7 +54,9 @@ class MainFrame : public DataObserver, public wxFrame
   CppPanel *m_cpp;
   XrcPanel *m_xrc;
   
-  void UpdateMenuBar();
+  wxString m_prjFileName;
+  
+  void UpdateFrame();
   
   DECLARE_EVENT_TABLE()
  public:
@@ -63,6 +65,7 @@ class MainFrame : public DataObserver, public wxFrame
   void RestorePosition(const wxString &name);
   void SavePosition(const wxString &name);
   void OnSaveProject(wxCommandEvent &event);
+  void OnSaveAsProject(wxCommandEvent &event);
   void OnOpenProject(wxCommandEvent &event);
   void OnNewProject(wxCommandEvent &event);
   void OnGenerateCode(wxCommandEvent &event);

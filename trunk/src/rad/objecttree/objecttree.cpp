@@ -36,38 +36,37 @@ END_EVENT_TABLE()
 ObjectTree::ObjectTree(wxWindow *parent, int id)
   : ObjectTreeGUI(parent,id)
 {
- /* wxImageList *img_list = new wxImageList(16,16);
-  img_list->Add(wxBitmap(ot_project_xpm));
-  img_list->Add(wxBitmap(ot_form_xpm));
-  img_list->Add(wxBitmap(ot_sizer_xpm));
-  img_list->Add(wxBitmap(ot_widget_xpm));
-  img_list->Add(wxBitmap(ot_spacer_xpm));
-  img_list->Add(wxBitmap(ot_notebook_xpm));
-  img_list->Add(wxBitmap(ot_menubar_xpm));
-  img_list->Add(wxBitmap(ot_menu_xpm));
-  img_list->Add(wxBitmap(ot_menuitem_xpm));
-
-  m_tcObjects->AssignImageList(img_list);*/
 }
 
 void ObjectTree::RebuildTree()
 {
   m_tcObjects->Freeze();
 
-  // borramos toda la información previa
-  m_tcObjects->DeleteAllItems();
-  m_map.erase(m_map.begin(),m_map.end());
-  
   PObjectBase project = GetData()->GetProjectData();
-
-//  wxTreeItemId root = m_tcObjects->AddRoot(wxT("Project"));
-//  ObjectBase *class_obj = GetDocument()->GetSelectedWindow();
-//  AddChildren(class_obj, root);
+  
+  // guardamos el valor del atributo "IsExpanded"
+  // para regenerar correctamente el árbol
+  // (ojo! hacerlo antes de m_map.clear())
   if (project)
   {
+    assert(m_expandedMap.empty());
+    SaveItemStatus(project);
+  }
+
+  // borramos toda la información previa
+  m_tcObjects->DeleteAllItems();
+  m_map.clear();
+  
+  if (project)
+  {  
     wxTreeItemId dummy;
     AddChildren(project, dummy, true );
+  
+    // restauramos el valor del atributo "IsExpanded"
+    RestoreItemStatus(project);
   }  
+
+  m_expandedMap.clear();
   
   m_tcObjects->Thaw();
 }  
@@ -170,7 +169,9 @@ void ObjectTree::AddChildren(PObjectBase obj, wxTreeItemId &parent, bool is_root
     else
       new_parent = m_tcObjects->AppendItem(parent,wxT(""),-1,-1,item_data);
 
-    m_tcObjects->Expand(parent);      
+
+    m_tcObjects->Expand(parent); // por defecto expandido
+
     
     // registramos el objeto
     m_map.insert(ObjectItemMap::value_type(obj,new_parent));
@@ -197,33 +198,6 @@ void ObjectTree::AddChildren(PObjectBase obj, wxTreeItemId &parent, bool is_root
   }  
 }
 
-/*int ObjectTree::GetImageIndex (string type)
-{
-  // TO-DO: eliminar dependencias con el tipo usando el icono
-  // definido para el componente en el fichero XML (el de la paleta)
-  
-  int image = 0;
-  if (type == "project")
-    image = 0;
-  else if (type == "form")
-    image = 1;
-  else if (type == "sizer")
-    image = 2;
-  else if (type == "container" || type == "widget")
-    image = 3;
-  else if (type == "spacer")
-    image = 4;
-  else if (type == "notebook")
-    image = 5;
-  else if (type == "menubar")
-    image = 6;
-  else if (type == "menu")
-    image = 7;
-  else if (type == "menuitem")
-    image = 8;
-  
-  return image;
-}*/
 
 int ObjectTree::GetImageIndex (string name)
 {
@@ -294,6 +268,43 @@ void ObjectTree::Create()
   }
   
   m_tcObjects->AssignImageList(m_iconList);
+}
+
+void ObjectTree::SaveItemStatus(PObjectBase obj)
+{
+  ObjectItemMap::iterator it = m_map.find(obj);
+  if (it != m_map.end()) 
+  {
+    wxTreeItemId id = it->second; // obtenemos el item
+    m_expandedMap.insert(ItemExpandedMap::value_type(obj,m_tcObjects->IsExpanded(id)));
+    
+    unsigned int i,count = obj->GetChildCount();
+    for (i = 0; i<count ; i++)
+      SaveItemStatus(obj->GetChild(i));
+  }
+}
+
+void ObjectTree::RestoreItemStatus(PObjectBase obj)
+{
+  bool isExpanded;
+  
+  ObjectItemMap::iterator item_it = m_map.find(obj);
+  if (item_it != m_map.end())
+  {
+    wxTreeItemId id = item_it->second;
+   
+    ItemExpandedMap::iterator expand_it = m_expandedMap.find(obj);
+    isExpanded = (expand_it != m_expandedMap.end()? expand_it->second : true );
+      
+    if (isExpanded)
+      m_tcObjects->Expand(id);      
+    else
+      m_tcObjects->Collapse(id); 
+  }
+    
+  unsigned int i,count = obj->GetChildCount();  
+  for (i = 0; i<count ; i++)
+    RestoreItemStatus(obj->GetChild(i));
 }
 
 ///////////////////////////////////////////////////////////////////////////////

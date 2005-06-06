@@ -121,9 +121,7 @@ void VisualEditor::Create()
   PObjectBase root = GetData()->GetSelectedForm();
   m_form = root;
 
-  //#ifdef __WX24__
-    if (IsShown()) Freeze(); // Freeze no funciona como en wxWidgets 2.4!
-  //#endif 
+  if (IsShown()) Freeze();
 
   m_back->SetSelectedItem(NULL);
   m_back->SetSelectedSizer(NULL);
@@ -144,9 +142,7 @@ void VisualEditor::Create()
       if (wsize.GetHeight() > 0 && wsize.GetWidth() > 0)
         m_back->SetSize(wsize);
       else
-      {
         need_fit = true;
-      }
     }
     else
     {
@@ -170,6 +166,8 @@ void VisualEditor::Create()
     
     if (need_fit)
       m_back->Fit();
+    
+    m_back->Layout();
       
     if (menubar) m_back->SetFrameWidgets(menubar, statusbar);
     
@@ -179,9 +177,7 @@ void VisualEditor::Create()
     m_back->SetSize(10,10);
   }
 
-  //#ifdef __WX24__
-    if (IsShown()) Thaw(); // Freeze no funciona como en wxWidgets 2.4!
-  //#endif   
+  if (IsShown()) Thaw();
 }  
 
 

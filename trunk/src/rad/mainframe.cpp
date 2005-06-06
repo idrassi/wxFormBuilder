@@ -45,11 +45,12 @@
 #define ID_IMPORT_XRC 106
 #define ID_UNDO 107
 #define ID_REDO 108
-
+#define ID_SAVE_AS_PRJ  102
 
 BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_NEW_PRJ,MainFrame::OnNewProject)
   EVT_MENU(ID_SAVE_PRJ,MainFrame::OnSaveProject)
+  EVT_MENU(ID_SAVE_AS_PRJ,MainFrame::OnSaveAsProject)
   EVT_MENU(ID_OPEN_PRJ,MainFrame::OnOpenProject)
   EVT_MENU(ID_ABOUT,MainFrame::OnAbout)
   EVT_MENU(ID_QUIT,MainFrame::OnExit)
@@ -63,6 +64,7 @@ END_EVENT_TABLE()
 MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   : wxFrame(parent,id,wxT("wxFormBuilder v.0.1"),wxDefaultPosition,wxSize(1000,800))
 {
+  SetIcon(wxIcon(wxwin16x16_xpm));
   wxString date(wxT(__DATE__));
   wxString time(wxT(__TIME__));
   SetTitle(wxT("wxFormBuilder (Build on ") + date +wxT(" - ")+ time + wxT(")"));
@@ -71,8 +73,8 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   
   wxMenu *menuFile = new wxMenu;
   menuFile->Append(ID_OPEN_PRJ, _T("&Open...\tF2"), _T("Load a project"));
-  menuFile->Append(10,          _T("&Save"), _T("Save current project"));
-  menuFile->Append(ID_SAVE_PRJ, _T("Save &As...\tF3"), _T("Save the project"));
+  menuFile->Append(ID_SAVE_PRJ,          _T("&Save"), _T("Save current project"));
+  menuFile->Append(ID_SAVE_AS_PRJ, _T("Save &As...\tF3"), _T("Save the project"));
   menuFile->AppendSeparator();
   menuFile->Append(ID_IMPORT_XRC, _T("&Import XRC..."), _T("Save current project"));
   menuFile->AppendSeparator();
@@ -302,17 +304,28 @@ void MainFrame::SavePosition(const wxString &name)
 
 void MainFrame::OnSaveProject(wxCommandEvent &event)
 {
-//  GetData()->SaveProject(wxT("hola.xml"));
+  if (m_prjFileName == wxT(""))
+    OnSaveAsProject(event);
+  else
+    GetData()->SaveProject(m_prjFileName);
+}  
+
+    
+void MainFrame::OnSaveAsProject(wxCommandEvent &event)
+{    
   wxFileDialog *dialog = new wxFileDialog(this,wxT("Open Project"),wxT("projects/example"),
     wxT("example.xml"),wxT("*.xml"),wxSAVE);
 
   if (dialog->ShowModal() == wxID_OK)
   {
-    GetData()->SaveProject(dialog->GetPath());
+    m_prjFileName = dialog->GetPath();
+    GetData()->SaveProject(m_prjFileName); // FIXME: debe devolver bool.
+    
+    // TO-DO: guardar el path para la próxima vez.
   };
   
   dialog->Destroy();
-}  
+}
 
 void MainFrame::OnOpenProject(wxCommandEvent &event)
 {
@@ -322,7 +335,11 @@ void MainFrame::OnOpenProject(wxCommandEvent &event)
 
   if (dialog->ShowModal() == wxID_OK)
   {
-    GetData()->LoadProject(dialog->GetPath());
+    m_prjFileName = dialog->GetPath();
+    if (!GetData()->LoadProject(m_prjFileName))
+      m_prjFileName = wxT("");
+      
+    // TO-DO: guardar el path para la próxima vez.
   };
   
   dialog->Destroy();
@@ -369,6 +386,7 @@ void MainFrame::OnImportXrc(wxCommandEvent &event)
 void MainFrame::OnNewProject(wxCommandEvent &event)
 {
   GetData()->NewProject();
+  m_prjFileName = wxT("");
 }  
 
 void MainFrame::OnGenerateCode(wxCommandEvent &event)
@@ -405,12 +423,12 @@ void MainFrame::OnClose(wxCloseEvent &event)
 void MainFrame::ProjectLoaded()
 {
   GetStatusBar()->SetStatusText(wxT("Project Loaded!"));
-  UpdateMenuBar();
+  UpdateFrame();
 }
 void MainFrame::ProjectSaved()
 {
   GetStatusBar()->SetStatusText(wxT("Project Saved!"));
-  UpdateMenuBar();
+  UpdateFrame();
 }
 void MainFrame::ObjectSelected(PObjectBase obj)
 {
@@ -429,19 +447,19 @@ void MainFrame::ObjectSelected(PObjectBase obj)
 void MainFrame::ObjectCreated(PObjectBase obj)
 {
   GetStatusBar()->SetStatusText(wxT("Object Created!"));
-  UpdateMenuBar();
+  UpdateFrame();
 }
 
 void MainFrame::ObjectRemoved(PObjectBase obj)
 {
   GetStatusBar()->SetStatusText(wxT("Object Removed!"));
-  UpdateMenuBar();
+  UpdateFrame();
 }
 
 void MainFrame::PropertyModified(PProperty prop)
 {
   GetStatusBar()->SetStatusText(wxT("Property Modified!"));
-  UpdateMenuBar();
+  UpdateFrame();
 }
 
 void MainFrame::CodeGeneration()
@@ -458,17 +476,28 @@ void MainFrame::OnRedo(wxCommandEvent &event)
   GetData()->Redo();
 }
 
-void MainFrame::UpdateMenuBar()
+void MainFrame::ProjectRefresh()
 {
+  UpdateFrame();
+}
+
+void MainFrame::UpdateFrame()
+{
+  // Actualizamos el título
+  wxString date(wxT(__DATE__));
+  wxString time(wxT(__TIME__));
+  wxString title(wxT("wxFormBuilder (Build on ") + date +wxT(" - ")+ time + wxT(")"));
+  title = title + wxT(" - [") + m_prjFileName + wxT("]");
+  SetTitle(title);
+  
+  // Actualizamos los menus
   wxMenu *menuEdit = GetMenuBar()->GetMenu(GetMenuBar()->FindMenu(_("Edit")));
   
   menuEdit->Enable(ID_REDO,GetData()->CanRedo());
   menuEdit->Enable(ID_UNDO,GetData()->CanUndo());
   GetToolBar()->EnableTool(ID_REDO,GetData()->CanRedo());
   GetToolBar()->EnableTool(ID_UNDO,GetData()->CanUndo());
-}
-
-void MainFrame::ProjectRefresh()
-{
-  UpdateMenuBar();
+  
+  // Actualizamos la barra de estado
+  // TO-DO: definir un campo...
 }

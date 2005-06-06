@@ -36,7 +36,10 @@ class ObjectTree : public DataObserver, public ObjectTreeGUI
  private:
    typedef map<PObjectBase, wxTreeItemId> ObjectItemMap;
    typedef map<string, int> IconIndexMap;
+   typedef map<PObjectBase, bool> ItemExpandedMap;
+   
    ObjectItemMap m_map;
+   ItemExpandedMap m_expandedMap;
    
    wxImageList *m_iconList;
    IconIndexMap m_iconIdx;
@@ -48,6 +51,9 @@ class ObjectTree : public DataObserver, public ObjectTreeGUI
    void AddChildren(PObjectBase child, wxTreeItemId &parent, bool is_root = false);
    int GetImageIndex (string type);
    void UpdateItem(wxTreeItemId id, PObjectBase obj);
+   
+   void SaveItemStatus(PObjectBase obj);
+   void RestoreItemStatus(PObjectBase obj);
    
    DECLARE_EVENT_TABLE()
    
