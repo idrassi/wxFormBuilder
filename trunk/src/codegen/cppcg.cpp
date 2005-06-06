@@ -526,10 +526,9 @@ void CppCodeGenerator::GenDefines(PObjectBase project)
   if (it != macro_set.end())
     macro_set.erase(it);
   
-  
+  unsigned int id = FIRST_ID;
   for (it = macro_set.begin() ; it != macro_set.end(); it++)
   {
-    unsigned int id = FIRST_ID;
     ostringstream define;
     define << "#define " << *it << " " << id;
     m_source->WriteLn(define.str());
