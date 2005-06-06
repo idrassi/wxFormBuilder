@@ -55,6 +55,7 @@ class MenuEditor : public wxDialog
     void OnMenuLeft(wxCommandEvent& e);
     void OnMenuRight(wxCommandEvent& e);
     void OnMenuUp(wxCommandEvent& e);
+    void OnUpdateMovers(wxUpdateUIEvent& e);
 };
 
 #endif //__menueditor__

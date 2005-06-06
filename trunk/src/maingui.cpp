@@ -87,6 +87,7 @@ bool MyApp::OnInit()
   
   MainFrame *frame = new MainFrame(data, NULL);
   frame->Show(TRUE); 
+  SetTopWindow(frame);
 
   #ifdef __WXFB_DEBUG__    
   frame->AddChild(m_log->GetFrame());

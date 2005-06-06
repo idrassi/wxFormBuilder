@@ -41,9 +41,10 @@ BEGIN_EVENT_TABLE(MenuEditor, wxDialog)
     EVT_BUTTON(ID_MENULEFT, MenuEditor::OnMenuLeft)
     EVT_BUTTON(ID_MENURIGHT, MenuEditor::OnMenuRight)
     EVT_BUTTON(ID_MENUUP, MenuEditor::OnMenuUp)
+    EVT_UPDATE_UI_RANGE(ID_MENUDOWN, ID_MENUUP, MenuEditor::OnUpdateMovers)
 END_EVENT_TABLE()
 
-MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,wxT(""),wxDefaultPosition,wxDefaultSize)
+MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,_T("Menu Editor"),wxDefaultPosition,wxDefaultSize)
 {
   wxBoxSizer *mainSizer;
   mainSizer = new wxBoxSizer(wxVERTICAL);
@@ -119,6 +120,7 @@ MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,wxT(""),wx
   this->SetAutoLayout(true);
   this->Layout();
   SetClientSize(540, 293);
+  CenterOnScreen();
 }
 
 long MenuEditor::GetSelectedItem()
@@ -184,10 +186,6 @@ void MenuEditor::OnRemoveMenuItem(wxCommandEvent& e)
         m_menuList->DeleteItem(sel);  
 }
 
-void MenuEditor::OnMenuDown(wxCommandEvent& e)
-{
-}
-
 void MenuEditor::OnMenuLeft(wxCommandEvent& e)
 {
     int sel = GetSelectedItem();
@@ -221,6 +219,49 @@ void MenuEditor::OnMenuRight(wxCommandEvent& e)
 
 void MenuEditor::OnMenuUp(wxCommandEvent& e)
 {
+    long sel = GetSelectedItem();
+    long prev = sel - 1;
+    int prevIdent = GetItemIdentation(prev);
+    int curIdent = GetItemIdentation(sel);
+    if (prevIdent < curIdent) return;
+    while (prevIdent > curIdent)
+        prevIdent = GetItemIdentation(--prev);
+        
+    wxString label = m_menuList->GetItemText(sel);
+    m_menuList->DeleteItem(sel);
+    long newSel = m_menuList->InsertItem(prev, label);
+    sel++; prev++;
+    if (sel < m_menuList->GetItemCount())
+    {
+        long childIdent = GetItemIdentation(sel);
+        while (sel < m_menuList->GetItemCount() && childIdent > curIdent)
+        {
+            label = m_menuList->GetItemText(sel);
+            m_menuList->DeleteItem(sel);
+            m_menuList->InsertItem(prev, label);
+            sel++; prev++;
+            if (sel < m_menuList->GetItemCount()) childIdent = GetItemIdentation(sel);
+        }
+    }
+    m_menuList->SetItemState(newSel, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
 
+void MenuEditor::OnMenuDown(wxCommandEvent& e)
+{
+
+}
+
+void MenuEditor::OnUpdateMovers(wxUpdateUIEvent& e)
+{
+    switch (e.GetId())
+    {
+        case ID_MENUUP:
+            e.Enable(GetSelectedItem() > 0);
+            break;
+        case ID_MENUDOWN:
+            e.Enable(GetSelectedItem() < m_menuList->GetItemCount() - 1);
+        default:
+            break;
+    }
+}
 
