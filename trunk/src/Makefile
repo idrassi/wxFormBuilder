@@ -2,9 +2,10 @@ CPP  = g++
 CC   = gcc
 
 RES  = 
-OBJ  = model/database.o model/objectbase.o model/objects.o rad/bitmaps.o rad/guirad.o rad/mainframe.o rad/palette.o utils/stringutils.o utils/typeconv.o maingui.o rad/designer/visualobj.o utils/debug.o rad/cpppanel/cpppanel.o rad/appobserver.o rad/objecttree/objecttree.o rad/inspector/objinspect.o rad/inspector/propeditor.o rad/designer/visualeditor.o rad/appdata.o rad/customkeys.o codegen/codegen.o codegen/cppcg.o rad/title.o rad/genericpanel.o model/types.o rad/xrcpanel/xrcpanel.o codegen/xrccg.o model/xrcfilter.o rad/about.o
-LINKOBJ  = model/database.o model/objectbase.o model/objects.o rad/bitmaps.o rad/guirad.o rad/mainframe.o rad/palette.o utils/stringutils.o utils/typeconv.o maingui.o rad/designer/visualobj.o utils/debug.o rad/cpppanel/cpppanel.o rad/appobserver.o rad/objecttree/objecttree.o rad/inspector/objinspect.o rad/inspector/propeditor.o rad/designer/visualeditor.o rad/appdata.o rad/customkeys.o codegen/codegen.o codegen/cppcg.o rad/title.o rad/genericpanel.o model/types.o rad/xrcpanel/xrcpanel.o codegen/xrccg.o model/xrcfilter.o rad/about.o
-LIBS = `wx-config --libs`   ../libs/tinyxml/tinyxml.a -lwx_gtk2u_stc-2.4
+OBJ  = model/database.o model/objectbase.o rad/bitmaps.o rad/guirad.o rad/mainframe.o rad/palette.o utils/stringutils.o utils/typeconv.o maingui.o rad/designer/visualobj.o utils/debug.o rad/cpppanel/cpppanel.o rad/appobserver.o rad/objecttree/objecttree.o rad/inspector/objinspect2.o rad/inspector/propeditor.o rad/designer/visualeditor.o rad/appdata.o rad/customkeys.o codegen/codegen.o codegen/cppcg.o rad/title.o rad/genericpanel.o model/types.o rad/xrcpanel/xrcpanel.o codegen/xrccg.o model/xrcfilter.o rad/about.o rad/cmdproc.o rad/menueditor.o rad/designer/menubar.o
+LINKOBJ  = model/database.o model/objectbase.o rad/bitmaps.o rad/guirad.o rad/mainframe.o rad/palette.o utils/stringutils.o utils/typeconv.o maingui.o rad/designer/visualobj.o utils/debug.o rad/cpppanel/cpppanel.o rad/appobserver.o rad/objecttree/objecttree.o rad/inspector/objinspect2.o rad/inspector/propeditor.o rad/designer/visualeditor.o rad/appdata.o rad/customkeys.o codegen/codegen.o codegen/cppcg.o rad/title.o rad/genericpanel.o model/types.o rad/xrcpanel/xrcpanel.o codegen/xrccg.o model/xrcfilter.o rad/about.o rad/cmdproc.o rad/menueditor.o rad/designer/menubar.o
+
+LIBS = `wx-config --libs`   ../libs/tinyxml/tinyxml.a -lwx_gtk2_stc-2.6 -lwx_gtk2_propgrid-2.6
 INCS = 
 CXXINCS =
 BIN  = ../bin/wxFormBuilder
@@ -87,8 +88,8 @@ rad/appobserver.o: rad/appobserver.cpp
 rad/objecttree/objecttree.o: rad/objecttree/objecttree.cpp
 	$(CPP) -c rad/objecttree/objecttree.cpp -o rad/objecttree/objecttree.o $(CXXFLAGS)
 
-rad/inspector/objinspect.o: rad/inspector/objinspect.cpp
-	$(CPP) -c rad/inspector/objinspect.cpp -o rad/inspector/objinspect.o $(CXXFLAGS)
+rad/inspector/objinspect2.o: rad/inspector/objinspect2.cpp
+	$(CPP) -c rad/inspector/objinspect2.cpp -o rad/inspector/objinspect2.o $(CXXFLAGS)
 
 rad/inspector/propeditor.o: rad/inspector/propeditor.cpp
 	$(CPP) -c rad/inspector/propeditor.cpp -o rad/inspector/propeditor.o $(CXXFLAGS)
@@ -110,3 +111,14 @@ codegen/cppcg.o: codegen/cppcg.cpp
 
 codegen/xrccg.o: codegen/xrccg.cpp
 	$(CPP) -c codegen/xrccg.cpp -o codegen/xrccg.o $(CXXFLAGS)
+
+rad/cmdproc.o: rad/cmdproc.cpp
+	$(CPP) -c rad/cmdproc.cpp -o rad/cmdproc.o $(CXXFLAGS)
+
+rad/menueditor.o: rad/menueditor.cpp
+	$(CPP) -c rad/menueditor.cpp -o rad/menueditor.o $(CXXFLAGS)
+	
+rad/designer/menubar.o: rad/designer/menubar.cpp
+	$(CPP) -c rad/designer/menubar.cpp -o rad/designer/menubar.o $(CXXFLAGS)
+
+

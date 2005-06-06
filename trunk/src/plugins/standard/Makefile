@@ -3,26 +3,33 @@ CXX = g++
 LIBCOMMON = libcommon.so
 LIBLAYOUT = liblayout.so
 
-CXXFLAGS = `wx-config --cxxflags` -I. -g -D__WX24__
-CFLAGS = `wx-config --cflags` -I. -g
-LDFLAGS = `wx-config --libs`
+WXFBDIR = /home/jose/proyectos/wxformbuilder
+
+CXXFLAGS = `wx-config --cxxflags` -I"." -I$(WXFBDIR)/src -I$(WXFBDIR)/libs/tinyxml -DTIXML_USE_STL -g
+CFLAGS = `wx-config --cflags` -I"." -I$(WXFBDIR)/src -I$(WXFBDIR)/libs/tinyxml -DTIXML_USE_STL -g
+LDFLAGS = `wx-config --libs` $(WXFBDIR)/libs/tinyxml/tinyxml.a
 
 all: $(LIBCOMMON) $(LIBLAYOUT)
 
-$(LIBCOMMON): common.o
-
-	$(CXX) -L. -shared -o $(LIBCOMMON) common.o $(LDFLAGS)
+$(LIBCOMMON): common.o xrcconv.o
+	$(CXX) -L. -shared -o $(LIBCOMMON) common.o xrcconv.o $(LDFLAGS)
 	strip $(LIBCOMMON)
+	mv $(LIBCOMMON) $(WXFBDIR)/bin/xml/
 
 common.o: common.cpp
 	$(CXX) -c $(CXXFLAGS) -o common.o common.cpp
 
-$(LIBLAYOUT): layout.o
-	$(CXX) -L. -shared -o $(LIBLAYOUT) layout.o $(LDFLAGS)
+$(LIBLAYOUT): layout.o xrcconv.o
+	$(CXX) -L. -shared -o $(LIBLAYOUT) layout.o xrcconv.o $(LDFLAGS)
 	strip $(LIBLAYOUT)
+	mv $(LIBLAYOUT) $(WXFBDIR)/bin/xml/
 
-layout.o: layout.cpp
+layout.o: layout.cpp xrcconv.o
 	$(CXX) -c $(CXXFLAGS) -o layout.o layout.cpp
+	
+xrcconv.o: $(WXFBDIR)/src/utils/xrcconv.cpp
+	$(CXX) -c $(CXXFLAGS) -o xrcconv.o $(WXFBDIR)/src/utils/xrcconv.cpp
+
 
 
 clean:

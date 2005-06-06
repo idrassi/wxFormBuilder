@@ -287,6 +287,9 @@ void ObjectInspector::Create()
         CreateCategory(_WXSTR(parent->GetObjectInfo()->GetClassName()), parent, parent->GetObjectInfo(),dummy);
       }
       
+      // bajo wxGTK no se actualiza adecuadamente
+      m_pg->Refresh();
+      
     }
     Thaw();
   }
