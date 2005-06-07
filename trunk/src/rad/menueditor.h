@@ -25,6 +25,7 @@
 #include <wx/wx.h>
 #include <wx/button.h>
 #include <wx/listctrl.h>
+#include "model/objectbase.h"
 
 /**
  * Class MenuEditor
@@ -39,6 +40,7 @@ class MenuEditor : public wxDialog
     void AddItem(const wxString& label, const wxString& id, const wxString& name, const wxString &help);
     long GetEndIndex(long n);
     void GetItem(long n, wxString& label, wxString& id, wxString& name, wxString& help);
+    void AddChild(long& n, int ident, PObjectBase obj);
   
   protected:
     wxListCtrl *m_menuList;
@@ -52,6 +54,7 @@ class MenuEditor : public wxDialog
   public:
     
     MenuEditor(wxWindow *parent, int id = -1);
+    void Populate(PObjectBase obj);
     void OnAddMenuItem(wxCommandEvent& e);
     void OnAddSeparator(wxCommandEvent& e);
     void OnRemoveMenuItem(wxCommandEvent& e);

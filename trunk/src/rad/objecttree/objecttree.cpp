@@ -356,8 +356,13 @@ void ItemPopupMenu::OnMenuEvent (wxCommandEvent & event)
       break;
     case MENU_EDIT_MENUS:
       {
-        MenuEditor me(NULL);
-        me.ShowModal();
+        PObjectBase obj = m_data->GetSelectedObject();
+        if (obj && obj->GetClassName() == "wxMenuBar")
+        {
+            MenuEditor me(NULL);
+            me.Populate(obj);
+            me.ShowModal();
+        }
       }
       break;
     default:

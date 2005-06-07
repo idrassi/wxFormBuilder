@@ -126,6 +126,40 @@ MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,_T("Menu E
   CenterOnScreen();
 }
 
+void MenuEditor::AddChild(long& n, int ident, PObjectBase obj)
+{
+    for (int i = 0; i < obj->GetChildCount(); i++)
+    {
+        PObjectBase childObj = obj->GetChild(i);
+        if (childObj->GetClassName() == "wxMenuItem")
+        {
+            InsertItem(n++, wxString(' ', ident * IDENTATION) + childObj->GetPropertyAsString("label"),
+                    childObj->GetPropertyAsString("id"),
+                    childObj->GetPropertyAsString("name"),
+                    childObj->GetPropertyAsString("help"));    
+        }
+        else if (childObj->GetClassName() == "separator")
+        {
+            InsertItem(n++, wxString(' ', ident * IDENTATION) + _T("---"), _T(""), _T(""), _T(""));
+        }
+        else
+        {
+            InsertItem(n++, wxString(' ', ident * IDENTATION) + childObj->GetPropertyAsString("label"),
+                    childObj->GetPropertyAsString("id"),
+                    childObj->GetPropertyAsString("name"),
+                    childObj->GetPropertyAsString("help"));
+            AddChild(n, ident + 1, childObj);
+        }  
+    }
+}
+
+void MenuEditor::Populate(PObjectBase obj)
+{
+    assert(obj && obj->GetClassName() == "wxMenuBar");
+    long n = 0;
+    AddChild(n, 0, obj);  
+}
+
 long MenuEditor::GetSelectedItem()
 {
     return m_menuList->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
