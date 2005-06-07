@@ -363,8 +363,9 @@ void ItemPopupMenu::OnMenuEvent (wxCommandEvent & event)
             me.Populate(obj);
             if (me.ShowModal() == wxID_OK)
             {
-                m_data->GetSelectedForm()->AddChild(me.GetMenubar(m_data->GetObjectDatabase()));    
-                m_data->NotifyObjectCreated(PObjectBase());
+              //  m_data->GetSelectedForm()->AddChild(me.GetMenubar(m_data->GetObjectDatabase()));    
+              //  m_data->NotifyObjectCreated(PObjectBase());
+              m_data->InsertObject(me.GetMenubar(m_data->GetObjectDatabase()),m_data->GetSelectedForm());
             }
         }
       }
