@@ -52,6 +52,9 @@ MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,_T("Menu E
   sizerTop = new wxBoxSizer(wxHORIZONTAL);
   m_menuList = new wxListCtrl(this,ID_DEFAULT,wxDefaultPosition,wxDefaultSize,wxLC_REPORT | wxLC_SINGLE_SEL);
   m_menuList->InsertColumn(0, _T("Label"), wxLIST_FORMAT_LEFT, 200);
+  m_menuList->InsertColumn(1, _T("Id"), wxLIST_FORMAT_LEFT, 50);
+  m_menuList->InsertColumn(2, _T("Name"), wxLIST_FORMAT_LEFT, 50);
+  m_menuList->InsertColumn(3, _T("Help String"), wxLIST_FORMAT_LEFT, 200);
   sizerTop->Add(m_menuList, 1, wxALL|wxEXPAND, 5);
   wxStaticBoxSizer *sizer1;
   sizer1 = new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("Menu item")), wxVERTICAL);
@@ -138,7 +141,17 @@ int MenuEditor::GetItemIdentation(long n)
     return (int)curIdent;
 }
 
-void MenuEditor::AddItem(const wxString& label)
+long MenuEditor::InsertItem(long n, const wxString& label, const wxString& id, 
+    const wxString& name, const wxString& helpString)
+{
+    long index = m_menuList->InsertItem(n, label);
+    m_menuList->SetItem(index, 1, id);
+    m_menuList->SetItem(index, 2, name);
+    m_menuList->SetItem(index, 3, helpString);
+    return index;
+}
+
+void MenuEditor::AddItem(const wxString& label, const wxString& id, const wxString& name, const wxString &help)
 {
     int sel = GetSelectedItem();
     int identation = 0;
@@ -147,18 +160,38 @@ void MenuEditor::AddItem(const wxString& label)
     labelAux.Trim(true);
     labelAux.Trim(false);
     if (sel < 0) sel = m_menuList->GetItemCount() - 1;
-    long index = m_menuList->InsertItem(sel + 1, wxString(' ', identation * IDENTATION) + labelAux);
+    long index = InsertItem(sel + 1, 
+                        wxString(' ', identation * IDENTATION) + labelAux,
+                        id, name, help);
     m_menuList->SetItemState(index, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+}
+
+void MenuEditor::GetItem(long n, wxString& label, wxString& id, wxString& name, wxString& help)
+{
+    label = m_menuList->GetItemText(n);
+    wxListItem item;
+    item.m_itemId = n;
+    item.m_col = 1;
+    item.m_mask = wxLIST_MASK_TEXT;
+    m_menuList->GetItem(item);
+    id = item.GetText();
+    item.m_col++;
+    m_menuList->GetItem(item);
+    name = item.GetText();
+    item.m_col++;
+    m_menuList->GetItem(item);
+    help = item.GetText();
 }
 
 void MenuEditor::OnAddMenuItem(wxCommandEvent& e)
 {
-    AddItem(m_tcLabel->GetValue());
+    AddItem(m_tcLabel->GetValue(), m_tcId->GetValue(), m_tcName->GetValue(),
+        m_tcHelpString->GetValue());
 }
 
 void MenuEditor::OnAddSeparator(wxCommandEvent& e)
 {
-    AddItem(_T("---"));
+    AddItem(_T("---"), _T(""), _T(""), _T(""));
 }
 
 void MenuEditor::OnRemoveMenuItem(wxCommandEvent& e)
@@ -190,8 +223,9 @@ void MenuEditor::OnMenuLeft(wxCommandEvent& e)
 {
     int sel = GetSelectedItem();
     int curIdent = GetItemIdentation(sel) - 1;
+    int childIdent = sel < m_menuList->GetItemCount() - 1 ? GetItemIdentation(sel + 1) : -1;
     
-    if (curIdent < 0)
+    if (curIdent < 0 || (childIdent != -1 && abs(curIdent - childIdent) > 1))
         return;
     
     wxString label = m_menuList->GetItemText(sel);
@@ -227,18 +261,20 @@ void MenuEditor::OnMenuUp(wxCommandEvent& e)
     while (prevIdent > curIdent)
         prevIdent = GetItemIdentation(--prev);
         
-    wxString label = m_menuList->GetItemText(sel);
+    wxString label, id, name, help;
+    GetItem(sel, label, id, name, help);
+    
     m_menuList->DeleteItem(sel);
-    long newSel = m_menuList->InsertItem(prev, label);
+    long newSel = InsertItem(prev, label, id, name, help);
     sel++; prev++;
     if (sel < m_menuList->GetItemCount())
     {
         long childIdent = GetItemIdentation(sel);
         while (sel < m_menuList->GetItemCount() && childIdent > curIdent)
         {
-            label = m_menuList->GetItemText(sel);
+            GetItem(sel, label, id, name, help);
             m_menuList->DeleteItem(sel);
-            m_menuList->InsertItem(prev, label);
+            InsertItem(prev, label, id, name, help);
             sel++; prev++;
             if (sel < m_menuList->GetItemCount()) childIdent = GetItemIdentation(sel);
         }
@@ -264,16 +300,18 @@ void MenuEditor::OnMenuDown(wxCommandEvent& e)
     while (GetItemIdentation(selAux) > selIdent) selAux++;
     if (GetItemIdentation(selAux) < selIdent) return;
     long endIndex = GetEndIndex(selAux) + 1;
-    wxString label = m_menuList->GetItemText(sel);
+    
+    wxString label, id, name, help;
+    GetItem(sel, label, id, name, help);
     
     m_menuList->DeleteItem(sel);
     endIndex--;
-    long first = m_menuList->InsertItem(endIndex, label);
+    long first = InsertItem(endIndex, label, id, name, help);
     while (GetItemIdentation(sel) > selIdent)
     {
-        label = m_menuList->GetItemText(sel);
+        GetItem(sel, label, id, name, help);
         m_menuList->DeleteItem(sel);
-        m_menuList->InsertItem(endIndex, label);
+        InsertItem(endIndex, label, id, name, help);
         first--;
     }
     m_menuList->SetItemState(first, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);

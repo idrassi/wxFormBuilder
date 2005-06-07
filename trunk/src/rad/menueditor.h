@@ -34,8 +34,11 @@ class MenuEditor : public wxDialog
   private:
     long GetSelectedItem();
     int GetItemIdentation(long n);
-    void AddItem(const wxString& label);
+    long InsertItem(long n, const wxString& label, const wxString& id, 
+        const wxString& name, const wxString& helpString);
+    void AddItem(const wxString& label, const wxString& id, const wxString& name, const wxString &help);
     long GetEndIndex(long n);
+    void GetItem(long n, wxString& label, wxString& id, wxString& name, wxString& help);
   
   protected:
     wxListCtrl *m_menuList;
