@@ -1,0 +1,5 @@
+TODO:
+
+*Todos los IDs tienen valor 1000
+*El tamaño no es correcto en los diálogos, ya que no se tiene en cuenta el caption de la ventana
+*Me ha puesto dos sizers con el mismo nombre
