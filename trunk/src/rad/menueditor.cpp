@@ -246,9 +246,37 @@ void MenuEditor::OnMenuUp(wxCommandEvent& e)
     m_menuList->SetItemState(newSel, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
 
+long MenuEditor::GetEndIndex(long n)
+{
+    long res = n;
+    int ident = GetItemIdentation(n);
+    res++;
+    if (res >= m_menuList->GetItemCount()) return n;
+    while (GetItemIdentation(res) > ident) res++;
+    return res - 1;
+}
+
 void MenuEditor::OnMenuDown(wxCommandEvent& e)
 {
-
+    long sel = GetSelectedItem();
+    int selIdent = GetItemIdentation(sel);
+    long selAux = sel + 1;
+    while (GetItemIdentation(selAux) > selIdent) selAux++;
+    if (GetItemIdentation(selAux) < selIdent) return;
+    long endIndex = GetEndIndex(selAux) + 1;
+    wxString label = m_menuList->GetItemText(sel);
+    
+    m_menuList->DeleteItem(sel);
+    endIndex--;
+    long first = m_menuList->InsertItem(endIndex, label);
+    while (GetItemIdentation(sel) > selIdent)
+    {
+        label = m_menuList->GetItemText(sel);
+        m_menuList->DeleteItem(sel);
+        m_menuList->InsertItem(endIndex, label);
+        first--;
+    }
+    m_menuList->SetItemState(first, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
 
 void MenuEditor::OnUpdateMovers(wxUpdateUIEvent& e)
