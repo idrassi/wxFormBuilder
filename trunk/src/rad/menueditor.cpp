@@ -128,7 +128,7 @@ MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,_T("Menu E
 
 void MenuEditor::AddChild(long& n, int ident, PObjectBase obj)
 {
-    for (int i = 0; i < obj->GetChildCount(); i++)
+    for (unsigned int i = 0; i < obj->GetChildCount(); i++)
     {
         PObjectBase childObj = obj->GetChild(i);
         if (childObj->GetClassName() == "wxMenuItem")
@@ -158,6 +158,64 @@ void MenuEditor::Populate(PObjectBase obj)
     assert(obj && obj->GetClassName() == "wxMenuBar");
     long n = 0;
     AddChild(n, 0, obj);  
+}
+
+bool MenuEditor::HasChildren(long n)
+{
+    if (n == m_menuList->GetItemCount() - 1)
+        return false;
+    else
+        return GetItemIdentation(n + 1) > GetItemIdentation(n);
+}
+
+PObjectBase MenuEditor::GetMenu(long& n, PObjectDatabase base)
+{
+    PObjectInfo info = base->GetObjectInfo("wxMenu");
+    PObjectBase menu = base->NewObject(info);  
+    wxString label, id, name, help; 
+    GetItem(n, label, id, name, help);
+    label.Trim(true); label.Trim(false);
+    menu->GetProperty("label")->SetValue(label); 
+    menu->GetProperty("name")->SetValue(name); 
+    int ident = GetItemIdentation(n);
+    n++;
+    while (n < m_menuList->GetItemCount() && GetItemIdentation(n) > ident)
+    {
+        GetItem(n, label, id, name, help);
+        label.Trim(true); label.Trim(false);
+        if (label == _T("---"))
+        {
+            info = base->GetObjectInfo("separator");
+            PObjectBase menuitem = base->NewObject(info);  
+            menu->AddChild(menuitem);
+            n++;
+        }
+        else if (HasChildren(n))
+            menu->AddChild(GetMenu(n, base));
+        else
+        {
+            info = base->GetObjectInfo("wxMenuItem");
+            PObjectBase menuitem = base->NewObject(info);  
+            menuitem->GetProperty("label")->SetValue(label); 
+            menuitem->GetProperty("name")->SetValue(name); 
+            menu->AddChild(menuitem);
+            n++;
+        }    
+    }
+
+    return menu;
+}
+
+PObjectBase MenuEditor::GetMenubar(PObjectDatabase base)
+{
+    PObjectInfo info = base->GetObjectInfo("wxMenuBar");
+    PObjectBase menubar = base->NewObject(info);
+    long n = 0;
+    while (n < m_menuList->GetItemCount())
+    {
+        menubar->AddChild(GetMenu(n, base));
+    }
+    return menubar;
 }
 
 long MenuEditor::GetSelectedItem()

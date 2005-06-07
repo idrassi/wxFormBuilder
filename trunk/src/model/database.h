@@ -144,9 +144,6 @@ class ObjectDatabase
   
   PObjectType GetObjectType(string name);
   
-  
-  PObjectBase NewObject(PObjectInfo obj_info);
-  
   int CountChildrenWithSameType(PObjectBase parent,PObjectType type);
   
   void SetDefaultLayoutProperties(PObjectBase obj);
@@ -154,6 +151,8 @@ class ObjectDatabase
  public:    
   ObjectDatabase();
   ~ObjectDatabase();
+  
+  PObjectBase NewObject(PObjectInfo obj_info);
 
   /**
    * Obtiene la información de un objeto a partir del nombre de la clase.

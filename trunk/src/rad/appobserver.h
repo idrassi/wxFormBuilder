@@ -30,6 +30,7 @@
 #include <vector>
 
 class DataObserver;
+class ItemPopupMenu;
 
 /**
  * Interfaz para manejar el modelo de datos de la aplicación.
@@ -40,6 +41,7 @@ class DataObservable
    typedef vector<DataObserver *> ObserverVector;
    ObserverVector m_observers;
    bool m_lock;
+   friend class ItemPopupMenu;
 
  protected:
    // Notifican a cada observador el evento correspondiente

@@ -361,7 +361,11 @@ void ItemPopupMenu::OnMenuEvent (wxCommandEvent & event)
         {
             MenuEditor me(NULL);
             me.Populate(obj);
-            me.ShowModal();
+            if (me.ShowModal() == wxID_OK)
+            {
+                m_data->GetSelectedForm()->AddChild(me.GetMenubar(m_data->GetObjectDatabase()));    
+                m_data->NotifyObjectCreated(PObjectBase());
+            }
         }
       }
       break;
