@@ -36,16 +36,20 @@
 #include "model/xrcfilter.h"
 #include "rad/about.h"
 
-#define ID_ABOUT 100
-#define ID_QUIT  101 
-#define ID_SAVE_PRJ  102
-#define ID_OPEN_PRJ  103
-#define ID_NEW_PRJ  104
+#define ID_ABOUT         100
+#define ID_QUIT          101 
+#define ID_SAVE_PRJ      102
+#define ID_OPEN_PRJ      103
+#define ID_NEW_PRJ       104
 #define ID_GENERATE_CODE 105
-#define ID_IMPORT_XRC 106
-#define ID_UNDO 107
-#define ID_REDO 108
-#define ID_SAVE_AS_PRJ  102
+#define ID_IMPORT_XRC    106
+#define ID_UNDO          107
+#define ID_REDO          108
+#define ID_SAVE_AS_PRJ   109
+#define ID_CUT           110
+#define ID_DELETE        111
+#define ID_COPY          112
+#define ID_PASTE          113
 
 BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_NEW_PRJ,MainFrame::OnNewProject)
@@ -58,6 +62,10 @@ BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_GENERATE_CODE,MainFrame::OnGenerateCode)
   EVT_MENU(ID_UNDO,MainFrame::OnUndo)
   EVT_MENU(ID_REDO,MainFrame::OnRedo)
+  EVT_MENU(ID_DELETE,MainFrame::OnDelete)
+  EVT_MENU(ID_CUT,MainFrame::OnCut)
+  EVT_MENU(ID_COPY,MainFrame::OnCopy)
+  EVT_MENU(ID_PASTE,MainFrame::OnPaste)
   EVT_CLOSE(MainFrame::OnClose)
 END_EVENT_TABLE()
 
@@ -83,6 +91,13 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   wxMenu *menuEdit = new wxMenu;
   menuEdit->Append(ID_UNDO, _T("&Undo \tCTRL+Z"), _T("Undo"));
   menuEdit->Append(ID_REDO, _T("&Redo \tCTRL+Y"), _T("Redo"));
+  menuEdit->AppendSeparator();
+  menuEdit->Append(ID_COPY, _T("&Copy \tCTRL+C"), _T("Copy"));
+  menuEdit->Enable(ID_COPY,false); // TO-DO
+  menuEdit->Append(ID_CUT, _T("&Cut \tCTRL+X"), _T("Cut"));
+  menuEdit->Append(ID_PASTE, _T("&Paste \tCTRL+V"), _T("Paste"));
+  menuEdit->AppendSeparator();
+  menuEdit->Append(ID_DELETE, _T("&Delete \tDel"), _T("Delete"));
   
   wxMenu *menuHelp = new wxMenu;
   menuHelp->Append(ID_ABOUT, _T("&About...\tF1"), _T("Show about dialog"));
@@ -237,7 +252,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
 
   // añadimos el manejador de las teclas rápidas de la aplicación
   // realmente este es el sitio donde hacerlo ?????
-  m_objTree->AddCustomKeysHandler(new CustomKeysEvtHandler(data));
+  //m_objTree->AddCustomKeysHandler(new CustomKeysEvtHandler(data));
 
 
   data->AddDataObserver(this);
@@ -500,4 +515,24 @@ void MainFrame::UpdateFrame()
   
   // Actualizamos la barra de estado
   // TO-DO: definir un campo...
+}
+
+void MainFrame::OnCopy(wxCommandEvent &event)
+{
+  //GetData()->CopyObject(GetData()->GetSelectedObject());
+}
+
+void MainFrame::OnCut (wxCommandEvent &event)
+{
+  GetData()->CutObject(GetData()->GetSelectedObject());
+}
+
+void MainFrame::OnDelete (wxCommandEvent &event)
+{
+  GetData()->RemoveObject(GetData()->GetSelectedObject());
+}
+
+void MainFrame::OnPaste (wxCommandEvent &event)
+{
+  GetData()->PasteObject(GetData()->GetSelectedObject());
 }

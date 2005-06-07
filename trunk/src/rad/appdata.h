@@ -105,6 +105,7 @@ class RemoveObjectCmd : public Command
 private:
   PObjectBase m_parent;
   PObjectBase m_object;
+  int m_oldPos;
   
  protected:
   void DoExecute();

@@ -75,6 +75,10 @@ class MainFrame : public DataObserver, public wxFrame
   void OnImportXrc(wxCommandEvent &event);
   void OnUndo(wxCommandEvent &event);
   void OnRedo(wxCommandEvent &event);
+  void OnCopy (wxCommandEvent &event);
+  void OnPaste (wxCommandEvent &event);
+  void OnCut (wxCommandEvent &event);
+  void OnDelete (wxCommandEvent &event);
   
   void ProjectLoaded();
   void ProjectSaved();

@@ -356,6 +356,7 @@ RemoveObjectCmd::RemoveObjectCmd(PObjectBase object)
 {
   m_object = object;
   m_parent = object->GetParent();
+  m_oldPos = m_parent->GetChildPosition(object);
 }
 
 void RemoveObjectCmd::DoExecute()
@@ -368,6 +369,9 @@ void RemoveObjectCmd::DoRestore()
 {
   m_parent->AddChild(m_object);
   m_object->SetParent(m_parent);
+  
+  // restauramos la posición
+  m_parent->ChangeChildPosition(m_object,m_oldPos);  
 }
 
 //-----------------
