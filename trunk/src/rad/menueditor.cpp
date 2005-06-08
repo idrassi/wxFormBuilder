@@ -188,10 +188,15 @@ PObjectBase MenuEditor::GetMenu(long& n, PObjectDatabase base)
             info = base->GetObjectInfo("separator");
             PObjectBase menuitem = base->NewObject(info);  
             menu->AddChild(menuitem);
+            menuitem->SetParent(menu);
             n++;
         }
         else if (HasChildren(n))
-            menu->AddChild(GetMenu(n, base));
+        {
+            PObjectBase child = GetMenu(n, base);
+            menu->AddChild(child);
+            child->SetParent(menu);
+        }
         else
         {
             info = base->GetObjectInfo("wxMenuItem");
@@ -199,6 +204,7 @@ PObjectBase MenuEditor::GetMenu(long& n, PObjectDatabase base)
             menuitem->GetProperty("label")->SetValue(label); 
             menuitem->GetProperty("name")->SetValue(name); 
             menu->AddChild(menuitem);
+            menuitem->SetParent(menu);
             n++;
         }    
     }
@@ -213,7 +219,9 @@ PObjectBase MenuEditor::GetMenubar(PObjectDatabase base)
     long n = 0;
     while (n < m_menuList->GetItemCount())
     {
-        menubar->AddChild(GetMenu(n, base));
+        PObjectBase child = GetMenu(n, base);
+        menubar->AddChild(child);
+        child->SetParent(menubar);
     }
     return menubar;
 }

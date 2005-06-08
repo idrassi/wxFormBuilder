@@ -357,16 +357,35 @@ void ItemPopupMenu::OnMenuEvent (wxCommandEvent & event)
     case MENU_EDIT_MENUS:
       {
         PObjectBase obj = m_data->GetSelectedObject();
-        if (obj && obj->GetClassName() == "wxMenuBar")
+        if (obj && (obj->GetClassName() == "wxMenuBar" || obj->GetClassName() == "Frame"))
         {
-            MenuEditor me(NULL);
-            me.Populate(obj);
-            if (me.ShowModal() == wxID_OK)
+          MenuEditor me(NULL);
+          if (obj->GetClassName() == "wxMenuBar") me.Populate(obj);
+          if (me.ShowModal() == wxID_OK)
+          {
+            if (obj->GetClassName() == "Frame")
             {
-              //  m_data->GetSelectedForm()->AddChild(me.GetMenubar(m_data->GetObjectDatabase()));    
-              //  m_data->NotifyObjectCreated(PObjectBase());
-              m_data->InsertObject(me.GetMenubar(m_data->GetObjectDatabase()),m_data->GetSelectedForm());
+              bool found = false;
+              PObjectBase menubar;
+              for (unsigned int i = 0; i < obj->GetChildCount() && !found; i++)
+              {
+                menubar = obj->GetChild(0);  
+                found = menubar->GetClassName() == "wxMenuBar"; 
+              }
+              if (found) obj = menubar;
             }
+            
+            if (obj->GetClassName() == "wxMenuBar")
+            {
+              PObjectBase parent = obj->GetParent();
+              PObjectBase menubar = me.GetMenubar(m_data->GetObjectDatabase());
+              
+              m_data->RemoveObject(obj);
+              m_data->InsertObject(menubar, parent);
+            }
+            else
+              m_data->InsertObject(me.GetMenubar(m_data->GetObjectDatabase()),m_data->GetSelectedForm());
+          }
         }
       }
       break;
@@ -374,4 +393,5 @@ void ItemPopupMenu::OnMenuEvent (wxCommandEvent & event)
       break;
   }
 }
+
 
