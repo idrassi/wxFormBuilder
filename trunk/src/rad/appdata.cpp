@@ -56,6 +56,54 @@ PObjectBase ApplicationData::GetProjectData()
   return m_project;
 }  
 
+void ApplicationData::BuildNameSet(PObjectBase obj, PObjectBase top, set<string> &name_set)
+{
+  if (obj != top)
+  {
+    PProperty nameProp = top->GetProperty("name");
+    if (nameProp)
+      name_set.insert(nameProp->GetValue());
+  }
+  
+  for (unsigned int i=0; i< top->GetChildCount(); i++)
+    BuildNameSet(obj, top->GetChild(i), name_set);  
+}
+
+void ApplicationData::ResolveNameConflict(PObjectBase obj)
+{
+  while (obj && obj->GetObjectInfo()->GetObjectType()->IsItem())
+  {
+    if (obj->GetChildCount() > 0)
+      obj = obj->GetChild(0);
+    else
+      return;
+  }
+  
+  PProperty nameProp = obj->GetProperty("name");
+  if (!nameProp)
+    return;
+  
+  string name = nameProp->GetValue();
+    
+  // el nombre no puede estar repetido dentro del mismo form
+  PObjectBase top = obj->FindNearAncestor("form");
+  if (!top)
+    top = m_project; // el objeto es un form.
+  
+  // construimos el conjunto de nombres  
+  set<string> name_set;
+  BuildNameSet(obj, top, name_set);
+  
+  // comprobamos si hay conflicto
+  set<string>::iterator it = name_set.find(name);
+  while (it != name_set.end())
+  {
+    name = name + "_";
+    it = name_set.find(name);
+  }
+  
+  nameProp->SetValue(name);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -95,6 +143,7 @@ void ApplicationData::CreateObject(wxString name)
         PCommand command(new InsertObjectCmd(obj,parent));
         m_cmdProc.Execute(command);
         created = true;
+        ResolveNameConflict(obj);
       }
       else
       {

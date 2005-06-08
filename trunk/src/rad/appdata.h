@@ -27,6 +27,7 @@
 #include "rad/appobserver.h"
 #include "model/database.h"
 #include "rad/cmdproc.h"
+#include <set>
 
 class ApplicationData : public DataObservable
 {
@@ -40,6 +41,21 @@ class ApplicationData : public DataObservable
   PObjectBase m_clipboard;
   
   CommandProcessor m_cmdProc;
+
+  
+  
+  
+  /**
+   * Resuelve un posible conflicto de nombres.
+   * @note el objeto a comprobar debe estar insertado en proyecto, por tanto
+   *       no es válida para arboles "flotantes".
+   */
+  void ResolveNameConflict(PObjectBase obj);
+  
+  /**
+   * Rutina auxiliar de ResolveNameConflict
+   */
+  void BuildNameSet(PObjectBase obj, PObjectBase top, set<string> &name_set);
   
  public:
   ApplicationData();
