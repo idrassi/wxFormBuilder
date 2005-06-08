@@ -49,7 +49,7 @@
 #define ID_CUT           110
 #define ID_DELETE        111
 #define ID_COPY          112
-#define ID_PASTE          113
+#define ID_PASTE         113
 
 BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_NEW_PRJ,MainFrame::OnNewProject)
@@ -80,23 +80,25 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
   
   wxMenu *menuFile = new wxMenu;
-  menuFile->Append(ID_OPEN_PRJ, _T("&Open...\tF2"), _T("Load a project"));
+  menuFile->Append(ID_OPEN_PRJ, _T("&Open...\tF2"), _T("Open a project"));
   menuFile->Append(ID_SAVE_PRJ,          _T("&Save"), _T("Save current project"));
-  menuFile->Append(ID_SAVE_AS_PRJ, _T("Save &As...\tF3"), _T("Save the project"));
+  menuFile->Append(ID_SAVE_AS_PRJ, _T("Save &As...\tF3"), _T("Save current project as..."));
   menuFile->AppendSeparator();
-  menuFile->Append(ID_IMPORT_XRC, _T("&Import XRC..."), _T("Save current project"));
+  menuFile->Append(ID_IMPORT_XRC, _T("&Import XRC..."), _T("Import XRC file"));
   menuFile->AppendSeparator();
-  menuFile->Append(ID_QUIT, _T("E&xit\tAlt-X"), _T("Quit this program"));
+  menuFile->Append(ID_GENERATE_CODE, _T("&Generate Code\tF8"), _T("Generate Code"));
+  menuFile->AppendSeparator();
+  menuFile->Append(ID_QUIT, _T("E&xit\tAlt-X"), _T("Quit wxFormBuilder"));
 
   wxMenu *menuEdit = new wxMenu;
-  menuEdit->Append(ID_UNDO, _T("&Undo \tCTRL+Z"), _T("Undo"));
-  menuEdit->Append(ID_REDO, _T("&Redo \tCTRL+Y"), _T("Redo"));
+  menuEdit->Append(ID_UNDO, _T("&Undo \tCTRL+Z"), _T("Undo changes"));
+  menuEdit->Append(ID_REDO, _T("&Redo \tCTRL+Y"), _T("Redo changes"));
   menuEdit->AppendSeparator();
-  menuEdit->Append(ID_COPY, _T("&Copy \tCTRL+C"), _T("Copy"));
-  menuEdit->Append(ID_CUT, _T("&Cut \tCTRL+X"), _T("Cut"));
-  menuEdit->Append(ID_PASTE, _T("&Paste \tCTRL+V"), _T("Paste"));
+  menuEdit->Append(ID_COPY, _T("&Copy \tCTRL+C"), _T("Copy selected object"));
+  menuEdit->Append(ID_CUT, _T("&Cut \tCTRL+X"), _T("Cut selected object"));
+  menuEdit->Append(ID_PASTE, _T("&Paste \tCTRL+V"), _T("Paste on selected object"));
   menuEdit->AppendSeparator();
-  menuEdit->Append(ID_DELETE, _T("&Delete \tDel"), _T("Delete"));
+  menuEdit->Append(ID_DELETE, _T("&Delete \tDel"), _T("Delete selected object"));
   
   wxMenu *menuHelp = new wxMenu;
   menuHelp->Append(ID_ABOUT, _T("&About...\tF1"), _T("Show about dialog"));

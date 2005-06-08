@@ -132,13 +132,18 @@ void CppPanel::CodeGeneration()
     if (file == wxT(""))
       file = wxT("noname");
     
+    if (path != "")
+    {
+      PCodeWriter h_cw(new FileCodeWriter(path + wxFILE_SEP_PATH + file + wxT(".h")));
+      PCodeWriter cpp_cw(new FileCodeWriter(path + wxFILE_SEP_PATH + file + wxT(".cpp")));
     
-    PCodeWriter h_cw(new FileCodeWriter(path + wxFILE_SEP_PATH + file + wxT(".h")));
-    PCodeWriter cpp_cw(new FileCodeWriter(path + wxFILE_SEP_PATH + file + wxT(".cpp")));
-    
-    codegen.SetHeaderWriter(h_cw);
-    codegen.SetSourceWriter(cpp_cw);
-    codegen.GenerateCode(project);
+      codegen.SetHeaderWriter(h_cw);
+      codegen.SetSourceWriter(cpp_cw);
+      codegen.GenerateCode(project);
+      wxLogMessage(wxT("Code generated on \'%s\'."),path.c_str());
+    }
+    else
+      wxLogError(wxT("You must set a path for files"));
   }  
 }
 

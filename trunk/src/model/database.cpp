@@ -359,7 +359,7 @@ PObjectBase ObjectDatabase::CreateObject(string classname, PObjectBase parent)
               created = true;
             }
             else
-              wxLogMessage(_("Oh my God! review your definitions (objtypes.xml)"));
+              wxLogError(_("Review your definitions file (objtypes.xml)"));
           }
         }
       }
@@ -893,13 +893,13 @@ bool ObjectDatabase::LoadObjectTypes()
         
         // obtenemos el objType
         PObjectType objType = GetObjectType(name);
-        wxLogMessage(wxString::Format(_("ObjectType %s can be parent of..."),name.c_str()));
+        //wxLogMessage(wxString::Format(_("ObjectType %s can be parent of..."),name.c_str()));
         TiXmlElement *child = elem->FirstChildElement("childtype");
         while (child)
         {
           int nmax = -1; // sin límite
           string childname = child->Attribute("name");
-          wxLogMessage(wxString::Format(_("%s"),childname.c_str()));
+          //wxLogMessage(wxString::Format(_("%s"),childname.c_str()));
           
           
           if (child->Attribute("nmax"))

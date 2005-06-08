@@ -1,25 +1,25 @@
 <?xml version="1.0"?>
 <!DOCTYPE Code::Blocks_layout_file>
 <Code::Blocks_layout_file>
-	<File name="codegen\cppcg.cpp" open="0" top="0">
-		<Cursor position="5709" topLine="166"/>
+	<File name="codegen\cppcg.cpp" open="1" top="0">
+		<Cursor position="8862" topLine="196"/>
 	</File>
 	<File name="codegen\cppcg.h" open="0" top="0">
 		<Cursor position="3846" topLine="110"/>
 	</File>
-	<File name="maingui.cpp" open="0" top="0">
-		<Cursor position="1121" topLine="42"/>
+	<File name="maingui.cpp" open="1" top="0">
+		<Cursor position="1797" topLine="51"/>
 	</File>
 	<File name="model\database.cpp" open="1" top="0">
-		<Cursor position="12771" topLine="380"/>
+		<Cursor position="29454" topLine="886"/>
 	</File>
-	<File name="model\database.h" open="1" top="0">
+	<File name="model\database.h" open="0" top="0">
 		<Cursor position="5757" topLine="171"/>
 	</File>
-	<File name="model\objectbase.cpp" open="1" top="0">
+	<File name="model\objectbase.cpp" open="0" top="0">
 		<Cursor position="14637" topLine="618"/>
 	</File>
-	<File name="model\objectbase.h" open="1" top="1">
+	<File name="model\objectbase.h" open="0" top="0">
 		<Cursor position="1409" topLine="8"/>
 	</File>
 	<File name="model\types.cpp" open="0" top="0">
@@ -31,17 +31,17 @@
 	<File name="model\xrcfilter.cpp" open="0" top="0">
 		<Cursor position="8891" topLine="242"/>
 	</File>
-	<File name="rad\appdata.cpp" open="1" top="0">
+	<File name="rad\appdata.cpp" open="0" top="0">
 		<Cursor position="255" topLine="0"/>
 	</File>
-	<File name="rad\appdata.h" open="1" top="0">
+	<File name="rad\appdata.h" open="0" top="0">
 		<Cursor position="2398" topLine="57"/>
 	</File>
-	<File name="rad\appobserver.h" open="1" top="0">
+	<File name="rad\appobserver.h" open="0" top="0">
 		<Cursor position="2756" topLine="93"/>
 	</File>
-	<File name="rad\cpppanel\cpppanel.cpp" open="0" top="0">
-		<Cursor position="4967" topLine="108"/>
+	<File name="rad\cpppanel\cpppanel.cpp" open="1" top="1">
+		<Cursor position="4611" topLine="115"/>
 	</File>
 	<File name="rad\designer\visualeditor.cpp" open="0" top="0">
 		<Cursor position="3937" topLine="182"/>
@@ -50,21 +50,25 @@
 		<Cursor position="12013" topLine="338"/>
 	</File>
 	<File name="rad\mainframe.cpp" open="1" top="0">
-		<Cursor position="3842" topLine="75"/>
+		<Cursor position="9243" topLine="203"/>
 	</File>
-	<File name="rad\objecttree\objecttree.cpp" open="0" top="0">
-		<Cursor position="2263" topLine="36"/>
+	<File name="rad\mainframe.h" open="1" top="0">
+		<Cursor position="2834" topLine="61"/>
+	</File>
+	<File name="rad\objecttree\objecttree.cpp" open="1" top="0">
+		<Cursor position="7277" topLine="238"/>
 	</File>
 	<File name="rad\objecttree\objecttree.h" open="0" top="0">
 		<Cursor position="1421" topLine="28"/>
 	</File>
+	<File name="utils\debug.cpp" open="1" top="0">
+		<Cursor position="1205" topLine="9"/>
+	</File>
 	<File name="utils\typeconv.cpp" open="0" top="0">
 		<Cursor position="596" topLine="0"/>
 	</File>
+	<Expand folder="/Sources/rad/objecttree"/>
+	<Expand folder="/Sources/rad/cpppanel"/>
 	<Expand folder="/Sources/rad"/>
-	<Expand folder="/Sources/model"/>
 	<Expand folder="/Sources"/>
-	<Expand folder="/Headers/model"/>
-	<Expand folder="/Headers/rad"/>
-	<Expand folder="/Headers"/>
 </Code::Blocks_layout_file>

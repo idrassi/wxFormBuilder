@@ -260,7 +260,8 @@ void ObjectTree::Create()
         //img.Rescale(21,21);
         img.Resize(wxSize(21,21),wxPoint(0,0));
         
-        wxLogMessage(wxString::Format("Adding icon %s,%d",comp_name.c_str(), index));
+        Debug::Print("Adding icon %s,%d",comp_name.c_str(), index);
+        
         m_iconList->Add(wxBitmap(img));
         m_iconIdx.insert(IconIndexMap::value_type(comp_name,index++));
       }

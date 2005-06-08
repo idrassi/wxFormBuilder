@@ -203,7 +203,7 @@ bool CppCodeGenerator::GenerateCode(PObjectBase project)
 {
   if (!project)
   {
-    //Error(...)
+    wxLogError(wxT("There is no project to generate code"));
     return false;
   }
   
@@ -225,7 +225,7 @@ bool CppCodeGenerator::GenerateCode(PObjectBase project)
   PProperty propFile = project->GetProperty("file");
   if (!propFile)
   {
-    //Error(...)
+    wxLogError(wxT("Missing \"file\" property on Project Object"));
     return false;
   }
   
@@ -296,7 +296,10 @@ string CppCodeGenerator::GetCode(PObjectBase obj, string name)
   PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo("C++");
   if (!code_info)
   {
-    //Error(...);
+    wxString msg(wxString::Format(wxT("Missing \"%s\" template for \"%s\" class. "
+      "Review your XML object description"),
+      name.c_str(), obj->GetClassName().c_str()));
+    wxLogError(msg);
     return "";
   }
   
@@ -313,14 +316,15 @@ void CppCodeGenerator::GenClassDeclaration(PObjectBase class_obj)
   PProperty propName = class_obj->GetProperty("name");
   if (!propName)
   {
-    // Error(...)
+    wxLogError(wxT("Missing \"name\" property on \"%s\" class. "
+      "Review your XML object description"),class_obj->GetClassName().c_str());
     return;
   }
     
   string class_name = propName->GetValue();
   if (class_name == "")
   {
-    // Error(...)
+    wxLogError(wxT("Object name can not be null"));
     return;
   }
 
@@ -385,10 +389,6 @@ void CppCodeGenerator::GenIncludes(PObjectBase project)
       string include = code_info->GetTemplate("include");
       if (include != "")
         m_header->WriteLn(include);
-    }
-    else
-    {
-      // Error(...)
     }
   }
   
@@ -582,10 +582,7 @@ void CppCodeGenerator::GenSettings(PObjectInfo info, PObjectBase obj)
   PCodeInfo code_info = info->GetCodeInfo("C++");
 
   if (!code_info)
-  {
-    //Error (...)
     return;
-  }
     
   _template = code_info->GetTemplate("settings");
   
