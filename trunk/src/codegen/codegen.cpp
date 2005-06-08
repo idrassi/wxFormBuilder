@@ -521,7 +521,3 @@ CodeWriter::CodeWriter()
   m_indent = 0;
   m_cols = 0;
 }  
-/*
-CodeWriter::~CodeWriter()
-{
-}*/

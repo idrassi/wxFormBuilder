@@ -305,11 +305,12 @@ typedef shared_ptr<CodeWriter> PCodeWriter;
  */
 class CodeGenerator
 {
+ protected:
+  
  public:
   /**
    * Destructor virtual.
-   */
-   
+   */   
   virtual ~CodeGenerator() {};
   /**
    * Genera el código del proyecto.

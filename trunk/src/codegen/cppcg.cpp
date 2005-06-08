@@ -201,6 +201,12 @@ string CppCodeGenerator::ConvertXpmName(string text)
 
 bool CppCodeGenerator::GenerateCode(PObjectBase project)
 {
+  if (!project)
+  {
+    //Error(...)
+    return false;
+  }
+  
   m_header->Clear();
   m_source->Clear();
   string date(__DATE__);
@@ -216,7 +222,14 @@ bool CppCodeGenerator::GenerateCode(PObjectBase project)
   m_header->WriteLn(code_header);
   m_source->WriteLn(code_header);
   
-  string file = project->GetProperty("file")->GetValue();
+  PProperty propFile = project->GetProperty("file");
+  if (!propFile)
+  {
+    //Error(...)
+    return false;
+  }
+  
+  string file = propFile->GetValue();
   if (file == "")
     file = "noname";
   
@@ -281,8 +294,14 @@ string CppCodeGenerator::GetCode(PObjectBase obj, string name)
 {
   string _template;
   PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo("C++");
-  _template = code_info->GetTemplate(name);
+  if (!code_info)
+  {
+    //Error(...);
+    return "";
+  }
   
+  _template = code_info->GetTemplate(name);
+    
   CppTemplateParser parser(obj,_template);
   string code = parser.ParseTemplate();
 
@@ -291,7 +310,19 @@ string CppCodeGenerator::GetCode(PObjectBase obj, string name)
 
 void CppCodeGenerator::GenClassDeclaration(PObjectBase class_obj)
 {
-  string class_name = class_obj->GetProperty("name")->GetValue();
+  PProperty propName = class_obj->GetProperty("name");
+  if (!propName)
+  {
+    // Error(...)
+    return;
+  }
+    
+  string class_name = propName->GetValue();
+  if (class_name == "")
+  {
+    // Error(...)
+    return;
+  }
 
   m_header->WriteLn("/**");
   m_header->WriteLn(" * Class " + class_name);
@@ -326,7 +357,6 @@ void CppCodeGenerator::GenClassDeclaration(PObjectBase class_obj)
   m_header->Unindent();
   m_header->WriteLn("");
 
-    
   m_header->Unindent();
   m_header->WriteLn("};");
   m_header->WriteLn("");
@@ -349,9 +379,17 @@ void CppCodeGenerator::GenIncludes(PObjectBase project)
   for (it = info_set.begin() ; it != info_set.end() ; it++)
   {
     PCodeInfo code_info = (*it)->GetCodeInfo("C++");
-    string include = code_info->GetTemplate("include");
-    if (include != "")
-      m_header->WriteLn(include);
+    
+    if (code_info)
+    {
+      string include = code_info->GetTemplate("include");
+      if (include != "")
+        m_header->WriteLn(include);
+    }
+    else
+    {
+      // Error(...)
+    }
   }
   
   m_header->WriteLn("");
@@ -544,7 +582,10 @@ void CppCodeGenerator::GenSettings(PObjectInfo info, PObjectBase obj)
   PCodeInfo code_info = info->GetCodeInfo("C++");
 
   if (!code_info)
+  {
+    //Error (...)
     return;
+  }
     
   _template = code_info->GetTemplate("settings");
   
