@@ -3,10 +3,11 @@
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">MyFrame</property>
     <property name="size" type="wxSize">500,300</property>
+    <property name="title" type="wxString" />
     <codegen language="C++">
       <template name="base">public wxFrame</template>
-      <template name="cons_decl">$name(wxWindow *parent, int id = -1);</template>
-      <template name="cons_def">$name::$name(wxWindow *parent, int id) : wxFrame(parent,id)</template>
+      <template name="cons_decl">$name(wxWindow *parent, int id = -1, wxString title = $title);</template>
+      <template name="cons_def">$name::$name(wxWindow *parent, int id, wxString title) : wxFrame(parent,id, title)</template>
     </codegen>
   </objectinfo>
   <objectinfo class="Panel" icon="panel.xpm" type="form">
@@ -26,9 +27,9 @@
     <property name="title" type="wxString" />
     <codegen language="C++">
       <template name="base">public wxDialog</template>
-      <template name="cons_decl">$name(wxWindow *parent, int id = -1);</template>
-      <template name="cons_def">$name::$name(wxWindow *parent, int id)
-        : wxDialog(parent,id,$title,wxDefaultPosition,$size)</template>
+      <template name="cons_decl">$name(wxWindow *parent, int id = -1, wxString title = $title);</template>
+      <template name="cons_def">$name::$name(wxWindow *parent, int id, wxString title)
+        : wxDialog(parent,id,title,wxDefaultPosition,$size)</template>
     </codegen>
   </objectinfo>
 </package>
