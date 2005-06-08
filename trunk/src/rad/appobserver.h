@@ -73,6 +73,7 @@ class DataObservable
   virtual void CreateObject(wxString name) = 0;
   virtual void RemoveObject(PObjectBase obj) = 0;
   virtual void CutObject(PObjectBase obj) = 0;
+  virtual void CopyObject(PObjectBase obj) = 0;
   virtual void PasteObject(PObjectBase parent) = 0;
   virtual void InsertObject(PObjectBase obj, PObjectBase parent) = 0;
   virtual void MergeProject(PObjectBase project) = 0;

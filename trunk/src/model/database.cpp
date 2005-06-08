@@ -382,6 +382,42 @@ PObjectBase ObjectDatabase::CreateObject(string classname, PObjectBase parent)
   return object;
 }
 
+PObjectBase ObjectDatabase::CopyObject(PObjectBase obj)
+{
+  assert(obj);
+  
+  PObjectInfo objInfo = obj->GetObjectInfo();
+  
+  PObjectBase copyObj = NewObject(objInfo); // creamos la copia
+  assert(copyObj);
+  
+  // copiamos las propiedades
+  unsigned int i;
+  unsigned int count = obj->GetPropertyCount();
+  for (i = 0; i < count; i++)
+  {
+    PProperty objProp = obj->GetProperty(i);
+    assert(objProp);
+    
+    PProperty copyProp = copyObj->GetProperty(objProp->GetName());
+    assert(copyProp);
+    
+    string propValue = objProp->GetValue();
+    copyProp->SetValue(propValue);
+  }
+  
+  // creamos recursivamente los hijos
+  count = obj->GetChildCount();
+  for (i = 0; i<count; i++)
+  {
+    PObjectBase childCopy = CopyObject(obj->GetChild(i));
+    copyObj->AddChild(childCopy);
+    childCopy->SetParent(copyObj);
+  }
+  
+  return copyObj;
+}
+
 void ObjectDatabase::SetDefaultLayoutProperties(PObjectBase sizeritem)
 {
   assert(sizeritem->GetObjectTypeName() == "sizeritem");

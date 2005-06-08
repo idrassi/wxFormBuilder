@@ -22,6 +22,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Añadir hidden. Juan Antonio Ortega (jortegalalmolda@gmail.com)
 
+// Atencion!!!!!!
+// ObjectBase::GetPropertyCount() != ObjectInfo::GetPropertyCount()
+//
+// En el primer caso devolverá el numero total de propiedades del objeto.
+// En el segundo caso sólo devolverá el número de propiedades definidas
+// para esa clase.
+
 #ifndef __OBJ__
 #define __OBJ__
 

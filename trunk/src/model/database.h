@@ -199,6 +199,12 @@ class ObjectDatabase
   PObjectBase CreateObject(TiXmlElement *obj, PObjectBase parent = PObjectBase());
 
   /**
+   * Crea un objeto como copia de otro.
+   */
+   
+  PObjectBase CopyObject(PObjectBase obj);
+
+  /**
    * Obtiene un paquete de objetos.
    */
   PObjectPackage GetPackage(unsigned int idx);

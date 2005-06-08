@@ -39,11 +39,8 @@ class ApplicationData : public DataObservable
   PObjectBase m_selObj;     // Objeto seleccionado
 
   PObjectBase m_clipboard;
-  
+  bool m_copyOnPaste; // flag que indica si hay que copiar el objeto al pegar
   CommandProcessor m_cmdProc;
-
-  
-  
   
   /**
    * Resuelve un posible conflicto de nombres.
@@ -68,6 +65,7 @@ class ApplicationData : public DataObservable
   void CreateObject(wxString name);
   void RemoveObject(PObjectBase obj);
   void CutObject(PObjectBase obj);
+  void CopyObject(PObjectBase obj);
   void PasteObject(PObjectBase parent);
   void InsertObject(PObjectBase obj, PObjectBase parent);
   void MergeProject(PObjectBase project);

@@ -190,8 +190,15 @@ void ApplicationData::RemoveObject(PObjectBase obj)
 
 void ApplicationData::CutObject(PObjectBase obj)
 {
+  m_copyOnPaste = false;
   m_clipboard = obj;
   RemoveObject(obj);
+}
+
+void ApplicationData::CopyObject(PObjectBase obj)
+{
+  m_copyOnPaste = true;
+  m_clipboard = obj;
 }
 
 void ApplicationData::PasteObject(PObjectBase parent)
@@ -218,32 +225,35 @@ void ApplicationData::PasteObject(PObjectBase parent)
     //           wxButton   <- Cambiamos este por m_clipboard
     PObjectBase obj = 
       m_objDb->CreateObject(m_clipboard->GetObjectInfo()->GetClassName(), parent);
+      
+    PObjectBase clipboard(m_clipboard);
+    if (m_copyOnPaste)
+      clipboard = m_objDb->CopyObject(m_clipboard);
+    else
+      m_clipboard.reset();
     
     if (obj)
     {
       PObjectBase aux = obj;
-      while (aux && aux->GetObjectInfo() != m_clipboard->GetObjectInfo())
+      while (aux && aux->GetObjectInfo() != clipboard->GetObjectInfo())
         aux = ( aux->GetChildCount() > 0 ? aux->GetChild(0) : PObjectBase());
         
       if (aux && aux != obj)
       {
-        // sustituimos aux por m_clipboard
+        // sustituimos aux por clipboard
         PObjectBase auxParent = aux->GetParent();
         auxParent->RemoveChild(aux);
         aux->SetParent(PObjectBase());
         
-        auxParent->AddChild(m_clipboard);
-        m_clipboard->SetParent(auxParent);
+        auxParent->AddChild(clipboard);
+        clipboard->SetParent(auxParent);
       }
       else
-        obj = m_clipboard;
+        obj = clipboard;
         
       // y finalmente insertamos en el arbol        
       PCommand command(new InsertObjectCmd(obj,parent));
       m_cmdProc.Execute(command);
-        
-      m_clipboard.reset();
-      
     }
     DataObservable::NotifyProjectRefresh();
   }

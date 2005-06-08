@@ -93,7 +93,6 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   menuEdit->Append(ID_REDO, _T("&Redo \tCTRL+Y"), _T("Redo"));
   menuEdit->AppendSeparator();
   menuEdit->Append(ID_COPY, _T("&Copy \tCTRL+C"), _T("Copy"));
-  menuEdit->Enable(ID_COPY,false); // TO-DO
   menuEdit->Append(ID_CUT, _T("&Cut \tCTRL+X"), _T("Cut"));
   menuEdit->Append(ID_PASTE, _T("&Paste \tCTRL+V"), _T("Paste"));
   menuEdit->AppendSeparator();
@@ -519,7 +518,7 @@ void MainFrame::UpdateFrame()
 
 void MainFrame::OnCopy(wxCommandEvent &event)
 {
-  //GetData()->CopyObject(GetData()->GetSelectedObject());
+  GetData()->CopyObject(GetData()->GetSelectedObject());
 }
 
 void MainFrame::OnCut (wxCommandEvent &event)
