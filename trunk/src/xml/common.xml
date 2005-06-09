@@ -200,7 +200,7 @@
       <template name="menu_add">#parent $name->Append($name, $label);</template>
     </codegen>
   </objectinfo>
-  <objectinfo class="submenu" icon="menu.xpm" type="menu">
+  <objectinfo class="submenu" icon="menu.xpm" type="submenu">
     <property name="name" type="text" hidden="1">m_menu</property>
     <property name="label" type="wxString">MyMenu</property>
     <codegen language="C++">

@@ -169,9 +169,9 @@ bool MenuEditor::HasChildren(long n)
         return GetItemIdentation(n + 1) > GetItemIdentation(n);
 }
 
-PObjectBase MenuEditor::GetMenu(long& n, PObjectDatabase base)
+PObjectBase MenuEditor::GetMenu(long& n, PObjectDatabase base, bool isSubMenu)
 {
-    PObjectInfo info = base->GetObjectInfo("wxMenu");
+    PObjectInfo info = base->GetObjectInfo(isSubMenu ? "submenu" : "wxMenu");
     PObjectBase menu = base->NewObject(info);  
     wxString label, id, name, help; 
     GetItem(n, label, id, name, help);
@@ -220,7 +220,7 @@ PObjectBase MenuEditor::GetMenubar(PObjectDatabase base)
     long n = 0;
     while (n < m_menuList->GetItemCount())
     {
-        PObjectBase child = GetMenu(n, base);
+        PObjectBase child = GetMenu(n, base, false);
         menubar->AddChild(child);
         child->SetParent(menubar);
     }

@@ -67,10 +67,15 @@
   
   <objtype name="menu">
     <childtype name="menuitem" />
-    <childtype name="menu" />
+    <childtype name="submenu" />
   </objtype>
   
   <objtype name="menuitem" />
+  
+  <objtype name="submenu">
+    <childtype name="menuitem" />
+    <childtype name="submenu" />
+  </objtype>
   
   <objtype name="statusbar" />
 </definitions>

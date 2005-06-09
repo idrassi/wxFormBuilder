@@ -751,7 +751,7 @@ bool ObjectDatabase::ShowInPalette(string type)
   return ( type == "form" || type == "widget" || type == "sizer" ||
            type == "component" || type == "container" || type == "spacer" ||
            type == "notebook" || type == "menubar" || type == "menu" ||
-           type == "menuitem" || type == "statusbar");
+           type == "menuitem" || type == "statusbar" || type == "submenu");
 }
 
 

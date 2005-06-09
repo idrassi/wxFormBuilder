@@ -353,8 +353,8 @@ bool ObjectBase::DoChildTypeOk(string type_child, string type_parent)
   else if (type_parent == "menubar")
     result = (type_child == "menu");
     
-  else if (type_parent == "menu")
-    result = (type_child == "menuitem" || type_child == "menu");
+  else if (type_parent == "menu" || type_parent == "submenu")
+    result = (type_child == "menuitem" || type_child == "submenu");
       
   else
     result = false;

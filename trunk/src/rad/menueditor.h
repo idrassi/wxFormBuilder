@@ -43,7 +43,7 @@ class MenuEditor : public wxDialog
     void GetItem(long n, wxString& label, wxString& id, wxString& name, wxString& help);
     void AddChild(long& n, int ident, PObjectBase obj);
     bool HasChildren(long n);
-    PObjectBase GetMenu(long& n, PObjectDatabase base);
+    PObjectBase GetMenu(long& n, PObjectDatabase base, bool isSubMenu = true);
     void AddNewItem();
   
   protected:
