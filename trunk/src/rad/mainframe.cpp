@@ -98,7 +98,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   menuEdit->Append(ID_CUT, _T("&Cut \tCTRL+X"), _T("Cut selected object"));
   menuEdit->Append(ID_PASTE, _T("&Paste \tCTRL+V"), _T("Paste on selected object"));
   menuEdit->AppendSeparator();
-  menuEdit->Append(ID_DELETE, _T("&Delete \tDel"), _T("Delete selected object"));
+  menuEdit->Append(ID_DELETE, _T("&Delete \tCTRL+D"), _T("Delete selected object"));
   
   wxMenu *menuHelp = new wxMenu;
   menuHelp->Append(ID_ABOUT, _T("&About...\tF1"), _T("Show about dialog"));

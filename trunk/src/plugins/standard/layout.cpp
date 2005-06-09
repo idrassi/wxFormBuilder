@@ -258,7 +258,7 @@ class FlexGridSizerComponent : public ComponentBase
   
   TiXmlElement* ExportToXrc(IObject *obj)
   {
-    ObjectToXrcFilter xrc(obj, _("wxGridSizer"));
+    ObjectToXrcFilter xrc(obj, _("wxFlexGridSizer"));
     xrc.AddProperty(_("rows"), _("rows"), XRC_TYPE_INTEGER);
     xrc.AddProperty(_("cols"), _("cols"), XRC_TYPE_INTEGER);    
     xrc.AddProperty(_("vgap"), _("vgap"), XRC_TYPE_INTEGER);
@@ -271,7 +271,7 @@ class FlexGridSizerComponent : public ComponentBase
 
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
-    XrcToXfbFilter filter(xrcObj, _("wxBoxSizer"));
+    XrcToXfbFilter filter(xrcObj, _("wxFlexGridSizer"));
     filter.AddProperty(_("rows"), _("rows"), XRC_TYPE_INTEGER);
     filter.AddProperty(_("cols"), _("cols"), XRC_TYPE_INTEGER);    
     filter.AddProperty(_("vgap"), _("vgap"), XRC_TYPE_INTEGER);
