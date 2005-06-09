@@ -90,17 +90,17 @@ bool XrcCodeGenerator::GenerateCode(PObjectBase project)
   TiXmlElement *element = new TiXmlElement("resource");
   element->SetAttribute("xmlns", "http://www.wxwindows.org/wxxrc");
   element->SetAttribute("version", "2.3.0.1");
-  /*
+  
   for (unsigned int i=0; i<project->GetChildCount(); i++)
   {
     TiXmlElement *child = GetElement(project->GetChild(i));
     if (child)
       element->LinkEndChild(child);
-  }*/
-  
+  }
+  /*
   TiXmlElement *child = GetElement(project->GetChild(0));
   if (child)
-    element->LinkEndChild(child);
+    element->LinkEndChild(child);*/
   
   doc->LinkEndChild(element);
 
