@@ -44,6 +44,7 @@ class MenuEditor : public wxDialog
     void AddChild(long& n, int ident, PObjectBase obj);
     bool HasChildren(long n);
     PObjectBase GetMenu(long& n, PObjectDatabase base);
+    void AddNewItem();
   
   protected:
     wxListCtrl *m_menuList;
@@ -66,6 +67,7 @@ class MenuEditor : public wxDialog
     void OnMenuLeft(wxCommandEvent& e);
     void OnMenuRight(wxCommandEvent& e);
     void OnMenuUp(wxCommandEvent& e);
+    void OnEnter(wxCommandEvent& e);
     void OnUpdateMovers(wxUpdateUIEvent& e);
 };
 

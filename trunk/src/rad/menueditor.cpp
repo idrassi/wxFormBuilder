@@ -42,6 +42,7 @@ BEGIN_EVENT_TABLE(MenuEditor, wxDialog)
     EVT_BUTTON(ID_MENURIGHT, MenuEditor::OnMenuRight)
     EVT_BUTTON(ID_MENUUP, MenuEditor::OnMenuUp)
     EVT_UPDATE_UI_RANGE(ID_MENUDOWN, ID_MENUUP, MenuEditor::OnUpdateMovers)
+    EVT_TEXT_ENTER(-1, MenuEditor::OnEnter)
 END_EVENT_TABLE()
 
 MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,_T("Menu Editor"),wxDefaultPosition,wxDefaultSize)
@@ -63,22 +64,22 @@ MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,_T("Menu E
   wxStaticText *m_stId;
   m_stId = new wxStaticText(this,ID_DEFAULT,wxT("Id"),wxDefaultPosition,wxDefaultSize,0);
   sizer11->Add(m_stId, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-  m_tcId = new wxTextCtrl(this,ID_DEFAULT,wxT(""),wxDefaultPosition,wxDefaultSize,0);
+  m_tcId = new wxTextCtrl(this,ID_DEFAULT,wxT(""),wxDefaultPosition,wxDefaultSize,wxTE_PROCESS_ENTER);
   sizer11->Add(m_tcId, 0, wxALL, 5);
   wxStaticText *m_stLabel;
   m_stLabel = new wxStaticText(this,ID_DEFAULT,wxT("Label"),wxDefaultPosition,wxDefaultSize,0);
   sizer11->Add(m_stLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-  m_tcLabel = new wxTextCtrl(this,ID_DEFAULT,wxT(""),wxDefaultPosition,wxDefaultSize,0);
+  m_tcLabel = new wxTextCtrl(this,ID_DEFAULT,wxT(""),wxDefaultPosition,wxDefaultSize,wxTE_PROCESS_ENTER);
   sizer11->Add(m_tcLabel, 0, wxALL, 5);
   wxStaticText *m_stName;
   m_stName = new wxStaticText(this,ID_DEFAULT,wxT("Name"),wxDefaultPosition,wxDefaultSize,0);
   sizer11->Add(m_stName, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-  m_tcName = new wxTextCtrl(this,ID_DEFAULT,wxT(""),wxDefaultPosition,wxDefaultSize,0);
+  m_tcName = new wxTextCtrl(this,ID_DEFAULT,wxT(""),wxDefaultPosition,wxDefaultSize,wxTE_PROCESS_ENTER);
   sizer11->Add(m_tcName, 0, wxALL, 5);
   wxStaticText *m_stHelpString;
   m_stHelpString = new wxStaticText(this,ID_DEFAULT,wxT("Help String"),wxDefaultPosition,wxDefaultSize,0);
   sizer11->Add(m_stHelpString, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-  m_tcHelpString = new wxTextCtrl(this,ID_DEFAULT,wxT(""),wxDefaultPosition,wxDefaultSize,0);
+  m_tcHelpString = new wxTextCtrl(this,ID_DEFAULT,wxT(""),wxDefaultPosition,wxDefaultSize,wxTE_PROCESS_ENTER);
   sizer11->Add(m_tcHelpString, 0, wxALL, 5);
   sizer1->Add(sizer11, 0, wxEXPAND, 5);
   wxBoxSizer *sizer4;
@@ -283,10 +284,20 @@ void MenuEditor::GetItem(long n, wxString& label, wxString& id, wxString& name, 
     help = item.GetText();
 }
 
-void MenuEditor::OnAddMenuItem(wxCommandEvent& e)
+void MenuEditor::AddNewItem()
 {
     AddItem(m_tcLabel->GetValue(), m_tcId->GetValue(), m_tcName->GetValue(),
-        m_tcHelpString->GetValue());
+        m_tcHelpString->GetValue());  
+    m_tcLabel->SetValue(_T(""));
+    m_tcId->SetValue(_T(""));
+    m_tcName->SetValue(_T(""));
+    m_tcHelpString->SetValue(_T(""));
+    m_tcId->SetFocus();
+}
+
+void MenuEditor::OnAddMenuItem(wxCommandEvent& e)
+{
+    AddNewItem();
 }
 
 void MenuEditor::OnAddSeparator(wxCommandEvent& e)
@@ -415,6 +426,11 @@ void MenuEditor::OnMenuDown(wxCommandEvent& e)
         first--;
     }
     m_menuList->SetItemState(first, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+}
+
+void MenuEditor::OnEnter(wxCommandEvent& e)
+{
+  AddNewItem();
 }
 
 void MenuEditor::OnUpdateMovers(wxUpdateUIEvent& e)
