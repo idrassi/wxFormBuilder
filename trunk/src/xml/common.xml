@@ -200,6 +200,16 @@
       <template name="menu_add">#parent $name->Append($name, $label);</template>
     </codegen>
   </objectinfo>
+  <objectinfo class="submenu" icon="menu.xpm" type="menu">
+    <property name="name" type="text" hidden="1">m_menu</property>
+    <property name="label" type="wxString">MyMenu</property>
+    <codegen language="C++">
+      <template name="declaration">wxMenu *$name;</template>
+      <template name="construction">$name = new wxMenu();</template>
+      <template name="include">#include &lt;wx/menu.h&gt;</template>
+      <template name="menu_add">#parent $name->Append(-1, $label, $name);</template>
+    </codegen>
+  </objectinfo>
   <objectinfo class="wxMenuItem" icon="menuitem.xpm" type="menuitem">
     <property name="name" type="text" hidden="1">menuItem</property>
     <property name="label" type="wxString">MyMenuItem</property>
@@ -258,8 +268,13 @@
   <objectinfo class="wxStatusBar" icon="statusbar.xpm" type="statusbar">
     <inherits class="wxWindow" />
     <property name="name" type="text">m_statusBar</property>
+    <property name="fields" type="text">1</property>
     <property name="style" type="bitlist">
       <option name="wxST_SIZEGRIP" />wxST_SIZEGRIP</property>
+    <codegen language="C++">
+      <template name="declaration">wxStatusBar *$name;</template>
+      <template name="construction">$name = #wxparent $name->CreateStatusBar($fields, $style, $id);</template>
+    </codegen>
   </objectinfo>
   
 </package>

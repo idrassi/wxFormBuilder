@@ -491,8 +491,10 @@ class StatusBarComponent : public ComponentBase
  public: 
   wxObject* Create(IObject *obj, wxObject *parent)
   {
-    return new wxStatusBar((wxWindow*)parent, -1,
+    wxStatusBar *sb = new wxStatusBar((wxWindow*)parent, -1,
       obj->GetPropertyAsInteger(_("style")));
+    sb->SetFieldsCount(obj->GetPropertyAsInteger(_("fields")));
+    return sb;
   }
 
   TiXmlElement* ExportToXrc(IObject *obj)
@@ -500,6 +502,7 @@ class StatusBarComponent : public ComponentBase
     ObjectToXrcFilter xrc(obj, _("wxStatusBar"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();    
     xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    xrc.AddProperty(_("fields"),_("fields"),XRC_TYPE_INTEGER);
     return xrc.GetXrcObject();
   } 
   
@@ -508,6 +511,7 @@ class StatusBarComponent : public ComponentBase
     XrcToXfbFilter filter(xrcObj, _("wxStatusBar"));
     filter.AddWindowProperties();
     filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    filter.AddProperty(_("fields"),_("fields"),XRC_TYPE_INTEGER);
     return filter.GetXfbObject();
   }
 };
@@ -611,6 +615,7 @@ BEGIN_LIBRARY()
   COMPONENT("wxNotebook", NotebookComponent)
   COMPONENT("wxMenuBar", MenuBarComponent)
   COMPONENT("wxMenu", MenuComponent)
+  COMPONENT("submenu", MenuComponent)
   COMPONENT("wxMenuItem", MenuItemComponent)
   COMPONENT("separator", SeparatorComponent)
   COMPONENT("wxListCtrl", ListCtrlComponent)
