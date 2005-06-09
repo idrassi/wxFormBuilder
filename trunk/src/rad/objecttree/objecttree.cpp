@@ -378,11 +378,18 @@ void ItemPopupMenu::OnMenuEvent (wxCommandEvent & event)
             
             if (obj->GetClassName() == "wxMenuBar")
             {
-              PObjectBase parent = obj->GetParent();
               PObjectBase menubar = me.GetMenubar(m_data->GetObjectDatabase());
-              
-              m_data->RemoveObject(obj);
-              m_data->InsertObject(menubar, parent);
+              while (obj->GetChildCount() > 0)
+              {
+                PObjectBase child = obj->GetChild(0);
+                obj->RemoveChild(0);
+                child->SetParent(PObjectBase());
+              }
+              for (unsigned int i = 0; i < menubar->GetChildCount(); i++)
+              {
+                PObjectBase child = menubar->GetChild(i);
+                m_data->InsertObject(child,obj);
+              }
             }
             else
               m_data->InsertObject(me.GetMenubar(m_data->GetObjectDatabase()),m_data->GetSelectedForm());
