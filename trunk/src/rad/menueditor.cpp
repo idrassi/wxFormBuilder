@@ -30,6 +30,7 @@
 #define ID_MENURIGHT 1004
 #define ID_MENUUP 1005
 #define ID_REMOVEMENUITEM 1006
+#define ID_LABEL 1007
 
 #define IDENTATION 4
 
@@ -43,6 +44,7 @@ BEGIN_EVENT_TABLE(MenuEditor, wxDialog)
     EVT_BUTTON(ID_MENUUP, MenuEditor::OnMenuUp)
     EVT_UPDATE_UI_RANGE(ID_MENUDOWN, ID_MENUUP, MenuEditor::OnUpdateMovers)
     EVT_TEXT_ENTER(-1, MenuEditor::OnEnter)
+    EVT_TEXT(ID_LABEL, MenuEditor::OnLabelChanged)
 END_EVENT_TABLE()
 
 MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,_T("Menu Editor"),wxDefaultPosition,wxDefaultSize)
@@ -61,16 +63,19 @@ MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,_T("Menu E
   sizer1 = new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("Menu item")), wxVERTICAL);
   wxFlexGridSizer *sizer11;
   sizer11 = new wxFlexGridSizer(4,2,0,0);
+
+  wxStaticText *m_stLabel;
+  m_stLabel = new wxStaticText(this,ID_DEFAULT,wxT("Label"),wxDefaultPosition,wxDefaultSize,0);
+  sizer11->Add(m_stLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+  m_tcLabel = new wxTextCtrl(this,ID_LABEL,wxT(""),wxDefaultPosition,wxDefaultSize,wxTE_PROCESS_ENTER);
+  sizer11->Add(m_tcLabel, 0, wxALL, 5);
+  
   wxStaticText *m_stId;
   m_stId = new wxStaticText(this,ID_DEFAULT,wxT("Id"),wxDefaultPosition,wxDefaultSize,0);
   sizer11->Add(m_stId, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
   m_tcId = new wxTextCtrl(this,ID_DEFAULT,wxT(""),wxDefaultPosition,wxDefaultSize,wxTE_PROCESS_ENTER);
   sizer11->Add(m_tcId, 0, wxALL, 5);
-  wxStaticText *m_stLabel;
-  m_stLabel = new wxStaticText(this,ID_DEFAULT,wxT("Label"),wxDefaultPosition,wxDefaultSize,0);
-  sizer11->Add(m_stLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-  m_tcLabel = new wxTextCtrl(this,ID_DEFAULT,wxT(""),wxDefaultPosition,wxDefaultSize,wxTE_PROCESS_ENTER);
-  sizer11->Add(m_tcLabel, 0, wxALL, 5);
+  
   wxStaticText *m_stName;
   m_stName = new wxStaticText(this,ID_DEFAULT,wxT("Name"),wxDefaultPosition,wxDefaultSize,0);
   sizer11->Add(m_stName, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
@@ -204,6 +209,7 @@ PObjectBase MenuEditor::GetMenu(long& n, PObjectDatabase base, bool isSubMenu)
             PObjectBase menuitem = base->NewObject(info);  
             menuitem->GetProperty("label")->SetValue(label); 
             menuitem->GetProperty("name")->SetValue(name); 
+            menuitem->GetProperty("id")->SetValue(id); 
             menu->AddChild(menuitem);
             menuitem->SetParent(menu);
             n++;
@@ -292,7 +298,7 @@ void MenuEditor::AddNewItem()
     m_tcId->SetValue(_T(""));
     m_tcName->SetValue(_T(""));
     m_tcHelpString->SetValue(_T(""));
-    m_tcId->SetFocus();
+    m_tcLabel->SetFocus();
 }
 
 void MenuEditor::OnAddMenuItem(wxCommandEvent& e)
@@ -431,6 +437,34 @@ void MenuEditor::OnMenuDown(wxCommandEvent& e)
 void MenuEditor::OnEnter(wxCommandEvent& e)
 {
   AddNewItem();
+}
+
+void MenuEditor::OnLabelChanged(wxCommandEvent& e)
+{
+  wxString label = m_tcLabel->GetValue();
+  wxString id, name;
+  bool nextUpper = false;
+  id = _T("ID_");
+  int tabPos = label.Find(_T("\\t"));
+  if (tabPos >= 0) label = label.Left(tabPos);
+  
+  for (size_t i = 0; i < label.Len(); i++)
+  {
+    if (isalnum(label[i]))
+    {
+      name += (nextUpper ? toupper(label[i]) : tolower(label[i]));
+      nextUpper = false;
+      id += toupper(label[i]);
+    }
+    else if (label[i] == ' ')
+    {
+      nextUpper = true;
+      id += _T("_");
+    }
+  }
+  if (name.Len() > 0 && isdigit(name[0])) name = _T("n") + name;
+  m_tcId->SetValue(id);
+  m_tcName->SetValue(name);
 }
 
 void MenuEditor::OnUpdateMovers(wxUpdateUIEvent& e)
