@@ -16,3 +16,5 @@ Por ejemplo, el control wxStaticText debe tener los flags de estilo de wxWindow 
 *wxFrame debería tener color de fondo oscuro
 
 *Al intentar cortar el nodo raíz del ObjectTree falla un aserto
+
+*Los \t de los menuitems salen con dos barras (\\t) en el código de C++ generado
