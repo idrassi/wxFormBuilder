@@ -50,6 +50,8 @@
 #define ID_DELETE        111
 #define ID_COPY          112
 #define ID_PASTE         113
+#define ID_EXPAND        114
+#define ID_STRETCH       115
 
 BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_NEW_PRJ,MainFrame::OnNewProject)
@@ -66,6 +68,8 @@ BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_CUT,MainFrame::OnCut)
   EVT_MENU(ID_COPY,MainFrame::OnCopy)
   EVT_MENU(ID_PASTE,MainFrame::OnPaste)
+  EVT_MENU(ID_EXPAND,MainFrame::OnToggleExpand)
+  EVT_MENU(ID_STRETCH,MainFrame::OnToggleStretch)
   EVT_CLOSE(MainFrame::OnClose)
 END_EVENT_TABLE()
 
@@ -97,8 +101,10 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   menuEdit->Append(ID_COPY, _T("&Copy \tCTRL+C"), _T("Copy selected object"));
   menuEdit->Append(ID_CUT, _T("&Cut \tCTRL+X"), _T("Cut selected object"));
   menuEdit->Append(ID_PASTE, _T("&Paste \tCTRL+V"), _T("Paste on selected object"));
-  menuEdit->AppendSeparator();
   menuEdit->Append(ID_DELETE, _T("&Delete \tCTRL+D"), _T("Delete selected object"));
+  menuEdit->AppendSeparator();
+  menuEdit->Append(ID_EXPAND, _T("&Toggle Expand\tALT+E"), _T("Toggle wxEXPAND flag of sizeritem properties"));
+  menuEdit->Append(ID_STRETCH, _T("&Toggle Stretch\tALT+S"), _T("Toggle option property of sizeritem properties"));
   
   wxMenu *menuHelp = new wxMenu;
   menuHelp->Append(ID_ABOUT, _T("&About...\tF1"), _T("Show about dialog"));
@@ -537,3 +543,14 @@ void MainFrame::OnPaste (wxCommandEvent &event)
 {
   GetData()->PasteObject(GetData()->GetSelectedObject());
 }
+
+void MainFrame::OnToggleExpand (wxCommandEvent &event)
+{
+  GetData()->ToggleExpandLayout(GetData()->GetSelectedObject());
+}
+
+void MainFrame::OnToggleStretch (wxCommandEvent &event)
+{
+  GetData()->ToggleStretchLayout(GetData()->GetSelectedObject());
+}
+

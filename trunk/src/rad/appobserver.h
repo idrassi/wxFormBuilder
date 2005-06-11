@@ -82,6 +82,8 @@ class DataObservable
   virtual void MovePosition(PObjectBase, bool right, unsigned int num = 1) = 0;
   virtual void Undo() = 0;
   virtual void Redo() = 0;
+  virtual void ToggleExpandLayout(PObjectBase obj) = 0;
+  virtual void ToggleStretchLayout(PObjectBase obj) = 0;
   
   // Obtienen información del modelo de datos
   virtual PObjectPackage GetPackage(unsigned int idx) = 0;

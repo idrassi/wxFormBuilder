@@ -277,17 +277,41 @@ void ApplicationData::PasteObject(PObjectBase parent)
     //  obj :: sizeritem
     //              /
     //           wxButton   <- Cambiamos este por m_clipboard
+    PObjectBase old_parent = parent;
+    
     PObjectBase obj = 
       m_objDb->CreateObject(m_clipboard->GetObjectInfo()->GetClassName(), parent);
+    
+    int pos = -1;
+    
+    if (!obj)
+    {
+      // si no se ha podido crear el objeto vamos a intentar crearlo colgado
+      // del padre de "parent" y además vamos a insertarlo en la posición
+      // siguiente a "parent"
+      PObjectBase selected = parent;
+      parent = selected->GetParent();
+      while (parent && parent->GetObjectInfo()->GetObjectType()->IsItem())
+      {
+        selected = parent;
+        parent = selected->GetParent();
+      }
       
-    PObjectBase clipboard(m_clipboard);
-    if (m_copyOnPaste)
-      clipboard = m_objDb->CopyObject(m_clipboard);
-    else
-      m_clipboard.reset();
+      if (parent)
+      {
+        obj = m_objDb->CreateObject(m_clipboard->GetObjectInfo()->GetClassName(), parent);
+        
+        if (obj)
+          pos = CalcPositionOfInsertion(selected,parent);
+      }
+    }
     
     if (obj)
     {
+      PObjectBase clipboard(m_clipboard);
+      if (m_copyOnPaste)
+        clipboard = m_objDb->CopyObject(m_clipboard);
+    
       PObjectBase aux = obj;
       while (aux && aux->GetObjectInfo() != clipboard->GetObjectInfo())
         aux = ( aux->GetChildCount() > 0 ? aux->GetChild(0) : PObjectBase());
@@ -305,11 +329,26 @@ void ApplicationData::PasteObject(PObjectBase parent)
       else
         obj = clipboard;
         
-      // y finalmente insertamos en el arbol        
-      PCommand command(new InsertObjectCmd(obj,parent));
+      // y finalmente insertamos en el arbol 
+      PCommand command(new InsertObjectCmd(obj,parent,pos));
       m_cmdProc.Execute(command);
+      
+      if (!m_copyOnPaste)
+        m_clipboard.reset();
+    
+      DataObservable::NotifyProjectRefresh();
+      
+      // vamos a mantener seleccionado el nuevo objeto creado
+      // pero hay que tener en cuenta que es muy probable que el objeto creado
+      // sea un "item"
+      while (obj && obj->GetObjectInfo()->GetObjectType()->IsItem())
+      {
+        assert(obj->GetChildCount() > 0);
+        obj = obj->GetChild(0);
+      }
+    
+      SelectObject(obj);    
     }
-    DataObservable::NotifyProjectRefresh();
   }
 }
 
@@ -449,6 +488,47 @@ void ApplicationData::Redo()
 {
   m_cmdProc.Redo();
   DataObservable::NotifyProjectRefresh();
+}
+
+
+void ApplicationData::ToggleExpandLayout(PObjectBase obj)
+{
+  if (obj)
+  {
+    PObjectBase parent = obj->GetParent();
+    if (parent->GetObjectTypeName() == "sizeritem")
+    {
+      PProperty propFlag = parent->GetProperty("flag");
+      assert(propFlag);
+      
+      wxString value;
+      wxString currentValue = propFlag->GetValueAsString();
+      
+      value = 
+        (TypeConv::FlagSet(wxT("wxEXPAND"),currentValue) ?
+         TypeConv::ClearFlag(wxT("wxEXPAND"),currentValue) :
+         TypeConv::SetFlag(wxT("wxEXPAND"),currentValue));
+         
+      ModifyProperty(propFlag,value);
+    }
+  }
+}
+
+void ApplicationData::ToggleStretchLayout(PObjectBase obj)
+{
+  if (obj)
+  {
+    PObjectBase parent = obj->GetParent();
+    if (parent->GetObjectTypeName() == "sizeritem")
+    {
+      PProperty propOption = parent->GetProperty("option");
+      assert(propOption);
+      
+      string value = ( propOption->GetValue() == "1" ? "0" : "1");
+      
+      ModifyProperty(propOption, _WXSTR(value));
+    }
+  }
 }
 
 

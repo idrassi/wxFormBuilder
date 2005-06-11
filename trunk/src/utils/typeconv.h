@@ -65,6 +65,10 @@ namespace TypeConv
   int     GetMacroValue(const wxString &str);
   int     StringToInt (const wxString &str);
   
+  bool     FlagSet  (const wxString &flag, const wxString &currentValue);
+  wxString ClearFlag(const wxString &flag, const wxString &currentValue);
+  wxString SetFlag  (const wxString &flag, const wxString &currentValue);
+  
   wxBitmap StringToBitmap(const wxString &str);
 
   wxFont StringToFont (const wxString &str);

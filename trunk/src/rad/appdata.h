@@ -101,6 +101,8 @@ class ApplicationData : public DataObservable
   void MovePosition(PObjectBase, bool right, unsigned int num = 1);
   void Undo();
   void Redo();
+  void ToggleExpandLayout(PObjectBase obj);
+  void ToggleStretchLayout(PObjectBase obj);
   
   // Servicios para los observadores  
   PObjectBase GetSelectedObject();

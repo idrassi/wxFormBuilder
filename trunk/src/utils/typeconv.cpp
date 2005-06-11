@@ -328,6 +328,76 @@ wxString TypeConv::BoolToString(bool val)
   return result;
 }
 
+bool TypeConv::FlagSet  (const wxString &flag, const wxString &currentValue)
+{
+  bool set = false;
+  wxStringTokenizer tkz(currentValue, wxT("|"));
+  while (!set && tkz.HasMoreTokens())
+  {
+    wxString token;
+    token = tkz.GetNextToken();
+    token.Trim(true);
+    token.Trim(false);
+    
+    if (token == flag)
+      set = true;
+  }
+  
+  return set;
+}
+
+wxString TypeConv::ClearFlag(const wxString &flag, const wxString &currentValue)
+{
+  wxString result;
+  wxStringTokenizer tkz(currentValue, wxT("|"));
+  while (tkz.HasMoreTokens())
+  {
+    wxString token;
+    token = tkz.GetNextToken();
+    token.Trim(true);
+    token.Trim(false);
+    
+    if (token != flag)
+    {
+      if (result != wxT(""))
+        result = result + wxT('|');
+        
+      result = result + token;
+    }
+  }
+  
+  return result;
+}
+
+wxString TypeConv::SetFlag  (const wxString &flag, const wxString &currentValue)
+{
+  bool found = false;
+  wxString result = currentValue;
+  wxStringTokenizer tkz(currentValue, wxT("|"));
+  while (tkz.HasMoreTokens())
+  {
+    wxString token;
+    token = tkz.GetNextToken();
+    token.Trim(true);
+    token.Trim(false);
+    
+    if (token == flag)
+      found = true;
+  }
+  
+  if (!found)
+  {
+    if (result != wxT(""))
+      result = result + wxT('|');
+        
+    result = result + flag;
+  }
+  return result;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
 PMacroDictionary MacroDictionary::s_instance = NULL;
 
 PMacroDictionary MacroDictionary::GetInstance()
@@ -366,47 +436,5 @@ MacroDictionary::MacroDictionary()
 {
   // Las macros serán incluidas en las bibliotecas de componentes... 
   // Sizers macros
-/*  MACRO(wxHORIZONTAL);
-  MACRO(wxVERTICAL);  
-  MACRO(wxALL);
-  MACRO(wxLEFT);
-  MACRO(wxTOP);
-  MACRO(wxRIGHT);
-  MACRO(wxBOTTOM);
-  MACRO(wxEXPAND);
-  MACRO(wxALIGN_BOTTOM);
-  MACRO(wxALIGN_CENTER_HORIZONTAL);
-  MACRO(wxALIGN_CENTER_VERTICAL);
-  MACRO(wxSHAPED);
-  MACRO(wxADJUST_MINSIZE);
-
-  MACRO2(wxFIXED_MINSIZE,wxADJUST_MINSIZE); //  MACRO(wxFIXED_MINSIZE);
-
-  // wxWindow style macros
-  MACRO(wxSIMPLE_BORDER);
-  MACRO(wxSUNKEN_BORDER);
-  MACRO(wxDOUBLE_BORDER);
-  MACRO(wxRAISED_BORDER);
-  MACRO(wxTAB_TRAVERSAL);
-
-
-  // wxButton
-  MACRO(wxBU_LEFT);
-  MACRO(wxBU_TOP);
-  MACRO(wxBU_RIGHT);
-  MACRO(wxBU_BOTTOM);
-  MACRO(wxBU_EXACTFIT);
-  
-  // wxStaticText
-  MACRO(wxALIGN_LEFT);
-  MACRO(wxALIGN_CENTRE);
-  MACRO(wxALIGN_RIGHT);
-  MACRO(wxST_NO_AUTORESIZE);
-  
-  // wxTextCtrl
-  MACRO(wxTE_MULTILINE);
-  MACRO(wxTE_READONLY);
-  MACRO(wxTE_RICH);*/
-  
 }
 

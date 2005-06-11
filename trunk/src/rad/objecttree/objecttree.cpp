@@ -121,6 +121,7 @@ void ObjectTree::ObjectSelected(PObjectBase obj)
   if (it != m_map.end() && m_tcObjects->GetSelection() != it->second)
   {
     m_tcObjects->SelectItem(it->second);
+    m_tcObjects->SetFocus();
   }
     
   
