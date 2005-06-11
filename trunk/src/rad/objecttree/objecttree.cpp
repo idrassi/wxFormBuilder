@@ -157,7 +157,24 @@ void ObjectTree::AddChildren(PObjectBase obj, wxTreeItemId &parent, bool is_root
   //    obj->GetObjectTypeName() == "notebookpage")
   
   if (obj->GetObjectInfo()->GetObjectType()->IsItem())
-    AddChildren(obj->GetChild(0),parent);
+  {
+    if (obj->GetChildCount() > 0)
+      AddChildren(obj->GetChild(0),parent);
+    else
+    {
+      // Si hemos llegado aquí ha sido porque el arbol no está bien formado
+      // y habrá que revisar cómo se ha creado.
+      wxString msg;
+      PObjectBase itemParent = obj->GetParent();
+      assert(parent);
+
+      msg = wxString::Format(wxT("Item without object as child of \'%s:%s\'"),
+        itemParent->GetPropertyAsString("name").c_str(),
+        itemParent->GetClassName().c_str());
+      
+      wxLogError(msg);
+    }
+  }
   else
   {
     wxTreeItemId new_parent;

@@ -40,7 +40,7 @@
 	<File name="rad\appobserver.h" open="0" top="0">
 		<Cursor position="2756" topLine="93"/>
 	</File>
-	<File name="rad\cpppanel\cpppanel.cpp" open="1" top="1">
+	<File name="rad\cpppanel\cpppanel.cpp" open="1" top="0">
 		<Cursor position="4611" topLine="115"/>
 	</File>
 	<File name="rad\designer\visualeditor.cpp" open="0" top="0">
@@ -67,8 +67,5 @@
 	<File name="utils\typeconv.cpp" open="0" top="0">
 		<Cursor position="596" topLine="0"/>
 	</File>
-	<Expand folder="/Sources/rad/objecttree"/>
-	<Expand folder="/Sources/rad/cpppanel"/>
-	<Expand folder="/Sources/rad"/>
 	<Expand folder="/Sources"/>
 </Code::Blocks_layout_file>

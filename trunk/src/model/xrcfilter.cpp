@@ -607,8 +607,11 @@ PObjectBase XrcLoader::GetObject(TiXmlElement *xrcObj, PObjectBase parent)
     // contrario es muy posible que se produzca un fallo debido a que
     // haya un sizeritem sin objeto incluido él.
     object = m_objDb->CreateObject("wxPanel",parent);
-    parent->AddChild(object);
-    object->SetParent(parent);
+    if (object)
+    {
+      parent->AddChild(object);
+      object->SetParent(parent);
+    }
   }
   
   return object;

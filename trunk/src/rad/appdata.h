@@ -54,6 +54,9 @@ class ApplicationData : public DataObservable
    */
   void BuildNameSet(PObjectBase obj, PObjectBase top, set<string> &name_set);
   
+  
+  int CalcPositionOfInsertion(PObjectBase selected,PObjectBase parent);
+  
  public:
   ApplicationData();
 
@@ -105,13 +108,14 @@ class InsertObjectCmd : public Command
  private:
   PObjectBase m_parent;
   PObjectBase m_object;
+  int m_pos;
   
  protected:
   void DoExecute();
   void DoRestore();
  
  public:
-   InsertObjectCmd(PObjectBase object, PObjectBase parent);
+   InsertObjectCmd(PObjectBase object, PObjectBase parent, int pos = -1);
 };
 
 class RemoveObjectCmd : public Command

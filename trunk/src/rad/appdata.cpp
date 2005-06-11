@@ -105,6 +105,41 @@ void ApplicationData::ResolveNameConflict(PObjectBase obj)
   nameProp->SetValue(name);
 }
 
+/**
+ * Calcula la posición donde deberá ser insertado el objeto.
+ *
+ * Dado un objeto "padre" y un objeto "seleccionado", esta rutina calcula la
+ * posición de inserción de un objeto debajo de "parent" de forma que el objeto
+ * quede a continuación del objeto "seleccionado".
+ *
+ * El algoritmo consiste ir subiendo en el arbol desde el objeto "selected"
+ * hasta encontrar un objeto cuyo padre sea el mismo que "parent" en cuyo
+ * caso se toma la posición siguiente a ese objeto.
+ *
+ * @param parent objeto "padre"
+ * @param selected objeto "seleccionado".
+ * @return posición de insercción (-1 si no se puede insertar).
+ */
+int ApplicationData::CalcPositionOfInsertion(PObjectBase selected,PObjectBase parent)
+{
+  int pos = -1;
+  
+  if (parent && selected)
+  {
+    PObjectBase parentSelected = selected->GetParent();
+    while (parentSelected && parentSelected != parent)
+    {
+      selected = parentSelected;
+      parentSelected = selected->GetParent();
+    }
+    
+    if (parentSelected && parentSelected == parent)
+      pos = parent->GetChildPosition(selected) + 1;
+  }
+  
+  return pos;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 void ApplicationData::SelectObject(PObjectBase obj)
@@ -137,10 +172,14 @@ void ApplicationData::CreateObject(wxString name)
     // y seguiremos subiendo hasta que ya no podamos crear el objeto.
     while (parent && !created)
     {
+      // además, el objeto se insertará a continuación del objeto seleccionado
       obj = m_objDb->CreateObject(string(name.mb_str()),parent);
+      
       if (obj)
-      {    
-        PCommand command(new InsertObjectCmd(obj,parent));
+      {
+        int pos = CalcPositionOfInsertion(GetSelectedObject(),parent);
+        
+        PCommand command(new InsertObjectCmd(obj,parent,pos));
         m_cmdProc.Execute(command);
         created = true;
         ResolveNameConflict(obj);
@@ -262,9 +301,13 @@ void ApplicationData::PasteObject(PObjectBase parent)
 void ApplicationData::InsertObject(PObjectBase obj, PObjectBase parent)
 {
   // FIXME! comprobar obj se puede colgar de parent
-  PCommand command(new InsertObjectCmd(obj,parent));
-  m_cmdProc.Execute(command);  
-  DataObservable::NotifyProjectRefresh(); 
+//  if (parent->GetObjectInfo()->GetObjectType()->FindChildType(
+//    obj->GetObjectInfo()->GetObjectType()))
+//  {
+    PCommand command(new InsertObjectCmd(obj,parent));
+    m_cmdProc.Execute(command);  
+    DataObservable::NotifyProjectRefresh(); 
+//  }
 }
 
 void ApplicationData::MergeProject(PObjectBase project)
@@ -274,9 +317,9 @@ void ApplicationData::MergeProject(PObjectBase project)
   {
     //m_project->AddChild(project->GetChild(i));
     //project->GetChild(i)->SetParent(m_project);
-    PObjectBase child = project->GetChild(i);
     
-    InsertObject(project->GetChild(i),m_project);
+    PObjectBase child = project->GetChild(i);
+    InsertObject(child,m_project);
   }
   DataObservable::NotifyProjectRefresh(); 
 }
@@ -393,14 +436,17 @@ void ApplicationData::Redo()
 
 
 //////////////////////////////////////////////////////////////////////////////
-InsertObjectCmd::InsertObjectCmd(PObjectBase object, PObjectBase parent)
-  : m_parent(parent), m_object(object)
+InsertObjectCmd::InsertObjectCmd(PObjectBase object, PObjectBase parent, int pos)
+  : m_parent(parent), m_object(object), m_pos(pos)
 {}
 
 void InsertObjectCmd::DoExecute()
 {
   m_parent->AddChild(m_object);
   m_object->SetParent(m_parent);
+  
+  if (m_pos >= 0)
+    m_parent->ChangeChildPosition(m_object,m_pos);
 }
 
 void InsertObjectCmd::DoRestore()
