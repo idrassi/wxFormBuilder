@@ -170,6 +170,18 @@ string CppCodeGenerator::ConvertCppString(string text)
         result = result + "\\\\";
         break;
         
+      case '\t':
+        result = result + "\\t";
+        break;
+        
+      case '\n':
+        result = result + "\\n";
+        break;
+      
+      case '\r':
+        result = result + "\\r";
+        break;
+        
       default:
         result = result + c;
         break;
