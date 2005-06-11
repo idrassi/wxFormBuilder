@@ -31,11 +31,11 @@
 	<File name="model\xrcfilter.cpp" open="0" top="0">
 		<Cursor position="8891" topLine="242"/>
 	</File>
-	<File name="rad\appdata.cpp" open="0" top="0">
-		<Cursor position="255" topLine="0"/>
+	<File name="rad\appdata.cpp" open="1" top="1">
+		<Cursor position="13777" topLine="445"/>
 	</File>
-	<File name="rad\appdata.h" open="0" top="0">
-		<Cursor position="2398" topLine="57"/>
+	<File name="rad\appdata.h" open="1" top="0">
+		<Cursor position="2398" topLine="78"/>
 	</File>
 	<File name="rad\appobserver.h" open="0" top="0">
 		<Cursor position="2756" topLine="93"/>
@@ -50,13 +50,13 @@
 		<Cursor position="12013" topLine="338"/>
 	</File>
 	<File name="rad\mainframe.cpp" open="1" top="0">
-		<Cursor position="9243" topLine="203"/>
+		<Cursor position="2910" topLine="52"/>
 	</File>
 	<File name="rad\mainframe.h" open="1" top="0">
-		<Cursor position="2834" topLine="61"/>
+		<Cursor position="2933" topLine="60"/>
 	</File>
 	<File name="rad\objecttree\objecttree.cpp" open="1" top="0">
-		<Cursor position="7277" topLine="238"/>
+		<Cursor position="3573" topLine="109"/>
 	</File>
 	<File name="rad\objecttree\objecttree.h" open="0" top="0">
 		<Cursor position="1421" topLine="28"/>
@@ -67,5 +67,7 @@
 	<File name="utils\typeconv.cpp" open="0" top="0">
 		<Cursor position="596" topLine="0"/>
 	</File>
+	<Expand folder="/Sources/rad/objecttree"/>
+	<Expand folder="/Sources/rad"/>
 	<Expand folder="/Sources"/>
 </Code::Blocks_layout_file>

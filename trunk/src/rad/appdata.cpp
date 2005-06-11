@@ -448,6 +448,8 @@ void ApplicationData::GenerateCode()
 
 void ApplicationData::MovePosition(PObjectBase obj, bool right, unsigned int num)
 {
+  PObjectBase noItemObj = obj;
+  
   PObjectBase parent = obj->GetParent();
   if (parent)
   {
@@ -472,8 +474,8 @@ void ApplicationData::MovePosition(PObjectBase obj, bool right, unsigned int num
       
       PCommand command(new ShiftChildCmd(obj,pos));
       m_cmdProc.Execute(command);
-      
       DataObservable::NotifyProjectRefresh();
+      SelectObject(noItemObj); 
     }
   }
 }

@@ -81,6 +81,8 @@ class MainFrame : public DataObserver, public wxFrame
   void OnDelete (wxCommandEvent &event);
   void OnToggleExpand (wxCommandEvent &event);
   void OnToggleStretch (wxCommandEvent &event);
+  void OnMoveUp (wxCommandEvent &event);
+  void OnMoveDown (wxCommandEvent &event);
   
   void ProjectLoaded();
   void ProjectSaved();

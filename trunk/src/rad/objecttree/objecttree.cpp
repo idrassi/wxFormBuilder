@@ -118,13 +118,15 @@ void ObjectTree::ObjectSelected(PObjectBase obj)
   // buscamos el item asociado al objeto lo marcamos
   // como seleccionado
   ObjectItemMap::iterator it = m_map.find(obj);
-  if (it != m_map.end() && m_tcObjects->GetSelection() != it->second)
+  if (it != m_map.end()) //&& m_tcObjects->GetSelection() != it->second)
   {
     m_tcObjects->SelectItem(it->second);
     m_tcObjects->SetFocus();
   }
-    
-  
+  else
+  {
+    wxLogError("Algo pasa porque no se encuentra el item asociado al objeto");
+  }
 }
 
 void ObjectTree::ObjectCreated(PObjectBase obj)

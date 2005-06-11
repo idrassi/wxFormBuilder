@@ -52,6 +52,8 @@
 #define ID_PASTE         113
 #define ID_EXPAND        114
 #define ID_STRETCH       115
+#define ID_MOVE_UP       116
+#define ID_MOVE_DOWN     117
 
 BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_NEW_PRJ,MainFrame::OnNewProject)
@@ -70,6 +72,8 @@ BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_PASTE,MainFrame::OnPaste)
   EVT_MENU(ID_EXPAND,MainFrame::OnToggleExpand)
   EVT_MENU(ID_STRETCH,MainFrame::OnToggleStretch)
+  EVT_MENU(ID_MOVE_UP,MainFrame::OnMoveUp)
+  EVT_MENU(ID_MOVE_DOWN,MainFrame::OnMoveDown)
   EVT_CLOSE(MainFrame::OnClose)
 END_EVENT_TABLE()
 
@@ -105,6 +109,8 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   menuEdit->AppendSeparator();
   menuEdit->Append(ID_EXPAND, _T("&Toggle Expand\tALT+E"), _T("Toggle wxEXPAND flag of sizeritem properties"));
   menuEdit->Append(ID_STRETCH, _T("&Toggle Stretch\tALT+S"), _T("Toggle option property of sizeritem properties"));
+  menuEdit->Append(ID_MOVE_UP, _T("&Move Up\tALT+Up"), _T("Move Up selected object"));
+  menuEdit->Append(ID_MOVE_DOWN, _T("&Move Down\tALT+Down"), _T("Move Down selected object"));
   
   wxMenu *menuHelp = new wxMenu;
   menuHelp->Append(ID_ABOUT, _T("&About...\tF1"), _T("Show about dialog"));
@@ -552,5 +558,15 @@ void MainFrame::OnToggleExpand (wxCommandEvent &event)
 void MainFrame::OnToggleStretch (wxCommandEvent &event)
 {
   GetData()->ToggleStretchLayout(GetData()->GetSelectedObject());
+}
+
+void MainFrame::OnMoveUp (wxCommandEvent &event)
+{
+  GetData()->MovePosition(GetData()->GetSelectedObject(),false,1);
+}
+
+void MainFrame::OnMoveDown (wxCommandEvent &event)
+{
+  GetData()->MovePosition(GetData()->GetSelectedObject(),true,1);
 }
 
