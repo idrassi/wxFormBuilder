@@ -55,8 +55,32 @@ class ApplicationData : public DataObservable
   void BuildNameSet(PObjectBase obj, PObjectBase top, set<string> &name_set);
   
   
+  /**
+   * Calcula la posición donde deberá ser insertado el objeto.
+   *
+   * Dado un objeto "padre" y un objeto "seleccionado", esta rutina calcula la
+   * posición de inserción de un objeto debajo de "parent" de forma que el objeto
+   * quede a continuación del objeto "seleccionado".
+   *
+   * El algoritmo consiste ir subiendo en el arbol desde el objeto "selected"
+   * hasta encontrar un objeto cuyo padre sea el mismo que "parent" en cuyo
+   * caso se toma la posición siguiente a ese objeto.
+   *
+   * @param parent objeto "padre"
+   * @param selected objeto "seleccionado".
+   * @return posición de insercción (-1 si no se puede insertar).
+   */
   int CalcPositionOfInsertion(PObjectBase selected,PObjectBase parent);
   
+  
+  /**
+   * Elimina aquellos items que no contengan hijos.
+   * 
+   * Esta rutina se utiliza cuando el árbol que se carga de un fichero
+   * no está bien formado, o la importación no ha sido correcta.
+   */
+   void RemoveEmptyItems(PObjectBase obj);
+   
  public:
   ApplicationData();
 

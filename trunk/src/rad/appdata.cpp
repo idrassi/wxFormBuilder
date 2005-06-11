@@ -105,21 +105,6 @@ void ApplicationData::ResolveNameConflict(PObjectBase obj)
   nameProp->SetValue(name);
 }
 
-/**
- * Calcula la posición donde deberá ser insertado el objeto.
- *
- * Dado un objeto "padre" y un objeto "seleccionado", esta rutina calcula la
- * posición de inserción de un objeto debajo de "parent" de forma que el objeto
- * quede a continuación del objeto "seleccionado".
- *
- * El algoritmo consiste ir subiendo en el arbol desde el objeto "selected"
- * hasta encontrar un objeto cuyo padre sea el mismo que "parent" en cuyo
- * caso se toma la posición siguiente a ese objeto.
- *
- * @param parent objeto "padre"
- * @param selected objeto "seleccionado".
- * @return posición de insercción (-1 si no se puede insertar).
- */
 int ApplicationData::CalcPositionOfInsertion(PObjectBase selected,PObjectBase parent)
 {
   int pos = -1;
@@ -139,6 +124,36 @@ int ApplicationData::CalcPositionOfInsertion(PObjectBase selected,PObjectBase pa
   
   return pos;
 }
+
+void ApplicationData::RemoveEmptyItems(PObjectBase obj)
+{
+  if (!obj->GetObjectInfo()->GetObjectType()->IsItem())
+  {
+    bool emptyItem = true;
+    
+    // esto es un algoritmo ineficiente pero "seguro" con los índices
+    while (emptyItem)
+    {
+      emptyItem = false;
+      for (unsigned int i=0; !emptyItem && i<obj->GetChildCount(); i++)
+      {
+        PObjectBase child = obj->GetChild(i);
+        if (child->GetObjectInfo()->GetObjectType()->IsItem() &&
+            child->GetChildCount() == 0)
+        {
+          obj->RemoveChild(child); // borramos el item
+          child->SetParent(PObjectBase());
+          
+          emptyItem = true;        // volvemos a recorrer 
+          wxLogWarning(wxT("Empty item removed"));
+        }
+      }
+    }
+  }
+  
+  for (unsigned int i=0; i<obj->GetChildCount() ; i++)
+    RemoveEmptyItems(obj->GetChild(i));
+}    
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -319,6 +334,8 @@ void ApplicationData::MergeProject(PObjectBase project)
     //project->GetChild(i)->SetParent(m_project);
     
     PObjectBase child = project->GetChild(i);
+    RemoveEmptyItems(child);
+    
     InsertObject(child,m_project);
   }
   DataObservable::NotifyProjectRefresh(); 
