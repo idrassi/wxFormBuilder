@@ -612,6 +612,14 @@ PObjectBase XrcLoader::GetObject(TiXmlElement *xrcObj, PObjectBase parent)
       parent->AddChild(object);
       object->SetParent(parent);
     }
+    else
+    {
+      wxString msg(wxString::Format(
+        wxT("Can't create unknown object (wxPanel) as child of \"%s:%s\""),
+        parent->GetPropertyAsString("name").mb_str(), parent->GetClassName().c_str()));
+        
+      wxLogError(msg);
+    }
   }
   
   return object;

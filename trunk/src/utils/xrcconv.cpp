@@ -233,7 +233,7 @@ XrcToXfbFilter::XrcToXfbFilter(TiXmlElement *obj, const wxString &classname)
   if (obj->Attribute("name"))
   {
     wxString objname(obj->Attribute("name"),wxConvUTF8);
-    AddProperty(wxT("name"), objname, XRC_TYPE_TEXT);
+    AddPropertyValue(wxT("name"), objname);
   }
 }
                                     
