@@ -234,10 +234,10 @@ ObjectInspector::ObjectInspector(wxWindow *parent, int id)
   SetSizer(topSizer);
 }
 
-void ObjectInspector::Create()
+void ObjectInspector::Create(bool force)
 {
   PObjectBase sel_obj = GetData()->GetSelectedObject();
-  if (sel_obj && sel_obj != m_currentSel)
+  if (sel_obj && (sel_obj != m_currentSel || force))
   {
     Freeze();
     
@@ -485,6 +485,11 @@ void ObjectInspector::ObjectCreated(PObjectBase obj)
 
 void ObjectInspector::ObjectRemoved(PObjectBase obj)
 {
+}
+
+void ObjectInspector::ProjectRefresh()
+{
+  Create(true);
 }
 
 void ObjectInspector::PropertyModified(PProperty prop)

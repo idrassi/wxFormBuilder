@@ -66,7 +66,7 @@ class ObjectInspector : public DataObserver, public wxPanel
                       PObjectInfo obj_info, PropertyMap &map);
   wxPGProperty* GetProperty(PProperty prop);
   
-  void Create();
+  void Create(bool force = false);
   
   void OnPropertyGridChange(wxPropertyGridEvent& event);
  protected:
@@ -79,6 +79,7 @@ class ObjectInspector : public DataObserver, public wxPanel
   void ObjectSelected(PObjectBase obj);
   void ObjectCreated(PObjectBase obj);
   void ObjectRemoved(PObjectBase obj);
+  void ProjectRefresh();
   void PropertyModified(PProperty prop);
   
   DECLARE_EVENT_TABLE()

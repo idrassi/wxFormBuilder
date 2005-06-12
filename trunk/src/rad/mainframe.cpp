@@ -33,6 +33,9 @@
 #include "icons/system.xpm"
 #include "icons/undo.xpm"
 #include "icons/redo.xpm"
+#include "icons/copy.xpm"
+#include "icons/paste.xpm"
+#include "icons/cruz.xpm"
 #include "model/xrcfilter.h"
 #include "rad/about.h"
 
@@ -246,6 +249,11 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   toolbar->AddSeparator();
   toolbar->AddTool(ID_UNDO, _T("Undo"), undo_xpm);
   toolbar->AddTool(ID_REDO, _T("Redo"), redo_xpm);
+  toolbar->AddSeparator();
+  toolbar->AddTool(ID_COPY, _T("Copy"), copy_xpm);
+  toolbar->AddTool(ID_PASTE, _T("Paste"), paste_xpm);
+  toolbar->AddSeparator();
+  toolbar->AddTool(ID_DELETE, _T("Delete"), cruz_xpm);
   toolbar->AddSeparator();
   toolbar->AddTool(ID_GENERATE_CODE,wxT("Generate Code"),system_xpm);
 
