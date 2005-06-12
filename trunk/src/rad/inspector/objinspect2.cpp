@@ -25,6 +25,7 @@
 #include "model/objectbase.h"
 #include "utils/debug.h"
 #include "utils/typeconv.h"
+#include "wx/tokenzr.h"
 
 // -----------------------------------------------------------------------
 // wxSizeProperty
@@ -302,8 +303,10 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
   wxString name = _WXSTR(prop->GetName());
   
   if (type == PT_TEXT || type == PT_MACRO || type == PT_WXSTRING)
+  {
     result = wxStringProperty(name, wxPG_LABEL, prop->GetValueAsString());
-
+    result->SetAttribute(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING, true);
+  }
   else if (type == PT_BOOL)
   {
     wxString valStr(prop->GetValue().c_str(),wxConvUTF8);
@@ -317,15 +320,15 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
     assert(opt_list && opt_list->GetOptionCount() > 0);
     
     wxPGConstants constants;
-    for (unsigned int i=0; i<opt_list->GetOptionCount() ;i++)
-      constants.Add(wxString(opt_list->GetOption(i).c_str(),wxConvUTF8), 1 << i);
-      
-    wxString aux = prop->GetValueAsString();
-    aux.Replace(_T("|"), _T(", "));
-    result = wxFlagsProperty(name, wxPG_LABEL, constants, 0);
-    if (aux != _T("0"))
-        result->SetValueFromString(aux, 0);
+    for (unsigned int i = 0; i < opt_list->GetOptionCount(); i++){
+      wxString item(opt_list->GetOption(i).c_str(), wxConvUTF8);
+      constants.Add(item, /*1 << i*/TypeConv::GetMacroValue(item));
+    }
     
+
+    result = wxFlagsProperty(name, wxPG_LABEL, constants, prop->GetValueAsInteger());
+    /*if (aux != _T("0"))
+        result->SetValueFromString(aux, 0);*/
   }
   else if (type == PT_INTLIST)
     result = wxStringProperty(name, wxPG_LABEL, _WXSTR(IntList(_STDSTR(prop->GetValueAsString())).ToString()));
