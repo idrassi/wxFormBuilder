@@ -561,7 +561,15 @@ class MenuItemComponent : public ComponentBase
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxMenuItem"), obj->GetPropertyAsString(_("name")));
-    xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+    //xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+    wxString shortcut = obj->GetPropertyAsString(_("shortcut"));
+    wxString label;
+    if (shortcut.IsEmpty())
+      label = obj->GetPropertyAsString(_("label"));
+    else
+      label = obj->GetPropertyAsString(_("label")) + _T("\\t") + shortcut;
+      
+    xrc.AddPropertyValue(_("label"), label);
     xrc.AddProperty(_("help"),_("help"),XRC_TYPE_TEXT);
     xrc.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_TEXT);
     return xrc.GetXrcObject();
@@ -570,7 +578,28 @@ class MenuItemComponent : public ComponentBase
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("wxMenuItem"));
-    filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+    //filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+    TiXmlElement *labelElement = xrcObj->FirstChildElement("label");
+    
+    wxString label, shortcut;
+    if (labelElement)
+    {
+      TiXmlNode *labelNode;
+      labelNode = labelElement->FirstChild();
+      if (labelNode && labelNode->ToText())
+      {
+        label = _T(labelNode->ToText()->Value());
+        int pos = label.Find(_T("\\t"));
+        if (pos >= 0)
+        {
+          shortcut = label.Mid(pos + 2);
+          label = label.Left(pos);
+        }
+      }
+    }
+    
+    filter.AddPropertyValue(_("label"), label);
+    filter.AddPropertyValue(_("shortcut"), shortcut);
     filter.AddProperty(_("help"),_("help"),XRC_TYPE_TEXT);
     filter.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_TEXT);
     return filter.GetXfbObject();

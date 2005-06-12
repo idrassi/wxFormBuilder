@@ -213,6 +213,7 @@
   <objectinfo class="wxMenuItem" icon="menuitem.xpm" type="menuitem">
     <property name="name" type="text" hidden="1">menuItem</property>
     <property name="label" type="wxString">MyMenuItem</property>
+    <property name="shortcut" type="wxString"></property>
     <property name="help" type="wxString"></property>
     <property name="id" type="macro" hidden="1">ID_DEFAULT</property>
     <property name="bitmap" type="bitmap" />
@@ -223,7 +224,7 @@
       <option name="wxITEM_CHECK" />
       <option name="wxITEM_RADIO" />wxITEM_NORMAL</property>-->
     <codegen language="C++">
-      <template name="construction">wxMenuItem *$name = new wxMenuItem(#parent $name,$id,$label,$help);</template>
+      <template name="construction">wxMenuItem *$name = new wxMenuItem(#parent $name, $id, $label + '\t' + $shortcut, $help);</template>
       <template name="settings">
         #ifnotnull $bitmap
         @{ $name->SetBitmap($bitmap); @}

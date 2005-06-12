@@ -55,9 +55,10 @@ MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,_T("Menu E
   sizerTop = new wxBoxSizer(wxHORIZONTAL);
   m_menuList = new wxListCtrl(this,ID_DEFAULT,wxDefaultPosition,wxDefaultSize,wxLC_REPORT | wxLC_SINGLE_SEL);
   m_menuList->InsertColumn(0, _T("Label"), wxLIST_FORMAT_LEFT, 200);
-  m_menuList->InsertColumn(1, _T("Id"), wxLIST_FORMAT_LEFT, 50);
-  m_menuList->InsertColumn(2, _T("Name"), wxLIST_FORMAT_LEFT, 50);
-  m_menuList->InsertColumn(3, _T("Help String"), wxLIST_FORMAT_LEFT, 200);
+  m_menuList->InsertColumn(1, _T("Shortcut"), wxLIST_FORMAT_LEFT, 50);
+  m_menuList->InsertColumn(2, _T("Id"), wxLIST_FORMAT_LEFT, 50);
+  m_menuList->InsertColumn(3, _T("Name"), wxLIST_FORMAT_LEFT, 50);
+  m_menuList->InsertColumn(4, _T("Help String"), wxLIST_FORMAT_LEFT, 200);
   sizerTop->Add(m_menuList, 1, wxALL|wxEXPAND, 5);
   wxStaticBoxSizer *sizer1;
   sizer1 = new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("Menu item")), wxVERTICAL);
@@ -69,6 +70,12 @@ MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,_T("Menu E
   sizer11->Add(m_stLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
   m_tcLabel = new wxTextCtrl(this,ID_LABEL,wxT(""),wxDefaultPosition,wxDefaultSize,wxTE_PROCESS_ENTER);
   sizer11->Add(m_tcLabel, 0, wxALL, 5);
+  
+  wxStaticText *m_stShortcut;
+  m_stShortcut = new wxStaticText(this,ID_DEFAULT,wxT("Shortcut"),wxDefaultPosition,wxDefaultSize,0);
+  sizer11->Add(m_stShortcut, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+  m_tcShortcut = new wxTextCtrl(this,ID_LABEL,wxT(""),wxDefaultPosition,wxDefaultSize,wxTE_PROCESS_ENTER);
+  sizer11->Add(m_tcShortcut, 0, wxALL, 5);
   
   wxStaticText *m_stId;
   m_stId = new wxStaticText(this,ID_DEFAULT,wxT("Id"),wxDefaultPosition,wxDefaultSize,0);
@@ -128,7 +135,7 @@ MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,_T("Menu E
   this->SetSizer(mainSizer);
   this->SetAutoLayout(true);
   this->Layout();
-  SetClientSize(540, 293);
+  SetClientSize(540, 318);
   CenterOnScreen();
 }
 
@@ -140,20 +147,22 @@ void MenuEditor::AddChild(long& n, int ident, PObjectBase obj)
         if (childObj->GetClassName() == "wxMenuItem")
         {
             InsertItem(n++, wxString(' ', ident * IDENTATION) + childObj->GetPropertyAsString("label"),
-                    childObj->GetPropertyAsString("id"),
-                    childObj->GetPropertyAsString("name"),
-                    childObj->GetPropertyAsString("help"));    
+                childObj->GetPropertyAsString("shortcut"),
+                childObj->GetPropertyAsString("id"),
+                childObj->GetPropertyAsString("name"),
+                childObj->GetPropertyAsString("help"));    
         }
         else if (childObj->GetClassName() == "separator")
         {
-            InsertItem(n++, wxString(' ', ident * IDENTATION) + _T("---"), _T(""), _T(""), _T(""));
+            InsertItem(n++, wxString(' ', ident * IDENTATION) + _T("---"), _T(""), _T(""), _T(""), _T(""));
         }
         else
         {
             InsertItem(n++, wxString(' ', ident * IDENTATION) + childObj->GetPropertyAsString("label"),
-                    childObj->GetPropertyAsString("id"),
-                    childObj->GetPropertyAsString("name"),
-                    childObj->GetPropertyAsString("help"));
+                _T(""),
+                childObj->GetPropertyAsString("id"),
+                childObj->GetPropertyAsString("name"),
+                childObj->GetPropertyAsString("help"));
             AddChild(n, ident + 1, childObj);
         }  
     }
@@ -178,16 +187,18 @@ PObjectBase MenuEditor::GetMenu(long& n, PObjectDatabase base, bool isSubMenu)
 {
     PObjectInfo info = base->GetObjectInfo(isSubMenu ? "submenu" : "wxMenu");
     PObjectBase menu = base->NewObject(info);  
-    wxString label, id, name, help; 
-    GetItem(n, label, id, name, help);
+    wxString label, shortcut, id, name, help; 
+    
+    GetItem(n, label, shortcut, id, name, help);
     label.Trim(true); label.Trim(false);
     menu->GetProperty("label")->SetValue(label); 
     menu->GetProperty("name")->SetValue(name); 
+    
     int ident = GetItemIdentation(n);
     n++;
     while (n < m_menuList->GetItemCount() && GetItemIdentation(n) > ident)
     {
-        GetItem(n, label, id, name, help);
+        GetItem(n, label, shortcut, id, name, help);
         label.Trim(true); label.Trim(false);
         if (label == _T("---"))
         {
@@ -208,6 +219,7 @@ PObjectBase MenuEditor::GetMenu(long& n, PObjectDatabase base, bool isSubMenu)
             info = base->GetObjectInfo("wxMenuItem");
             PObjectBase menuitem = base->NewObject(info);  
             menuitem->GetProperty("label")->SetValue(label); 
+            menuitem->GetProperty("shortcut")->SetValue(shortcut);
             menuitem->GetProperty("name")->SetValue(name); 
             menuitem->GetProperty("id")->SetValue(id); 
             menu->AddChild(menuitem);
@@ -248,38 +260,45 @@ int MenuEditor::GetItemIdentation(long n)
     return (int)curIdent;
 }
 
-long MenuEditor::InsertItem(long n, const wxString& label, const wxString& id, 
-    const wxString& name, const wxString& helpString)
+long MenuEditor::InsertItem(long n, const wxString& label, const wxString& shortcut,
+    const wxString& id, const wxString& name, const wxString& helpString)
 {
     long index = m_menuList->InsertItem(n, label);
-    m_menuList->SetItem(index, 1, id);
-    m_menuList->SetItem(index, 2, name);
-    m_menuList->SetItem(index, 3, helpString);
+    m_menuList->SetItem(index, 1, shortcut);
+    m_menuList->SetItem(index, 2, id);
+    m_menuList->SetItem(index, 3, name);
+    m_menuList->SetItem(index, 4, helpString);
     return index;
 }
 
-void MenuEditor::AddItem(const wxString& label, const wxString& id, const wxString& name, const wxString &help)
+void MenuEditor::AddItem(const wxString& label, const wxString& shortcut, 
+  const wxString& id, const wxString& name, const wxString &help)
 {
     int sel = GetSelectedItem();
     int identation = 0;
     if (sel >= 0) identation = GetItemIdentation(sel);
-    wxString labelAux =label;
+    wxString labelAux = label;
     labelAux.Trim(true);
     labelAux.Trim(false);
     if (sel < 0) sel = m_menuList->GetItemCount() - 1;
-    long index = InsertItem(sel + 1, 
-                        wxString(' ', identation * IDENTATION) + labelAux,
-                        id, name, help);
+    
+    labelAux = wxString(' ', identation * IDENTATION) + labelAux;
+    
+    long index = InsertItem(sel + 1, labelAux, shortcut, id, name, help);
     m_menuList->SetItemState(index, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
 
-void MenuEditor::GetItem(long n, wxString& label, wxString& id, wxString& name, wxString& help)
+void MenuEditor::GetItem(long n, wxString& label, wxString& shortcut, 
+  wxString& id, wxString& name, wxString& help)
 {
     label = m_menuList->GetItemText(n);
     wxListItem item;
     item.m_itemId = n;
     item.m_col = 1;
     item.m_mask = wxLIST_MASK_TEXT;
+    m_menuList->GetItem(item);
+    shortcut = item.GetText();
+    item.m_col++;
     m_menuList->GetItem(item);
     id = item.GetText();
     item.m_col++;
@@ -292,9 +311,10 @@ void MenuEditor::GetItem(long n, wxString& label, wxString& id, wxString& name, 
 
 void MenuEditor::AddNewItem()
 {
-    AddItem(m_tcLabel->GetValue(), m_tcId->GetValue(), m_tcName->GetValue(),
-        m_tcHelpString->GetValue());  
+    AddItem(m_tcLabel->GetValue(), m_tcShortcut->GetValue(), m_tcId->GetValue(), 
+        m_tcName->GetValue(), m_tcHelpString->GetValue());  
     m_tcLabel->SetValue(_T(""));
+    m_tcShortcut->SetValue(_T(""));
     m_tcId->SetValue(_T(""));
     m_tcName->SetValue(_T(""));
     m_tcHelpString->SetValue(_T(""));
@@ -308,7 +328,7 @@ void MenuEditor::OnAddMenuItem(wxCommandEvent& e)
 
 void MenuEditor::OnAddSeparator(wxCommandEvent& e)
 {
-    AddItem(_T("---"), _T(""), _T(""), _T(""));
+    AddItem(_T("---"), _T(""), _T(""), _T(""), _T(""));
 }
 
 void MenuEditor::OnRemoveMenuItem(wxCommandEvent& e)
@@ -378,20 +398,20 @@ void MenuEditor::OnMenuUp(wxCommandEvent& e)
     while (prevIdent > curIdent)
         prevIdent = GetItemIdentation(--prev);
         
-    wxString label, id, name, help;
-    GetItem(sel, label, id, name, help);
+    wxString label, shortcut, id, name, help;
+    GetItem(sel, label, shortcut, id, name, help);
     
     m_menuList->DeleteItem(sel);
-    long newSel = InsertItem(prev, label, id, name, help);
+    long newSel = InsertItem(prev, label, shortcut, id, name, help);
     sel++; prev++;
     if (sel < m_menuList->GetItemCount())
     {
         long childIdent = GetItemIdentation(sel);
         while (sel < m_menuList->GetItemCount() && childIdent > curIdent)
         {
-            GetItem(sel, label, id, name, help);
+            GetItem(sel, label, shortcut, id, name, help);
             m_menuList->DeleteItem(sel);
-            InsertItem(prev, label, id, name, help);
+            InsertItem(prev, label, shortcut, id, name, help);
             sel++; prev++;
             if (sel < m_menuList->GetItemCount()) childIdent = GetItemIdentation(sel);
         }
@@ -418,17 +438,17 @@ void MenuEditor::OnMenuDown(wxCommandEvent& e)
     if (GetItemIdentation(selAux) < selIdent) return;
     long endIndex = GetEndIndex(selAux) + 1;
     
-    wxString label, id, name, help;
-    GetItem(sel, label, id, name, help);
+    wxString label, shortcut, id, name, help;
+    GetItem(sel, label, shortcut, id, name, help);
     
     m_menuList->DeleteItem(sel);
     endIndex--;
-    long first = InsertItem(endIndex, label, id, name, help);
+    long first = InsertItem(endIndex, label, shortcut, id, name, help);
     while (GetItemIdentation(sel) > selIdent)
     {
-        GetItem(sel, label, id, name, help);
+        GetItem(sel, label, shortcut, id, name, help);
         m_menuList->DeleteItem(sel);
-        InsertItem(endIndex, label, id, name, help);
+        InsertItem(endIndex, label, shortcut, id, name, help);
         first--;
     }
     m_menuList->SetItemState(first, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
@@ -444,7 +464,7 @@ void MenuEditor::OnLabelChanged(wxCommandEvent& e)
   wxString label = m_tcLabel->GetValue();
   wxString id, name;
   bool nextUpper = false;
-  id = _T("ID_");
+  if (!label.IsEmpty()) id = _T("ID_");
   int tabPos = label.Find(_T("\\t"));
   if (tabPos >= 0) label = label.Left(tabPos);
   

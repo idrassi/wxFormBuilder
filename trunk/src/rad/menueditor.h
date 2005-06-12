@@ -36,11 +36,13 @@ class MenuEditor : public wxDialog
   private:
     long GetSelectedItem();
     int GetItemIdentation(long n);
-    long InsertItem(long n, const wxString& label, const wxString& id, 
-        const wxString& name, const wxString& helpString);
-    void AddItem(const wxString& label, const wxString& id, const wxString& name, const wxString &help);
+    long InsertItem(long n, const wxString& label, const wxString& shortcut,
+        const wxString& id, const wxString& name, const wxString& helpString);
+    void AddItem(const wxString& label, const wxString& shortcut, 
+        const wxString& id, const wxString& name, const wxString &help);
     long GetEndIndex(long n);
-    void GetItem(long n, wxString& label, wxString& id, wxString& name, wxString& help);
+    void GetItem(long n, wxString& label, wxString& shortcut, wxString& id, 
+        wxString& name, wxString& help);
     void AddChild(long& n, int ident, PObjectBase obj);
     bool HasChildren(long n);
     PObjectBase GetMenu(long& n, PObjectDatabase base, bool isSubMenu = true);
@@ -52,6 +54,7 @@ class MenuEditor : public wxDialog
     wxTextCtrl *m_tcLabel;
     wxTextCtrl *m_tcName;
     wxTextCtrl *m_tcHelpString;
+    wxTextCtrl *m_tcShortcut;
     
     DECLARE_EVENT_TABLE()
   

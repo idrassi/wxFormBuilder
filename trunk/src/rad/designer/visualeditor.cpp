@@ -363,8 +363,13 @@ wxMenu* GridPanel::GetMenuFromObject(PObjectBase menu)
     else
     {
       wxString label = menuItem->GetPropertyAsString(_T("label"));
-      label.Replace(_T("\\t"), _T("\t"));
-      wxMenuItem *item = new wxMenuItem(menuWidget, wxID_HIGHEST + 1, label, menuItem->GetPropertyAsString(_T("help")));
+      wxString shortcut = menuItem->GetPropertyAsString(_T("shortcut"));
+      if (!shortcut.IsEmpty())
+        label += '\t' + shortcut;
+        
+      wxMenuItem *item = new wxMenuItem(menuWidget, wxID_HIGHEST + 1, 
+          label, menuItem->GetPropertyAsString(_T("help")));
+          
       if (!menuItem->GetProperty("bitmap")->IsDefaultValue())
         item->SetBitmap(menuItem->GetPropertyAsBitmap("bitmap"));
       menuWidget->Append(item);
