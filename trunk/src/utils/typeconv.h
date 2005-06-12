@@ -53,7 +53,6 @@ namespace TypeConv
   wxString _StringToWxString(const string &str);
   string _WxStringToString(const wxString &str);
   
-  
   wxPoint StringToPoint (const wxString &str);
   bool    StringToPoint(const wxString &str, wxPoint *point);
   wxSize  StringToSize (const wxString &str);
@@ -79,6 +78,9 @@ namespace TypeConv
   
   bool StringToBool(const wxString &str);
   wxString BoolToString(bool val);
+  
+  wxArrayString StringToArrayString(const wxString &str);
+  wxString ArrayStringToString(const wxArrayString &arrayStr);
   
 };
 

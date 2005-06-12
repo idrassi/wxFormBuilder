@@ -24,13 +24,13 @@
     <codegen language="C++">
       <template name="settings">
         #ifnotnull $font
-        @{ $name->SetFont($font); @}
-        
+        @{ $name->SetFont($font); #nl @}
         #ifnotnull $fg
-        @{ $name->SetForegroundColour($fg); @}
-        
-        #ifnotnull $bg
-        @{ $name->SetBackgroundColour($bg); @} 
+	
+        @{ $name->SetForegroundColour($fg); #nl @}
+
+	#ifnotnull $bg
+        @{ $name->SetBackgroundColour($bg); #nl @} 
       </template>
     </codegen>
   </objectinfo>
@@ -224,7 +224,7 @@
       <option name="wxITEM_CHECK" />
       <option name="wxITEM_RADIO" />wxITEM_NORMAL</property>-->
     <codegen language="C++">
-      <template name="construction">wxMenuItem *$name = new wxMenuItem(#parent $name, $id, $label + '\t' + $shortcut, $help);</template>
+      <template name="construction">wxMenuItem *$name = new wxMenuItem(#parent $name, $id, $label #ifnotnull $shortcut @{ + wxT('\t') + $shortcut @}, $help);</template>
       <template name="settings">
         #ifnotnull $bitmap
         @{ $name->SetBitmap($bitmap); @}

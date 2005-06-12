@@ -227,19 +227,27 @@ void ApplicationData::RemoveObject(PObjectBase obj)
   //  cuando se va a eliminar un objeto es importante que no se dejen
   //  nodos ficticios ("items") en las hojas del árbol.
   PObjectBase parent = obj->GetParent();
-  while (parent && parent->GetObjectInfo()->GetObjectType()->IsItem())
-  {
-    obj = parent;
-    parent = obj->GetParent();
-  }
+  if (parent)
+  {  
+    while (parent && parent->GetObjectInfo()->GetObjectType()->IsItem())
+    {
+      obj = parent;
+      parent = obj->GetParent();
+    }
 
-  PCommand command(new RemoveObjectCmd(obj));
-  m_cmdProc.Execute(command);
+    PCommand command(new RemoveObjectCmd(obj));
+    m_cmdProc.Execute(command);
 
-  DataObservable::NotifyObjectRemoved(obj);
+    DataObservable::NotifyObjectRemoved(obj);
   
-  // "parent" será el nuevo objeto seleccionado tras eliminar obj.
-  SelectObject(parent);
+    // "parent" será el nuevo objeto seleccionado tras eliminar obj.
+    SelectObject(parent);
+  }
+  else
+  {
+    if (obj->GetObjectTypeName()!="project")
+      assert(false); 
+  }
 }
 
 void ApplicationData::CutObject(PObjectBase obj)

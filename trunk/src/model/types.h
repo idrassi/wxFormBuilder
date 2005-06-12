@@ -133,7 +133,8 @@ typedef enum
   PT_WXCOLOUR,
   PT_PATH,
   PT_BITMAP,
-  PT_XPM_BITMAP      // será empotrado en el código
+  PT_XPM_BITMAP,      // será empotrado en el código
+  PT_STRINGLIST
 } PropertyType;
 /*  
 typedef enum

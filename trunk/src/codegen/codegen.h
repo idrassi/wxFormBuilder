@@ -114,7 +114,8 @@ class TemplateParser
     ID_CHILD,
     ID_IFNOTNULL, 
     ID_FOREACH,
-    ID_PREDEFINED  // simbolo predefinido '#pred'
+    ID_PREDEFINED,  // simbolo predefinido '#pred'
+    ID_NEWLINE
   } Ident;
   
 
@@ -143,6 +144,7 @@ class TemplateParser
   bool ParseChild();
   bool ParseForEach();
   bool ParseIfNotNull();
+  bool ParseNewLine();
   
   /**
    * Parsea una macro.

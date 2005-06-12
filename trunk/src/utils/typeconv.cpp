@@ -395,6 +395,19 @@ wxString TypeConv::SetFlag  (const wxString &flag, const wxString &currentValue)
   return result;
 }
 
+wxArrayString TypeConv::StringToArrayString(const wxString &str)
+{
+  wxArrayString result;
+  
+  return result;
+}
+
+wxString TypeConv::ArrayStringToString(const wxArrayString &arrayStr)
+{
+  wxString result;
+  
+  return result;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 

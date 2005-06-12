@@ -54,13 +54,18 @@ void CodeWriter::FixWrite(string s)
   wxString str(s.c_str(),wxConvUTF8);
   
   wxStringTokenizer tkz(str,wxT("\n"));
+  bool prev_is_null = false;
+  
   while (tkz.HasMoreTokens())
   {
     wxString line = tkz.GetNextToken();
     line.Trim(false);
     line.Trim(true);
-    if (line != wxT(""))
+    
+    if (line != wxT("") || !prev_is_null)
       WriteLn(string(line.mb_str()));
+      
+    prev_is_null = (line == wxT(""));
   }
 }
 
@@ -138,6 +143,9 @@ bool TemplateParser::ParseMacro()
       break;
     case ID_CHILD:
       return ParseChild();
+      break;
+    case ID_NEWLINE:
+      return ParseNewLine();
       break;
     default:
       assert(false);
@@ -381,7 +389,8 @@ bool TemplateParser::ParseIfNotNull()
       string code;
       PTemplateParser parser = CreateParser(m_obj,inner_template);
       code = parser->ParseTemplate();
-      m_out << endl << code;
+      //m_out << endl << code;
+      m_out << code;
     }
     
   }
@@ -406,7 +415,8 @@ TemplateParser::Ident TemplateParser::SearchIdent(string ident)
     return ID_CHILD;
   else if (ident == "parent")
     return ID_PARENT;
-
+  else if (ident == "nl")
+    return ID_NEWLINE;
   else
     return ID_ERROR;  
 }
@@ -438,8 +448,10 @@ string TemplateParser::ParseTemplate()
   
   // vamos a trim'ear la cadena
   wxString wx_result(result.c_str(),wxConvUTF8);
-  wx_result.Trim(true);
-  wx_result.Trim(false);
+  
+  // FIXME: estos trim's eliminan también los \n del principio y del final...
+  //wx_result.Trim(true);
+  //wx_result.Trim(false);
   
   return string(wx_result.mb_str());
 }
@@ -512,6 +524,12 @@ bool TemplateParser::ParsePred()
   if (m_pred != "")
     m_out << m_pred;
   
+  return true;
+}
+
+bool TemplateParser::ParseNewLine()
+{
+  m_out << '\n';
   return true;
 }
 
