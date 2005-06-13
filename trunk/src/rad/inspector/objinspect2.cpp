@@ -519,19 +519,10 @@ void ObjectInspector::PropertyModified(PProperty prop)
         }
         break;
     case PT_WXPOINT:
-        {
-            wxPoint val = prop->GetValueAsPoint();
-            //pgProp->DoSetValue((void*)&val);
-            pgProp->SetValueFromString(wxString::Format(_T("%d; %d"), val.x, val.y), 0);
-        }
+        m_pg->SetPropertyValue(pgid, prop->GetValueAsPoint());
         break;
     case PT_WXSIZE:
-        {
-            wxSize val = prop->GetValueAsSize();
-            //pgProp->DoSetValue((void*)&val);
-            //m_pg->SetPropertyValue(pgid, val);   casca!!
-            pgProp->SetValueFromString(wxString::Format(_T("%d; %d"), val.x, val.y), 0);
-        }
+        m_pg->SetPropertyValue(pgid, prop->GetValueAsSize());
         break;
     case PT_WXFONT:
         {
