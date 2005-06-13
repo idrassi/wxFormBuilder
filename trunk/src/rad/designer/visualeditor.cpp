@@ -216,12 +216,12 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *wxparent,
   //if (obj_view.Window() &&
   //    (obj->GetObjectTypeName() == "widget" || obj->GetObjectTypeName() == "container")
   //    || obj->GetObjectTypeName() == "statusbar")
-  if (obj_view.Window() && !comp->KeepEvtHandler())
+  if (obj_view.Window())// && !comp->KeepEvtHandler())
   {
     obj_view.Window()->PushEventHandler(
       new VObjEvtHandler(obj_view.Window(),obj,GetData()));
   }
-    
+
   // nuevo padre para las ventanas que se encuentren por debajo
   wxWindow *new_wxparent = (obj_view.Window() ? obj_view.Window() : wxparent);
 

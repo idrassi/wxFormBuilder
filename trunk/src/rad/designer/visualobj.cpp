@@ -178,11 +178,19 @@ VObjEvtHandler::VObjEvtHandler(wxWindow *win, PObjectBase obj, DataObservable *d
 void VObjEvtHandler::OnLeftClick(wxMouseEvent &event)
 {
   PObjectBase obj = m_object.lock();
-
+/*
   if (obj)
     m_data->SelectObject(obj);
   else
-    wxLogMessage(wxT("Hay algun problema en VObjEvtHandler"));
+    wxLogMessage(wxT("Hay algun problema en VObjEvtHandler"));*/
+    
+  if (obj)
+  {
+    if (m_data->GetSelectedObject() != obj)
+      m_data->SelectObject(obj); 
+    else
+      event.Skip();
+  }
     
   //event.Skip();
 }  

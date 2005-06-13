@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE Code::Blocks_layout_file>
 <Code::Blocks_layout_file>
-	<File name="codegen\codegen.cpp" open="1" top="1">
+	<File name="codegen\codegen.cpp" open="1" top="0">
 		<Cursor position="10517" topLine="429"/>
 	</File>
 	<File name="codegen\codegen.h" open="1" top="0">
@@ -36,6 +36,9 @@
 	</File>
 	<File name="model\xrcfilter.cpp" open="0" top="0">
 		<Cursor position="8891" topLine="242"/>
+	</File>
+	<File name="plugins\component.h" open="1" top="1">
+		<Cursor position="1080" topLine="20"/>
 	</File>
 	<File name="rad\appdata.cpp" open="1" top="0">
 		<Cursor position="7290" topLine="232"/>
@@ -76,6 +79,6 @@
 	<File name="utils\typeconv.h" open="1" top="0">
 		<Cursor position="3035" topLine="50"/>
 	</File>
-	<Expand folder="/Sources/codegen"/>
-	<Expand folder="/Sources"/>
+	<Expand folder="/Headers/plugins"/>
+	<Expand folder="/Headers"/>
 </Code::Blocks_layout_file>
