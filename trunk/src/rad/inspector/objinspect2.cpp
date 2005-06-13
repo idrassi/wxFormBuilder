@@ -296,6 +296,28 @@ void ObjectInspector::Create(bool force)
   }
 }
 
+int ObjectInspector::StringToBits(const wxString& strVal, wxPGConstants& constants)
+{
+  wxStringTokenizer strTok(strVal, _T(" |"));
+  int val = 0;
+  while (strTok.HasMoreTokens())
+  {
+    wxString token = strTok.GetNextToken();
+    unsigned int i = 0;
+    bool done = false;
+    while (i < constants.GetCount() && !done)
+    {
+      if (constants.GetLabel(i) == token)
+      {
+        val |= constants.GetValue(i);
+        done = true;
+      }
+      i++;  
+    }
+  }
+  return val;
+}
+
 wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
 {
   wxPGProperty *result;
@@ -320,13 +342,14 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
     assert(opt_list && opt_list->GetOptionCount() > 0);
     
     wxPGConstants constants;
-    for (unsigned int i = 0; i < opt_list->GetOptionCount(); i++){
+    for (unsigned int i = 0; i < opt_list->GetOptionCount(); i++)
+    {
       wxString item(opt_list->GetOption(i).c_str(), wxConvUTF8);
-      constants.Add(item, /*1 << i*/TypeConv::GetMacroValue(item));
+      constants.Add(item, 1 << i);
     }
-    
 
-    result = wxFlagsProperty(name, wxPG_LABEL, constants, prop->GetValueAsInteger());
+    int val = StringToBits(prop->GetValueAsString(), constants);
+    result = wxFlagsProperty(name, wxPG_LABEL, constants, val);
     /*if (aux != _T("0"))
         result->SetValueFromString(aux, 0);*/
   }
@@ -511,11 +534,10 @@ void ObjectInspector::PropertyModified(PProperty prop)
         break;
     case PT_BITLIST:
         {
-            /*wxString aux = prop->GetValueAsString();
+            wxString aux = prop->GetValueAsString();
             aux.Replace(_T("|"), _T(", "));
-            if (aux != _T("0"))
-                pgProp->SetValueFromString(aux, 0);*/
-            m_pg->SetPropertyValue(pgid, prop->GetValueAsInteger());
+            if (aux == _T("0")) aux = _T("");
+            pgProp->SetValueFromString(aux, 0);
         }
         break;
     case PT_WXPOINT:

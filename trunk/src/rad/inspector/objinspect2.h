@@ -62,6 +62,7 @@ class ObjectInspector : public DataObserver, public wxPanel
   PObjectBase m_currentSel;
   wxPropertyGrid *m_pg;
   
+  int StringToBits(const wxString& strVal, wxPGConstants& constants);
   void CreateCategory(const wxString& name, PObjectBase obj,
                       PObjectInfo obj_info, PropertyMap &map);
   wxPGProperty* GetProperty(PProperty prop);
