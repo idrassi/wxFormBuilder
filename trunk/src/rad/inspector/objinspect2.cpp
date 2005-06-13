@@ -511,10 +511,11 @@ void ObjectInspector::PropertyModified(PProperty prop)
         break;
     case PT_BITLIST:
         {
-            wxString aux = prop->GetValueAsString();
+            /*wxString aux = prop->GetValueAsString();
             aux.Replace(_T("|"), _T(", "));
             if (aux != _T("0"))
-                pgProp->SetValueFromString(aux, 0);
+                pgProp->SetValueFromString(aux, 0);*/
+            m_pg->SetPropertyValue(pgid, prop->GetValueAsInteger());
         }
         break;
     case PT_WXPOINT:
