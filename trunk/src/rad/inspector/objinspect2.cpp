@@ -577,10 +577,11 @@ void ObjectInspector::PropertyModified(PProperty prop)
         }
         break;
     case PT_STRINGLIST:
-      {
-        // ????
-      }      
-      break;
+        {
+            wxArrayString val = prop->GetValueAsArrayString();
+            pgProp->DoSetValue((void*)&val);
+        }
+        break;
     default:
         pgProp->SetValueFromString(prop->GetValueAsString(), 0);
   }
