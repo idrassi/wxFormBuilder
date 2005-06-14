@@ -340,25 +340,42 @@ bool TemplateParser::ParseForEach()
     // el valor de la propiedad debe ser una cadena de caracteres
     // separada por ','. Se va a generar la plantilla anidada tantas
     // veces como tokens se encuentren el el valor de la propiedad.
-
-    // Para ello se utiliza la clase wxStringTokenizer de wxWidgets
-    wxStringTokenizer tkz(wxString(propvalue.c_str(),wxConvUTF8), wxT(","));
-    while (tkz.HasMoreTokens())
+    
+    if (property->GetType() == PT_INTLIST)
     {
-      wxString token;
-      token = tkz.GetNextToken();
-      token.Trim(true);
-      token.Trim(false);
+      // Para ello se utiliza la clase wxStringTokenizer de wxWidgets
+      wxStringTokenizer tkz(wxString(propvalue.c_str(),wxConvUTF8), wxT(","));
+      while (tkz.HasMoreTokens())
+      {
+        wxString token;
+        token = tkz.GetNextToken();
+        token.Trim(true);
+        token.Trim(false);
       
-      // parseamos la plantilla interna
+        // parseamos la plantilla interna
+        {
+          string code;
+          PTemplateParser parser = CreateParser(m_obj,inner_template);
+          parser->SetPredefined(string(token.mb_str()));
+          code = parser->ParseTemplate();
+          m_out << endl << code;        
+        }
+      }
+    }
+    else if (property->GetType() == PT_STRINGLIST)
+    {
+      wxArrayString array = property->GetValueAsArrayString();
+      for (unsigned int i=0 ; i<array.Count() ; i++)
       {
         string code;
         PTemplateParser parser = CreateParser(m_obj,inner_template);
-        parser->SetPredefined(string(token.mb_str()));
+        parser->SetPredefined(ValueToCode(PT_WXSTRING,string(array[i].mb_str())));
         code = parser->ParseTemplate();
         m_out << endl << code;        
       }
     }
+    else
+      wxLogError(wxT("Property type not compatible with \"foreach\" macro"));
   }
 
   return true;
@@ -531,6 +548,11 @@ bool TemplateParser::ParseNewLine()
 {
   m_out << '\n';
   return true;
+}
+
+string TemplateParser::PropertyToCode(PProperty property)
+{
+  return ValueToCode(property->GetType(), property->GetValue());
 }
 
 //////////////////////////////////////////////////////////////////////////////

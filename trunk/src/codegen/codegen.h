@@ -168,6 +168,12 @@ class TemplateParser
    TemplateParser(PObjectBase obj, string _template); 
    
    /**
+    * Devuelve el código del valor de una propiedad en el formato del lenguaje.
+    * @note usa ValueToCode
+    */
+   string PropertyToCode(PProperty property);
+   
+   /**
     * Este método crea un nuevo parser del mismo tipo que el objeto que llama
     * a dicho método.
     */
@@ -182,9 +188,9 @@ class TemplateParser
   virtual string RootWxParentToCode() = 0;
   
   /**
-   * Devuelve el código del valor de una propiedad en el formato del lenguaje.
+   * A partir del valor de una propiedad genera el código.
    */
-  virtual string PropertyToCode(PProperty property) = 0;
+  virtual string ValueToCode(PropertyType type, string value) = 0;
   
   /**
    * La función "estrella" de la clase. Analiza una plantilla devolviendo el

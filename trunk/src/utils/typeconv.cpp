@@ -424,6 +424,7 @@ wxArrayString TypeConv::StringToArrayString(const wxString &str)
           else
           {
             result.Add(substr); // fin de cadena
+            substr.Clear();
             state = 0;
           }
         }

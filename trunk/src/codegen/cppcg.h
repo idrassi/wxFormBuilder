@@ -40,7 +40,8 @@ class CppTemplateParser : public TemplateParser
   // redefinidas para C++
   PTemplateParser CreateParser(PObjectBase obj, string _template); 
   string RootWxParentToCode();
-  string PropertyToCode(PProperty property); 
+  //string PropertyToCode(PProperty property); 
+  string ValueToCode(PropertyType type, string value);
 };
 
 /**

@@ -115,7 +115,11 @@
       <option name="wxCB_READONLY" />0</property>
     <codegen language="C++">
       <template name="declaration">wxComboBox *$name;</template>
-      <template name="construction">$name = new wxComboBox(#wxparent $name,$id,$value,$pos,$size,0,NULL,$style);</template>
+      <template name="construction">
+        $name = new wxComboBox(#wxparent $name,$id,$value,$pos,$size,0,NULL,$style);
+	#foreach $choices
+	@{ $name->Append(#pred); @}
+      </template>
     </codegen>
   </objectinfo>
   
@@ -133,7 +137,11 @@
       <option name="wxLB_SORT" />0</property>
     <codegen language="C++">
       <template name="declaration">wxListBox *$name;</template>
-      <template name="construction">$name = new wxListBox(#wxparent $name,$id,$pos,$size,0,NULL,$style);</template>
+      <template name="construction">
+        $name = new wxListBox(#wxparent $name,$id,$pos,$size,0,NULL,$style);
+	#foreach $choices
+	@{ $name->Append(#pred); @}
+      </template>
     </codegen>
   </objectinfo>
   

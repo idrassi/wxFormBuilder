@@ -45,10 +45,11 @@ PTemplateParser CppTemplateParser::CreateParser(PObjectBase obj, string _templat
 /**
  * Convierte el valor de una propiedad a código C++.
  */
-string CppTemplateParser::PropertyToCode(PProperty property)
+//string CppTemplateParser::PropertyToCode(PProperty property)
+string CppTemplateParser::ValueToCode(PropertyType type, string value)
 {
-  PropertyType type = property->GetType();
-  string value = property->GetValue();
+  //PropertyType type = property->GetType();
+  //string value = property->GetValue();
   
   string result;
   

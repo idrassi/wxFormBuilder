@@ -74,7 +74,7 @@
 		<Cursor position="1421" topLine="28"/>
 	</File>
 	<File name="utils\debug.cpp" open="1" top="1">
-		<Cursor position="1205" topLine="9"/>
+		<Cursor position="1379" topLine="9"/>
 	</File>
 	<File name="utils\typeconv.cpp" open="0" top="0">
 		<Cursor position="9019" topLine="379"/>
@@ -82,8 +82,4 @@
 	<File name="utils\typeconv.h" open="0" top="0">
 		<Cursor position="3035" topLine="50"/>
 	</File>
-	<Expand folder="/Sources/utils"/>
-	<Expand folder="/Sources/rad/designer"/>
-	<Expand folder="/Sources/rad"/>
-	<Expand folder="/Sources"/>
 </Code::Blocks_layout_file>
