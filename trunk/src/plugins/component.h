@@ -46,7 +46,8 @@ class IObject
   virtual wxPoint  GetPropertyAsPoint   (const wxString& pname) = 0;
   virtual wxSize   GetPropertyAsSize    (const wxString& pname) = 0;
   virtual wxBitmap GetPropertyAsBitmap  (const wxString& pname) = 0;
-  virtual wxArrayInt GetPropertyAsIntegerArray(const wxString& pname) = 0;
+  virtual wxArrayInt GetPropertyAsArrayInt(const wxString& pname) = 0;
+  virtual wxArrayString GetPropertyAsArrayString(const wxString& pname) = 0;
 };
 
 // interfaz para manejar la vista de un objeto

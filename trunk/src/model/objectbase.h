@@ -152,6 +152,7 @@ class Property
   int GetValueAsInteger();
   wxString GetValueAsString();
   wxBitmap GetValueAsBitmap();
+  wxArrayString GetValueAsArrayString();
   
 };
 
@@ -425,10 +426,9 @@ class ObjectBase : public IObject, public enable_shared_from_this<ObjectBase>
   wxPoint  GetPropertyAsPoint   (const wxString& pname);
   wxSize   GetPropertyAsSize    (const wxString& pname);
   wxBitmap GetPropertyAsBitmap  (const wxString& pname);
-  wxArrayInt GetPropertyAsIntegerArray(const wxString& pname);
   
-  
-  
+  wxArrayInt    GetPropertyAsArrayInt (const wxString& pname);
+  wxArrayString GetPropertyAsArrayString  (const wxString& pname);
 };
 
 ///////////////////////////////////////////////////////////////////////////////

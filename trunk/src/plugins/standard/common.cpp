@@ -272,13 +272,20 @@ class ComboBoxComponent : public ComponentBase
  public: 
   wxObject* Create(IObject *obj, wxObject *parent)
   {
-    return new wxComboBox((wxWindow *)parent,-1,
+    wxComboBox *combo = new wxComboBox((wxWindow *)parent,-1,
       obj->GetPropertyAsString(_("value")),
-    obj->GetPropertyAsPoint(_("pos")),
-    obj->GetPropertyAsSize(_("size")),
-    0,
-    NULL,
-    obj->GetPropertyAsInteger(_("style")));
+      obj->GetPropertyAsPoint(_("pos")),
+      obj->GetPropertyAsSize(_("size")),
+      0,
+      NULL,
+      obj->GetPropertyAsInteger(_("style")));
+    
+    // choices
+    wxArrayString choices = obj->GetPropertyAsArrayString(_("choices"));
+    for (unsigned int i=0; i<choices.Count(); i++)
+      combo->Append(choices[i]);
+      
+    return combo;
   }
   
   TiXmlElement* ExportToXrc(IObject *obj)
@@ -486,6 +493,27 @@ class ListCtrlComponent : public ComponentBase
   }
 };
 
+class ListBoxComponent : public ComponentBase
+{
+  public:
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    wxListBox *listbox = new wxListBox((wxWindow*)parent, -1,
+      obj->GetPropertyAsPoint(_("pos")),
+      obj->GetPropertyAsSize(_("size")),
+      0,
+      NULL,
+      obj->GetPropertyAsInteger(_("style")));
+
+    // choices
+    wxArrayString choices = obj->GetPropertyAsArrayString(_("choices"));
+    for (unsigned int i=0; i<choices.Count(); i++)
+      listbox->Append(choices[i]);
+      
+    return listbox;
+  }
+};
+
 class StatusBarComponent : public ComponentBase
 {
  public: 
@@ -637,6 +665,7 @@ BEGIN_LIBRARY()
   COMPONENT("wxPanel",PanelComponent)
   COMPONENT("wxGrid",GridComponent)
   COMPONENT("wxComboBox", ComboBoxComponent)
+  COMPONENT("wxListBox", ListBoxComponent)
   COMPONENT("wxCheckBox", CheckBoxComponent)
   COMPONENT("wxStaticBitmap", StaticBitmapComponent)
   COMPONENT("wxXpmStaticBitmap", XpmStaticBitmapComponent)
@@ -705,6 +734,15 @@ BEGIN_LIBRARY()
   MACRO(wxLC_SORT_DESCENDING)
   MACRO(wxLC_HRULES)
   MACRO(wxLC_VRULES)
+  
+  // wxListBox
+  MACRO(wxLB_SINGLE)
+  MACRO(wxLB_MULTIPLE)
+  MACRO(wxLB_EXTENDED)
+  MACRO(wxLB_HSCROLL)
+  MACRO(wxLB_ALWAYS_SB)
+  MACRO(wxLB_NEEDED_SB)
+  MACRO(wxLB_SORT)
   
   // wxStatusBar
   MACRO(wxST_SIZEGRIP)

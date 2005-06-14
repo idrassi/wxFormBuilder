@@ -108,6 +108,7 @@
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_comboBox</property>
     <property name="value" type="wxString">Combo!</property>
+    <property name="choices" type="stringlist"></property>
     <property name="style" type="bitlist">
       <option name="wxCB_SIMPLE" />
       <option name="wxCB_DROPDOWN" />
@@ -117,6 +118,25 @@
       <template name="construction">$name = new wxComboBox(#wxparent $name,$id,$value,$pos,$size,0,NULL,$style);</template>
     </codegen>
   </objectinfo>
+  
+  <objectinfo class="wxListBox" icon="list_box.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text" hidden="1">m_listBox</property>
+    <property name="choices" type="stringlist"></property>
+    <property name="style" type="bitlist">
+      <option name="wxLB_SINGLE" />
+      <option name="wxLB_MULTIPLE" />
+      <option name="wxLB_EXTENDED" />
+      <option name="wxLB_HSCROLL" />
+      <option name="wxLB_ALWAYS_SB" />
+      <option name="wxLB_NEEDED_SB" />
+      <option name="wxLB_SORT" />0</property>
+    <codegen language="C++">
+      <template name="declaration">wxListBox *$name;</template>
+      <template name="construction">$name = new wxListBox(#wxparent $name,$id,$pos,$size,0,NULL,$style);</template>
+    </codegen>
+  </objectinfo>
+  
   <objectinfo class="wxGrid" icon="grid.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_grid</property>

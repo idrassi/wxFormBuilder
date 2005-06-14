@@ -183,6 +183,12 @@ wxString Property::GetValueAsString()
 {
   return _WXSTR(m_value);
 }
+
+wxArrayString Property::GetValueAsArrayString()
+{
+  return TypeConv::StringToArrayString(_WXSTR(m_value));
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 const int ObjectBase::INDENT = 2;
 
@@ -604,7 +610,7 @@ wxBitmap ObjectBase::GetPropertyAsBitmap  (const wxString& pname)
     return wxBitmap();
 }
 
-wxArrayInt ObjectBase::GetPropertyAsIntegerArray(const wxString& pname)
+wxArrayInt ObjectBase::GetPropertyAsArrayInt(const wxString& pname)
 {
   wxArrayInt array;
   PProperty property = GetProperty(_STDSTR(pname));
@@ -617,6 +623,15 @@ wxArrayInt ObjectBase::GetPropertyAsIntegerArray(const wxString& pname)
   }
   
   return array;
+}
+
+wxArrayString ObjectBase::GetPropertyAsArrayString(const wxString& pname)
+{
+  PProperty property = GetProperty(_STDSTR(pname));
+  if (property)
+    return property->GetValueAsArrayString();
+  else
+    return wxArrayString();
 }
           
 ///////////////////////////////////////////////////////////////////////////////

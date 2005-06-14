@@ -243,8 +243,8 @@ class FlexGridSizerComponent : public ComponentBase
       obj->GetPropertyAsInteger(_("hgap")));
 
     wxArrayInt gcols, grows;
-    gcols = obj->GetPropertyAsIntegerArray(_("growablecols"));
-    grows = obj->GetPropertyAsIntegerArray(_("growablerows"));
+    gcols = obj->GetPropertyAsArrayInt(_("growablecols"));
+    grows = obj->GetPropertyAsArrayInt(_("growablerows"));
    
     unsigned int i;
     for (i=0; i < gcols.GetCount() ; i++)

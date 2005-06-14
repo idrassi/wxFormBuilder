@@ -395,9 +395,45 @@ wxString TypeConv::SetFlag  (const wxString &flag, const wxString &currentValue)
   return result;
 }
 
+// la representación de un array de cadenas será:
+// 'string1' 'string2' 'string3'
+// el caracter (') se representa dentro de una cadena como ('')
+// 'string''1'''
 wxArrayString TypeConv::StringToArrayString(const wxString &str)
 {
+  int i=0, size = str.Length(), state = 0;
   wxArrayString result;
+  wxString substr;
+  while (i < size)
+  {
+    wxChar c = str[i];
+    switch (state)
+    {
+      case 0: // esperando (') de comienzo de cadena
+        if (c == wxT('\''))
+          state = 1;
+        break;
+      case 1: // guardando cadena
+        if (c == wxT('\''))
+        {
+          if (i+1 < size && str[i+1] == wxT('\''))
+          {
+            substr = substr + wxT('\'');  // sustitución ('') por (') y seguimos
+            i++;
+          }
+          else
+          {
+            result.Add(substr); // fin de cadena
+            state = 0;
+          }
+        }
+        else
+          substr = substr + c; // seguimos guardado la cadena
+        
+        break;
+    }
+    i++;
+  }
   
   return result;
 }
@@ -405,6 +441,14 @@ wxArrayString TypeConv::StringToArrayString(const wxString &str)
 wxString TypeConv::ArrayStringToString(const wxArrayString &arrayStr)
 {
   wxString result;
+  wxString substr;
+  int i, size= arrayStr.Count();
+  
+  if (size > 0)
+    result = wxT('\'') + arrayStr[0] + wxT('\'');
+  
+  for (i=1 ; i < size ; i++)
+    result = result +  wxT(" '") + arrayStr[i] + wxT('\'');
   
   return result;
 }

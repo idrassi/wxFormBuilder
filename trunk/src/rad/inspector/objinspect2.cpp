@@ -399,6 +399,16 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
     result = wxImageFileProperty(name, wxPG_LABEL, prop->GetValueAsString());
     result->SetAttribute(wxPG_FILE_WILDCARD, _T("XPM files (*.xpm)|*.xpm"));
   }
+  else if (type == PT_STRINGLIST)
+  {
+    result = wxArrayStringProperty(name, wxPG_LABEL,prop->GetValueAsArrayString());    
+  }
+  else // propiedad desconocida
+  {
+    result = wxStringProperty(name, wxPG_LABEL, prop->GetValueAsString());
+    result->SetAttribute(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING, true);
+    wxLogError(wxT("Property type Unknown"));
+  }
     
   return result;
 }
@@ -484,6 +494,12 @@ void ObjectInspector::OnPropertyGridChange(wxPropertyGridEvent& event)
                     }
                 }
                 break;
+            case PT_STRINGLIST:
+                {
+                  const wxArrayString &arraystr = event.GetPropertyValueAsArrayString();
+                  GetData()->ModifyProperty(prop, TypeConv::ArrayStringToString(arraystr));
+                }
+                break;
             default:
                 GetData()->ModifyProperty(prop, event.GetPropertyValueAsString());
         }
@@ -560,6 +576,11 @@ void ObjectInspector::PropertyModified(PProperty prop)
             pgProp->DoSetValue((void*)&val);
         }
         break;
+    case PT_STRINGLIST:
+      {
+        // ????
+      }      
+      break;
     default:
         pgProp->SetValueFromString(prop->GetValueAsString(), 0);
   }
