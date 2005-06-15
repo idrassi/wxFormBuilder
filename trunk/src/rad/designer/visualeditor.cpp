@@ -151,6 +151,11 @@ void VisualEditor::Create()
       m_back->SetSize(350,200);
     }
     
+    if (root->GetClassName() == "Frame")
+      m_back->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
+    else
+      m_back->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+    
     for (unsigned int i=0; i < root->GetChildCount(); i++)
     {
       PObjectBase child = root->GetChild(i);
