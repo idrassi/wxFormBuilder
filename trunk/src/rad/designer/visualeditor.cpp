@@ -46,7 +46,7 @@
 BEGIN_EVENT_TABLE(VisualEditor,wxPanel)
   //EVT_SASH_DRAGGED(-1, VisualEditor::OnResizeBackPanel)
   //EVT_COMMAND(-1, wxEVT_PANEL_RESIZED, VisualEditor::OnResizeBackPanel)
-  //EVT_PANEL_RESIZED(-1, VisualEditor::OnResizeBackPanel)
+  EVT_PANEL_RESIZED(-1, VisualEditor::OnResizeBackPanel)
   EVT_PAINT(VisualEditor::OnPaintPanel)
 END_EVENT_TABLE()
 

@@ -11,17 +11,6 @@
 
 #include <wx/event.h>
 
-BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EVENT_TYPE(wxEVT_PANEL_RESIZED, 6000)
-END_DECLARE_EVENT_TYPES()
-
-#define EVT_PANEL_RESIZED(id, fn) \
-    DECLARE_EVENT_TABLE_ENTRY( \
-        wxEVT_PANEL_RESIZED, id, wxID_ANY, \
-        (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxCommandEventFunction, &fn ), \
-        (wxObject *) NULL \
-    ),
-
 class ResizablePanel : public wxPanel
 {
     enum{
@@ -51,5 +40,16 @@ class ResizablePanel : public wxPanel
     
     DECLARE_EVENT_TABLE()
 };
+
+BEGIN_DECLARE_EVENT_TYPES()
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_PANEL_RESIZED, 6000)
+END_DECLARE_EVENT_TYPES()
+
+#define EVT_PANEL_RESIZED(id, fn) \
+    DECLARE_EVENT_TABLE_ENTRY( \
+        wxEVT_PANEL_RESIZED, id, wxID_ANY, \
+        (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxCommandEventFunction, &fn ), \
+        (wxObject *) NULL \
+    ),
 
 #endif
