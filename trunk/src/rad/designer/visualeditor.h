@@ -29,6 +29,7 @@
 #include "rad/appobserver.h"
 #include "model/objectbase.h"
 #include "rad/designer/visualobj.h"
+#include "rad/designer/resizablepanel.h"
 
 #include <wx/sashwin.h>
 
@@ -36,7 +37,7 @@
  * Redefine el manjedor OnPaint para dibujar una rejilla.
  */
 
-class GridPanel : public wxSashWindow //wxPanel
+class GridPanel : public ResizablePanel //wxSashWindow //wxPanel
 {
  private:
    int m_x;
@@ -94,7 +95,7 @@ class VisualEditor : public DataObserver, public wxPanel
   
  public:
   VisualEditor(wxWindow *parent);
-  void OnResizeBackPanel (wxSashEvent &event);
+  void OnResizeBackPanel (wxCommandEvent &event); //(wxSashEvent &event)
   void OnPaintPanel (wxPaintEvent &event);
   void DeleteVisualObject(PVisualObject obj);
   

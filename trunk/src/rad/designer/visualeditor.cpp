@@ -31,6 +31,7 @@
 #include "utils/debug.h"
 #include "menubar.h"
 #include "wx/statline.h"
+#include "rad/designer/resizablepanel.h"
 
 #ifdef __WX24__
   #define wxFULL_REPAINT_ON_RESIZE 0
@@ -42,9 +43,10 @@
   #define VISUAL_EDITOR_BORDER (wxFULL_REPAINT_ON_RESIZE | wxDOUBLE_BORDER)
 #endif
 
-
 BEGIN_EVENT_TABLE(VisualEditor,wxPanel)
-  EVT_SASH_DRAGGED(-1, VisualEditor::OnResizeBackPanel)
+  //EVT_SASH_DRAGGED(-1, VisualEditor::OnResizeBackPanel)
+  //EVT_COMMAND(-1, wxEVT_PANEL_RESIZED, VisualEditor::OnResizeBackPanel)
+  //EVT_PANEL_RESIZED(-1, VisualEditor::OnResizeBackPanel)
   EVT_PAINT(VisualEditor::OnPaintPanel)
 END_EVENT_TABLE()
 
@@ -60,10 +62,10 @@ VisualEditor::VisualEditor(wxWindow *parent)
   
   m_back = new GridPanel(this,-1,wxPoint(10,10),wxSize(350,200),VISUAL_EDITOR_BORDER);
   m_back->SetAutoLayout(true);
-  m_back->SetSashVisible(wxSASH_BOTTOM,true);
+  /*m_back->SetSashVisible(wxSASH_BOTTOM,true);
   m_back->SetSashBorder(wxSASH_BOTTOM,true);
   m_back->SetSashVisible(wxSASH_RIGHT,true);
-  m_back->SetSashBorder(wxSASH_RIGHT,true);
+  m_back->SetSashBorder(wxSASH_RIGHT,true);*/
 //  m_back->PushEventHandler(new EditorHandler(GetData()));
 }  
 
@@ -86,12 +88,12 @@ void VisualEditor::OnPaintPanel (wxPaintEvent &event)
   dc.Clear();
 }
 
-void VisualEditor::OnResizeBackPanel (wxSashEvent &event)
+void VisualEditor::OnResizeBackPanel (wxCommandEvent &event) //(wxSashEvent &event)
 {
-  wxRect rect(event.GetDragRect());
+  /*wxRect rect(event.GetDragRect());
   Debug::Print("VisualEditor::OnResizeBackPanel [%d,%d,%d,%d]",rect.x,rect.y,rect.width, rect.height);
   m_back->SetSize(rect.width,rect.height);
-  m_back->Layout();  
+  m_back->Layout();*/  
   
   PObjectBase form (GetData()->GetSelectedForm());
   
@@ -100,12 +102,12 @@ void VisualEditor::OnResizeBackPanel (wxSashEvent &event)
     PProperty prop(form->GetProperty("size"));
     if (prop)
     {
-      wxString value(TypeConv::PointToString(wxPoint(rect.width,rect.height)));
+      wxString value(TypeConv::PointToString(wxPoint(m_back->GetSize().x, m_back->GetSize().y)));
       GetData()->ModifyProperty(prop, value);
     }
   }
   
-  event.Skip();
+  //event.Skip();
 }  
 
 /**
@@ -258,17 +260,17 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *wxparent,
   return vobj;
 }  
 
-BEGIN_EVENT_TABLE(GridPanel, wxSashWindow)
+BEGIN_EVENT_TABLE(GridPanel, ResizablePanel) //wxSashWindow)
   EVT_PAINT(GridPanel::OnPaint)
 //  EVT_MOTION(GridPanel::OnMouseMove)	
 END_EVENT_TABLE()
 
-IMPLEMENT_CLASS(GridPanel, wxSashWindow)
+IMPLEMENT_CLASS(GridPanel, ResizablePanel) //wxSashWindow)
 
 GridPanel::GridPanel(wxWindow *parent, int id, const wxPoint& pos,
 
   const wxSize &size, long style, const wxString &name)
-  : wxSashWindow(parent,id,pos,size,style,name)
+  : ResizablePanel(parent, pos, size, style) //wxSashWindow(parent,id,pos,size,style,name)
 {
   SetGrid(10,10);
   m_selSizer = NULL;
