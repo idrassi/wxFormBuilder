@@ -31,6 +31,8 @@
 #include "wx/statline.h"
 #include "wx/notebook.h"
 #include "wx/listctrl.h"
+#include "wx/radiobox.h"
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // FORMS
@@ -514,6 +516,38 @@ class ListBoxComponent : public ComponentBase
   }
 };
 
+class RadioBoxComponent : public ComponentBase
+{
+  public:
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    wxArrayString choices = obj->GetPropertyAsArrayString(_("choices"));
+    wxString *strings = new wxString[choices.Count()];
+    for (unsigned int i=0; i < choices.Count(); i++)
+      strings[i] = choices[i];
+      
+    int majorDim = obj->GetPropertyAsInteger(_("majorDimension"));
+    if (majorDim < 1)
+    {
+      wxLogWarning(wxT("Property majorDimension of wxRadioBox set to \'1\'"));
+      majorDim = 1;
+    }
+    
+    wxRadioBox *radiobox = new wxRadioBox((wxWindow*)parent, -1,
+      obj->GetPropertyAsString(_("label")),
+      obj->GetPropertyAsPoint(_("pos")),
+      obj->GetPropertyAsSize(_("size")),
+      choices.Count(),
+      strings,
+      majorDim,
+      obj->GetPropertyAsInteger(_("style")));
+ 
+    delete []strings;
+         
+    return radiobox;
+  }
+};
+
 class StatusBarComponent : public ComponentBase
 {
  public: 
@@ -666,6 +700,7 @@ BEGIN_LIBRARY()
   COMPONENT("wxGrid",GridComponent)
   COMPONENT("wxComboBox", ComboBoxComponent)
   COMPONENT("wxListBox", ListBoxComponent)
+  COMPONENT("wxRadioBox", RadioBoxComponent)
   COMPONENT("wxCheckBox", CheckBoxComponent)
   COMPONENT("wxStaticBitmap", StaticBitmapComponent)
   COMPONENT("wxXpmStaticBitmap", XpmStaticBitmapComponent)
@@ -743,6 +778,11 @@ BEGIN_LIBRARY()
   MACRO(wxLB_ALWAYS_SB)
   MACRO(wxLB_NEEDED_SB)
   MACRO(wxLB_SORT)
+  
+  // wxRadioBox
+  MACRO(wxRA_SPECIFY_ROWS)
+  MACRO(wxRA_SPECIFY_COLS)
+  MACRO(wxRA_USE_CHECKBOX)
   
   // wxStatusBar
   MACRO(wxST_SIZEGRIP)

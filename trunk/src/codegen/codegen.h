@@ -40,14 +40,17 @@ typedef shared_ptr<TemplateParser> PTemplateParser;
  * Aspectos Lexicos.
  *
  * Las macros del preprocesador viene precedidas del carácter '#'.
- *   Ejemplo: #wxparent
+ *   Ejemplo: #wxparent $name
  *
  * Las propiedades del objeto vienen precedidas del carácter '$'.
  *   Ejemplo: $name
  *
+ * La creacion de una variable local vienen precedidas con el caracter '%'
+ *   Ejemplo: int %var = $style;
+ *
  * Para considerar como texto los caracteres especiales se usa el carácter
  * especial '@'.
- *   Ejemplo: @# @$ @@ 
+ *   Ejemplo: @# @$ @@ @%
  *
  */
  

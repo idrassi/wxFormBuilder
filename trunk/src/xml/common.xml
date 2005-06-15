@@ -145,6 +145,28 @@
     </codegen>
   </objectinfo>
   
+  <objectinfo class="wxRadioBox" icon="radio_box.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text" hidden="1">m_radioBox</property>
+    <property name="choices" type="stringlist"></property>
+    <property name="label" type="wxString">wxRadioBox</property>
+    <property name="majorDimension" type="text">1</property>
+    <property name="style" type="bitlist">
+      <option name="wxRA_SPECIFY_ROWS" />
+      <option name="wxRA_SPECIFY_COLS" />
+      <option name="wxRA_USE_CHECKBOX" />wxRA_SPECIFY_COLS</property>
+    <codegen language="C++">
+      <template name="declaration">wxRadioBox *$name;</template>
+      <template name="construction">
+        { #nl
+	  wxString __choices[] = { $choices }; #nl
+	  int __nchoices = sizeof(__choices)/sizeof(wxString); #nl
+          $name = new wxRadioBox(#wxparent $name, $id, $label, $pos,$size,__nchoices,__choices,$majorDimension, $style); #nl
+        } #nl
+      </template>
+    </codegen>
+  </objectinfo>
+  
   <objectinfo class="wxGrid" icon="grid.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_grid</property>

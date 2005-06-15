@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!DOCTYPE Code::Blocks_layout_file>
 <Code::Blocks_layout_file>
-	<File name="codegen\codegen.cpp" open="0" top="0">
-		<Cursor position="10517" topLine="429"/>
+	<File name="codegen\codegen.cpp" open="1" top="0">
+		<Cursor position="10688" topLine="68"/>
 	</File>
-	<File name="codegen\codegen.h" open="0" top="0">
-		<Cursor position="4322" topLine="120"/>
+	<File name="codegen\codegen.h" open="1" top="0">
+		<Cursor position="1790" topLine="27"/>
 	</File>
-	<File name="codegen\cppcg.cpp" open="0" top="0">
-		<Cursor position="17737" topLine="587"/>
+	<File name="codegen\cppcg.cpp" open="1" top="1">
+		<Cursor position="17682" topLine="572"/>
 	</File>
 	<File name="codegen\cppcg.h" open="0" top="0">
 		<Cursor position="3846" topLine="110"/>
@@ -16,7 +16,7 @@
 	<File name="maingui.cpp" open="0" top="0">
 		<Cursor position="1797" topLine="51"/>
 	</File>
-	<File name="model\database.cpp" open="0" top="0">
+	<File name="model\database.cpp" open="1" top="0">
 		<Cursor position="27105" topLine="834"/>
 	</File>
 	<File name="model\database.h" open="0" top="0">
@@ -73,7 +73,7 @@
 	<File name="rad\objecttree\objecttree.h" open="0" top="0">
 		<Cursor position="1421" topLine="28"/>
 	</File>
-	<File name="utils\debug.cpp" open="1" top="1">
+	<File name="utils\debug.cpp" open="1" top="0">
 		<Cursor position="1379" topLine="9"/>
 	</File>
 	<File name="utils\typeconv.cpp" open="0" top="0">
@@ -82,4 +82,6 @@
 	<File name="utils\typeconv.h" open="0" top="0">
 		<Cursor position="3035" topLine="50"/>
 	</File>
+	<Expand folder="/Sources/codegen"/>
+	<Expand folder="/Sources"/>
 </Code::Blocks_layout_file>

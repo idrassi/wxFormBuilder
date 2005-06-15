@@ -142,7 +142,22 @@ string CppTemplateParser::ValueToCode(PropertyType type, string value)
       //result = "wxBitmap(wxT(\"" + ConvertCppString(value)
       //                 + "\"), wxBITMAP_TYPE_XPM)";
       break;
-      
+    
+    case PT_STRINGLIST:
+      // las listas de cadenas serán generadas como una secuencia de wxString
+      // separados por ','.
+      {
+        wxArrayString array = TypeConv::StringToArrayString(_WXSTR(value));
+        if (array.Count() > 0)
+          result = ValueToCode(PT_WXSTRING,_STDSTR(array[0]));
+          
+        
+        for (unsigned int i=1 ; i< array.Count() ; i++)
+          result = result + ", " + ValueToCode(PT_WXSTRING,_STDSTR(array[i]));
+          
+      }
+      break;
+        
     default:
       
       break;  
@@ -567,9 +582,9 @@ void CppCodeGenerator::GenDefines(PObjectBase project)
   set<string> macro_set;
   FindMacros(project,macro_set);
 
-  m_source->WriteLn("");
+  m_header->WriteLn("");
   // la macro por defecto tiene valor -1  
-  m_source->WriteLn("#define ID_DEFAULT -1 // Default");
+  m_header->WriteLn("#define ID_DEFAULT -1 // Default");
 
   // debemos quitar la macro por defecto del conjunto
   set<string>::iterator it;
@@ -582,11 +597,11 @@ void CppCodeGenerator::GenDefines(PObjectBase project)
   {
     ostringstream define;
     define << "#define " << *it << " " << id;
-    m_source->WriteLn(define.str());
+    m_header->WriteLn(define.str());
     id++;
   }
   
-  m_source->WriteLn("");
+  m_header->WriteLn("");
 }
 
 void CppCodeGenerator::GenSettings(PObjectInfo info, PObjectBase obj)
