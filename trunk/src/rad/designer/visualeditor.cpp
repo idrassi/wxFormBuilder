@@ -401,7 +401,7 @@ void GridPanel::SetFrameWidgets(PObjectBase menubar, wxWindow *statusbar)
   SetSizer(NULL, false);
   
   wxSizer *dummySizer = new wxBoxSizer(wxVERTICAL);
-  dummySizer->Add(mbWidget, 0, wxEXPAND | wxTOP | wxBOTTOM, 3);
+  dummySizer->Add(mbWidget, 0, wxEXPAND | wxTOP | wxBOTTOM, 0);
   dummySizer->Add(new wxStaticLine(this, -1), 0, wxEXPAND | wxALL, 0);
   
   if (mainSizer)
