@@ -375,7 +375,8 @@ wxMenu* GridPanel::GetMenuFromObject(PObjectBase menu)
         label += '\t' + shortcut;
         
       wxMenuItem *item = new wxMenuItem(menuWidget, wxID_HIGHEST + 1, 
-          label, menuItem->GetPropertyAsString(_T("help")));
+          label, menuItem->GetPropertyAsString(_T("help")), 
+          menuItem->GetPropertyAsInteger(_T("kind")));
           
       if (!menuItem->GetProperty("bitmap")->IsDefaultValue())
         item->SetBitmap(menuItem->GetPropertyAsBitmap("bitmap"));

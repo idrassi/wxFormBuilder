@@ -268,13 +268,13 @@
     <property name="id" type="macro" hidden="1">ID_DEFAULT</property>
     <property name="bitmap" type="bitmap" />
     <!--<property name="checked" type="bool">0</property>
-    <property name="enabled" type="bool">1</property>
+    <property name="enabled" type="bool">1</property>-->
     <property name="kind" type="option">
       <option name="wxITEM_NORMAL" />
       <option name="wxITEM_CHECK" />
-      <option name="wxITEM_RADIO" />wxITEM_NORMAL</property>-->
+      <option name="wxITEM_RADIO" />wxITEM_NORMAL</property>
     <codegen language="C++">
-      <template name="construction">wxMenuItem *$name = new wxMenuItem(#parent $name, $id, $label #ifnotnull $shortcut @{ + wxT('\t') + $shortcut @}, $help);</template>
+      <template name="construction">wxMenuItem *$name = new wxMenuItem(#parent $name, $id, $label #ifnotnull $shortcut @{ + wxT('\t') + $shortcut @}, $help, $kind);</template>
       <template name="settings">
         #ifnotnull $bitmap
         @{ $name->SetBitmap($bitmap); @}

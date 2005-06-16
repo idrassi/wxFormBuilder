@@ -634,6 +634,13 @@ class MenuItemComponent : public ComponentBase
     xrc.AddPropertyValue(_("label"), label);
     xrc.AddProperty(_("help"),_("help"),XRC_TYPE_TEXT);
     xrc.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_TEXT);
+    
+    switch (obj->GetPropertyAsInteger(_("kind")))
+    {
+      case wxITEM_CHECK: xrc.AddPropertyValue(_("checkable"), _("1")); break;
+      case wxITEM_RADIO: xrc.AddPropertyValue(_("radio"), _("1")); break;
+    }
+    
     return xrc.GetXrcObject();
   }
   
@@ -786,6 +793,11 @@ BEGIN_LIBRARY()
   
   // wxStatusBar
   MACRO(wxST_SIZEGRIP)
+  
+  // wxMenuItem
+  MACRO(wxITEM_NORMAL)
+  MACRO(wxITEM_CHECK)
+  MACRO(wxITEM_RADIO)
   
 END_LIBRARY()
 
