@@ -28,6 +28,9 @@
 #include <wx/image.h>
 #include "rad/menueditor.h"
 
+#define ICON_SIZE 21
+//#define ICON_SIZE 18
+
 BEGIN_EVENT_TABLE(ObjectTree,ObjectTreeGUI)
   EVT_TREE_SEL_CHANGED(-1, ObjectTree::OnSelChanged)
   EVT_TREE_ITEM_RIGHT_CLICK(-1, ObjectTree::OnRightClick)	
@@ -67,7 +70,7 @@ void ObjectTree::RebuildTree()
   }  
 
   m_expandedMap.clear();
-  
+ 
   m_tcObjects->Thaw();
 }  
 
@@ -249,13 +252,13 @@ void ObjectTree::Create()
 {
   // Cramos la lista de iconos obteniendo los iconos de los paquetes.
   unsigned int index = 0;
-  m_iconList = new wxImageList(21,21);
+  m_iconList = new wxImageList(ICON_SIZE,ICON_SIZE);
   
   {
     wxBitmap icon(project_xpm);
     wxImage img = icon.ConvertToImage();
-    //img.Rescale(21,21);
-    img.Resize(wxSize(21,21),wxPoint(0,0));
+    img.Rescale(ICON_SIZE,ICON_SIZE);
+    //img.Resize(wxSize(ICON_SIZE,ICON_SIZE),wxPoint(0,0));
     m_iconList->Add(wxBitmap(img));
     m_iconIdx.insert(IconIndexMap::value_type("_default_",index++));
   }
@@ -277,8 +280,8 @@ void ObjectTree::Create()
         // todas las imagenes deben tener el mismo tamaño, en caso contrario
         // el control hace cosas raras
         wxImage img = icon.ConvertToImage();
-        //img.Rescale(21,21);
-        img.Resize(wxSize(21,21),wxPoint(0,0));
+        img.Rescale(ICON_SIZE,ICON_SIZE);
+        //img.Resize(wxSize(ICON_SIZE,ICON_SIZE),wxPoint(0,0));
         
         Debug::Print("Adding icon %s,%d",comp_name.c_str(), index);
         

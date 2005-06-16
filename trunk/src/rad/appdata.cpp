@@ -28,6 +28,236 @@
 
 using namespace TypeConv;
 
+
+///////////////////////////////////////////////////////////////////////////////
+// Comandos
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Comando para insertar un objeto en el árbol.
+ */
+class InsertObjectCmd : public Command
+{
+ private:
+  PObjectBase m_parent;
+  PObjectBase m_object;
+  int m_pos;
+  
+ protected:
+  void DoExecute();
+  void DoRestore();
+ 
+ public:
+   InsertObjectCmd(PObjectBase object, PObjectBase parent, int pos = -1);
+};
+
+/**
+ * Comando para borrar un objeto.
+ */
+class RemoveObjectCmd : public Command
+{
+private:
+  PObjectBase m_parent;
+  PObjectBase m_object;
+  int m_oldPos;
+  
+ protected:
+  void DoExecute();
+  void DoRestore();
+ 
+ public:
+   RemoveObjectCmd(PObjectBase object);
+};
+
+/**
+ * Comando para modificar una propiedad.
+ */
+class ModifyPropertyCmd : public Command
+{
+ private:
+  PProperty m_property;
+  string m_oldValue, m_newValue;
+ 
+ protected:
+  void DoExecute();
+  void DoRestore();
+  
+ public:
+  ModifyPropertyCmd(PProperty prop, string value);
+};
+
+/**
+ * Comando para mover de posición un objeto.
+ */
+class ShiftChildCmd : public Command
+{
+ private:
+  PObjectBase m_object;
+  int m_oldPos, m_newPos;
+
+ protected:
+  void DoExecute();
+  void DoRestore();
+  
+ public:
+  ShiftChildCmd(PObjectBase object, int pos);
+
+};
+
+/**
+ * CutObjectCmd ademas de eliminar el objeto del árbol se asegura
+ * de eliminar la referencia "clipboard" deshacer el cambio.
+ */
+class CutObjectCmd : public Command
+{
+ private:
+  // necesario para consultar/modificar el objeto "clipboard"
+  ApplicationData *m_data;
+  //PObjectBase m_clipboard;
+  PObjectBase m_parent;
+  PObjectBase m_object;
+  int m_oldPos;
+  
+ protected:
+  void DoExecute();
+  void DoRestore();
+  
+ public:
+  CutObjectCmd(PObjectBase object, ApplicationData *data);
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// Implementación de los Comandos
+///////////////////////////////////////////////////////////////////////////////
+
+InsertObjectCmd::InsertObjectCmd(PObjectBase object, PObjectBase parent, int pos)
+  : m_parent(parent), m_object(object), m_pos(pos)
+{}
+
+void InsertObjectCmd::DoExecute()
+{
+  m_parent->AddChild(m_object);
+  m_object->SetParent(m_parent);
+  
+  if (m_pos >= 0)
+    m_parent->ChangeChildPosition(m_object,m_pos);
+}
+
+void InsertObjectCmd::DoRestore()
+{
+  m_parent->RemoveChild(m_object);
+  m_object->SetParent(PObjectBase());
+}
+
+//-----------------------------------------------------------------------------
+
+RemoveObjectCmd::RemoveObjectCmd(PObjectBase object)
+{
+  m_object = object;
+  m_parent = object->GetParent();
+  m_oldPos = m_parent->GetChildPosition(object);
+}
+
+void RemoveObjectCmd::DoExecute()
+{
+  m_parent->RemoveChild(m_object);
+  m_object->SetParent(PObjectBase());
+}
+
+void RemoveObjectCmd::DoRestore()
+{
+  m_parent->AddChild(m_object);
+  m_object->SetParent(m_parent);
+  
+  // restauramos la posición
+  m_parent->ChangeChildPosition(m_object,m_oldPos);  
+}
+
+//-----------------------------------------------------------------------------
+
+ModifyPropertyCmd::ModifyPropertyCmd(PProperty prop, string value)
+  : m_property(prop), m_newValue(value)
+{
+  m_oldValue = prop->GetValue();
+}
+
+void ModifyPropertyCmd::DoExecute()
+{
+  m_property->SetValue(m_newValue);
+}
+
+void ModifyPropertyCmd::DoRestore()
+{
+  m_property->SetValue(m_oldValue);
+}
+
+//-----------------------------------------------------------------------------
+
+ShiftChildCmd::ShiftChildCmd(PObjectBase object, int pos)
+{
+  m_object = object;
+  PObjectBase parent = object->GetParent();
+  
+  assert(parent);
+  
+  m_oldPos = parent->GetChildPosition(object);
+  m_newPos = pos;
+}
+
+void ShiftChildCmd::DoExecute()
+{
+  if (m_oldPos != m_newPos)
+  {
+    PObjectBase parent (m_object->GetParent());
+    parent->ChangeChildPosition(m_object,m_newPos);
+  }
+}
+
+void ShiftChildCmd::DoRestore()
+{
+  if (m_oldPos != m_newPos)
+  {
+    PObjectBase parent (m_object->GetParent());
+    parent->ChangeChildPosition(m_object,m_oldPos);
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+CutObjectCmd::CutObjectCmd(PObjectBase object, ApplicationData *data)
+{
+  m_data = data;
+  m_object = object;
+  m_parent = object->GetParent();
+  m_oldPos = m_parent->GetChildPosition(object);
+}
+
+void CutObjectCmd::DoExecute()
+{
+  // guardamos el clipboard ???
+  //m_clipboard = m_data->GetClipboardObject();
+  
+  m_data->SetClipboardObject(m_object);
+  m_parent->RemoveChild(m_object);
+  m_object->SetParent(PObjectBase());
+}
+
+void CutObjectCmd::DoRestore()
+{
+  // reubicamos el objeto donde estaba
+  m_parent->AddChild(m_object);
+  m_object->SetParent(m_parent);
+  m_parent->ChangeChildPosition(m_object,m_oldPos);  
+  
+  // restauramos el clipboard
+  //m_data->SetClipboardObject(m_clipboard);
+  m_data->SetClipboardObject(PObjectBase());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// ApplicationData
+///////////////////////////////////////////////////////////////////////////////
+
 ApplicationData::ApplicationData()
 {
   m_objDb = PObjectDatabase(new ObjectDatabase());
@@ -223,6 +453,16 @@ void ApplicationData::CreateObject(wxString name)
   
 void ApplicationData::RemoveObject(PObjectBase obj)
 {
+  DoRemoveObject(obj,false);
+}
+
+void ApplicationData::CutObject(PObjectBase obj)
+{
+  DoRemoveObject(obj,true);
+}
+
+void ApplicationData::DoRemoveObject(PObjectBase obj, bool cutObject)
+{
   // Nota:
   //  cuando se va a eliminar un objeto es importante que no se dejen
   //  nodos ficticios ("items") en las hojas del árbol.
@@ -235,8 +475,17 @@ void ApplicationData::RemoveObject(PObjectBase obj)
       parent = obj->GetParent();
     }
 
-    PCommand command(new RemoveObjectCmd(obj));
-    m_cmdProc.Execute(command);
+    if (cutObject)
+    {
+      m_copyOnPaste = false;
+      PCommand command(new CutObjectCmd(obj,this));
+      m_cmdProc.Execute(command);
+    }
+    else
+    {
+      PCommand command(new RemoveObjectCmd(obj));
+      m_cmdProc.Execute(command);
+    }
 
     DataObservable::NotifyObjectRemoved(obj);
   
@@ -248,19 +497,20 @@ void ApplicationData::RemoveObject(PObjectBase obj)
     if (obj->GetObjectTypeName()!="project")
       assert(false); 
   }
-}
-
-void ApplicationData::CutObject(PObjectBase obj)
-{
-  m_copyOnPaste = false;
-  m_clipboard = obj;
-  RemoveObject(obj);
+  
+  CheckProjectTree(m_project);
 }
 
 void ApplicationData::CopyObject(PObjectBase obj)
 {
   m_copyOnPaste = true;
-  m_clipboard = obj;
+    
+  // Hacemos una primera copia del objeto, ya que si despues de copiar
+  // el objeto se modificasen las propiedades, dichas modificaciones se verian
+  // reflejadas en la copia.
+  m_clipboard = m_objDb->CopyObject(obj);
+  
+  CheckProjectTree(m_project);
 }
 
 void ApplicationData::PasteObject(PObjectBase parent)
@@ -358,6 +608,8 @@ void ApplicationData::PasteObject(PObjectBase parent)
       SelectObject(obj);    
     }
   }
+  
+  CheckProjectTree(m_project);
 }
 
 void ApplicationData::InsertObject(PObjectBase obj, PObjectBase parent)
@@ -492,12 +744,14 @@ void ApplicationData::Undo()
 {
   m_cmdProc.Undo();
   DataObservable::NotifyProjectRefresh();
+  CheckProjectTree(m_project);
 }
 
 void ApplicationData::Redo()
 {
   m_cmdProc.Redo();
   DataObservable::NotifyProjectRefresh();
+  CheckProjectTree(m_project);
 }
 
 
@@ -541,96 +795,17 @@ void ApplicationData::ToggleStretchLayout(PObjectBase obj)
   }
 }
 
+void ApplicationData::CheckProjectTree(PObjectBase obj)
+{
+  assert(obj);
+  for (unsigned int i=0; i< obj->GetChildCount(); i++)
+  {
+    PObjectBase child = obj->GetChild(i);
+    if (child->GetParent() != obj)
+      wxLogError(wxString::Format(wxT("Parent of object \'%s\' is wrong!"),child->GetPropertyAsString(wxT("name")).mb_str()));
+      
+    CheckProjectTree(child);
+  }
+}
 
 //////////////////////////////////////////////////////////////////////////////
-InsertObjectCmd::InsertObjectCmd(PObjectBase object, PObjectBase parent, int pos)
-  : m_parent(parent), m_object(object), m_pos(pos)
-{}
-
-void InsertObjectCmd::DoExecute()
-{
-  m_parent->AddChild(m_object);
-  m_object->SetParent(m_parent);
-  
-  if (m_pos >= 0)
-    m_parent->ChangeChildPosition(m_object,m_pos);
-}
-
-void InsertObjectCmd::DoRestore()
-{
-  m_parent->RemoveChild(m_object);
-  m_object->SetParent(PObjectBase());
-}
-
-//-----------------
-
-RemoveObjectCmd::RemoveObjectCmd(PObjectBase object)
-{
-  m_object = object;
-  m_parent = object->GetParent();
-  m_oldPos = m_parent->GetChildPosition(object);
-}
-
-void RemoveObjectCmd::DoExecute()
-{
-  m_parent->RemoveChild(m_object);
-  m_object->SetParent(PObjectBase());
-}
-
-void RemoveObjectCmd::DoRestore()
-{
-  m_parent->AddChild(m_object);
-  m_object->SetParent(m_parent);
-  
-  // restauramos la posición
-  m_parent->ChangeChildPosition(m_object,m_oldPos);  
-}
-
-//-----------------
-
-ModifyPropertyCmd::ModifyPropertyCmd(PProperty prop, string value)
-  : m_property(prop), m_newValue(value)
-{
-  m_oldValue = prop->GetValue();
-}
-
-void ModifyPropertyCmd::DoExecute()
-{
-  m_property->SetValue(m_newValue);
-}
-
-void ModifyPropertyCmd::DoRestore()
-{
-  m_property->SetValue(m_oldValue);
-}
-
-//-----------------
-
-ShiftChildCmd::ShiftChildCmd(PObjectBase object, int pos)
-{
-  m_object = object;
-  PObjectBase parent = object->GetParent();
-  
-  assert(parent);
-  
-  m_oldPos = parent->GetChildPosition(object);
-  m_newPos = pos;
-}
-
-void ShiftChildCmd::DoExecute()
-{
-  if (m_oldPos != m_newPos)
-  {
-    PObjectBase parent (m_object->GetParent());
-    parent->ChangeChildPosition(m_object,m_newPos);
-  }
-}
-
-void ShiftChildCmd::DoRestore()
-{
-  if (m_oldPos != m_newPos)
-  {
-    PObjectBase parent (m_object->GetParent());
-    parent->ChangeChildPosition(m_object,m_oldPos);
-  }
-}

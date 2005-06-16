@@ -42,6 +42,12 @@ class ApplicationData : public DataObservable
   bool m_copyOnPaste; // flag que indica si hay que copiar el objeto al pegar
   CommandProcessor m_cmdProc;
   
+  
+  /**
+   * Comprueba las referencias cruzadas de todos los nodos del árbol
+   */
+  void CheckProjectTree(PObjectBase obj);
+  
   /**
    * Resuelve un posible conflicto de nombres.
    * @note el objeto a comprobar debe estar insertado en proyecto, por tanto
@@ -53,7 +59,6 @@ class ApplicationData : public DataObservable
    * Rutina auxiliar de ResolveNameConflict
    */
   void BuildNameSet(PObjectBase obj, PObjectBase top, set<string> &name_set);
-  
   
   /**
    * Calcula la posición donde deberá ser insertado el objeto.
@@ -80,6 +85,11 @@ class ApplicationData : public DataObservable
    * no está bien formado, o la importación no ha sido correcta.
    */
    void RemoveEmptyItems(PObjectBase obj);
+   
+   /**
+    * Eliminar un objeto.
+    */
+   void DoRemoveObject(PObjectBase object, bool cutObject);
    
  public:
   ApplicationData();
@@ -111,9 +121,6 @@ class ApplicationData : public DataObservable
   bool CanUndo() { return m_cmdProc.CanUndo(); }
   bool CanRedo() { return m_cmdProc.CanRedo(); }
   
-
-  
-
   PObjectPackage GetPackage(unsigned int idx)
     { return m_objDb->GetPackage(idx);}
   
@@ -122,70 +129,13 @@ class ApplicationData : public DataObservable
   
   PObjectDatabase GetObjectDatabase()
     { return m_objDb; }
-  
+
+
+  // Servicios específicos, no definidos en DataObservable
+  void        SetClipboardObject(PObjectBase obj) { m_clipboard = obj; }
+  PObjectBase GetClipboardObject()                { return m_clipboard; }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// Comandos
-///////////////////////////////////////////////////////////////////////////////
 
-class InsertObjectCmd : public Command
-{
- private:
-  PObjectBase m_parent;
-  PObjectBase m_object;
-  int m_pos;
-  
- protected:
-  void DoExecute();
-  void DoRestore();
- 
- public:
-   InsertObjectCmd(PObjectBase object, PObjectBase parent, int pos = -1);
-};
-
-class RemoveObjectCmd : public Command
-{
-private:
-  PObjectBase m_parent;
-  PObjectBase m_object;
-  int m_oldPos;
-  
- protected:
-  void DoExecute();
-  void DoRestore();
- 
- public:
-   RemoveObjectCmd(PObjectBase object);
-};
-
-class ModifyPropertyCmd : public Command
-{
- private:
-  PProperty m_property;
-  string m_oldValue, m_newValue;
- 
- protected:
-  void DoExecute();
-  void DoRestore();
-  
- public:
-  ModifyPropertyCmd(PProperty prop, string value);
-};
-
-class ShiftChildCmd : public Command
-{
- private:
-  PObjectBase m_object;
-  int m_oldPos, m_newPos;
-
- protected:
-  void DoExecute();
-  void DoRestore();
-  
- public:
-  ShiftChildCmd(PObjectBase object, int pos);
-
-};
 
 #endif //__APP_DATA__
