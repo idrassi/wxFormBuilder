@@ -84,7 +84,9 @@ void VisualEditor::OnPaintPanel (wxPaintEvent &event)
   // es necesario esto para que se pinte el panel de oscuro
   // con wxGTK.
   wxPaintDC dc(this);
-  dc.SetBackground(wxBrush(wxColour(150,150,150),wxSOLID));
+  //dc.SetBackground(wxBrush(wxColour(150,150,150),wxSOLID));
+  // El fondo oscuro ahora queda mal con los forms de tipo Frame
+  dc.SetBackground(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW), wxSOLID));
   dc.Clear();
 }
 
@@ -152,9 +154,9 @@ void VisualEditor::Create()
     }
     
     if (root->GetClassName() == "Frame")
-      m_back->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
+      m_back->SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
     else
-      m_back->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+      m_back->SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
     
     for (unsigned int i=0; i < root->GetChildCount(); i++)
     {
@@ -176,12 +178,13 @@ void VisualEditor::Create()
     
     m_back->Layout();
       
-    if (menubar) m_back->SetFrameWidgets(menubar, statusbar);
+    if (menubar || statusbar) m_back->SetFrameWidgets(menubar, statusbar);
     
   }
   else
   {
     m_back->SetSize(10,10);
+    m_back->SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
   }
 
   if (IsShown()) Thaw();
@@ -388,13 +391,17 @@ wxMenu* GridPanel::GetMenuFromObject(PObjectBase menu)
 
 void GridPanel::SetFrameWidgets(PObjectBase menubar, wxWindow *statusbar)
 {
-  assert(menubar->GetObjectTypeName() == "menubar");
-  Menubar *mbWidget = new Menubar(this, -1);
-  for (unsigned int i = 0; i < menubar->GetChildCount(); i++)
+  Menubar *mbWidget = NULL;
+  
+  if (menubar)
   {
-    PObjectBase menu = menubar->GetChild(i);
-    wxMenu *menuWidget = GetMenuFromObject(menu);
-    mbWidget->AppendMenu(menu->GetPropertyAsString(_T("label")), menuWidget);
+    mbWidget = new Menubar(this, -1);
+    for (unsigned int i = 0; i < menubar->GetChildCount(); i++)
+    {
+      PObjectBase menu = menubar->GetChild(i);
+      wxMenu *menuWidget = GetMenuFromObject(menu);
+      mbWidget->AppendMenu(menu->GetPropertyAsString(_T("label")), menuWidget);
+    }
   }
   
   wxSizer *mainSizer = GetSizer();
@@ -402,8 +409,11 @@ void GridPanel::SetFrameWidgets(PObjectBase menubar, wxWindow *statusbar)
   SetSizer(NULL, false);
   
   wxSizer *dummySizer = new wxBoxSizer(wxVERTICAL);
-  dummySizer->Add(mbWidget, 0, wxEXPAND | wxTOP | wxBOTTOM, 0);
-  dummySizer->Add(new wxStaticLine(this, -1), 0, wxEXPAND | wxALL, 0);
+  if (mbWidget)
+  {
+    dummySizer->Add(mbWidget, 0, wxEXPAND | wxTOP | wxBOTTOM, 0);
+    dummySizer->Add(new wxStaticLine(this, -1), 0, wxEXPAND | wxALL, 0);
+  }
   
   if (mainSizer)
     dummySizer->Add(mainSizer, 1, wxEXPAND | wxALL, 0);

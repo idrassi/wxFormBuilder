@@ -166,6 +166,7 @@ void VisualWindow::SetupWindow()
 BEGIN_EVENT_TABLE(VObjEvtHandler,wxEvtHandler)
   EVT_LEFT_DOWN(VObjEvtHandler::OnLeftClick)
   EVT_PAINT(VObjEvtHandler::OnPaint)
+  EVT_SET_CURSOR(VObjEvtHandler::OnSetCursor)
 END_EVENT_TABLE()
 
 VObjEvtHandler::VObjEvtHandler(wxWindow *win, PObjectBase obj, DataObservable *data)
@@ -193,6 +194,9 @@ void VObjEvtHandler::OnLeftClick(wxMouseEvent &event)
   }
     
   //event.Skip();
+  m_window->ClientToScreen(&event.m_x, &event.m_y);
+  m_window->GetParent()->ScreenToClient(&event.m_x, &event.m_y);
+  ::wxPostEvent(m_window->GetParent(), event);
 }  
 
 
@@ -211,6 +215,15 @@ void VObjEvtHandler::OnPaint(wxPaintEvent &event)
     }
   }
   event.Skip();  
+}
+
+void VObjEvtHandler::OnSetCursor(wxSetCursorEvent &event)
+{
+  wxCoord x = event.GetX(), y = event.GetY();
+  m_window->ClientToScreen(&x, &y);
+  m_window->GetParent()->ScreenToClient(&x, &y);
+  wxSetCursorEvent sce(x, y);
+  ::wxPostEvent(m_window->GetParent(), sce);
 }
 
 

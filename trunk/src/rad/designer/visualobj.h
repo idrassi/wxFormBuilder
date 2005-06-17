@@ -133,6 +133,7 @@ class VObjEvtHandler : public wxEvtHandler
    VObjEvtHandler(wxWindow *win, PObjectBase obj, DataObservable *data);
    void OnLeftClick(wxMouseEvent &event);
    void OnPaint(wxPaintEvent &event);
+   void OnSetCursor(wxSetCursorEvent &event);
 }; 
 
 
