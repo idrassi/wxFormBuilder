@@ -118,7 +118,9 @@ class TemplateParser
     ID_IFNOTNULL, 
     ID_FOREACH,
     ID_PREDEFINED,  // simbolo predefinido '#pred'
-    ID_NEWLINE
+    ID_NEWLINE,
+    ID_IFEQUAL,
+    ID_IFNOTEQUAL,
   } Ident;
   
 
@@ -131,6 +133,12 @@ class TemplateParser
    * las macros #begin y #end, teniendo en cuenta que puede estar anidados
    */
   string ExtractInnerTemplate();
+  
+  /**
+   * Un valor literal es una cadena encerrada entre '"' (ej. "xxx"),
+   * el caracter " se representa con "".
+   */
+  string ExtractLiteral();
 
   /**
    * Consulta el siguiente símbolo de la entrada y devuelve el token.
@@ -148,7 +156,9 @@ class TemplateParser
   bool ParseForEach();
   bool ParseIfNotNull();
   bool ParseNewLine();
-  
+  bool ParseIfEqual();
+  bool ParseIfNotEqual();
+
   /**
    * Parsea una macro.
    */

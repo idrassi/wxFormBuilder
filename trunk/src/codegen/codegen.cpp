@@ -147,6 +147,12 @@ bool TemplateParser::ParseMacro()
     case ID_NEWLINE:
       return ParseNewLine();
       break;
+    case ID_IFEQUAL:
+      ParseIfEqual();
+      break;
+    case ID_IFNOTEQUAL:
+      ParseIfNotEqual();
+      break;
     default:
       assert(false);
       return false;
@@ -416,6 +422,106 @@ bool TemplateParser::ParseIfNotNull()
   return true;
 }
 
+string TemplateParser::ExtractLiteral()
+{
+  ostringstream os;
+  
+  char c;
+
+  // ignoramos los espacios que pudiera haber al principio
+  ignore_whitespaces();
+ 
+  c = m_in.get(); // comillas de inicio
+  
+  if (c == '"')
+  {
+    bool end = false;
+    // comenzamos la extracción de la plantilla  
+    while (!end && m_in.peek() != EOF)
+    {
+      c = m_in.get(); // extraemos un caracter
+      
+      // comprobamos si estamos ante un posible cierre de comillas
+      if (c == '"')
+      {
+        if (m_in.peek() == '"') // caracter (") denotado por ("")
+        {
+          m_in.get(); // ignoramos la segunda comilla
+          os << '"';
+        }
+        else // cierre
+        {
+          end = true;
+          
+          // ignoramos todo los caracteres siguientes hasta un espacio
+          // así errores como "hola"mundo" -> "hola"
+          while (m_in.peek() != EOF && m_in.peek() != ' ')
+            m_in.get();
+        }
+      }
+      else // un caracter del literal
+        os << c;
+    }
+  }  
+
+  return os.str();
+}
+
+bool TemplateParser::ParseIfEqual()
+{
+  // ignoramos los espacios que pudiera haber al principio
+  ignore_whitespaces();
+  
+  // parseamos la propiedad
+  if (GetNextToken() == TOK_PROPERTY)
+  {
+    string propname = ParsePropertyName();
+    string value = ExtractLiteral();
+    string inner_template = ExtractInnerTemplate();
+    
+    PProperty property = m_obj->GetProperty(propname);
+    if (property && property->GetValue() == value)
+    {
+      // hay que generar el codigo de la plantilla
+      string code;
+      PTemplateParser parser = CreateParser(m_obj,inner_template);
+      code = parser->ParseTemplate();
+      //m_out << endl << code;
+      m_out << code;
+      return true;
+    }
+  }
+  return false;
+}
+
+bool TemplateParser::ParseIfNotEqual()
+{
+  // ignoramos los espacios que pudiera haber al principio
+  ignore_whitespaces();
+  
+  // parseamos la propiedad
+  if (GetNextToken() == TOK_PROPERTY)
+  {
+    string propname = ParsePropertyName();
+    string value = ExtractLiteral();
+    string inner_template = ExtractInnerTemplate();
+    
+    PProperty property = m_obj->GetProperty(propname);
+    if (property && property->GetValue() != value)
+    {
+      // hay que generar el codigo de la plantilla
+      string code;
+      PTemplateParser parser = CreateParser(m_obj,inner_template);
+      code = parser->ParseTemplate();
+      //m_out << endl << code;
+      m_out << code;
+      return true;
+    }
+  }
+  
+  return false;
+}
+
 TemplateParser::Ident TemplateParser::SearchIdent(string ident)
 {
 //  Debug::Print("Parsing command %s",ident.c_str());
@@ -434,6 +540,10 @@ TemplateParser::Ident TemplateParser::SearchIdent(string ident)
     return ID_PARENT;
   else if (ident == "nl")
     return ID_NEWLINE;
+  else if (ident == "ifequal")
+    return ID_IFEQUAL;
+  else if (ident == "ifnotequal")
+    return ID_IFNOTEQUAL;
   else
     return ID_ERROR;  
 }

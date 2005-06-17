@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!DOCTYPE Code::Blocks_layout_file>
 <Code::Blocks_layout_file>
-	<File name="codegen\codegen.cpp" open="1" top="0">
-		<Cursor position="10688" topLine="68"/>
+	<File name="codegen\codegen.cpp" open="1" top="1">
+		<Cursor position="11140" topLine="441"/>
 	</File>
 	<File name="codegen\codegen.h" open="1" top="0">
-		<Cursor position="1790" topLine="27"/>
+		<Cursor position="4130" topLine="118"/>
 	</File>
 	<File name="codegen\cppcg.cpp" open="1" top="0">
 		<Cursor position="17682" topLine="572"/>
@@ -59,10 +59,13 @@
 		<Cursor position="0" topLine="21"/>
 	</File>
 	<File name="rad\designer\visualeditor.cpp" open="1" top="0">
-		<Cursor position="2050" topLine="37"/>
+		<Cursor position="3342" topLine="62"/>
+	</File>
+	<File name="rad\designer\visualeditor.h" open="1" top="0">
+		<Cursor position="2313" topLine="20"/>
 	</File>
 	<File name="rad\designer\visualobj.cpp" open="1" top="0">
-		<Cursor position="2035" topLine="33"/>
+		<Cursor position="5665" topLine="182"/>
 	</File>
 	<File name="rad\inspector\objinspect2.cpp" open="0" top="0">
 		<Cursor position="12013" topLine="338"/>
@@ -73,7 +76,7 @@
 	<File name="rad\mainframe.h" open="0" top="0">
 		<Cursor position="2933" topLine="60"/>
 	</File>
-	<File name="rad\objecttree\objecttree.cpp" open="1" top="1">
+	<File name="rad\objecttree\objecttree.cpp" open="1" top="0">
 		<Cursor position="1243" topLine="9"/>
 	</File>
 	<File name="rad\objecttree\objecttree.h" open="0" top="0">
@@ -88,7 +91,4 @@
 	<File name="utils\typeconv.h" open="0" top="0">
 		<Cursor position="3035" topLine="50"/>
 	</File>
-	<Expand folder="/Sources/rad/objecttree"/>
-	<Expand folder="/Sources/rad"/>
-	<Expand folder="/Sources"/>
 </Code::Blocks_layout_file>
