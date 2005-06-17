@@ -76,6 +76,7 @@ class MenuEditor : public wxDialog
     void OnEnter(wxCommandEvent& e);
     void OnLabelChanged(wxCommandEvent& e);
     void OnUpdateMovers(wxUpdateUIEvent& e);
+    void OnItemActivated(wxListEvent& e);
 };
 
 #endif //__menueditor__

@@ -45,6 +45,7 @@ BEGIN_EVENT_TABLE(MenuEditor, wxDialog)
     EVT_UPDATE_UI_RANGE(ID_MENUDOWN, ID_MENUUP, MenuEditor::OnUpdateMovers)
     EVT_TEXT_ENTER(-1, MenuEditor::OnEnter)
     EVT_TEXT(ID_LABEL, MenuEditor::OnLabelChanged)
+    EVT_LIST_ITEM_ACTIVATED(-1, MenuEditor::OnItemActivated) 
 END_EVENT_TABLE()
 
 MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,_T("Menu Editor"),wxDefaultPosition,wxDefaultSize)
@@ -340,6 +341,7 @@ void MenuEditor::AddNewItem()
     m_tcId->SetValue(_T(""));
     m_tcName->SetValue(_T(""));
     m_tcHelpString->SetValue(_T(""));
+    m_rbItemKind->SetSelection(0);
     m_tcLabel->SetFocus();
 }
 
@@ -523,3 +525,22 @@ void MenuEditor::OnUpdateMovers(wxUpdateUIEvent& e)
     }
 }
 
+void MenuEditor::OnItemActivated(wxListEvent& e)
+{
+  wxString label, shortcut, id, name, helpString, kind;
+  GetItem(e.GetIndex(), label, shortcut, id, name, helpString, kind);
+  
+  label.Trim(true); label.Trim(false);
+  m_tcLabel->SetValue(label);
+  m_tcShortcut->SetValue(shortcut);
+  m_tcId->SetValue(id);
+  m_tcName->SetValue(name);
+  m_tcHelpString->SetValue(helpString);
+  
+  if (kind == _T("wxITEM_CHECK"))
+    m_rbItemKind->SetSelection(1);
+  else if (kind == _T("wxITEM_RADIO"))
+    m_rbItemKind->SetSelection(2);
+  else
+    m_rbItemKind->SetSelection(0);
+}
