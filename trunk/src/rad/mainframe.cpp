@@ -556,7 +556,10 @@ void MainFrame::UpdateRecentProjects()
   
   // borramos los items del menu de los projectos recientes
   for (i = 0 ; i < 4 ; i++)
-    menuFile->Destroy(ID_RECENT_0 + i);
+  {
+    if (menuFile->FindItem(ID_RECENT_0 + i))
+      menuFile->Destroy(ID_RECENT_0 + i);
+  }
   
   // creamos los nuevos ficheros recientes
   for (unsigned int i = 0 ; i < 4 && !m_recentProjects[i].IsEmpty() ; i++)

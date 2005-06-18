@@ -2,7 +2,7 @@
 <!DOCTYPE Code::Blocks_layout_file>
 <Code::Blocks_layout_file>
 	<File name="codegen\codegen.cpp" open="1" top="0">
-		<Cursor position="1175" topLine="639"/>
+		<Cursor position="11948" topLine="486"/>
 	</File>
 	<File name="codegen\codegen.h" open="1" top="0">
 		<Cursor position="4130" topLine="197"/>
@@ -71,7 +71,7 @@
 		<Cursor position="12013" topLine="338"/>
 	</File>
 	<File name="rad\mainframe.cpp" open="1" top="1">
-		<Cursor position="4021" topLine="88"/>
+		<Cursor position="18444" topLine="537"/>
 	</File>
 	<File name="rad\mainframe.h" open="1" top="0">
 		<Cursor position="2208" topLine="49"/>
@@ -91,7 +91,4 @@
 	<File name="utils\typeconv.h" open="0" top="0">
 		<Cursor position="3035" topLine="50"/>
 	</File>
-	<Expand folder="/Sources/utils"/>
-	<Expand folder="/Sources/rad"/>
-	<Expand folder="/Sources"/>
 </Code::Blocks_layout_file>
