@@ -635,7 +635,15 @@ class MenuItemComponent : public ComponentBase
     xrc.AddProperty(_("help"),_("help"),XRC_TYPE_TEXT);
     xrc.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_TEXT);
     
-    switch (obj->GetPropertyAsInteger(_("kind")))
+    int kind = obj->GetPropertyAsInteger(_("kind"));
+    
+    if (obj->GetPropertyAsInteger("checked") && (kind == wxITEM_RADIO || kind == wxITEM_CHECK))
+      xrc.AddProperty(_("checked"), _("checked"), XRC_TYPE_BOOL);
+    
+    if (obj->GetPropertyAsInteger("enabled") == 0)
+      xrc.AddProperty(_("enabled"), _("enabled"), XRC_TYPE_BOOL);
+    
+    switch (kind)
     {
       case wxITEM_CHECK: xrc.AddPropertyValue(_("checkable"), _("1")); break;
       case wxITEM_RADIO: xrc.AddPropertyValue(_("radio"), _("1")); break;
