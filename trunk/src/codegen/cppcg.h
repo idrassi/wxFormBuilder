@@ -54,6 +54,8 @@ class CppCodeGenerator : public CodeGenerator
   
   PCodeWriter m_header;
   PCodeWriter m_source;
+  
+  string m_path;
 
   /**
    * Dado un objeto y el nombre de una plantilla, obtiene el código.
@@ -130,6 +132,11 @@ class CppCodeGenerator : public CodeGenerator
   static string ConvertCppString(string text); 
   
   /**
+   * Convierte un path a path relativo.
+   */
+  static string ConvertToRelativePath(string path, string referencePath);
+  
+  /**
    * Convierte una cadena de texto con el nombre de un fichero XPM
    * y genera el nombre del identificador de "C/C++" asociado.
    */
@@ -144,6 +151,17 @@ class CppCodeGenerator : public CodeGenerator
    * Configura el escritor de código para el fichero de fuente.
    */
   void SetSourceWriter(PCodeWriter cw) { m_source = cw; }
+
+
+  /**
+   * Configura el path de referencia para generar las rutas relativas
+   * al path que se pasa como parámetro.
+   *
+   * @nota el path se genera con el caracter barra '/' ya que sobre windows
+   *       los compiladores interpretan correctamente el path.
+   */
+  bool SelectRelativePath (string path);
+
 
   /**
    * Genera el código del proyecto.

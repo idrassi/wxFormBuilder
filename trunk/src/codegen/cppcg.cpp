@@ -23,6 +23,7 @@
 
 #include "cppcg.h"
 #include "utils/typeconv.h"
+#include <wx/filename.h>
 
 #define FIRST_ID 1000
 
@@ -677,4 +678,18 @@ void CppCodeGenerator::FindXpmProperties(PObjectBase obj, set<string> &set)
     PObjectBase child = obj->GetChild(i);
     FindXpmProperties(child, set);
   }
+}
+
+bool CppCodeGenerator::SelectRelativePath (string path)
+{
+  bool result = wxFileName::DirExists(_WXSTR(path));
+  m_path = (result ? path : "");
+
+  return result;
+}
+
+string ConvertToRelativePath(string path, string referencePath)
+{
+  // no se usa
+  return path;
 }

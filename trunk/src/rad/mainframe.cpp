@@ -58,6 +58,11 @@
 #define ID_STRETCH       115
 #define ID_MOVE_UP       116
 #define ID_MOVE_DOWN     117
+#define ID_RECENT_0      118 // Tienen que tener ids consecutivos
+#define ID_RECENT_1      119 // ID_RECENT_n+1 == ID_RECENT_n + 1
+#define ID_RECENT_2      120 // 
+#define ID_RECENT_3      121 // 
+#define ID_RECENT_SEP    122
 
 BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_NEW_PRJ,MainFrame::OnNewProject)
@@ -78,6 +83,10 @@ BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_STRETCH,MainFrame::OnToggleStretch)
   EVT_MENU(ID_MOVE_UP,MainFrame::OnMoveUp)
   EVT_MENU(ID_MOVE_DOWN,MainFrame::OnMoveDown)
+  EVT_MENU(ID_RECENT_0,MainFrame::OnOpenRecent)
+  EVT_MENU(ID_RECENT_1,MainFrame::OnOpenRecent)
+  EVT_MENU(ID_RECENT_2,MainFrame::OnOpenRecent)
+  EVT_MENU(ID_RECENT_3,MainFrame::OnOpenRecent)
   EVT_CLOSE(MainFrame::OnClose)
 END_EVENT_TABLE()
 
@@ -92,7 +101,9 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
   
   wxMenu *menuFile = new wxMenu;
+  menuFile->Append(ID_NEW_PRJ, _T("&New"), _T("create an empty project"));
   menuFile->Append(ID_OPEN_PRJ, _T("&Open...\tF2"), _T("Open a project"));
+  
   menuFile->Append(ID_SAVE_PRJ,          _T("&Save"), _T("Save current project"));
   menuFile->Append(ID_SAVE_AS_PRJ, _T("Save &As...\tF3"), _T("Save current project as..."));
   menuFile->AppendSeparator();
@@ -101,7 +112,8 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   menuFile->Append(ID_GENERATE_CODE, _T("&Generate Code\tF8"), _T("Generate Code"));
   menuFile->AppendSeparator();
   menuFile->Append(ID_QUIT, _T("E&xit\tAlt-X"), _T("Quit wxFormBuilder"));
-
+  menuFile->AppendSeparator();
+  
   wxMenu *menuEdit = new wxMenu;
   menuEdit->Append(ID_UNDO, _T("&Undo \tCTRL+Z"), _T("Undo changes"));
   menuEdit->Append(ID_REDO, _T("&Redo \tCTRL+Y"), _T("Redo changes"));
@@ -128,17 +140,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
 
   // ... and attach this menu bar to the frame
   SetMenuBar(menuBar);
-
-  /*
-  #ifdef __WXFB_DEBUG__
-  m_log = new wxLogWindow(NULL,wxT("Logging"));
-  m_old_log = wxLog::SetActiveTarget(m_log);
-  #endif //__WXFB_DEBUG__
-  */
-  
   wxBoxSizer *top_sizer = new wxBoxSizer(wxVERTICAL);
-  
-
   
   ///////////////
 
@@ -165,7 +167,6 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   
   tree_panel->SetSizer(tree_sizer);
   tree_panel->SetAutoLayout(true);
-
 
   wxPanel *obj_inspPanel = new wxPanel(h_splitter,-1);
   wxBoxSizer *obj_insp_sizer = new wxBoxSizer(wxVERTICAL);
@@ -198,38 +199,19 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   
   m_notebook = new wxNotebook(right, -1, wxDefaultPosition, wxDefaultSize, wxNB_NOPAGETHEME);
 
-/*  wxPanel *panel = new wxPanel(notebook,-1);
-  panel->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)	);
-  wxPanel *desig = new wxPanel(panel,-1,wxPoint(0,0),wxSize(100,100),wxDOUBLE_BORDER);*/
-  
-  //m_design = new DesignPanel(doc,m_notebook);
   m_visualEdit = new VisualEditor(m_notebook);
   data->AddDataObserver(m_visualEdit);
-//  m_design = new wxPanel(m_notebook);
-  m_notebook->AddPage( m_visualEdit, wxT("Designer") );
 
-// provisional
-//  m_h = new CodeEditorPanel(doc,m_notebook,FILE_H);
-//  m_h = new wxPanel(m_notebook);
+  m_notebook->AddPage( m_visualEdit, wxT("Designer") );
 
   m_cpp = new CppPanel(m_notebook,-1);
   data->AddDataObserver(m_cpp);
   m_notebook->AddPage( m_cpp, wxT("C++") );
 
-//Juan
   m_xrc = new XrcPanel(m_notebook,-1);
   data->AddDataObserver(m_xrc);
   m_notebook->AddPage(m_xrc, wxT("XRC"));
-//End
-  
-//  m_cpp = new CodeEditorPanel(doc,m_notebook,FILE_CPP);
-//  m_cpp = new wxPanel(m_notebook);
-//  m_notebook->AddPage( m_cpp, wxT("cpp") );
 
-/*  wxStaticText *text = new wxStaticText(right,-1,wxT("EDITOR"),wxDefaultPosition,wxDefaultSize,wxSIMPLE_BORDER);
-  text->SetBackgroundColour(wxColour(100,100,100));
-  text->SetForegroundColour(*wxWHITE);
-  text->SetFont(wxFont(8, wxSWISS, wxNORMAL, wxBOLD, 0, wxT("")));*/
   Title *ed_title = new Title(right,wxT("Editor"));
   
   right_sizer->Add(m_palette,0,wxEXPAND,0);
@@ -238,7 +220,6 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   right_sizer->Add(m_notebook,1,wxEXPAND|wxTOP,5);
   right->SetSizer(right_sizer);
 
-//  top_sizer->Add(sizer,0,wxEXPAND,0);
   top_sizer->Add(v_splitter,1,wxEXPAND,0);
 
   CreateStatusBar();
@@ -272,12 +253,9 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   //Centre();
   Refresh();
 
-
   // añadimos el manejador de las teclas rápidas de la aplicación
   // realmente este es el sitio donde hacerlo ?????
   //m_objTree->AddCustomKeysHandler(new CustomKeysEvtHandler(data));
-
-
   data->AddDataObserver(this);
 };  
 
@@ -302,8 +280,10 @@ void MainFrame::RestorePosition(const wxString &name)
 {
     bool maximized;
     int x, y, w, h;
-    wxConfigBase *config = wxConfigBase::Get();
+
+    m_currentDir = wxT("./projects");
     
+    wxConfigBase *config = wxConfigBase::Get();
     config->SetPath(name);
     if (config->Read(_T("IsMaximized"), &maximized))
     {
@@ -318,7 +298,15 @@ void MainFrame::RestorePosition(const wxString &name)
         config->Read(_T("IsIconized"), &iconized);
         if (iconized) Iconize(iconized);
     }
+    config->Read(_T("CurrentDirectory"), &m_currentDir);
+    
+    config->Read(_T("RecentFile0"),&m_recentProjects[0]);
+    config->Read(_T("RecentFile1"),&m_recentProjects[1]);
+    config->Read(_T("RecentFile2"),&m_recentProjects[2]);
+    config->Read(_T("RecentFile3"),&m_recentProjects[3]);
+    
     config->SetPath(_T(".."));
+    UpdateRecentProjects();
 }
 
 void MainFrame::SavePosition(const wxString &name)
@@ -337,6 +325,13 @@ void MainFrame::SavePosition(const wxString &name)
     }    
     config->Write(_T("IsMaximized"), isMaximized);
     config->Write(_T("IsIconized"), isIconized);
+    config->Write(_T("CurrentDirectory"), m_currentDir);
+    
+    config->Write(_T("RecentFile0"),m_recentProjects[0]);
+    config->Write(_T("RecentFile1"),m_recentProjects[1]);
+    config->Write(_T("RecentFile2"),m_recentProjects[2]);
+    config->Write(_T("RecentFile3"),m_recentProjects[3]);
+    
     config->SetPath(_T(".."));
 } 
 
@@ -351,15 +346,14 @@ void MainFrame::OnSaveProject(wxCommandEvent &event)
     
 void MainFrame::OnSaveAsProject(wxCommandEvent &event)
 {    
-  wxFileDialog *dialog = new wxFileDialog(this,wxT("Open Project"),wxT("projects/example"),
+  wxFileDialog *dialog = new wxFileDialog(this,wxT("Open Project"),m_currentDir,
     wxT("example.xml"),wxT("*.xml"),wxSAVE);
 
   if (dialog->ShowModal() == wxID_OK)
   {
+    m_currentDir = dialog->GetDirectory();
     m_prjFileName = dialog->GetPath();
     GetData()->SaveProject(m_prjFileName); // FIXME: debe devolver bool.
-    
-    // TO-DO: guardar el path para la próxima vez.
   };
   
   dialog->Destroy();
@@ -368,28 +362,43 @@ void MainFrame::OnSaveAsProject(wxCommandEvent &event)
 void MainFrame::OnOpenProject(wxCommandEvent &event)
 {
   //GetData()->LoadProject(wxT("hola.xml"));
-  wxFileDialog *dialog = new wxFileDialog(this,wxT("Open Project"),wxT("projects/example"),
+  wxFileDialog *dialog = new wxFileDialog(this,wxT("Open Project"),m_currentDir,
     wxT("example.xml"),wxT("*.xml"),wxOPEN | wxHIDE_READONLY);
 
   if (dialog->ShowModal() == wxID_OK)
   {
+    m_currentDir = dialog->GetDirectory();
     m_prjFileName = dialog->GetPath();
     if (!GetData()->LoadProject(m_prjFileName))
       m_prjFileName = wxT("");
-      
-    // TO-DO: guardar el path para la próxima vez.
+    else
+      InsertRecentProject(m_prjFileName);
   };
   
   dialog->Destroy();
-}  
+}
+
+void MainFrame::OnOpenRecent(wxCommandEvent &event)
+{
+  int i = event.GetId() - ID_RECENT_0;
+  
+  assert (i >= 0 && i < 4);
+
+  m_prjFileName = m_recentProjects[i];
+  if (!GetData()->LoadProject(m_prjFileName))
+    m_prjFileName = wxT("");
+  else
+    InsertRecentProject(m_prjFileName);
+}
 
 void MainFrame::OnImportXrc(wxCommandEvent &event)
 {
-  wxFileDialog *dialog = new wxFileDialog(this,wxT("Import XRC file"),wxT("projects/example"),
+  wxFileDialog *dialog = new wxFileDialog(this,wxT("Import XRC file"),m_currentDir,
   wxT("example.xrc"),wxT("*.xrc"),wxOPEN | wxHIDE_READONLY);
 
   if (dialog->ShowModal() == wxID_OK)
   {
+    m_currentDir = dialog->GetDirectory();
     TiXmlDocument doc(_STDSTR(dialog->GetPath()));
     if (doc.LoadFile())
     {
@@ -538,6 +547,44 @@ void MainFrame::UpdateFrame()
   
   // Actualizamos la barra de estado
   // TO-DO: definir un campo...
+}
+
+void MainFrame::UpdateRecentProjects()
+{
+  int i;
+  wxMenu *menuFile = GetMenuBar()->GetMenu(GetMenuBar()->FindMenu(_("File")));
+  
+  // borramos los items del menu de los projectos recientes
+  for (i = 0 ; i < 4 ; i++)
+    menuFile->Destroy(ID_RECENT_0 + i);
+  
+  // creamos los nuevos ficheros recientes
+  for (unsigned int i = 0 ; i < 4 && !m_recentProjects[i].IsEmpty() ; i++)
+    menuFile->Append(ID_RECENT_0+i, m_recentProjects[i], wxT(""));
+}
+
+void MainFrame::InsertRecentProject(const wxString &file)
+{
+  bool found;
+  int i;
+  
+  for (i = 0; i < 4 && !found; i++)
+    found = (file == m_recentProjects[i]);
+  
+  if (found) // en i-1 está la posición encontrada (0 < i < 4)
+  {
+    // desplazamos desde 0 hasta i-1 una posición a la derecha
+    for (i = i - 1; i > 0; i--)
+      m_recentProjects[i] = m_recentProjects[i-1];
+  }
+  else if (!found)
+  {
+    for (i = 3; i > 0; i--)
+      m_recentProjects[i] = m_recentProjects[i-1];
+  }
+  m_recentProjects[0] = file;
+  
+  UpdateRecentProjects();
 }
 
 void MainFrame::OnCopy(wxCommandEvent &event)

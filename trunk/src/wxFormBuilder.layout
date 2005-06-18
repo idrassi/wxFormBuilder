@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <!DOCTYPE Code::Blocks_layout_file>
 <Code::Blocks_layout_file>
-	<File name="codegen\codegen.cpp" open="1" top="1">
-		<Cursor position="11140" topLine="441"/>
+	<File name="codegen\codegen.cpp" open="1" top="0">
+		<Cursor position="1175" topLine="639"/>
 	</File>
 	<File name="codegen\codegen.h" open="1" top="0">
-		<Cursor position="4130" topLine="118"/>
+		<Cursor position="4130" topLine="197"/>
 	</File>
 	<File name="codegen\cppcg.cpp" open="1" top="0">
-		<Cursor position="17682" topLine="572"/>
+		<Cursor position="1060" topLine="0"/>
 	</File>
-	<File name="codegen\cppcg.h" open="0" top="0">
-		<Cursor position="3846" topLine="110"/>
+	<File name="codegen\cppcg.h" open="1" top="0">
+		<Cursor position="4098" topLine="115"/>
 	</File>
 	<File name="maingui.cpp" open="0" top="0">
 		<Cursor position="1797" topLine="51"/>
@@ -59,7 +59,7 @@
 		<Cursor position="0" topLine="21"/>
 	</File>
 	<File name="rad\designer\visualeditor.cpp" open="1" top="0">
-		<Cursor position="3342" topLine="62"/>
+		<Cursor position="3110" topLine="62"/>
 	</File>
 	<File name="rad\designer\visualeditor.h" open="1" top="0">
 		<Cursor position="2313" topLine="20"/>
@@ -70,11 +70,11 @@
 	<File name="rad\inspector\objinspect2.cpp" open="0" top="0">
 		<Cursor position="12013" topLine="338"/>
 	</File>
-	<File name="rad\mainframe.cpp" open="1" top="0">
-		<Cursor position="8330" topLine="193"/>
+	<File name="rad\mainframe.cpp" open="1" top="1">
+		<Cursor position="4021" topLine="88"/>
 	</File>
-	<File name="rad\mainframe.h" open="0" top="0">
-		<Cursor position="2933" topLine="60"/>
+	<File name="rad\mainframe.h" open="1" top="0">
+		<Cursor position="2208" topLine="49"/>
 	</File>
 	<File name="rad\objecttree\objecttree.cpp" open="1" top="0">
 		<Cursor position="1243" topLine="9"/>
@@ -91,4 +91,7 @@
 	<File name="utils\typeconv.h" open="0" top="0">
 		<Cursor position="3035" topLine="50"/>
 	</File>
+	<Expand folder="/Sources/utils"/>
+	<Expand folder="/Sources/rad"/>
+	<Expand folder="/Sources"/>
 </Code::Blocks_layout_file>

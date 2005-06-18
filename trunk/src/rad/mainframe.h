@@ -56,7 +56,16 @@ class MainFrame : public DataObserver, public wxFrame
   
   wxString m_prjFileName;
   
+  wxString m_currentDir;
+  
+  wxString m_recentProjects[4];
+    
   void UpdateFrame();
+  
+  // Actualiza los projectos más recientes en el menu
+  void UpdateRecentProjects();
+  void InsertRecentProject(const wxString &file);
+  void OnOpenRecent(wxCommandEvent &event);
   
   DECLARE_EVENT_TABLE()
  public:
