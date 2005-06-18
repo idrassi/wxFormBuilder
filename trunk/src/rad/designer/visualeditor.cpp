@@ -85,8 +85,7 @@ void VisualEditor::OnPaintPanel (wxPaintEvent &event)
   // con wxGTK.
   wxPaintDC dc(this);
   //dc.SetBackground(wxBrush(wxColour(150,150,150),wxSOLID));
-  // El fondo oscuro ahora queda mal con los forms de tipo Frame
-  dc.SetBackground(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW), wxSOLID));
+  dc.SetBackground(wxBrush(wxColour(192,192,192),wxSOLID));
   dc.Clear();
 }
 
@@ -362,6 +361,7 @@ void GridPanel::HighlightSelection(wxDC& dc)
 
 wxMenu* GridPanel::GetMenuFromObject(PObjectBase menu)
 {
+  int lastMenuId = wxID_HIGHEST + 1;
   wxMenu *menuWidget = new wxMenu();
   for (unsigned int j = 0; j < menu->GetChildCount(); j++)
   {
@@ -377,13 +377,19 @@ wxMenu* GridPanel::GetMenuFromObject(PObjectBase menu)
       if (!shortcut.IsEmpty())
         label += '\t' + shortcut;
         
-      wxMenuItem *item = new wxMenuItem(menuWidget, wxID_HIGHEST + 1, 
+      wxMenuItem *item = new wxMenuItem(menuWidget, lastMenuId++, 
           label, menuItem->GetPropertyAsString(_T("help")), 
           menuItem->GetPropertyAsInteger(_T("kind")));
           
       if (!menuItem->GetProperty("bitmap")->IsDefaultValue())
         item->SetBitmap(menuItem->GetPropertyAsBitmap("bitmap"));
+        
       menuWidget->Append(item);
+        
+      if (item->GetKind() == wxITEM_CHECK && menuItem->GetPropertyAsInteger("checked"))
+        item->Check(true);
+        
+      item->Enable(menuItem->GetPropertyAsInteger("enabled"));
     }
   }
   return menuWidget; 

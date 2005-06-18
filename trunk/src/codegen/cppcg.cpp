@@ -551,8 +551,8 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
   else if (type == "menuitem")
   {  
     m_source->WriteLn(GetCode(obj,"construction"));
-    GenSettings(obj->GetObjectInfo(), obj);
     m_source->WriteLn(GetCode(obj,"menuitem_add"));
+    GenSettings(obj->GetObjectInfo(), obj);
   }
   else  
     assert(false);
