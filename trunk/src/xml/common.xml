@@ -21,6 +21,7 @@
       <option name="wxVSCROLL" />
       <option name="wxHSCROLL" />
       <option name="wxCLIP_CHILDREN" /></property>
+    <property name="enabled" type="bool">1</property>
     <codegen language="C++">
       <template name="settings">
         #ifnotnull $font
@@ -31,6 +32,9 @@
 
 	#ifnotnull $bg
         @{ $name->SetBackgroundColour($bg); #nl @} 
+        
+        #ifequal $enabled "0"
+        @{ $name->Enable($enabled); #nl @}
       </template>
     </codegen>
   </objectinfo>

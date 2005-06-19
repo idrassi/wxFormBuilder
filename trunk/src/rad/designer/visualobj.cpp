@@ -123,6 +123,7 @@ void VisualWindow::SetupWindow()
   PProperty pfont  = obj->GetProperty("font");
   PProperty pfg_colour  = obj->GetProperty("fg");
   PProperty pbg_colour  = obj->GetProperty("bg");
+  PProperty penabled = obj->GetProperty("enabled");
     
   wxPoint pos;
   wxSize size;
@@ -158,6 +159,9 @@ void VisualWindow::SetupWindow()
 
     if (pbg_colour->GetValue() != "")
       GetWindow()->SetBackgroundColour(bg_colour);
+      
+    if (penabled)
+      GetWindow()->Enable(penabled->GetValueAsInteger());
   }
 }
 

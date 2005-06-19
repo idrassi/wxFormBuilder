@@ -534,7 +534,10 @@ void MainFrame::UpdateFrame()
   wxString date(wxT(__DATE__));
   wxString time(wxT(__TIME__));
   wxString title(wxT("wxFormBuilder (Build on ") + date +wxT(" - ")+ time + wxT(")"));
-  title = title + wxT(" - [") + m_prjFileName + wxT("]");
+  if (m_prjFileName.IsEmpty())
+    title += wxT(" - [untitled]");
+  else
+    title = title + wxT(" - [") + m_prjFileName + wxT("]");
   SetTitle(title);
   
   // Actualizamos los menus
