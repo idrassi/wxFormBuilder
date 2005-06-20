@@ -105,6 +105,14 @@ void CppPanel::CodeGeneration()
   // Vamos a generar el código en el panel
   {
     CppCodeGenerator codegen;
+    
+    wxString path;
+    PProperty ppath = project->GetProperty("path");
+    if (ppath)
+    {
+      path = _WXSTR(ppath->GetValue());
+      codegen.SetBasePath(ppath->GetValue());
+    }
 
     m_cppPanel->GetTextCtrl()->Freeze();
     m_hPanel->GetTextCtrl()->Freeze();
@@ -123,7 +131,10 @@ void CppPanel::CodeGeneration()
     wxString path, file;
     PProperty ppath = project->GetProperty("path");
     if (ppath)
+    {
       path = _WXSTR(ppath->GetValue());
+      codegen.SetBasePath(ppath->GetValue());
+    }
       
     PProperty pfile = project->GetProperty("file");
     if (pfile)

@@ -43,6 +43,7 @@ class ApplicationData : public DataObservable
   
   // Procesador de comandos Undo/Redo
   CommandProcessor m_cmdProc;
+  string m_projectFile;
   
   
   /**

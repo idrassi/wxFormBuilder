@@ -141,7 +141,7 @@ class CppCodeGenerator : public CodeGenerator
   /**
    * Convierte un path a path relativo.
    */
-  static string ConvertToRelativePath(string path, string referencePath);
+  static string ConvertToRelativePath(string path, string basePath);
   
   /**
    * Convierte una cadena de texto con el nombre de un fichero XPM
@@ -169,7 +169,7 @@ class CppCodeGenerator : public CodeGenerator
    * @nota el path se genera con el caracter barra '/' ya que sobre windows
    *       los compiladores interpretan correctamente el path.
    */
-  bool SelectRelativePath (string path);
+  bool SetBasePath (string path);
 
 
   /**

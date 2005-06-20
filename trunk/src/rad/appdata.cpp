@@ -658,6 +658,7 @@ void ApplicationData::SaveProject(const wxString &filename)
 {
   TiXmlDocument *doc = m_project->Serialize();
   doc->SaveFile(filename.mb_str());
+  m_projectFile = _STDSTR(filename);
   delete doc;
   
   DataObservable::NotifyProjectSaved();
@@ -684,6 +685,7 @@ bool ApplicationData::LoadProject(const wxString &file)
       m_selObj = m_project;
       result = true;
       m_cmdProc.Reset();
+      m_projectFile = _STDSTR(file);
       DataObservable::NotifyProjectLoaded();
     }
   }
@@ -810,16 +812,7 @@ void ApplicationData::CheckProjectTree(PObjectBase obj)
 
 string ApplicationData::GetProjectPath()
 {
-  string result;
-  
-  if (m_project)
-  {
-    PProperty prop = m_project->GetProperty("path");
-    if (prop)
-      result = prop->GetValue();    
-  }
-  
-  return result;
+  return _STDSTR(::wxPathOnly(_WXSTR(m_projectFile)));
 }
 
 //////////////////////////////////////////////////////////////////////////////

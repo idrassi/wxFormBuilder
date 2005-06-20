@@ -70,6 +70,8 @@ class ObjectInspector : public DataObserver, public wxPanel
   void Create(bool force = false);
   
   void OnPropertyGridChange(wxPropertyGridEvent& event);
+  
+  wxString MakeRelativePath(const wxString &file);
  protected:
    
  public:

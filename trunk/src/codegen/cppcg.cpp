@@ -677,7 +677,8 @@ void CppCodeGenerator::FindXpmProperties(PObjectBase obj, set<string> &set)
     PProperty property = obj->GetProperty(i);
     if (property->GetType() == PT_XPM_BITMAP)
     {
-      string inc = "#include \"" + ConvertCppString(property->GetValue()) + "\"";
+      string path = ConvertToRelativePath(property->GetValue(),m_path);
+      string inc = "#include \"" + ConvertCppString(path) + "\"";
       set.insert(inc);
     }
   }
@@ -690,7 +691,7 @@ void CppCodeGenerator::FindXpmProperties(PObjectBase obj, set<string> &set)
   }
 }
 
-bool CppCodeGenerator::SelectRelativePath (string path)
+bool CppCodeGenerator::SetBasePath (string path)
 {
   bool result = wxFileName::DirExists(_WXSTR(path));
   m_path = (result ? path : "");
@@ -698,10 +699,16 @@ bool CppCodeGenerator::SelectRelativePath (string path)
   return result;
 }
 
-string CppCodeGenerator::ConvertToRelativePath(string path, string referencePath)
+string CppCodeGenerator::ConvertToRelativePath(string path, string basePath)
 {
-  // no se usa
-  return path;
+  string auxPath = path;
+  if (basePath != "")
+  {
+    wxFileName filename(_WXSTR(auxPath));
+    if (filename.MakeRelativeTo(_WXSTR(basePath)))
+      auxPath = _STDSTR(filename.GetFullPath());
+  }
+  return auxPath;
 }
 
 #define ADD_PREDEFINED_MACRO(x) m_predMacros.insert(#x)

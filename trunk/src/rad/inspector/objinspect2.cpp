@@ -503,8 +503,10 @@ void ObjectInspector::OnPropertyGridChange(wxPropertyGridEvent& event)
                 
             // TODO: Usar ruta relativa al directorio de salida en el caso
             //       de que la imagen se encuentre en un subdirectorio de este.
-            // case PT_BITMAP:
-            // case PT_XPM_BITMAP:
+             case PT_BITMAP:
+             case PT_XPM_BITMAP:
+               GetData()->ModifyProperty(prop, MakeRelativePath(event.GetPropertyValueAsString()));
+               break;
             
 
             default:
@@ -593,4 +595,14 @@ void ObjectInspector::PropertyModified(PProperty prop)
         pgProp->SetValueFromString(prop->GetValueAsString(), 0);
   }
   m_pg->Refresh();
+}
+
+wxString ObjectInspector::MakeRelativePath(const wxString &file)
+{
+  //wxFileName filename(file);
+  //if (filename.MakeRelativeTo(_WXSTR(GetData()->GetProjectPath())))
+//    return filename.GetFullPath();
+  
+  return file;
+  
 }
