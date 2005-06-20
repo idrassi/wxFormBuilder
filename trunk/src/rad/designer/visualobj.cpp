@@ -124,6 +124,8 @@ void VisualWindow::SetupWindow()
   PProperty pfg_colour  = obj->GetProperty("fg");
   PProperty pbg_colour  = obj->GetProperty("bg");
   PProperty penabled = obj->GetProperty("enabled");
+  PProperty phidden  = obj->GetProperty("hidden");
+  PProperty ptooltip = obj->GetProperty("tooltip");
     
   wxPoint pos;
   wxSize size;
@@ -162,6 +164,12 @@ void VisualWindow::SetupWindow()
       
     if (penabled)
       GetWindow()->Enable(penabled->GetValueAsInteger());
+      
+    if (phidden)
+      GetWindow()->Show(!phidden->GetValueAsInteger());
+      
+    if (ptooltip)
+      GetWindow()->SetToolTip(ptooltip->GetValueAsString());
   }
 }
 

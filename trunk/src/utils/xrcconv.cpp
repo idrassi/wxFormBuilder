@@ -206,6 +206,9 @@ void ObjectToXrcFilter::AddWindowProperties()
   
   if (!m_obj->IsNull(_("font")))
     AddProperty(_("font"), _("font"), XRC_TYPE_FONT);  
+    
+  if (!m_obj->IsNull(_("tooltip")))
+    AddProperty(_("tooltip"), _T("tooltip"), XRC_TYPE_TEXT);
 };
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -22,6 +22,8 @@
       <option name="wxHSCROLL" />
       <option name="wxCLIP_CHILDREN" /></property>
     <property name="enabled" type="bool">1</property>
+    <property name="hidden" type="bool">0</property>
+    <property name="tooltip" type="wxString" />
     <codegen language="C++">
       <template name="settings">
         #ifnotnull $font
@@ -35,6 +37,12 @@
         
         #ifequal $enabled "0"
         @{ $name->Enable($enabled); #nl @}
+        
+        #ifequal $hidden "1"
+        @{ $name->Hide(); #nl @}
+        
+        #ifnotnull $tooltip
+        @{ $name->SetToolTip($tooltip); #nl @}
       </template>
     </codegen>
   </objectinfo>

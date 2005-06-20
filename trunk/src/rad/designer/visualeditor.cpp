@@ -328,6 +328,7 @@ void GridPanel::HighlightSelection(wxDC& dc)
   if (m_selItem)
   {
     wxPoint point;
+    bool shown;
 
     // Tenemos un problema (de momento) con los wxClassInfo's de los
     // componentes que no forman parte de wxWidgets, debido a que el componente
@@ -340,22 +341,27 @@ void GridPanel::HighlightSelection(wxDC& dc)
     {
         point = ((wxWindow*)m_selItem)->GetPosition();
         size = ((wxWindow*)m_selItem)->GetSize();
+        shown = ((wxWindow*)m_selItem)->IsShown();
     }
     else if (m_selItem->IsKindOf(CLASSINFO(wxSizer)))
     {
         point = ((wxSizer*)m_selItem)->GetPosition();
         size = ((wxSizer*)m_selItem)->GetSize();
+        shown = true;
     }
     else
     {
         Debug::Print("Unknown class: %s", m_selItem->GetClassInfo()->GetClassName());
         return;
     }
-        
-    wxPen redPen(*wxRED, 1, wxSOLID);
-    dc.SetPen(redPen);
-    dc.SetBrush(*wxTRANSPARENT_BRUSH);
-    DrawRectangle(dc, point, size, object);
+    
+    if (shown)
+    {
+      wxPen redPen(*wxRED, 1, wxSOLID);
+      dc.SetPen(redPen);
+      dc.SetBrush(*wxTRANSPARENT_BRUSH);
+      DrawRectangle(dc, point, size, object);
+    }
   }
 }
 
