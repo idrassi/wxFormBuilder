@@ -56,6 +56,13 @@ class CppCodeGenerator : public CodeGenerator
   PCodeWriter m_source;
   
   string m_path;
+  
+  /**
+   * Las macros predefinidas no generarán defines.
+   */
+  set<string> m_predMacros;
+  
+  void SetupPredefinedMacros();
 
   /**
    * Dado un objeto y el nombre de una plantilla, obtiene el código.
@@ -141,6 +148,8 @@ class CppCodeGenerator : public CodeGenerator
    * y genera el nombre del identificador de "C/C++" asociado.
    */
   static string ConvertXpmName(string text);
+  
+  CppCodeGenerator();
     
   /**
    * Configura el escritor de código para el fichero de cabecera.

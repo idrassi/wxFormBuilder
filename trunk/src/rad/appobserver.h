@@ -96,6 +96,8 @@ class DataObservable
   
   virtual bool CanUndo() = 0;
   virtual bool CanRedo() = 0;
+  
+  virtual string GetProjectPath() = 0;
 };
 
 /**

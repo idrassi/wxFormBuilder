@@ -26,7 +26,9 @@
 #include "bitmaps.h"
 #include "utils/debug.h"
 #include "rad/title.h"
-#include "icons/play.xpm"
+//#include "icons/play.xpm"
+
+#define MAX_TOOLS 28
 
 #define ID_PALETTE_BUTTON 999
 #define ID_ABOUT 100
@@ -49,7 +51,6 @@ void wxFbPalette::Create()
   
   m_notebook = new wxNotebook(this,-1);
 
-//  unsigned int pkg_count = ApplicationDocument::GetInstance()->GetPackageCount();
   unsigned int pkg_count = GetData()->GetPackageCount();
   
   Debug::Print("[Palette] Pages %d",pkg_count);
@@ -60,31 +61,35 @@ void wxFbPalette::Create()
     string pkg_name = pkg->GetPackageName();
 
     wxPanel *panel = new wxPanel(m_notebook,-1);
-
-    wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
-    Debug::Print("[Palette] Page %s Items %d",pkg_name.c_str(), pkg->GetObjectCount());
-    wxToolBar *toolbar = new wxToolBar(panel, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
-    toolbar->SetToolBitmapSize(wxSize(22, 22));
     
-    unsigned int j;
-    for (j=0;j<pkg->GetObjectCount();j++)
+    unsigned int j = 0;
+    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);    
+    while (j < pkg->GetObjectCount())
     {
-      wxString widget(pkg->GetObjectInfo(j)->GetClassName().c_str(),wxConvUTF8);
-      wxString icon_file(pkg->GetObjectInfo(j)->GetIconFile().c_str(),wxConvUTF8);
+      Debug::Print("[Palette] Page %s Items %d",pkg_name.c_str(), pkg->GetObjectCount());
+      wxToolBar *toolbar = new wxToolBar(panel, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
+      toolbar->SetToolBitmapSize(wxSize(22, 22));
+    
+      unsigned int k;
+      for (k=0; k < MAX_TOOLS && j < pkg->GetObjectCount();j++,k++)
+      {
+        wxString widget(pkg->GetObjectInfo(j)->GetClassName().c_str(),wxConvUTF8);
+        wxString icon_file(pkg->GetObjectInfo(j)->GetIconFile().c_str(),wxConvUTF8);
 
-      wxBitmap icon;
-      icon.LoadFile(icon_file,wxBITMAP_TYPE_XPM);
+        wxBitmap icon;
+        icon.LoadFile(icon_file,wxBITMAP_TYPE_XPM);
       
-      //wxBitmapButton *button = new wxBitmapButton(panel,-1,icon,wxDefaultPosition,wxSize(32,32));
-      //button->SetToolTip(widget);
-      toolbar->AddTool(nextId++, widget, icon, widget);
+        //wxBitmapButton *button = new wxBitmapButton(panel,-1,icon,wxDefaultPosition,wxSize(32,32));
+        //button->SetToolTip(widget);
+        toolbar->AddTool(nextId++, widget, icon, widget);
 
-      //button->PushEventHandler(new PaletteButtonEventHandler(widget,GetData()));
-      //sizer->Add(button,0, wxALL, 2);
+        //button->PushEventHandler(new PaletteButtonEventHandler(widget,GetData()));
+        //sizer->Add(button,0, wxALL, 2);
+      }
+      toolbar->Realize();
+      m_tv.push_back(toolbar);
+      sizer->Add(toolbar, 0, wxALL | wxALIGN_CENTER_VERTICAL, 2);
     }
-    toolbar->Realize();
-    m_tv.push_back(toolbar);
-    sizer->Add(toolbar, 0, wxALL | wxALIGN_CENTER_VERTICAL, 2);
     panel->SetAutoLayout(true);
     panel->SetSizer(sizer);
     sizer->Fit(panel);
@@ -117,7 +122,7 @@ void wxFbPalette::OnButtonClick(wxCommandEvent &event)
   }
 }  
 
-
+/*
 #define ID_FILE_OPEN 1000
 #define ID_FILE_SAVE 1001
 
@@ -142,7 +147,7 @@ ToolPanel::ToolPanel(wxWindow *parent, int id)
   button = new wxBitmapButton(this,-1,play_xpm,
     wxDefaultPosition,wxSize(24,24));  
   sizer->Add(button,0,0,0);
-
+*/
 
   /*
   for (int i=0;i<6;i++)
@@ -152,7 +157,7 @@ ToolPanel::ToolPanel(wxWindow *parent, int id)
     //sizer->Add(button,0,wxALL,2);
     sizer->Add(button,0,0,0);
   } */ 
-  SetSizer(sizer);
+ /* SetSizer(sizer);
   sizer->SetSizeHints(this);
 
 }  
@@ -161,8 +166,8 @@ void ToolPanel::OnSaveFile(wxCommandEvent &event)
 {
 //  GetDocument()->SaveDocument(wxT("c:\\pepe.xml"));
 }  
-
-
+*/
+/*
 PaletteButtonEventHandler::PaletteButtonEventHandler (wxString name,DataObservable *data)
 {
   m_name = name;
@@ -178,3 +183,4 @@ void PaletteButtonEventHandler::OnButtonClick(wxCommandEvent &event)
   m_data->CreateObject(m_name);
 }  
 
+*/

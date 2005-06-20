@@ -63,7 +63,7 @@ class PaletteButton : public wxBitmapButton
 };
 
 */
-
+/*
 class ToolPanel : public DataObserver, public wxPanel
 {
  protected:
@@ -73,9 +73,9 @@ class ToolPanel : public DataObserver, public wxPanel
    ToolPanel(wxWindow *parent, int id);
    void OnSaveFile(wxCommandEvent &event);
 
-};  
+};  */
 
-
+/*
 class PaletteButtonEventHandler : public wxEvtHandler
 {
  private:
@@ -87,5 +87,5 @@ class PaletteButtonEventHandler : public wxEvtHandler
   PaletteButtonEventHandler(wxString name, DataObservable *data);
   void OnButtonClick(wxCommandEvent &event);
 };
-
+*/
 #endif //__PALETTE__

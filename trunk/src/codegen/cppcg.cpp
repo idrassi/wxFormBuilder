@@ -169,6 +169,11 @@ string CppTemplateParser::ValueToCode(PropertyType type, string value)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+CppCodeGenerator::CppCodeGenerator()
+{
+  SetupPredefinedMacros();
+}
+
 string CppCodeGenerator::ConvertCppString(string text)
 {
   string result;
@@ -569,7 +574,12 @@ void CppCodeGenerator::FindMacros(PObjectBase obj, set<string> &macro_set)
   {
     PProperty prop = obj->GetProperty(i);
     if (prop->GetType() == PT_MACRO)
-      macro_set.insert(prop->GetValue());
+    {
+      string value = prop->GetValue();
+      set<string>::iterator it = m_predMacros.find(value);
+      if (it == m_predMacros.end())
+        macro_set.insert(prop->GetValue());
+    }
   }
   
   for (i=0; i<obj->GetChildCount(); i++)
@@ -688,8 +698,16 @@ bool CppCodeGenerator::SelectRelativePath (string path)
   return result;
 }
 
-string ConvertToRelativePath(string path, string referencePath)
+string CppCodeGenerator::ConvertToRelativePath(string path, string referencePath)
 {
   // no se usa
   return path;
+}
+
+#define ADD_PREDEFINED_MACRO(x) m_predMacros.insert(#x)
+void CppCodeGenerator::SetupPredefinedMacros()
+{
+  ADD_PREDEFINED_MACRO(wxID_OK);
+  ADD_PREDEFINED_MACRO(wxID_CANCEL);
+  ///...
 }

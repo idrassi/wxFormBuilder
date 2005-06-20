@@ -808,4 +808,18 @@ void ApplicationData::CheckProjectTree(PObjectBase obj)
   }
 }
 
+string ApplicationData::GetProjectPath()
+{
+  string result;
+  
+  if (m_project)
+  {
+    PProperty prop = m_project->GetProperty("path");
+    if (prop)
+      result = prop->GetValue();    
+  }
+  
+  return result;
+}
+
 //////////////////////////////////////////////////////////////////////////////

@@ -49,7 +49,7 @@ class MainFrame : public DataObserver, public wxFrame
   wxFbPalette *m_palette;
   ObjectTree *m_objTree;
   ObjectInspector *m_objInsp;
-  ToolPanel *m_toolPanel;
+  //ToolPanel *m_toolPanel;
   VisualEditor *m_visualEdit;
   CppPanel *m_cpp;
   XrcPanel *m_xrc;

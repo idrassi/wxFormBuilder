@@ -500,6 +500,13 @@ void ObjectInspector::OnPropertyGridChange(wxPropertyGridEvent& event)
                   GetData()->ModifyProperty(prop, TypeConv::ArrayStringToString(arraystr));
                 }
                 break;
+                
+            // TODO: Usar ruta relativa al directorio de salida en el caso
+            //       de que la imagen se encuentre en un subdirectorio de este.
+            // case PT_BITMAP:
+            // case PT_XPM_BITMAP:
+            
+
             default:
                 GetData()->ModifyProperty(prop, event.GetPropertyValueAsString());
         }

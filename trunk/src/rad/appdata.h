@@ -35,11 +35,13 @@ class ApplicationData : public DataObservable
   
   bool m_changeFlag;        // flag de proyecto modificado
   PObjectDatabase m_objDb;  // Base de datos de objetos  
-  PObjectBase m_project; // Proyecto
+  PObjectBase m_project;    // Proyecto
   PObjectBase m_selObj;     // Objeto seleccionado
 
   PObjectBase m_clipboard;
   bool m_copyOnPaste; // flag que indica si hay que copiar el objeto al pegar
+  
+  // Procesador de comandos Undo/Redo
   CommandProcessor m_cmdProc;
   
   
@@ -134,6 +136,8 @@ class ApplicationData : public DataObservable
   // Servicios específicos, no definidos en DataObservable
   void        SetClipboardObject(PObjectBase obj) { m_clipboard = obj; }
   PObjectBase GetClipboardObject()                { return m_clipboard; }
+  
+  string GetProjectPath();
 };
 
 
