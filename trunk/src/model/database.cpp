@@ -292,13 +292,14 @@ PObjectBase ObjectDatabase::CreateObject(string classname, PObjectBase parent)
 {
   PObjectBase object;
   PObjectInfo objInfo = GetObjectInfo(classname);
-  PObjectType objType = objInfo->GetObjectType();
-   
+  
   if (!objInfo)
   {
-    assert(false);
+    wxLogError(_("Object not found (") + _WXSTR(classname) + _(")"));
     return PObjectBase();
   }
+  
+  PObjectType objType = objInfo->GetObjectType();
 
   if (parent)
   {
