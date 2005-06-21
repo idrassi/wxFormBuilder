@@ -1,0 +1,23 @@
+<codegen language="C++">
+
+  <templates class="Frame">
+    <template name="base">public wxFrame</template>
+    <template name="cons_decl">$name(wxWindow *parent, int id = -1, wxString title = $title);</template>
+    <template name="cons_def">$name::$name(wxWindow *parent, int id, wxString title) : wxFrame(parent, id, title)</template>
+  </templates>
+  
+  <templates class="Panel">
+    <template name="base">public wxPanel</template>
+    <template name="cons_decl">$name(wxWindow *parent, int id = -1);</template>
+    <template name="cons_def">$name::$name(wxWindow *parent, int id) : wxPanel(parent, id)</template>
+  </templates>
+  
+  <templates class="Dialog">
+    <template name="base">public wxDialog</template>
+    <template name="cons_decl">$name(wxWindow *parent, int id = -1, wxString title = $title);</template>
+    <template name="cons_def">$name::$name(wxWindow *parent, int id, wxString title)
+      : wxDialog(parent, id, title, wxDefaultPosition, $size)</template>
+  </templates>
+
+</codegen>
+

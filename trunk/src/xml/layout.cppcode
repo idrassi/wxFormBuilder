@@ -1,0 +1,42 @@
+<codegen language="C++">
+  
+  <templates class="wxBoxSizer">
+    <template name="declaration">wxBoxSizer *$name;</template>
+    <template name="construction">$name = new wxBoxSizer($orient);</template>
+  </templates>
+  
+  <templates class="wxStaticBoxSizer">
+    <template name="declaration">wxStaticBoxSizer *$name;</template>
+    <template name="construction">
+      $name = new wxStaticBoxSizer(new wxStaticBox(#wxparent $name, -1, $label), $orient);
+    </template>
+  </templates>
+  
+  <templates class="wxGridSizer">
+    <template name="declaration">wxGridSizer *$name;</template>
+    <template name="construction">$name = new wxGridSizer($rows, $cols, $vgap, $hgap);</template>
+  </templates>
+  
+  <templates class="wxFlexGridSizer">
+    <template name="declaration">wxFlexGridSizer *$name;</template>
+    <template name="construction">$name = new wxFlexGridSizer($rows, $cols, $vgap, $hgap);
+      #ifnotnull $growablecols
+      @{
+        #foreach $growablecols
+        @{ $name->AddGrowableCol(#pred); @}
+      @}
+      
+      #ifnotnull $growablerows
+      @{
+        #foreach $growablerows
+        @{ $name->AddGrowableRow(#pred); @}
+      @}
+    </template>
+  </templates>
+  
+  <templates class="spacer">
+    <template name="spacer_add">#parent $name->Add($width, $height, $option, $flag, $border);</template>
+  </templates>
+  
+</codegen>
+

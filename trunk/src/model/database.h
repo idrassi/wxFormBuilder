@@ -112,6 +112,12 @@ class ObjectDatabase
    * Inicializa el dicctionario de tipos de propiedades.
    */
   void InitPropertyTypes();
+  
+  /**
+   * Carga las plantillas de generación de código de un fichero
+   * xml de código dado
+   */
+  void LoadCodeGen(string file);
     
   /**
    * Carga los objetos de un paquete con todas sus propiedades salvo

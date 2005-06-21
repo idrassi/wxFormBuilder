@@ -28,6 +28,7 @@
 #include "utils/stringutils.h"
 #include "utils/typeconv.h"
 #include "utils/debug.h"
+#include <wx/filename.h>
 
 //#define DEBUG_PRINT(x) cout << x
 
@@ -518,6 +519,7 @@ bool ObjectDatabase::LoadFile(string file)
   {
     // Cargamos el paquete por defecto
     LoadPackage("default.xml");
+    LoadCodeGen("default.cppcode");
     
     TiXmlElement* root = doc.FirstChildElement("packages");
     if (root)
@@ -529,9 +531,15 @@ bool ObjectDatabase::LoadFile(string file)
       while (elem)
       {
         string file = elem->Attribute("file");
+        wxFileName fn(_WXSTR(file));
+        fn.SetExt(_T("cppcode"));
+        
         PObjectPackage package = LoadPackage(file);
         if (package)
+        {
           m_pkgs.push_back(package);
+          LoadCodeGen(_STDSTR(fn.GetFullName()));
+        }
             
         elem = elem->NextSiblingElement(PACKAGE_TAG); 
       }
@@ -614,6 +622,48 @@ bool ObjectDatabase::HasCppProperties(string type)
            type == "statusbar");
 }
 
+void ObjectDatabase::LoadCodeGen(string file)
+{
+  TiXmlDocument doc(m_xmlPath + '/' + file);
+  if (doc.LoadFile())
+  {
+    // leemos la descripcion de generacion de código
+    TiXmlElement* elem_codegen = doc.FirstChildElement("codegen");
+    if (elem_codegen)
+    {
+      string language = elem_codegen->Attribute("language");
+      
+      // leemos cada plantilla de código
+      TiXmlElement* elem_templates = elem_codegen->FirstChildElement("templates");
+      while (elem_templates)
+      {
+        string class_name = elem_templates->Attribute("class");
+        TiXmlElement *elem_template = elem_templates->FirstChildElement("template");
+        PCodeInfo code_info(new CodeInfo());
+        
+        while (elem_template)
+        {
+          string template_name = elem_template->Attribute("name");
+          string template_code;
+          
+          TiXmlText * elem_code = elem_template->LastChild()->ToText();
+          if (elem_code)
+            template_code = elem_code->Value();          
+            
+          code_info->AddTemplate(template_name,template_code);
+          elem_template = elem_template->NextSiblingElement("template");
+        }
+        
+        PObjectInfo obj_info = GetObjectInfo(class_name);
+        if (obj_info)
+          obj_info->AddCodeInfo(language, code_info);
+          
+        elem_templates = elem_templates->NextSiblingElement("templates");
+      }
+
+    }
+  }
+}
 
 PObjectPackage ObjectDatabase::LoadPackage(string file)
 {
@@ -704,6 +754,7 @@ PObjectPackage ObjectDatabase::LoadPackage(string file)
           
           elem_prop = elem_prop->NextSiblingElement(PROPERTY_TAG);
         }
+        /*
         // leemos la descripcion de generacion de código
         TiXmlElement* elem_codegen = elem_obj->FirstChildElement(CODEGEN_TAG);
         while (elem_codegen)
@@ -729,7 +780,7 @@ PObjectPackage ObjectDatabase::LoadPackage(string file)
           obj_info->AddCodeInfo(language,code_info);
           elem_codegen = elem_codegen->NextSiblingElement(CODEGEN_TAG);
         };
-
+        */
         
         // añadimos el descriptor de objeto al registro
         m_objs.insert(ObjectInfoMap::value_type(class_name,obj_info));
