@@ -1,13 +1,10 @@
 <package name="layout" lib="liblayout" desc="wxWidgets sizer layouts">
+
   <objectinfo class="wxBoxSizer" icon="sizer.xpm" type="sizer">
     <property name="name" type="text" hidden="1">bSizer</property>
     <property name="orient" type="option">
       <option name="wxVERTICAL" />
       <option name="wxHORIZONTAL" />wxVERTICAL</property>
-    <codegen language="C++">
-      <template name="declaration">wxBoxSizer *$name;</template>
-      <template name="construction">$name = new wxBoxSizer($orient);</template>
-    </codegen>
   </objectinfo>
   
   <objectinfo class="wxStaticBoxSizer" icon="staticbox_sizer.xpm" type="sizer">
@@ -16,12 +13,6 @@
       <option name="wxVERTICAL" />
       <option name="wxHORIZONTAL" />wxVERTICAL</property>
     <property name="label" type="wxString">label</property>
-    <codegen language="C++">
-      <template name="declaration">wxStaticBoxSizer *$name;</template>
-      <template name="construction">
-        $name = new wxStaticBoxSizer(new wxStaticBox(#wxparent $name, -1, $label), $orient);
-      </template>
-    </codegen>
   </objectinfo>
   
   <objectinfo class="wxGridSizer" icon="grid_sizer.xpm" type="sizer">
@@ -30,13 +21,9 @@
     <property name="cols" type="text">2</property>
     <property name="vgap" type="text">0</property>
     <property name="hgap" type="text">0</property>
-    <codegen language="C++">
-      <template name="declaration">wxGridSizer *$name;</template>
-      <template name="construction">$name = new wxGridSizer($rows,$cols,$vgap,$hgap);</template>
-    </codegen>
   </objectinfo>
   
-<objectinfo class="wxFlexGridSizer" icon="flex_grid_sizer.xpm" type="sizer">
+  <objectinfo class="wxFlexGridSizer" icon="flex_grid_sizer.xpm" type="sizer">
     <property name="name" type="text" hidden="1">fgSizer</property>
     <property name="rows" type="text">2</property>
     <property name="cols" type="text">2</property>
@@ -44,23 +31,8 @@
     <property name="hgap" type="text">0</property>
     <property name="growablerows" type="intlist" />
     <property name="growablecols" type="intlist" />
-    <codegen language="C++">
-      <template name="declaration">wxFlexGridSizer *$name;</template>
-      <template name="construction">$name = new wxFlexGridSizer($rows,$cols,$vgap,$hgap);
-        #ifnotnull $growablecols
-        @{
-          #foreach $growablecols
-          @{ $name->AddGrowableCol(#pred); @}
-        @}
-        
-        #ifnotnull $growablerows
-        @{
-          #foreach $growablerows
-          @{ $name->AddGrowableRow(#pred); @}
-        @}
-      </template>
-    </codegen>
   </objectinfo>
+  
   <objectinfo class="spacer" icon="spacer.xpm" type="spacer">
     <property name="border" type="text">5</property>
     <property name="flag" type="bitlist">
@@ -80,8 +52,6 @@
     <property name="option" type="text">0</property>
     <property name="width" type="text">10</property>
     <property name="height" type="text">10</property>
-    <codegen language="C++">
-      <template name="spacer_add">#parent $name->Add($width, $height, $option, $flag, $border);</template>
-    </codegen>
   </objectinfo>
+  
 </package>

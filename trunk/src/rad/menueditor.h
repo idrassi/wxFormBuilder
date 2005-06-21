@@ -114,6 +114,7 @@ class MenuEditor : public wxDialog
     /** Eventos de la interfaz de usuario */
     void OnAddMenuItem(wxCommandEvent& e);
     void OnAddSeparator(wxCommandEvent& e);
+    void OnModifyMenuItem(wxCommandEvent& e);
     void OnRemoveMenuItem(wxCommandEvent& e);
     void OnMenuDown(wxCommandEvent& e);
     void OnMenuLeft(wxCommandEvent& e);

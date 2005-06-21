@@ -106,6 +106,7 @@ class ItemPopupMenu : public wxMenu
   DECLARE_EVENT_TABLE()
      
  public:
+  void OnUpdateEvent(wxUpdateUIEvent& e);
   ItemPopupMenu(DataObservable *data, PObjectBase obj);
   void OnMenuEvent (wxCommandEvent & event);
 };

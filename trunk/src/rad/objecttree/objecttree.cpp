@@ -100,6 +100,7 @@ void ObjectTree::OnRightClick(wxTreeEvent &event)
     assert(obj);
     wxMenu * menu = new ItemPopupMenu(GetData(),obj);
     wxPoint pos = event.GetPoint();
+    menu->UpdateUI(menu);
     PopupMenu(menu,pos.x, pos.y);
   }
 }
@@ -348,6 +349,7 @@ ObjectTreeItemData::ObjectTreeItemData(PObjectBase obj) : m_object(obj)
 
 BEGIN_EVENT_TABLE(ItemPopupMenu,wxMenu)
   EVT_MENU(-1, ItemPopupMenu::OnMenuEvent)
+  EVT_UPDATE_UI(-1, ItemPopupMenu::OnUpdateEvent)
 END_EVENT_TABLE()
 
 ItemPopupMenu::ItemPopupMenu(DataObservable *data, PObjectBase obj)
@@ -386,21 +388,21 @@ void ItemPopupMenu::OnMenuEvent (wxCommandEvent & event)
         if (obj && (obj->GetClassName() == "wxMenuBar" || obj->GetClassName() == "Frame"))
         {
           MenuEditor me(NULL);
+          if (obj->GetClassName() == "Frame")
+          {
+            bool found = false;
+            PObjectBase menubar;
+            for (unsigned int i = 0; i < obj->GetChildCount() && !found; i++)
+            {
+              menubar = obj->GetChild(i);  
+              found = menubar->GetClassName() == "wxMenuBar"; 
+            }
+            if (found) obj = menubar;
+          }
+            
           if (obj->GetClassName() == "wxMenuBar") me.Populate(obj);
           if (me.ShowModal() == wxID_OK)
-          {
-            if (obj->GetClassName() == "Frame")
-            {
-              bool found = false;
-              PObjectBase menubar;
-              for (unsigned int i = 0; i < obj->GetChildCount() && !found; i++)
-              {
-                menubar = obj->GetChild(0);  
-                found = menubar->GetClassName() == "wxMenuBar"; 
-              }
-              if (found) obj = menubar;
-            }
-            
+          { 
             if (obj->GetClassName() == "wxMenuBar")
             {
               PObjectBase menubar = me.GetMenubar(m_data->GetObjectDatabase());
@@ -423,6 +425,20 @@ void ItemPopupMenu::OnMenuEvent (wxCommandEvent & event)
       }
       break;
     default:
+      break;
+  }
+}
+
+void ItemPopupMenu::OnUpdateEvent(wxUpdateUIEvent& e)
+{
+  switch (e.GetId())
+  {
+    case MENU_EDIT_MENUS:
+      e.Enable(m_object && (m_object->GetClassName() == "wxMenuBar" 
+        || m_object->GetClassName() == "Frame"));
+      break;
+    case MENU_CUT: case MENU_MOVE_UP: case MENU_MOVE_DOWN:
+      e.Enable(m_object && m_object->GetObjectTypeName() != "project");
       break;
   }
 }

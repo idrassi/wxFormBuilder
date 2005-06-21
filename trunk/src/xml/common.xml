@@ -1,4 +1,5 @@
 <package name="common" lib="libcommon" desc="wxWidgets common controls">
+
   <objectinfo class="wxWindow" type="interface">
     <property name="name" type="text" hidden="1">window</property>
     <property name="id" type="macro" hidden="1">ID_DEFAULT</property>
@@ -24,28 +25,8 @@
     <property name="enabled" type="bool">1</property>
     <property name="hidden" type="bool">0</property>
     <property name="tooltip" type="wxString" />
-    <codegen language="C++">
-      <template name="settings">
-        #ifnotnull $font
-        @{ $name->SetFont($font); #nl @}
-        #ifnotnull $fg
-	
-        @{ $name->SetForegroundColour($fg); #nl @}
-
-	#ifnotnull $bg
-        @{ $name->SetBackgroundColour($bg); #nl @} 
-        
-        #ifequal $enabled "0"
-        @{ $name->Enable($enabled); #nl @}
-        
-        #ifequal $hidden "1"
-        @{ $name->Hide(); #nl @}
-        
-        #ifnotnull $tooltip
-        @{ $name->SetToolTip($tooltip); #nl @}
-      </template>
-    </codegen>
   </objectinfo>
+  
   <objectinfo class="wxButton" icon="button.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_button</property>
@@ -56,12 +37,8 @@
       <option name="wxBU_BOTTOM" />
       <option name="wxBU_EXACTFIT" />0</property>
     <property name="label" type="wxString">MyButton</property>
-    <codegen language="C++">
-      <template name="declaration">wxButton *$name;</template>
-      <template name="construction">$name = new wxButton(#wxparent $name,$id,$label,$pos,$size,$style);</template>
-      <template name="include">#include &lt;wx/button.h&gt;</template>
-    </codegen>
   </objectinfo>
+  
   <objectinfo class="wxPanel" icon="panel.xpm" type="container">
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_panel</property>
@@ -74,12 +51,8 @@
     <property name="pos" type="wxPoint" />
     <property name="size" type="wxSize" />
     <property name="id" type="macro" hidden="1">ID_DEFAULT</property>
-    <codegen language="C++">
-      <template name="declaration">wxPanel *$name;</template>
-      <template name="construction">$name = new wxPanel(#wxparent $name,$id,$pos,$size,$style);</template>
-      <template name="include">#include &lt;wx/panel.h&gt;</template>
-    </codegen>
   </objectinfo>
+  
   <objectinfo class="wxTextCtrl" icon="text_ctrl.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_textCtrl</property>
@@ -87,12 +60,9 @@
       <option name="wxTE_MULTILINE" />
       <option name="wxTE_READONLY" />
       <option name="wxTE_RICH" />0</property>
-    <property name="value" type="wxString" />
-    <codegen language="C++">
-      <template name="declaration">wxTextCtrl *$name;</template>
-      <template name="construction">$name = new wxTextCtrl(#wxparent $name,$id,$value,$pos,$size,$style);</template>
-    </codegen>  
+    <property name="value" type="wxString" /> 
   </objectinfo>
+  
   <objectinfo class="wxStaticText" icon="static_text.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_staticText</property>
@@ -102,20 +72,14 @@
       <option name="wxALIGN_CENTRE" />
       <option name="wxST_NO_AUTORESIZE" />0</property>
     <property name="label" type="wxString">MyLabel</property>
-    <codegen language="C++">
-      <template name="declaration">wxStaticText *$name;</template>
-      <template name="construction">$name = new wxStaticText(#wxparent $name,$id,$label,$pos,$size,$style);</template>
-    </codegen>
   </objectinfo>
+  
   <objectinfo class="wxCheckBox" icon="checkbox.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_checkBox</property>
     <property name="label" type="wxString">Check Me!</property>
-    <codegen language="C++">
-      <template name="declaration">wxCheckBox *$name;</template>
-      <template name="construction">$name = new wxCheckBox(#wxparent $name,$id,$label,$pos,$size,$style);</template>
-    </codegen>
   </objectinfo>  
+  
   <objectinfo class="wxComboBox" icon="combo_box.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_comboBox</property>
@@ -125,14 +89,6 @@
       <option name="wxCB_SIMPLE" />
       <option name="wxCB_DROPDOWN" />
       <option name="wxCB_READONLY" />0</property>
-    <codegen language="C++">
-      <template name="declaration">wxComboBox *$name;</template>
-      <template name="construction">
-        $name = new wxComboBox(#wxparent $name,$id,$value,$pos,$size,0,NULL,$style);
-	#foreach $choices
-	@{ $name->Append(#pred); @}
-      </template>
-    </codegen>
   </objectinfo>
   
   <objectinfo class="wxListBox" icon="list_box.xpm" type="widget">
@@ -147,14 +103,6 @@
       <option name="wxLB_ALWAYS_SB" />
       <option name="wxLB_NEEDED_SB" />
       <option name="wxLB_SORT" />0</property>
-    <codegen language="C++">
-      <template name="declaration">wxListBox *$name;</template>
-      <template name="construction">
-        $name = new wxListBox(#wxparent $name,$id,$pos,$size,0,NULL,$style);
-	#foreach $choices
-	@{ $name->Append(#pred); @}
-      </template>
-    </codegen>
   </objectinfo>
   
   <objectinfo class="wxRadioBox" icon="radio_box.xpm" type="widget">
@@ -167,16 +115,6 @@
       <option name="wxRA_SPECIFY_ROWS" />
       <option name="wxRA_SPECIFY_COLS" />
       <option name="wxRA_USE_CHECKBOX" />wxRA_SPECIFY_COLS</property>
-    <codegen language="C++">
-      <template name="declaration">wxRadioBox *$name;</template>
-      <template name="construction">
-        { #nl
-	  wxString __choices[] = { $choices }; #nl
-	  int __nchoices = sizeof(__choices)/sizeof(wxString); #nl
-          $name = new wxRadioBox(#wxparent $name, $id, $label, $pos,$size,__nchoices,__choices,$majorDimension, $style); #nl
-        } #nl
-      </template>
-    </codegen>
   </objectinfo>
   
   <objectinfo class="wxGrid" icon="grid.xpm" type="widget">
@@ -184,45 +122,28 @@
     <property name="name" type="text" hidden="1">m_grid</property>
     <property name="rows" type="text">5</property>
     <property name="cols" type="text">5</property>    
-    <codegen language="C++">
-      <template name="declaration">wxGrid *$name;</template>
-      <template name="construction">$name = new wxGrid(#wxparent $name,$id,$pos,$size,$style);</template>
-      <template name="settings">$name->CreateGrid($rows,$cols);</template>
-      <template name="include">#include &lt;wx/grid.h&gt;</template>
-    </codegen>
-  </objectinfo>  
+  </objectinfo> 
+   
   <objectinfo class="wxStaticBitmap" icon="static_bitmap.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_bitmap</property>
     <property name="bitmap" type="bitmap" />
-    <codegen language="C++">
-      <template name="declaration">wxStaticBitmap *$name;</template>
-      <template name="construction">$name = new wxStaticBitmap(#wxparent $name,$id,$bitmap,$pos,$size,$style);</template>
-      <template name="include">#include &lt;wx/statbmp.h&gt;</template>
-    </codegen>
   </objectinfo>
-<objectinfo class="wxXpmStaticBitmap" icon="xpm_static_bitmap.xpm" type="widget">
+  
+  <objectinfo class="wxXpmStaticBitmap" icon="xpm_static_bitmap.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_bitmap</property>
     <property name="bitmap" type="xpm_bitmap" />
-    <codegen language="C++">
-      <template name="declaration">wxStaticBitmap *$name;</template>
-      <template name="construction">$name = new wxStaticBitmap(#wxparent $name,$id,$bitmap,$pos,$size,$style);</template>
-      <template name="include">#include &lt;wx/statbmp.h&gt;</template>
-    </codegen>
-  </objectinfo>  
+  </objectinfo>
+    
   <objectinfo class="wxStaticLine" icon="static_line.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_staticline</property>
     <property name="style" type="bitlist">
       <option name="wxLI_HORIZONTAL" />
       <option name="wxLI_VERTICAL" />wxLI_HORIZONTAL</property>
-    <codegen language="C++">
-      <template name="declaration">wxStaticLine *$name;</template>
-      <template name="construction">$name = new wxStaticLine(#wxparent $name,$id,$pos,$size,$style);</template>
-      <template name="include">#include &lt;wx/statline.h&gt;</template>
-    </codegen>
-  </objectinfo>  
+  </objectinfo> 
+   
   <objectinfo class="wxNotebook" icon="notebook.xpm" type="notebook">
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_notebook</property>
@@ -235,43 +156,24 @@
       <option name="wxNB_MULTILINE" />
       <option name="wxNB_NOPAGETHEME" />
       <option name="wxNB_FLAT" /></property>
-    <codegen language="C++">
-      <template name="declaration">wxNotebook *$name;</template>
-      <template name="construction">$name = new wxNotebook(#wxparent $name,$id,$pos,$size,$style);</template>
-      <template name="include">#include &lt;wx/notebook.h&gt;</template>
-    </codegen>
   </objectinfo>
+  
   <objectinfo class="wxMenuBar" icon="menubar.xpm" type="menubar">
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_menubar</property>
     <property name="label" type="wxString">MyMenuBar</property>
-    <codegen language="C++">
-      <template name="declaration">wxMenuBar *$name;</template>
-      <template name="construction">$name = new wxMenuBar($style);</template>
-      <template name="include">#include &lt;wx/menu.h&gt;</template>
-      <template name="menubar_add">#wxparent $name->SetMenuBar($name);</template>
-    </codegen>
   </objectinfo>
+  
   <objectinfo class="wxMenu" icon="menu.xpm" type="menu">
     <property name="name" type="text" hidden="1">m_menu</property>
     <property name="label" type="wxString">MyMenu</property>
-    <codegen language="C++">
-      <template name="declaration">wxMenu *$name;</template>
-      <template name="construction">$name = new wxMenu();</template>
-      <template name="include">#include &lt;wx/menu.h&gt;</template>
-      <template name="menu_add">#parent $name->Append($name, $label);</template>
-    </codegen>
   </objectinfo>
+  
   <objectinfo class="submenu" icon="menu.xpm" type="submenu">
     <property name="name" type="text" hidden="1">m_menu</property>
     <property name="label" type="wxString">MyMenu</property>
-    <codegen language="C++">
-      <template name="declaration">wxMenu *$name;</template>
-      <template name="construction">$name = new wxMenu();</template>
-      <template name="include">#include &lt;wx/menu.h&gt;</template>
-      <template name="menu_add">#parent $name->Append(-1, $label, $name);</template>
-    </codegen>
   </objectinfo>
+  
   <objectinfo class="wxMenuItem" icon="menuitem.xpm" type="menuitem">
     <property name="name" type="text" hidden="1">menuItem</property>
     <property name="label" type="wxString">MyMenuItem</property>
@@ -285,39 +187,11 @@
       <option name="wxITEM_NORMAL" />
       <option name="wxITEM_CHECK" />
       <option name="wxITEM_RADIO" />wxITEM_NORMAL</property>
-    <codegen language="C++">
-      <template name="construction">wxMenuItem *$name = new wxMenuItem(#parent $name, $id, $label #ifnotnull $shortcut @{ + wxT('\t') + $shortcut @}, $help, $kind);</template>
-      <template name="settings">
-        #ifnotnull $bitmap
-        @{ $name->SetBitmap($bitmap); #nl @}
-              
-        #ifequal $enabled "0" 
-        @{$name->Enable($enabled); #nl @}
-        
-        #ifequal $kind "wxITEM_CHECK"
-        @{
-          #ifequal $checked "1"
-          @{ $name->Check($checked); #nl @}
-        @}
-        
-        #ifequal $kind "wxITEM_RADIO"
-        @{
-          #ifequal $checked "1"
-          @{ $name->Check($checked); #nl @}
-        @}
-      </template>
-      <template name="menuitem_add">#parent $name->Append($name);</template>	
-      <template name="include">#include &lt;wx/menu.h&gt;</template>
-    </codegen>
   </objectinfo>
+  
   <objectinfo class="separator" icon="menuitem.xpm" type="menuitem">
-    <codegen language="C++">
-      <template name="construction"></template>
-      <template name="settings"></template>
-      <template name="menuitem_add">#parent $name->AppendSeparator();</template>
-      <template name="include">#include &lt;wx/menu.h&gt;</template>
-    </codegen>
   </objectinfo>
+  
   <objectinfo class="wxListCtrl" icon="list_ctrl.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text">m_listCtrl</property>
@@ -337,22 +211,14 @@
       <option name="wxLC_SORT_DESCENDING" />
       <option name="wxLC_HRULES" />
       <option name="wxLC_VRULES" />wxLC_ICON</property>
-    <codegen language="C++">
-      <template name="declaration">wxListCtrl *$name;</template>
-      <template name="construction">$name = new wxListCtrl(#wxparent $name,$id,$pos,$size,$style);</template>
-      <template name="include">#include &lt;wx/listctrl.h&gt;</template>
-    </codegen>
   </objectinfo>
+  
   <objectinfo class="wxStatusBar" icon="statusbar.xpm" type="statusbar">
     <inherits class="wxWindow" />
     <property name="name" type="text">m_statusBar</property>
     <property name="fields" type="text">1</property>
     <property name="style" type="bitlist">
       <option name="wxST_SIZEGRIP" />wxST_SIZEGRIP</property>
-    <codegen language="C++">
-      <template name="declaration">wxStatusBar *$name;</template>
-      <template name="construction">$name = #wxparent $name->CreateStatusBar($fields, $style, $id);</template>
-    </codegen>
   </objectinfo>
   
 </package>
