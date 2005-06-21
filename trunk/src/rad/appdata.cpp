@@ -762,7 +762,7 @@ void ApplicationData::ToggleExpandLayout(PObjectBase obj)
   if (obj)
   {
     PObjectBase parent = obj->GetParent();
-    if (parent->GetObjectTypeName() == "sizeritem")
+    if (parent && parent->GetObjectTypeName() == "sizeritem")
     {
       PProperty propFlag = parent->GetProperty("flag");
       assert(propFlag);
@@ -785,7 +785,7 @@ void ApplicationData::ToggleStretchLayout(PObjectBase obj)
   if (obj)
   {
     PObjectBase parent = obj->GetParent();
-    if (parent->GetObjectTypeName() == "sizeritem")
+    if (parent && parent->GetObjectTypeName() == "sizeritem")
     {
       PProperty propOption = parent->GetProperty("option");
       assert(propOption);

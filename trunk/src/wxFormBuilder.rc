@@ -1,3 +1,4 @@
-//rcinclude "wx/msw/wx.rc"
+aaaa ICON "wxFormBuilder.ico"
 
-wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
+#include "wx/msw/wx.rc"
+
