@@ -17,7 +17,9 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// Written by José Antonio Hurtado - joseantonio.hurtado@hispalinux.es
+// Written by
+//   José Antonio Hurtado - joseantonio.hurtado@gmail.com
+//   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -287,12 +289,13 @@ class FlexGridSizerComponent : public ComponentBase
 ///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()
-  COMPONENT("spacer",SpacerComponent)
-  COMPONENT("sizeritem",SizerItemComponent)
-  COMPONENT("wxBoxSizer",BoxSizerComponent)
-  COMPONENT("wxStaticBoxSizer",StaticBoxSizerComponent)
-  COMPONENT("wxGridSizer",GridSizerComponent)
-  COMPONENT("wxFlexGridSizer",FlexGridSizerComponent)
+  ABSTRACT_COMPONENT("spacer",SpacerComponent)
+  ABSTRACT_COMPONENT("sizeritem",SizerItemComponent)
+  
+  SIZER_COMPONENT("wxBoxSizer",BoxSizerComponent)
+  SIZER_COMPONENT("wxStaticBoxSizer",StaticBoxSizerComponent)
+  SIZER_COMPONENT("wxGridSizer",GridSizerComponent)
+  SIZER_COMPONENT("wxFlexGridSizer",FlexGridSizerComponent)
 
   // wxBoxSizer
   MACRO(wxHORIZONTAL)

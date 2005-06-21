@@ -17,11 +17,11 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// Written by José Antonio Hurtado - joseantonio.hurtado@hispalinux.es
+// Written by
+//   José Antonio Hurtado - joseantonio.hurtado@gmail.com
+//   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-// Añadido código de creación del panel XRC (línea 173)
-// Juan Antonio Ortega (jortegalalmolda@gmail.com)
 
 #include "mainframe.h"
 #include "wx/splitter.h"

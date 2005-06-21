@@ -17,11 +17,11 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// Written by José Antonio Hurtado - joseantonio.hurtado@hispalinux.es
+// Written by
+//   José Antonio Hurtado - joseantonio.hurtado@gmail.com
+//   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-// Añadir IsShown() al hacer Freeze y Thaw en Create
-// Juan Antonio Ortega (jortegalalmolda@gmail.com)
 
 #include "visualeditor.h"
 
@@ -120,51 +120,62 @@ void VisualEditor::Create()
   PObjectBase menubar;
   wxWindow *statusbar = NULL;
   
-  Debug::Print("[VisualEditor::Update] Generating preview...");
-  PObjectBase root = GetData()->GetSelectedForm();
-  m_form = root;
+  m_form = GetData()->GetSelectedForm();
 
-  if (IsShown()) Freeze();
+  if (IsShown()) Freeze(); // congelamos para evitar el flickering
 
+  // borramos la información previa del editor
   m_back->SetSelectedItem(NULL);
   m_back->SetSelectedSizer(NULL);
   m_back->SetSelectedObject(PObjectBase());
-  
   m_back->DestroyChildren();
-  m_back->SetSizer(NULL);  /* ! */
+  m_back->SetSizer(NULL); // *!*
   
-  m_map.erase(m_map.begin(),m_map.end());
+  // limpiamos el registro de objetos del editor
+  m_map.clear(); //m_map.erase(m_map.begin(),m_map.end()); 
   
-  if (root)
+  if (m_form)
   { 
-    // lo primero que hacemos es establecer el tamaño
-    PProperty psize(root->GetProperty("size"));
+    
+    // --- [1] Configuramos el tamaño del form ---------------------------
+    PProperty psize(m_form->GetProperty("size"));
     if (psize)
     {
       wxSize wsize(TypeConv::StringToSize(_WXSTR(psize->GetValue())));
       if (wsize.GetHeight() > 0 && wsize.GetWidth() > 0)
         m_back->SetSize(wsize);
       else
+        // si el tamaño es el predeterminado, haremos un Fit() al final para
+        // que se ajuste según los componentes
         need_fit = true;
     }
     else
     {
-      m_back->SetSize(350,200);
+      //m_back->SetSize(350,200);
+      m_back->SetSize(wxDefaultSize);
+      need_fit = true;
     }
     
-    if (root->GetClassName() == "Frame")
+    // --- [2] Emulamos el color del form -------------------------------
+    if (m_form->GetClassName() == "Frame")
       m_back->SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
     else
       m_back->SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
-    
-    for (unsigned int i=0; i < root->GetChildCount(); i++)
+
+    // --- [3] Creamos los componentes del form -------------------------
+    for (unsigned int i=0; i < m_form->GetChildCount(); i++)
     {
-      PObjectBase child = root->GetChild(i);
-      if (child->GetObjectTypeName() == "menubar")
-        menubar = child;
-      else
-        Generate(child,m_back,NULL,PVisualObject()); 
+      PObjectBase child = m_form->GetChild(i);
       
+      if (child->GetObjectTypeName() == "menubar")
+        menubar = child; // guardamos el objeto del menú para crearlo después
+      else
+        // generamos recursivamente todo el arbol de objetos
+        Generate(child,m_back,NULL,PVisualObject());       
+
+  
+      // si se creó una barra de estado, guardamos el widget para configurar
+      // el "frame"
       if (child->GetClassName() == "wxStatusBar")
       {
         VisualObjectMap::iterator it = m_map.find(child);
@@ -177,11 +188,12 @@ void VisualEditor::Create()
     
     m_back->Layout();
       
-    if (menubar || statusbar) m_back->SetFrameWidgets(menubar, statusbar);
-    
+    if (menubar || statusbar)
+      m_back->SetFrameWidgets(menubar, statusbar);
   }
   else
   {
+    // no hay form que mostrar
     m_back->SetSize(10,10);
     m_back->SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
   }
@@ -432,7 +444,9 @@ void GridPanel::SetFrameWidgets(PObjectBase menubar, wxWindow *statusbar)
   else
     dummySizer->AddStretchSpacer(1);
     
-  if (statusbar) dummySizer->Add(statusbar, 0, wxEXPAND | wxALL, 0);
+  if (statusbar)
+    dummySizer->Add(statusbar, 0, wxEXPAND | wxALL, 0);
+
   
   SetSizer(dummySizer, false);
   Layout();

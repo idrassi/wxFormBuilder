@@ -17,12 +17,11 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// Written by José Antonio Hurtado - joseantonio.hurtado@hispalinux.es
+// Written by
+//   José Antonio Hurtado - joseantonio.hurtado@gmail.com
+//   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-// Panel para código XRC (basado en el panel de CPP)
-// Código de inicialización de wxStyledTextCtrl
-// Juan Antonio Ortega (jortegalalmolda@gmail.com)
 
 #include "xrcpanel.h"
 #include "rad/bitmaps.h"

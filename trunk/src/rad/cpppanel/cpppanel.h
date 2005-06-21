@@ -17,11 +17,11 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// Written by José Antonio Hurtado - joseantonio.hurtado@hispalinux.es
+// Written by
+//   José Antonio Hurtado - joseantonio.hurtado@gmail.com
+//   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-// Sustituir wxTextCtrl por wxStyledTextCtrl
-// Juan Antonio Ortega (jortegalalmolda@gmail.com)
 
 #ifndef __CPP_PANEL__
 #define __CPP_PANEL__

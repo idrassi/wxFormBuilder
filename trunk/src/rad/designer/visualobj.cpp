@@ -17,13 +17,11 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// Written by José Antonio Hurtado - joseantonio.hurtado@hispalinux.es
+// Written by
+//   José Antonio Hurtado - joseantonio.hurtado@gmail.com
+//   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-// Sustituir "proportion" por "option"
-//           "fg_colour" por "fg"
-//           "bg_colour" por "bg"
-// Juan Antonio Ortega (jortegalalmolda@gmail.com)
 
 #include "visualobj.h"
 #include "visualeditor.h"

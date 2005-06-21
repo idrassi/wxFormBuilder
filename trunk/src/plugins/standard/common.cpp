@@ -17,11 +17,11 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// Written by José Antonio Hurtado - joseantonio.hurtado@hispalinux.es
+// Written by
+//   José Antonio Hurtado - joseantonio.hurtado@gmail.com
+//   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-// Sustituir "label" por "bitmap" en wxStaticBitmap
-// Juan Antonio Ortega (jortegalalmolda@gmail.com)
 
 #include "plugins/component.h"
 #include "plugins/plugin.h"
@@ -703,31 +703,33 @@ class SeparatorComponent : public ComponentBase
 ///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()
-  COMPONENT("Frame",FrameFormComponent)
-  COMPONENT("Panel",PanelFormComponent)
-  COMPONENT("Dialog",DialogFormComponent)
+
+  // Los forms no son considerados como windows !
+  ABSTRACT_COMPONENT("Frame",FrameFormComponent)
+  ABSTRACT_COMPONENT("Panel",PanelFormComponent)
+  ABSTRACT_COMPONENT("Dialog",DialogFormComponent)
     
-  COMPONENT("notebookpage",NotebookPageComponent)
-  COMPONENT("wxButton",ButtonComponent)
-  COMPONENT("wxTextCtrl",TextCtrlComponent)
-  COMPONENT("wxStaticText",StaticTextComponent)
-  COMPONENT("wxPanel",PanelComponent)
-  COMPONENT("wxGrid",GridComponent)
-  COMPONENT("wxComboBox", ComboBoxComponent)
-  COMPONENT("wxListBox", ListBoxComponent)
-  COMPONENT("wxRadioBox", RadioBoxComponent)
-  COMPONENT("wxCheckBox", CheckBoxComponent)
-  COMPONENT("wxStaticBitmap", StaticBitmapComponent)
-  COMPONENT("wxXpmStaticBitmap", XpmStaticBitmapComponent)
-  COMPONENT("wxStaticLine", StaticLineComponent)
-  COMPONENT("wxNotebook", NotebookComponent)
-  COMPONENT("wxMenuBar", MenuBarComponent)
-  COMPONENT("wxMenu", MenuComponent)
-  COMPONENT("submenu", MenuComponent)
-  COMPONENT("wxMenuItem", MenuItemComponent)
-  COMPONENT("separator", SeparatorComponent)
-  COMPONENT("wxListCtrl", ListCtrlComponent)
-  COMPONENT("wxStatusBar", StatusBarComponent)
+  WINDOW_COMPONENT("notebookpage",NotebookPageComponent)
+  WINDOW_COMPONENT("wxButton",ButtonComponent)
+  WINDOW_COMPONENT("wxTextCtrl",TextCtrlComponent)
+  WINDOW_COMPONENT("wxStaticText",StaticTextComponent)
+  WINDOW_COMPONENT("wxPanel",PanelComponent)
+  WINDOW_COMPONENT("wxGrid",GridComponent)
+  WINDOW_COMPONENT("wxComboBox", ComboBoxComponent)
+  WINDOW_COMPONENT("wxListBox", ListBoxComponent)
+  WINDOW_COMPONENT("wxRadioBox", RadioBoxComponent)
+  WINDOW_COMPONENT("wxCheckBox", CheckBoxComponent)
+  WINDOW_COMPONENT("wxStaticBitmap", StaticBitmapComponent)
+  WINDOW_COMPONENT("wxXpmStaticBitmap", XpmStaticBitmapComponent)
+  WINDOW_COMPONENT("wxStaticLine", StaticLineComponent)
+  WINDOW_COMPONENT("wxNotebook", NotebookComponent)
+  WINDOW_COMPONENT("wxMenuBar", MenuBarComponent)
+  WINDOW_COMPONENT("wxMenu", MenuComponent)
+  WINDOW_COMPONENT("submenu", MenuComponent)
+  WINDOW_COMPONENT("wxMenuItem", MenuItemComponent)
+  WINDOW_COMPONENT("separator", SeparatorComponent)
+  WINDOW_COMPONENT("wxListCtrl", ListCtrlComponent)
+  WINDOW_COMPONENT("wxStatusBar", StatusBarComponent)
 
   // wxWindow style macros
   MACRO(wxSIMPLE_BORDER)
