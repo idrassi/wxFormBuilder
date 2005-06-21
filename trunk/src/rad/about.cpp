@@ -24,6 +24,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "about.h"
+#include <wx/html/htmlwin.h>
+#include <wx/mimetype.h>
+#include <wx/filename.h>
 
 #define ID_DEFAULT -1 // Default
 #define ID_OK 1000
@@ -32,8 +35,40 @@ BEGIN_EVENT_TABLE(AboutDialog,wxDialog)
   EVT_BUTTON(ID_OK,AboutDialog::OnButtonEvent)
 END_EVENT_TABLE()
 
-AboutDialog::AboutDialog(wxWindow *parent, int id) : wxDialog(parent,id,wxT("About..."),wxDefaultPosition,wxSize(308,248))
+class HtmlWindow : public wxHtmlWindow
 {
+  public:
+    HtmlWindow(wxWindow *parent) : wxHtmlWindow(parent, -1, wxDefaultPosition, wxDefaultSize, 
+      wxHW_SCROLLBAR_NEVER | wxHW_NO_SELECTION | wxRAISED_BORDER)
+    {
+    }
+    
+    void LaunchBrowser(const wxString& url)
+    {
+      wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(_T("html"));
+      if (!ft) {
+        wxLogError("Impossible to determine the file type for extension html.\n"
+                   "Please edit your MIME types.");
+        return;
+      }
+    
+      wxString cmd;
+      bool ok = ft->GetOpenCommand(&cmd, wxFileType::MessageParameters(url, _T("")));
+      delete ft;
+    
+      if (ok)
+          wxExecute(cmd, wxEXEC_ASYNC); 
+    }
+    
+    void OnLinkClicked(const wxHtmlLinkInfo& link)
+    {
+      LaunchBrowser(link.GetHref());
+    }
+};
+
+AboutDialog::AboutDialog(wxWindow *parent, int id) : wxDialog(parent,id,wxT("About..."),wxDefaultPosition,wxSize(485,370))//wxSize(308,248))
+{
+#if 0
   wxBoxSizer *sizer2;
   sizer2 = new wxBoxSizer(wxVERTICAL);
   m_staticText2 = new wxStaticText(this,ID_DEFAULT,wxT("wxFormBuilder"),wxDefaultPosition,wxDefaultSize,0);
@@ -65,6 +100,17 @@ AboutDialog::AboutDialog(wxWindow *parent, int id) : wxDialog(parent,id,wxT("Abo
   this->SetSizer(sizer2);
   this->SetAutoLayout(true);
   this->Layout();
+#endif
+  
+  wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
+  wxHtmlWindow *htmlWin = new HtmlWindow(this);
+  mainSizer->Add(htmlWin, 1, wxEXPAND | wxALL, 5);
+  mainSizer->Add(new wxButton(this, wxID_OK, _("OK")), 0, wxALIGN_CENTER | wxBOTTOM, 5);
+  
+  htmlWin->LoadFile(wxFileName(_T("resources/about.html")));
+  
+  SetSizer(mainSizer);
+  Layout();
 }
 
 void AboutDialog::OnButtonEvent (wxCommandEvent &event)
