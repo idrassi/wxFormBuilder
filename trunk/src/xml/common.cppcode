@@ -173,4 +173,14 @@
     <template name="construction">$name = #wxparent $name->CreateStatusBar($fields, $style, $id);</template>
   </templates>
   
+  <templates class="wxToolBar">
+    <template name="declaration">wxToolBar *$name;</template>
+    <template name="construction">$name = #wxparent $name->CreateToolBar($style, $id);</template>
+    <template name="after_addchild">$name->Realize();</template>
+  </templates>
+  
+  <templates class="tool">
+    <template name="construction">#wxparent $name->AddTool(-1, $label, $bitmap, $help);</template>
+  </templates>
+  
 </codegen>

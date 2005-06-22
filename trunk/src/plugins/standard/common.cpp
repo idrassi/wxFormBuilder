@@ -26,6 +26,7 @@
 #include "plugins/component.h"
 #include "plugins/plugin.h"
 #include "utils/xrcconv.h"
+#include "xpm/unknown.xpm"
 
 #include "wx/grid.h"
 #include "wx/statline.h"
@@ -708,8 +709,17 @@ class ToolBarComponent : public ComponentBase
     wxToolBar *tb = new wxToolBar((wxWindow*)parent, -1,
       obj->GetPropertyAsPoint(_("pos")),
       obj->GetPropertyAsSize(_("size")),
-      obj->GetPropertyAsInteger(_("style")) | wxTB_NOALIGN);
-
+      obj->GetPropertyAsInteger(_("style")) | wxTB_NOALIGN | wxTB_NODIVIDER | wxNO_BORDER);
+    
+    if (!obj->IsNull("bitmapsize"))
+      tb->SetToolBitmapSize(obj->GetPropertyAsSize(_("bitmapsize")));
+    if (!obj->IsNull("marings"))
+      tb->SetMargins(obj->GetPropertyAsSize(_("margins")));
+    if (!obj->IsNull("packing"))
+      tb->SetToolPacking(obj->GetPropertyAsInteger(_("packing")));
+    if (!obj->IsNull("separation"))
+      tb->SetToolSeparation(obj->GetPropertyAsInteger(_("separation")));
+      
     return tb;
   }
   
@@ -723,19 +733,23 @@ class ToolBarComponent : public ComponentBase
 
   TiXmlElement* ExportToXrc(IObject *obj)
   {
-    ObjectToXrcFilter xrc(obj, _("wxStatusBar"), obj->GetPropertyAsString(_("name")));
+    ObjectToXrcFilter xrc(obj, _("wxToolBar"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();    
-    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
-    xrc.AddProperty(_("fields"),_("fields"),XRC_TYPE_INTEGER);
+    xrc.AddProperty(_("bitmapsize"), _("bitmapsize"), XRC_TYPE_SIZE);
+    xrc.AddProperty(_("margins"), _("margins"), XRC_TYPE_SIZE);
+    xrc.AddProperty(_("packing"), _("packing"), XRC_TYPE_INTEGER);
+    xrc.AddProperty(_("separation"), _("separation"), XRC_TYPE_INTEGER);
     return xrc.GetXrcObject();
   } 
   
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
-    XrcToXfbFilter filter(xrcObj, _("wxStatusBar"));
+    XrcToXfbFilter filter(xrcObj, _("wxToolBar"));
     filter.AddWindowProperties();
-    filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
-    filter.AddProperty(_("fields"),_("fields"),XRC_TYPE_INTEGER);
+    filter.AddProperty(_("bitmapsize"), _("bitmapsize"), XRC_TYPE_SIZE);
+    filter.AddProperty(_("margins"), _("margins"), XRC_TYPE_SIZE);
+    filter.AddProperty(_("packing"), _("packing"), XRC_TYPE_INTEGER);
+    filter.AddProperty(_("separation"), _("separation"), XRC_TYPE_INTEGER);
     return filter.GetXfbObject();
   }
 };  
@@ -756,19 +770,19 @@ class ToolComponent : public ComponentBase
 
   TiXmlElement* ExportToXrc(IObject *obj)
   {
-    ObjectToXrcFilter xrc(obj, _("wxStatusBar"), obj->GetPropertyAsString(_("name")));
+    ObjectToXrcFilter xrc(obj, _("tool"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();    
-    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
-    xrc.AddProperty(_("fields"),_("fields"),XRC_TYPE_INTEGER);
+    xrc.AddProperty(_("label"), _("label"), XRC_TYPE_TEXT);
+    xrc.AddProperty(_("bitmap"), _("bitmap"), XRC_TYPE_TEXT);
     return xrc.GetXrcObject();
   } 
   
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
-    XrcToXfbFilter filter(xrcObj, _("wxStatusBar"));
+    XrcToXfbFilter filter(xrcObj, _("tool"));
     filter.AddWindowProperties();
-    filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
-    filter.AddProperty(_("fields"),_("fields"),XRC_TYPE_INTEGER);
+    filter.AddProperty(_("label"), _("label"), XRC_TYPE_TEXT);
+    filter.AddProperty(_("bitmap"), _("bitmap"), XRC_TYPE_TEXT);
     return filter.GetXfbObject();
   }
 };   

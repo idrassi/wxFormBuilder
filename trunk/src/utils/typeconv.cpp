@@ -27,6 +27,7 @@
 #include <wx/tokenzr.h>
 #include "utils/stringutils.h"
 #include "utils/debug.h"
+#include "xpm/unknown.xpm"
  
 ////////////////////////////////////
 
@@ -249,7 +250,7 @@ wxBitmap TypeConv::StringToBitmap(const wxString &str)
   if (bitmap.Ok())
     return bitmap;
 
-  return wxBitmap();
+  return wxBitmap(unknown_xpm);
 }
 
 wxColour TypeConv::StringToColour(const wxString &str)

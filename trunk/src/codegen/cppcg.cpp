@@ -303,7 +303,8 @@ void CppCodeGenerator::GenAttributeDeclaration(PObjectBase obj, Permission perm)
       obj->GetObjectTypeName() == "statusbar" || 
       obj->GetObjectTypeName() == "component" ||
       obj->GetObjectTypeName() == "container" ||
-      obj->GetObjectTypeName() == "menubar")
+      obj->GetObjectTypeName() == "menubar" ||
+      obj->GetObjectTypeName() == "toolbar")
   {
     string perm_str = obj->GetProperty("permission")->GetValue();
     
@@ -465,7 +466,7 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
   string type = obj->GetObjectTypeName();
   
   if (type == "notebook" || type == "container" || type == "widget" ||
-      type == "menubar" || type == "statusbar")
+      type == "menubar" || type == "statusbar" || type == "toolbar")
   {
       // comprobamos si no se ha declarado como atributo de clase
       // en cuyo caso lo declaramos en el constructor
@@ -480,11 +481,12 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
       for (unsigned int i=0; i<obj->GetChildCount() ; i++)
         GenConstruction(obj->GetChild(i),true);
         
-      if (type == "menubar")
+      if (type == "menubar" || type == "toolbar")
       {
-        m_source->WriteLn(GetCode(obj,"menubar_add")); 
+        m_source->WriteLn(GetCode(obj,"after_addchild")); 
         m_source->WriteLn("");
       }
+      
   }
   else if (type == "sizer")
   {
@@ -561,6 +563,10 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
     m_source->WriteLn(GetCode(obj,"construction"));
     m_source->WriteLn(GetCode(obj,"menuitem_add"));
     GenSettings(obj->GetObjectInfo(), obj);
+  }
+  else if (type == "tool")
+  {
+    m_source->WriteLn(GetCode(obj, "construction"));
   }
   else  
     assert(false);

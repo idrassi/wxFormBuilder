@@ -224,6 +224,10 @@
   <objectinfo class="wxToolBar" icon="toolbar.xpm" type="toolbar">
     <inherits class="wxWindow" />
     <property name="name" type="text">m_toolBar</property>
+    <property name="bitmapsize" type="wxSize" />
+    <property name="margins" type="wxSize" />
+    <property name="packing" type="text" />
+    <property name="separation" type="text" />
     <property name="style" type="bitlist">
       <option name="wxTB_FLAT" />
       <option name="wxTB_DOCKABLE" />
