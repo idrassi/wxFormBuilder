@@ -700,6 +700,79 @@ class SeparatorComponent : public ComponentBase
   }
 };
 
+class ToolBarComponent : public ComponentBase
+{
+ public: 
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    wxToolBar *tb = new wxToolBar((wxWindow*)parent, -1,
+      obj->GetPropertyAsPoint(_("pos")),
+      obj->GetPropertyAsSize(_("size")),
+      obj->GetPropertyAsInteger(_("style")) | wxTB_NOALIGN);
+
+    return tb;
+  }
+  
+  void OnCreated(IObjectView *objview, wxWindow *wxparent, IObjectView *parent,
+                 IObjectView *first_child)
+  {
+    wxToolBar *tb = (wxToolBar*) objview->Window();
+    wxASSERT(tb->IsKindOf(CLASSINFO(wxToolBar)));
+    tb->Realize();
+  }
+
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxStatusBar"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();    
+    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    xrc.AddProperty(_("fields"),_("fields"),XRC_TYPE_INTEGER);
+    return xrc.GetXrcObject();
+  } 
+  
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxStatusBar"));
+    filter.AddWindowProperties();
+    filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    filter.AddProperty(_("fields"),_("fields"),XRC_TYPE_INTEGER);
+    return filter.GetXfbObject();
+  }
+};  
+
+class ToolComponent : public ComponentBase
+{
+ public: 
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    wxToolBar *tb = (wxToolBar*) parent;
+    tb->AddTool(-1,
+      obj->GetPropertyAsString(_("label")),
+      obj->GetPropertyAsBitmap(_("bitmap")),
+      obj->GetPropertyAsString(_("help"))); 
+
+    return NULL;
+  }
+
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxStatusBar"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();    
+    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    xrc.AddProperty(_("fields"),_("fields"),XRC_TYPE_INTEGER);
+    return xrc.GetXrcObject();
+  } 
+  
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxStatusBar"));
+    filter.AddWindowProperties();
+    filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    filter.AddProperty(_("fields"),_("fields"),XRC_TYPE_INTEGER);
+    return filter.GetXfbObject();
+  }
+};   
+
 ///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()
@@ -730,6 +803,8 @@ BEGIN_LIBRARY()
   WINDOW_COMPONENT("separator", SeparatorComponent)
   WINDOW_COMPONENT("wxListCtrl", ListCtrlComponent)
   WINDOW_COMPONENT("wxStatusBar", StatusBarComponent)
+  WINDOW_COMPONENT("wxToolBar", ToolBarComponent)
+  WINDOW_COMPONENT("tool", ToolComponent)
 
   // wxWindow style macros
   MACRO(wxSIMPLE_BORDER)
@@ -808,6 +883,18 @@ BEGIN_LIBRARY()
   MACRO(wxITEM_NORMAL)
   MACRO(wxITEM_CHECK)
   MACRO(wxITEM_RADIO)
+  
+  // wxToolBar
+  MACRO(wxTB_FLAT)  
+  MACRO(wxTB_DOCKABLE)
+  MACRO(wxTB_HORIZONTAL)
+  MACRO(wxTB_VERTICAL)
+  MACRO(wxTB_TEXT)
+  MACRO(wxTB_NOICONS)
+  MACRO(wxTB_NODIVIDER)
+  MACRO(wxTB_NOALIGN)
+  MACRO(wxTB_HORZ_LAYOUT)
+  MACRO(wxTB_HORZ_TEXT) 
   
 END_LIBRARY()
 

@@ -31,6 +31,7 @@
     <childtype name="sizer" nmax="1" />
     <childtype name="menubar" nmax="1" />
     <childtype name="statusbar" nmax="1" />
+    <childtype name="toolbar" nmax="1" />
   </objtype>
   
   <objtype name="widget" />
@@ -78,5 +79,13 @@
   </objtype>
   
   <objtype name="statusbar" />
+  
+  <objtype name="toolbar">
+    <childtype name="tool" />
+    <childtype name="widget" />
+  </objtype>
+  
+  <objtype name="tool" />
+  
 </definitions>
   

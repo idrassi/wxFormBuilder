@@ -620,7 +620,7 @@ bool ObjectDatabase::HasCppProperties(string type)
 {
    return (type == "component" || type == "widget" ||
            type == "container" || type == "notebook" || type == "menubar" ||
-           type == "statusbar");
+           type == "statusbar" || type == "toolbar");
 }
 
 void ObjectDatabase::LoadCodeGen(string file)
@@ -803,7 +803,8 @@ bool ObjectDatabase::ShowInPalette(string type)
   return ( type == "form" || type == "widget" || type == "sizer" ||
            type == "component" || type == "container" || type == "spacer" ||
            type == "notebook" || type == "menubar" || type == "menu" ||
-           type == "menuitem" || type == "statusbar" || type == "submenu");
+           type == "menuitem" || type == "statusbar" || type == "submenu" ||
+           type == "toolbar" || type == "tool" );
 }
 
 

@@ -220,5 +220,27 @@
     <property name="style" type="bitlist">
       <option name="wxST_SIZEGRIP" />wxST_SIZEGRIP</property>
   </objectinfo>
+   
+  <objectinfo class="wxToolBar" icon="toolbar.xpm" type="toolbar">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_toolBar</property>
+    <property name="style" type="bitlist">
+      <option name="wxTB_FLAT" />
+      <option name="wxTB_DOCKABLE" />
+      <option name="wxTB_HORIZONTAL" />
+      <option name="wxTB_VERTICAL" />
+      <option name="wxTB_TEXT" />
+      <option name="wxTB_NOICONS" />
+      <option name="wxTB_NODIVIDER" />
+      <option name="wxTB_NOALIGN" />
+      <option name="wxTB_HORZ_LAYOUT" />
+      <option name="wxTB_HORZ_TEXT" /></property>
+  </objectinfo>
+  
+  <objectinfo class="tool" icon="toolbar.xpm" type="tool">
+    <property name="label" type="wxString">tool</property>
+    <property name="bitmap" type="bitmap" />
+    <property name="help" type="wxString" />
+  </objectinfo>
   
 </package>

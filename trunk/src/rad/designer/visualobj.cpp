@@ -50,7 +50,7 @@ PVisualObject VisualObject::CreateVisualObject
   //   ABSTRACT_COMPONENT
   // y que se pueda consultar el tipo.
   
-  if (type == "notebook" || type == "container" || type == "widget" || type == "statusbar")
+  if (type == "notebook" || type == "container" || type == "widget" || type == "statusbar" || type == "toolbar" || type == "tool")
     vobj = PVisualObject(new VisualWindow(obj,wx_parent));
     
   else if (type == "sizer")
@@ -151,13 +151,13 @@ void VisualWindow::SetupWindow()
   {
     GetWindow()->SetSize(pos.x,pos.y,size.GetWidth(), size.GetHeight());
 
-    if (pfont->GetValue() != "")
+    if (pfont && pfont->GetValue() != "")
       GetWindow()->SetFont(font);
     
-    if (pfg_colour->GetValue() != "")
+    if (pfg_colour && pfg_colour->GetValue() != "")
       GetWindow()->SetForegroundColour(fg_colour);
 
-    if (pbg_colour->GetValue() != "")
+    if (pbg_colour && pbg_colour->GetValue() != "")
       GetWindow()->SetBackgroundColour(bg_colour);
       
     if (penabled)

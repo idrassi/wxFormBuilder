@@ -119,6 +119,7 @@ void VisualEditor::Create()
   bool need_fit = false;
   PObjectBase menubar;
   wxWindow *statusbar = NULL;
+  wxWindow *toolbar = NULL;
   
   m_form = GetData()->GetSelectedForm();
 
@@ -181,6 +182,14 @@ void VisualEditor::Create()
         VisualObjectMap::iterator it = m_map.find(child);
         statusbar = shared_dynamic_cast<VisualWindow>(it->second)->GetWindow();
       }
+      
+      // si se creó una barra de herramientas, guardamos el widget para configurar
+      // el "frame"
+      if (child->GetClassName() == "wxToolBar")
+      {
+        VisualObjectMap::iterator it = m_map.find(child);
+        toolbar = shared_dynamic_cast<VisualWindow>(it->second)->GetWindow();
+      }
     }
     
     if (need_fit)
@@ -188,8 +197,8 @@ void VisualEditor::Create()
     
     m_back->Layout();
       
-    if (menubar || statusbar)
-      m_back->SetFrameWidgets(menubar, statusbar);
+    if (menubar || statusbar || toolbar)
+      m_back->SetFrameWidgets(menubar, toolbar, statusbar);
   }
   else
   {
@@ -413,7 +422,7 @@ wxMenu* GridPanel::GetMenuFromObject(PObjectBase menu)
   return menuWidget; 
 }
 
-void GridPanel::SetFrameWidgets(PObjectBase menubar, wxWindow *statusbar)
+void GridPanel::SetFrameWidgets(PObjectBase menubar, wxWindow *toolbar, wxWindow *statusbar)
 {
   Menubar *mbWidget = NULL;
   
@@ -438,6 +447,9 @@ void GridPanel::SetFrameWidgets(PObjectBase menubar, wxWindow *statusbar)
     dummySizer->Add(mbWidget, 0, wxEXPAND | wxTOP | wxBOTTOM, 0);
     dummySizer->Add(new wxStaticLine(this, -1), 0, wxEXPAND | wxALL, 0);
   }
+  
+  if (toolbar)
+    dummySizer->Add(toolbar, 0, wxEXPAND | wxALL, 0);
   
   if (mainSizer)
     dummySizer->Add(mainSizer, 1, wxEXPAND | wxALL, 0);

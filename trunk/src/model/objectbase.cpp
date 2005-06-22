@@ -342,7 +342,7 @@ bool ObjectBase::DoChildTypeOk(string type_child, string type_parent)
     result = ( type_child == "form");
     
   else if (type_parent == "container" || type_parent == "form")
-    result = (type_child == "sizer" || type_child == "menubar" || type_child == "statusbar"); // sólo puede haber uno
+    result = (type_child == "sizer" || type_child == "menubar" || type_child == "statusbar" || type_child == "toolbar"); // sólo puede haber uno
 
   else if (type_parent == "notebook")
     result = (type_child == "notebookpage");
@@ -363,6 +363,9 @@ bool ObjectBase::DoChildTypeOk(string type_child, string type_parent)
     
   else if (type_parent == "menu" || type_parent == "submenu")
     result = (type_child == "menuitem" || type_child == "submenu");
+    
+  else if (type_parent == "toolbar")
+    result = (type_child == "tool" || type_child == "widget");
       
   else
     result = false;
