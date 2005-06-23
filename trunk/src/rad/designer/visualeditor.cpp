@@ -503,10 +503,11 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
 {
   // sólo es necesario regenerar la vista si el objeto
   // seleccionado pertenece a otro form
-
   if (GetData()->GetSelectedForm() != m_form)
     Create();
-    
+
+  // Asignamos el widget y el sizer para mostrar el recuadro
+      
   PVisualObject visualObj;
   PObjectBase objAuxCt, objAuxNb, objAux;
   VisualObjectMap::iterator it = m_map.find(obj);
@@ -515,15 +516,36 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
   {
     wxWindow *selPanel = NULL;
     visualObj = it->second;
-    objAuxCt = obj->FindNearAncestor("container");  
-    objAuxNb = obj->FindNearAncestor("notebook");
     
-    if (!objAuxCt)
-      objAux = objAuxNb;
-    else if (!objAuxNb)
-      objAux = objAuxCt;
-    else
-      objAux = objAuxNb->Deep() > objAuxCt->Deep() ? objAuxNb : objAuxCt;
+    // 1. Buscar el panel activo, sobre este es donde se dibujarán los recuadros
+    //    en el evento OnPaint.
+    // buscamos hacia arriba el objeto más cercano cuyo componente sea
+    // de tipo WINDOW.
+    
+    //objAuxCt = obj->FindNearAncestor("container");  
+    //objAuxNb = obj->FindNearAncestor("notebook");
+    //if (!objAuxCt)
+    //  objAux = objAuxNb;
+    //else if (!objAuxNb)
+    //  objAux = objAuxCt;
+    //else
+    //  objAux = objAuxNb->Deep() > objAuxCt->Deep() ? objAuxNb : objAuxCt;
+    
+    objAux = obj->GetParent();
+    while (objAux)
+    {
+      IComponent *compAux = objAux->GetObjectInfo()->GetComponent();  
+      if (!compAux)
+      {
+        objAux.reset();
+        break;
+      }
+        
+      if (compAux->GetComponentType() == COMPONENT_TYPE_WINDOW)
+        break;
+
+      objAux = objAux->GetParent();
+    }
     
     if (objAux)  // Un padre de tipo T_WIDGET es siempre un contenedor
     {
@@ -532,24 +554,58 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
     }
     else
       selPanel = m_back;
-        
+      
+    // 2. Buscar el item
     wxObject *item = NULL;
     wxSizer *sizer = NULL;
     string typeName = obj->GetObjectTypeName();
-    if ( typeName == "widget" || typeName == "container" ||
-         typeName == "notebook" || typeName == "statusbar")
+    
+    int componentType = COMPONENT_TYPE_ABSTRACT;
+    IComponent *comp = obj->GetObjectInfo()->GetComponent(); 
+    if (comp)
+      componentType = comp->GetComponentType();
+    
+    //if ( typeName == "widget" || typeName == "container" ||
+    //     typeName == "notebook" || typeName == "statusbar")
+    if (componentType == COMPONENT_TYPE_WINDOW)
       item = shared_dynamic_cast<VisualWindow>(visualObj)->GetWindow();
       
-    else if (typeName == "sizer")
+    //else if (typeName == "sizer")
+    else if (componentType == COMPONENT_TYPE_SIZER) 
       item = shared_dynamic_cast<VisualSizer>(visualObj)->GetSizer();
     
-    objAux = obj->FindNearAncestor("sizer");
-    objAuxCt = obj->FindNearAncestor("container");
-    if (objAux && (!objAuxCt || objAux->Deep() > objAuxCt->Deep()))
+    // 3. Buscar el sizer.
+    // lo que se hace a continuación es buscar el objeto más próximo que sea
+    // un componente WINDOW o un componente SIZER y en el caso de ser un
+    // sizer lo guardamos.
+    
+    //objAux = obj->FindNearAncestor("sizer");
+    //objAuxCt = obj->FindNearAncestor("container");
+    //if (objAux && (!objAuxCt || objAux->Deep() > objAuxCt->Deep()))
+    //{
+    //  it = m_map.find(objAux);
+    //  sizer = shared_dynamic_cast<VisualSizer>(it->second)->GetSizer(); 
+    //}
+    
+    objAux = obj->GetParent();
+    while (objAux)
     {
-      it = m_map.find(objAux);
-      sizer = shared_dynamic_cast<VisualSizer>(it->second)->GetSizer(); 
+      IComponent *compAux = objAux->GetObjectInfo()->GetComponent();
+      if (!compAux)
+        break;
+      
+      if (compAux->GetComponentType() == COMPONENT_TYPE_SIZER)
+      {
+        it = m_map.find(objAux);
+        sizer = shared_dynamic_cast<VisualSizer>(it->second)->GetSizer();
+        break;
+      }
+      else if (compAux->GetComponentType() == COMPONENT_TYPE_WINDOW)
+        break;
+        
+      objAux = objAux->GetParent();
     }
+    
     
     m_back->SetSelectedSizer(sizer);
     m_back->SetSelectedItem(item);

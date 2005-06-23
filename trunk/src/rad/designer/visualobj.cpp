@@ -50,14 +50,32 @@ PVisualObject VisualObject::CreateVisualObject
   //   ABSTRACT_COMPONENT
   // y que se pueda consultar el tipo.
   
-  if (type == "notebook" || type == "container" || type == "widget" || type == "statusbar" || type == "toolbar" || type == "tool")
-    vobj = PVisualObject(new VisualWindow(obj,wx_parent));
+  IComponent *comp = obj->GetObjectInfo()->GetComponent(); 
+  
+  if (comp)
+  {
+    int compType = comp->GetComponentType();
     
-  else if (type == "sizer")
-    vobj = PVisualObject(new VisualSizer(obj,wx_parent));
+    switch (compType)
+    {
+      case COMPONENT_TYPE_WINDOW:
+        vobj = PVisualObject(new VisualWindow(obj,wx_parent));
+        break;
     
-  else // items
+      case COMPONENT_TYPE_SIZER:
+        vobj = PVisualObject(new VisualSizer(obj,wx_parent));
+        break;
+    
+      default: // items y forms
+        vobj = PVisualObject(new VisualObject(obj));
+        break;
+    }
+  }
+  else
+  {
     vobj = PVisualObject(new VisualObject(obj));
+    wxLogError(_("Component for ") + _WXSTR(obj->GetClassName()) + _("%s not found!"));
+  }
 
   return vobj;
 }   

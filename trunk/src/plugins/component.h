@@ -31,6 +31,10 @@
 #include <wx/dynarray.h>
 #include "tinyxml.h"
 
+#define COMPONENT_TYPE_ABSTRACT 0
+#define COMPONENT_TYPE_WINDOW   1
+#define COMPONENT_TYPE_SIZER    2
+
 class IComponent;
 
 // interfaz para plugins
@@ -125,7 +129,13 @@ class IComponent
    * Algunos componentes no deben dejar a wxFormBuilder redefinir su tabla
    * de manejadores de eventos, en aquellos casos devolver "true"
    */
-  virtual bool KeepEvtHandler() = 0;
+  virtual bool KeepEvtHandler() = 0; // No es necesaria...
+  
+  
+  /**
+   *
+   */
+  virtual int GetComponentType() = 0;
 };
 
 
@@ -143,17 +153,32 @@ extern "C"
 extern "C" WXEXPORT IComponentLibrary * GetComponentLibrary()  \
 { \
   IComponentLibrary * lib = new ComponentLibrary();
-  
+
+/*  
 #define COMPONENT(name,class)  \
   lib->RegisterComponent(_T(name),new class());
+*/
 
 #define MACRO(name) \
   lib->RegisterMacro(_T(#name),name);
   
 #define END_LIBRARY()   return lib; }
 
-#define WINDOW_COMPONENT COMPONENT
-#define SIZER_COMPONENT  COMPONENT
-#define ABSTRACT_COMPONENT COMPONENT
+#define WINDOW_COMPONENT(name,class) \
+  _REGISTER_COMPONENT(name,class,COMPONENT_TYPE_WINDOW)
+
+#define SIZER_COMPONENT(name,class) \
+  _REGISTER_COMPONENT(name,class,COMPONENT_TYPE_SIZER)
+
+#define ABSTRACT_COMPONENT(name,class) \
+  _REGISTER_COMPONENT(name,class,COMPONENT_TYPE_ABSTRACT)
+
+#define _REGISTER_COMPONENT(name,class,type)  \
+  {                                     \
+    ComponentBase *c = new class();     \
+    c->__SetComponentType(type);        \
+    lib->RegisterComponent(_T(name),c); \
+  }
+
 
 #endif //__COMPONENT_H__

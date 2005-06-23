@@ -125,7 +125,17 @@ class ComponentLibrary : public IComponentLibrary
  */
 class ComponentBase : public IComponent
 {
+ private:
+  int m_type;
+  
  public:
+ 
+  ComponentBase() : m_type(0) {};
+  
+  void __SetComponentType(int type)
+  {
+    m_type = (type >= 0 && type <= 2 ? type : COMPONENT_TYPE_ABSTRACT);
+  };
 
   wxObject* Create(IObject *obj, wxObject *parent) { return NULL; }
   void OnCreated(IObjectView *obj, wxWindow *wxparent,
@@ -137,6 +147,8 @@ class ComponentBase : public IComponent
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj) { return NULL; };
   
   bool KeepEvtHandler() { return false; }
+  
+  int GetComponentType() { return m_type; };
 };
 
 #endif // __PLUGIN_H__
