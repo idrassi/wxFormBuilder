@@ -26,7 +26,7 @@
 #include "plugins/component.h"
 #include "plugins/plugin.h"
 #include "utils/xrcconv.h"
-#include "xpm/unknown.xpm"
+#include "icons/unknown.xpm"
 
 #include "wx/grid.h"
 #include "wx/statline.h"
@@ -638,10 +638,10 @@ class MenuItemComponent : public ComponentBase
     
     int kind = obj->GetPropertyAsInteger(_("kind"));
     
-    if (obj->GetPropertyAsInteger("checked") && (kind == wxITEM_RADIO || kind == wxITEM_CHECK))
+    if (obj->GetPropertyAsInteger(_("checked")) && (kind == wxITEM_RADIO || kind == wxITEM_CHECK))
       xrc.AddProperty(_("checked"), _("checked"), XRC_TYPE_BOOL);
     
-    if (obj->GetPropertyAsInteger("enabled") == 0)
+    if (obj->GetPropertyAsInteger(_("enabled")) == 0)
       xrc.AddProperty(_("enabled"), _("enabled"), XRC_TYPE_BOOL);
     
     switch (kind)
@@ -666,7 +666,7 @@ class MenuItemComponent : public ComponentBase
       labelNode = labelElement->FirstChild();
       if (labelNode && labelNode->ToText())
       {
-        label = _T(labelNode->ToText()->Value());
+        label = wxString(labelNode->ToText()->Value(),wxConvUTF8);
         int pos = label.Find(_T("\\t"));
         if (pos >= 0)
         {
@@ -711,13 +711,17 @@ class ToolBarComponent : public ComponentBase
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")) | wxTB_NOALIGN | wxTB_NODIVIDER | wxNO_BORDER);
     
-    if (!obj->IsNull("bitmapsize"))
+    if (!obj->IsNull(_("bitmapsize")))
       tb->SetToolBitmapSize(obj->GetPropertyAsSize(_("bitmapsize")));
-    if (!obj->IsNull("marings"))
-      tb->SetMargins(obj->GetPropertyAsSize(_("margins")));
-    if (!obj->IsNull("packing"))
+    if (!obj->IsNull(_("marings")))
+    {
+      //tb->SetMargins(obj->GetPropertyAsSize(_("margins")));
+      wxSize margins(obj->GetPropertyAsSize(_("margins")));
+      tb->SetMargins(margins.GetWidth(), margins.GetHeight());
+    }
+    if (!obj->IsNull(_("packing")))
       tb->SetToolPacking(obj->GetPropertyAsInteger(_("packing")));
-    if (!obj->IsNull("separation"))
+    if (!obj->IsNull(_("separation")))
       tb->SetToolSeparation(obj->GetPropertyAsInteger(_("separation")));
       
     return tb;

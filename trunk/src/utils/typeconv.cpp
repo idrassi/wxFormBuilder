@@ -27,7 +27,7 @@
 #include <wx/tokenzr.h>
 #include "utils/stringutils.h"
 #include "utils/debug.h"
-#include "xpm/unknown.xpm"
+#include "icons/unknown.xpm"
  
 ////////////////////////////////////
 

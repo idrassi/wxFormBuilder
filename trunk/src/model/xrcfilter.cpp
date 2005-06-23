@@ -115,8 +115,8 @@ void XrcFilter::LinkValues(TiXmlElement *element, TiXmlElement *xrcInfo,
       // Me refiero a las propiedades width y height, las cuales están mapeadas
       // como una propiedad wxSize (llamada "size") en XRC, mientras que en la
       // interfaz wxSizer son dos propiedades de tipo "int" separadas.
-      int width = obj->GetPropertyAsInteger("width");
-      int height = obj->GetPropertyAsInteger("height");
+      int width = obj->GetPropertyAsInteger(_T("width"));
+      int height = obj->GetPropertyAsInteger(_T("height"));
       
       TiXmlElement *propElement = new TiXmlElement("size");
       
@@ -618,7 +618,7 @@ PObjectBase XrcLoader::GetObject(TiXmlElement *xrcObj, PObjectBase parent)
     {
       wxString msg(wxString::Format(
         wxT("Can't create unknown object (wxPanel) as child of \"%s:%s\""),
-        parent->GetPropertyAsString("name").mb_str(), parent->GetClassName().c_str()));
+        parent->GetPropertyAsString(_T("name")).c_str(), parent->GetClassName().c_str()));
         
       wxLogError(msg);
     }

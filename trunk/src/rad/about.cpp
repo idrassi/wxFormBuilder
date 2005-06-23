@@ -47,8 +47,8 @@ class HtmlWindow : public wxHtmlWindow
     {
       wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(_T("html"));
       if (!ft) {
-        wxLogError("Impossible to determine the file type for extension html.\n"
-                   "Please edit your MIME types.");
+        wxLogError(_("Impossible to determine the file type for extension html.\n"
+                     "Please edit your MIME types."));
         return;
       }
     

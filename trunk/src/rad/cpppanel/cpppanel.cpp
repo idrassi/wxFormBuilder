@@ -145,7 +145,7 @@ void CppPanel::CodeGeneration()
     if (file == wxT(""))
       file = wxT("noname");
     
-    if (path != "")
+    if (!path.IsEmpty())
     {
       PCodeWriter h_cw(new FileCodeWriter(path + wxFILE_SEP_PATH + file + wxT(".h")));
       PCodeWriter cpp_cw(new FileCodeWriter(path + wxFILE_SEP_PATH + file + wxT(".cpp")));

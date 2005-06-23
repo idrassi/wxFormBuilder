@@ -170,24 +170,24 @@ void MenuEditor::AddChild(long& n, int ident, PObjectBase obj)
         PObjectBase childObj = obj->GetChild(i);
         if (childObj->GetClassName() == "wxMenuItem")
         {
-            InsertItem(n++, wxString(' ', ident * IDENTATION) + childObj->GetPropertyAsString("label"),
-                childObj->GetPropertyAsString("shortcut"),
-                childObj->GetPropertyAsString("id"),
-                childObj->GetPropertyAsString("name"),
-                childObj->GetPropertyAsString("help"),
-                childObj->GetPropertyAsString("kind"));    
+            InsertItem(n++, wxString(wxChar(' '), ident * IDENTATION) + childObj->GetPropertyAsString(_T("label")),
+                childObj->GetPropertyAsString(_T("shortcut")),
+                childObj->GetPropertyAsString(_T("id")),
+                childObj->GetPropertyAsString(_T("name")),
+                childObj->GetPropertyAsString(_T("help")),
+                childObj->GetPropertyAsString(_T("kind")));    
         }
         else if (childObj->GetClassName() == "separator")
         {
-            InsertItem(n++, wxString(' ', ident * IDENTATION) + _T("---"), _T(""), _T(""), _T(""), _T(""), _T(""));
+            InsertItem(n++, wxString(wxChar(' '), ident * IDENTATION) + _T("---"), _T(""), _T(""), _T(""), _T(""), _T(""));
         }
         else
         {
-            InsertItem(n++, wxString(' ', ident * IDENTATION) + childObj->GetPropertyAsString("label"),
+            InsertItem(n++, wxString(wxChar(' '), ident * IDENTATION) + childObj->GetPropertyAsString(_T("label")),
                 _T(""),
-                childObj->GetPropertyAsString("id"),
-                childObj->GetPropertyAsString("name"),
-                childObj->GetPropertyAsString("help"),
+                childObj->GetPropertyAsString(_T("id")),
+                childObj->GetPropertyAsString(_T("name")),
+                childObj->GetPropertyAsString(_T("help")),
                 _T(""));
             AddChild(n, ident + 1, childObj);
         }  
@@ -281,7 +281,7 @@ int MenuEditor::GetItemIdentation(long n)
 {
     wxString label = m_menuList->GetItemText(n);
     size_t curIdent = 0;
-    while (curIdent < label.Len() && label[curIdent] == ' ') curIdent++;
+    while (curIdent < label.Len() && label[curIdent] == wxChar(' ')) curIdent++;
     curIdent /= IDENTATION;
     
     return (int)curIdent;
@@ -311,7 +311,7 @@ void MenuEditor::AddItem(const wxString& label, const wxString& shortcut,
     labelAux.Trim(false);
     if (sel < 0) sel = m_menuList->GetItemCount() - 1;
     
-    labelAux = wxString(' ', identation * IDENTATION) + labelAux;
+    labelAux = wxString(wxChar(' '), identation * IDENTATION) + labelAux;
     
     long index = InsertItem(sel + 1, labelAux, shortcut, id, name, help, kind);
     m_menuList->SetItemState(index, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
@@ -383,7 +383,7 @@ void MenuEditor::OnModifyMenuItem(wxCommandEvent& e)
         case 2: kind = _T("wxITEM_RADIO"); break;
     }
     
-    m_menuList->SetItem(index, 0, wxString(' ', identation * IDENTATION) + m_tcLabel->GetValue());
+    m_menuList->SetItem(index, 0, wxString(wxChar(' '), identation * IDENTATION) + m_tcLabel->GetValue());
     m_menuList->SetItem(index, 1, m_tcShortcut->GetValue());
     m_menuList->SetItem(index, 2, m_tcId->GetValue());
     m_menuList->SetItem(index, 3, m_tcName->GetValue());
@@ -428,7 +428,7 @@ void MenuEditor::OnMenuLeft(wxCommandEvent& e)
     wxString label = m_menuList->GetItemText(sel);
     label.Trim(true);
     label.Trim(false);
-    label = wxString(' ', curIdent * IDENTATION) + label;
+    label = wxString(wxChar(' '), curIdent * IDENTATION) + label;
     m_menuList->SetItemText(sel, label);
 }
 
@@ -444,7 +444,7 @@ void MenuEditor::OnMenuRight(wxCommandEvent& e)
     wxString label = m_menuList->GetItemText(sel);
     label.Trim(true);
     label.Trim(false);
-    label = wxString(' ', curIdent * IDENTATION) + label;
+    label = wxString(wxChar(' '), curIdent * IDENTATION) + label;
     m_menuList->SetItemText(sel, label);
 }
 
@@ -536,7 +536,7 @@ void MenuEditor::OnLabelChanged(wxCommandEvent& e)
       nextUpper = false;
       id += toupper(label[i]);
     }
-    else if (label[i] == ' ')
+    else if (label[i] == wxChar(' '))
     {
       nextUpper = true;
       id += _T("_");

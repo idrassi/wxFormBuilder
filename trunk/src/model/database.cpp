@@ -972,7 +972,7 @@ bool ObjectDatabase::LoadObjectTypes()
     }
   }
   else
-    wxLogError("Error loading object types");
+    wxLogError(_("Error loading object types"));
   return true;
 }
 

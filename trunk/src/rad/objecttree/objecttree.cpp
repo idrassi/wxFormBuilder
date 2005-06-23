@@ -131,7 +131,7 @@ void ObjectTree::ObjectSelected(PObjectBase obj)
   }
   else
   {
-    wxLogError("Algo pasa porque no se encuentra el item asociado al objeto");
+    wxLogError(_("Algo pasa porque no se encuentra el item asociado al objeto"));
   }
 }
 
@@ -178,7 +178,7 @@ void ObjectTree::AddChildren(PObjectBase obj, wxTreeItemId &parent, bool is_root
       assert(parent);
 
       msg = wxString::Format(wxT("Item without object as child of \'%s:%s\'"),
-        itemParent->GetPropertyAsString("name").c_str(),
+        itemParent->GetPropertyAsString(wxT("name")).c_str(),
         itemParent->GetClassName().c_str());
       
       wxLogError(msg);

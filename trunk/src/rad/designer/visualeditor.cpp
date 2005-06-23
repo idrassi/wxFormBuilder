@@ -402,21 +402,21 @@ wxMenu* GridPanel::GetMenuFromObject(PObjectBase menu)
       wxString label = menuItem->GetPropertyAsString(_T("label"));
       wxString shortcut = menuItem->GetPropertyAsString(_T("shortcut"));
       if (!shortcut.IsEmpty())
-        label += '\t' + shortcut;
+        label = label + wxChar('\t') + shortcut;
         
       wxMenuItem *item = new wxMenuItem(menuWidget, lastMenuId++, 
           label, menuItem->GetPropertyAsString(_T("help")), 
           menuItem->GetPropertyAsInteger(_T("kind")));
           
       if (!menuItem->GetProperty("bitmap")->IsDefaultValue())
-        item->SetBitmap(menuItem->GetPropertyAsBitmap("bitmap"));
+        item->SetBitmap(menuItem->GetPropertyAsBitmap(_T("bitmap")));
         
       menuWidget->Append(item);
         
-      if (item->GetKind() == wxITEM_CHECK && menuItem->GetPropertyAsInteger("checked"))
+      if (item->GetKind() == wxITEM_CHECK && menuItem->GetPropertyAsInteger(_T("checked")))
         item->Check(true);
         
-      item->Enable(menuItem->GetPropertyAsInteger("enabled"));
+      item->Enable(menuItem->GetPropertyAsInteger(_T("enabled")));
     }
   }
   return menuWidget; 
