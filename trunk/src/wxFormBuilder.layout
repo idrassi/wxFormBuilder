@@ -7,8 +7,8 @@
 	<File name="codegen\codegen.h" open="0" top="0">
 		<Cursor position="1135" topLine="0"/>
 	</File>
-	<File name="codegen\cppcg.cpp" open="1" top="1">
-		<Cursor position="22387" topLine="765"/>
+	<File name="codegen\cppcg.cpp" open="1" top="0">
+		<Cursor position="1157" topLine="0"/>
 	</File>
 	<File name="codegen\cppcg.h" open="0" top="0">
 		<Cursor position="1135" topLine="0"/>
@@ -139,8 +139,8 @@
 	<File name="rad\inspector\propeditor.h" open="0" top="0">
 		<Cursor position="1135" topLine="12"/>
 	</File>
-	<File name="rad\mainframe.cpp" open="0" top="0">
-		<Cursor position="1135" topLine="0"/>
+	<File name="rad\mainframe.cpp" open="1" top="1">
+		<Cursor position="4853" topLine="96"/>
 	</File>
 	<File name="rad\mainframe.h" open="0" top="0">
 		<Cursor position="1135" topLine="0"/>
@@ -194,6 +194,5 @@
 		<Cursor position="1135" topLine="0"/>
 	</File>
 	<Expand folder="/Sources/rad"/>
-	<Expand folder="/Sources/codegen"/>
 	<Expand folder="/Sources"/>
 </Code::Blocks_layout_file>

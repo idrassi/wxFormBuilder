@@ -123,7 +123,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   menuEdit->Append(ID_PASTE, _T("&Paste \tCTRL+V"), _T("Paste on selected object"));
   menuEdit->Append(ID_DELETE, _T("&Delete \tCTRL+D"), _T("Delete selected object"));
   menuEdit->AppendSeparator();
-  menuEdit->Append(ID_EXPAND, _T("&Toggle Expand\tALT+E"), _T("Toggle wxEXPAND flag of sizeritem properties"));
+  menuEdit->Append(ID_EXPAND, _T("&Toggle Expand\tALT+W"), _T("Toggle wxEXPAND flag of sizeritem properties"));
   menuEdit->Append(ID_STRETCH, _T("&Toggle Stretch\tALT+S"), _T("Toggle option property of sizeritem properties"));
   menuEdit->Append(ID_MOVE_UP, _T("&Move Up\tALT+Up"), _T("Move Up selected object"));
   menuEdit->Append(ID_MOVE_DOWN, _T("&Move Down\tALT+Down"), _T("Move Down selected object"));
