@@ -35,6 +35,7 @@
 #define XRC_TYPE_BITLIST 5
 #define XRC_TYPE_SIZE    6
 #define XRC_TYPE_POINT   7
+#define XRC_TYPE_STRINGLIST 8
 
 /**
  * Filtro para exportar un objeto a formato XRC.
@@ -83,6 +84,7 @@ class ObjectToXrcFilter
   void LinkColour(const wxColour &colour, TiXmlElement *propElement);
   void LinkFont(const wxFont &font, TiXmlElement *propElement);
   void LinkInteger(const int &integer, TiXmlElement *propElement);
+  void LinkStringList(const wxArrayString &array, TiXmlElement *propElement);
 };
 
 /**
@@ -121,6 +123,7 @@ class XrcToXfbFilter
   void ImportTextProperty(const wxString &xrcPropName, TiXmlElement *property);
   void ImportColourProperty(const wxString &xrcPropName, TiXmlElement *property);
   void ImportFontProperty(const wxString &xrcPropName, TiXmlElement *property);
+  void ImportStringListProperty(const wxString &xrcPropName, TiXmlElement *property);
   
   TiXmlElement *GetXrcProperty(const wxString &name);
 };

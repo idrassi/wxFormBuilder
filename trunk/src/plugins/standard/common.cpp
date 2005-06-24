@@ -515,6 +515,24 @@ class ListBoxComponent : public ComponentBase
       
     return listbox;
   }
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxListBox"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();    
+    xrc.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
+    xrc.AddProperty(_("choices"), _("content"), XRC_TYPE_STRINGLIST);
+    return xrc.GetXrcObject();
+  } 
+
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxListBox"));
+    filter.AddWindowProperties();
+    filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    filter.AddProperty(_("content"),_("choices"), XRC_TYPE_STRINGLIST);
+    return filter.GetXfbObject();
+  }
 };
 
 class RadioBoxComponent : public ComponentBase
@@ -546,6 +564,26 @@ class RadioBoxComponent : public ComponentBase
     delete []strings;
          
     return radiobox;
+  }
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxRadioBox"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();    
+    xrc.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
+    xrc.AddProperty(_("choices"), _("content"), XRC_TYPE_STRINGLIST);
+    xrc.AddProperty(_("majorDimension"), _("dimension"), XRC_TYPE_INTEGER);
+    return xrc.GetXrcObject();
+  } 
+
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxRadioBox"));
+    filter.AddWindowProperties();
+    filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    filter.AddProperty(_("content"),_("choices"), XRC_TYPE_STRINGLIST);
+    filter.AddProperty(_("dimension"), _("majorDimension"), XRC_TYPE_INTEGER);
+    return filter.GetXfbObject();
   }
 };
 

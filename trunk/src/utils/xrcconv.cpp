@@ -77,6 +77,10 @@ void ObjectToXrcFilter::AddProperty(const wxString &objPropName,
     case XRC_TYPE_FONT:
       LinkFont(m_obj->GetPropertyAsFont(objPropName), propElement);
       break;
+      
+    case XRC_TYPE_STRINGLIST:
+      LinkStringList(m_obj->GetPropertyAsArrayString(objPropName), propElement);
+      break;
   }
   
   m_xrcObj->LinkEndChild(propElement);
@@ -185,6 +189,16 @@ void ObjectToXrcFilter::LinkFont(const wxFont &font, TiXmlElement *propElement)
   propElement->LinkEndChild(element);
 } 
 
+void ObjectToXrcFilter::LinkStringList(const wxArrayString &array, TiXmlElement *propElement)
+{
+    for (size_t i = 0; i < array.GetCount(); i++)
+    {
+      TiXmlElement *element = new TiXmlElement("item");
+      element->LinkEndChild(new TiXmlText(array[i]));
+      propElement->LinkEndChild(element);
+    }
+}
+
 void ObjectToXrcFilter::AddWindowProperties()
 {
   // falta exstyle
@@ -278,6 +292,11 @@ void XrcToXfbFilter::AddProperty(const wxString &xrcPropName,
     case XRC_TYPE_FONT:
       ImportFontProperty(xrcPropName, propElement);
       break;
+      
+    case XRC_TYPE_STRINGLIST:
+      ImportStringListProperty(xrcPropName, propElement);
+      break;
+      
   }
   
   m_xfbObj->LinkEndChild(propElement);
@@ -462,7 +481,29 @@ void XrcToXfbFilter::ImportColourProperty(const wxString &xrcPropName,
   }
 }                                        
                                         
+void XrcToXfbFilter::ImportStringListProperty(const wxString &xrcPropName, TiXmlElement *property)
+{
+  TiXmlElement *xrcProperty = m_xrcObj->FirstChildElement(xrcPropName.mb_str());
+  if (!xrcProperty)
+    return;
 
+  TiXmlElement *element = NULL;
+  TiXmlNode *xmlValue = NULL;
+  wxString res;
+  
+  element = xrcProperty->FirstChildElement("item");
+  while (element)
+  {
+    xmlValue = element->FirstChild();
+    if (xmlValue && xmlValue->ToText())
+      res += '\'' + wxString(xmlValue->ToText()->Value(), wxConvUTF8) + _T("' ");
+      
+    element = element->NextSiblingElement("item");
+  }
+
+  res.Trim();
+  property->LinkEndChild(new TiXmlText(res.mb_str()));
+}
 
 void XrcToXfbFilter::AddWindowProperties()
 {
