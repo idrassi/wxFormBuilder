@@ -394,7 +394,7 @@ wxMenu* GridPanel::GetMenuFromObject(PObjectBase menu)
   {
     PObjectBase menuItem = menu->GetChild(j);
     if (menuItem->GetObjectTypeName() == "submenu")
-      menuWidget->Append(wxID_HIGHEST + 1, menuItem->GetPropertyAsString(_T("label")), GetMenuFromObject(menuItem));
+      menuWidget->Append(lastMenuId++, menuItem->GetPropertyAsString(_T("label")), GetMenuFromObject(menuItem));
     else if (menuItem->GetClassName() == "separator")
       menuWidget->AppendSeparator();
     else

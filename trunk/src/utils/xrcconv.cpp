@@ -197,13 +197,13 @@ void ObjectToXrcFilter::AddWindowProperties()
   if (!m_obj->IsNull(_("fg")))  
     AddProperty(_("fg"), _("fg"), XRC_TYPE_COLOUR);  
 
-  if (!m_obj->IsNull(_("enabled")))
+  if (!m_obj->IsNull(_("enabled")) && !m_obj->GetPropertyAsInteger("enabled"))
     AddProperty(_("enabled"), _("enabled"), XRC_TYPE_BOOL);
   
   if (!m_obj->IsNull(_("focused")))  
     AddPropertyValue(_("focused"),_("0"));
   
-  if (!m_obj->IsNull(_("hidden")))
+  if (!m_obj->IsNull(_("hidden")) && m_obj->GetPropertyAsInteger("hidden"))
     AddProperty(_("hidden"), _("hidden"), XRC_TYPE_BOOL);  
   
   if (!m_obj->IsNull(_("font")))

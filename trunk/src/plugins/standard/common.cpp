@@ -743,6 +743,7 @@ class ToolBarComponent : public ComponentBase
     xrc.AddProperty(_("margins"), _("margins"), XRC_TYPE_SIZE);
     xrc.AddProperty(_("packing"), _("packing"), XRC_TYPE_INTEGER);
     xrc.AddProperty(_("separation"), _("separation"), XRC_TYPE_INTEGER);
+    xrc.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
     return xrc.GetXrcObject();
   } 
   
@@ -754,6 +755,7 @@ class ToolBarComponent : public ComponentBase
     filter.AddProperty(_("margins"), _("margins"), XRC_TYPE_SIZE);
     filter.AddProperty(_("packing"), _("packing"), XRC_TYPE_INTEGER);
     filter.AddProperty(_("separation"), _("separation"), XRC_TYPE_INTEGER);
+    filter.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
     return filter.GetXfbObject();
   }
 };  
@@ -764,7 +766,7 @@ class ToolComponent : public ComponentBase
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     wxToolBar *tb = (wxToolBar*) parent;
-    tb->AddTool(-1,
+    tb->AddTool(wxID_HIGHEST + 200,
       obj->GetPropertyAsString(_("label")),
       obj->GetPropertyAsBitmap(_("bitmap")),
       obj->GetPropertyAsString(_("help"))); 
