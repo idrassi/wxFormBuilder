@@ -29,6 +29,7 @@
 #include "objectbase.h"
 #include "tinyxml.h"
 #include <wx/dynlib.h>
+#include <set>
 
 class ObjectPackage;
 class ObjectDatabase;
@@ -97,10 +98,9 @@ class ObjectDatabase
   // diccionario para obtener el valor numérico a partir de la cadena
   // de texto del archivo XML.
   typedef map<string,PropertyType> PTMap;
-  
   typedef map<string,PObjectType> ObjectTypeMap;
   typedef vector<wxDynamicLibrary *> CLibraryVector;
-  
+  typedef set<string> MacroSet;
     
   string m_xmlPath; // directorio donde se encuentran los archivos xml
   string m_iconPath;
@@ -109,6 +109,13 @@ class ObjectDatabase
   PTMap m_propTypes;
   CLibraryVector m_libs;
   ObjectTypeMap m_types; // registro de tipos de objetos.
+  
+  // para comprobar que no se nos han quedado macros sin añadir en las
+  // liberias de componentes, vamos a crear un conjunto con las macros
+  // definidas en los XML, y al importar las librerías vamos a ir eliminando
+  // dichas macros del conjunto, quedando al final las macros que faltan
+  // por registrar en la librería.
+  MacroSet m_macroSet;
   
   /**
    * Inicializa el dicctionario de tipos de propiedades.

@@ -2,8 +2,8 @@
 
   <templates class="Frame">
     <template name="base">public wxFrame</template>
-    <template name="cons_decl">$name(wxWindow *parent, int id = -1, wxString title = $title);</template>
-    <template name="cons_def">$name::$name(wxWindow *parent, int id, wxString title) : wxFrame(parent, id, title)</template>
+    <template name="cons_decl">$name(wxWindow *parent, int id = -1, wxString title = $title, wxPoint pos = $pos, wxSize size = $size, int style = $style);</template>
+    <template name="cons_def">$name::$name(wxWindow *parent, int id, wxString title, wxPoint pos, wxSize size, int style) : wxFrame(parent, id, title, pos, size, style )</template>
   </templates>
   
   <templates class="Panel">

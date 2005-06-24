@@ -27,7 +27,13 @@
     <template name="construction">$name = new wxButton(#wxparent $name, $id, $label, $pos, $size, $style);</template>
     <template name="include">#include &lt;wx/button.h&gt;</template>
   </templates>
-  
+
+  <templates class="wxBitmapButton">
+    <template name="declaration">wxBitmapButton *$name;</template>
+    <template name="construction">$name = new wxBitmapButton(#wxparent $name, $id, $bitmap, $pos, $size, $style);</template>
+    <template name="include">#include &lt;wx/bmpbuttn.h&gt;</template>
+  </templates>
+
   <templates class="wxPanel">
     <template name="declaration">wxPanel *$name;</template>
     <template name="construction">$name = new wxPanel(#wxparent $name, $id, $pos, $size, $style);</template>
@@ -113,7 +119,7 @@
     <template name="declaration">wxMenuBar *$name;</template>
     <template name="construction">$name = new wxMenuBar($style);</template>
     <template name="include">#include &lt;wx/menu.h&gt;</template>
-    <template name="menubar_add">#wxparent $name->SetMenuBar($name);</template>
+    <template name="after_addchild">#wxparent $name->SetMenuBar($name);</template>
   </templates>
   
   <templates class="wxMenu">
@@ -181,6 +187,30 @@
   
   <templates class="tool">
     <template name="construction">#wxparent $name->AddTool(-1, $label, $bitmap, $help);</template>
+  </templates>
+  
+  <templates class="wxChoice">
+    <template name="declaration">wxChoice *$name;</template>
+    <template name="construction">
+      { #nl
+        wxString __choices[] = { $choices }; #nl
+        int __nchoices = sizeof(__choices) / sizeof(wxString); #nl
+        $name = new wxChoice(#wxparent $name, $id, $pos, $size, __nchoices, __choices, $style); #nl
+      } #nl
+    </template>
+    <template name="include">#include &lt;wx/choice.h&gt;</template>
+  </templates>
+  
+  <templates class="wxGauge">
+    <template name="declaration">wxGauge *$name;</template>
+    <template name="construction">$name = new wxGauge(#wxparent $name, $id, $range, $pos, $size, $style);</template>
+    <template name="include">#include &lt;wx/gauge.h&gt;</template>
+  </templates>
+  
+  <templates class="wxSlider">
+    <template name="declaration">wxSlider *$name;</template>
+    <template name="construction">$name = new wxSlider(#wxparent $name, $id, $value, $minValue, $maxValue, $pos, $size, $style);</template>
+    <template name="include">#include &lt;wx/slider.h&gt;</template>
   </templates>
   
 </codegen>

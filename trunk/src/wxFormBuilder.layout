@@ -7,8 +7,8 @@
 	<File name="codegen\codegen.h" open="0" top="0">
 		<Cursor position="1135" topLine="0"/>
 	</File>
-	<File name="codegen\cppcg.cpp" open="1" top="0">
-		<Cursor position="1157" topLine="0"/>
+	<File name="codegen\cppcg.cpp" open="0" top="0">
+		<Cursor position="13963" topLine="459"/>
 	</File>
 	<File name="codegen\cppcg.h" open="0" top="0">
 		<Cursor position="1135" topLine="0"/>
@@ -20,13 +20,13 @@
 		<Cursor position="1135" topLine="0"/>
 	</File>
 	<File name="maingui.cpp" open="0" top="0">
-		<Cursor position="1135" topLine="0"/>
+		<Cursor position="1230" topLine="18"/>
 	</File>
-	<File name="model\database.cpp" open="0" top="0">
-		<Cursor position="1135" topLine="0"/>
+	<File name="model\database.cpp" open="1" top="1">
+		<Cursor position="17646" topLine="542"/>
 	</File>
 	<File name="model\database.h" open="0" top="0">
-		<Cursor position="1135" topLine="0"/>
+		<Cursor position="1278" topLine="75"/>
 	</File>
 	<File name="model\objectbase.cpp" open="0" top="0">
 		<Cursor position="1135" topLine="0"/>
@@ -46,7 +46,7 @@
 	<File name="model\xrcfilter.h" open="0" top="0">
 		<Cursor position="1135" topLine="0"/>
 	</File>
-	<File name="plugins\component.h" open="1" top="0">
+	<File name="plugins\component.h" open="0" top="0">
 		<Cursor position="1135" topLine="0"/>
 	</File>
 	<File name="rad\about.cpp" open="0" top="0">
@@ -91,25 +91,25 @@
 	<File name="rad\customkeys.h" open="0" top="0">
 		<Cursor position="1135" topLine="0"/>
 	</File>
-	<File name="rad\designer\menubar.cpp" open="1" top="0">
+	<File name="rad\designer\menubar.cpp" open="0" top="0">
 		<Cursor position="1004" topLine="0"/>
 	</File>
 	<File name="rad\designer\menubar.h" open="0" top="0">
 		<Cursor position="1135" topLine="0"/>
 	</File>
-	<File name="rad\designer\resizablepanel.cpp" open="1" top="0">
+	<File name="rad\designer\resizablepanel.cpp" open="0" top="0">
 		<Cursor position="0" topLine="18"/>
 	</File>
-	<File name="rad\designer\resizablepanel.h" open="1" top="0">
+	<File name="rad\designer\resizablepanel.h" open="0" top="0">
 		<Cursor position="1135" topLine="39"/>
 	</File>
-	<File name="rad\designer\visualeditor.cpp" open="1" top="0">
-		<Cursor position="11866" topLine="0"/>
+	<File name="rad\designer\visualeditor.cpp" open="0" top="0">
+		<Cursor position="1362" topLine="6"/>
 	</File>
-	<File name="rad\designer\visualeditor.h" open="1" top="0">
+	<File name="rad\designer\visualeditor.h" open="0" top="0">
 		<Cursor position="1661" topLine="24"/>
 	</File>
-	<File name="rad\designer\visualobj.cpp" open="1" top="0">
+	<File name="rad\designer\visualobj.cpp" open="0" top="0">
 		<Cursor position="7028" topLine="223"/>
 	</File>
 	<File name="rad\designer\visualobj.h" open="0" top="0">
@@ -139,7 +139,7 @@
 	<File name="rad\inspector\propeditor.h" open="0" top="0">
 		<Cursor position="1135" topLine="12"/>
 	</File>
-	<File name="rad\mainframe.cpp" open="1" top="1">
+	<File name="rad\mainframe.cpp" open="0" top="0">
 		<Cursor position="4853" topLine="96"/>
 	</File>
 	<File name="rad\mainframe.h" open="0" top="0">
@@ -193,6 +193,7 @@
 	<File name="utils\typeconv.h" open="0" top="0">
 		<Cursor position="1135" topLine="0"/>
 	</File>
-	<Expand folder="/Sources/rad"/>
+	<Expand folder="/Sources/model"/>
+	<Expand folder="/Sources/codegen"/>
 	<Expand folder="/Sources"/>
 </Code::Blocks_layout_file>

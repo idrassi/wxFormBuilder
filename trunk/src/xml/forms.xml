@@ -4,6 +4,24 @@
     <property name="name" type="text" hidden="1">MyFrame</property>
     <property name="size" type="wxSize">500,300</property>
     <property name="title" type="wxString" />
+    <property name="style" type="bitlist">
+      <option name="wxDEFAULT_FRAME_STYLE" />
+      <option name="wxICONIZE" />
+      <option name="wxCAPTION" />
+      <option name="wxMINIMIZE" />
+      <option name="wxMINIMIZE_BOX" />
+      <option name="wxMAXIMIZE" />
+      <option name="wxMAXIMIZE_BOX" />
+      <option name="wxCLOSE_BOX" />
+      <option name="wxSTAY_ON_TOP" />
+      <option name="wxSYSTEM_MENU" />
+      <option name="wxRESIZE_BORDER" />
+      <option name="wxFRAME_TOOL_WINDOW" />
+      <option name="wxFRAME_NO_TASKBAR" />
+      <option name="wxFRAME_FLOAT_ON_PARENT" />
+      <option name="wxFRAME_EX_CONTEXTHELP" />
+      <option name="wxFRAME_SHAPED" />
+      <option name="wxFRAME_EX_METAL" />wxDEFAULT_FRAME_STYLE</property>
   </objectinfo>
   
   <objectinfo class="Panel" icon="panel.xpm" type="form">

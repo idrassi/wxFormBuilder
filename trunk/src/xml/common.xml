@@ -39,6 +39,19 @@
     <property name="label" type="wxString">MyButton</property>
   </objectinfo>
   
+  <objectinfo class="wxBitmapButton" icon="bitmap_button.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text" hidden="1">m_bpButton</property>
+    <property name="style" type="bitlist">
+      <option name="wxBU_LEFT" />
+      <option name="wxBU_TOP" />
+      <option name="wxBU_RIGHT" />
+      <option name="wxBU_BOTTOM" />
+      <option name="wxBU_AUTODRAW" />wxBU_AUTODRAW</property>
+    <property name="bitmap" type="bitmap" />
+  </objectinfo>
+  
+  
   <objectinfo class="wxPanel" icon="panel.xpm" type="container">
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_panel</property>
@@ -247,4 +260,37 @@
     <property name="help" type="wxString" />
   </objectinfo>
   
+  <objectinfo class="wxChoice" icon="choice.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_choice</property>
+    <property name="choices" type="stringlist" />
+  </objectinfo>
+  
+  <objectinfo class="wxSlider" icon="slider.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_slider</property>
+    <property name="value" type="text">50</property>
+    <property name="minValue" type="text">0</property>
+    <property name="maxValue" type="text">100</property>
+    <property name="style" type="bitlist">
+      <option name="wxSL_HORIZONTAL" />
+      <option name="wxSL_VERTICAL" />
+      <option name="wxSL_AUTOTICKS" />
+      <option name="wxSL_LABELS" />
+      <option name="wxSL_LEFT" />
+      <option name="wxSL_RIGHT" />
+      <option name="wxSL_TOP" />
+      <option name="wxSL_BOTTOM" />
+      <option name="wxSL_SELRANGE" />
+      <option name="wxSL_INVERSE" />wxSL_HORIZONTAL</property>
+  </objectinfo>
+  <objectinfo class="wxGauge" icon="gauge.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_gauge</property>
+    <property name="range" type="text">100</property>
+    <property name="style" type="bitlist">
+      <option name="wxGA_HORIZONTAL" />
+      <option name="wxGA_VERTICAL" />
+      <option name="wxGA_SMOOTH" />wxGA_HORIZONTAL</property>
+  </objectinfo>
 </package>

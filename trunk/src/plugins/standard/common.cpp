@@ -33,6 +33,8 @@
 #include "wx/notebook.h"
 #include "wx/listctrl.h"
 #include "wx/radiobox.h"
+#include "wx/bmpbuttn.h"
+
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -153,6 +155,21 @@ class ButtonComponent : public ComponentBase
     filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
     return filter.GetXfbObject();
   }
+};
+
+class BitmapButtonComponent : public ComponentBase
+{
+ public: 
+    
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    return new wxBitmapButton((wxWindow*)parent,-1,
+      obj->GetPropertyAsBitmap(_("bitmap")),
+      obj->GetPropertyAsPoint(_("pos")),
+      obj->GetPropertyAsSize(_("size")),
+      obj->GetPropertyAsInteger(_("style")));
+  }
+
 };
 
 
@@ -831,6 +848,57 @@ class ToolComponent : public ComponentBase
   }
 };   
 
+class ChoiceComponent : public ComponentBase
+{
+ public:
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    wxArrayString choices = obj->GetPropertyAsArrayString(_("choices"));
+    wxString *strings = new wxString[choices.Count()];
+    for (unsigned int i=0; i < choices.Count(); i++)
+      strings[i] = choices[i];
+      
+    wxChoice *choice = new wxChoice((wxWindow*)parent, -1,
+      obj->GetPropertyAsPoint(_("pos")),
+      obj->GetPropertyAsSize(_("size")),
+      choices.Count(),
+      strings,
+      obj->GetPropertyAsInteger(_("style")));
+ 
+    delete []strings;
+         
+    return choice;
+  }
+};
+
+class SliderComponent : public ComponentBase
+{
+ public:
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    return new wxSlider((wxWindow *)parent,-1,
+      obj->GetPropertyAsInteger(_("value")),
+      obj->GetPropertyAsInteger(_("minValue")),
+      obj->GetPropertyAsInteger(_("maxValue")),
+      obj->GetPropertyAsPoint(_("pos")),
+      obj->GetPropertyAsSize(_("size")),
+      obj->GetPropertyAsInteger(_("style")));
+  }
+};
+
+class GaugeComponent : public ComponentBase
+{
+public:
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    return new wxGauge((wxWindow *)parent,-1,
+      obj->GetPropertyAsInteger(_("range")),
+      obj->GetPropertyAsPoint(_("pos")),
+      obj->GetPropertyAsSize(_("size")),
+      obj->GetPropertyAsInteger(_("style")));
+  }
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()
@@ -842,6 +910,7 @@ BEGIN_LIBRARY()
     
   WINDOW_COMPONENT("notebookpage",NotebookPageComponent)
   WINDOW_COMPONENT("wxButton",ButtonComponent)
+  WINDOW_COMPONENT("wxBitmapButton",BitmapButtonComponent)
   WINDOW_COMPONENT("wxTextCtrl",TextCtrlComponent)
   WINDOW_COMPONENT("wxStaticText",StaticTextComponent)
   WINDOW_COMPONENT("wxPanel",PanelComponent)
@@ -863,6 +932,9 @@ BEGIN_LIBRARY()
   WINDOW_COMPONENT("wxStatusBar", StatusBarComponent)
   WINDOW_COMPONENT("wxToolBar", ToolBarComponent)
   WINDOW_COMPONENT("tool", ToolComponent)
+  WINDOW_COMPONENT("wxChoice", ChoiceComponent)
+  WINDOW_COMPONENT("wxSlider", SliderComponent)
+  WINDOW_COMPONENT("wxGauge", GaugeComponent)
 
   // wxWindow style macros
   MACRO(wxSIMPLE_BORDER)
@@ -870,6 +942,33 @@ BEGIN_LIBRARY()
   MACRO(wxDOUBLE_BORDER)
   MACRO(wxRAISED_BORDER)
   MACRO(wxTAB_TRAVERSAL)
+  MACRO(wxCLIP_CHILDREN)
+  MACRO(wxHSCROLL)
+  MACRO(wxNO_3D)
+  MACRO(wxNO_FULL_REPAINT_ON_RESIZE)
+  MACRO(wxSTATIC_BORDER)
+  MACRO(wxTRANSPARENT_WINDOW)
+  MACRO(wxVSCROLL)
+  MACRO(wxWANTS_CHARS)
+  
+  // wxFrame style macros
+  MACRO(wxCAPTION)
+  MACRO(wxCLOSE_BOX)
+  MACRO(wxDEFAULT_FRAME_STYLE)
+  MACRO(wxFRAME_EX_CONTEXTHELP)
+  MACRO(wxFRAME_EX_METAL)
+  MACRO(wxFRAME_FLOAT_ON_PARENT)
+  MACRO(wxFRAME_NO_TASKBAR)
+  MACRO(wxFRAME_SHAPED)
+  MACRO(wxFRAME_TOOL_WINDOW)
+  MACRO(wxICONIZE)
+  MACRO(wxMAXIMIZE)
+  MACRO(wxMAXIMIZE_BOX)
+  MACRO(wxMINIMIZE)
+  MACRO(wxMINIMIZE_BOX)
+  MACRO(wxRESIZE_BORDER)
+  MACRO(wxSTAY_ON_TOP)
+  MACRO(wxSYSTEM_MENU)
 
   // wxButton
   MACRO(wxBU_LEFT)
@@ -877,6 +976,7 @@ BEGIN_LIBRARY()
   MACRO(wxBU_RIGHT)
   MACRO(wxBU_BOTTOM)
   MACRO(wxBU_EXACTFIT)
+  MACRO(wxBU_AUTODRAW)
   
   // wxStaticText
   MACRO(wxALIGN_LEFT)
@@ -953,6 +1053,29 @@ BEGIN_LIBRARY()
   MACRO(wxTB_NOALIGN)
   MACRO(wxTB_HORZ_LAYOUT)
   MACRO(wxTB_HORZ_TEXT) 
+  
+  // wxSlider
+  MACRO(wxSL_AUTOTICKS)
+  MACRO(wxSL_BOTTOM)
+  MACRO(wxSL_HORIZONTAL)
+  MACRO(wxSL_INVERSE)
+  MACRO(wxSL_LABELS)
+  MACRO(wxSL_LEFT)
+  MACRO(wxSL_RIGHT)
+  MACRO(wxSL_SELRANGE)
+  MACRO(wxSL_TOP)
+  MACRO(wxSL_VERTICAL)
+  
+  // wxComboBox
+  MACRO(wxCB_DROPDOWN)
+  MACRO(wxCB_READONLY)
+  MACRO(wxCB_SIMPLE)
+  
+  // wxGauge
+  MACRO(wxGA_HORIZONTAL)
+  MACRO(wxGA_SMOOTH)
+  MACRO(wxGA_VERTICAL)
+
   
 END_LIBRARY()
 

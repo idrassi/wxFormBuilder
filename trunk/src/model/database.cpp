@@ -556,6 +556,18 @@ bool ObjectDatabase::LoadFile(string file)
         elem = elem->NextSiblingElement(PACKAGE_TAG);         
       }  
     }
+    
+    // imprimimos las macros declaradas pero no importadas.
+    MacroSet::iterator it;
+    //Debug::Print("Missing macros of component libraries");
+    wxLogMessage("Missing macros of component libraries (solo para depurar)");
+    for (it = m_macroSet.begin(); it != m_macroSet.end(); it++)
+    {
+      wxLogMessage(_WXSTR(*it));
+      //Debug::Print((char*)(*it).c_str());
+    }
+    
+    
   }
 //  else
 //  {
@@ -730,14 +742,15 @@ PObjectPackage ObjectDatabase::LoadPackage(string file)
               opt_list->AddOption(macro_name);
               elem_opt = elem_opt->NextSiblingElement("option");
               
+              m_macroSet.insert(macro_name);
               // vamos a comprobar si la macro está registrada en la aplicación
               // de los contrario mostraremos un mensaje de advertencia.
-//              {
-//                int macro;
-//                PMacroDictionary dic = MacroDictionary::GetInstance();
-//                if (!dic->SearchMacro(macro_name,&macro))
-//                  Debug::Print("Macro '%s' not defined!",macro_name.c_str());
-//              }
+              /*{
+                int macro;
+                PMacroDictionary dic = MacroDictionary::GetInstance();
+                if (!dic->SearchMacro(macro_name,&macro))
+                  wxLogWarning(_("Macro '%s' not defined on component library!"),_WXSTR(macro_name).c_str());
+              }*/
             }
           }
           
@@ -852,6 +865,7 @@ void ObjectDatabase::ImportComponentLibrary(string libfile)
         wxString name = comp_lib->GetMacroName(i);
         int value = comp_lib->GetMacroValue(i);
         dic->AddMacro(_STDSTR(name),value);
+        m_macroSet.erase(_STDSTR(name));
       }
     }
     else
