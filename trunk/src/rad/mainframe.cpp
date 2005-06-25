@@ -432,8 +432,9 @@ void MainFrame::OnImportXrc(wxCommandEvent &event)
 
 void MainFrame::OnNewProject(wxCommandEvent &event)
 {
+  m_prjFileName = wxT(""); // Hay que hacerlo antes, ya que la notificación refresh
+                           // se produce al hacer NewProject
   GetData()->NewProject();
-  m_prjFileName = wxT("");
 }  
 
 void MainFrame::OnGenerateCode(wxCommandEvent &event)
