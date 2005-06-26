@@ -281,8 +281,11 @@ void XrcToXfbFilter::AddProperty(const wxString &xrcPropName,
     case XRC_TYPE_BITLIST:
     case XRC_TYPE_TEXT:
     case XRC_TYPE_BOOL:      
-    case XRC_TYPE_INTEGER:
       ImportTextProperty(xrcPropName, propElement);
+      break;
+      
+    case XRC_TYPE_INTEGER:
+      ImportIntegerProperty(xrcPropName, propElement);
       break;
 
     case XRC_TYPE_COLOUR:
@@ -331,6 +334,22 @@ void XrcToXfbFilter::ImportTextProperty(const wxString &xrcPropName,
     if (textElement && textElement->ToText())
       property->LinkEndChild(textElement->Clone());
   }
+}
+
+void XrcToXfbFilter::ImportIntegerProperty(const wxString &xrcPropName,
+                                        TiXmlElement *property)
+{
+  TiXmlElement *xrcProperty = m_xrcObj->FirstChildElement(xrcPropName.mb_str());
+  if (xrcProperty)
+  {
+    TiXmlNode *textElement = xrcProperty->FirstChild();
+    if (textElement && textElement->ToText())
+      property->LinkEndChild(textElement->Clone());
+    else
+      property->LinkEndChild(new TiXmlText("0"));
+  }
+  else
+    property->LinkEndChild(new TiXmlText("0"));
 }
 
 void XrcToXfbFilter::ImportFontProperty(const wxString &xrcPropName,
