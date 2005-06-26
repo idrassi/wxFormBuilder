@@ -131,7 +131,9 @@ void ObjectTree::ObjectSelected(PObjectBase obj)
   }
   else
   {
+    #ifdef __WXFB_DEBUG__
     wxLogError(_("Algo pasa porque no se encuentra el item asociado al objeto"));
+    #endif
   }
 }
 
