@@ -32,7 +32,7 @@ BEGIN_EVENT_TABLE(ResizablePanel, wxPanel)
   EVT_LEFT_DOWN(ResizablePanel::OnLeftDown)
   EVT_LEFT_UP(ResizablePanel::OnLeftUp)
   EVT_MOTION(ResizablePanel::OnMouseMotion)
-  EVT_SIZE(ResizablePanel::OnSize)
+  //EVT_SIZE(ResizablePanel::OnSize)
 END_EVENT_TABLE()
 
 ResizablePanel::ResizablePanel(wxWindow *parent, const wxPoint& pos, const wxSize& size,
@@ -160,16 +160,25 @@ void ResizablePanel::OnLeftUp(wxMouseEvent& e)
     dc.SetPen(wxNullPen);
     dc.SetBrush(wxNullBrush);
     
+    wxCommandEvent event(wxEVT_PANEL_RESIZED, GetId());
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
+    
     SetSize(m_curX, m_curY);
     
     m_curX = m_curY = -1;
   }
 }
 
+/*
+// Cuando cambie de tamaño el panel no interesa que se genere el evento
+// Resized. Si el panel cambiaba de tamaño por un SetSize (p.e. cuando estaba
+// el tamaño por defecto) se actualizaba la propiedad size del form.
+//
 void ResizablePanel::OnSize(wxSizeEvent& e)
 {
   wxCommandEvent event(wxEVT_PANEL_RESIZED, GetId());
   event.SetEventObject(this);
   GetEventHandler()->ProcessEvent(event);
 }
-
+*/

@@ -61,7 +61,8 @@ class ResizablePanel : public wxPanel
     void OnLeftDown(wxMouseEvent& e);
     void OnSetCursor(wxSetCursorEvent& e);
     void OnLeftUp(wxMouseEvent& e);
-    void OnSize(wxSizeEvent& e);
+    //void OnSize(wxSizeEvent& e);
+    void OnPanelResized(wxSizeEvent &e);
     
     DECLARE_EVENT_TABLE()
 };
