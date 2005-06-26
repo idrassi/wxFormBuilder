@@ -3,7 +3,7 @@ Compiling wxFormBuilder
 
 In order to compile wxFormBuilder you need these libraries:
 
-- wxWidgets - 2.5.4 (**new**)
+- wxWidgets - 2.6.0 (compiled with SHARED=1)
  
 - boost     - 1.31
   Used only for automatic memory management with "smart pointers".
@@ -11,6 +11,10 @@ In order to compile wxFormBuilder you need these libraries:
 
 - tinyxml   - 2.3.2
   Used for loading/saving XML files.
+  
+- wxpropgrid 1.0.4
+
+- wxStyledTextCtrl (wxWidgets contrib)
 
 
 Change appropiate paths on Makefile for Linux, or into Dev-C++ project
@@ -34,15 +38,45 @@ On Linux I use this path structure:
     +- libs
          +- boost_1_31_0  : boost library
          +- tinyxml       : tinyxml library
+	 
+    +- bin
+        +- xml
+	+- resources
+	+- xpm
          
 --------------------------------------------------------------     
+
+How-to build on Linux
+---------------------
+
+Steps to build wxFormBuilder on Linux.
+
+1. Download and build wxGTK-2.6.0, wxpropgrid 1.0.4 and wxStyledTextCtrl as shared library.
+2. Build tinyxml as static library with Makefile.tinyxml.
+3. Create "bin" directory at the same level that src directory (see above).
+4. Copy src/xml/ src/resources/ and src/xpm/ subdirectories into bin subdirectory.
+5. Edit src/Makefile and set LIBS var with the aproppiate libraries names
+   (because it depends of wxWidgets configuration).
+6. Repeat step 5 with src/plugins/standard/Makefile
+7. Build src
+8. Build src/plugins/standard
+9. go to bin/ a run ./wxFormBuilder
+
+
+
+ NOTE:
+ 
+ This makefiles are edited by hand, if you are familiar with bakefile tool, please
+ help us to make easy the build process. Thanks.
+
+
      
 Enjoy :-)
 
 
 José Antonio Hurtado.
 
-joseantonio.hurtado@hispalinux.es
+joseantonio.hurtado@gmail.com
 
-2005-03-19
+2005-06-26
 

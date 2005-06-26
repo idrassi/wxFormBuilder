@@ -2,8 +2,7 @@ CPP  = g++
 CC   = gcc
 
 RES  = 
-OBJ  = model/database.o model/objectbase.o rad/bitmaps.o rad/guirad.o rad/mainframe.o rad/palette.o utils/stringutils.o utils/typeconv.o maingui.o rad/designer/visualobj.o utils/debug.o rad/cpppanel/cpppanel.o rad/appobserver.o rad/objecttree/objecttree.o rad/inspector/objinspect2.o rad/inspector/propeditor.o rad/designer/visualeditor.o rad/appdata.o rad/customkeys.o codegen/codegen.o codegen/cppcg.o rad/title.o rad/genericpanel.o model/types.o rad/xrcpanel/xrcpanel.o codegen/xrccg.o model/xrcfilter.o rad/about.o rad/cmdproc.o rad/menueditor.o rad/designer/menubar.o
-LINKOBJ  = model/database.o model/objectbase.o rad/bitmaps.o rad/guirad.o rad/mainframe.o rad/palette.o utils/stringutils.o utils/typeconv.o maingui.o rad/designer/visualobj.o utils/debug.o rad/cpppanel/cpppanel.o rad/appobserver.o rad/objecttree/objecttree.o rad/inspector/objinspect2.o rad/inspector/propeditor.o rad/designer/visualeditor.o rad/appdata.o rad/customkeys.o codegen/codegen.o codegen/cppcg.o rad/title.o rad/genericpanel.o model/types.o rad/xrcpanel/xrcpanel.o codegen/xrccg.o model/xrcfilter.o rad/about.o rad/cmdproc.o rad/menueditor.o rad/designer/menubar.o
+OBJ  = model/database.o model/objectbase.o rad/bitmaps.o rad/guirad.o rad/mainframe.o rad/palette.o utils/stringutils.o utils/typeconv.o maingui.o rad/designer/visualobj.o utils/debug.o rad/cpppanel/cpppanel.o rad/appobserver.o rad/objecttree/objecttree.o rad/inspector/objinspect2.o rad/inspector/propeditor.o rad/designer/visualeditor.o rad/appdata.o rad/customkeys.o codegen/codegen.o codegen/cppcg.o rad/title.o rad/genericpanel.o model/types.o rad/xrcpanel/xrcpanel.o codegen/xrccg.o model/xrcfilter.o rad/about.o rad/cmdproc.o rad/menueditor.o rad/designer/menubar.o rad/designer/resizablepanel.o
 
 LIBS = `wx-config --libs`   ../libs/tinyxml/tinyxml.a -lwx_gtk2_stc-2.6 -lwx_gtk2_propgrid-2.6
 INCS = 
@@ -22,7 +21,7 @@ clean: clean-custom
 
 
 $(BIN): $(OBJ)
-	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
+	$(CPP) $(OBJ) -o $(BIN) $(LIBS)
 
 
 model/types.o: model/types.cpp
@@ -121,4 +120,6 @@ rad/menueditor.o: rad/menueditor.cpp
 rad/designer/menubar.o: rad/designer/menubar.cpp
 	$(CPP) -c rad/designer/menubar.cpp -o rad/designer/menubar.o $(CXXFLAGS)
 
+rad/designer/resizablepanel.o: rad/designer/resizablepanel.cpp
+	$(CPP) -c rad/designer/resizablepanel.cpp -o rad/designer/resizablepanel.o $(CXXFLAGS)
 

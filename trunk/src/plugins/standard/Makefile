@@ -3,7 +3,7 @@ CXX = g++
 LIBCOMMON = libcommon.so
 LIBLAYOUT = liblayout.so
 
-WXFBDIR = /home/jose/proyectos/wxformbuilder
+WXFBDIR = ../../..
 
 CXXFLAGS = `wx-config --cxxflags` -I"." -I$(WXFBDIR)/src -I$(WXFBDIR)/libs/tinyxml -DTIXML_USE_STL -g
 CFLAGS = `wx-config --cflags` -I"." -I$(WXFBDIR)/src -I$(WXFBDIR)/libs/tinyxml -DTIXML_USE_STL -g
