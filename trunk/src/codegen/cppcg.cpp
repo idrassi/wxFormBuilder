@@ -32,6 +32,7 @@
 CppTemplateParser::CppTemplateParser(PObjectBase obj, string _template)
   : TemplateParser(obj,_template)
 {
+  m_useRelativePath = false;
 }
 string CppTemplateParser::RootWxParentToCode()
 {
@@ -44,6 +45,19 @@ PTemplateParser CppTemplateParser::CreateParser(PObjectBase obj, string _templat
   return newparser;
 }
 
+bool CppTemplateParser::UseRelativePath(bool relative, string basePath)
+{
+  bool result;
+  m_useRelativePath = relative;
+  
+  if (m_useRelativePath)
+  {
+    result = wxFileName::DirExists(_WXSTR(basePath));
+    m_basePath = (result ? basePath : "");
+  }
+
+  return result;
+}
 
 /**
  * Convierte el valor de una propiedad a código C++.
@@ -132,8 +146,14 @@ string CppTemplateParser::ValueToCode(PropertyType type, string value)
       break;  
       
     case PT_BITMAP:
-      result = "wxBitmap(wxT(\"" + CppCodeGenerator::ConvertCppString(value)
+      {
+      string file = (m_useRelativePath ?
+                     CppCodeGenerator::ConvertToRelativePath(value, m_basePath)
+                     : value );
+                     
+      result = "wxBitmap(wxT(\"" + CppCodeGenerator::ConvertCppString(file)
                        + "\"), wxBITMAP_TYPE_ANY)";
+      }
       break;
       
     case PT_XPM_BITMAP:
@@ -153,8 +173,7 @@ string CppTemplateParser::ValueToCode(PropertyType type, string value)
         wxArrayString array = TypeConv::StringToArrayString(_WXSTR(value));
         if (array.Count() > 0)
           result = ValueToCode(PT_WXSTRING,_STDSTR(array[0]));
-          
-        
+  
         for (unsigned int i=1 ; i< array.Count() ; i++)
           result = result + ", " + ValueToCode(PT_WXSTRING,_STDSTR(array[i]));
           
@@ -174,6 +193,7 @@ string CppTemplateParser::ValueToCode(PropertyType type, string value)
 CppCodeGenerator::CppCodeGenerator()
 {
   SetupPredefinedMacros();
+  m_useRelativePath = false;
 }
 
 string CppCodeGenerator::ConvertCppString(string text)
@@ -343,6 +363,7 @@ string CppCodeGenerator::GetCode(PObjectBase obj, string name)
   _template = code_info->GetTemplate(name);
     
   CppTemplateParser parser(obj,_template);
+  parser.UseRelativePath(m_useRelativePath, m_basePath);
   string code = parser.ParseTemplate();
 
   return code;
@@ -508,6 +529,7 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
                            "#wxparent $name->SetAutoLayout(true);\n"
                            "#wxparent $name->Layout();";
         CppTemplateParser parser(obj,_template);
+        parser.UseRelativePath(m_useRelativePath, m_basePath);
         m_source->WriteLn(parser.ParseTemplate());
       } 
       
@@ -636,6 +658,7 @@ void CppCodeGenerator::GenSettings(PObjectInfo info, PObjectBase obj)
   if (_template != "")
   {
     CppTemplateParser parser(obj,_template);
+    parser.UseRelativePath(m_useRelativePath, m_basePath);
     string code = parser.ParseTemplate();
     if (code != "")
       m_source->WriteLn(code);
@@ -685,7 +708,12 @@ void CppCodeGenerator::FindXpmProperties(PObjectBase obj, set<string> &set)
     PProperty property = obj->GetProperty(i);
     if (property->GetType() == PT_XPM_BITMAP)
     {
-      string path = ConvertToRelativePath(property->GetValue(),m_path);
+      // Se supone el path contiene la ruta completa del archivo y no
+      // una relativa.
+      string path = ( m_useRelativePath ?
+                      ConvertToRelativePath(property->GetValue(),m_basePath) :
+                      property->GetValue() );
+                      
       string inc = "#include \"" + ConvertCppString(path) + "\"";
       set.insert(inc);
     }
@@ -699,10 +727,17 @@ void CppCodeGenerator::FindXpmProperties(PObjectBase obj, set<string> &set)
   }
 }
 
-bool CppCodeGenerator::SetBasePath (string path)
+bool CppCodeGenerator::UseRelativePath(bool relative, string basePath)
+//bool CppCodeGenerator::SetBasePath (string path)
 {
-  bool result = wxFileName::DirExists(_WXSTR(path));
-  m_path = (result ? path : "");
+  bool result;
+  m_useRelativePath = relative;
+  
+  if (m_useRelativePath)
+  {
+    result = wxFileName::DirExists(_WXSTR(basePath));
+    m_basePath = (result ? basePath : "");
+  }
 
   return result;
 }

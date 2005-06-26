@@ -41,16 +41,19 @@ using namespace TypeConv;
 class InsertObjectCmd : public Command
 {
  private:
+  ApplicationData *m_data;
   PObjectBase m_parent;
   PObjectBase m_object;
   int m_pos;
+  PObjectBase m_oldSelected;
+  
   
  protected:
   void DoExecute();
   void DoRestore();
  
  public:
-   InsertObjectCmd(PObjectBase object, PObjectBase parent, int pos = -1);
+   InsertObjectCmd(ApplicationData *data, PObjectBase object, PObjectBase parent, int pos = -1);
 };
 
 /**
@@ -59,16 +62,18 @@ class InsertObjectCmd : public Command
 class RemoveObjectCmd : public Command
 {
 private:
+  ApplicationData *m_data;
   PObjectBase m_parent;
   PObjectBase m_object;
   int m_oldPos;
+  PObjectBase m_oldSelected;
   
  protected:
   void DoExecute();
   void DoRestore();
  
  public:
-   RemoveObjectCmd(PObjectBase object);
+   RemoveObjectCmd(ApplicationData *data,PObjectBase object);
 };
 
 /**
@@ -119,22 +124,26 @@ class CutObjectCmd : public Command
   PObjectBase m_parent;
   PObjectBase m_object;
   int m_oldPos;
+  PObjectBase m_oldSelected;
   
  protected:
   void DoExecute();
   void DoRestore();
   
  public:
-  CutObjectCmd(PObjectBase object, ApplicationData *data);
+  CutObjectCmd(ApplicationData *data, PObjectBase object);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // Implementación de los Comandos
 ///////////////////////////////////////////////////////////////////////////////
 
-InsertObjectCmd::InsertObjectCmd(PObjectBase object, PObjectBase parent, int pos)
-  : m_parent(parent), m_object(object), m_pos(pos)
-{}
+InsertObjectCmd::InsertObjectCmd(ApplicationData *data, PObjectBase object,
+                                 PObjectBase parent, int pos)
+  : m_data(data), m_parent(parent), m_object(object), m_pos(pos)
+{
+  m_oldSelected = data->GetSelectedObject();
+}
 
 void InsertObjectCmd::DoExecute()
 {
@@ -149,15 +158,18 @@ void InsertObjectCmd::DoRestore()
 {
   m_parent->RemoveChild(m_object);
   m_object->SetParent(PObjectBase());
+  m_data->SelectObject(m_oldSelected);
 }
 
 //-----------------------------------------------------------------------------
 
-RemoveObjectCmd::RemoveObjectCmd(PObjectBase object)
+RemoveObjectCmd::RemoveObjectCmd(ApplicationData *data, PObjectBase object)
 {
+  m_data = data;
   m_object = object;
   m_parent = object->GetParent();
   m_oldPos = m_parent->GetChildPosition(object);
+  m_oldSelected = data->GetSelectedObject();
 }
 
 void RemoveObjectCmd::DoExecute()
@@ -172,7 +184,8 @@ void RemoveObjectCmd::DoRestore()
   m_object->SetParent(m_parent);
   
   // restauramos la posición
-  m_parent->ChangeChildPosition(m_object,m_oldPos);  
+  m_parent->ChangeChildPosition(m_object,m_oldPos); 
+  m_data->SelectObject(m_oldSelected); 
 }
 
 //-----------------------------------------------------------------------------
@@ -226,12 +239,13 @@ void ShiftChildCmd::DoRestore()
 
 //-----------------------------------------------------------------------------
 
-CutObjectCmd::CutObjectCmd(PObjectBase object, ApplicationData *data)
+CutObjectCmd::CutObjectCmd(ApplicationData *data, PObjectBase object)
 {
   m_data = data;
   m_object = object;
   m_parent = object->GetParent();
   m_oldPos = m_parent->GetChildPosition(object);
+  m_oldSelected = data->GetSelectedObject();
 }
 
 void CutObjectCmd::DoExecute()
@@ -254,6 +268,7 @@ void CutObjectCmd::DoRestore()
   // restauramos el clipboard
   //m_data->SetClipboardObject(m_clipboard);
   m_data->SetClipboardObject(PObjectBase());
+  m_data->SelectObject(m_oldSelected);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -426,7 +441,7 @@ void ApplicationData::CreateObject(wxString name)
       {
         int pos = CalcPositionOfInsertion(GetSelectedObject(),parent);
         
-        PCommand command(new InsertObjectCmd(obj,parent,pos));
+        PCommand command(new InsertObjectCmd(this,obj,parent,pos));
         m_cmdProc.Execute(command);
         created = true;
         ResolveNameConflict(obj);
@@ -480,12 +495,12 @@ void ApplicationData::DoRemoveObject(PObjectBase obj, bool cutObject)
     if (cutObject)
     {
       m_copyOnPaste = false;
-      PCommand command(new CutObjectCmd(obj,this));
+      PCommand command(new CutObjectCmd(this, obj));
       m_cmdProc.Execute(command);
     }
     else
     {
-      PCommand command(new RemoveObjectCmd(obj));
+      PCommand command(new RemoveObjectCmd(this,obj));
       m_cmdProc.Execute(command);
     }
 
@@ -590,7 +605,7 @@ void ApplicationData::PasteObject(PObjectBase parent)
         obj = clipboard;
         
       // y finalmente insertamos en el arbol 
-      PCommand command(new InsertObjectCmd(obj,parent,pos));
+      PCommand command(new InsertObjectCmd(this,obj,parent,pos));
       m_cmdProc.Execute(command);
       
       if (!m_copyOnPaste)
@@ -620,7 +635,7 @@ void ApplicationData::InsertObject(PObjectBase obj, PObjectBase parent)
 //  if (parent->GetObjectInfo()->GetObjectType()->FindChildType(
 //    obj->GetObjectInfo()->GetObjectType()))
 //  {
-    PCommand command(new InsertObjectCmd(obj,parent));
+    PCommand command(new InsertObjectCmd(this,obj,parent));
     m_cmdProc.Execute(command);  
     DataObservable::NotifyProjectRefresh(); 
 //  }
@@ -749,6 +764,7 @@ void ApplicationData::Undo()
   m_cmdProc.Undo();
   DataObservable::NotifyProjectRefresh();
   CheckProjectTree(m_project);
+  DataObservable::NotifyObjectSelected(GetSelectedObject());
 }
 
 void ApplicationData::Redo()
@@ -756,6 +772,7 @@ void ApplicationData::Redo()
   m_cmdProc.Redo();
   DataObservable::NotifyProjectRefresh();
   CheckProjectTree(m_project);
+  DataObservable::NotifyObjectSelected(GetSelectedObject());
 }
 
 

@@ -1,5 +1,24 @@
 <package name="layout" lib="liblayout" desc="wxWidgets sizer layouts">
 
+  <objectinfo class="sizeritem" type="sizeritem">
+    <property name="border" type="text">5</property>
+    <property name="flag" type="bitlist">
+      <option name="wxALL" />
+      <option name="wxLEFT" />
+      <option name="wxRIGHT" />
+      <option name="wxTOP" />
+      <option name="wxBOTTOM" />
+      <option name="wxEXPAND" />
+      <option name="wxALIGN_RIGHT" />
+      <option name="wxALIGN_BOTTOM" />
+      <option name="wxALIGN_CENTER_HORIZONTAL" />
+      <option name="wxALIGN_CENTER_VERTICAL" />
+      <option name="wxSHAPED" />
+      <option name="wxADJUST_MINSIZE" />
+      <option name="wxFIXED_MINSIZE" />wxALL | wxEXPAND</property>
+    <property name="option" type="text">1</property>
+  </objectinfo>
+
   <objectinfo class="wxBoxSizer" icon="sizer.xpm" type="sizer">
     <property name="name" type="text" hidden="1">bSizer</property>
     <property name="orient" type="option">

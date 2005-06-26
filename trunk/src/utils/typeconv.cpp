@@ -245,10 +245,12 @@ wxString TypeConv::FontToString (const wxFont &font)
 
 wxBitmap TypeConv::StringToBitmap(const wxString &str)
 {
-  //wxImage image(str,
-  wxBitmap bitmap(str,wxBITMAP_TYPE_ANY);
-  if (bitmap.Ok())
-    return bitmap;
+  if (::wxFileExists(str))
+  {
+    wxBitmap bitmap(str,wxBITMAP_TYPE_ANY);
+    if (bitmap.Ok())
+      return bitmap;
+  }
 
   return wxBitmap(unknown_xpm);
 }

@@ -103,24 +103,49 @@ void CppPanel::InitStyledTextCtrl(wxStyledTextCtrl *stc)
 void CppPanel::CodeGeneration()
 {
   PObjectBase project = GetData()->GetProjectData();
+
+  wxString path, file;
+  bool useRelativePath = false;
   
+  PProperty pCodeGen = project->GetProperty("code_generation");
+  if (pCodeGen)
+  {
+    if (!TypeConv::FlagSet  (wxT("C++"),_WXSTR(pCodeGen->GetValue())))
+      return;
+  }
+    
+  // Obtenemos el path de salida
+  PProperty ppath = project->GetProperty("path");
+  if (ppath)
+    path = _WXSTR(ppath->GetValue());
+    
+  // Obtenemos el nombre del fichero
+  PProperty pfile = project->GetProperty("file");
+  if (pfile)
+    file = _WXSTR(pfile->GetValue());
+      
+  if (file == wxT(""))
+    file = wxT("noname");
+
+  // Comprobamos si hay que usar rutas relativas o absolutas en la generación
+  PProperty pRelPath = project->GetProperty("relative_path");
+  if (pRelPath)
+    useRelativePath = (pRelPath->GetValueAsInteger() ? true : false);
+ 
+ 
   // Vamos a generar el código en el panel
   {
     CppCodeGenerator codegen;
-    
-    wxString path;
-    PProperty ppath = project->GetProperty("path");
-    if (ppath)
-    {
-      path = _WXSTR(ppath->GetValue());
-      codegen.SetBasePath(ppath->GetValue());
-    }
+    //codegen.SetBasePath(ppath->GetValue());
+    //codegen.SetRelativePath(useRelativePath);
+    codegen.UseRelativePath(useRelativePath,_STDSTR(path));
 
     m_cppPanel->GetTextCtrl()->Freeze();
     m_hPanel->GetTextCtrl()->Freeze();
 
     codegen.SetHeaderWriter(m_hCW);   
     codegen.SetSourceWriter(m_cppCW);
+    
     codegen.GenerateCode(project);
     m_cppPanel->GetTextCtrl()->Thaw();
     m_hPanel->GetTextCtrl()->Thaw();
@@ -129,21 +154,7 @@ void CppPanel::CodeGeneration()
   // y ahora en el fichero
   {
     CppCodeGenerator codegen;
-    
-    wxString path, file;
-    PProperty ppath = project->GetProperty("path");
-    if (ppath)
-    {
-      path = _WXSTR(ppath->GetValue());
-      codegen.SetBasePath(ppath->GetValue());
-    }
-      
-    PProperty pfile = project->GetProperty("file");
-    if (pfile)
-      file = _WXSTR(pfile->GetValue());
-      
-    if (file == wxT(""))
-      file = wxT("noname");
+    codegen.UseRelativePath(useRelativePath,_STDSTR(path));
     
     if (!path.IsEmpty())
     {

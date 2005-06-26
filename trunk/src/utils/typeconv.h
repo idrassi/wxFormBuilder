@@ -23,17 +23,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-////////////
-// NOTAS:
-// No me gusta nada este módulo, y tampoco, en general, el tratamiento de las
-// propiedades como cadenas de caracteres.
-// Sería más elegante tratar los valores como objetos TVariant, pero esta
-// modificación implica refactorizar el sistema de propiedades.
-// de momento se queda como está pero es algo a tener en cuenta para los
-// futuros cambios...
-
-
-
 #ifndef __TYPE_UTILS__
 #define __TYPE_UTILS__
 
@@ -107,48 +96,6 @@ class MacroDictionary
   bool SearchMacro(string name, int *result);
   void AddMacro(string name, int value);
 };
-
-/**
- * Clase que encapsula el valor de una propiedad.
- *
-class TVariant
-{
- public:
-  // Constructores abiertos
-  TVariant(PropertyType type, const string &value);  
-  TVariant(PropertyType type, const wxString &value);
-  
-  // Constructores específicos
-  TVariant(const wxFont &font);
-  TVariant(const wxColour &colour);
-  TVariant(const wxString &wxstring);
-  TVariant(const wxPoint &point);
-  TVariant(const wxSize &size);
-  TVariant(const bool boolean);
-  
-  wxFont AsFont();
-  wxColour AsColour();
-  wxPoint AsPoint();
-  wxSize AsSize();
-  bool AsBool();
-  int AsInteger();
-
-  // Efectuan una conversión en caso de no ser un tipo string,
-  // este es el formato común a todos, y el que se usará para almacenar
-  // el valor en una archivo
-  wxString AsString();
-  string AsStdString();
-  
-  // se admite el valor nulo
-  bool IsNull();
-  
- private:
-  PropertyType m_type;
-  
-  // la representación del valor es siempre una cadena de caracteres
-  string m_value;
-};
-*/
 
 #endif //__TYPE_UTILS__
 

@@ -1,13 +1,8 @@
 <codegen language="C++">
 
-  <templates class="sizeritem">
-    <template name="window_add">#parent $name->Add(#child $name, $option, $flag, $border);</template>
-    <template name="sizer_add">#parent $name->Add(#child $name, $option, $flag, $border);</template>
-  </templates>
+
   
-  <templates class="notebookpage">
-    <template name="page_add">#parent $name->AddPage(#child $name, $label, $select);</template>
-  </templates>
+
   
 </codegen>
 

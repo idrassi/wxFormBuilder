@@ -558,6 +558,7 @@ bool ObjectDatabase::LoadFile(string file)
     }
     
     // imprimimos las macros declaradas pero no importadas.
+    #ifdef __WXFB_DEBUG__
     MacroSet::iterator it;
     //Debug::Print("Missing macros of component libraries");
     wxLogMessage("Missing macros of component libraries (solo para depurar)");
@@ -566,6 +567,7 @@ bool ObjectDatabase::LoadFile(string file)
       wxLogMessage(_WXSTR(*it));
       //Debug::Print((char*)(*it).c_str());
     }
+    #endif
     
     
   }

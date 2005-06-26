@@ -79,6 +79,13 @@ void XrcPanel::CodeGeneration()
 {
   PObjectBase project = GetData()->GetProjectData();
   
+  PProperty pCodeGen = project->GetProperty("code_generation");
+  if (pCodeGen)
+  {
+    if (!TypeConv::FlagSet (wxT("XRC"),_WXSTR(pCodeGen->GetValue())))
+      return;
+  }
+  
   // Vamos a generar el código en el panel
   {
     XrcCodeGenerator codegen;

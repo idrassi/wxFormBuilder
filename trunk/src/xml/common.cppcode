@@ -115,6 +115,10 @@
     <template name="include">#include &lt;wx/notebook.h&gt;</template>
   </templates>
 
+  <templates class="notebookpage">
+    <template name="page_add">#parent $name->AddPage(#child $name, $label, $select);</template>
+  </templates>
+
   <templates class="wxMenuBar">
     <template name="declaration">wxMenuBar *$name;</template>
     <template name="construction">$name = new wxMenuBar($style);</template>

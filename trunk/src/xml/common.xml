@@ -170,7 +170,12 @@
       <option name="wxNB_NOPAGETHEME" />
       <option name="wxNB_FLAT" /></property>
   </objectinfo>
-  
+
+  <objectinfo class="notebookpage" icon="panel.xpm" type="notebookpage">
+    <property name="label" type="wxString">a page</property>
+    <property name="select" type="bool">0</property>
+  </objectinfo>
+
   <objectinfo class="wxMenuBar" icon="menubar.xpm" type="menubar">
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_menubar</property>

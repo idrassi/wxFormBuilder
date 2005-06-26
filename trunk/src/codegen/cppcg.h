@@ -23,6 +23,17 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+/*
+  NOTAS:
+  
+  La implementación realizada para la generación de las rutas relativas
+  es un "apaño" y no una solución.
+  
+  En valor de toda propiedad que sea una ruta de un fichero o un directorio
+  debe estar de forma absoluta, de lo contrario no funcionará la generación
+  de código.
+*/
+
 #ifndef _CPP_CODE_GEN_
 #define _CPP_CODE_GEN_
 
@@ -36,6 +47,10 @@ using namespace std;
  */
 class CppTemplateParser : public TemplateParser
 {
+ private:
+  bool m_useRelativePath;
+  string m_basePath;
+  
  public:
   CppTemplateParser(PObjectBase obj, string _template); 
   
@@ -44,6 +59,9 @@ class CppTemplateParser : public TemplateParser
   string RootWxParentToCode();
   //string PropertyToCode(PProperty property); 
   string ValueToCode(PropertyType type, string value);
+  
+  // genera rutas relativas en los nombres de archivo
+  bool UseRelativePath(bool relative = false, string basePath = "");
 };
 
 /**
@@ -57,7 +75,8 @@ class CppCodeGenerator : public CodeGenerator
   PCodeWriter m_header;
   PCodeWriter m_source;
   
-  string m_path;
+  bool m_useRelativePath;
+  string m_basePath;
   
   /**
    * Las macros predefinidas no generarán defines.
@@ -171,7 +190,7 @@ class CppCodeGenerator : public CodeGenerator
    * @nota el path se genera con el caracter barra '/' ya que sobre windows
    *       los compiladores interpretan correctamente el path.
    */
-  bool SetBasePath (string path);
+  bool UseRelativePath(bool relative = false, string basePath = "");
 
 
   /**
