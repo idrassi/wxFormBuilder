@@ -90,7 +90,7 @@ class SpacerComponent : public ComponentBase
   
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
-    XrcToXfbFilter filter(xrcObj, _("wxMenuItem"));
+    XrcToXfbFilter filter(xrcObj, _("spacer"));
     
     // la propiedad "size" hay que descomponerla en weight y height
     AddSizeProperty(filter, xrcObj);

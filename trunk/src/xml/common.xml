@@ -269,6 +269,7 @@
     <inherits class="wxWindow" />
     <property name="name" type="text">m_choice</property>
     <property name="choices" type="stringlist" />
+    <property name="selection" type="text">0</property>
   </objectinfo>
   
   <objectinfo class="wxSlider" icon="slider.xpm" type="widget">
@@ -293,6 +294,7 @@
     <inherits class="wxWindow" />
     <property name="name" type="text">m_gauge</property>
     <property name="range" type="text">100</property>
+    <property name="value" type="text">50</property>
     <property name="style" type="bitlist">
       <option name="wxGA_HORIZONTAL" />
       <option name="wxGA_VERTICAL" />

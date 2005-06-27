@@ -864,11 +864,34 @@ class ChoiceComponent : public ComponentBase
       choices.Count(),
       strings,
       obj->GetPropertyAsInteger(_("style")));
- 
+    
+    choice->SetSelection(obj->GetPropertyAsInteger(_("selection")));
+    
     delete []strings;
          
     return choice;
   }
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxChoice"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();    
+    xrc.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
+    xrc.AddProperty(_("choices"), _("content"), XRC_TYPE_STRINGLIST);
+    xrc.AddProperty(_("selection"), _("selection"), XRC_TYPE_INTEGER);
+    return xrc.GetXrcObject();
+  } 
+
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxChoice"));
+    filter.AddWindowProperties();
+    filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    filter.AddProperty(_("content"),_("choices"), XRC_TYPE_STRINGLIST);
+    filter.AddProperty(_("selection"), _("selection"), XRC_TYPE_INTEGER);
+    return filter.GetXfbObject();
+  }
+  
 };
 
 class SliderComponent : public ComponentBase
@@ -884,6 +907,29 @@ class SliderComponent : public ComponentBase
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
   }
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("tool"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties(); 
+    xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    xrc.AddProperty(_("value"), _("value"), XRC_TYPE_INTEGER);
+    xrc.AddProperty(_("min"), _("minValue"), XRC_TYPE_INTEGER);
+    xrc.AddProperty(_("max"), _("maxValue"), XRC_TYPE_INTEGER);
+    return xrc.GetXrcObject();
+  } 
+  
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("tool"));
+    filter.AddWindowProperties();
+    filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    filter.AddProperty(_("value"), _("value"), XRC_TYPE_INTEGER);
+    filter.AddProperty(_("min"), _("minValue"), XRC_TYPE_INTEGER);
+    filter.AddProperty(_("max"), _("maxValue"), XRC_TYPE_INTEGER);
+    return filter.GetXfbObject();
+  }
+  
 };
 
 class GaugeComponent : public ComponentBase
@@ -891,12 +937,35 @@ class GaugeComponent : public ComponentBase
 public:
   wxObject* Create(IObject *obj, wxObject *parent)
   {
-    return new wxGauge((wxWindow *)parent,-1,
+    wxGauge *gauge = new wxGauge((wxWindow *)parent,-1,
       obj->GetPropertyAsInteger(_("range")),
       obj->GetPropertyAsPoint(_("pos")),
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
+    gauge->SetValue(obj->GetPropertyAsInteger(_("value")));
+    return gauge;
   }
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("tool"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties(); 
+    xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);   
+    xrc.AddProperty(_("range"), _("range"), XRC_TYPE_INTEGER);
+    xrc.AddProperty(_("value"), _("value"), XRC_TYPE_INTEGER);
+    return xrc.GetXrcObject();
+  } 
+  
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("tool"));
+    filter.AddWindowProperties();
+    filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    filter.AddProperty(_("range"), _("range"), XRC_TYPE_INTEGER);
+    filter.AddProperty(_("value"), _("value"), XRC_TYPE_INTEGER);
+    return filter.GetXfbObject();
+  }
+  
 };
 
 ///////////////////////////////////////////////////////////////////////////////
