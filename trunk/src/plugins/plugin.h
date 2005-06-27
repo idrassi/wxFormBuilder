@@ -29,7 +29,7 @@
 #include "component.h"
 #include "wx/wx.h"
 #include <vector>
-
+#include <map>
 
 // Implementación de la librería. Este módulo debe estar implementado en la
 // librería.
@@ -53,9 +53,16 @@ class ComponentLibrary : public IComponentLibrary
     wxString name;
     int value;
   } AMacro;
+  
+  typedef struct
+  {
+    wxString name, syn;
+  } ASynonymous;
 
-  vector<AComponent> m_components;
-  vector<AMacro>     m_macros;  
+  vector<AComponent>  m_components;
+  vector<AMacro>      m_macros;  
+  typedef map<wxString,wxString> SynMap;
+  SynMap m_synMap;
   
  public:
   virtual ~ComponentLibrary() {};
@@ -76,6 +83,16 @@ class ComponentLibrary : public IComponentLibrary
     macro.value = value;
     
     m_macros.push_back(macro);
+  }
+  
+  void RegisterMacroSynonymous(const wxString &syn, const wxString &name)
+  {
+    /*ASynonymous asyn;
+    asyn.name = name;
+    asyn.syn = syn;
+    
+    m_synonymous.push_back(asyn);*/
+    m_synMap.insert(SynMap::value_type(syn, name));
   }
 
   IComponent* GetComponent(unsigned int idx)
@@ -109,6 +126,35 @@ class ComponentLibrary : public IComponentLibrary
     return 0;
   }
   
+  /*wxString GetMacroSynonymous(unsigned int idx)
+  {
+    if (idx < m_synonymous.size())
+      return m_synonymous[idx].syn;
+      
+    return wxString();
+  }
+  
+  wxString GetSynonymousName(unsigned int idx)
+  {
+    if (idx < m_synonymous.size())
+      return m_synonymous[idx].name;
+      
+    return wxString();
+  }*/
+  
+  bool FindSynonymous(const wxString& syn, wxString& trans)
+  {
+    bool found = false;
+    SynMap::iterator it = m_synMap.find(syn);
+    if (it != m_synMap.end())
+    {
+      found = true;
+      trans = it->second;
+    }
+    
+    return found;
+  }
+  
   unsigned int GetMacroCount()
   {
     return m_macros.size();
@@ -118,6 +164,11 @@ class ComponentLibrary : public IComponentLibrary
   {
     return m_components.size();
   }
+  
+  /*unsigned int GetSynonymousCount()
+  {
+    return m_synonymous.size();
+  }*/
 };
 
 /**

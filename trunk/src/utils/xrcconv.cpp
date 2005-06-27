@@ -24,10 +24,40 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "xrcconv.h"
+#include "plugins/component.h"
+#include "wx/wx.h"
+#include "wx/tokenzr.h"
 
 #include <string>
 #include <sstream>
 using namespace std;
+
+wxString ReplaceSynonymous(const wxString &bitlist)
+{
+  wxMessageBox("Antes: "+bitlist);
+  IComponentLibrary *lib = GetComponentLibrary();
+  wxString result, translation;
+  wxStringTokenizer tkz(bitlist, wxT("|"));
+  while (tkz.HasMoreTokens())
+  {
+    wxString token;
+    token = tkz.GetNextToken();
+    token.Trim(true);
+    token.Trim(false);
+    
+    if (result != wxT(""))
+        result = result + wxT('|');
+    
+    if (lib->FindSynonymous(token, translation))  
+      result += translation;
+    else
+      result += token;
+
+  }
+  delete lib;
+  wxMessageBox("Después: "+result);
+  return result;
+}
 
 ObjectToXrcFilter::ObjectToXrcFilter(IObject *obj, const wxString &classname,
                                      const wxString &objname,
@@ -278,7 +308,6 @@ void XrcToXfbFilter::AddProperty(const wxString &xrcPropName,
   {
     case XRC_TYPE_SIZE: 
     case XRC_TYPE_POINT:
-    case XRC_TYPE_BITLIST:
     case XRC_TYPE_TEXT:
     case XRC_TYPE_BOOL:      
       ImportTextProperty(xrcPropName, propElement);
@@ -286,6 +315,10 @@ void XrcToXfbFilter::AddProperty(const wxString &xrcPropName,
       
     case XRC_TYPE_INTEGER:
       ImportIntegerProperty(xrcPropName, propElement);
+      break;
+      
+    case XRC_TYPE_BITLIST:
+      ImportBitlistProperty(xrcPropName, propElement);
       break;
 
     case XRC_TYPE_COLOUR:
@@ -350,6 +383,22 @@ void XrcToXfbFilter::ImportIntegerProperty(const wxString &xrcPropName,
   }
   else
     property->LinkEndChild(new TiXmlText("0"));
+}
+
+void XrcToXfbFilter::ImportBitlistProperty(const wxString &xrcPropName,
+                                        TiXmlElement *property)
+{
+  TiXmlElement *xrcProperty = m_xrcObj->FirstChildElement(xrcPropName.mb_str());
+  if (xrcProperty)
+  {
+    TiXmlNode *textElement = xrcProperty->FirstChild();
+    if (textElement && textElement->ToText())
+    {
+      wxString bitlist = wxString(textElement->ToText()->Value(),wxConvUTF8);
+      bitlist = ReplaceSynonymous(bitlist);
+      property->LinkEndChild(new TiXmlText(bitlist.c_str()));
+    }
+  }
 }
 
 void XrcToXfbFilter::ImportFontProperty(const wxString &xrcPropName,

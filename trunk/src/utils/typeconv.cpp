@@ -459,6 +459,33 @@ wxString TypeConv::ArrayStringToString(const wxArrayString &arrayStr)
   return result;
 }
 
+wxString TypeConv::ReplaceSynonymous(const wxString &bitlist)
+{
+  wxMessageBox("Antes: "+bitlist);
+  wxString result;
+  string translation;
+  wxStringTokenizer tkz(bitlist, wxT("|"));
+  while (tkz.HasMoreTokens())
+  {
+    wxString token;
+    token = tkz.GetNextToken();
+    token.Trim(true);
+    token.Trim(false);
+    
+    if (result != wxT(""))
+        result = result + wxT('|');
+    
+    if (MacroDictionary::GetInstance()->SearchSynonymous(_STDSTR(token), translation))  
+      result += _WXSTR(translation);
+    else
+      result += token;
+
+  }
+  wxMessageBox("Después: "+result);
+  return result;
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 PMacroDictionary MacroDictionary::s_instance = NULL;
@@ -486,6 +513,18 @@ bool MacroDictionary::SearchMacro(string name, int *result)
   return found;
 }
 
+bool MacroDictionary::SearchSynonymous(string synName, string& result)
+{
+  bool found = false;
+  SynMap::iterator it = m_synMap.find(synName);
+  if (it != m_synMap.end())
+  {
+    found = true;
+    result = it->second;
+  }
+  
+  return found;
+}
 
 #define MACRO(x) m_map.insert(MacroMap::value_type(#x,x))
 #define MACRO2(x,y) m_map.insert(MacroMap::value_type(#x,y))
@@ -493,6 +532,11 @@ bool MacroDictionary::SearchMacro(string name, int *result)
 void MacroDictionary::AddMacro(string name, int value)
 {
   m_map.insert(MacroMap::value_type(name,value));
+}
+
+void MacroDictionary::AddSynonymous(string synName, string name)
+{
+  m_synMap.insert(SynMap::value_type(synName, name));
 }
 
 MacroDictionary::MacroDictionary()

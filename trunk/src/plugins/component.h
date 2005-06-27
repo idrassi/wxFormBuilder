@@ -75,15 +75,20 @@ class IComponentLibrary
   // usadas por el plugin para registrar los componentes y macros
   virtual void RegisterComponent(const wxString &text, IComponent *c) = 0;
   virtual void RegisterMacro(const wxString &text, const int value) = 0;
+  virtual void RegisterMacroSynonymous(const wxString &text, const wxString &name) = 0;
 
   // usadas por wxFormBuilder para extraer los componentes y macros
   virtual IComponent* GetComponent(unsigned int idx) = 0;
   virtual wxString    GetComponentName(unsigned int idx) = 0;
   virtual wxString    GetMacroName(unsigned int i) = 0;
   virtual int         GetMacroValue(unsigned int i) = 0; 
+  //virtual wxString    GetMacroSynonymous(unsigned int i) = 0;
+  //virtual wxString    GetSynonymousName(unsigned int i) = 0;
+  virtual bool FindSynonymous(const wxString& syn, wxString& trans) = 0;
   
   virtual unsigned int GetMacroCount() = 0;
   virtual unsigned int GetComponentCount() = 0;
+  //virtual unsigned int GetSynonymousCount() = 0;
 };
 
 /**
@@ -161,6 +166,9 @@ extern "C" WXEXPORT IComponentLibrary * GetComponentLibrary()  \
 
 #define MACRO(name) \
   lib->RegisterMacro(_T(#name),name);
+  
+#define SYNONYMOUS(syn,name) \
+  lib->RegisterMacroSynonymous(_T(#syn),_T(#name));
   
 #define END_LIBRARY()   return lib; }
 

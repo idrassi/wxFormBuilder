@@ -869,6 +869,14 @@ void ObjectDatabase::ImportComponentLibrary(string libfile)
         dic->AddMacro(_STDSTR(name),value);
         m_macroSet.erase(_STDSTR(name));
       }
+      
+      /*for (unsigned int i = 0; i < comp_lib->GetSynonymousCount(); i++)
+      {
+        PMacroDictionary dic = MacroDictionary::GetInstance();
+        wxString syn = comp_lib->GetMacroSynonymous(i);
+        wxString name = comp_lib->GetSynonymousName(i);
+        dic->AddSynonymous(_STDSTR(syn), _STDSTR(name));
+      }*/
     }
     else
       Debug::Print("[Database::ImportComponentLibrary] %s is not a valid component library",

@@ -73,6 +73,7 @@ namespace TypeConv
   wxArrayString StringToArrayString(const wxString &str);
   wxString ArrayStringToString(const wxArrayString &arrayStr);
   
+  wxString ReplaceSynonymous(const wxString &bitlist);
 };
 
 
@@ -86,8 +87,11 @@ class MacroDictionary
  private:
   typedef map<string,int> MacroMap;
   static PMacroDictionary s_instance;
+  
+  typedef map<string,string> SynMap;
 
   MacroMap m_map;
+  SynMap m_synMap;
   
   MacroDictionary(); 
   
@@ -95,6 +99,8 @@ class MacroDictionary
   static PMacroDictionary GetInstance();
   bool SearchMacro(string name, int *result);
   void AddMacro(string name, int value);
+  void AddSynonymous(string synName, string name);
+  bool SearchSynonymous(string synName, string& result);
 };
 
 #endif //__TYPE_UTILS__
