@@ -160,11 +160,11 @@ void ResizablePanel::OnLeftUp(wxMouseEvent& e)
     dc.SetPen(wxNullPen);
     dc.SetBrush(wxNullBrush);
     
+    SetSize(m_curX, m_curY);
+    
     wxCommandEvent event(wxEVT_PANEL_RESIZED, GetId());
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
-    
-    SetSize(m_curX, m_curY);
     
     m_curX = m_curY = -1;
   }
