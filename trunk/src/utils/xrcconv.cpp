@@ -34,7 +34,6 @@ using namespace std;
 
 wxString ReplaceSynonymous(const wxString &bitlist)
 {
-  wxMessageBox("Antes: "+bitlist);
   IComponentLibrary *lib = GetComponentLibrary();
   wxString result, translation;
   wxStringTokenizer tkz(bitlist, wxT("|"));
@@ -55,7 +54,7 @@ wxString ReplaceSynonymous(const wxString &bitlist)
 
   }
   delete lib;
-  wxMessageBox("Después: "+result);
+
   return result;
 }
 
