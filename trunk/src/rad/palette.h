@@ -28,6 +28,7 @@
 
 #include <wx/wx.h>
 #include <wx/notebook.h>
+#include <wx/spinbutt.h>
 #include "rad/appobserver.h"
 
 typedef vector<wxToolBar*> ToolbarVector;
@@ -39,6 +40,8 @@ class wxFbPalette : public DataObserver, public wxPanel
   wxNotebook *m_notebook;
   static wxWindowID nextId;
   
+  void PopulateToolbar(PObjectPackage pkg, int startat, wxToolBar *toolbar);
+  
   DECLARE_EVENT_TABLE()
    
  public:
@@ -49,7 +52,8 @@ class wxFbPalette : public DataObserver, public wxPanel
    * DataObservable.
    */
   void Create();
-  
+  void OnSpinUp(wxSpinEvent& e);
+  void OnSpinDown(wxSpinEvent& e);
   void OnButtonClick(wxCommandEvent &event);
 };
 /*

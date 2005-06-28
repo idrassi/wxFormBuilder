@@ -40,11 +40,35 @@ wxWindowID wxFbPalette::nextId = wxID_HIGHEST + 2;
 
 BEGIN_EVENT_TABLE(wxFbPalette, wxPanel)
     EVT_TOOL(-1, wxFbPalette::OnButtonClick)
+    EVT_SPIN_UP(-1, wxFbPalette::OnSpinUp)
+    EVT_SPIN_DOWN(-1, wxFbPalette::OnSpinDown)
 END_EVENT_TABLE()
 
 wxFbPalette::wxFbPalette(wxWindow *parent,int id)
   : wxPanel(parent,id), m_notebook(NULL)
 {
+}
+
+void wxFbPalette::PopulateToolbar(PObjectPackage pkg, int startat, wxToolBar *toolbar)
+{   
+  unsigned int j = 0;
+  while (j < pkg->GetObjectCount())
+  {
+    if (j < startat)
+    {
+      j++; continue;
+    }
+  
+    wxString widget(pkg->GetObjectInfo(j)->GetClassName().c_str(),wxConvUTF8);
+    wxString icon_file(pkg->GetObjectInfo(j)->GetIconFile().c_str(),wxConvUTF8);
+
+    wxBitmap icon;
+    icon.LoadFile(icon_file, wxBITMAP_TYPE_XPM);
+  
+    toolbar->AddTool(nextId++, widget, icon, widget);
+    toolbar->Realize();
+    j++;
+  }
 }
 
 void wxFbPalette::Create()
@@ -57,47 +81,32 @@ void wxFbPalette::Create()
   
   Debug::Print("[Palette] Pages %d",pkg_count);
   
-  for (unsigned int i = 0; i< pkg_count;i++)
+  for (unsigned int i = 0; i < pkg_count;i++)
   {
     PObjectPackage pkg = GetData()->GetPackage(i);
     string pkg_name = pkg->GetPackageName();
 
     wxPanel *panel = new wxPanel(m_notebook,-1);
     
-    unsigned int j = 0;
-    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);    
-    while (j < pkg->GetObjectCount())
-    {
-      Debug::Print("[Palette] Page %s Items %d",pkg_name.c_str(), pkg->GetObjectCount());
-      wxToolBar *toolbar = new wxToolBar(panel, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
-      toolbar->SetToolBitmapSize(wxSize(22, 22));
+    wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL); 
+       
+    wxToolBar *toolbar = new wxToolBar(panel, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
+    toolbar->SetToolBitmapSize(wxSize(22, 22));
+    PopulateToolbar(pkg, 0, toolbar);
+    m_tv.push_back(toolbar);
     
-      unsigned int k;
-      for (k=0; k < MAX_TOOLS && j < pkg->GetObjectCount();j++,k++)
-      {
-        wxString widget(pkg->GetObjectInfo(j)->GetClassName().c_str(),wxConvUTF8);
-        wxString icon_file(pkg->GetObjectInfo(j)->GetIconFile().c_str(),wxConvUTF8);
+    sizer->Add(toolbar, 1, wxALL | wxALIGN_CENTER_VERTICAL, 2);
+    wxSpinButton *sb = new wxSpinButton(panel, -1, wxDefaultPosition, wxDefaultSize, wxSP_HORIZONTAL);
+    sb->SetRange(0, (int)pkg->GetObjectCount() - 1);
+    sb->SetValue(0);
+    sizer->Add(sb, 0, wxALL | wxALIGN_TOP, 0);
 
-        wxBitmap icon;
-        icon.LoadFile(icon_file,wxBITMAP_TYPE_XPM);
-      
-        //wxBitmapButton *button = new wxBitmapButton(panel,-1,icon,wxDefaultPosition,wxSize(32,32));
-        //button->SetToolTip(widget);
-        toolbar->AddTool(nextId++, widget, icon, widget);
-
-        //button->PushEventHandler(new PaletteButtonEventHandler(widget,GetData()));
-        //sizer->Add(button,0, wxALL, 2);
-      }
-      toolbar->Realize();
-      m_tv.push_back(toolbar);
-      sizer->Add(toolbar, 0, wxALL | wxALIGN_CENTER_VERTICAL, 2);
-    }
     panel->SetAutoLayout(true);
     panel->SetSizer(sizer);
     sizer->Fit(panel);
     sizer->SetSizeHints(panel);
 
-    m_notebook->AddPage(panel,wxString(pkg_name.c_str(),wxConvUTF8));
+    m_notebook->AddPage(panel, wxString(pkg_name.c_str(), wxConvUTF8));
 
   }
   Title *title = new Title(this,wxT("Component Palette"));
@@ -108,7 +117,28 @@ void wxFbPalette::Create()
   SetSizer(top_sizer);
   top_sizer->Fit(this);
   top_sizer->SetSizeHints(this);
+}
 
+void wxFbPalette::OnSpinUp(wxSpinEvent& e)
+{
+  PObjectPackage pkg = GetData()->GetPackage(m_notebook->GetSelection());
+  if ((int)pkg->GetObjectCount() - e.GetPosition() <= 0) return;
+  wxToolBar *toolbar = m_tv[m_notebook->GetSelection()];
+  toolbar->DeleteToolByPos(0);
+}
+
+void wxFbPalette::OnSpinDown(wxSpinEvent& e)
+{
+  if (e.GetPosition() < 0) return;
+  
+  wxToolBar *toolbar = m_tv[m_notebook->GetSelection()];
+  PObjectPackage pkg = GetData()->GetPackage(m_notebook->GetSelection());
+  wxString widget(pkg->GetObjectInfo(e.GetPosition())->GetClassName().c_str(),wxConvUTF8);
+  wxString icon_file(pkg->GetObjectInfo(e.GetPosition())->GetIconFile().c_str(),wxConvUTF8);
+  wxBitmap icon;
+  icon.LoadFile(icon_file, wxBITMAP_TYPE_XPM);
+  toolbar->InsertTool(0, nextId++, icon, wxNullBitmap, false, NULL, widget, widget);
+  toolbar->Realize();
 }
 
 void wxFbPalette::OnButtonClick(wxCommandEvent &event)
