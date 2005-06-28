@@ -158,6 +158,7 @@ wxSize Property::GetValueAsSize()
 
 wxBitmap Property::GetValueAsBitmap()
 {
+  // ¿cómo obtener la ruta del projecto?
   return TypeConv::StringToBitmap(_WXSTR(m_value));
 }
 

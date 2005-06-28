@@ -42,6 +42,8 @@
     #include "wxwin32x32.xpm"
 #endif
 
+#include "rad/global.h"
+
 
 class MyApp : public wxApp
 {
@@ -60,6 +62,8 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
+  GlobalDataInit();
+  
   wxInitAllImageHandlers();
 
   wxBitmap bitmap;    
@@ -101,3 +105,4 @@ bool MyApp::OnInit()
   return TRUE;
 }
 
+// OnQuit?? -> GlobalDataDestroy()

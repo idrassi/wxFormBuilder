@@ -27,6 +27,7 @@
 #include "utils/typeconv.h"
 #include "utils/debug.h"
 #include "codegen/codegen.h"
+#include "rad/global.h"
 
 using namespace TypeConv;
 
@@ -676,6 +677,7 @@ void ApplicationData::SaveProject(const wxString &filename)
   TiXmlDocument *doc = m_project->Serialize();
   doc->SaveFile(filename.mb_str());
   m_projectFile = _STDSTR(filename);
+  GlobalData()->SetProjectPath(::wxPathOnly(filename));
   delete doc;
   
   DataObservable::NotifyProjectSaved();
@@ -703,6 +705,7 @@ bool ApplicationData::LoadProject(const wxString &file)
       result = true;
       m_cmdProc.Reset();
       m_projectFile = _STDSTR(file);
+      GlobalData()->SetProjectPath(::wxPathOnly(file));
       DataObservable::NotifyProjectLoaded();
     }
   }
@@ -716,6 +719,7 @@ void ApplicationData::NewProject()
   m_project = m_objDb->CreateObject("Project");
   m_selObj = m_project;
   m_cmdProc.Reset();
+  GlobalData()->SetProjectPath(wxT(""));
   DataObservable::NotifyProjectRefresh();  
 }
 

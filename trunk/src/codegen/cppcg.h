@@ -162,7 +162,7 @@ class CppCodeGenerator : public CodeGenerator
   /**
    * Convierte un path a path relativo.
    */
-  static string ConvertToRelativePath(string path, string basePath);
+  //static string ConvertToRelativePath(string path, string basePath);
   
   /**
    * Convierte una cadena de texto con el nombre de un fichero XPM

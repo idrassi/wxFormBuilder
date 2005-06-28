@@ -28,6 +28,7 @@
 #include "utils/debug.h"
 #include "utils/typeconv.h"
 #include "wx/tokenzr.h"
+#include "rad/global.h"
 
 // -----------------------------------------------------------------------
 // wxSizeProperty
@@ -395,10 +396,12 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
     result = wxDirProperty(name, wxPG_LABEL, prop->GetValueAsString());
   
   else if (type == PT_BITMAP)
-    result = wxImageFileProperty(name, wxPG_LABEL, prop->GetValueAsString());
+    result = wxImageFileProperty(name, wxPG_LABEL,
+      TypeConv::MakeAbsolutePath(prop->GetValueAsString(),GlobalData()->GetProjectPath()));
     
   else if (type == PT_XPM_BITMAP){
-    result = wxImageFileProperty(name, wxPG_LABEL, prop->GetValueAsString());
+    result = wxImageFileProperty(name, wxPG_LABEL,
+      TypeConv::MakeAbsolutePath(prop->GetValueAsString(),GlobalData()->GetProjectPath()));
     result->SetAttribute(wxPG_FILE_WILDCARD, _T("XPM files (*.xpm)|*.xpm"));
   }
   else if (type == PT_STRINGLIST)
@@ -507,7 +510,9 @@ void ObjectInspector::OnPropertyGridChange(wxPropertyGridEvent& event)
             //       de que la imagen se encuentre en un subdirectorio de este.
              case PT_BITMAP:
              case PT_XPM_BITMAP:
-               GetData()->ModifyProperty(prop, MakeRelativePath(event.GetPropertyValueAsString()));
+               GetData()->ModifyProperty(prop, 
+                 TypeConv::MakeRelativePath(event.GetPropertyValueAsString(),
+                   GlobalData()->GetProjectPath()));
                break;
             
 
@@ -597,14 +602,4 @@ void ObjectInspector::PropertyModified(PProperty prop)
         pgProp->SetValueFromString(prop->GetValueAsString(), 0);
   }
   m_pg->Refresh();
-}
-
-wxString ObjectInspector::MakeRelativePath(const wxString &file)
-{
-  //wxFileName filename(file);
-  //if (filename.MakeRelativeTo(_WXSTR(GetData()->GetProjectPath())))
-//    return filename.GetFullPath();
-  
-  return file;
-  
 }

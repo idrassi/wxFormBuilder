@@ -28,6 +28,8 @@
 #include "utils/stringutils.h"
 #include "utils/debug.h"
 #include "icons/unknown.xpm"
+#include <wx/filename.h>
+#include "rad/global.h"
  
 ////////////////////////////////////
 
@@ -243,16 +245,60 @@ wxString TypeConv::FontToString (const wxFont &font)
   return str;                                                                               
 }
 
-wxBitmap TypeConv::StringToBitmap(const wxString &str)
+wxBitmap TypeConv::StringToBitmap(const wxString &filename)
 {
-  if (::wxFileExists(str))
+  wxString basePath = GlobalData()->GetProjectPath();
+  wxString fullpath = TypeConv::MakeAbsolutePath(filename,basePath);
+  
+  if (::wxFileExists(fullpath))
   {
-    wxBitmap bitmap(str,wxBITMAP_TYPE_ANY);
+    wxBitmap bitmap(fullpath,wxBITMAP_TYPE_ANY);
     if (bitmap.Ok())
       return bitmap;
   }
 
   return wxBitmap(unknown_xpm);
+}
+
+wxString TypeConv::MakeAbsolutePath (const wxString &filename,
+                                     const wxString &basePath)
+{
+  wxFileName fnFile(filename);
+  if (fnFile.IsRelative())
+  {
+    // Es una ruta relativa, por tanto hemos de obtener la ruta completa
+    // a partir de basePath
+    wxFileName fnBasePath(basePath);
+    if (fnBasePath.IsAbsolute())
+    {
+      if (fnFile.MakeAbsolute(basePath))
+        return fnFile.GetFullPath();
+      
+    }
+  }
+  else
+    return filename; // es una ruta absoluta, la devolvemos sin más
+  
+  return wxString();
+}
+
+wxString TypeConv::MakeRelativePath(const wxString &filename, 
+                                    const wxString &basePath)
+{
+  wxFileName fnFile(filename);
+  if (fnFile.IsAbsolute())
+  {
+    wxFileName fnBasePath(basePath);
+    if (fnBasePath.IsAbsolute())
+    {
+      if (fnFile.MakeRelativeTo(basePath))
+        return fnFile.GetFullPath();
+    }
+  }
+  else
+    return filename;
+  
+  return wxString();  
 }
 
 wxColour TypeConv::StringToColour(const wxString &str)

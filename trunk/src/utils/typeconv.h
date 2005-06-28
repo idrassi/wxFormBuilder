@@ -59,7 +59,7 @@ namespace TypeConv
   wxString ClearFlag(const wxString &flag, const wxString &currentValue);
   wxString SetFlag  (const wxString &flag, const wxString &currentValue);
   
-  wxBitmap StringToBitmap(const wxString &str);
+  wxBitmap StringToBitmap(const wxString &filename);
 
   wxFont StringToFont (const wxString &str);
   wxString FontToString (const wxFont &font);
@@ -74,11 +74,18 @@ namespace TypeConv
   wxString ArrayStringToString(const wxArrayString &arrayStr);
   
   wxString ReplaceSynonymous(const wxString &bitlist);
+  
+  // Obtiene la ruta absoluta de un archivo
+  wxString MakeAbsolutePath(const wxString &filename, const wxString &basePath);
+  
+  // Obtiene la ruta relativa de un archivo
+  wxString MakeRelativePath(const wxString &filename, const wxString &basePath);
 };
 
 
 // No me gusta nada tener que usar variables globales o singletons
 // pero hasta no dar con otro diseño más elegante seguiremos con este...
+// TO-DO: incluirlo en GlobalApplicationData
 class MacroDictionary;
 typedef MacroDictionary* PMacroDictionary;
 

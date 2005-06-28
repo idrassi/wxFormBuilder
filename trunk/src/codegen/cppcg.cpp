@@ -26,6 +26,7 @@
 #include "cppcg.h"
 #include "utils/typeconv.h"
 #include <wx/filename.h>
+#include "rad/global.h"
 
 #define FIRST_ID 1000
 
@@ -147,9 +148,12 @@ string CppTemplateParser::ValueToCode(PropertyType type, string value)
       
     case PT_BITMAP:
       {
-      string file = (m_useRelativePath ?
-                     CppCodeGenerator::ConvertToRelativePath(value, m_basePath)
-                     : value );
+        wxString absPath = TypeConv::MakeAbsolutePath(_WXSTR(value),
+          GlobalData()->GetProjectPath());
+      
+      string file = _STDSTR(m_useRelativePath ?
+                     TypeConv::MakeRelativePath(absPath, _WXSTR(m_basePath))
+                     : absPath );
                      
       result = "wxBitmap(wxT(\"" + CppCodeGenerator::ConvertCppString(file)
                        + "\"), wxBITMAP_TYPE_ANY)";
@@ -708,11 +712,14 @@ void CppCodeGenerator::FindXpmProperties(PObjectBase obj, set<string> &set)
     PProperty property = obj->GetProperty(i);
     if (property->GetType() == PT_XPM_BITMAP)
     {
+      wxString absPath = TypeConv::MakeAbsolutePath(_WXSTR(property->GetValue()),
+        GlobalData()->GetProjectPath());
+        
       // Se supone el path contiene la ruta completa del archivo y no
       // una relativa.
-      string path = ( m_useRelativePath ?
-                      ConvertToRelativePath(property->GetValue(),m_basePath) :
-                      property->GetValue() );
+      string path = _STDSTR( m_useRelativePath ?
+                      TypeConv::MakeRelativePath(absPath,_WXSTR(m_basePath)) :
+                      absPath );
                       
       string inc = "#include \"" + ConvertCppString(path) + "\"";
       set.insert(inc);
@@ -741,7 +748,7 @@ bool CppCodeGenerator::UseRelativePath(bool relative, string basePath)
 
   return result;
 }
-
+/*
 string CppCodeGenerator::ConvertToRelativePath(string path, string basePath)
 {
   string auxPath = path;
@@ -752,7 +759,7 @@ string CppCodeGenerator::ConvertToRelativePath(string path, string basePath)
       auxPath = _STDSTR(filename.GetFullPath());
   }
   return auxPath;
-}
+}*/
 
 #define ADD_PREDEFINED_MACRO(x) m_predMacros.insert(#x)
 void CppCodeGenerator::SetupPredefinedMacros()
