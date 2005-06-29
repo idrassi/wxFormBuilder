@@ -30,13 +30,11 @@
 #include "rad/title.h"
 //#include "icons/play.xpm"
 
-#define MAX_TOOLS 28
-
 #define ID_PALETTE_BUTTON 999
 #define ID_ABOUT 100
 #define ID_QUIT  101 
 
-wxWindowID wxFbPalette::nextId = wxID_HIGHEST + 2;
+wxWindowID wxFbPalette::nextId = wxID_HIGHEST + 1000;
 
 BEGIN_EVENT_TABLE(wxFbPalette, wxPanel)
     EVT_TOOL(-1, wxFbPalette::OnButtonClick)
@@ -49,16 +47,11 @@ wxFbPalette::wxFbPalette(wxWindow *parent,int id)
 {
 }
 
-void wxFbPalette::PopulateToolbar(PObjectPackage pkg, int startat, wxToolBar *toolbar)
+void wxFbPalette::PopulateToolbar(PObjectPackage pkg, wxToolBar *toolbar)
 {   
   unsigned int j = 0;
   while (j < pkg->GetObjectCount())
   {
-    if (j < startat)
-    {
-      j++; continue;
-    }
-  
     wxString widget(pkg->GetObjectInfo(j)->GetClassName().c_str(),wxConvUTF8);
     wxString icon_file(pkg->GetObjectInfo(j)->GetIconFile().c_str(),wxConvUTF8);
 
@@ -92,13 +85,14 @@ void wxFbPalette::Create()
        
     wxToolBar *toolbar = new wxToolBar(panel, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
     toolbar->SetToolBitmapSize(wxSize(22, 22));
-    PopulateToolbar(pkg, 0, toolbar);
+    PopulateToolbar(pkg, toolbar);
     m_tv.push_back(toolbar);
     
     sizer->Add(toolbar, 1, wxALL | wxALIGN_CENTER_VERTICAL, 2);
     wxSpinButton *sb = new wxSpinButton(panel, -1, wxDefaultPosition, wxDefaultSize, wxSP_HORIZONTAL);
     sb->SetRange(0, (int)pkg->GetObjectCount() - 1);
     sb->SetValue(0);
+    m_posVector.push_back(0);
     sizer->Add(sb, 0, wxALL | wxALIGN_TOP, 0);
 
     panel->SetAutoLayout(true);
@@ -121,20 +115,26 @@ void wxFbPalette::Create()
 
 void wxFbPalette::OnSpinUp(wxSpinEvent& e)
 {
-  PObjectPackage pkg = GetData()->GetPackage(m_notebook->GetSelection());
-  if ((int)pkg->GetObjectCount() - e.GetPosition() <= 0) return;
-  wxToolBar *toolbar = m_tv[m_notebook->GetSelection()];
+  int page = m_notebook->GetSelection();
+  PObjectPackage pkg = GetData()->GetPackage(page);
+  
+  if ((int)pkg->GetObjectCount() - m_posVector[page] - 1 <= 0) return;
+  
+  m_posVector[page]++;
+  wxToolBar *toolbar = m_tv[page];
   toolbar->DeleteToolByPos(0);
 }
 
 void wxFbPalette::OnSpinDown(wxSpinEvent& e)
 {
-  if (e.GetPosition() < 0) return;
+  int page = m_notebook->GetSelection();
+  if (m_posVector[page] <= 0) return;
   
-  wxToolBar *toolbar = m_tv[m_notebook->GetSelection()];
-  PObjectPackage pkg = GetData()->GetPackage(m_notebook->GetSelection());
-  wxString widget(pkg->GetObjectInfo(e.GetPosition())->GetClassName().c_str(),wxConvUTF8);
-  wxString icon_file(pkg->GetObjectInfo(e.GetPosition())->GetIconFile().c_str(),wxConvUTF8);
+  m_posVector[page]--;
+  wxToolBar *toolbar = m_tv[page];
+  PObjectPackage pkg = GetData()->GetPackage(page);
+  wxString widget(pkg->GetObjectInfo(m_posVector[page])->GetClassName().c_str(),wxConvUTF8);
+  wxString icon_file(pkg->GetObjectInfo(m_posVector[page])->GetIconFile().c_str(),wxConvUTF8);
   wxBitmap icon;
   icon.LoadFile(icon_file, wxBITMAP_TYPE_XPM);
   toolbar->InsertTool(0, nextId++, icon, wxNullBitmap, false, NULL, widget, widget);

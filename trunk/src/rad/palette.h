@@ -39,8 +39,9 @@ class wxFbPalette : public DataObserver, public wxPanel
   ToolbarVector m_tv;
   wxNotebook *m_notebook;
   static wxWindowID nextId;
+  vector<int> m_posVector;
   
-  void PopulateToolbar(PObjectPackage pkg, int startat, wxToolBar *toolbar);
+  void PopulateToolbar(PObjectPackage pkg, wxToolBar *toolbar);
   
   DECLARE_EVENT_TABLE()
    

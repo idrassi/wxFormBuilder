@@ -910,7 +910,7 @@ class SliderComponent : public ComponentBase
   
   TiXmlElement* ExportToXrc(IObject *obj)
   {
-    ObjectToXrcFilter xrc(obj, _("tool"), obj->GetPropertyAsString(_("name")));
+    ObjectToXrcFilter xrc(obj, _("wxSlider"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties(); 
     xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
     xrc.AddProperty(_("value"), _("value"), XRC_TYPE_INTEGER);
@@ -921,7 +921,7 @@ class SliderComponent : public ComponentBase
   
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
-    XrcToXfbFilter filter(xrcObj, _("tool"));
+    XrcToXfbFilter filter(xrcObj, _("wxSlider"));
     filter.AddWindowProperties();
     filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
     filter.AddProperty(_("value"), _("value"), XRC_TYPE_INTEGER);
@@ -948,7 +948,7 @@ public:
   
   TiXmlElement* ExportToXrc(IObject *obj)
   {
-    ObjectToXrcFilter xrc(obj, _("tool"), obj->GetPropertyAsString(_("name")));
+    ObjectToXrcFilter xrc(obj, _("wxGauge"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties(); 
     xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);   
     xrc.AddProperty(_("range"), _("range"), XRC_TYPE_INTEGER);
@@ -958,7 +958,7 @@ public:
   
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
-    XrcToXfbFilter filter(xrcObj, _("tool"));
+    XrcToXfbFilter filter(xrcObj, _("wxGauge"));
     filter.AddWindowProperties();
     filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
     filter.AddProperty(_("range"), _("range"), XRC_TYPE_INTEGER);
