@@ -45,7 +45,7 @@ wxString ReplaceSynonymous(const wxString &bitlist)
     token.Trim(false);
     
     if (result != wxT(""))
-        result = result + wxT('|');
+        result = result + wxChar('|');
     
     if (lib->FindSynonymous(token, translation))  
       result += translation;
@@ -223,7 +223,7 @@ void ObjectToXrcFilter::LinkStringList(const wxArrayString &array, TiXmlElement 
     for (size_t i = 0; i < array.GetCount(); i++)
     {
       TiXmlElement *element = new TiXmlElement("item");
-      element->LinkEndChild(new TiXmlText(array[i]));
+      element->LinkEndChild(new TiXmlText(array[i].mb_str()));
       propElement->LinkEndChild(element);
     }
 }
@@ -240,13 +240,13 @@ void ObjectToXrcFilter::AddWindowProperties()
   if (!m_obj->IsNull(_("fg")))  
     AddProperty(_("fg"), _("fg"), XRC_TYPE_COLOUR);  
 
-  if (!m_obj->IsNull(_("enabled")) && !m_obj->GetPropertyAsInteger("enabled"))
+  if (!m_obj->IsNull(_("enabled")) && !m_obj->GetPropertyAsInteger(_("enabled")))
     AddProperty(_("enabled"), _("enabled"), XRC_TYPE_BOOL);
   
   if (!m_obj->IsNull(_("focused")))  
     AddPropertyValue(_("focused"),_("0"));
   
-  if (!m_obj->IsNull(_("hidden")) && m_obj->GetPropertyAsInteger("hidden"))
+  if (!m_obj->IsNull(_("hidden")) && m_obj->GetPropertyAsInteger(_("hidden")))
     AddProperty(_("hidden"), _("hidden"), XRC_TYPE_BOOL);  
   
   if (!m_obj->IsNull(_("font")))
@@ -395,7 +395,7 @@ void XrcToXfbFilter::ImportBitlistProperty(const wxString &xrcPropName,
     {
       wxString bitlist = wxString(textElement->ToText()->Value(),wxConvUTF8);
       bitlist = ReplaceSynonymous(bitlist);
-      property->LinkEndChild(new TiXmlText(bitlist.c_str()));
+      property->LinkEndChild(new TiXmlText(bitlist.mb_str()));
     }
   }
 }
@@ -563,7 +563,7 @@ void XrcToXfbFilter::ImportStringListProperty(const wxString &xrcPropName, TiXml
   {
     xmlValue = element->FirstChild();
     if (xmlValue && xmlValue->ToText())
-      res += '\'' + wxString(xmlValue->ToText()->Value(), wxConvUTF8) + _T("' ");
+      res += wxChar('\'') + wxString(xmlValue->ToText()->Value(), wxConvUTF8) + _T("' ");
       
     element = element->NextSiblingElement("item");
   }

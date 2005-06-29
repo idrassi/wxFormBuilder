@@ -507,7 +507,7 @@ wxString TypeConv::ArrayStringToString(const wxArrayString &arrayStr)
 
 wxString TypeConv::ReplaceSynonymous(const wxString &bitlist)
 {
-  wxMessageBox("Antes: "+bitlist);
+  wxMessageBox(_("Antes: ")+bitlist);
   wxString result;
   string translation;
   wxStringTokenizer tkz(bitlist, wxT("|"));
@@ -519,7 +519,7 @@ wxString TypeConv::ReplaceSynonymous(const wxString &bitlist)
     token.Trim(false);
     
     if (result != wxT(""))
-        result = result + wxT('|');
+        result = result + wxChar('|');
     
     if (MacroDictionary::GetInstance()->SearchSynonymous(_STDSTR(token), translation))  
       result += _WXSTR(translation);
@@ -527,7 +527,7 @@ wxString TypeConv::ReplaceSynonymous(const wxString &bitlist)
       result += token;
 
   }
-  wxMessageBox("Después: "+result);
+  wxMessageBox(_("Después: ")+result);
   return result;
 }
 

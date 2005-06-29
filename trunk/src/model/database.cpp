@@ -561,7 +561,7 @@ bool ObjectDatabase::LoadFile(string file)
     #ifdef __WXFB_DEBUG__
     MacroSet::iterator it;
     //Debug::Print("Missing macros of component libraries");
-    wxLogMessage("Missing macros of component libraries (solo para depurar)");
+    wxLogMessage(_("Missing macros of component libraries"));
     for (it = m_macroSet.begin(); it != m_macroSet.end(); it++)
     {
       wxLogMessage(_WXSTR(*it));
