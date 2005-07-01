@@ -504,8 +504,14 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
       GenSettings(obj->GetObjectInfo(), obj);
       
       for (unsigned int i=0; i<obj->GetChildCount() ; i++)
-        GenConstruction(obj->GetChild(i),true);
+      {
+        PObjectBase child = obj->GetChild(i);
+        GenConstruction(child, true);
         
+        if (type == "toolbar")
+          GenAddToolbar(child->GetObjectInfo(), child);
+      }
+      
       if (type == "menubar" || type == "toolbar")
       {
         m_source->WriteLn(GetCode(obj,"after_addchild")); 
@@ -674,6 +680,34 @@ void CppCodeGenerator::GenSettings(PObjectInfo info, PObjectBase obj)
     PObjectInfo base_info = info->GetBaseClass(i);
     GenSettings(base_info,obj);
   }
+}
+
+void CppCodeGenerator::GenAddToolbar(PObjectInfo info, PObjectBase obj)
+{
+  string _template;
+  PCodeInfo code_info = info->GetCodeInfo("C++");
+
+  if (!code_info)
+    return;
+    
+  _template = code_info->GetTemplate("toolbar_add");
+  
+  if (_template != "")
+  {
+    CppTemplateParser parser(obj,_template);
+    parser.UseRelativePath(m_useRelativePath, m_basePath);
+    string code = parser.ParseTemplate();
+    if (code != "")
+      m_source->WriteLn(code);
+  }
+  
+  // procedemos recursivamente con las clases base
+  for (unsigned int i=0; i< info->GetBaseClassCount(); i++)
+  {
+    PObjectInfo base_info = info->GetBaseClass(i);
+    GenAddToolbar(base_info,obj);
+  }
+  
 }
 
 ///////////////////////////////////////////////////////////////////////

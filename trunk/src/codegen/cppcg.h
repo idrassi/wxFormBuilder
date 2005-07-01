@@ -153,6 +153,12 @@ class CppCodeGenerator : public CodeGenerator
    */
   void GenSettings(PObjectInfo info, PObjectBase obj);
   
+  /**
+   * Añade un control a una toolbar. Hay que pasarle el objectinfo de tipo
+   * wxWindow, donde se encuentra la plantilla, y el objectbase del control
+   */
+  void GenAddToolbar(PObjectInfo info, PObjectBase obj);
+  
  public:
   /**
    * Convierte una cadena de texto a formato "C/C++"

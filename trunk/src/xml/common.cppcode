@@ -20,6 +20,7 @@
       #ifnotnull $tooltip
       @{ $name->SetToolTip($tooltip); #nl @}
     </template>
+    <template name="toolbar_add">#parent $name->AddControl($name);</template>
   </templates>
     
   <templates class="wxButton">

@@ -265,8 +265,12 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *wxparent,
     first_child = Generate(obj->GetChild(0),new_wxparent,NULL,vobj);
     
   for (unsigned int i=1; i<obj->GetChildCount() ; i++)
-    Generate(obj->GetChild(i),new_wxparent,NULL,vobj);
-
+  {
+    PVisualObject child = Generate(obj->GetChild(i),new_wxparent,NULL,vobj);
+    VisualObjectAdapter adapter(child);
+    if (adapter.Window() && new_wxparent->IsKindOf(CLASSINFO(wxToolBar)))
+      ((wxToolBar*)new_wxparent)->AddControl((wxControl*) adapter.Window());
+  }
 
   // Procesamos el evento OnCreated
   VisualObjectAdapter parent_view(vparent);
