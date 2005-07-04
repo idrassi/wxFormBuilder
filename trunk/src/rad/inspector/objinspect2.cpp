@@ -327,9 +327,14 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
   PropertyType type = prop->GetType();
   wxString name = _WXSTR(prop->GetName());
   
-  if (type == PT_TEXT || type == PT_MACRO || type == PT_WXSTRING)
+  if (type == PT_TEXT || type == PT_MACRO)
   {
     result = wxStringProperty(name, wxPG_LABEL, prop->GetValueAsString());
+    result->SetAttribute(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING, true);
+  }
+  else if (type == PT_WXSTRING)
+  {
+    result = wxStringProperty(name, wxPG_LABEL, prop->GetValueAsText());
     result->SetAttribute(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING, true);
   }
   else if (type == PT_BOOL)
@@ -460,9 +465,18 @@ void ObjectInspector::OnPropertyGridChange(wxPropertyGridEvent& event)
         PProperty prop = it->second;
         switch (prop->GetType())
         {
-            case PT_TEXT: case PT_MACRO: case PT_WXSTRING: case PT_OPTION:
-                GetData()->ModifyProperty(prop, event.GetPropertyValueAsString());
-                break;
+            case PT_TEXT: case PT_MACRO: case PT_OPTION:
+              GetData()->ModifyProperty(prop, event.GetPropertyValueAsString());
+              break;
+            
+            case PT_WXSTRING:
+            {
+                // las cadenas de texto del inspector son formateadas
+                wxString value = _WXSTR(TypeConv::TextToString(_STDSTR(event.GetPropertyValueAsString())));
+                GetData()->ModifyProperty(prop, value);
+            }
+            break;
+                
             case PT_BOOL:
                 GetData()->ModifyProperty(prop, event.GetPropertyValueAsBool() ? _T("1") : _T("0"));
                 break;
@@ -558,8 +572,11 @@ void ObjectInspector::PropertyModified(PProperty prop)
 
   switch (prop->GetType())
   {
-    case PT_TEXT: case PT_MACRO: case PT_WXSTRING: case PT_OPTION:
+    case PT_TEXT: case PT_MACRO: case PT_OPTION:
         pgProp->SetValueFromString(prop->GetValueAsString(), 0);
+        break;
+    case PT_WXSTRING:
+        pgProp->SetValueFromString(prop->GetValueAsText(), 0);
         break;
     case PT_BOOL:
         pgProp->SetValueFromInt(prop->GetValueAsString() == _T("0") ? 0 : 1, 0);

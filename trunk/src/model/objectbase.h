@@ -141,18 +141,20 @@ class Property
   ////////////////////
   void SetValue(const wxFont &font);
   void SetValue(const wxColour &colour);
-  void SetValue(const wxString &str);
+  void SetValue(const wxString &str, bool format = false);
   void SetValue(const wxPoint &point);
   void SetValue(const wxSize &size);
   void SetValue(const int integer);
-  
-  wxFont GetValueAsFont();
+
+  wxFont   GetValueAsFont();
   wxColour GetValueAsColour();
-  wxPoint GetValueAsPoint();
-  wxSize GetValueAsSize();
-  int GetValueAsInteger();
+  wxPoint  GetValueAsPoint();
+  wxSize   GetValueAsSize();
+  int      GetValueAsInteger();
   wxString GetValueAsString();
   wxBitmap GetValueAsBitmap();
+  wxString GetValueAsText();   // sustituye los ('\n',...) por ("\\n",...)
+
   wxArrayString GetValueAsArrayString();
   
 };

@@ -39,47 +39,6 @@ string OptionList::GetOption(unsigned int idx)
   return m_options[idx];
 }
 
-//ostream& operator << (ostream &s, ObjectType type)
-//{
-//  switch (type)
-//  {
-//    case T_WIDGET:
-//      s << "T_WIDGET";
-//      break;
-//    case T_SIZER:
-//      s << "T_SIZER";
-//      break;
-//    case T_FORM:
-//      s << "T_FORM";
-//      break;
-//    case T_SPACER:
-//      s << "T_SPACER";
-//      break;
-//    case T_SIZERITEM:
-//      s << "T_SIZERITEM";
-//      break;
-//    case T_ERROR:
-//      s << "T_ERROR";
-//      break;
-//    case T_INTERFACE:
-//      s << "T_INTERFACE";
-//      break;
-//    case T_COMPONENT:
-//      s << "T_COMPONENT";
-//      break;
-//    case T_PROJECT:
-//      s << "T_PROJECT";
-//      break;
-//      
-//    default:
-//      break;
-//
-//  }
-//  return s;
-//}
-
-
-
 PropertyInfo::PropertyInfo(string name, PropertyType type, string def_value,
                            bool hidden, POptionList opt_list)
 {
@@ -92,20 +51,15 @@ PropertyInfo::PropertyInfo(string name, PropertyType type, string def_value,
 
 PropertyInfo::~PropertyInfo()
 {
-// Se acabaron los delete's  
-//  if (m_opt_list)
-//    delete m_opt_list;
 }
 
 bool Property::IsDefaultValue()
 {
-//  return (m_info->GetDefaultValue() == m_value.AsStdString());
   return (m_info->GetDefaultValue() == m_value);
 }
 
 void Property::SetDefaultValue()
 {
-//  m_value = TVariant(GetType(),m_info->GetDefaultValue());
   m_value = m_info->GetDefaultValue();
 }
 
@@ -117,14 +71,16 @@ void Property::SetValue(const wxColour &colour)
 {
   m_value = _STDSTR(TypeConv::ColourToString(colour));
 }
-void Property::SetValue(const wxString &str)
+void Property::SetValue(const wxString &str, bool format)
 {
-  m_value = _STDSTR(str);
+  string value = _STDSTR(str);
+  
+  m_value = (format ? TypeConv::TextToString(value) : value );
 }
 
 void Property::SetValue(const wxPoint &point)
 {
-    m_value = _STDSTR(TypeConv::PointToString(point));
+  m_value = _STDSTR(TypeConv::PointToString(point));
 }
 
 void Property::SetValue(const wxSize &size)
@@ -187,6 +143,12 @@ wxString Property::GetValueAsString()
   return _WXSTR(m_value);
 }
 
+wxString Property::GetValueAsText()
+{
+  return _WXSTR(TypeConv::StringToText(m_value));
+}
+
+
 wxArrayString Property::GetValueAsArrayString()
 {
   return TypeConv::StringToArrayString(_WXSTR(m_value));
@@ -203,27 +165,6 @@ ObjectBase::ObjectBase (string class_name)
   
   Debug::Print("new ObjectBase (%d)",s_instances);
 }
-
-/*
-PObjectBase ObjectBase::NewInstance (string class_name, PObjectBase parent)
-{
-  PObjectBase _this(new ObjectBase(class_name));
-
-  _this->SetupInstance(parent);
-  
-  return _this;
-}
-
-void ObjectBase::SetupInstance(PObjectBase parent)
-{
-  //  this->ObjectDocument::SetupInstance();
-  
-  if (parent)
-  {
-    parent->AddChild(GetThis());
-    this->SetParent(parent);
-  }
-}*/
 
 ObjectBase::~ObjectBase()
 {

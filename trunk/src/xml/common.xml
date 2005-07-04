@@ -35,7 +35,7 @@
       <option name="wxBU_TOP" />
       <option name="wxBU_RIGHT" />
       <option name="wxBU_BOTTOM" />
-      <option name="wxBU_EXACTFIT" />0</property>
+      <option name="wxBU_EXACTFIT" /></property>
     <property name="label" type="wxString">MyButton</property>
   </objectinfo>
   
@@ -72,7 +72,7 @@
     <property name="style" type="bitlist">
       <option name="wxTE_MULTILINE" />
       <option name="wxTE_READONLY" />
-      <option name="wxTE_RICH" />0</property>
+      <option name="wxTE_RICH" /></property>
     <property name="value" type="wxString" /> 
   </objectinfo>
   
@@ -83,7 +83,7 @@
       <option name="wxALIGN_LEFT" />
       <option name="wxALIGN_RIGHT" />
       <option name="wxALIGN_CENTRE" />
-      <option name="wxST_NO_AUTORESIZE" />0</property>
+      <option name="wxST_NO_AUTORESIZE" /></property>
     <property name="label" type="wxString">MyLabel</property>
   </objectinfo>
   
@@ -101,7 +101,7 @@
     <property name="style" type="bitlist">
       <option name="wxCB_SIMPLE" />
       <option name="wxCB_DROPDOWN" />
-      <option name="wxCB_READONLY" />0</property>
+      <option name="wxCB_READONLY" /></property>
   </objectinfo>
   
   <objectinfo class="wxListBox" icon="list_box.xpm" type="widget">
@@ -115,7 +115,7 @@
       <option name="wxLB_HSCROLL" />
       <option name="wxLB_ALWAYS_SB" />
       <option name="wxLB_NEEDED_SB" />
-      <option name="wxLB_SORT" />0</property>
+      <option name="wxLB_SORT" /></property>
   </objectinfo>
   
   <objectinfo class="wxRadioBox" icon="radio_box.xpm" type="widget">

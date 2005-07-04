@@ -531,6 +531,72 @@ wxString TypeConv::ReplaceSynonymous(const wxString &bitlist)
   return result;
 }
 
+  
+string TypeConv::TextToString(const string &str)
+{
+  string result;
+  
+  for (unsigned int i=0 ; i < str.length() ; i++)
+  {
+    char c = str[i];
+    if (c == '\\')
+    {
+      if (i < str.length() - 1)
+      {
+        char next = str[i+1];
+      
+        switch (next)
+        {
+          case 'n': result = result + '\n'; i++;
+                    break;
+          
+          case 't': result = result + '\t'; i++;
+                    break;
+          
+          case 'r': result = result + '\r'; i++;
+                    break;
+                          
+          case '\\': result = result + '\\'; i++;
+                     break;
+        }
+      }
+    }
+    else
+      result = result + c;
+  }
+  
+  return result;
+}
+
+string TypeConv::StringToText(const string &str)
+{
+  string result;
+  
+  for (unsigned int i=0 ; i < str.length() ; i++)
+  {
+    char c = str[i];
+    
+    switch (c)
+    {
+      case '\n': result = result + "\\n";
+                 break;
+          
+      case '\t': result = result + "\\t";
+                 break;
+          
+      case '\r': result = result + "\\r";
+                 break;
+                          
+      case '\\': result = result + "\\\\";
+                 break;
+      
+      default:   result = result + c;
+                 break;
+    }
+  }
+  return result;
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 

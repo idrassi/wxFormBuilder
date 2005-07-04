@@ -80,6 +80,11 @@ namespace TypeConv
   
   // Obtiene la ruta relativa de un archivo
   wxString MakeRelativePath(const wxString &filename, const wxString &basePath);
+  
+  // dada una cadena de caracteres obtiene otra transformando los caracteres
+  // especiales denotados al estilo C ('\n' '\\' '\t')
+  string StringToText(const string &str);
+  string TextToString(const string &str);
 };
 
 
