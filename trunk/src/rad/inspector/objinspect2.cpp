@@ -221,6 +221,30 @@ WX_PG_IMPLEMENT_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR(fbColourProperty,
                                                      0)
 
 // -----------------------------------------------------------------------
+// wxMyImageFilePropertyClass
+// -----------------------------------------------------------------------
+
+class wxMyImageFilePropertyClass : public wxFilePropertyClass
+{
+    WX_PG_DECLARE_DERIVED_PROPERTY_CLASS()
+public:
+
+    wxMyImageFilePropertyClass( const wxString& label, const wxString& name, const wxString& value );
+    virtual ~wxMyImageFilePropertyClass ();
+
+    virtual void DoSetValue ( wxPGVariant value );
+    wxString GetValueAsString ( int arg_flags ) const;
+    WX_PG_DECLARE_CUSTOM_PAINT_METHODS()
+
+protected:
+    wxBitmap*   m_pBitmap; // final thumbnail area
+    wxImage*    m_pImage; // intermediate thumbnail area
+
+};
+
+WX_PG_IMPLEMENT_DERIVED_PROPERTY_CLASS(wxMyImageFileProperty,const wxString&)
+
+// -----------------------------------------------------------------------
 // ObjectInspector
 // -----------------------------------------------------------------------
 
@@ -401,11 +425,11 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
     result = wxDirProperty(name, wxPG_LABEL, prop->GetValueAsString());
   
   else if (type == PT_BITMAP)
-    result = wxImageFileProperty(name, wxPG_LABEL,
+    result = wxMyImageFileProperty(name, wxPG_LABEL,
       TypeConv::MakeAbsolutePath(prop->GetValueAsString(),GlobalData()->GetProjectPath()));
     
   else if (type == PT_XPM_BITMAP){
-    result = wxImageFileProperty(name, wxPG_LABEL,
+    result = wxMyImageFileProperty(name, wxPG_LABEL,
       TypeConv::MakeAbsolutePath(prop->GetValueAsString(),GlobalData()->GetProjectPath()));
     result->SetAttribute(wxPG_FILE_WILDCARD, _T("XPM files (*.xpm)|*.xpm"));
   }
@@ -619,4 +643,165 @@ void ObjectInspector::PropertyModified(PProperty prop)
         pgProp->SetValueFromString(prop->GetValueAsString(), 0);
   }
   m_pg->Refresh();
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+static const wxString& wxMyDefaultImageWildcard ()
+{
+    // Form the wildcard, if not done yet
+    if ( !wxPGGlobalVars->m_pDefaultImageWildcard.length() )
+    {
+
+        wxString str;
+
+        // TODO: This section may require locking (using global).
+
+        wxList& handlers = wxImage::GetHandlers();
+
+        wxList::iterator node;
+        wxArrayString ext;
+        
+        for ( node = handlers.begin(); node != handlers.end(); node++ )
+        {
+            wxImageHandler *handler = (wxImageHandler*)*node;
+
+            wxString ext_lo = handler->GetExtension();
+            wxString ext_up = ext_lo.Upper();
+
+            ext.Add( ext_lo );
+        }
+        
+        if (ext.Count() > 0)
+        {
+          unsigned int i;
+          
+          str.append ( wxT("All image files (") );
+        
+          str.append(wxT("*."));
+          str.append(ext[0]);
+          for (i = 1; i < ext.Count(); i++)
+          {
+            str.append(wxT(";*."));
+            str.append(ext[i]);
+          }
+          str.append ( wxT(")|*.") );
+          str.append(ext[0]);
+
+          for (i = 1; i < ext.Count(); i++)
+          {
+            str.append(wxT(";*."));
+            str.append(ext[i]);
+          }
+          str.append ( wxT("|") );
+        }
+  
+        
+
+        // Let's iterate over the image handler list.
+        //for ( wxList::Node *node = handlers.GetFirst(); node; node = node->GetNext() )
+        for ( node = handlers.begin(); node != handlers.end(); node++ )
+        {
+            wxImageHandler *handler = (wxImageHandler*)*node;
+
+            wxString ext_lo = handler->GetExtension();
+            wxString ext_up = ext_lo.Upper();
+
+            str.append ( ext_up );
+            str.append ( wxT(" files (*.") );
+            str.append ( ext_up );
+            str.append ( wxT(")|*.") );
+            str.append ( ext_lo );
+            str.append ( wxT("|") );
+        }
+
+        str.append ( wxT("All files (*.*)|*.*") );
+
+        wxPGGlobalVars->m_pDefaultImageWildcard = str;
+    }
+
+    return wxPGGlobalVars->m_pDefaultImageWildcard;
+}
+
+wxMyImageFilePropertyClass::wxMyImageFilePropertyClass ( const wxString& label, const wxString& name,
+    const wxString& value )
+    : wxFilePropertyClass(label,name,value)
+{
+
+    m_wildcard = wxMyDefaultImageWildcard();
+
+    m_pImage = (wxImage*) NULL;
+    m_pBitmap = (wxBitmap*) NULL;
+}
+
+wxMyImageFilePropertyClass::~wxMyImageFilePropertyClass () 
+{
+    if ( m_pBitmap )
+        delete m_pBitmap;
+    if ( m_pImage )
+        delete m_pImage;
+}
+
+void wxMyImageFilePropertyClass::DoSetValue ( wxPGVariant value )
+{
+    wxFilePropertyClass::DoSetValue(value);
+
+    // Delete old image
+    if ( m_pImage )
+    {
+        delete m_pImage;
+        m_pImage = NULL;
+    }
+    if ( m_pBitmap )
+    {
+        delete m_pBitmap;
+        m_pBitmap = NULL;
+    }
+
+    // Create the image thumbnail
+    if ( m_filename.FileExists() )
+    {
+        m_pImage = new wxImage ( m_filename.GetFullPath() );
+    }
+
+}
+
+wxSize wxMyImageFilePropertyClass::GetImageSize() const
+{
+    return wxSize(-1,-1);
+}
+
+void wxMyImageFilePropertyClass::OnCustomPaint ( wxDC& dc,
+    const wxRect& rect, wxPGPaintData& )
+{
+    if ( m_pBitmap || (m_pImage && m_pImage->Ok() ) )
+    {
+        // Draw the thumbnail
+
+        // Create the bitmap here because required size is not known in DoSetValue().
+        if ( !m_pBitmap )
+        {
+            m_pImage->Rescale ( rect.width, rect.height );
+            m_pBitmap = new wxBitmap ( *m_pImage );
+            delete m_pImage;
+            m_pImage = NULL;
+        }
+
+        dc.DrawBitmap ( *m_pBitmap, rect.x, rect.y, FALSE );
+    }
+    else
+    {
+        // No file - just draw a white box
+        dc.SetBrush ( *wxWHITE_BRUSH );
+        dc.DrawRectangle ( rect );
+    }
+}
+
+
+wxString wxMyImageFilePropertyClass::GetValueAsString ( int arg_flags ) const
+{
+  return TypeConv::MakeRelativePath(m_filename.GetFullPath(), GlobalData()->GetProjectPath());
 }

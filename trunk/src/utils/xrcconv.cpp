@@ -32,7 +32,85 @@
 #include <sstream>
 using namespace std;
 
-wxString ReplaceSynonymous(const wxString &bitlist)
+static wxString StringToXrcText(const wxString &str)
+{
+  wxString result;
+  
+  for (unsigned int i=0 ; i < str.Length() ; i++)
+  {
+    wxChar c = str[i];
+    
+    switch (c)
+    {
+      case wxChar('\n'): result = result + wxT("\\n");
+                 break;
+          
+      case wxChar('\t'): result = result + wxT("\\t");
+                 break;
+          
+      case wxChar('\r'): result = result + wxT("\\r");
+                 break;
+                          
+      case wxChar('\\'): result = result + wxT("\\\\");
+                 break;
+      
+      case wxChar('_'):  result = result + wxT("__");
+                 break;
+                 
+      case wxChar('&'):  result = result + wxT("_");
+                 break;
+      
+      default:   result = result + c;
+                 break;
+    }
+  }
+  return result;
+}
+
+static wxString XrcTextToString(const wxString &str)
+{
+  wxString result;
+  
+  for (unsigned int i=0 ; i < str.Length() ; i++)
+  {
+    wxChar c = str[i];
+    if (c == wxChar('\\') && i < str.length() - 1)
+    {
+      wxChar next = str[i+1];
+        
+      switch (next)
+      {
+        case wxChar('n'): result = result + wxChar('\n'); i++;
+                  break;
+          
+        case wxChar('t'): result = result + wxChar('\t'); i++;
+                  break;
+          
+        case wxChar('r'): result = result + wxChar('\r'); i++;
+                  break;
+                          
+        case wxChar('\\'): result = result + wxChar('\\'); i++;
+                   break;
+      }
+    }
+    else if (c == wxChar('_'))
+    {
+      if (i < str.Length() - 1 && str[i+1] == wxChar('_'))
+      {
+        result = result + wxChar('_');
+        i++;
+      }
+      else
+        result = result + wxChar('&');
+    }
+    else
+      result = result + c;
+  }
+  
+  return result;
+}
+
+static wxString ReplaceSynonymous(const wxString &bitlist)
 {
   IComponentLibrary *lib = GetComponentLibrary();
   wxString result, translation;
@@ -90,8 +168,12 @@ void ObjectToXrcFilter::AddProperty(const wxString &objPropName,
     case XRC_TYPE_SIZE: 
     case XRC_TYPE_POINT:
     case XRC_TYPE_BITLIST:
-    case XRC_TYPE_TEXT:
       LinkText(m_obj->GetPropertyAsString(objPropName), propElement);
+      break;
+      
+    case XRC_TYPE_TEXT:
+      // El texto ha de ser convertido a formato XRC
+      LinkText(m_obj->GetPropertyAsString(objPropName), propElement, true);
       break;
 
     case XRC_TYPE_BOOL:      
@@ -108,7 +190,8 @@ void ObjectToXrcFilter::AddProperty(const wxString &objPropName,
       break;
       
     case XRC_TYPE_STRINGLIST:
-      LinkStringList(m_obj->GetPropertyAsArrayString(objPropName), propElement);
+      // LinkStringList convierte las cadenas a formato XRC
+      LinkStringList(m_obj->GetPropertyAsArrayString(objPropName), propElement, true);
       break;
   }
   
@@ -128,9 +211,10 @@ TiXmlElement* ObjectToXrcFilter::GetXrcObject()
   return (m_xrcObj->Clone())->ToElement();
 }
 
-void ObjectToXrcFilter::LinkText(const wxString &text,TiXmlElement *propElement)
+void ObjectToXrcFilter::LinkText(const wxString &text,TiXmlElement *propElement, bool xrcFormat)
 {
-  propElement->LinkEndChild(new TiXmlText(text.mb_str()));
+  wxString value = (xrcFormat ? StringToXrcText(text) : text);
+  propElement->LinkEndChild(new TiXmlText(value.mb_str()));
 }
 
 void ObjectToXrcFilter::LinkInteger(const int &integer, TiXmlElement *propElement)
@@ -218,12 +302,13 @@ void ObjectToXrcFilter::LinkFont(const wxFont &font, TiXmlElement *propElement)
   propElement->LinkEndChild(element);
 } 
 
-void ObjectToXrcFilter::LinkStringList(const wxArrayString &array, TiXmlElement *propElement)
+void ObjectToXrcFilter::LinkStringList(const wxArrayString &array, TiXmlElement *propElement, bool xrcFormat)
 {
     for (size_t i = 0; i < array.GetCount(); i++)
     {
+      wxString value = ( xrcFormat ? StringToXrcText(array[i]) : array[i]);
       TiXmlElement *element = new TiXmlElement("item");
-      element->LinkEndChild(new TiXmlText(array[i].mb_str()));
+      element->LinkEndChild(new TiXmlText(value.mb_str()));
       propElement->LinkEndChild(element);
     }
 }
@@ -307,9 +392,12 @@ void XrcToXfbFilter::AddProperty(const wxString &xrcPropName,
   {
     case XRC_TYPE_SIZE: 
     case XRC_TYPE_POINT:
-    case XRC_TYPE_TEXT:
     case XRC_TYPE_BOOL:      
       ImportTextProperty(xrcPropName, propElement);
+      break;
+      
+    case XRC_TYPE_TEXT:
+      ImportTextProperty(xrcPropName, propElement, true);
       break;
       
     case XRC_TYPE_INTEGER:
@@ -329,7 +417,7 @@ void XrcToXfbFilter::AddProperty(const wxString &xrcPropName,
       break;
       
     case XRC_TYPE_STRINGLIST:
-      ImportStringListProperty(xrcPropName, propElement);
+      ImportStringListProperty(xrcPropName, propElement, true);
       break;
       
   }
@@ -357,14 +445,23 @@ TiXmlElement* XrcToXfbFilter::GetXfbObject()
 //-----------------------------
 
 void XrcToXfbFilter::ImportTextProperty(const wxString &xrcPropName,
-                                        TiXmlElement *property)
+                                        TiXmlElement *property, bool parseXrcText)
 {
   TiXmlElement *xrcProperty = m_xrcObj->FirstChildElement(xrcPropName.mb_str());
   if (xrcProperty)
   {
     TiXmlNode *textElement = xrcProperty->FirstChild();
     if (textElement && textElement->ToText())
-      property->LinkEndChild(textElement->Clone());
+    {
+      // Convertimos el texto XRC a texto normal
+      wxString value(wxString(textElement->ToText()->Value(),wxConvUTF8));
+      
+      if (parseXrcText)
+        value = XrcTextToString(value);
+         
+      TiXmlText *xmlText = new TiXmlText(value.mb_str());
+      property->LinkEndChild(xmlText);
+    }
   }
 }
 
@@ -548,7 +645,8 @@ void XrcToXfbFilter::ImportColourProperty(const wxString &xrcPropName,
   }
 }                                        
                                         
-void XrcToXfbFilter::ImportStringListProperty(const wxString &xrcPropName, TiXmlElement *property)
+void XrcToXfbFilter::ImportStringListProperty(const wxString &xrcPropName,
+  TiXmlElement *property , bool parseXrcText)
 {
   TiXmlElement *xrcProperty = m_xrcObj->FirstChildElement(xrcPropName.mb_str());
   if (!xrcProperty)
@@ -563,7 +661,13 @@ void XrcToXfbFilter::ImportStringListProperty(const wxString &xrcPropName, TiXml
   {
     xmlValue = element->FirstChild();
     if (xmlValue && xmlValue->ToText())
-      res += wxChar('\'') + wxString(xmlValue->ToText()->Value(), wxConvUTF8) + _T("' ");
+    {
+      wxString value = wxString(xmlValue->ToText()->Value(), wxConvUTF8);
+      if (parseXrcText)
+        value = XrcTextToString(value);
+        
+      res += wxChar('\'') + value + _T("' ");
+    }
       
     element = element->NextSiblingElement("item");
   }

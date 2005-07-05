@@ -55,6 +55,11 @@ WX_PG_DECLARE_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR(fbColourProperty)
 
 // -----------------------------------------------------------------------
 
+WX_PG_DECLARE_PROPERTY_WITH_DECL(wxMyImageFileProperty,const wxString&,wxEmptyString,WXDLLIMPEXP_PG)
+
+// -----------------------------------------------------------------------
+
+
 class ObjectInspector : public DataObserver, public wxPanel
 {
  private:

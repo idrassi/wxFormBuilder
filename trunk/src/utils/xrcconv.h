@@ -80,11 +80,11 @@ class ObjectToXrcFilter
   TiXmlElement *m_xrcObj;
   IObject *m_obj;
   
-  void LinkText(const wxString &text, TiXmlElement *propElement);
+  void LinkText(const wxString &text, TiXmlElement *propElement, bool xrcFormat = false);
   void LinkColour(const wxColour &colour, TiXmlElement *propElement);
   void LinkFont(const wxFont &font, TiXmlElement *propElement);
   void LinkInteger(const int &integer, TiXmlElement *propElement);
-  void LinkStringList(const wxArrayString &array, TiXmlElement *propElement);
+  void LinkStringList(const wxArrayString &array, TiXmlElement *propElement,  bool xrcFormat = false);
 };
 
 /**
@@ -120,12 +120,12 @@ class XrcToXfbFilter
   TiXmlElement *m_xfbObj;
   TiXmlElement *m_xrcObj;
   
-  void ImportTextProperty(const wxString &xrcPropName, TiXmlElement *property);
+  void ImportTextProperty(const wxString &xrcPropName, TiXmlElement *property, bool parseXrcText = false);
   void ImportIntegerProperty(const wxString &xrcPropName, TiXmlElement *property);
   void ImportBitlistProperty(const wxString &xrcPropName, TiXmlElement *property);
   void ImportColourProperty(const wxString &xrcPropName, TiXmlElement *property);
   void ImportFontProperty(const wxString &xrcPropName, TiXmlElement *property);
-  void ImportStringListProperty(const wxString &xrcPropName, TiXmlElement *property);
+  void ImportStringListProperty(const wxString &xrcPropName, TiXmlElement *property, bool parseXrcText = false);
   
   TiXmlElement *GetXrcProperty(const wxString &name);
 };
