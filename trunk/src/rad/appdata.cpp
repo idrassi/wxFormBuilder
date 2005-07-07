@@ -707,6 +707,7 @@ bool ApplicationData::LoadProject(const wxString &file)
       m_projectFile = _STDSTR(file);
       GlobalData()->SetProjectPath(::wxPathOnly(file));
       DataObservable::NotifyProjectLoaded();
+      DataObservable::NotifyProjectRefresh();  
     }
   }
   delete doc;  
@@ -836,6 +837,96 @@ void ApplicationData::CheckProjectTree(PObjectBase obj)
 string ApplicationData::GetProjectPath()
 {
   return _STDSTR(::wxPathOnly(_WXSTR(m_projectFile)));
+}
+
+bool ApplicationData::GetLayoutSettings(PObjectBase obj, int *flag, int *option,int *border)
+{
+  if (obj)
+  {
+    PObjectBase parent = obj->GetParent();
+    if (parent && parent->GetObjectTypeName() == "sizeritem")
+    {
+      PProperty propOption = parent->GetProperty("option");
+      PProperty propFlag   = parent->GetProperty("flag");
+      PProperty propBorder = parent->GetProperty("border");
+      assert(propOption && propFlag && propBorder);
+      
+      *option = propOption->GetValueAsInteger();
+      *flag   = propFlag->GetValueAsInteger();
+      *border = propBorder->GetValueAsInteger();
+      
+      return true;
+    }
+  }
+  return false;
+}
+
+void ApplicationData::ChangeAlignment (PObjectBase obj, int align, bool vertical)
+{
+  if (obj)
+  {
+    PObjectBase parent = obj->GetParent();
+    if (parent && parent->GetObjectTypeName() == "sizeritem")
+    {
+      PProperty propFlag = parent->GetProperty("flag");
+      assert(propFlag);
+      
+      wxString value = propFlag->GetValueAsString();
+      
+      // Primero borramos los flags de la configuración previa, para así
+      // evitar conflictos de alineaciones.
+      if (vertical)
+      {
+        value = TypeConv::ClearFlag(wxT("wxALIGN_TOP"), value);
+        value = TypeConv::ClearFlag(wxT("wxALIGN_BOTTOM"), value);
+        value = TypeConv::ClearFlag(wxT("wxALIGN_CENTER_VERTICAL"), value);
+      }
+      else
+      {
+        value = TypeConv::ClearFlag(wxT("wxALIGN_LEFT"), value);
+        value = TypeConv::ClearFlag(wxT("wxALIGN_RIGHT"), value);
+        value = TypeConv::ClearFlag(wxT("wxALIGN_CENTER_HORIZONTAL"), value);
+      }
+      
+      wxString alignStr;
+      switch (align)
+      {
+        case wxALIGN_RIGHT:
+          alignStr = wxT("wxALIGN_RIGHT");
+          break;
+        case wxALIGN_CENTER_HORIZONTAL:
+          alignStr = wxT("wxALIGN_CENTER_HORIZONTAL");
+          break;
+        case wxALIGN_BOTTOM:
+          alignStr = wxT("wxALIGN_BOTTOM");
+          break;
+        case wxALIGN_CENTER_VERTICAL:
+          alignStr = wxT("wxALIGN_CENTER_VERTICAL");
+          break;
+      }
+          
+      value = TypeConv::SetFlag(alignStr, value);
+      ModifyProperty(propFlag,value);
+    }
+  }
+}
+
+bool ApplicationData::CanPasteObject()
+{
+  PObjectBase obj = GetSelectedObject();
+  if (obj && obj->GetObjectTypeName() != "project")
+    return (m_clipboard != NULL);
+  
+  return false;
+}
+
+bool ApplicationData::CanCopyObject()
+{
+  PObjectBase obj = GetSelectedObject();
+  if (obj && obj->GetObjectTypeName() != "project")
+    return true;
+  
+  return false;
 }
 
 //////////////////////////////////////////////////////////////////////////////

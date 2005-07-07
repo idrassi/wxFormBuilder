@@ -37,6 +37,15 @@
 #include "icons/paste.xpm"
 #include "icons/cruz.xpm"
 #include "icons/tijeras.xpm"
+#include "icons/ralign.xpm"
+#include "icons/lalign.xpm"
+#include "icons/chalign.xpm"
+#include "icons/talign.xpm"
+#include "icons/balign.xpm"
+#include "icons/cvalign.xpm"
+#include "icons/expand.xpm"
+#include "icons/stretch.xpm"
+
 #include "model/xrcfilter.h"
 #include "rad/about.h"
 
@@ -64,6 +73,13 @@
 #define ID_RECENT_3      121 // 
 #define ID_RECENT_SEP    122
 
+#define ID_ALIGN_LEFT     123
+#define ID_ALIGN_CENTER_H 124
+#define ID_ALIGN_RIGHT    125 
+#define ID_ALIGN_TOP      126
+#define ID_ALIGN_CENTER_V 127
+#define ID_ALIGN_BOTTOM   128
+
 BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_NEW_PRJ,MainFrame::OnNewProject)
   EVT_MENU(ID_SAVE_PRJ,MainFrame::OnSaveProject)
@@ -87,6 +103,12 @@ BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_RECENT_1,MainFrame::OnOpenRecent)
   EVT_MENU(ID_RECENT_2,MainFrame::OnOpenRecent)
   EVT_MENU(ID_RECENT_3,MainFrame::OnOpenRecent)
+  EVT_MENU(ID_ALIGN_RIGHT,MainFrame::OnChangeAlignment)
+  EVT_MENU(ID_ALIGN_LEFT,MainFrame::OnChangeAlignment)
+  EVT_MENU(ID_ALIGN_CENTER_H,MainFrame::OnChangeAlignment)
+  EVT_MENU(ID_ALIGN_TOP,MainFrame::OnChangeAlignment)
+  EVT_MENU(ID_ALIGN_BOTTOM,MainFrame::OnChangeAlignment)
+  EVT_MENU(ID_ALIGN_CENTER_V,MainFrame::OnChangeAlignment)
   EVT_CLOSE(MainFrame::OnClose)
 END_EVENT_TABLE()
 
@@ -127,6 +149,13 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   menuEdit->Append(ID_STRETCH, _T("&Toggle Stretch\tALT+S"), _T("Toggle option property of sizeritem properties"));
   menuEdit->Append(ID_MOVE_UP, _T("&Move Up\tALT+Up"), _T("Move Up selected object"));
   menuEdit->Append(ID_MOVE_DOWN, _T("&Move Down\tALT+Down"), _T("Move Down selected object"));
+  menuEdit->AppendSeparator();
+  menuEdit->Append(ID_ALIGN_LEFT,     _T("&Align Left"),           _T("Align item to the left"));
+  menuEdit->Append(ID_ALIGN_CENTER_H, _T("&Align Center Horizontal"), _T("Align item to the center horizontally"));
+  menuEdit->Append(ID_ALIGN_RIGHT,    _T("&Align Right"),         _T("Align item to the right"));
+  menuEdit->Append(ID_ALIGN_TOP,      _T("&Align Top"),              _T("Align item to the top"));
+  menuEdit->Append(ID_ALIGN_CENTER_H, _T("&Align Center Vertical"),   _T("Align item to the center vertically"));
+  menuEdit->Append(ID_ALIGN_BOTTOM,   _T("&Align Bottom"),         _T("Align item to the bottom"));
   
   wxMenu *menuHelp = new wxMenu;
   menuHelp->Append(ID_ABOUT, _T("&About...\tF1"), _T("Show about dialog"));
@@ -235,10 +264,20 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   toolbar->AddTool(ID_CUT, _T("Cut"), tijeras_xpm);
   toolbar->AddTool(ID_COPY, _T("Copy"), copy_xpm);
   toolbar->AddTool(ID_PASTE, _T("Paste"), paste_xpm);
-  toolbar->AddSeparator();
   toolbar->AddTool(ID_DELETE, _T("Delete"), cruz_xpm);
   toolbar->AddSeparator();
   toolbar->AddTool(ID_GENERATE_CODE,wxT("Generate Code"),system_xpm);
+  toolbar->AddSeparator();
+  toolbar->AddTool(ID_ALIGN_LEFT,wxT(""),lalign_xpm,wxNullBitmap,wxITEM_CHECK);
+  toolbar->AddTool(ID_ALIGN_CENTER_H,wxT(""),chalign_xpm,wxNullBitmap,wxITEM_CHECK);
+  toolbar->AddTool(ID_ALIGN_RIGHT,wxT(""),ralign_xpm,wxNullBitmap,wxITEM_CHECK);
+  toolbar->AddSeparator();
+  toolbar->AddTool(ID_ALIGN_TOP,wxT(""),talign_xpm,wxNullBitmap,wxITEM_CHECK);
+  toolbar->AddTool(ID_ALIGN_CENTER_V,wxT(""),cvalign_xpm,wxNullBitmap,wxITEM_CHECK);
+  toolbar->AddTool(ID_ALIGN_BOTTOM,wxT(""),balign_xpm,wxNullBitmap,wxITEM_CHECK);
+  toolbar->AddSeparator();
+  toolbar->AddTool(ID_EXPAND,wxT(""),expand_xpm,wxNullBitmap,wxITEM_CHECK);
+  toolbar->AddTool(ID_STRETCH,wxT(""),stretch_xpm,wxNullBitmap,wxITEM_CHECK);
 
   toolbar->Realize();
 
@@ -402,16 +441,6 @@ void MainFrame::OnImportXrc(wxCommandEvent &event)
     TiXmlDocument doc(_STDSTR(dialog->GetPath()));
     if (doc.LoadFile())
     {
-      /*XrcFilter xrc;
-      xrc.SetObjectDatabase(GetData()->GetObjectDatabase());
-      PObjectBase project = xrc.GetProject(&doc);
-      if (project)
-      {
-        GetData()->MergeProject(project);
-      }
-      else
-        wxLogMessage(wxT("Error al importar XRC"));*/
-        
       XrcLoader xrc;
       xrc.SetObjectDatabase(GetData()->GetObjectDatabase());
       PObjectBase project = xrc.GetProject(&doc);
@@ -490,6 +519,7 @@ void MainFrame::ObjectSelected(PObjectBase obj)
     name = wxT("\"Unknown\"");
   
   GetStatusBar()->SetStatusText(wxT("Object ") + name + wxT(" Selected!"));
+  UpdateFrame();
 }
 
 void MainFrame::ObjectCreated(PObjectBase obj)
@@ -529,6 +559,45 @@ void MainFrame::ProjectRefresh()
   UpdateFrame();
 }
 
+void MainFrame::UpdateLayoutTools()
+{
+  int option, border, flag;
+  if (GetData()->GetLayoutSettings(GetData()->GetSelectedObject(),&flag,&option,&border))
+  {
+    // Activamos todas las herramientas de layout
+    GetToolBar()->EnableTool(ID_EXPAND,true);  
+    GetToolBar()->EnableTool(ID_STRETCH,true);  
+    GetToolBar()->EnableTool(ID_ALIGN_LEFT,true);  
+    GetToolBar()->EnableTool(ID_ALIGN_CENTER_H,true);  
+    GetToolBar()->EnableTool(ID_ALIGN_RIGHT,true);  
+    GetToolBar()->EnableTool(ID_ALIGN_TOP,true);  
+    GetToolBar()->EnableTool(ID_ALIGN_CENTER_V,true);  
+    GetToolBar()->EnableTool(ID_ALIGN_BOTTOM,true);
+    
+    // Colocamos la posición de los botones
+    GetToolBar()->ToggleTool(ID_EXPAND,         flag & wxEXPAND);
+    GetToolBar()->ToggleTool(ID_STRETCH,        option > 0);  
+    GetToolBar()->ToggleTool(ID_ALIGN_LEFT,     !(flag & (wxALIGN_RIGHT | wxALIGN_CENTER_HORIZONTAL)));
+    GetToolBar()->ToggleTool(ID_ALIGN_CENTER_H, flag & wxALIGN_CENTER_HORIZONTAL);  
+    GetToolBar()->ToggleTool(ID_ALIGN_RIGHT,    flag & wxALIGN_RIGHT);
+    GetToolBar()->ToggleTool(ID_ALIGN_TOP,      !(flag & (wxALIGN_BOTTOM | wxALIGN_CENTER_VERTICAL)));
+    GetToolBar()->ToggleTool(ID_ALIGN_CENTER_V, flag & wxALIGN_CENTER_VERTICAL);
+    GetToolBar()->ToggleTool(ID_ALIGN_BOTTOM,   flag & wxALIGN_BOTTOM);
+  }
+  else
+  {
+    // Desactivamos todas las herramientas de layout
+    GetToolBar()->EnableTool(ID_EXPAND,false);  
+    GetToolBar()->EnableTool(ID_STRETCH,false);  
+    GetToolBar()->EnableTool(ID_ALIGN_LEFT,false);  
+    GetToolBar()->EnableTool(ID_ALIGN_CENTER_H,false);  
+    GetToolBar()->EnableTool(ID_ALIGN_RIGHT,false);  
+    GetToolBar()->EnableTool(ID_ALIGN_TOP,false);  
+    GetToolBar()->EnableTool(ID_ALIGN_CENTER_V,false);  
+    GetToolBar()->EnableTool(ID_ALIGN_BOTTOM,false);  
+  }
+}
+
 void MainFrame::UpdateFrame()
 {
   // Actualizamos el título
@@ -546,8 +615,17 @@ void MainFrame::UpdateFrame()
   
   menuEdit->Enable(ID_REDO,GetData()->CanRedo());
   menuEdit->Enable(ID_UNDO,GetData()->CanUndo());
+
+  // Actualizamos la barra de herramientas
   GetToolBar()->EnableTool(ID_REDO,GetData()->CanRedo());
   GetToolBar()->EnableTool(ID_UNDO,GetData()->CanUndo());
+  GetToolBar()->EnableTool(ID_COPY,GetData()->CanCopyObject());
+  GetToolBar()->EnableTool(ID_CUT,GetData()->CanCopyObject());
+  GetToolBar()->EnableTool(ID_DELETE,GetData()->CanCopyObject());
+  GetToolBar()->EnableTool(ID_PASTE,GetData()->CanPasteObject());
+  
+  UpdateLayoutTools();
+
   
   // Actualizamos la barra de estado
   // TO-DO: definir un campo...
@@ -597,21 +675,25 @@ void MainFrame::InsertRecentProject(const wxString &file)
 void MainFrame::OnCopy(wxCommandEvent &event)
 {
   GetData()->CopyObject(GetData()->GetSelectedObject());
+  UpdateFrame();
 }
 
 void MainFrame::OnCut (wxCommandEvent &event)
 {
   GetData()->CutObject(GetData()->GetSelectedObject());
+  UpdateFrame();
 }
 
 void MainFrame::OnDelete (wxCommandEvent &event)
 {
   GetData()->RemoveObject(GetData()->GetSelectedObject());
+  UpdateFrame();
 }
 
 void MainFrame::OnPaste (wxCommandEvent &event)
 {
   GetData()->PasteObject(GetData()->GetSelectedObject());
+  UpdateFrame();
 }
 
 void MainFrame::OnToggleExpand (wxCommandEvent &event)
@@ -632,5 +714,32 @@ void MainFrame::OnMoveUp (wxCommandEvent &event)
 void MainFrame::OnMoveDown (wxCommandEvent &event)
 {
   GetData()->MovePosition(GetData()->GetSelectedObject(),true,1);
+}
+
+void MainFrame::OnChangeAlignment (wxCommandEvent &event)
+{
+  int align = 0;
+  bool vertical = (event.GetId() == ID_ALIGN_TOP ||
+                   event.GetId() == ID_ALIGN_BOTTOM ||
+                   event.GetId() == ID_ALIGN_CENTER_V);
+  
+  switch (event.GetId())
+  {    
+    case ID_ALIGN_RIGHT:
+      align = wxALIGN_RIGHT;
+      break;
+    case ID_ALIGN_CENTER_H:
+      align = wxALIGN_CENTER_HORIZONTAL;
+      break;
+    case ID_ALIGN_BOTTOM:
+      align = wxALIGN_BOTTOM;
+      break;  
+    case ID_ALIGN_CENTER_V:
+      align = wxALIGN_CENTER_VERTICAL;
+      break;
+  }
+  
+  GetData()->ChangeAlignment(GetData()->GetSelectedObject(),align,vertical);
+  UpdateLayoutTools();
 }
 

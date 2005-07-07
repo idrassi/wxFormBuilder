@@ -66,6 +66,7 @@ class MainFrame : public DataObserver, public wxFrame
   void UpdateRecentProjects();
   void InsertRecentProject(const wxString &file);
   void OnOpenRecent(wxCommandEvent &event);
+  void UpdateLayoutTools();
   
   DECLARE_EVENT_TABLE()
  public:
@@ -92,6 +93,7 @@ class MainFrame : public DataObserver, public wxFrame
   void OnToggleStretch (wxCommandEvent &event);
   void OnMoveUp (wxCommandEvent &event);
   void OnMoveDown (wxCommandEvent &event);
+  void OnChangeAlignment (wxCommandEvent &event);
   
   void ProjectLoaded();
   void ProjectSaved();

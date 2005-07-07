@@ -118,6 +118,7 @@ class ApplicationData : public DataObservable
   void Redo();
   void ToggleExpandLayout(PObjectBase obj);
   void ToggleStretchLayout(PObjectBase obj);
+  void ChangeAlignment (PObjectBase obj, int align, bool vertical);
   
   // Servicios para los observadores  
   PObjectBase GetSelectedObject();
@@ -125,6 +126,9 @@ class ApplicationData : public DataObservable
   PObjectBase GetSelectedForm();
   bool CanUndo() { return m_cmdProc.CanUndo(); }
   bool CanRedo() { return m_cmdProc.CanRedo(); }
+  bool GetLayoutSettings(PObjectBase obj, int *flag, int *option,int *border);
+  bool CanPasteObject();
+  bool CanCopyObject();
   
   PObjectPackage GetPackage(unsigned int idx)
     { return m_objDb->GetPackage(idx);}

@@ -86,6 +86,7 @@ class DataObservable
   virtual void Redo() = 0;
   virtual void ToggleExpandLayout(PObjectBase obj) = 0;
   virtual void ToggleStretchLayout(PObjectBase obj) = 0;
+  virtual void ChangeAlignment (PObjectBase obj, int align, bool vertical) = 0;
   
   // Obtienen información del modelo de datos
   virtual PObjectPackage GetPackage(unsigned int idx) = 0;
@@ -98,6 +99,10 @@ class DataObservable
   
   virtual bool CanUndo() = 0;
   virtual bool CanRedo() = 0;
+
+  virtual bool GetLayoutSettings(PObjectBase obj, int *flag, int *option,int *border) = 0;
+  virtual bool CanPasteObject() = 0;
+  virtual bool CanCopyObject() = 0;
   
   virtual string GetProjectPath() = 0;
 };
