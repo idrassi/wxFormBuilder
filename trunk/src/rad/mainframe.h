@@ -68,6 +68,8 @@ class MainFrame : public DataObserver, public wxFrame
   void OnOpenRecent(wxCommandEvent &event);
   void UpdateLayoutTools();
   
+  bool SaveWarning();
+  
   DECLARE_EVENT_TABLE()
  public:
   MainFrame(DataObservable *data,wxWindow *parent, int id = -1);

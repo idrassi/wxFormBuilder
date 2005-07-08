@@ -35,7 +35,7 @@ class ApplicationData : public DataObservable
 {
  private: 
   
-  bool m_changeFlag;        // flag de proyecto modificado
+  bool m_modFlag;           // flag de proyecto modificado
   PObjectDatabase m_objDb;  // Base de datos de objetos  
   PObjectBase m_project;    // Proyecto
   PObjectBase m_selObj;     // Objeto seleccionado
@@ -96,6 +96,8 @@ class ApplicationData : public DataObservable
     */
    void DoRemoveObject(PObjectBase object, bool cutObject);
    
+   void Execute(PCommand cmd);
+   
  public:
   ApplicationData();
 
@@ -129,6 +131,7 @@ class ApplicationData : public DataObservable
   bool GetLayoutSettings(PObjectBase obj, int *flag, int *option,int *border);
   bool CanPasteObject();
   bool CanCopyObject();
+  bool IsModified();
   
   PObjectPackage GetPackage(unsigned int idx)
     { return m_objDb->GetPackage(idx);}

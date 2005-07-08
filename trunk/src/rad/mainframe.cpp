@@ -379,7 +379,10 @@ void MainFrame::OnSaveProject(wxCommandEvent &event)
   if (m_prjFileName == wxT(""))
     OnSaveAsProject(event);
   else
+  {
     GetData()->SaveProject(m_prjFileName);
+    InsertRecentProject(m_prjFileName);
+  }
 }  
 
     
@@ -393,6 +396,7 @@ void MainFrame::OnSaveAsProject(wxCommandEvent &event)
     m_currentDir = dialog->GetDirectory();
     m_prjFileName = dialog->GetPath();
     GetData()->SaveProject(m_prjFileName); // FIXME: debe devolver bool.
+    InsertRecentProject(m_prjFileName);
   };
   
   dialog->Destroy();
@@ -400,7 +404,9 @@ void MainFrame::OnSaveAsProject(wxCommandEvent &event)
 
 void MainFrame::OnOpenProject(wxCommandEvent &event)
 {
-  //GetData()->LoadProject(wxT("hola.xml"));
+  if (!SaveWarning())
+    return;
+  
   wxFileDialog *dialog = new wxFileDialog(this,wxT("Open Project"),m_currentDir,
     wxT("example.xml"),wxT("*.xml"),wxOPEN | wxHIDE_READONLY);
 
@@ -419,8 +425,10 @@ void MainFrame::OnOpenProject(wxCommandEvent &event)
 
 void MainFrame::OnOpenRecent(wxCommandEvent &event)
 {
+  if (!SaveWarning())
+    return;
+
   int i = event.GetId() - ID_RECENT_0;
-  
   assert (i >= 0 && i < 4);
 
   m_prjFileName = m_recentProjects[i];
@@ -461,6 +469,9 @@ void MainFrame::OnImportXrc(wxCommandEvent &event)
 
 void MainFrame::OnNewProject(wxCommandEvent &event)
 {
+  if (!SaveWarning())
+    return;
+
   m_prjFileName = wxT(""); // Hay que hacerlo antes, ya que la notificación refresh
                            // se produce al hacer NewProject
   GetData()->NewProject();
@@ -488,13 +499,19 @@ void MainFrame::OnAbout(wxCommandEvent &event)
 
 void MainFrame::OnExit(wxCommandEvent &event)
 {
+  if (!SaveWarning())
+    return;
+
   Close();
 }
 
 void MainFrame::OnClose(wxCloseEvent &event)
 {
-    SavePosition(_T("mainframe"));
-    event.Skip();
+  if (!SaveWarning())
+    return;
+    
+  SavePosition(_T("mainframe"));
+  event.Skip();
 }
 
 void MainFrame::ProjectLoaded()
@@ -603,11 +620,15 @@ void MainFrame::UpdateFrame()
   // Actualizamos el título
   wxString date(wxT(__DATE__));
   wxString time(wxT(__TIME__));
-  wxString title(wxT("wxFormBuilder (Build on ") + date +wxT(" - ")+ time + wxT(")"));
-  if (m_prjFileName.IsEmpty())
-    title += wxT(" - [untitled]");
-  else
-    title = title + wxT(" - [") + m_prjFileName + wxT("]");
+  wxString title(wxT("wxFormBuilder (Build on ") + date +wxT(" - ")+ time + wxT(") - "));
+
+  if (GetData()->IsModified())
+    title = title + wxChar('*'); 
+
+    title = title + ( m_prjFileName.IsEmpty() ?
+                      wxT("[untitled]") :
+                      wxT("[") + m_prjFileName + wxT("]"));
+  
   SetTitle(title);
   
   // Actualizamos los menus
@@ -741,5 +762,27 @@ void MainFrame::OnChangeAlignment (wxCommandEvent &event)
   
   GetData()->ChangeAlignment(GetData()->GetSelectedObject(),align,vertical);
   UpdateLayoutTools();
+}
+
+bool MainFrame::SaveWarning()
+{
+  int result = wxYES;
+  
+  if (GetData()->IsModified())
+  {
+    result = ::wxMessageBox(wxT("Current project file has been modified...\n")
+                            wxT("Do you want to save the changes?"),
+                            wxT("Save project"),
+                            wxYES | wxNO | wxCANCEL,
+                            this);
+
+    if (result == wxYES)
+    {
+      wxCommandEvent dummy;
+      OnSaveProject(dummy);
+    }
+  }
+  
+  return (result != wxCANCEL);
 }
 

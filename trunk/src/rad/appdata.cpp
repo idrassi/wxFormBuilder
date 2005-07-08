@@ -443,7 +443,7 @@ void ApplicationData::CreateObject(wxString name)
         int pos = CalcPositionOfInsertion(GetSelectedObject(),parent);
         
         PCommand command(new InsertObjectCmd(this,obj,parent,pos));
-        m_cmdProc.Execute(command);
+        Execute(command); //m_cmdProc.Execute(command);
         created = true;
         ResolveNameConflict(obj);
       }
@@ -497,12 +497,12 @@ void ApplicationData::DoRemoveObject(PObjectBase obj, bool cutObject)
     {
       m_copyOnPaste = false;
       PCommand command(new CutObjectCmd(this, obj));
-      m_cmdProc.Execute(command);
+      Execute(command); //m_cmdProc.Execute(command);
     }
     else
     {
       PCommand command(new RemoveObjectCmd(this,obj));
-      m_cmdProc.Execute(command);
+      Execute(command); //m_cmdProc.Execute(command);
     }
 
     DataObservable::NotifyObjectRemoved(obj);
@@ -607,7 +607,7 @@ void ApplicationData::PasteObject(PObjectBase parent)
         
       // y finalmente insertamos en el arbol 
       PCommand command(new InsertObjectCmd(this,obj,parent,pos));
-      m_cmdProc.Execute(command);
+      Execute(command); //m_cmdProc.Execute(command);
       
       if (!m_copyOnPaste)
         m_clipboard.reset();
@@ -637,7 +637,7 @@ void ApplicationData::InsertObject(PObjectBase obj, PObjectBase parent)
 //    obj->GetObjectInfo()->GetObjectType()))
 //  {
     PCommand command(new InsertObjectCmd(this,obj,parent));
-    m_cmdProc.Execute(command);  
+    Execute(command); //m_cmdProc.Execute(command);
     DataObservable::NotifyProjectRefresh(); 
 //  }
 }
@@ -665,7 +665,7 @@ void ApplicationData::ModifyProperty(PProperty prop, wxString str)
   if (_STDSTR(str) != prop->GetValue())
   {
     PCommand command(new ModifyPropertyCmd(prop,_STDSTR(str)));
-    m_cmdProc.Execute(command);
+    Execute(command); //m_cmdProc.Execute(command);
 
     DataObservable::NotifyPropertyModified(prop);
   }  
@@ -703,6 +703,7 @@ bool ApplicationData::LoadProject(const wxString &file)
       m_project = proj;
       m_selObj = m_project;
       result = true;
+      m_modFlag = false;
       m_cmdProc.Reset();
       m_projectFile = _STDSTR(file);
       GlobalData()->SetProjectPath(::wxPathOnly(file));
@@ -719,6 +720,7 @@ void ApplicationData::NewProject()
 {
   m_project = m_objDb->CreateObject("Project");
   m_selObj = m_project;
+  m_modFlag = false;
   m_cmdProc.Reset();
   GlobalData()->SetProjectPath(wxT(""));
   DataObservable::NotifyProjectRefresh();  
@@ -757,9 +759,10 @@ void ApplicationData::MovePosition(PObjectBase obj, bool right, unsigned int num
       pos = (right ? pos+num : pos-num);
       
       PCommand command(new ShiftChildCmd(obj,pos));
-      m_cmdProc.Execute(command);
+      Execute(command); //m_cmdProc.Execute(command);
       DataObservable::NotifyProjectRefresh();
       SelectObject(noItemObj); 
+  
     }
   }
 }
@@ -927,6 +930,17 @@ bool ApplicationData::CanCopyObject()
     return true;
   
   return false;
+}
+
+bool ApplicationData::IsModified()
+{
+  return m_modFlag;
+}
+
+void ApplicationData::Execute(PCommand cmd)
+{
+  m_modFlag = true;
+  m_cmdProc.Execute(cmd);
 }
 
 //////////////////////////////////////////////////////////////////////////////

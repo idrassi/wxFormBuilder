@@ -104,6 +104,8 @@ class DataObservable
   virtual bool CanPasteObject() = 0;
   virtual bool CanCopyObject() = 0;
   
+  virtual bool IsModified() = 0;
+  
   virtual string GetProjectPath() = 0;
 };
 
