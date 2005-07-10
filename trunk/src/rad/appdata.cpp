@@ -675,6 +675,7 @@ void ApplicationData::ModifyProperty(PProperty prop, wxString str)
 void ApplicationData::SaveProject(const wxString &filename)
 {
   TiXmlDocument *doc = m_project->Serialize();
+  m_modFlag = false;
   doc->SaveFile(filename.mb_str());
   m_projectFile = _STDSTR(filename);
   GlobalData()->SetProjectPath(::wxPathOnly(filename));
