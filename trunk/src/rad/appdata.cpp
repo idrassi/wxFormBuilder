@@ -831,7 +831,7 @@ void ApplicationData::CheckProjectTree(PObjectBase obj)
   {
     PObjectBase child = obj->GetChild(i);
     if (child->GetParent() != obj)
-      wxLogError(wxString::Format(wxT("Parent of object \'%s\' is wrong!"),child->GetPropertyAsString(wxT("name")).mb_str()));
+      wxLogError(wxString::Format(wxT("Parent of object \'%s\' is wrong!"),child->GetPropertyAsString(wxT("name")).c_str()));
       
     CheckProjectTree(child);
   }
