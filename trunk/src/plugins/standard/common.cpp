@@ -170,6 +170,22 @@ class BitmapButtonComponent : public ComponentBase
       obj->GetPropertyAsInteger(_("style")));
   }
 
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxBitmapButton"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();
+    xrc.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_TEXT);
+    xrc.AddPropertyValue(_("default"),_("0"));
+    return xrc.GetXrcObject();
+  }
+  
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxBitmapButton"));
+    filter.AddWindowProperties();
+    filter.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_TEXT);
+    return filter.GetXfbObject();
+  }
 };
 
 
