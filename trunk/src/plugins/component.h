@@ -30,12 +30,32 @@
 #include "wx/wx.h"
 #include <wx/dynarray.h>
 #include "tinyxml.h"
+#include <string>
+
 
 #define COMPONENT_TYPE_ABSTRACT 0
 #define COMPONENT_TYPE_WINDOW   1
 #define COMPONENT_TYPE_SIZER    2
 
+using namespace std;
+
 class IComponent;
+
+// Secciones de la generacción de código
+enum
+{
+  CG_DECLARATION,
+  CG_CONSTRUCTION,
+  CG_POST_CONSTRUCTION,
+  CG_SETTINGS
+};
+
+// Lenguajes de programación para la generacción de código
+enum
+{
+  CG_CPP
+};
+
 
 // interfaz para plugins
 // la idea es proporcionar una interfaz para acceder a las propiedades del
@@ -128,18 +148,7 @@ class IComponent
    */
   virtual TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj) = 0;
   
-  /**
-   * Conservar la tabla de manejadores de eventos original del componente.
-   *
-   * Algunos componentes no deben dejar a wxFormBuilder redefinir su tabla
-   * de manejadores de eventos, en aquellos casos devolver "true"
-   */
-  virtual bool KeepEvtHandler() = 0; // No es necesaria...
   
-  
-  /**
-   *
-   */
   virtual int GetComponentType() = 0;
 };
 

@@ -179,7 +179,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
     
   wxPanel *right = new wxPanel(v_splitter,-1);
   v_splitter->SplitVertically(left,right,300);
-
+  
   wxSplitterWindow *h_splitter = new wxSplitterWindow(left,-1,wxDefaultPosition,wxDefaultSize, wxSP_3D | wxSP_LIVE_UPDATE);//wxSP_BORDER);
 
   wxPanel *tree_panel = new wxPanel(h_splitter,-1);
@@ -376,12 +376,13 @@ void MainFrame::SavePosition(const wxString &name)
 
 void MainFrame::OnSaveProject(wxCommandEvent &event)
 {
-  if (m_prjFileName == wxT(""))
+  wxString filename = _WXSTR(GetData()->GetProjectFileName());
+  if (filename == wxT(""))
     OnSaveAsProject(event);
   else
   {
-    GetData()->SaveProject(m_prjFileName);
-    InsertRecentProject(m_prjFileName);
+    GetData()->SaveProject(filename);
+    InsertRecentProject(filename);
   }
 }  
 
@@ -394,9 +395,9 @@ void MainFrame::OnSaveAsProject(wxCommandEvent &event)
   if (dialog->ShowModal() == wxID_OK)
   {
     m_currentDir = dialog->GetDirectory();
-    m_prjFileName = dialog->GetPath();
-    GetData()->SaveProject(m_prjFileName); // FIXME: debe devolver bool.
-    InsertRecentProject(m_prjFileName);
+    wxString filename = dialog->GetPath();
+    GetData()->SaveProject(filename); // FIXME: debe devolver bool.
+    InsertRecentProject(filename);
   };
   
   dialog->Destroy();
@@ -413,11 +414,9 @@ void MainFrame::OnOpenProject(wxCommandEvent &event)
   if (dialog->ShowModal() == wxID_OK)
   {
     m_currentDir = dialog->GetDirectory();
-    m_prjFileName = dialog->GetPath();
-    if (!GetData()->LoadProject(m_prjFileName))
-      m_prjFileName = wxT("");
-    else
-      InsertRecentProject(m_prjFileName);
+    wxString filename = dialog->GetPath();
+    if (GetData()->LoadProject(filename))
+      InsertRecentProject(filename);
   };
   
   dialog->Destroy();
@@ -431,11 +430,9 @@ void MainFrame::OnOpenRecent(wxCommandEvent &event)
   int i = event.GetId() - ID_RECENT_0;
   assert (i >= 0 && i < 4);
 
-  m_prjFileName = m_recentProjects[i];
-  if (!GetData()->LoadProject(m_prjFileName))
-    m_prjFileName = wxT("");
-  else
-    InsertRecentProject(m_prjFileName);
+  wxString filename = m_recentProjects[i];
+  if (GetData()->LoadProject(filename))
+    InsertRecentProject(filename);
 }
 
 void MainFrame::OnImportXrc(wxCommandEvent &event)
@@ -472,8 +469,6 @@ void MainFrame::OnNewProject(wxCommandEvent &event)
   if (!SaveWarning())
     return;
 
-  m_prjFileName = wxT(""); // Hay que hacerlo antes, ya que la notificación refresh
-                           // se produce al hacer NewProject
   GetData()->NewProject();
 }  
 
@@ -625,9 +620,11 @@ void MainFrame::UpdateFrame()
   if (GetData()->IsModified())
     title = title + wxChar('*'); 
 
-    title = title + ( m_prjFileName.IsEmpty() ?
+   wxString filename = _WXSTR(GetData()->GetProjectFileName());
+
+   title = title + ( filename.IsEmpty() ?
                       wxT("[untitled]") :
-                      wxT("[") + m_prjFileName + wxT("]"));
+                      wxT("[") + filename + wxT("]"));
   
   SetTitle(title);
   

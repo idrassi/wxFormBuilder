@@ -1,0 +1,58 @@
+<codegen language="C++">
+
+  <templates class="wxCalendarCtrl">
+    <template name="declaration">wxCalendarCtrl *$name;</template>
+    <template name="construction">$name = new wxCalendarCtrl(#wxparent $name, $id, wxDefaultDateTime, $pos, $size, $style);</template>
+    <template name="include">#include &lt;wx/calctrl.h&gt;</template>
+  </templates>
+
+  <templates class="wxHtmlWindow">
+    <template name="declaration">wxHtmlWindow *$name;</template>
+    <template name="construction">$name = new wxHtmlWindow(#wxparent $name, $id, $pos, $size, $style);</template>
+    <template name="include">#include &lt;wx/calctrl.h&gt;</template>
+  </templates>
+
+
+  <templates class="wxRadioButton">
+    <template name="declaration">wxHtmlWindow *$name;</template>
+    <template name="construction">$name = new wxHtmlWindow(#wxparent $name, $id, $pos, $size, $style);</template>
+    <template name="include">#include &lt;wx/calctrl.h&gt;</template>
+  </templates>
+
+  <templates class="wxToggleButton">
+    <template name="declaration">wxHtmlWindow *$name;</template>
+    <template name="construction">$name = new wxHtmlWindow(#wxparent $name, $id, $pos, $size, $style);</template>
+    <template name="include">#include &lt;wx/calctrl.h&gt;</template>
+  </templates>
+
+  <templates class="wxTreeCtrl">
+    <template name="declaration">wxHtmlWindow *$name;</template>
+    <template name="construction">$name = new wxHtmlWindow(#wxparent $name, $id, $pos, $size, $style);</template>
+    <template name="include">#include &lt;wx/calctrl.h&gt;</template>
+  </templates>
+  
+  <templates class="wxScrollBar">
+    <template name="declaration">wxHtmlWindow *$name;</template>
+    <template name="construction">$name = new wxHtmlWindow(#wxparent $name, $id, $pos, $size, $style);</template>
+    <template name="include">#include &lt;wx/calctrl.h&gt;</template>
+  </templates>
+
+  <templates class="wxSpinCtrl">
+    <template name="declaration">wxHtmlWindow *$name;</template>
+    <template name="construction">$name = new wxHtmlWindow(#wxparent $name, $id, $pos, $size, $style);</template>
+    <template name="include">#include &lt;wx/calctrl.h&gt;</template>
+  </templates>
+
+  <templates class="wxSpinButton">
+    <template name="declaration">wxHtmlWindow *$name;</template>
+    <template name="construction">$name = new wxHtmlWindow(#wxparent $name, $id, $pos, $size, $style);</template>
+    <template name="include">#include &lt;wx/calctrl.h&gt;</template>
+  </templates>
+
+  <templates class="wxSplitterWindow">
+    <template name="declaration">wxSplitterWindow *$name;</template>
+    <template name="construction">$name = new wxSplitterWindow(#wxparent $name, $id, $pos, $size, $style);</template>
+    <template name="include">#include &lt;wx/splitter.h&gt;</template>
+  </templates>
+  
+</codegen>

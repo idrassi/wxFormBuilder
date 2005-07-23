@@ -1,5 +1,6 @@
 <packages>
   <package file="common.xml" />
+  <package file="additional.xml" />
   <package file="layout.xml" />
   <package file="forms.xml" />
 </packages>

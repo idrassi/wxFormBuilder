@@ -171,7 +171,7 @@
       <option name="wxNB_FLAT" /></property>
   </objectinfo>
 
-  <objectinfo class="notebookpage" icon="panel.xpm" type="notebookpage">
+  <objectinfo class="notebookpage" type="notebookpage">
     <property name="label" type="wxString">a page</property>
     <property name="select" type="bool">0</property>
   </objectinfo>

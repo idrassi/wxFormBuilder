@@ -37,6 +37,8 @@
 #include <wx/splash.h>
 #include "rad/mainframe.h"
 #include "rad/appdata.h"
+#include <wx/filename.h>
+
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
     #include "wxwin32x32.xpm"
@@ -63,11 +65,15 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
   GlobalDataInit();
-  
   wxInitAllImageHandlers();
+  
+  // Obtenemos la ruta del ejecutable
+  wxString exeFile(argv[0]);
+  wxFileName appFileName(exeFile);
+  wxString path = appFileName.GetPath();
 
   wxBitmap bitmap;    
-  if (bitmap.LoadFile(wxT("splash.png"), wxBITMAP_TYPE_PNG))
+  if (bitmap.LoadFile(path + wxFILE_SEP_PATH + wxT("splash.png"), wxBITMAP_TYPE_PNG))
   {
       new wxSplashScreen(bitmap, wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
           2000, NULL, -1, wxDefaultPosition, wxDefaultSize,
@@ -78,7 +84,7 @@ bool MyApp::OnInit()
   SetAppName(_T("wxFormBuilder"));
 
   #ifndef __WXMSW__
-  wxSleep(2);
+  //wxSleep(2);
   #endif
 
   wxYield();
@@ -89,7 +95,8 @@ bool MyApp::OnInit()
   #endif //__WXFB_DEBUG__
 
 
-  DataObservable *data = new ApplicationData();
+  
+  DataObservable *data = new ApplicationData(path.mb_str());
   
   MainFrame *frame = new MainFrame(data, NULL);
   frame->Show(TRUE); 
@@ -98,9 +105,21 @@ bool MyApp::OnInit()
   #ifdef __WXFB_DEBUG__    
   frame->AddChild(m_log->GetFrame());
   #endif //__WXFB_DEBUG__
+
+  if (argc > 1)
+  {
+    wxString arg(argv[1]);
+    
+    if (::wxFileExists(arg))
+    {
+      // No va bien (en mainframe aparece untitled)
+      data->LoadProject(arg);
+      return TRUE;
+    }
+  }
+  
   
   data->NewProject();
-  //data->LoadProject(wxT("projects/example/example.xml"));
   
   return TRUE;
 }

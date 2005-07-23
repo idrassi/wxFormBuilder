@@ -8,8 +8,8 @@
   
   <templates class="Panel">
     <template name="base">public wxPanel</template>
-    <template name="cons_decl">$name(wxWindow *parent, int id = -1);</template>
-    <template name="cons_def">$name::$name(wxWindow *parent, int id) : wxPanel(parent, id)</template>
+    <template name="cons_decl">$name(wxWindow *parent, int id = -1,wxPoint pos = $pos, wxSize size = $size, int style = $style);</template>
+    <template name="cons_def">$name::$name(wxWindow *parent, int id,wxPoint pos,wxSize size, int style) : wxPanel(parent, id,pos,size,style)</template>
   </templates>
   
   <templates class="Dialog">

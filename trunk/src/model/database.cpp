@@ -307,6 +307,18 @@ PObjectBase ObjectDatabase::CreateObject(string classname, PObjectBase parent)
     PObjectType parentType = parent->GetObjectInfo()->GetObjectType();
     int max = parentType->FindChildType(objType);
     
+    // FIXME! Esto es un parche para evitar crear los tipos menubar,statusbar y
+    // toolbar en un form que no sea wxFrame.
+    // Hay que modificar el conjunto de tipos para permitir tener varios tipos
+    // de forms (como childType de project), pero hay mucho código no válido
+    // para forms que no sean de tipo "form". Dicho de otra manera, hay 
+    // código que dependen del nombre del tipo, cosa que hay que evitar.
+    if (parentType->GetName() == "form" && parent->GetClassName() != "Frame" && 
+        (objType->GetName() == "statusbar" ||
+         objType->GetName() == "menubar" ||
+         objType->GetName() == "toolbar"))
+      return PObjectBase(); // tipo no válido
+    
     if (max != 0) // tipo válido
     {
       bool create = true;
@@ -436,11 +448,11 @@ void ObjectDatabase::SetDefaultLayoutProperties(PObjectBase sizeritem)
     sizeritem->GetProperty("option")->SetValue(string("0"));
     sizeritem->GetProperty("flag")->SetValue(string("wxALL"));
   }
-  else if (obj_type == "sizer")
+  else if (obj_type == "sizer" || obj_type == "splitter")
   {  
     sizeritem->GetProperty("option")->SetValue(string("1"));
     sizeritem->GetProperty("flag")->SetValue(string("wxEXPAND"));
-  }  
+  }
 }
 
 void ObjectDatabase::ResetObjectCounters()
@@ -634,7 +646,7 @@ bool ObjectDatabase::HasCppProperties(string type)
 {
    return (type == "component" || type == "widget" ||
            type == "container" || type == "notebook" || type == "menubar" ||
-           type == "statusbar" || type == "toolbar");
+           type == "statusbar" || type == "toolbar" || type == "splitter");
 }
 
 void ObjectDatabase::LoadCodeGen(string file)
@@ -819,7 +831,7 @@ bool ObjectDatabase::ShowInPalette(string type)
            type == "component" || type == "container" || type == "spacer" ||
            type == "notebook" || type == "menubar" || type == "menu" ||
            type == "menuitem" || type == "statusbar" || type == "submenu" ||
-           type == "toolbar" || type == "tool" );
+           type == "toolbar" || type == "tool" || type == "splitter");
 }
 
 
@@ -981,8 +993,8 @@ bool ObjectDatabase::LoadObjectTypes()
           
           
           if (child->Attribute("nmax"))
-            //nmax = StringUtils::StrToInt(child->Attribute("nmax"));
-            nmax = 1;
+            nmax = TypeConv::StringToInt(_WXSTR(child->Attribute("nmax")));
+            //nmax = 1;
           
           PObjectType childType = GetObjectType(childname);
           assert(childType);

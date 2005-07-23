@@ -270,8 +270,9 @@ bool TemplateParser::ParseWxParent()
 
   PObjectBase wxparent;
   
-  PObjectBase cont_parent (m_obj->FindNearAncestor("container"));
+  /*PObjectBase cont_parent (m_obj->FindNearAncestor("container"));
   PObjectBase nbook_parent (m_obj->FindNearAncestor("notebook"));
+  PObjectBase splitter_parent (m_obj->FindNearAncestor("splitter"));
   
   if (cont_parent && nbook_parent)
 
@@ -279,7 +280,23 @@ bool TemplateParser::ParseWxParent()
                 cont_parent : nbook_parent);
 
   else
-    wxparent = (cont_parent ? cont_parent : nbook_parent);
+    wxparent = (cont_parent ? cont_parent : nbook_parent);*/
+    
+  PObjectBase candidates[3];
+  candidates[0] = m_obj->FindNearAncestor("container");
+  candidates[1] = m_obj->FindNearAncestor("notebook");
+  candidates[2] = m_obj->FindNearAncestor("splitter");
+  
+  for (int i=0 ; i<3 ; i++)
+  {
+    if (!wxparent)
+      wxparent = candidates[i];
+    else
+    {
+      if (candidates[i] && candidates[i]->Deep() > wxparent->Deep())
+        wxparent = candidates[i];
+    }
+  }
   
   if (wxparent)
   {

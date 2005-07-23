@@ -2,6 +2,7 @@ CXX = g++
 
 LIBCOMMON = libcommon.dll
 LIBLAYOUT = liblayout.dll
+LIBADDITIONAL = libadditional.dll
 
 WXFBDIR = ../../..
 WXWINDIR = $(WXFBDIR)/libs/wxWidgets-2.6.0_dll
@@ -17,7 +18,7 @@ CXXFLAGS = -Wall -g -O0 -mthreads -DHAVE_W32API_H -D__WXMSW__ -DWXUSINGDLL -DNOP
 LDFLAGS = -mwindows -mthreads -Wl,--subsystem,windows -mwindows -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32 -lstdc++
 LIBS = -lwxmsw26 -lwxtiff -lwxjpeg -lwxpng -lwxzlib -lwxregex -lwxexpat -lwxmsw26_stc -ltinyxml -L$(WXFBDIR)/libs/tinyxml -L$(WXWINDIR)/lib 
 
-all: $(LIBCOMMON) $(LIBLAYOUT)
+all: $(LIBCOMMON) $(LIBLAYOUT) $(LIBADDITIONAL)
 	cp *.dll $(WXFBDIR)/bin/xml
 
 $(LIBCOMMON): common.o xrcconv.o
@@ -36,6 +37,14 @@ layout.o: layout.cpp xrcconv.o
 	
 xrcconv.o: $(WXFBDIR)/src/utils/xrcconv.cpp
 	$(CXX) -c $(CXXFLAGS) $(CXXINCS) -o xrcconv.o $(WXFBDIR)/src/utils/xrcconv.cpp
+
+$(LIBADDITIONAL): additional.o xrcconv.o
+	$(CXX) -L. -shared -o $(LIBADDITIONAL) additional.o xrcconv.o $(LDFLAGS) $(LIBS)
+	strip $(LIBLAYOUT)
+
+additional.o: additional.cpp
+	$(CXX) -c $(CXXFLAGS) $(CXXINCS) -o additional.o additional.cpp
+	
 
 clean:
 	rm *.o *.dll

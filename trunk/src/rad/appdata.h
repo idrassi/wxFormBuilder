@@ -35,6 +35,7 @@ class ApplicationData : public DataObservable
 {
  private: 
   
+  string m_rootDir;       // directorio raíz (mismo que el ejecutable)
   bool m_modFlag;           // flag de proyecto modificado
   PObjectDatabase m_objDb;  // Base de datos de objetos  
   PObjectBase m_project;    // Proyecto
@@ -99,7 +100,7 @@ class ApplicationData : public DataObservable
    void Execute(PCommand cmd);
    
  public:
-  ApplicationData();
+  ApplicationData(const string &rootdir = ".");
 
   // Operaciones sobre los datos
   bool LoadProject(const wxString &filename);
@@ -147,7 +148,7 @@ class ApplicationData : public DataObservable
   void        SetClipboardObject(PObjectBase obj) { m_clipboard = obj; }
   PObjectBase GetClipboardObject()                { return m_clipboard; }
   
-  string GetProjectPath();
+  string GetProjectFileName() { return m_projectFile; }
 };
 
 

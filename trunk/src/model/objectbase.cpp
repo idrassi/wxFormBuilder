@@ -255,7 +255,8 @@ PObjectBase ObjectBase::FindNearAncestor(string type)
 bool ObjectBase::AddChild (PObjectBase obj)
 {
   bool result = false;
-  if (ChildTypeOk(obj->GetObjectTypeName()))
+  if (ChildTypeOk(obj->GetObjectInfo()->GetObjectType()))
+  //if (ChildTypeOk(obj->GetObjectTypeName()))
   {
     m_children.push_back(obj);
     result = true;
@@ -267,7 +268,8 @@ bool ObjectBase::AddChild (PObjectBase obj)
 bool ObjectBase::AddChild (unsigned int idx, PObjectBase obj)
 {
   bool result = false;
-  if (ChildTypeOk(obj->GetObjectTypeName()) && idx <= m_children.size())
+  if (ChildTypeOk(obj->GetObjectInfo()->GetObjectType()) && idx <= m_children.size())
+  //if (ChildTypeOk(obj->GetObjectTypeName()) && idx <= m_children.size())
   {
     m_children.insert(m_children.begin() + idx,obj);
     result = true;
@@ -275,7 +277,7 @@ bool ObjectBase::AddChild (unsigned int idx, PObjectBase obj)
   
   return result;
 }
-
+/*
 bool ObjectBase::DoChildTypeOk(string type_child, string type_parent)
 {
   bool result;
@@ -318,7 +320,7 @@ bool ObjectBase::DoChildTypeOk(string type_child, string type_parent)
 bool ObjectBase::ChildTypeOk (string type)
 {
   return DoChildTypeOk(type, GetObjectTypeName());
-}
+}*/
 
 bool ObjectBase::ChildTypeOk (PObjectType type)
 {

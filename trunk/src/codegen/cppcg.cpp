@@ -328,7 +328,8 @@ void CppCodeGenerator::GenAttributeDeclaration(PObjectBase obj, Permission perm)
       obj->GetObjectTypeName() == "component" ||
       obj->GetObjectTypeName() == "container" ||
       obj->GetObjectTypeName() == "menubar" ||
-      obj->GetObjectTypeName() == "toolbar")
+      obj->GetObjectTypeName() == "toolbar" ||
+      obj->GetObjectTypeName() == "splitter")
   {
     string perm_str = obj->GetProperty("permission")->GetValue();
     
@@ -491,7 +492,8 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
   string type = obj->GetObjectTypeName();
   
   if (type == "notebook" || type == "container" || type == "widget" ||
-      type == "menubar" || type == "statusbar" || type == "toolbar")
+      type == "menubar" || type == "statusbar" || type == "toolbar" ||
+      type == "splitter")
   {
       // comprobamos si no se ha declarado como atributo de clase
       // en cuyo caso lo declaramos en el constructor
@@ -511,6 +513,33 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
         if (type == "toolbar")
           GenAddToolbar(child->GetObjectInfo(), child);
       }
+      
+      if (type == "splitter")
+      {
+        // generamos el split
+        if (obj->GetChildCount() == 2)
+        {
+          PObjectBase sub1,sub2;
+          sub1 = obj->GetChild(0)->GetChild(0);
+          sub2 = obj->GetChild(1)->GetChild(0);
+          
+          string _template;
+          if (obj->GetProperty("splitmode")->GetValue()=="wxSPLIT_VERTICAL")
+            _template = "$name->SplitVertically(";
+          else
+            _template = "$name->SplitHorizontally(";
+          
+          _template = _template + sub1->GetProperty("name")->GetValue() +
+            "," + sub2->GetProperty("name")->GetValue() + ",$sashpos);";
+            
+          CppTemplateParser parser(obj,_template);
+          parser.UseRelativePath(m_useRelativePath, m_basePath);
+          m_source->WriteLn(parser.ParseTemplate());  
+        }
+        else
+          wxLogError(wxT("Missing subwindows for wxSplitterWindow widget."));
+      }
+      
       
       if (type == "menubar" || type == "toolbar")
       {
@@ -572,7 +601,8 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
       string child_type = obj->GetChild(0)->GetObjectTypeName();
       string temp_name;
       if (child_type == "notebook" || child_type == "container" ||
-          child_type == "widget" || child_type == "statusbar")
+          child_type == "widget" || child_type == "statusbar" ||
+          child_type == "splitter")
       {
         temp_name = "window_add";
       }
@@ -600,8 +630,15 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
   {
     m_source->WriteLn(GetCode(obj, "construction"));
   }
-  else  
-    assert(false);
+  else
+  {
+    //wxLogError(wxString::Format(wxT("Unknown type %s"),_WXSTR(type).c_str()));
+    //assert(false);
+    
+    // generamos los hijos
+    for (unsigned int i=0; i<obj->GetChildCount() ; i++)
+      GenConstruction(obj->GetChild(i),false);
+  }
 }
 
 void CppCodeGenerator::FindMacros(PObjectBase obj, set<string> &macro_set)

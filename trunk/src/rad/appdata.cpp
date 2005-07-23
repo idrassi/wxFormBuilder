@@ -276,11 +276,12 @@ void CutObjectCmd::DoRestore()
 // ApplicationData
 ///////////////////////////////////////////////////////////////////////////////
 
-ApplicationData::ApplicationData()
+ApplicationData::ApplicationData(const string &rootdir)
 {
+  m_rootDir = rootdir;
   m_objDb = PObjectDatabase(new ObjectDatabase());
-  m_objDb->SetXmlPath("./xml/");
-  m_objDb->SetIconPath("./xpm/");
+  m_objDb->SetXmlPath(m_rootDir + "/xml/");
+  m_objDb->SetIconPath(m_rootDir + "/xpm/");
   m_objDb->LoadObjectTypes();
   m_objDb->LoadFile();
 }  
@@ -671,7 +672,6 @@ void ApplicationData::ModifyProperty(PProperty prop, wxString str)
   }  
 }
   
-
 void ApplicationData::SaveProject(const wxString &filename)
 {
   TiXmlDocument *doc = m_project->Serialize();
@@ -723,6 +723,7 @@ void ApplicationData::NewProject()
   m_selObj = m_project;
   m_modFlag = false;
   m_cmdProc.Reset();
+  m_projectFile = "";
   GlobalData()->SetProjectPath(wxT(""));
   DataObservable::NotifyProjectRefresh();  
 }
@@ -731,7 +732,6 @@ void ApplicationData::GenerateCode()
 {
   DataObservable::NotifyCodeGeneration();
 }
-
 
 void ApplicationData::MovePosition(PObjectBase obj, bool right, unsigned int num)
 {
@@ -836,11 +836,6 @@ void ApplicationData::CheckProjectTree(PObjectBase obj)
       
     CheckProjectTree(child);
   }
-}
-
-string ApplicationData::GetProjectPath()
-{
-  return _STDSTR(::wxPathOnly(_WXSTR(m_projectFile)));
 }
 
 bool ApplicationData::GetLayoutSettings(PObjectBase obj, int *flag, int *option,int *border)

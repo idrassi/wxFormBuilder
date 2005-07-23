@@ -993,7 +993,7 @@ BEGIN_LIBRARY()
   ABSTRACT_COMPONENT("Panel",PanelFormComponent)
   ABSTRACT_COMPONENT("Dialog",DialogFormComponent)
     
-  WINDOW_COMPONENT("notebookpage",NotebookPageComponent)
+  ABSTRACT_COMPONENT("notebookpage",NotebookPageComponent)
   WINDOW_COMPONENT("wxButton",ButtonComponent)
   WINDOW_COMPONENT("wxBitmapButton",BitmapButtonComponent)
   WINDOW_COMPONENT("wxTextCtrl",TextCtrlComponent)

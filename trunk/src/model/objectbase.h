@@ -196,7 +196,7 @@ class ObjectBase : public IObject, public enable_shared_from_this<ObjectBase>
   }
 
 
-  bool DoChildTypeOk (string type_child ,string type_parent);
+  //bool DoChildTypeOk (string type_child ,string type_parent);
   /*
    * Configura la instancia en su creación.
    *
@@ -382,7 +382,7 @@ class ObjectBase : public IObject, public enable_shared_from_this<ObjectBase>
    * Comprueba si el tipo de objeto pasado es válido como hijo del objeto.
    * Esta rutina es importante, ya que define las restricciónes de ubicación.
    */
-  bool ChildTypeOk (string type);
+  //bool ChildTypeOk (string type);
   bool ChildTypeOk (PObjectType type);
   
   bool IsContainer() { return (GetObjectTypeName() == "container"); }

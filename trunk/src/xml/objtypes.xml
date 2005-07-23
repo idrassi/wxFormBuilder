@@ -50,9 +50,18 @@
     <childtype name="container" nmax="1" />
     <childtype name="sizer" nmax="1" />
     <childtype name="notebook" nmax="1" />
+    <childtype name="splitter" nmax="1" />
   </objtype>
   
   <objtype name="spacer" />
+  
+  <objtype name="splitter" >
+    <childtype name="splitteritem" nmax="2" />
+  </objtype>
+  
+  <objtype name="splitteritem" item="1">
+    <childtype name="container" nmax="1" />
+  </objtype>
   
   <objtype name="notebook" >
     <childtype name="notebookpage" />

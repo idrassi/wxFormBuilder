@@ -1,0 +1,111 @@
+<package name="additional" lib="libadditional" desc="wxWidgets additional controls">
+  <objectinfo class="wxCalendarCtrl" icon="calendar.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_calendar</property>
+    <property name="style" type="bitlist">
+      <option name="wxCAL_SUNDAY_FIRST" />
+      <option name="wxCAL_MONDAY_FIRST" />
+      <option name="wxCAL_SHOW_HOLIDAYS" />
+      <option name="wxCAL_NO_YEAR_CHANGE" />
+      <option name="wxCAL_NO_MONTH_CHANGE" />
+      <option name="wxCAL_SHOW_SURROUNDING_WEEKS" />
+      <option name="wxCAL_SEQUENTIAL_MONTH_SELECTION" />wxCAL_SHOW_HOLIDAYS</property>
+  </objectinfo>
+  
+  <objectinfo class="wxHtmlWindow" icon="htmlwin.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_htmlWin</property>
+    <property name="style" type="bitlist">
+      <option name="wxHW_SCROLLBAR_NEVER" />
+      <option name="wxHW_SCROLLBAR_AUTO" />
+      <option name="wxHW_NO_SELECTION" />wxHW_SCROLLBAR_AUTO</property>
+  </objectinfo>
+  
+  <objectinfo class="wxTreeCtrl" icon="tree_ctrl.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_htmlWin</property>
+    <property name="style" type="bitlist">
+      <option name="wxTR_EDIT_LABELS" />
+      <option name="wxTR_NO_BUTTONS" />
+      <option name="wxTR_HAS_BUTTONS" />
+      <option name="wxTR_TWIST_BUTTONS" />
+      <option name="wxTR_NO_LINES" />
+      <option name="wxTR_FULL_ROW_HIGHLIGHT" />
+      <option name="wxTR_LINES_AT_ROOT" />
+      <option name="wxTR_HIDE_ROOT" />
+      <option name="wxTR_ROW_LINES" />
+      <option name="wxTR_HAS_VARIABLE_ROW_HEIGHT" />
+      <option name="wxTR_SINGLE" />
+      <option name="wxTR_MULTIPLE" />
+      <option name="wxTR_EXTENDED" />
+      <option name="wxTR_DEFAULT_STYLE" />wxTR_DEFAULT_STYLE</property>
+  </objectinfo>
+  
+  <objectinfo class="wxRadioButton" icon="radio_button.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_radioBtn</property>
+    <property name="label" type="wxString">RadioBtn</property>
+    <property name="style" type="bitlist">
+      <option name="wxRB_GROUP" />
+      <option name="wxRB_SINGLE" />
+      <option name="wxRB_USE_CHECKBOX" /></property>
+  </objectinfo>
+
+  <objectinfo class="wxToggleButton" icon="toggle_button.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_toggleBtn</property>
+    <property name="label" type="wxString">Toggle me!</property>
+    <property name="value" type="bool">0</property>
+  </objectinfo>
+  
+  <objectinfo class="wxScrollBar" icon="scrollbar.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_scrollBar</property>
+    <property name="style" type="option">
+      <option name="wxSB_HORIZONTAL" />
+      <option name="wxSB_VERTICAL" />wxSB_HORIZONTAL</property>
+  </objectinfo>
+  
+  <objectinfo class="wxSpinCtrl" icon="spin_ctrl.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_spinCtrl</property>
+    <property name="value" type="wxString"></property>
+    <property name="min" type="text">0</property>
+    <property name="max" type="text">10</property>
+    <property name="initial" type="text">0</property>
+    <property name="style" type="bitlist">
+      <option name="wxSP_ARROW_KEYS" />
+      <option name="wxSP_WRAP" />wxSP_ARROW_KEYS</property>
+  </objectinfo>
+
+  <objectinfo class="wxSpinButton" icon="spinbtn.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_spinBtn</property>
+    <property name="style" type="bitlist">
+      <option name="wxSP_HORIZONTAL" />
+      <option name="wxSP_VERTICAL" />
+      <option name="wxSP_ARROW_KEYS" />
+      <option name="wxSP_WRAP" /></property>
+  </objectinfo>
+  
+  <objectinfo class="wxSplitterWindow" icon="splitter_window.xpm" type="splitter">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_splitter</property>
+    <property name="style" type="bitlist">
+      <option name="wxSP_3D" />
+      <option name="wxSP_3DSASH" />
+      <option name="wxSP_3DBORDER" />
+      <option name="wxSP_BORDER" />
+      <option name="wxSP_NOBORDER" />
+      <option name="wxSP_NO_XP_THEME" />
+      <option name="wxSP_PERMIT_UNSPLIT" />
+      <option name="wxSP_LIVE_UPDATE" />wxSP_3D</property>
+    <property name="splitmode" type="option">
+      <option name="wxSPLIT_VERTICAL" />
+      <option name="wxSPLIT_HORIZONTAL" />wxSPLIT_VERTICAL</property>
+    <property name="sashpos" type="text">0</property>
+  </objectinfo>
+  
+  <objectinfo class="splitteritem" type="splitteritem" />
+
+</package>

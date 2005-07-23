@@ -37,8 +37,6 @@
 // haremos una plantilla para que el preprocesador la implemente dentro del
 // propio módulo.
 
-using namespace std;
-
 class ComponentLibrary : public IComponentLibrary
 {
  private:
@@ -196,9 +194,7 @@ class ComponentBase : public IComponent
   TiXmlElement* ExportToXrc(IObject *obj) { return NULL; };
   
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj) { return NULL; };
-  
-  bool KeepEvtHandler() { return false; }
-  
+    
   int GetComponentType() { return m_type; };
 };
 

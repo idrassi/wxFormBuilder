@@ -28,7 +28,6 @@
 #include "bitmaps.h"
 #include "utils/debug.h"
 #include "rad/title.h"
-//#include "icons/play.xpm"
 
 #define ID_PALETTE_BUTTON 999
 #define ID_ABOUT 100
@@ -114,7 +113,31 @@ void wxFbPalette::Create()
 }
 
 void wxFbPalette::OnSpinUp(wxSpinEvent& e)
-{
+{/*
+  int page = m_notebook->GetSelection(), i = 0;
+  PObjectPackage pkg = GetData()->GetPackage(page);
+  int firstHidden = 0;
+  
+  // Calcular el primer icono oculto
+    
+  wxMenu *popup = new wxMenu();
+  for (i=firstHidden; i < pkg->GetObjectCount() ; i++)
+  {
+    wxString widget(pkg->GetObjectInfo(i)->GetClassName().c_str(),wxConvUTF8);
+    wxString icon_file(pkg->GetObjectInfo(i)->GetIconFile().c_str(),wxConvUTF8);
+
+    wxBitmap icon;
+    icon.LoadFile(icon_file, wxBITMAP_TYPE_XPM);
+  
+    wxMenuItem *item = new wxMenuItem(popup,-1,widget,widget);
+    item->SetBitmap(icon);
+    
+    popup->Append(item);
+    //popup->Append(-1,widget,widget);
+  }
+  
+  PopupMenu(popup);*/
+  
   int page = m_notebook->GetSelection();
   PObjectPackage pkg = GetData()->GetPackage(page);
   
