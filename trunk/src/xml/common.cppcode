@@ -186,12 +186,18 @@
   
   <templates class="wxToolBar">
     <template name="declaration">wxToolBar *$name;</template>
-    <template name="construction">$name = #wxparent $name->CreateToolBar($style, $id);</template>
+    <template name="construction">
+      $name = #wxparent $name->CreateToolBar($style, $id);
+      #ifnotnull $bitmapsize @{ #nl $name->SetToolBitmapSize($bitmapsize); @}
+      #ifnotnull $separation @{ #nl $name->SetToolSeparation($separation); @}
+      #ifnotnull $margins    @{ #nl $name->SetMargins($margins); @}
+      #ifnotnull $packing    @{ #nl $name->SetToolPacking($packing); @}
+    </template>
     <template name="after_addchild">$name->Realize();</template>
   </templates>
   
   <templates class="tool">
-    <template name="construction">#wxparent $name->AddTool(-1, $label, $bitmap, $help);</template>
+    <template name="construction">#parent $name->AddTool(-1, $label, $bitmap, $help);</template>
   </templates>
   
   <templates class="wxChoice">

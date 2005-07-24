@@ -939,7 +939,7 @@ void ObjectDatabase::InitPropertyTypes()
   PT("wxFont",PT_WXFONT);
   PT("wxColour",PT_WXCOLOUR);
   PT("bitmap",PT_BITMAP);
-  PT("xpm_bitmap",PT_XPM_BITMAP);
+  //PT("xpm_bitmap",PT_XPM_BITMAP);
   PT("stringlist",PT_STRINGLIST);
 }
 

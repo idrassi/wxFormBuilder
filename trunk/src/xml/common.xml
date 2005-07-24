@@ -1,7 +1,7 @@
 <package name="common" lib="libcommon" desc="wxWidgets common controls">
 
   <objectinfo class="wxWindow" type="interface">
-    <property name="name" type="text" hidden="1">window</property>
+    <property name="name" type="text">window</property>
     <property name="id" type="macro" hidden="1">ID_DEFAULT</property>
     <property name="pos" type="wxPoint" />
     <property name="size" type="wxSize" />
@@ -141,12 +141,6 @@
     <inherits class="wxWindow" />
     <property name="name" type="text" hidden="1">m_bitmap</property>
     <property name="bitmap" type="bitmap" />
-  </objectinfo>
-  
-  <objectinfo class="wxXpmStaticBitmap" icon="xpm_static_bitmap.xpm" type="widget">
-    <inherits class="wxWindow" />
-    <property name="name" type="text" hidden="1">m_bitmap</property>
-    <property name="bitmap" type="xpm_bitmap" />
   </objectinfo>
     
   <objectinfo class="wxStaticLine" icon="static_line.xpm" type="widget">

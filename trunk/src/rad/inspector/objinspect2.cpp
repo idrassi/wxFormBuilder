@@ -428,11 +428,11 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
     result = wxMyImageFileProperty(name, wxPG_LABEL,
       TypeConv::MakeAbsolutePath(prop->GetValueAsString(),GlobalData()->GetProjectPath()));
     
-  else if (type == PT_XPM_BITMAP){
+  /*else if (type == PT_XPM_BITMAP){
     result = wxMyImageFileProperty(name, wxPG_LABEL,
       TypeConv::MakeAbsolutePath(prop->GetValueAsString(),GlobalData()->GetProjectPath()));
     result->SetAttribute(wxPG_FILE_WILDCARD, _T("XPM files (*.xpm)|*.xpm"));
-  }
+  }*/
   else if (type == PT_STRINGLIST)
   {
     result = wxArrayStringProperty(name, wxPG_LABEL,prop->GetValueAsArrayString());    
@@ -547,7 +547,7 @@ void ObjectInspector::OnPropertyGridChange(wxPropertyGridEvent& event)
             // TODO: Usar ruta relativa al directorio de salida en el caso
             //       de que la imagen se encuentre en un subdirectorio de este.
              case PT_BITMAP:
-             case PT_XPM_BITMAP:
+             //case PT_XPM_BITMAP:
                GetData()->ModifyProperty(prop, 
                  TypeConv::MakeRelativePath(event.GetPropertyValueAsString(),
                    GlobalData()->GetProjectPath()));

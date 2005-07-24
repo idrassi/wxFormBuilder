@@ -147,28 +147,28 @@ string CppTemplateParser::ValueToCode(PropertyType type, string value)
       break;  
       
     case PT_BITMAP:
+    {  
+      wxFileName bmpFileName(_WXSTR(value));    
+      if (bmpFileName.GetExt().Upper() == wxT("XPM"))
+      {
+        // Si el bitmap es de tipo XPM lo empotraremos en el código, en caso
+        // contrario será cargado del fichero en tiempo de ejecución.
+        result = "wxBitmap(" + CppCodeGenerator::ConvertXpmName(value) + ")";
+      }
+      else
       {
         wxString absPath = TypeConv::MakeAbsolutePath(_WXSTR(value),
           GlobalData()->GetProjectPath());
       
-      string file = _STDSTR(m_useRelativePath ?
+        string file = _STDSTR(m_useRelativePath ?
                      TypeConv::MakeRelativePath(absPath, _WXSTR(m_basePath))
                      : absPath );
                      
-      result = "wxBitmap(wxT(\"" + CppCodeGenerator::ConvertCppString(file)
-                       + "\"), wxBITMAP_TYPE_ANY)";
+        result = "wxBitmap(wxT(\"" + CppCodeGenerator::ConvertCppString(file)
+                        + "\"), wxBITMAP_TYPE_ANY)";
       }
-      break;
-      
-    case PT_XPM_BITMAP:
-      // A diferencia de PT_BITMAP, estos bitmaps se compilan dentro del
-      // módulo cpp, por lo que el programa ejecutable no requerirá dicho
-      // fichero.     
-      result = "wxBitmap(" + CppCodeGenerator::ConvertXpmName(value) + ")";
-      
-      //result = "wxBitmap(wxT(\"" + ConvertCppString(value)
-      //                 + "\"), wxBITMAP_TYPE_XPM)";
-      break;
+    }
+    break;
     
     case PT_STRINGLIST:
       // las listas de cadenas serán generadas como una secuencia de wxString
@@ -781,19 +781,24 @@ void CppCodeGenerator::FindXpmProperties(PObjectBase obj, set<string> &set)
   for (i = 0; i < count; i++)
   {
     PProperty property = obj->GetProperty(i);
-    if (property->GetType() == PT_XPM_BITMAP)
+    //if (property->GetType() == PT_XPM_BITMAP)
+    if (property->GetType() == PT_BITMAP)
     {
-      wxString absPath = TypeConv::MakeAbsolutePath(_WXSTR(property->GetValue()),
-        GlobalData()->GetProjectPath());
+      wxFileName bmpFileName(_WXSTR(property->GetValue()));
+      if (bmpFileName.GetExt().Upper() == wxT("XPM"))
+      {
+        wxString absPath = TypeConv::MakeAbsolutePath(_WXSTR(property->GetValue()),
+          GlobalData()->GetProjectPath());
         
-      // Se supone el path contiene la ruta completa del archivo y no
-      // una relativa.
-      string path = _STDSTR( m_useRelativePath ?
-                      TypeConv::MakeRelativePath(absPath,_WXSTR(m_basePath)) :
-                      absPath );
+        // Se supone el path contiene la ruta completa del archivo y no
+        // una relativa.
+        string path = _STDSTR( m_useRelativePath ?
+                        TypeConv::MakeRelativePath(absPath,_WXSTR(m_basePath)) :
+                        absPath );
                       
-      string inc = "#include \"" + ConvertCppString(path) + "\"";
-      set.insert(inc);
+        string inc = "#include \"" + ConvertCppString(path) + "\"";
+        set.insert(inc);
+      }
     }
   }
   
