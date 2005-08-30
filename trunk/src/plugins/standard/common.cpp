@@ -330,7 +330,7 @@ class ComboBoxComponent : public ComponentBase
     xrc.AddWindowProperties();    
     xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     xrc.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
-    //xrc.AddProperty(_("value"),_("value"),XRC_TYPE_INTEGER);
+    xrc.AddProperty(_("choices"),_("content"),XRC_TYPE_STRINGLIST);
     return xrc.GetXrcObject();
   }
   
@@ -340,6 +340,7 @@ class ComboBoxComponent : public ComponentBase
     filter.AddWindowProperties();
     filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     filter.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
+    filter.AddProperty(_("content"),_("choices"),XRC_TYPE_STRINGLIST);
     return filter.GetXfbObject();
   }
 };

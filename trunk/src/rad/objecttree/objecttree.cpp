@@ -348,6 +348,7 @@ ObjectTreeItemData::ObjectTreeItemData(PObjectBase obj) : m_object(obj)
 #define MENU_CUT        102
 #define MENU_PASTE      103
 #define MENU_EDIT_MENUS 104
+#define MENU_COPY       105
 
 BEGIN_EVENT_TABLE(ItemPopupMenu,wxMenu)
   EVT_MENU(-1, ItemPopupMenu::OnMenuEvent)
@@ -358,12 +359,13 @@ ItemPopupMenu::ItemPopupMenu(DataObservable *data, PObjectBase obj)
   : wxMenu(), m_data(data), m_object(obj)
 {
   Append(MENU_CUT,       wxT("Cut"));
+  Append(MENU_COPY,      wxT("Copy"));
   Append(MENU_PASTE,     wxT("Paste"));
   AppendSeparator();
   Append(MENU_MOVE_UP,   wxT("Move Up"));
   Append(MENU_MOVE_DOWN, wxT("Move Down"));
   AppendSeparator();
-  Append(MENU_EDIT_MENUS, wxT("Edit menus..."));
+  Append(MENU_EDIT_MENUS, wxT("Menu Editor..."));
 }
 
 void ItemPopupMenu::OnMenuEvent (wxCommandEvent & event)
@@ -439,7 +441,15 @@ void ItemPopupMenu::OnUpdateEvent(wxUpdateUIEvent& e)
       e.Enable(m_object && (m_object->GetClassName() == "wxMenuBar" 
         || m_object->GetClassName() == "Frame"));
       break;
-    case MENU_CUT: case MENU_MOVE_UP: case MENU_MOVE_DOWN:
+    case MENU_CUT:
+    case MENU_COPY:
+      e.Enable(m_data->CanCopyObject());
+      break;
+    case MENU_PASTE:
+      e.Enable(m_data->CanPasteObject());
+      break;
+      
+    case MENU_MOVE_UP: case MENU_MOVE_DOWN:
       e.Enable(m_object && m_object->GetObjectTypeName() != "project");
       break;
   }

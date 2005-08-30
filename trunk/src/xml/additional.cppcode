@@ -38,9 +38,9 @@
   </templates>
 
   <templates class="wxSpinCtrl">
-    <template name="declaration">wxHtmlWindow *$name;</template>
-    <template name="construction">$name = new wxHtmlWindow(#wxparent $name, $id, $pos, $size, $style);</template>
-    <template name="include">#include &lt;wx/calctrl.h&gt;</template>
+    <template name="declaration">wxSpinCtrl *$name;</template>
+    <template name="construction">$name = new wxSpinCtrl(#wxparent $name, $id, $value, $pos, $size, $style, $min, $max, $initial);</template>
+    <template name="include">#include &lt;wx/spinctrl.h&gt;</template>
   </templates>
 
   <templates class="wxSpinButton">
