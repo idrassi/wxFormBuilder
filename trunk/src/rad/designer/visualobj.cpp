@@ -195,6 +195,7 @@ BEGIN_EVENT_TABLE(VObjEvtHandler,wxEvtHandler)
   EVT_LEFT_DOWN(VObjEvtHandler::OnLeftClick)
   EVT_PAINT(VObjEvtHandler::OnPaint)
   EVT_SET_CURSOR(VObjEvtHandler::OnSetCursor)
+  EVT_NOTEBOOK_PAGE_CHANGED(-1,VObjEvtHandler::OnNotebookPageChanged)
 END_EVENT_TABLE()
 
 VObjEvtHandler::VObjEvtHandler(wxWindow *win, PObjectBase obj, DataObservable *data)
@@ -220,6 +221,11 @@ void VObjEvtHandler::OnLeftClick(wxMouseEvent &event)
     else
       event.Skip();
   }
+
+  // try to solve wxNoteBook page selection problem
+  //if (m_data->GetSelectedObject()->GetObjectTypeName() == "notebook")
+    //FixNotebookPageSelection(m_data->GetSelectedObject(),wxDynamicCast(m_window, wxNotebook));
+
     
   //event.Skip();
   m_window->ClientToScreen(&event.m_x, &event.m_y);
@@ -254,4 +260,40 @@ void VObjEvtHandler::OnSetCursor(wxSetCursorEvent &event)
   ::wxPostEvent(m_window->GetParent(), sce);
 }
 
+//////////////////////////////////////
+// Object Tree for notebook objects:
+//
+//  notebook
+//      |
+//    notebookpage (item)
+//          |
+//       container
+//////////////////////////////////////
 
+void VObjEvtHandler::OnNotebookPageChanged(wxNotebookEvent &event)
+{
+	PObjectBase obj = m_data->GetSelectedObject();
+  if (obj->GetObjectTypeName() == "notebook")
+  {
+    int selPage = event.GetSelection();
+    if (selPage >= 0)
+    {
+    	for (unsigned int i=0; i<obj->GetChildCount(); i++)
+    	{
+  	  	PObjectBase child = obj->GetChild(i);
+    		PProperty propSelect = child->GetProperty("select");
+    		if (propSelect)
+  	  	{
+  	  		// we can't use DataObservable::ModifyProperty because
+  	  		// it will regenerate de gui, so these modifications won't be
+  	  		// undoable
+  			  if (i == selPage && !propSelect->GetValueAsInteger())
+  			    propSelect->SetValue(string("1"));
+          else if (i != selPage && propSelect->GetValueAsInteger())
+            propSelect->SetValue(string("0"));
+  		  }
+  	  }
+    }
+  }
+  event.Skip();
+}

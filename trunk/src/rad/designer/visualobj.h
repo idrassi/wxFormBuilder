@@ -136,6 +136,9 @@ class VObjEvtHandler : public wxEvtHandler
    void OnLeftClick(wxMouseEvent &event);
    void OnPaint(wxPaintEvent &event);
    void OnSetCursor(wxSetCursorEvent &event);
+   
+   // A patch to solve the notebook problem about page selection
+   void OnNotebookPageChanged(wxNotebookEvent &event);
 }; 
 
 
