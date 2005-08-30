@@ -208,11 +208,6 @@ VObjEvtHandler::VObjEvtHandler(wxWindow *win, PObjectBase obj, DataObservable *d
 void VObjEvtHandler::OnLeftClick(wxMouseEvent &event)
 {
   PObjectBase obj = m_object.lock();
-/*
-  if (obj)
-    m_data->SelectObject(obj);
-  else
-    wxLogMessage(wxT("Hay algun problema en VObjEvtHandler"));*/
     
   if (obj)
   {
@@ -222,11 +217,7 @@ void VObjEvtHandler::OnLeftClick(wxMouseEvent &event)
       event.Skip();
   }
 
-  // try to solve wxNoteBook page selection problem
-  //if (m_data->GetSelectedObject()->GetObjectTypeName() == "notebook")
-    //FixNotebookPageSelection(m_data->GetSelectedObject(),wxDynamicCast(m_window, wxNotebook));
-
-    
+   
   //event.Skip();
   m_window->ClientToScreen(&event.m_x, &event.m_y);
   m_window->GetParent()->ScreenToClient(&event.m_x, &event.m_y);
@@ -287,9 +278,9 @@ void VObjEvtHandler::OnNotebookPageChanged(wxNotebookEvent &event)
   	  		// we can't use DataObservable::ModifyProperty because
   	  		// it will regenerate de gui, so these modifications won't be
   	  		// undoable
-  			  if (i == selPage && !propSelect->GetValueAsInteger())
+  			  if ((int)i == selPage && !propSelect->GetValueAsInteger())
   			    propSelect->SetValue(string("1"));
-          else if (i != selPage && propSelect->GetValueAsInteger())
+          else if ((int)i != selPage && propSelect->GetValueAsInteger())
             propSelect->SetValue(string("0"));
   		  }
   	  }
