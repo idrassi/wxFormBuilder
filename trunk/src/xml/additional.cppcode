@@ -9,32 +9,32 @@
   <templates class="wxHtmlWindow">
     <template name="declaration">wxHtmlWindow *$name;</template>
     <template name="construction">$name = new wxHtmlWindow(#wxparent $name, $id, $pos, $size, $style);</template>
-    <template name="include">#include &lt;wx/calctrl.h&gt;</template>
+    <template name="include">#include &lt;wx/html/htmlwin.h&gt;</template>
   </templates>
 
 
   <templates class="wxRadioButton">
-    <template name="declaration">wxHtmlWindow *$name;</template>
-    <template name="construction">$name = new wxHtmlWindow(#wxparent $name, $id, $pos, $size, $style);</template>
-    <template name="include">#include &lt;wx/calctrl.h&gt;</template>
+    <template name="declaration">wxRadioButton *$name;</template>
+    <template name="construction">$name = new wxRadioButton(#wxparent $name, $id, $label, $pos, $size, $style);</template>
+    <template name="include">#include &lt;wx/radiobut.h&gt;</template>
   </templates>
 
   <templates class="wxToggleButton">
-    <template name="declaration">wxHtmlWindow *$name;</template>
-    <template name="construction">$name = new wxHtmlWindow(#wxparent $name, $id, $pos, $size, $style);</template>
-    <template name="include">#include &lt;wx/calctrl.h&gt;</template>
+    <template name="declaration">wxToggleButton *$name;</template>
+    <template name="construction">$name = new wxToggleButton(#wxparent $name, $id, $label, $pos, $size, $style);</template>
+    <template name="include">#include &lt;wx/tglbtn.h&gt;</template>
   </templates>
 
   <templates class="wxTreeCtrl">
-    <template name="declaration">wxHtmlWindow *$name;</template>
-    <template name="construction">$name = new wxHtmlWindow(#wxparent $name, $id, $pos, $size, $style);</template>
-    <template name="include">#include &lt;wx/calctrl.h&gt;</template>
+    <template name="declaration">wxTreeCtrl *$name;</template>
+    <template name="construction">$name = new wxTreeCtrl(#wxparent $name, $id, $pos, $size, $style);</template>
+    <template name="include">#include &lt;wx/treectrl.h&gt;</template>
   </templates>
   
   <templates class="wxScrollBar">
-    <template name="declaration">wxHtmlWindow *$name;</template>
-    <template name="construction">$name = new wxHtmlWindow(#wxparent $name, $id, $pos, $size, $style);</template>
-    <template name="include">#include &lt;wx/calctrl.h&gt;</template>
+    <template name="declaration">wxScrollBar *$name;</template>
+    <template name="construction">$name = new wxScrollBar(#wxparent $name, $id, $pos, $size, $style);</template>
+    <template name="include">#include &lt;wx/scrolbar.h&gt;</template>
   </templates>
 
   <templates class="wxSpinCtrl">
@@ -44,9 +44,9 @@
   </templates>
 
   <templates class="wxSpinButton">
-    <template name="declaration">wxHtmlWindow *$name;</template>
-    <template name="construction">$name = new wxHtmlWindow(#wxparent $name, $id, $pos, $size, $style);</template>
-    <template name="include">#include &lt;wx/calctrl.h&gt;</template>
+    <template name="declaration">wxSpinButton *$name;</template>
+    <template name="construction">$name = new wxSpinButton(#wxparent $name, $id, $pos, $size, $style);</template>
+    <template name="include">#include &lt;wx/spinbutt.h&gt;</template>
   </templates>
 
   <templates class="wxSplitterWindow">
