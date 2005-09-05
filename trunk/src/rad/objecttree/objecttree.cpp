@@ -349,6 +349,7 @@ ObjectTreeItemData::ObjectTreeItemData(PObjectBase obj) : m_object(obj)
 #define MENU_PASTE      103
 #define MENU_EDIT_MENUS 104
 #define MENU_COPY       105
+#define MENU_MOVE_NEW_BOXSIZER   106
 
 BEGIN_EVENT_TABLE(ItemPopupMenu,wxMenu)
   EVT_MENU(-1, ItemPopupMenu::OnMenuEvent)
@@ -364,6 +365,7 @@ ItemPopupMenu::ItemPopupMenu(DataObservable *data, PObjectBase obj)
   AppendSeparator();
   Append(MENU_MOVE_UP,   wxT("Move Up"));
   Append(MENU_MOVE_DOWN, wxT("Move Down"));
+  Append(MENU_MOVE_NEW_BOXSIZER, wxT("Move into a new wxBoxSizer"));
   AppendSeparator();
   Append(MENU_EDIT_MENUS, wxT("Menu Editor..."));
 }
@@ -385,6 +387,9 @@ void ItemPopupMenu::OnMenuEvent (wxCommandEvent & event)
       break;
     case MENU_MOVE_DOWN:
       m_data->MovePosition(m_object,true);
+      break;
+    case MENU_MOVE_NEW_BOXSIZER:
+      m_data->CreateBoxSizerWithObject(m_object);
       break;
     case MENU_EDIT_MENUS:
       {

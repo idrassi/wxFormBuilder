@@ -126,7 +126,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   menuFile->Append(ID_NEW_PRJ, _T("&New"), _T("create an empty project"));
   menuFile->Append(ID_OPEN_PRJ, _T("&Open...\tF2"), _T("Open a project"));
   
-  menuFile->Append(ID_SAVE_PRJ,          _T("&Save"), _T("Save current project"));
+  menuFile->Append(ID_SAVE_PRJ,          _T("&Save\tCTRL+S"), _T("Save current project"));
   menuFile->Append(ID_SAVE_AS_PRJ, _T("Save &As...\tF3"), _T("Save current project as..."));
   menuFile->AppendSeparator();
   menuFile->Append(ID_IMPORT_XRC, _T("&Import XRC..."), _T("Import XRC file"));

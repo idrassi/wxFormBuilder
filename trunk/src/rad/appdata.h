@@ -122,6 +122,7 @@ class ApplicationData : public DataObservable
   void ToggleExpandLayout(PObjectBase obj);
   void ToggleStretchLayout(PObjectBase obj);
   void ChangeAlignment (PObjectBase obj, int align, bool vertical);
+  void CreateBoxSizerWithObject(PObjectBase obj);
   
   // Servicios para los observadores  
   PObjectBase GetSelectedObject();

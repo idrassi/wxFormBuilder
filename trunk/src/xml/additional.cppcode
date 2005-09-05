@@ -55,4 +55,16 @@
     <template name="include">#include &lt;wx/splitter.h&gt;</template>
   </templates>
   
+  <templates class="wxCheckList">
+    <template name="declaration">wxCheckListBox *$name;</template>
+    <template name="construction">
+      { #nl
+        wxString __choices[] = { $choices }; #nl
+        int __nchoices = sizeof(__choices) / sizeof(wxString); #nl
+        $name = new wxCheckListBox(#wxparent $name, $id, $pos, $size,__nchoices,__choices,$style);
+      }#nl
+    </template>
+    <template name="include">#include &lt;wx/checklst.h&gt;</template>
+  </templates>
+  
 </codegen>

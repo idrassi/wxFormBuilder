@@ -40,7 +40,7 @@ xrcconv.o: $(WXFBDIR)/src/utils/xrcconv.cpp
 
 $(LIBADDITIONAL): additional.o xrcconv.o
 	$(CXX) -L. -shared -o $(LIBADDITIONAL) additional.o xrcconv.o $(LDFLAGS) $(LIBS)
-	strip (LIBADDITIONAL)
+	strip $(LIBADDITIONAL)
 
 additional.o: additional.cpp
 	$(CXX) -c $(CXXFLAGS) $(CXXINCS) -o additional.o additional.cpp

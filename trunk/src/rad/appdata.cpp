@@ -135,6 +135,23 @@ class CutObjectCmd : public Command
   CutObjectCmd(ApplicationData *data, PObjectBase object);
 };
 
+/**
+ * Cambia el padre.
+ */
+class ReparentObjectCmd : public Command
+{
+ private:
+	PObjectBase m_sizeritem;
+	PObjectBase m_sizer;
+	PObjectBase m_oldSizer;
+ protected:
+  void DoExecute();
+  void DoRestore();
+ 
+ public:
+  ReparentObjectCmd (PObjectBase sizeritem, PObjectBase sizer);
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 // Implementación de los Comandos
 ///////////////////////////////////////////////////////////////////////////////
@@ -272,6 +289,29 @@ void CutObjectCmd::DoRestore()
   m_data->SelectObject(m_oldSelected);
 }
 
+//-----------------------------------------------------------------------------
+
+ReparentObjectCmd ::ReparentObjectCmd (PObjectBase sizeritem, PObjectBase sizer)
+{
+	m_sizeritem = sizeritem;
+	m_sizer = sizer;
+	m_oldSizer = m_sizeritem->GetParent();
+}
+
+void ReparentObjectCmd::DoExecute()
+{
+  m_oldSizer->RemoveChild(m_sizeritem);
+  m_sizeritem->SetParent(m_sizer);
+  m_sizer->AddChild(m_sizeritem);
+}
+
+void ReparentObjectCmd::DoRestore()
+{
+  m_sizer->RemoveChild(m_sizeritem);
+  m_sizeritem->SetParent(m_oldSizer);
+  m_oldSizer->AddChild(m_sizeritem);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // ApplicationData
 ///////////////////////////////////////////////////////////////////////////////
@@ -394,7 +434,9 @@ void ApplicationData::RemoveEmptyItems(PObjectBase obj)
           child->SetParent(PObjectBase());
           
           emptyItem = true;        // volvemos a recorrer 
-          wxLogWarning(wxT("Empty item removed"));
+          wxString msg;
+          msg.Printf(wxT("Empty item removed under %s"),obj->GetPropertyAsString("name").c_str());
+          wxLogWarning(msg);
         }
       }
     }
@@ -908,6 +950,32 @@ void ApplicationData::ChangeAlignment (PObjectBase obj, int align, bool vertical
       ModifyProperty(propFlag,value);
     }
   }
+}
+
+void ApplicationData::CreateBoxSizerWithObject(PObjectBase obj)
+{
+	PObjectBase sizer, sizeritem;
+	
+	sizeritem = obj->GetParent();
+	if (sizeritem && sizeritem->GetObjectTypeName()=="sizeritem")
+	{
+		sizer = sizeritem->GetParent();
+		
+		// creamos un wxBoxSizer
+		PObjectBase newSizer = m_objDb->CreateObject("wxBoxSizer",sizer);
+		if (newSizer)
+		{				
+			PCommand cmd(new InsertObjectCmd(this,newSizer,sizer,0));
+			Execute(cmd);
+			
+      if (newSizer->GetObjectTypeName() == "sizeritem")
+			  newSizer = newSizer->GetChild(0);
+			
+			PCommand cmdReparent(new ReparentObjectCmd(sizeritem,newSizer));
+			Execute(cmdReparent);
+			DataObservable::NotifyProjectRefresh();		
+		}
+	}
 }
 
 bool ApplicationData::CanPasteObject()

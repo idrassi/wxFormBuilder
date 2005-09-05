@@ -36,7 +36,7 @@
 #include <wx/tglbtn.h>
 #include <wx/scrolbar.h>
 #include <wx/splitter.h>
-
+#include <wx/checklst.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -253,7 +253,41 @@ class SplitterItemComponent : public ComponentBase
   }
 };
 
+class CheckListBoxComponent : public ComponentBase
+{
+public:
 
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+  	wxArrayString choices (obj->GetPropertyAsArrayString(_("choices")));
+    wxCheckListBox *cl =
+      new wxCheckListBox((wxWindow *)parent,-1,
+      obj->GetPropertyAsPoint(_("pos")),
+      obj->GetPropertyAsSize(_("size")),
+      choices,
+      obj->GetPropertyAsInteger(_("style")));
+      
+    return cl;
+  }
+
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxCheckList"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties(); 
+    xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);   
+    xrc.AddProperty(_("choices"), _("choices"), XRC_TYPE_STRINGLIST);
+    return xrc.GetXrcObject();
+  } 
+  
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxCheckList"));
+    filter.AddWindowProperties();
+    filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    filter.AddProperty(_("choices"), _("choices"), XRC_TYPE_STRINGLIST);
+    return filter.GetXfbObject();
+  }
+};
 ///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()
@@ -268,6 +302,9 @@ BEGIN_LIBRARY()
   WINDOW_COMPONENT("wxSpinButton",SpinButtonComponent)
   WINDOW_COMPONENT("wxSplitterWindow",SplitterWindowComponent)
   ABSTRACT_COMPONENT("splitteritem",SplitterItemComponent)
+  
+  // wxCheckListBox
+  WINDOW_COMPONENT("wxCheckList",CheckListBoxComponent)
 
   // wxCalendarCtrl
   MACRO(wxCAL_SUNDAY_FIRST)

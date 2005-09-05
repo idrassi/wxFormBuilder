@@ -87,6 +87,7 @@ class DataObservable
   virtual void ToggleExpandLayout(PObjectBase obj) = 0;
   virtual void ToggleStretchLayout(PObjectBase obj) = 0;
   virtual void ChangeAlignment (PObjectBase obj, int align, bool vertical) = 0;
+  virtual void CreateBoxSizerWithObject(PObjectBase obj) = 0;
   
   // Obtienen información del modelo de datos
   virtual PObjectPackage GetPackage(unsigned int idx) = 0;

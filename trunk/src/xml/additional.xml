@@ -108,4 +108,18 @@
   
   <objectinfo class="splitteritem" type="splitteritem" />
 
+  <objectinfo class="wxCheckList" icon="checkbox.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_checkList</property>
+    <property name="style" type="bitlist">
+      <option name="wxLB_SINGLE" />
+      <option name="wxLB_MULTIPLE" />
+      <option name="wxLB_EXTENDED" />
+      <option name="wxLB_HSCROLL" />
+      <option name="wxLB_ALWAYS_SB" />
+      <option name="wxLB_NEEDED_SB" />
+      <option name="wxLB_SORT" /></property>
+    <property name="choices" type="stringlist" />
+  </objectinfo>
+
 </package>
