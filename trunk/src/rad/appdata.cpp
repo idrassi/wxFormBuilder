@@ -47,12 +47,12 @@ class InsertObjectCmd : public Command
   PObjectBase m_object;
   int m_pos;
   PObjectBase m_oldSelected;
-  
-  
+
+
  protected:
   void DoExecute();
   void DoRestore();
- 
+
  public:
    InsertObjectCmd(ApplicationData *data, PObjectBase object, PObjectBase parent, int pos = -1);
 };
@@ -68,11 +68,11 @@ private:
   PObjectBase m_object;
   int m_oldPos;
   PObjectBase m_oldSelected;
-  
+
  protected:
   void DoExecute();
   void DoRestore();
- 
+
  public:
    RemoveObjectCmd(ApplicationData *data,PObjectBase object);
 };
@@ -85,11 +85,11 @@ class ModifyPropertyCmd : public Command
  private:
   PProperty m_property;
   string m_oldValue, m_newValue;
- 
+
  protected:
   void DoExecute();
   void DoRestore();
-  
+
  public:
   ModifyPropertyCmd(PProperty prop, string value);
 };
@@ -106,7 +106,7 @@ class ShiftChildCmd : public Command
  protected:
   void DoExecute();
   void DoRestore();
-  
+
  public:
   ShiftChildCmd(PObjectBase object, int pos);
 
@@ -126,11 +126,11 @@ class CutObjectCmd : public Command
   PObjectBase m_object;
   int m_oldPos;
   PObjectBase m_oldSelected;
-  
+
  protected:
   void DoExecute();
   void DoRestore();
-  
+
  public:
   CutObjectCmd(ApplicationData *data, PObjectBase object);
 };
@@ -147,7 +147,7 @@ class ReparentObjectCmd : public Command
  protected:
   void DoExecute();
   void DoRestore();
- 
+
  public:
   ReparentObjectCmd (PObjectBase sizeritem, PObjectBase sizer);
 };
@@ -167,7 +167,7 @@ void InsertObjectCmd::DoExecute()
 {
   m_parent->AddChild(m_object);
   m_object->SetParent(m_parent);
-  
+
   if (m_pos >= 0)
     m_parent->ChangeChildPosition(m_object,m_pos);
 }
@@ -200,10 +200,10 @@ void RemoveObjectCmd::DoRestore()
 {
   m_parent->AddChild(m_object);
   m_object->SetParent(m_parent);
-  
+
   // restauramos la posición
-  m_parent->ChangeChildPosition(m_object,m_oldPos); 
-  m_data->SelectObject(m_oldSelected); 
+  m_parent->ChangeChildPosition(m_object,m_oldPos);
+  m_data->SelectObject(m_oldSelected);
 }
 
 //-----------------------------------------------------------------------------
@@ -230,9 +230,9 @@ ShiftChildCmd::ShiftChildCmd(PObjectBase object, int pos)
 {
   m_object = object;
   PObjectBase parent = object->GetParent();
-  
+
   assert(parent);
-  
+
   m_oldPos = parent->GetChildPosition(object);
   m_newPos = pos;
 }
@@ -270,7 +270,7 @@ void CutObjectCmd::DoExecute()
 {
   // guardamos el clipboard ???
   //m_clipboard = m_data->GetClipboardObject();
-  
+
   m_data->SetClipboardObject(m_object);
   m_parent->RemoveChild(m_object);
   m_object->SetParent(PObjectBase());
@@ -281,8 +281,8 @@ void CutObjectCmd::DoRestore()
   // reubicamos el objeto donde estaba
   m_parent->AddChild(m_object);
   m_object->SetParent(m_parent);
-  m_parent->ChangeChildPosition(m_object,m_oldPos);  
-  
+  m_parent->ChangeChildPosition(m_object,m_oldPos);
+
   // restauramos el clipboard
   //m_data->SetClipboardObject(m_clipboard);
   m_data->SetClipboardObject(PObjectBase());
@@ -324,12 +324,12 @@ ApplicationData::ApplicationData(const string &rootdir)
   m_objDb->SetIconPath(m_rootDir + "/xpm/");
   m_objDb->LoadObjectTypes();
   m_objDb->LoadFile();
-}  
-  
+}
+
 PObjectBase ApplicationData::GetSelectedObject()
 {
   return m_selObj;
-}  
+}
 
 PObjectBase ApplicationData::GetSelectedForm()
 {
@@ -338,12 +338,12 @@ PObjectBase ApplicationData::GetSelectedForm()
   else
     return m_selObj->FindNearAncestor("form");
 }
-  
+
 
 PObjectBase ApplicationData::GetProjectData()
 {
   return m_project;
-}  
+}
 
 void ApplicationData::BuildNameSet(PObjectBase obj, PObjectBase top, set<string> &name_set)
 {
@@ -353,9 +353,9 @@ void ApplicationData::BuildNameSet(PObjectBase obj, PObjectBase top, set<string>
     if (nameProp)
       name_set.insert(nameProp->GetValue());
   }
-  
+
   for (unsigned int i=0; i< top->GetChildCount(); i++)
-    BuildNameSet(obj, top->GetChild(i), name_set);  
+    BuildNameSet(obj, top->GetChild(i), name_set);
 }
 
 void ApplicationData::ResolveNameConflict(PObjectBase obj)
@@ -367,22 +367,22 @@ void ApplicationData::ResolveNameConflict(PObjectBase obj)
     else
       return;
   }
-  
+
   PProperty nameProp = obj->GetProperty("name");
   if (!nameProp)
     return;
-  
+
   string name = nameProp->GetValue();
-    
+
   // el nombre no puede estar repetido dentro del mismo form
   PObjectBase top = obj->FindNearAncestor("form");
   if (!top)
     top = m_project; // el objeto es un form.
-  
-  // construimos el conjunto de nombres  
+
+  // construimos el conjunto de nombres
   set<string> name_set;
   BuildNameSet(obj, top, name_set);
-  
+
   // comprobamos si hay conflicto
   set<string>::iterator it = name_set.find(name);
   while (it != name_set.end())
@@ -390,14 +390,14 @@ void ApplicationData::ResolveNameConflict(PObjectBase obj)
     name = name + "_";
     it = name_set.find(name);
   }
-  
+
   nameProp->SetValue(name);
 }
 
 int ApplicationData::CalcPositionOfInsertion(PObjectBase selected,PObjectBase parent)
 {
   int pos = -1;
-  
+
   if (parent && selected)
   {
     PObjectBase parentSelected = selected->GetParent();
@@ -406,11 +406,11 @@ int ApplicationData::CalcPositionOfInsertion(PObjectBase selected,PObjectBase pa
       selected = parentSelected;
       parentSelected = selected->GetParent();
     }
-    
+
     if (parentSelected && parentSelected == parent)
       pos = parent->GetChildPosition(selected) + 1;
   }
-  
+
   return pos;
 }
 
@@ -419,7 +419,7 @@ void ApplicationData::RemoveEmptyItems(PObjectBase obj)
   if (!obj->GetObjectInfo()->GetObjectType()->IsItem())
   {
     bool emptyItem = true;
-    
+
     // esto es un algoritmo ineficiente pero "seguro" con los índices
     while (emptyItem)
     {
@@ -432,8 +432,8 @@ void ApplicationData::RemoveEmptyItems(PObjectBase obj)
         {
           obj->RemoveChild(child); // borramos el item
           child->SetParent(PObjectBase());
-          
-          emptyItem = true;        // volvemos a recorrer 
+
+          emptyItem = true;        // volvemos a recorrer
           wxString msg;
           msg.Printf(wxT("Empty item removed under %s"),obj->GetPropertyAsString("name").c_str());
           wxLogWarning(msg);
@@ -441,10 +441,10 @@ void ApplicationData::RemoveEmptyItems(PObjectBase obj)
       }
     }
   }
-  
+
   for (unsigned int i=0; i<obj->GetChildCount() ; i++)
     RemoveEmptyItems(obj->GetChild(i));
-}    
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -452,17 +452,17 @@ void ApplicationData::SelectObject(PObjectBase obj)
 {
   Debug::Print("Object Selected!");
   m_selObj = obj;
-/*  
+/*
   if (obj->GetObjectType() != T_FORM)
   {
     m_selForm = shared_dynamic_cast<FormObject>(obj->FindNearAncestor(T_FORM));
   }
   else
     m_selForm = shared_dynamic_cast<FormObject>(obj);*/
-    
+
   DataObservable::NotifyObjectSelected(obj);
 }
-  
+
 void ApplicationData::CreateObject(wxString name)
 {
   Debug::Print("ApplicationData::CreateObject] New %s",name.c_str());
@@ -472,7 +472,7 @@ void ApplicationData::CreateObject(wxString name)
   if (parent)
   {
     bool created = false;
-    
+
     // Para que sea más práctico, si el objeto no se puede crear debajo
     // del objeto seleccionado vamos a intentarlo en el padre del seleccionado
     // y seguiremos subiendo hasta que ya no podamos crear el objeto.
@@ -480,11 +480,11 @@ void ApplicationData::CreateObject(wxString name)
     {
       // además, el objeto se insertará a continuación del objeto seleccionado
       obj = m_objDb->CreateObject(string(name.mb_str()),parent);
-      
+
       if (obj)
       {
         int pos = CalcPositionOfInsertion(GetSelectedObject(),parent);
-        
+
         PCommand command(new InsertObjectCmd(this,obj,parent,pos));
         Execute(command); //m_cmdProc.Execute(command);
         created = true;
@@ -499,19 +499,19 @@ void ApplicationData::CreateObject(wxString name)
           parent = parent->GetParent();
       }
     }
-  }  
-  
+  }
+
   DataObservable::NotifyObjectCreated(obj);
 
   // Seleccionamos el objeto, si este es un item entonces se selecciona
   // el objeto contenido. ¿Tiene sentido tener un item debajo de un item?
   while (obj && obj->GetObjectInfo()->GetObjectType()->IsItem())
     obj = ( obj->GetChildCount() > 0 ? obj->GetChild(0) : PObjectBase());
-  
+
   if (obj)
     SelectObject(obj);
 }
-  
+
 void ApplicationData::RemoveObject(PObjectBase obj)
 {
   DoRemoveObject(obj,false);
@@ -529,7 +529,7 @@ void ApplicationData::DoRemoveObject(PObjectBase obj, bool cutObject)
   //  nodos ficticios ("items") en las hojas del árbol.
   PObjectBase parent = obj->GetParent();
   if (parent)
-  {  
+  {
     while (parent && parent->GetObjectInfo()->GetObjectType()->IsItem())
     {
       obj = parent;
@@ -549,33 +549,33 @@ void ApplicationData::DoRemoveObject(PObjectBase obj, bool cutObject)
     }
 
     DataObservable::NotifyObjectRemoved(obj);
-  
+
     // "parent" será el nuevo objeto seleccionado tras eliminar obj.
     SelectObject(parent);
   }
   else
   {
     if (obj->GetObjectTypeName()!="project")
-      assert(false); 
+      assert(false);
   }
-  
+
   CheckProjectTree(m_project);
 }
 
 void ApplicationData::CopyObject(PObjectBase obj)
 {
   m_copyOnPaste = true;
-    
+
   // Hacemos una primera copia del objeto, ya que si despues de copiar
   // el objeto se modificasen las propiedades, dichas modificaciones se verian
   // reflejadas en la copia.
   m_clipboard = m_objDb->CopyObject(obj);
-  
+
   CheckProjectTree(m_project);
 }
 
 void ApplicationData::PasteObject(PObjectBase parent)
-{ 
+{
   if (m_clipboard)
   {
     // Vamos a hacer un pequeño truco, intentaremos crear un objeto nuevo
@@ -597,12 +597,12 @@ void ApplicationData::PasteObject(PObjectBase parent)
     //              /
     //           wxButton   <- Cambiamos este por m_clipboard
     PObjectBase old_parent = parent;
-    
-    PObjectBase obj = 
+
+    PObjectBase obj =
       m_objDb->CreateObject(m_clipboard->GetObjectInfo()->GetClassName(), parent);
-    
+
     int pos = -1;
-    
+
     if (!obj)
     {
       // si no se ha podido crear el objeto vamos a intentar crearlo colgado
@@ -615,48 +615,48 @@ void ApplicationData::PasteObject(PObjectBase parent)
         selected = parent;
         parent = selected->GetParent();
       }
-      
+
       if (parent)
       {
         obj = m_objDb->CreateObject(m_clipboard->GetObjectInfo()->GetClassName(), parent);
-        
+
         if (obj)
           pos = CalcPositionOfInsertion(selected,parent);
       }
     }
-    
+
     if (obj)
     {
       PObjectBase clipboard(m_clipboard);
       if (m_copyOnPaste)
         clipboard = m_objDb->CopyObject(m_clipboard);
-    
+
       PObjectBase aux = obj;
       while (aux && aux->GetObjectInfo() != clipboard->GetObjectInfo())
         aux = ( aux->GetChildCount() > 0 ? aux->GetChild(0) : PObjectBase());
-        
+
       if (aux && aux != obj)
       {
         // sustituimos aux por clipboard
         PObjectBase auxParent = aux->GetParent();
         auxParent->RemoveChild(aux);
         aux->SetParent(PObjectBase());
-        
+
         auxParent->AddChild(clipboard);
         clipboard->SetParent(auxParent);
       }
       else
         obj = clipboard;
-        
-      // y finalmente insertamos en el arbol 
+
+      // y finalmente insertamos en el arbol
       PCommand command(new InsertObjectCmd(this,obj,parent,pos));
       Execute(command); //m_cmdProc.Execute(command);
-      
+
       if (!m_copyOnPaste)
         m_clipboard.reset();
-    
+
       DataObservable::NotifyProjectRefresh();
-      
+
       // vamos a mantener seleccionado el nuevo objeto creado
       // pero hay que tener en cuenta que es muy probable que el objeto creado
       // sea un "item"
@@ -665,11 +665,11 @@ void ApplicationData::PasteObject(PObjectBase parent)
         assert(obj->GetChildCount() > 0);
         obj = obj->GetChild(0);
       }
-    
-      SelectObject(obj);    
+
+      SelectObject(obj);
     }
   }
-  
+
   CheckProjectTree(m_project);
 }
 
@@ -681,7 +681,7 @@ void ApplicationData::InsertObject(PObjectBase obj, PObjectBase parent)
 //  {
     PCommand command(new InsertObjectCmd(this,obj,parent));
     Execute(command); //m_cmdProc.Execute(command);
-    DataObservable::NotifyProjectRefresh(); 
+    DataObservable::NotifyProjectRefresh();
 //  }
 }
 
@@ -692,28 +692,28 @@ void ApplicationData::MergeProject(PObjectBase project)
   {
     //m_project->AddChild(project->GetChild(i));
     //project->GetChild(i)->SetParent(m_project);
-    
+
     PObjectBase child = project->GetChild(i);
     RemoveEmptyItems(child);
-    
+
     InsertObject(child,m_project);
   }
-  DataObservable::NotifyProjectRefresh(); 
+  DataObservable::NotifyProjectRefresh();
 }
-  
+
 void ApplicationData::ModifyProperty(PProperty prop, wxString str)
 {
   PObjectBase object = prop->GetObject();
-  
+
   if (_STDSTR(str) != prop->GetValue())
   {
     PCommand command(new ModifyPropertyCmd(prop,_STDSTR(str)));
     Execute(command); //m_cmdProc.Execute(command);
 
     DataObservable::NotifyPropertyModified(prop);
-  }  
+  }
 }
-  
+
 void ApplicationData::SaveProject(const wxString &filename)
 {
   TiXmlDocument *doc = m_project->Serialize();
@@ -722,21 +722,21 @@ void ApplicationData::SaveProject(const wxString &filename)
   m_projectFile = _STDSTR(filename);
   GlobalData()->SetProjectPath(::wxPathOnly(filename));
   delete doc;
-  
+
   DataObservable::NotifyProjectSaved();
-}  
+}
 
 bool ApplicationData::LoadProject(const wxString &file)
 {
   Debug::Print("LOADING");
-  
+
   bool result = false;
-  
+
   TiXmlDocument *doc = new TiXmlDocument();
   if (doc->LoadFile(file.mb_str()))
   {
     m_objDb->ResetObjectCounters();
-    
+
     TiXmlElement *root = doc->RootElement();
     PObjectBase proj = m_objDb->CreateObject(root);
     if (proj && proj->GetObjectTypeName()== "project")
@@ -751,11 +751,11 @@ bool ApplicationData::LoadProject(const wxString &file)
       m_projectFile = _STDSTR(file);
       GlobalData()->SetProjectPath(::wxPathOnly(file));
       DataObservable::NotifyProjectLoaded();
-      DataObservable::NotifyProjectRefresh();  
+      DataObservable::NotifyProjectRefresh();
     }
   }
-  delete doc;  
- 
+  delete doc;
+
   return result;
 }
 
@@ -767,7 +767,7 @@ void ApplicationData::NewProject()
   m_cmdProc.Reset();
   m_projectFile = "";
   GlobalData()->SetProjectPath(wxT(""));
-  DataObservable::NotifyProjectRefresh();  
+  DataObservable::NotifyProjectRefresh();
 }
 
 void ApplicationData::GenerateCode()
@@ -778,7 +778,7 @@ void ApplicationData::GenerateCode()
 void ApplicationData::MovePosition(PObjectBase obj, bool right, unsigned int num)
 {
   PObjectBase noItemObj = obj;
-  
+
   PObjectBase parent = obj->GetParent();
   if (parent)
   {
@@ -789,23 +789,23 @@ void ApplicationData::MovePosition(PObjectBase obj, bool right, unsigned int num
       obj = parent;
       parent = obj->GetParent();
     }
-        
+
     unsigned int pos = parent->GetChildPosition(obj);
-    
+
     // nos aseguramos de que los límites son correctos
-    
+
     unsigned int children_count = parent->GetChildCount();
-    
+
     if ((right && num + pos < children_count) ||
         !right  && (num <= pos))
     {
       pos = (right ? pos+num : pos-num);
-      
+
       PCommand command(new ShiftChildCmd(obj,pos));
       Execute(command); //m_cmdProc.Execute(command);
       DataObservable::NotifyProjectRefresh();
-      SelectObject(noItemObj); 
-  
+      SelectObject(noItemObj);
+
     }
   }
 }
@@ -836,15 +836,15 @@ void ApplicationData::ToggleExpandLayout(PObjectBase obj)
     {
       PProperty propFlag = parent->GetProperty("flag");
       assert(propFlag);
-      
+
       wxString value;
       wxString currentValue = propFlag->GetValueAsString();
-      
-      value = 
+
+      value =
         (TypeConv::FlagSet(wxT("wxEXPAND"),currentValue) ?
          TypeConv::ClearFlag(wxT("wxEXPAND"),currentValue) :
          TypeConv::SetFlag(wxT("wxEXPAND"),currentValue));
-         
+
       ModifyProperty(propFlag,value);
     }
   }
@@ -859,9 +859,9 @@ void ApplicationData::ToggleStretchLayout(PObjectBase obj)
     {
       PProperty propOption = parent->GetProperty("option");
       assert(propOption);
-      
+
       string value = ( propOption->GetValue() == "1" ? "0" : "1");
-      
+
       ModifyProperty(propOption, _WXSTR(value));
     }
   }
@@ -875,7 +875,7 @@ void ApplicationData::CheckProjectTree(PObjectBase obj)
     PObjectBase child = obj->GetChild(i);
     if (child->GetParent() != obj)
       wxLogError(wxString::Format(wxT("Parent of object \'%s\' is wrong!"),child->GetPropertyAsString(wxT("name")).c_str()));
-      
+
     CheckProjectTree(child);
   }
 }
@@ -891,11 +891,11 @@ bool ApplicationData::GetLayoutSettings(PObjectBase obj, int *flag, int *option,
       PProperty propFlag   = parent->GetProperty("flag");
       PProperty propBorder = parent->GetProperty("border");
       assert(propOption && propFlag && propBorder);
-      
+
       *option = propOption->GetValueAsInteger();
       *flag   = propFlag->GetValueAsInteger();
       *border = propBorder->GetValueAsInteger();
-      
+
       return true;
     }
   }
@@ -911,9 +911,9 @@ void ApplicationData::ChangeAlignment (PObjectBase obj, int align, bool vertical
     {
       PProperty propFlag = parent->GetProperty("flag");
       assert(propFlag);
-      
+
       wxString value = propFlag->GetValueAsString();
-      
+
       // Primero borramos los flags de la configuración previa, para así
       // evitar conflictos de alineaciones.
       if (vertical)
@@ -928,7 +928,7 @@ void ApplicationData::ChangeAlignment (PObjectBase obj, int align, bool vertical
         value = TypeConv::ClearFlag(wxT("wxALIGN_RIGHT"), value);
         value = TypeConv::ClearFlag(wxT("wxALIGN_CENTER_HORIZONTAL"), value);
       }
-      
+
       wxString alignStr;
       switch (align)
       {
@@ -945,9 +945,45 @@ void ApplicationData::ChangeAlignment (PObjectBase obj, int align, bool vertical
           alignStr = wxT("wxALIGN_CENTER_VERTICAL");
           break;
       }
-          
+
       value = TypeConv::SetFlag(alignStr, value);
       ModifyProperty(propFlag,value);
+    }
+  }
+}
+
+void ApplicationData::ToggleBorderFlag(PObjectBase obj, int border)
+{
+  if (obj)
+  {
+    PObjectBase parent = obj->GetParent();
+    if (parent && parent->GetObjectTypeName() == "sizeritem")
+    {
+      PProperty propFlag = parent->GetProperty("flag");
+      assert(propFlag);
+
+      wxString value = propFlag->GetValueAsString();
+
+      value = TypeConv::ClearFlag(wxT("wxALL"), value);
+      value = TypeConv::ClearFlag(wxT("wxTOP"), value);
+      value = TypeConv::ClearFlag(wxT("wxBOTTOM"), value);
+      value = TypeConv::ClearFlag(wxT("wxRIGHT"), value);
+      value = TypeConv::ClearFlag(wxT("wxLEFT"), value);
+
+      int intVal = propFlag->GetValueAsInteger();
+      intVal ^= border;
+
+      if ((intVal & wxALL) == wxALL)
+        value = TypeConv::SetFlag(wxT("wxALL"), value);
+      else
+      {
+        if ((intVal & wxTOP) != 0) value = TypeConv::SetFlag(wxT("wxTOP"), value);
+        if ((intVal & wxBOTTOM) != 0) value = TypeConv::SetFlag(wxT("wxBOTTOM"), value);
+        if ((intVal & wxRIGHT) != 0) value = TypeConv::SetFlag(wxT("wxRIGHT"), value);
+        if ((intVal & wxLEFT) != 0) value = TypeConv::SetFlag(wxT("wxLEFT"), value);
+      }
+
+      ModifyProperty(propFlag, value);
     }
   }
 }
@@ -955,25 +991,25 @@ void ApplicationData::ChangeAlignment (PObjectBase obj, int align, bool vertical
 void ApplicationData::CreateBoxSizerWithObject(PObjectBase obj)
 {
 	PObjectBase sizer, sizeritem;
-	
+
 	sizeritem = obj->GetParent();
 	if (sizeritem && sizeritem->GetObjectTypeName()=="sizeritem")
 	{
 		sizer = sizeritem->GetParent();
-		
+
 		// creamos un wxBoxSizer
 		PObjectBase newSizer = m_objDb->CreateObject("wxBoxSizer",sizer);
 		if (newSizer)
-		{				
+		{
 			PCommand cmd(new InsertObjectCmd(this,newSizer,sizer,0));
 			Execute(cmd);
-			
+
       if (newSizer->GetObjectTypeName() == "sizeritem")
 			  newSizer = newSizer->GetChild(0);
-			
+
 			PCommand cmdReparent(new ReparentObjectCmd(sizeritem,newSizer));
 			Execute(cmdReparent);
-			DataObservable::NotifyProjectRefresh();		
+			DataObservable::NotifyProjectRefresh();
 		}
 	}
 }
@@ -983,7 +1019,7 @@ bool ApplicationData::CanPasteObject()
   PObjectBase obj = GetSelectedObject();
   if (obj && obj->GetObjectTypeName() != "project")
     return (m_clipboard != NULL);
-  
+
   return false;
 }
 
@@ -992,7 +1028,7 @@ bool ApplicationData::CanCopyObject()
   PObjectBase obj = GetSelectedObject();
   if (obj && obj->GetObjectTypeName() != "project")
     return true;
-  
+
   return false;
 }
 

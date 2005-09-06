@@ -33,39 +33,39 @@
 
 class ApplicationData : public DataObservable
 {
- private: 
-  
+ private:
+
   string m_rootDir;       // directorio raíz (mismo que el ejecutable)
   bool m_modFlag;           // flag de proyecto modificado
-  PObjectDatabase m_objDb;  // Base de datos de objetos  
+  PObjectDatabase m_objDb;  // Base de datos de objetos
   PObjectBase m_project;    // Proyecto
   PObjectBase m_selObj;     // Objeto seleccionado
 
   PObjectBase m_clipboard;
   bool m_copyOnPaste; // flag que indica si hay que copiar el objeto al pegar
-  
+
   // Procesador de comandos Undo/Redo
   CommandProcessor m_cmdProc;
   string m_projectFile;
-  
-  
+
+
   /**
    * Comprueba las referencias cruzadas de todos los nodos del árbol
    */
   void CheckProjectTree(PObjectBase obj);
-  
+
   /**
    * Resuelve un posible conflicto de nombres.
    * @note el objeto a comprobar debe estar insertado en proyecto, por tanto
    *       no es válida para arboles "flotantes".
    */
   void ResolveNameConflict(PObjectBase obj);
-  
+
   /**
    * Rutina auxiliar de ResolveNameConflict
    */
   void BuildNameSet(PObjectBase obj, PObjectBase top, set<string> &name_set);
-  
+
   /**
    * Calcula la posición donde deberá ser insertado el objeto.
    *
@@ -82,23 +82,23 @@ class ApplicationData : public DataObservable
    * @return posición de insercción (-1 si no se puede insertar).
    */
   int CalcPositionOfInsertion(PObjectBase selected,PObjectBase parent);
-  
-  
+
+
   /**
    * Elimina aquellos items que no contengan hijos.
-   * 
+   *
    * Esta rutina se utiliza cuando el árbol que se carga de un fichero
    * no está bien formado, o la importación no ha sido correcta.
    */
    void RemoveEmptyItems(PObjectBase obj);
-   
+
    /**
     * Eliminar un objeto.
     */
    void DoRemoveObject(PObjectBase object, bool cutObject);
-   
+
    void Execute(PCommand cmd);
-   
+
  public:
   ApplicationData(const string &rootdir = ".");
 
@@ -114,7 +114,7 @@ class ApplicationData : public DataObservable
   void PasteObject(PObjectBase parent);
   void InsertObject(PObjectBase obj, PObjectBase parent);
   void MergeProject(PObjectBase project);
-  void ModifyProperty(PProperty prop, wxString value); 
+  void ModifyProperty(PProperty prop, wxString value);
   void GenerateCode();
   void MovePosition(PObjectBase, bool right, unsigned int num = 1);
   void Undo();
@@ -122,9 +122,10 @@ class ApplicationData : public DataObservable
   void ToggleExpandLayout(PObjectBase obj);
   void ToggleStretchLayout(PObjectBase obj);
   void ChangeAlignment (PObjectBase obj, int align, bool vertical);
+  void ToggleBorderFlag(PObjectBase obj, int border);
   void CreateBoxSizerWithObject(PObjectBase obj);
-  
-  // Servicios para los observadores  
+
+  // Servicios para los observadores
   PObjectBase GetSelectedObject();
   PObjectBase GetProjectData();
   PObjectBase GetSelectedForm();
@@ -134,13 +135,13 @@ class ApplicationData : public DataObservable
   bool CanPasteObject();
   bool CanCopyObject();
   bool IsModified();
-  
+
   PObjectPackage GetPackage(unsigned int idx)
     { return m_objDb->GetPackage(idx);}
-  
+
   unsigned int GetPackageCount()
     { return m_objDb->GetPackageCount(); }
-  
+
   PObjectDatabase GetObjectDatabase()
     { return m_objDb; }
 
@@ -148,7 +149,7 @@ class ApplicationData : public DataObservable
   // Servicios específicos, no definidos en DataObservable
   void        SetClipboardObject(PObjectBase obj) { m_clipboard = obj; }
   PObjectBase GetClipboardObject()                { return m_clipboard; }
-  
+
   string GetProjectFileName() { return m_projectFile; }
 };
 

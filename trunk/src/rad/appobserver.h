@@ -49,17 +49,17 @@ class DataObservable
    // Notifican a cada observador el evento correspondiente
    void NotifyProjectLoaded();
    void NotifyProjectSaved();
-   void NotifyObjectSelected(PObjectBase obj); 
-   void NotifyObjectCreated(PObjectBase obj); 
+   void NotifyObjectSelected(PObjectBase obj);
+   void NotifyObjectCreated(PObjectBase obj);
    void NotifyObjectRemoved(PObjectBase obj);
    void NotifyPropertyModified(PProperty prop);
    void NotifyProjectRefresh();
    void NotifyCodeGeneration();
-   
- public: 
-  DataObservable() { m_lock = false; }  
+
+ public:
+  DataObservable() { m_lock = false; }
   virtual ~DataObservable() {};
-    
+
   // notar que los observadores se pasan como punteros normales, el motivo
   // es que, generalmente, las implementaciones de DataObserver serán objetos
   // de la GUI, por tanto es el propio framework quien gestiona la vida del
@@ -87,8 +87,9 @@ class DataObservable
   virtual void ToggleExpandLayout(PObjectBase obj) = 0;
   virtual void ToggleStretchLayout(PObjectBase obj) = 0;
   virtual void ChangeAlignment (PObjectBase obj, int align, bool vertical) = 0;
+  virtual void ToggleBorderFlag(PObjectBase obj, int border) = 0;
   virtual void CreateBoxSizerWithObject(PObjectBase obj) = 0;
-  
+
   // Obtienen información del modelo de datos
   virtual PObjectPackage GetPackage(unsigned int idx) = 0;
   virtual unsigned int GetPackageCount() = 0;
@@ -97,16 +98,16 @@ class DataObservable
   virtual PObjectBase GetSelectedObject() = 0;
   virtual PObjectBase GetSelectedForm() = 0;
   virtual PObjectBase GetProjectData() = 0;
-  
+
   virtual bool CanUndo() = 0;
   virtual bool CanRedo() = 0;
 
   virtual bool GetLayoutSettings(PObjectBase obj, int *flag, int *option,int *border) = 0;
   virtual bool CanPasteObject() = 0;
   virtual bool CanCopyObject() = 0;
-  
+
   virtual bool IsModified() = 0;
-  
+
   virtual string GetProjectFileName() = 0;
 };
 
@@ -116,17 +117,17 @@ class DataObservable
 class DataObserver
 {
  private:
-  DataObservable *m_data;  
-   
+  DataObservable *m_data;
+
  public:
-  
-  DataObserver() { m_data = NULL; }  
+
+  DataObserver() { m_data = NULL; }
   virtual ~DataObserver() {};
 
   // Establece el objeto observable
   void SetData(DataObservable *data) { m_data = data; };
   DataObservable *GetData() { return m_data; }
-  
+
   virtual void ProjectLoaded() {}
   virtual void ProjectSaved() {}
   virtual void ObjectSelected(PObjectBase obj) {}

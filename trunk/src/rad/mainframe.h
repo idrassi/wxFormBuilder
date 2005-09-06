@@ -52,21 +52,21 @@ class MainFrame : public DataObserver, public wxFrame
   VisualEditor *m_visualEdit;
   CppPanel *m_cpp;
   XrcPanel *m_xrc;
-  
+
   wxString m_currentDir;
-  
+
   wxString m_recentProjects[4];
-    
+
   void UpdateFrame();
-  
+
   // Actualiza los projectos más recientes en el menu
   void UpdateRecentProjects();
   void InsertRecentProject(const wxString &file);
   void OnOpenRecent(wxCommandEvent &event);
   void UpdateLayoutTools();
-  
+
   bool SaveWarning();
-  
+
   DECLARE_EVENT_TABLE()
  public:
   MainFrame(DataObservable *data,wxWindow *parent, int id = -1);
@@ -93,7 +93,8 @@ class MainFrame : public DataObserver, public wxFrame
   void OnMoveUp (wxCommandEvent &event);
   void OnMoveDown (wxCommandEvent &event);
   void OnChangeAlignment (wxCommandEvent &event);
-  
+  void OnChangeBorder(wxCommandEvent& e);
+
   void ProjectLoaded();
   void ProjectSaved();
   void ObjectSelected(PObjectBase obj);
@@ -102,7 +103,7 @@ class MainFrame : public DataObserver, public wxFrame
   void PropertyModified(PProperty prop);
   void CodeGeneration();
   void ProjectRefresh();
-};  
+};
 
 
 
