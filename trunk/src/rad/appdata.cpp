@@ -996,12 +996,13 @@ void ApplicationData::CreateBoxSizerWithObject(PObjectBase obj)
 	if (sizeritem && sizeritem->GetObjectTypeName()=="sizeritem")
 	{
 		sizer = sizeritem->GetParent();
+		unsigned int childPos = sizer->GetChildPosition(sizeritem);
 
 		// creamos un wxBoxSizer
 		PObjectBase newSizer = m_objDb->CreateObject("wxBoxSizer",sizer);
 		if (newSizer)
 		{
-			PCommand cmd(new InsertObjectCmd(this,newSizer,sizer,0));
+			PCommand cmd(new InsertObjectCmd(this,newSizer,sizer,childPos));
 			Execute(cmd);
 
       if (newSizer->GetObjectTypeName() == "sizeritem")

@@ -482,18 +482,19 @@ PObjectBase  ObjectDatabase::CreateObject(TiXmlElement *xml_obj, PObjectBase par
     {
       string prop_value;
       string prop_name = xml_prop->Attribute(NAME_TAG);
-
-      TiXmlNode *xml_value = xml_prop->FirstChild();
-      if (xml_value && xml_value->ToText())
+      PProperty prop = object->GetProperty(prop_name);
+      if (prop) // ¿ existe la propiedad ?
       {
-        prop_value = xml_value->ToText()->Value();
-        PProperty prop = object->GetProperty(prop_name);
-        if (prop)
-        {
-          prop->SetValue(prop_value);
-//          prop->SetValue(TVariant(prop->GetType(),prop_value));
-        }
+      	// modificamos el valor
+      	TiXmlNode *xml_value = xml_prop->FirstChild();
+      	if (xml_value && xml_value->ToText())
+          prop_value = xml_value->ToText()->Value();
+        else
+          prop_value = ""; // valor nulo
+      
+        prop->SetValue(prop_value);
       }
+        
       xml_prop = xml_prop->NextSiblingElement(PROPERTY_TAG);
     }
     

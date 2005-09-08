@@ -142,7 +142,7 @@
   </templates>
   
   <templates class="wxMenuItem">
-    <template name="construction">wxMenuItem *$name = new wxMenuItem(#parent $name, $id, $label #ifnotnull $shortcut @{ + wxT('\t') + $shortcut @}, $help, $kind);</template>
+    <template name="construction">wxMenuItem *$name = new wxMenuItem(#parent $name, $id, wxString($label) #ifnotnull $shortcut @{ + wxT('\t') + $shortcut @}, $help, $kind);</template>
     <template name="settings">
       #ifnotnull $bitmap
       @{ $name->SetBitmap($bitmap); #nl @}
