@@ -527,7 +527,7 @@ wxString TypeConv::ReplaceSynonymous(const wxString &bitlist)
       result += token;
 
   }
-  wxMessageBox(_("Después: ")+result);
+  wxMessageBox(_("Despues: ")+result);
   return result;
 }
 

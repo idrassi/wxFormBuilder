@@ -435,7 +435,7 @@ void ApplicationData::RemoveEmptyItems(PObjectBase obj)
 
           emptyItem = true;        // volvemos a recorrer
           wxString msg;
-          msg.Printf(wxT("Empty item removed under %s"),obj->GetPropertyAsString("name").c_str());
+          msg.Printf(wxT("Empty item removed under %s"),obj->GetPropertyAsString(wxT("name")).c_str());
           wxLogWarning(msg);
         }
       }
