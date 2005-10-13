@@ -405,7 +405,7 @@ void MainFrame::OnSaveProject(wxCommandEvent &event)
 void MainFrame::OnSaveAsProject(wxCommandEvent &event)
 {
   wxFileDialog *dialog = new wxFileDialog(this,wxT("Open Project"),m_currentDir,
-    wxT("example.xml"),wxT("*.xml"),wxSAVE);
+    wxT("example.fbp"),wxT("*.fbp | wxFormBuilder Project File"),wxSAVE);
 
   if (dialog->ShowModal() == wxID_OK)
   {
@@ -424,7 +424,7 @@ void MainFrame::OnOpenProject(wxCommandEvent &event)
     return;
 
   wxFileDialog *dialog = new wxFileDialog(this,wxT("Open Project"),m_currentDir,
-    wxT("example.xml"),wxT("*.xml"),wxOPEN | wxHIDE_READONLY);
+    wxT("example.fbp"),wxT("*.fbp"),wxOPEN | wxHIDE_READONLY);
 
   if (dialog->ShowModal() == wxID_OK)
   {

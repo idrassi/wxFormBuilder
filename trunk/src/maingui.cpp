@@ -76,7 +76,7 @@ bool MyApp::OnInit()
   if (bitmap.LoadFile(path + wxFILE_SEP_PATH + wxT("splash.png"), wxBITMAP_TYPE_PNG))
   {
       new wxSplashScreen(bitmap, wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
-          2000, NULL, -1, wxDefaultPosition, wxDefaultSize,
+          3000, NULL, -1, wxDefaultPosition, wxDefaultSize,
           wxSIMPLE_BORDER|wxSTAY_ON_TOP);
   }
   

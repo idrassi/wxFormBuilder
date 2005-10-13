@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!DOCTYPE Code::Blocks_project_file>
+<Code::Blocks_project_file>
+	<FileVersion major="1" minor="1"/>
+	<Project>
+		<Option title="Common Components Plugin"/>
+		<Option makefile="Makefile"/>
+		<Option makefile_is_custom="0"/>
+		<Option compiler="0"/>
+		<Build>
+			<Target title="default">
+				<Option output="..\..\..\bin\xml\libcommon.dll"/>
+				<Option working_dir="..\..\..\bin\xml"/>
+				<Option object_output=".objs"/>
+				<Option deps_output=".deps"/>
+				<Option external_deps=""/>
+				<Option type="3"/>
+				<Option compiler="0"/>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall"/>
+			<Add option="-g"/>
+			<Add option="-O0"/>
+			<Add option="-mthreads"/>
+			<Add option="-Wno-ctor-dtor-privacy"/>
+			<Add option="-DBUILD_DLL"/>
+			<Add option="-DHAVE_W32API_H"/>
+			<Add option="-D__WXMSW__"/>
+			<Add option="-DWXUSINGDLL"/>
+			<Add option="-DNOPCH"/>
+			<Add option="-DNO_GCC_PRAGMA"/>
+			<Add option="-DTIXML_USE_STL"/>
+			<Add directory="..\..\..\libs\tinyxml"/>
+			<Add directory="..\..\..\libs\wxwidgets-2.6.0_dll\include"/>
+			<Add directory="..\.."/>
+		</Compiler>
+		<Linker>
+			<Add option="-mthreads"/>
+			<Add option="-Wl,--subsystem,windows"/>
+			<Add option="-mwindows"/>
+			<Add library="wxmsw26"/>
+			<Add library="wxtiff"/>
+			<Add library="wxjpeg"/>
+			<Add library="wxpng"/>
+			<Add library="wxzlib"/>
+			<Add library="wxregex"/>
+			<Add library="wxexpat"/>
+			<Add library="kernel32"/>
+			<Add library="user32"/>
+			<Add library="gdi32"/>
+			<Add library="comdlg32"/>
+			<Add library="winspool"/>
+			<Add library="winmm"/>
+			<Add library="shell32"/>
+			<Add library="comctl32"/>
+			<Add library="ole32"/>
+			<Add library="oleaut32"/>
+			<Add library="uuid"/>
+			<Add library="rpcrt4"/>
+			<Add library="advapi32"/>
+			<Add library="wsock32"/>
+			<Add library="odbc32"/>
+			<Add library="tinyxml"/>
+			<Add library="stdc++"/>
+			<Add directory="..\..\..\libs\tinyxml"/>
+			<Add directory="..\..\..\libs\wxwidgets-2.6.0_dll\lib"/>
+		</Linker>
+		<Unit filename="..\component.h">
+			<Option compilerVar=""/>
+			<Option compile="0"/>
+			<Option link="0"/>
+			<Option target="default"/>
+		</Unit>
+		<Unit filename="..\plugin.h">
+			<Option compilerVar=""/>
+			<Option compile="0"/>
+			<Option link="0"/>
+			<Option target="default"/>
+		</Unit>
+		<Unit filename="common.cpp">
+			<Option compilerVar="CPP"/>
+			<Option target="default"/>
+		</Unit>
+		<Unit filename="..\..\utils\xrcconv.cpp">
+			<Option compilerVar="CPP"/>
+			<Option target="default"/>
+		</Unit>
+		<Unit filename="..\..\utils\xrcconv.h">
+			<Option compilerVar=""/>
+			<Option compile="0"/>
+			<Option link="0"/>
+			<Option target="default"/>
+		</Unit>
+	</Project>
+</Code::Blocks_project_file>
