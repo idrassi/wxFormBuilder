@@ -167,7 +167,7 @@ void CppPanel::CodeGeneration()
       wxLogMessage(wxT("Code generated on \'%s\'."),path.c_str());
     }
     else
-      wxLogError(wxT("You must set a path for files"));
+      wxLogWarning(wxT("You must set the \"path\" property of the project for output files"));
   }  
 }
 
