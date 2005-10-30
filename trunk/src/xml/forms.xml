@@ -35,6 +35,20 @@
     <property name="name" type="text" hidden="1">MyDialog</property>
     <property name="size" type="wxSize" />
     <property name="title" type="wxString" />
+    <property name="style" type="bitlist">
+      <option name="wxCAPTION" />
+      <option name="wxDEFAULT_DIALOG_STYLE" />
+      <option name="wxRESIZE_BORDER" />
+      <option name="wxSYSTEM_MENU" />
+      <option name="wxCLOSE_BOX" />
+      <option name="wxMAXIMIZE_BOX" />
+      <option name="wxMINIMIZE_BOX" />
+      <option name="wxTHICK_FRAME" />
+      <option name="wxSTAY_ON_TOP" />
+      <option name="wxNO_3D" />
+      <option name="wxDIALOG_NO_PARENT" />
+      <option name="wxDIALOG_EX_CONTEXTHELP" />
+      <option name="wxDIALOG_EX_METAL" />wxDEFAULT_DIALOG_STYLE</property>
   </objectinfo>
   
 </package>
