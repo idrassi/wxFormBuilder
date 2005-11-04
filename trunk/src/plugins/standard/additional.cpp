@@ -239,6 +239,45 @@ class SplitterWindowComponent : public ComponentBase
       
     return splitter;
   }
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxSplitterWindow"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();    
+    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    xrc.AddProperty(_("sashpos"),_("sashpos"),XRC_TYPE_INTEGER);
+    //xrc.AddProperty(_("minsize"),_("minsize"),...
+    if (obj->GetPropertyAsString(_("splitmode")) == _T("wxSPLIT_VERTICAL"))
+      xrc.AddPropertyValue(_("orientation"),_T("vertical"));
+    else
+      xrc.AddPropertyValue(_("orientation"),_T("horizontal"));
+      
+    return xrc.GetXrcObject();
+  }  
+  
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxSplitterWindow"));
+    filter.AddWindowProperties();
+    filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    filter.AddProperty(_("sashpos"),_("sashpos"),XRC_TYPE_INTEGER);
+    
+    TiXmlElement *splitmode = xrcObj->FirstChildElement("orientation");
+    if (splitmode)
+    {
+      TiXmlText *xmlValue = splitmode->FirstChild()->ToText();
+      if (xmlValue)
+      {
+      	string value = xmlValue->Value();
+        if (value == "vertical")
+          filter.AddPropertyValue(_T("splitmode"),_T("wxSPLIT_VERTICAL"));
+        else
+          filter.AddPropertyValue(_T("splitmode"),_T("wxSPLIT_HORIZONTAL"));
+      }
+    }
+    
+    return filter.GetXfbObject();
+  }
 };
 
 class SplitterItemComponent : public ComponentBase
@@ -250,6 +289,13 @@ class SplitterItemComponent : public ComponentBase
     wxCustomSplitterWindow *splitter = (wxCustomSplitterWindow *)parent->Window();
     wxWindow *subwindow = first_child->Window();
     splitter->AddSubwindow(subwindow);
+  }
+  
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    // A __dummyitem__ will be ignored...
+  	ObjectToXrcFilter xrc(obj, _("__dummyitem__"),_T(""));
+  	return xrc.GetXrcObject();
   }
 };
 

@@ -569,7 +569,9 @@ PObjectBase XrcLoader::GetObject(TiXmlElement *xrcObj, PObjectBase parent)
 {
   // La estrategia será construir el objeto a partir del nombre
   // para posteriormente modificar las propiedades.
-
+  static int _level = 0;
+  
+  _level++;
   string className = xrcObj->Attribute("class");
   if (parent->GetObjectTypeName() == "project")
   {
@@ -578,6 +580,10 @@ PObjectBase XrcLoader::GetObject(TiXmlElement *xrcObj, PObjectBase parent)
     // como "Panel" para distinguirlo de un "form" y un "container"
     className = className.substr(2,className.size() - 2);
   }
+
+  wxString buf;
+  buf.Printf("%d.Importing %s below %s",_level,className.c_str(), parent->GetClassName().c_str());
+  wxLogMessage(buf);
 
   PObjectBase object;
   PObjectInfo objInfo = m_objDb->GetObjectInfo(className);
@@ -589,7 +595,15 @@ PObjectBase XrcLoader::GetObject(TiXmlElement *xrcObj, PObjectBase parent)
       TiXmlElement *fbObj = comp->ImportFromXrc(xrcObj);
       if (fbObj)
       {
-        object = m_objDb->CreateObject(fbObj,parent);
+      	object = m_objDb->CreateObject(fbObj,parent);
+      	
+      	// Es posible que sea haya creado el objeto, creando un item 
+        // previamente (ocurren en el caso de wxSplitterWindow). Por tanto,
+        // hay que asegurarse de que el objeto apuntado por "object" no sea
+        // el item.
+      	if (object && object->GetClassName() != className && object->GetChildCount()>0)
+      	  object = object->GetChild(0);
+        
         if (object)
         {  
           // recursivamente importamos los objetos que están por debajo
@@ -600,6 +614,7 @@ PObjectBase XrcLoader::GetObject(TiXmlElement *xrcObj, PObjectBase parent)
             element = element->NextSiblingElement("object");
           }
         }
+        else wxLogMessage("Couldn't");
       }
     }
   }
@@ -623,6 +638,6 @@ PObjectBase XrcLoader::GetObject(TiXmlElement *xrcObj, PObjectBase parent)
       wxLogError(msg);
     }
   }
-  
+  _level--;
   return object;
 }

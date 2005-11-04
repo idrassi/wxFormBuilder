@@ -134,10 +134,21 @@ TiXmlElement* XrcCodeGenerator::GetElement(PObjectBase obj)
     
   if (element)
   {
-    for (unsigned int i=0; i<obj->GetChildCount(); i++)
+  	if (element->Attribute("class") == string("__dummyitem__"))
     {
-      TiXmlElement *aux = GetElement(obj->GetChild(i));
-      if (aux) element->LinkEndChild(aux);
+    	delete element;
+    	element = NULL;
+    	
+    	if (obj->GetChildCount() > 0)
+    	  element = GetElement(obj->GetChild(0));
+    }
+    else
+    {
+      for (unsigned int i=0; i<obj->GetChildCount(); i++)
+      {
+        TiXmlElement *aux = GetElement(obj->GetChild(i));
+        if (aux) element->LinkEndChild(aux);
+      }
     }
   }
   else

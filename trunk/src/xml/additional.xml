@@ -23,7 +23,7 @@
   
   <objectinfo class="wxTreeCtrl" icon="tree_ctrl.xpm" type="widget">
     <inherits class="wxWindow" />
-    <property name="name" type="text">m_htmlWin</property>
+    <property name="name" type="text">m_treeCtrl</property>
     <property name="style" type="bitlist">
       <option name="wxTR_EDIT_LABELS" />
       <option name="wxTR_NO_BUTTONS" />
