@@ -285,6 +285,10 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *wxparent,
   if ((obj_view.Sizer() && parent_view.Window()) || (!vparent && obj_view.Sizer()))
   {
     wxparent->SetSizer(obj_view.Sizer());
+    
+    if (vparent)
+      obj_view.Sizer()->SetSizeHints(wxparent);
+      
     wxparent->SetAutoLayout(true);
     wxparent->Layout();
   }
