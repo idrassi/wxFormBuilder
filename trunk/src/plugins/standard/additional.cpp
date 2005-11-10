@@ -47,14 +47,14 @@ class wxCustomSplitterWindow : public wxSplitterWindow
   int m_splitMode;
   int m_sashPos;
   wxWindow * m_subWindows[2];
-  
+
   void Rebuild();
  public:
   wxCustomSplitterWindow(wxWindow* parent, wxWindowID id, const wxPoint& point,
     const wxSize& size, long style);
-    
+
   void CreateSplit(int splitMode, int sashPos);
-  
+
   void AddSubwindow(wxWindow *subw);
 };
 
@@ -77,7 +77,7 @@ void wxCustomSplitterWindow::CreateSplit(int splitMode, int sashPos)
 }
 
 void wxCustomSplitterWindow::AddSubwindow(wxWindow *subw)
-{ 
+{
   if (m_swCount < 2)
   {
     Unsplit();
@@ -92,7 +92,7 @@ void wxCustomSplitterWindow::Rebuild()
 {
   if (IsSplit())
     Unsplit();
-    
+
   if (m_splitMode == wxSPLIT_VERTICAL)
     SplitVertically(m_subWindows[0],m_subWindows[1],m_sashPos);
   else
@@ -112,6 +112,22 @@ public:
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
   }
+
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxCalendarCtrl"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();
+    //xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    return xrc.GetXrcObject();
+  }
+
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxCalendarCtrl"));
+    filter.AddWindowProperties();
+    //filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    return filter.GetXfbObject();
+  }
 };
 
 class HtmlWindowComponent : public ComponentBase
@@ -123,14 +139,28 @@ public:
       obj->GetPropertyAsPoint(_("pos")),
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
-    
+
     wxString dummy_page(
       wxT("<b>wxHtmlWindow</b><br />")
       wxT("This is a dummy page.</body></html>"));
-      
+
     hw->SetPage(dummy_page);
-    
+
     return hw;
+  }
+
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxHtmlWindow"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();
+    return xrc.GetXrcObject();
+  }
+
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxHtmlWindow"));
+    filter.AddWindowProperties();
+    return filter.GetXfbObject();
   }
 };
 
@@ -139,11 +169,34 @@ class RadioButtonComponent : public ComponentBase
 public:
   wxObject* Create(IObject *obj, wxObject *parent)
   {
-    return new wxRadioButton((wxWindow *)parent,-1,
+    wxRadioButton *rb = new wxRadioButton((wxWindow *)parent,-1,
       obj->GetPropertyAsString(_("label")),
       obj->GetPropertyAsPoint(_("pos")),
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
+
+    rb->SetValue(obj->GetPropertyAsInteger(_("value")));
+    return rb;
+  }
+
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxRadioButton"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();
+    //xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    xrc.AddProperty(_("label"),_("label"), XRC_TYPE_TEXT);
+    xrc.AddProperty(_("value"),_("value"), XRC_TYPE_BOOL);
+    return xrc.GetXrcObject();
+  }
+
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxRadioButton"));
+    filter.AddWindowProperties();
+    //filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    filter.AddProperty(_("label"),_("label"), XRC_TYPE_TEXT);
+    filter.AddProperty(_("value"),_("value"), XRC_TYPE_BOOL);
+    return filter.GetXfbObject();
   }
 };
 
@@ -152,12 +205,36 @@ class ToggleButtonComponent : public ComponentBase
 public:
   wxObject* Create(IObject *obj, wxObject *parent)
   {
-    return new wxToggleButton((wxWindow *)parent,-1,
+    wxToggleButton* tb = new wxToggleButton((wxWindow *)parent,-1,
       obj->GetPropertyAsString(_("label")),
       obj->GetPropertyAsPoint(_("pos")),
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
+
+    tb->SetValue(obj->GetPropertyAsInteger(_("value")));
+    return tb;
   }
+
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxToggleButton"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();
+    //xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    xrc.AddProperty(_("label"),_("label"), XRC_TYPE_TEXT);
+    xrc.AddProperty(_("value"),_("checked"), XRC_TYPE_BOOL);
+    return xrc.GetXrcObject();
+  }
+
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxToggleButton"));
+    filter.AddWindowProperties();
+    //filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    filter.AddProperty(_("label"),_("label"), XRC_TYPE_TEXT);
+    filter.AddProperty(_("checked"),_("value"), XRC_TYPE_BOOL);
+    return filter.GetXfbObject();
+  }
+
 };
 
 class TreeCtrlComponent : public ComponentBase
@@ -169,7 +246,7 @@ public:
       obj->GetPropertyAsPoint(_("pos")),
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
-      
+
     // dummy nodes
     wxTreeItemId root = tc->AddRoot(wxT("root node"));
     wxTreeItemId node1 = tc->AppendItem(root,wxT("node1"));
@@ -179,8 +256,22 @@ public:
     tc->Expand(node1);
     tc->Expand(node2);
     tc->Expand(node3);
-    
+
     return tc;
+  }
+
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxTreeCtrl"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();
+    return xrc.GetXrcObject();
+  }
+
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxTreeCtrl"));
+    filter.AddWindowProperties();
+    return filter.GetXfbObject();
   }
 };
 
@@ -192,7 +283,7 @@ public:
     return new wxScrollBar((wxWindow *)parent,-1,
       obj->GetPropertyAsPoint(_("pos")),
       obj->GetPropertyAsSize(_("size")),
-      obj->GetPropertyAsInteger(_("style")));    
+      obj->GetPropertyAsInteger(_("style")));
   }
 };
 
@@ -210,6 +301,28 @@ public:
       obj->GetPropertyAsInteger(_("max")),
       obj->GetPropertyAsInteger(_("initial")));
   }
+
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxSpinCtrl"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();
+    xrc.AddProperty(_("initial"),_("value"), XRC_TYPE_TEXT);
+    xrc.AddProperty(_("min"),_("min"), XRC_TYPE_INTEGER);
+    xrc.AddProperty(_("max"),_("max"), XRC_TYPE_INTEGER);
+    return xrc.GetXrcObject();
+  }
+
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxSpinCtrl"));
+    filter.AddWindowProperties();
+    filter.AddProperty(_("value"),_("value"), XRC_TYPE_TEXT);
+    filter.AddProperty(_("value"),_("initial"), XRC_TYPE_TEXT);
+    filter.AddProperty(_("min"),_("min"), XRC_TYPE_INTEGER);
+    filter.AddProperty(_("max"),_("max"), XRC_TYPE_INTEGER);
+
+    return filter.GetXfbObject();
+  }
 };
 
 class SpinButtonComponent : public ComponentBase
@@ -222,6 +335,20 @@ public:
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
   }
+
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxSpinButton"), obj->GetPropertyAsString(_("name")));
+    xrc.AddWindowProperties();
+    return xrc.GetXrcObject();
+  }
+
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("wxSpinButton"));
+    filter.AddWindowProperties();
+    return filter.GetXfbObject();
+  }
 };
 
 class SplitterWindowComponent : public ComponentBase
@@ -233,17 +360,17 @@ class SplitterWindowComponent : public ComponentBase
       obj->GetPropertyAsPoint(_("pos")),
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
-    
+
     splitter->CreateSplit(obj->GetPropertyAsInteger(_("splitmode")),
       obj->GetPropertyAsInteger(_("sashpos")));
-      
+
     return splitter;
   }
-  
+
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxSplitterWindow"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties();    
+    xrc.AddWindowProperties();
     xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     xrc.AddProperty(_("sashpos"),_("sashpos"),XRC_TYPE_INTEGER);
     //xrc.AddProperty(_("minsize"),_("minsize"),...
@@ -251,17 +378,17 @@ class SplitterWindowComponent : public ComponentBase
       xrc.AddPropertyValue(_("orientation"),_T("vertical"));
     else
       xrc.AddPropertyValue(_("orientation"),_T("horizontal"));
-      
+
     return xrc.GetXrcObject();
-  }  
-  
+  }
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("wxSplitterWindow"));
     filter.AddWindowProperties();
     filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     filter.AddProperty(_("sashpos"),_("sashpos"),XRC_TYPE_INTEGER);
-    
+
     TiXmlElement *splitmode = xrcObj->FirstChildElement("orientation");
     if (splitmode)
     {
@@ -275,7 +402,7 @@ class SplitterWindowComponent : public ComponentBase
           filter.AddPropertyValue(_T("splitmode"),_T("wxSPLIT_HORIZONTAL"));
       }
     }
-    
+
     return filter.GetXfbObject();
   }
 };
@@ -290,7 +417,7 @@ class SplitterItemComponent : public ComponentBase
     wxWindow *subwindow = first_child->Window();
     splitter->AddSubwindow(subwindow);
   }
-  
+
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     // A __dummyitem__ will be ignored...
@@ -312,19 +439,19 @@ public:
       obj->GetPropertyAsSize(_("size")),
       choices,
       obj->GetPropertyAsInteger(_("style")));
-      
+
     return cl;
   }
 
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxCheckList"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties(); 
-    xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);   
+    xrc.AddWindowProperties();
+    xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
     xrc.AddProperty(_("choices"), _("choices"), XRC_TYPE_STRINGLIST);
     return xrc.GetXrcObject();
-  } 
-  
+  }
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("wxCheckList"));
@@ -337,7 +464,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()
-    
+
   WINDOW_COMPONENT("wxCalendarCtrl",CalendarCtrlComponent)
   WINDOW_COMPONENT("wxHtmlWindow",HtmlWindowComponent)
   WINDOW_COMPONENT("wxRadioButton",RadioButtonComponent)
@@ -348,7 +475,7 @@ BEGIN_LIBRARY()
   WINDOW_COMPONENT("wxSpinButton",SpinButtonComponent)
   WINDOW_COMPONENT("wxSplitterWindow",SplitterWindowComponent)
   ABSTRACT_COMPONENT("splitteritem",SplitterItemComponent)
-  
+
   // wxCheckListBox
   WINDOW_COMPONENT("wxCheckList",CheckListBoxComponent)
 
@@ -365,7 +492,7 @@ BEGIN_LIBRARY()
   MACRO(wxHW_SCROLLBAR_NEVER)
   MACRO(wxHW_SCROLLBAR_AUTO)
   MACRO(wxHW_NO_SELECTION)
-  
+
   // wxTreeCtrl
   MACRO(wxTR_EDIT_LABELS)
   MACRO(wxTR_NO_BUTTONS)
@@ -381,7 +508,7 @@ BEGIN_LIBRARY()
   MACRO(wxTR_MULTIPLE)
   MACRO(wxTR_EXTENDED)
   MACRO(wxTR_DEFAULT_STYLE)
-  
+
   // wxRadioButton
   MACRO(wxRB_GROUP)
   MACRO(wxRB_SINGLE)
@@ -391,12 +518,12 @@ BEGIN_LIBRARY()
   MACRO(wxSB_HORIZONTAL)
   MACRO(wxSB_VERTICAL)
 
-  // wxSpinCtrl y wxSpinButton 
+  // wxSpinCtrl y wxSpinButton
   MACRO(wxSP_ARROW_KEYS)
   MACRO(wxSP_WRAP)
   MACRO(wxSP_HORIZONTAL)
   MACRO(wxSP_VERTICAL)
-  
+
   // wxSplitterWindow
   MACRO(wxSP_3D)
   MACRO(wxSP_3DSASH)
@@ -409,6 +536,6 @@ BEGIN_LIBRARY()
 
   MACRO(wxSPLIT_VERTICAL)
   MACRO(wxSPLIT_HORIZONTAL)
-  
+
 END_LIBRARY()
 
