@@ -43,7 +43,7 @@
   #define VISUAL_EDITOR_BORDER (wxFULL_REPAINT_ON_RESIZE | wxDOUBLE_BORDER)
 #endif
 
-BEGIN_EVENT_TABLE(VisualEditor,wxPanel)
+BEGIN_EVENT_TABLE(VisualEditor,wxScrolledWindow)
   //EVT_SASH_DRAGGED(-1, VisualEditor::OnResizeBackPanel)
   //EVT_COMMAND(-1, wxEVT_PANEL_RESIZED, VisualEditor::OnResizeBackPanel)
   EVT_PANEL_RESIZED(-1, VisualEditor::OnResizeBackPanel)
@@ -51,15 +51,16 @@ BEGIN_EVENT_TABLE(VisualEditor,wxPanel)
 END_EVENT_TABLE()
 
 VisualEditor::VisualEditor(wxWindow *parent)
-  : wxPanel(parent,-1,wxDefaultPosition,wxDefaultSize,wxSUNKEN_BORDER)
+  : wxScrolledWindow(parent,-1,wxDefaultPosition,wxDefaultSize,wxSUNKEN_BORDER)
 {
 
 // Parece ser que han modificado el comportamiento en wxMSW 2.5.x ya que al
-// poner un color de background, este es aplicado a los hijos también.  
+// poner un color de background, este es aplicado a los hijos también.
 // SetBackgroundColour(wxColour(150,150,150));
-  
+
   SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
-  
+  SetScrollRate(5, 5);
+
   m_back = new GridPanel(this,-1,wxPoint(10,10),wxSize(350,200),VISUAL_EDITOR_BORDER);
   m_back->SetAutoLayout(true);
   /*m_back->SetSashVisible(wxSASH_BOTTOM,true);
@@ -67,7 +68,7 @@ VisualEditor::VisualEditor(wxWindow *parent)
   m_back->SetSashVisible(wxSASH_RIGHT,true);
   m_back->SetSashBorder(wxSASH_RIGHT,true);*/
 //  m_back->PushEventHandler(new EditorHandler(GetData()));
-}  
+}
 
 void VisualEditor::Setup()
 {
@@ -76,7 +77,16 @@ void VisualEditor::Setup()
   handler->SetWindow(m_back);
   m_back->PushEventHandler(handler);
   #endif //__WXFB_EXPERIMENTAL__
-  
+
+}
+
+void VisualEditor::UpdateVirtualSize()
+{
+  int w, h, panelW, panelH;
+  GetVirtualSize(&w, &h);
+  m_back->GetSize(&panelW, &panelH);
+  panelW += 20; panelH += 20;
+  if (panelW != w || panelH != h) SetVirtualSize(panelW, panelH);
 }
 
 void VisualEditor::OnPaintPanel (wxPaintEvent &event)
@@ -94,10 +104,10 @@ void VisualEditor::OnResizeBackPanel (wxCommandEvent &event) //(wxSashEvent &eve
   /*wxRect rect(event.GetDragRect());
   Debug::Print("VisualEditor::OnResizeBackPanel [%d,%d,%d,%d]",rect.x,rect.y,rect.width, rect.height);
   m_back->SetSize(rect.width,rect.height);
-  m_back->Layout();*/  
-  
+  m_back->Layout();*/
+
   PObjectBase form (GetData()->GetSelectedForm());
-  
+
   if (form)
   {
     PProperty prop(form->GetProperty("size"));
@@ -107,9 +117,9 @@ void VisualEditor::OnResizeBackPanel (wxCommandEvent &event) //(wxSashEvent &eve
       GetData()->ModifyProperty(prop, value);
     }
   }
-  
+
   //event.Skip();
-}  
+}
 
 /**
  * Crea la vista preliminar borrando la previa.
@@ -120,7 +130,7 @@ void VisualEditor::Create()
   PObjectBase menubar;
   wxWindow *statusbar = NULL;
   wxWindow *toolbar = NULL;
-  
+
   m_form = GetData()->GetSelectedForm();
 
   if (IsShown()) Freeze(); // congelamos para evitar el flickering
@@ -131,13 +141,13 @@ void VisualEditor::Create()
   m_back->SetSelectedObject(PObjectBase());
   m_back->DestroyChildren();
   m_back->SetSizer(NULL); // *!*
-  
+
   // limpiamos el registro de objetos del editor
-  m_map.clear(); //m_map.erase(m_map.begin(),m_map.end()); 
-  
+  m_map.clear(); //m_map.erase(m_map.begin(),m_map.end());
+
   if (m_form)
-  { 
-    
+  {
+
     // --- [1] Configuramos el tamaño del form ---------------------------
     PProperty psize(m_form->GetProperty("size"));
     if (psize)
@@ -156,7 +166,7 @@ void VisualEditor::Create()
       m_back->SetSize(wxDefaultSize);
       need_fit = true;
     }
-    
+
     // --- [2] Emulamos el color del form -------------------------------
     if (m_form->GetClassName() == "Frame")
       m_back->SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
@@ -167,14 +177,14 @@ void VisualEditor::Create()
     for (unsigned int i=0; i < m_form->GetChildCount(); i++)
     {
       PObjectBase child = m_form->GetChild(i);
-      
+
       if (child->GetObjectTypeName() == "menubar")
         menubar = child; // guardamos el objeto del menú para crearlo después
       else
         // generamos recursivamente todo el arbol de objetos
-        Generate(child,m_back,NULL,PVisualObject());       
+        Generate(child,m_back,NULL,PVisualObject());
 
-  
+
       // si se creó una barra de estado, guardamos el widget para configurar
       // el "frame"
       if (child->GetClassName() == "wxStatusBar")
@@ -182,7 +192,7 @@ void VisualEditor::Create()
         VisualObjectMap::iterator it = m_map.find(child);
         statusbar = shared_dynamic_cast<VisualWindow>(it->second)->GetWindow();
       }
-      
+
       // si se creó una barra de herramientas, guardamos el widget para configurar
       // el "frame"
       if (child->GetClassName() == "wxToolBar")
@@ -191,12 +201,12 @@ void VisualEditor::Create()
         toolbar = shared_dynamic_cast<VisualWindow>(it->second)->GetWindow();
       }
     }
-    
+
     if (need_fit)
       m_back->Fit();
-    
+
     m_back->Layout();
-      
+
     if (menubar || statusbar || toolbar)
       m_back->SetFrameWidgets(menubar, toolbar, statusbar);
   }
@@ -208,7 +218,8 @@ void VisualEditor::Create()
   }
 
   if (IsShown()) Thaw();
-}  
+  UpdateVirtualSize();
+}
 
 
 /**
@@ -226,19 +237,19 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *wxparent,
 {
   // en primer lugar creamos la instancia del objeto-wx que nos ocupa
   PVisualObject vobj(VisualObject::CreateVisualObject(obj,wxparent));
-    
+
   if (!vobj)
     return vobj; // no se debe dar nunca
- 
-  IComponent *comp = obj->GetObjectInfo()->GetComponent();  
+
+  IComponent *comp = obj->GetObjectInfo()->GetComponent();
   assert(comp);
-  
+
   // registramos el objeto para poder obtener la referencia a VisualObject a
   // partir de un ObjectBase
   m_map.insert(VisualObjectMap::value_type(obj,vobj));
-  
+
   VisualObjectAdapter obj_view(vobj); // Adaptador IObjectView para obj
-  
+
   // Si el objeto es un widget, le añadimos el menejador de eventos para
   // poder seleccionarlo desde el designer y que se dibujen los recuadros...
   // FIXME: eliminar dependencias con ObjectType
@@ -255,7 +266,7 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *wxparent,
   // nuevo padre para las ventanas que se encuentren por debajo
   wxWindow *new_wxparent = (obj_view.Window() ? obj_view.Window() : wxparent);
 
-  // Generamos recursivamente todos los hijos conservando la refenrencia 
+  // Generamos recursivamente todos los hijos conservando la refenrencia
   // del primero, ya que será pasado como parámetros en la función del
   // plugin OnCreated.
 
@@ -263,7 +274,7 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *wxparent,
 
   if (obj->GetChildCount()>0)
     first_child = Generate(obj->GetChild(0),new_wxparent,NULL,vobj);
-    
+
   for (unsigned int i=1; i<obj->GetChildCount() ; i++)
   {
     PVisualObject child = Generate(obj->GetChild(i),new_wxparent,NULL,vobj);
@@ -275,30 +286,30 @@ PVisualObject VisualEditor::Generate(PObjectBase obj, wxWindow *wxparent,
   // Procesamos el evento OnCreated
   VisualObjectAdapter parent_view(vparent);
   VisualObjectAdapter first_child_view(first_child);
-  
+
   comp->OnCreated(&obj_view,new_wxparent,&parent_view, &first_child_view);
-  
+
   // Por último, debemos asignar el sizer al widget, en los siguientes casos:
   // 1. El objeto creado sea un sizer y el objeto padre sea una ventana.
   // 2. No objeto padre (wxparent == m_back).
-  
+
   if ((obj_view.Sizer() && parent_view.Window()) || (!vparent && obj_view.Sizer()))
   {
     wxparent->SetSizer(obj_view.Sizer());
-    
+
     if (vparent)
       obj_view.Sizer()->SetSizeHints(wxparent);
-      
+
     wxparent->SetAutoLayout(true);
     wxparent->Layout();
   }
-    
+
   return vobj;
-}  
+}
 
 BEGIN_EVENT_TABLE(GridPanel, ResizablePanel) //wxSashWindow)
   EVT_PAINT(GridPanel::OnPaint)
-//  EVT_MOTION(GridPanel::OnMouseMove)	
+//  EVT_MOTION(GridPanel::OnMouseMove)
 END_EVENT_TABLE()
 
 IMPLEMENT_CLASS(GridPanel, ResizablePanel) //wxSashWindow)
@@ -330,19 +341,19 @@ void GridPanel::DrawRectangle(wxDC& dc, const wxPoint& point, const wxSize& size
   int bottomBorder = (flag & wxBOTTOM) == 0 ? 1 : border;
   int rightBorder = (flag & wxRIGHT) == 0 ? 1 : border;
   int leftBorder = (flag & wxLEFT) == 0 ? 1 : border;
-  dc.DrawRectangle(point.x - leftBorder + 1, point.y - topBorder + 1, 
-                    size.x + leftBorder + rightBorder - 2, 
+  dc.DrawRectangle(point.x - leftBorder + 1, point.y - topBorder + 1,
+                    size.x + leftBorder + rightBorder - 2,
                     size.y + topBorder + bottomBorder - 2);
-  dc.DrawRectangle(point.x - leftBorder, point.y - topBorder, 
-                    size.x + leftBorder + rightBorder, 
-                    size.y + topBorder + bottomBorder);    
-}  
+  dc.DrawRectangle(point.x - leftBorder, point.y - topBorder,
+                    size.x + leftBorder + rightBorder,
+                    size.y + topBorder + bottomBorder);
+}
 
 void GridPanel::HighlightSelection(wxDC& dc)
 {
   wxSize size;
   PObjectBase object = m_selObj.lock();
- 
+
   if (m_selSizer)
   {
     wxPoint point = m_selSizer->GetPosition();
@@ -361,7 +372,7 @@ void GridPanel::HighlightSelection(wxDC& dc)
 
     // Tenemos un problema (de momento) con los wxClassInfo's de los
     // componentes que no forman parte de wxWidgets, debido a que el componente
-    // se compila por separado en una librería compartida/dll 
+    // se compila por separado en una librería compartida/dll
     // y parece ser que la información de tipo de wxWidgets se configura
     // estáticamente.
     // Por tanto, no vamos a usar la información de tipos de wxWidgets.
@@ -383,7 +394,7 @@ void GridPanel::HighlightSelection(wxDC& dc)
         Debug::Print("Unknown class: %s", m_selItem->GetClassInfo()->GetClassName());
         return;
     }
-    
+
     if (shown)
     {
       wxPen redPen(*wxRED, 1, wxSOLID);
@@ -411,29 +422,29 @@ wxMenu* GridPanel::GetMenuFromObject(PObjectBase menu)
       wxString shortcut = menuItem->GetPropertyAsString(_T("shortcut"));
       if (!shortcut.IsEmpty())
         label = label + wxChar('\t') + shortcut;
-        
-      wxMenuItem *item = new wxMenuItem(menuWidget, lastMenuId++, 
-          label, menuItem->GetPropertyAsString(_T("help")), 
+
+      wxMenuItem *item = new wxMenuItem(menuWidget, lastMenuId++,
+          label, menuItem->GetPropertyAsString(_T("help")),
           menuItem->GetPropertyAsInteger(_T("kind")));
-          
+
       if (!menuItem->GetProperty("bitmap")->IsDefaultValue())
         item->SetBitmap(menuItem->GetPropertyAsBitmap(_T("bitmap")));
-        
+
       menuWidget->Append(item);
-        
+
       if (item->GetKind() == wxITEM_CHECK && menuItem->GetPropertyAsInteger(_T("checked")))
         item->Check(true);
-        
+
       item->Enable(menuItem->GetPropertyAsInteger(_T("enabled")));
     }
   }
-  return menuWidget; 
+  return menuWidget;
 }
 
 void GridPanel::SetFrameWidgets(PObjectBase menubar, wxWindow *toolbar, wxWindow *statusbar)
 {
   Menubar *mbWidget = NULL;
-  
+
   if (menubar)
   {
     mbWidget = new Menubar(this, -1);
@@ -444,30 +455,30 @@ void GridPanel::SetFrameWidgets(PObjectBase menubar, wxWindow *toolbar, wxWindow
       mbWidget->AppendMenu(menu->GetPropertyAsString(_T("label")), menuWidget);
     }
   }
-  
+
   wxSizer *mainSizer = GetSizer();
-  
+
   SetSizer(NULL, false);
-  
+
   wxSizer *dummySizer = new wxBoxSizer(wxVERTICAL);
   if (mbWidget)
   {
     dummySizer->Add(mbWidget, 0, wxEXPAND | wxTOP | wxBOTTOM, 0);
     dummySizer->Add(new wxStaticLine(this, -1), 0, wxEXPAND | wxALL, 0);
   }
-  
+
   if (toolbar)
     dummySizer->Add(toolbar, 0, wxEXPAND | wxALL, 0);
-  
+
   if (mainSizer)
     dummySizer->Add(mainSizer, 1, wxEXPAND | wxALL, 0);
   else
     dummySizer->AddStretchSpacer(1);
-    
+
   if (statusbar)
     dummySizer->Add(statusbar, 0, wxEXPAND | wxALL, 0);
 
-  
+
   SetSizer(dummySizer, false);
   Layout();
 }
@@ -480,10 +491,10 @@ void GridPanel::OnPaint(wxPaintEvent &event)
   for (int i=0;i<size.GetWidth();i += m_x)
     for (int j=0;j<size.GetHeight();j += m_y)
       dc.DrawPoint(i-1,j-1);
-      
+
   if (m_actPanel != this) return;
   HighlightSelection(dc);
-}   
+}
 /*
 void GridPanel::OnMouseMove(wxMouseEvent &event)
 {
@@ -515,22 +526,22 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
     Create();
 
   // Asignamos el widget y el sizer para mostrar el recuadro
-      
+
   PVisualObject visualObj;
   PObjectBase objAuxCt, objAuxNb, objAux;
   VisualObjectMap::iterator it = m_map.find(obj);
-  
+
   if (it != m_map.end())
   {
     wxWindow *selPanel = NULL;
     visualObj = it->second;
-    
+
     // 1. Buscar el panel activo, sobre este es donde se dibujarán los recuadros
     //    en el evento OnPaint.
     // buscamos hacia arriba el objeto más cercano cuyo componente sea
     // de tipo WINDOW.
-    
-    //objAuxCt = obj->FindNearAncestor("container");  
+
+    //objAuxCt = obj->FindNearAncestor("container");
     //objAuxNb = obj->FindNearAncestor("notebook");
     //if (!objAuxCt)
     //  objAux = objAuxNb;
@@ -538,23 +549,23 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
     //  objAux = objAuxCt;
     //else
     //  objAux = objAuxNb->Deep() > objAuxCt->Deep() ? objAuxNb : objAuxCt;
-    
+
     objAux = obj->GetParent();
     while (objAux)
     {
-      IComponent *compAux = objAux->GetObjectInfo()->GetComponent();  
+      IComponent *compAux = objAux->GetObjectInfo()->GetComponent();
       if (!compAux)
       {
         objAux.reset();
         break;
       }
-        
+
       if (compAux->GetComponentType() == COMPONENT_TYPE_WINDOW)
         break;
 
       objAux = objAux->GetParent();
     }
-    
+
     if (objAux)  // Un padre de tipo T_WIDGET es siempre un contenedor
     {
       it = m_map.find(objAux);
@@ -562,46 +573,46 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
     }
     else
       selPanel = m_back;
-      
+
     // 2. Buscar el item
     wxObject *item = NULL;
     wxSizer *sizer = NULL;
     string typeName = obj->GetObjectTypeName();
-    
+
     int componentType = COMPONENT_TYPE_ABSTRACT;
-    IComponent *comp = obj->GetObjectInfo()->GetComponent(); 
+    IComponent *comp = obj->GetObjectInfo()->GetComponent();
     if (comp)
       componentType = comp->GetComponentType();
-    
+
     //if ( typeName == "widget" || typeName == "container" ||
     //     typeName == "notebook" || typeName == "statusbar")
     if (componentType == COMPONENT_TYPE_WINDOW)
       item = shared_dynamic_cast<VisualWindow>(visualObj)->GetWindow();
-      
+
     //else if (typeName == "sizer")
-    else if (componentType == COMPONENT_TYPE_SIZER) 
+    else if (componentType == COMPONENT_TYPE_SIZER)
       item = shared_dynamic_cast<VisualSizer>(visualObj)->GetSizer();
-    
+
     // 3. Buscar el sizer.
     // lo que se hace a continuación es buscar el objeto más próximo que sea
     // un componente WINDOW o un componente SIZER y en el caso de ser un
     // sizer lo guardamos.
-    
+
     //objAux = obj->FindNearAncestor("sizer");
     //objAuxCt = obj->FindNearAncestor("container");
     //if (objAux && (!objAuxCt || objAux->Deep() > objAuxCt->Deep()))
     //{
     //  it = m_map.find(objAux);
-    //  sizer = shared_dynamic_cast<VisualSizer>(it->second)->GetSizer(); 
+    //  sizer = shared_dynamic_cast<VisualSizer>(it->second)->GetSizer();
     //}
-    
+
     objAux = obj->GetParent();
     while (objAux)
     {
       IComponent *compAux = objAux->GetObjectInfo()->GetComponent();
       if (!compAux)
         break;
-      
+
       if (compAux->GetComponentType() == COMPONENT_TYPE_SIZER)
       {
         it = m_map.find(objAux);
@@ -610,11 +621,11 @@ void VisualEditor::ObjectSelected(PObjectBase obj)
       }
       else if (compAux->GetComponentType() == COMPONENT_TYPE_WINDOW)
         break;
-        
+
       objAux = objAux->GetParent();
     }
-    
-    
+
+
     m_back->SetSelectedSizer(sizer);
     m_back->SetSelectedItem(item);
     m_back->SetSelectedObject(obj);
@@ -638,7 +649,7 @@ void VisualEditor::ObjectCreated(PObjectBase obj)
 
 void VisualEditor::ObjectRemoved(PObjectBase obj)
 {
-  Create();  
+  Create();
 }
 
 void VisualEditor::PropertyModified(PProperty prop)
@@ -646,6 +657,7 @@ void VisualEditor::PropertyModified(PProperty prop)
   PObjectBase aux = m_back->GetSelectedObject();
   Create();
   ObjectSelected(aux);
+  UpdateVirtualSize();
 }
 
 

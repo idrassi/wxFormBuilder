@@ -48,14 +48,14 @@ class GridPanel : public ResizablePanel //wxSashWindow //wxPanel
    wxObject *m_selItem;
    WPObjectBase m_selObj;
    wxWindow *m_actPanel;
-   
+
    void DrawRectangle(wxDC& dc, const wxPoint& point, const wxSize& size, PObjectBase object);
-   
+
    DECLARE_CLASS(GridPanel)
-   
+
  protected:
    DECLARE_EVENT_TABLE()
-   
+
  public:
    GridPanel(wxWindow *parent, int id, const wxPoint& pos, const wxSize &size,
      long style, const wxString &name = wxT("gridpanel"));
@@ -74,34 +74,35 @@ class GridPanel : public ResizablePanel //wxSashWindow //wxPanel
    void HighlightSelection(wxDC& dc);
    void OnPaint(wxPaintEvent &event);
 //   void OnMouseMove(wxMouseEvent &event);
-}; 
+};
 
-class VisualEditor : public DataObserver, public wxPanel
+class VisualEditor : public DataObserver, public wxScrolledWindow
 {
  private:
   typedef map<PObjectBase,PVisualObject> VisualObjectMap;
   VisualObjectMap m_map;
-  
-  GridPanel *m_back; 
+
+  GridPanel *m_back;
 
   PObjectBase m_form;  // puntero al último form creado
 
-  DECLARE_EVENT_TABLE()  
-  
+  DECLARE_EVENT_TABLE()
+
  protected:
   //PVisualObject Generate(PObjectBase obj, wxWindow *parent, wxSizer *sizer,
   //                       ObjectType parentType);
   PVisualObject Generate(PObjectBase obj, wxWindow *parent, wxSizer *sizer,
                          PVisualObject vobj_parent);
   void Create();
-  
+
  public:
   VisualEditor(wxWindow *parent);
   void OnResizeBackPanel (wxCommandEvent &event); //(wxSashEvent &event)
   void OnPaintPanel (wxPaintEvent &event);
   void DeleteVisualObject(PVisualObject obj);
-  
+
   void Setup();
+  void UpdateVirtualSize();
 
   ///////////////
   void ProjectLoaded();
@@ -112,7 +113,7 @@ class VisualEditor : public DataObserver, public wxPanel
   void PropertyModified(PProperty prop);
   void ProjectRefresh();
 
-};  
+};
 
 
 #endif //__VISUAL_EDITOR__
