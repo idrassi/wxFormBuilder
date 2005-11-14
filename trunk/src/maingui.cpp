@@ -52,7 +52,7 @@ class MyApp : public wxApp
 private:
   wxLog * m_old_log;
   wxLogWindow * m_log;
-  
+
 public:
 
   virtual bool OnInit();
@@ -66,20 +66,23 @@ bool MyApp::OnInit()
 {
   GlobalDataInit();
   wxInitAllImageHandlers();
-  
+
   // Obtenemos la ruta del ejecutable
   wxString exeFile(argv[0]);
   wxFileName appFileName(exeFile);
   wxString path = appFileName.GetPath();
 
-  wxBitmap bitmap;    
+  // Guardamos la ruta del ejecutable
+  GlobalData()->SetApplicationPath(path);
+
+  wxBitmap bitmap;
   if (bitmap.LoadFile(path + wxFILE_SEP_PATH + wxT("splash.png"), wxBITMAP_TYPE_PNG))
   {
       new wxSplashScreen(bitmap, wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
           3000, NULL, -1, wxDefaultPosition, wxDefaultSize,
           wxSIMPLE_BORDER|wxSTAY_ON_TOP);
   }
-  
+
   SetVendorName(_T("wxFormBuilder"));
   SetAppName(_T("wxFormBuilder"));
 
@@ -95,21 +98,21 @@ bool MyApp::OnInit()
   #endif //__WXFB_DEBUG__
 
 
-  
+
   DataObservable *data = new ApplicationData(string(path.mb_str()));
-  
+
   MainFrame *frame = new MainFrame(data, NULL);
-  frame->Show(TRUE); 
+  frame->Show(TRUE);
   SetTopWindow(frame);
 
-  #ifdef __WXFB_DEBUG__    
+  #ifdef __WXFB_DEBUG__
   frame->AddChild(m_log->GetFrame());
   #endif //__WXFB_DEBUG__
 
   if (argc > 1)
   {
     wxString arg(argv[1]);
-    
+
     if (::wxFileExists(arg))
     {
       // No va bien (en mainframe aparece untitled)
@@ -117,10 +120,10 @@ bool MyApp::OnInit()
       return TRUE;
     }
   }
-  
-  
+
+
   data->NewProject();
-  
+
   return TRUE;
 }
 

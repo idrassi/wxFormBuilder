@@ -27,6 +27,7 @@
 #include <wx/html/htmlwin.h>
 #include <wx/mimetype.h>
 #include <wx/filename.h>
+#include "rad/global.h"
 
 #define ID_DEFAULT -1 // Default
 #define ID_OK 1000
@@ -38,11 +39,11 @@ END_EVENT_TABLE()
 class HtmlWindow : public wxHtmlWindow
 {
   public:
-    HtmlWindow(wxWindow *parent) : wxHtmlWindow(parent, -1, wxDefaultPosition, wxDefaultSize, 
+    HtmlWindow(wxWindow *parent) : wxHtmlWindow(parent, -1, wxDefaultPosition, wxDefaultSize,
       wxHW_SCROLLBAR_NEVER | wxHW_NO_SELECTION | wxRAISED_BORDER)
     {
     }
-    
+
     void LaunchBrowser(const wxString& url)
     {
       wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(_T("html"));
@@ -51,15 +52,15 @@ class HtmlWindow : public wxHtmlWindow
                      "Please edit your MIME types."));
         return;
       }
-    
+
       wxString cmd;
       bool ok = ft->GetOpenCommand(&cmd, wxFileType::MessageParameters(url, _T("")));
       delete ft;
-    
+
       if (ok)
-          wxExecute(cmd, wxEXEC_ASYNC); 
+          wxExecute(cmd, wxEXEC_ASYNC);
     }
-    
+
     void OnLinkClicked(const wxHtmlLinkInfo& link)
     {
       LaunchBrowser(link.GetHref());
@@ -101,14 +102,14 @@ AboutDialog::AboutDialog(wxWindow *parent, int id) : wxDialog(parent,id,wxT("Abo
   this->SetAutoLayout(true);
   this->Layout();
 #endif
-  
+
   wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
   wxHtmlWindow *htmlWin = new HtmlWindow(this);
   mainSizer->Add(htmlWin, 1, wxEXPAND | wxALL, 5);
   mainSizer->Add(new wxButton(this, wxID_OK, _("OK")), 0, wxALIGN_CENTER | wxBOTTOM, 5);
-  
-  htmlWin->LoadFile(wxFileName(_T("resources/about.html")));
-  
+
+  htmlWin->LoadFile(wxFileName(GlobalData()->GetApplicationPath() + wxFILE_SEP_PATH + _T("resources/about.html")));
+
   SetSizer(mainSizer);
   Layout();
 }

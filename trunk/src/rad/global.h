@@ -43,17 +43,22 @@ class GlobalApplicationData
 {
  private:
   GlobalApplicationData() {};
-  
+
   static GlobalApplicationData* s_instance;
-  
+
   wxString m_projectPath;
- 
+  wxString m_exePath;
+
  public:
    static GlobalApplicationData* Get();
    static void Destroy();
-   
+
    const wxString &GetProjectPath() { return m_projectPath; };
    void SetProjectPath(const wxString &path) { m_projectPath = path; };
+
+   const wxString &GetApplicationPath() { return m_exePath; };
+   void SetApplicationPath(const wxString &path) { m_exePath = path; };
+
 };
 
 
