@@ -83,7 +83,7 @@ class PanelFormComponent : public ComponentBase
   {
     ObjectToXrcFilter xrc(obj, _("wxPanel"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();
-    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    //xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     return xrc.GetXrcObject();
   }
   
@@ -91,7 +91,7 @@ class PanelFormComponent : public ComponentBase
   {
     XrcToXfbFilter filter(xrcObj, _("Panel"));
     filter.AddWindowProperties();
-    filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    //filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     return filter.GetXfbObject();
   }
 };
@@ -206,7 +206,7 @@ class TextCtrlComponent : public ComponentBase
   {
     ObjectToXrcFilter xrc(obj, _("wxTextCtrl"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();    
-    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    //xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     xrc.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
     return xrc.GetXrcObject();
   }
@@ -215,7 +215,7 @@ class TextCtrlComponent : public ComponentBase
   {
     XrcToXfbFilter filter(xrcObj, _("wxTextCtrl"));
     filter.AddWindowProperties();
-    filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    //filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     filter.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
     return filter.GetXfbObject();
   }
@@ -239,7 +239,7 @@ class StaticTextComponent : public ComponentBase
   {
     ObjectToXrcFilter xrc(obj, _("wxStaticText"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();    
-    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    //xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
     return xrc.GetXrcObject();
   }
@@ -269,7 +269,7 @@ class PanelComponent : public ComponentBase
   {
     ObjectToXrcFilter xrc(obj, _("wxPanel"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();    
-    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    //xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     return xrc.GetXrcObject();
   }
 
@@ -277,7 +277,7 @@ class PanelComponent : public ComponentBase
   {
     XrcToXfbFilter filter(xrcObj, _("wxPanel"));
     filter.AddWindowProperties();
-    filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    //filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     return filter.GetXfbObject();
   }
 
@@ -328,7 +328,7 @@ class ComboBoxComponent : public ComponentBase
   {
     ObjectToXrcFilter xrc(obj, _("wxComboBox"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();    
-    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    //xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     xrc.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
     xrc.AddProperty(_("choices"),_("content"),XRC_TYPE_STRINGLIST);
     return xrc.GetXrcObject();
@@ -338,7 +338,7 @@ class ComboBoxComponent : public ComponentBase
   {
     XrcToXfbFilter filter(xrcObj, _("wxComboBox"));
     filter.AddWindowProperties();
-    filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    //filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     filter.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
     filter.AddProperty(_("content"),_("choices"),XRC_TYPE_STRINGLIST);
     return filter.GetXfbObject();
@@ -422,7 +422,7 @@ class StaticLineComponent : public ComponentBase
   {
     ObjectToXrcFilter xrc(obj, _("wxStaticLine"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();    
-    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    //xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     return xrc.GetXrcObject();
   }
 
@@ -430,7 +430,7 @@ class StaticLineComponent : public ComponentBase
   {
     XrcToXfbFilter filter(xrcObj, _("wxStaticLine"));
     filter.AddWindowProperties();
-    filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    //filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     return filter.GetXfbObject();
   }
 };
@@ -450,7 +450,7 @@ class NotebookComponent : public ComponentBase
   {
     ObjectToXrcFilter xrc(obj, _("wxNotebook"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();    
-    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    //xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     return xrc.GetXrcObject();
   }  
   
@@ -458,7 +458,7 @@ class NotebookComponent : public ComponentBase
   {
     XrcToXfbFilter filter(xrcObj, _("wxNotebook"));
     filter.AddWindowProperties();
-    filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    //filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     return filter.GetXfbObject();
   }
   
@@ -517,7 +517,7 @@ class ListCtrlComponent : public ComponentBase
   {
     ObjectToXrcFilter xrc(obj, _("wxListCtrl"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();    
-    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    //xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     return xrc.GetXrcObject();
   } 
 
@@ -525,7 +525,7 @@ class ListCtrlComponent : public ComponentBase
   {
     XrcToXfbFilter filter(xrcObj, _("wxListCtrl"));
     filter.AddWindowProperties();
-    filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    //filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     return filter.GetXfbObject();
   }
 };
@@ -554,7 +554,7 @@ class ListBoxComponent : public ComponentBase
   {
     ObjectToXrcFilter xrc(obj, _("wxListBox"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();    
-    xrc.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
+    //xrc.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
     xrc.AddProperty(_("choices"), _("content"), XRC_TYPE_STRINGLIST);
     return xrc.GetXrcObject();
   } 
@@ -563,7 +563,7 @@ class ListBoxComponent : public ComponentBase
   {
     XrcToXfbFilter filter(xrcObj, _("wxListBox"));
     filter.AddWindowProperties();
-    filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    //filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
     filter.AddProperty(_("content"),_("choices"), XRC_TYPE_STRINGLIST);
     return filter.GetXfbObject();
   }
@@ -604,7 +604,7 @@ class RadioBoxComponent : public ComponentBase
   {
     ObjectToXrcFilter xrc(obj, _("wxRadioBox"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();    
-    xrc.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
+    //xrc.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
     xrc.AddProperty(_("choices"), _("content"), XRC_TYPE_STRINGLIST);
     xrc.AddProperty(_("majorDimension"), _("dimension"), XRC_TYPE_INTEGER);
     return xrc.GetXrcObject();
@@ -614,7 +614,7 @@ class RadioBoxComponent : public ComponentBase
   {
     XrcToXfbFilter filter(xrcObj, _("wxRadioBox"));
     filter.AddWindowProperties();
-    filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    //filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
     filter.AddProperty(_("content"),_("choices"), XRC_TYPE_STRINGLIST);
     filter.AddProperty(_("dimension"), _("majorDimension"), XRC_TYPE_INTEGER);
     return filter.GetXfbObject();
@@ -636,7 +636,7 @@ class StatusBarComponent : public ComponentBase
   {
     ObjectToXrcFilter xrc(obj, _("wxStatusBar"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();    
-    xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    //xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     xrc.AddProperty(_("fields"),_("fields"),XRC_TYPE_INTEGER);
     return xrc.GetXrcObject();
   } 
@@ -645,7 +645,7 @@ class StatusBarComponent : public ComponentBase
   {
     XrcToXfbFilter filter(xrcObj, _("wxStatusBar"));
     filter.AddWindowProperties();
-    filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
+    //filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     filter.AddProperty(_("fields"),_("fields"),XRC_TYPE_INTEGER);
     return filter.GetXfbObject();
   }
@@ -815,7 +815,7 @@ class ToolBarComponent : public ComponentBase
     xrc.AddProperty(_("margins"), _("margins"), XRC_TYPE_SIZE);
     xrc.AddProperty(_("packing"), _("packing"), XRC_TYPE_INTEGER);
     xrc.AddProperty(_("separation"), _("separation"), XRC_TYPE_INTEGER);
-    xrc.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
+    //xrc.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
     return xrc.GetXrcObject();
   } 
   
@@ -827,7 +827,7 @@ class ToolBarComponent : public ComponentBase
     filter.AddProperty(_("margins"), _("margins"), XRC_TYPE_SIZE);
     filter.AddProperty(_("packing"), _("packing"), XRC_TYPE_INTEGER);
     filter.AddProperty(_("separation"), _("separation"), XRC_TYPE_INTEGER);
-    filter.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
+    //filter.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
     return filter.GetXfbObject();
   }
 };  
@@ -893,7 +893,7 @@ class ChoiceComponent : public ComponentBase
   {
     ObjectToXrcFilter xrc(obj, _("wxChoice"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();    
-    xrc.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
+    //xrc.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
     xrc.AddProperty(_("choices"), _("content"), XRC_TYPE_STRINGLIST);
     xrc.AddProperty(_("selection"), _("selection"), XRC_TYPE_INTEGER);
     return xrc.GetXrcObject();
@@ -903,7 +903,7 @@ class ChoiceComponent : public ComponentBase
   {
     XrcToXfbFilter filter(xrcObj, _("wxChoice"));
     filter.AddWindowProperties();
-    filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    //filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
     filter.AddProperty(_("content"),_("choices"), XRC_TYPE_STRINGLIST);
     filter.AddProperty(_("selection"), _("selection"), XRC_TYPE_INTEGER);
     return filter.GetXfbObject();
@@ -929,7 +929,7 @@ class SliderComponent : public ComponentBase
   {
     ObjectToXrcFilter xrc(obj, _("wxSlider"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties(); 
-    xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    //xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
     xrc.AddProperty(_("value"), _("value"), XRC_TYPE_INTEGER);
     xrc.AddProperty(_("min"), _("minValue"), XRC_TYPE_INTEGER);
     xrc.AddProperty(_("max"), _("maxValue"), XRC_TYPE_INTEGER);
@@ -940,7 +940,7 @@ class SliderComponent : public ComponentBase
   {
     XrcToXfbFilter filter(xrcObj, _("wxSlider"));
     filter.AddWindowProperties();
-    filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    //filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
     filter.AddProperty(_("value"), _("value"), XRC_TYPE_INTEGER);
     filter.AddProperty(_("min"), _("minValue"), XRC_TYPE_INTEGER);
     filter.AddProperty(_("max"), _("maxValue"), XRC_TYPE_INTEGER);
@@ -967,7 +967,7 @@ public:
   {
     ObjectToXrcFilter xrc(obj, _("wxGauge"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties(); 
-    xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);   
+    //xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);   
     xrc.AddProperty(_("range"), _("range"), XRC_TYPE_INTEGER);
     xrc.AddProperty(_("value"), _("value"), XRC_TYPE_INTEGER);
     return xrc.GetXrcObject();
@@ -977,7 +977,7 @@ public:
   {
     XrcToXfbFilter filter(xrcObj, _("wxGauge"));
     filter.AddWindowProperties();
-    filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+    //filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
     filter.AddProperty(_("range"), _("range"), XRC_TYPE_INTEGER);
     filter.AddProperty(_("value"), _("value"), XRC_TYPE_INTEGER);
     return filter.GetXfbObject();

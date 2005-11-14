@@ -49,6 +49,7 @@
       <option name="wxRB_GROUP" />
       <option name="wxRB_SINGLE" />
       <option name="wxRB_USE_CHECKBOX" /></property>
+    <property name="value" type="bool">0</property>
   </objectinfo>
 
   <objectinfo class="wxToggleButton" icon="toggle_button.xpm" type="widget">

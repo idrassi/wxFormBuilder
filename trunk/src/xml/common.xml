@@ -2,7 +2,7 @@
 
   <objectinfo class="wxWindow" type="interface">
     <property name="name" type="text">window</property>
-    <property name="id" type="macro" hidden="1">ID_DEFAULT</property>
+    <property name="id" type="macro">ID_DEFAULT</property>
     <property name="pos" type="wxPoint" />
     <property name="size" type="wxSize" />
     <property name="font" type="wxFont" />
@@ -29,7 +29,7 @@
   
   <objectinfo class="wxButton" icon="button.xpm" type="widget">
     <inherits class="wxWindow" />
-    <property name="name" type="text" hidden="1">m_button</property>
+    <property name="name" type="text">m_button</property>
     <property name="style" type="bitlist">
       <option name="wxBU_LEFT" />
       <option name="wxBU_TOP" />
@@ -41,7 +41,7 @@
   
   <objectinfo class="wxBitmapButton" icon="bitmap_button.xpm" type="widget">
     <inherits class="wxWindow" />
-    <property name="name" type="text" hidden="1">m_bpButton</property>
+    <property name="name" type="text">m_bpButton</property>
     <property name="style" type="bitlist">
       <option name="wxBU_LEFT" />
       <option name="wxBU_TOP" />
@@ -54,21 +54,18 @@
   
   <objectinfo class="wxPanel" icon="panel.xpm" type="container">
     <inherits class="wxWindow" />
-    <property name="name" type="text" hidden="1">m_panel</property>
+    <property name="name" type="text">m_panel</property>
     <property name="style" type="bitlist">
       <option name="wxSIMPLE_BORDER" />
       <option name="wxDOUBLE_BORDER" />
       <option name="wxSUNKEN_BORDER" />
       <option name="wxRAISED_BORDER" />
       <option name="wxTAB_TRAVERSAL" />wxTAB_TRAVERSAL</property>
-    <property name="pos" type="wxPoint" />
-    <property name="size" type="wxSize" />
-    <property name="id" type="macro" hidden="1">ID_DEFAULT</property>
   </objectinfo>
   
   <objectinfo class="wxTextCtrl" icon="text_ctrl.xpm" type="widget">
     <inherits class="wxWindow" />
-    <property name="name" type="text" hidden="1">m_textCtrl</property>
+    <property name="name" type="text">m_textCtrl</property>
     <property name="style" type="bitlist">
       <option name="wxTE_MULTILINE" />
       <option name="wxTE_READONLY" />
@@ -78,7 +75,7 @@
   
   <objectinfo class="wxStaticText" icon="static_text.xpm" type="widget">
     <inherits class="wxWindow" />
-    <property name="name" type="text" hidden="1">m_staticText</property>
+    <property name="name" type="text">m_staticText</property>
     <property name="style" type="bitlist">
       <option name="wxALIGN_LEFT" />
       <option name="wxALIGN_RIGHT" />
@@ -89,13 +86,13 @@
   
   <objectinfo class="wxCheckBox" icon="checkbox.xpm" type="widget">
     <inherits class="wxWindow" />
-    <property name="name" type="text" hidden="1">m_checkBox</property>
+    <property name="name" type="text">m_checkBox</property>
     <property name="label" type="wxString">Check Me!</property>
   </objectinfo>  
   
   <objectinfo class="wxComboBox" icon="combo_box.xpm" type="widget">
     <inherits class="wxWindow" />
-    <property name="name" type="text" hidden="1">m_comboBox</property>
+    <property name="name" type="text">m_comboBox</property>
     <property name="value" type="wxString">Combo!</property>
     <property name="choices" type="stringlist"></property>
     <property name="style" type="bitlist">
@@ -106,7 +103,7 @@
   
   <objectinfo class="wxListBox" icon="list_box.xpm" type="widget">
     <inherits class="wxWindow" />
-    <property name="name" type="text" hidden="1">m_listBox</property>
+    <property name="name" type="text">m_listBox</property>
     <property name="choices" type="stringlist"></property>
     <property name="style" type="bitlist">
       <option name="wxLB_SINGLE" />
@@ -120,7 +117,7 @@
   
   <objectinfo class="wxRadioBox" icon="radio_box.xpm" type="widget">
     <inherits class="wxWindow" />
-    <property name="name" type="text" hidden="1">m_radioBox</property>
+    <property name="name" type="text">m_radioBox</property>
     <property name="choices" type="stringlist"></property>
     <property name="label" type="wxString">wxRadioBox</property>
     <property name="majorDimension" type="text">1</property>
@@ -132,20 +129,20 @@
   
   <objectinfo class="wxGrid" icon="grid.xpm" type="widget">
     <inherits class="wxWindow" />
-    <property name="name" type="text" hidden="1">m_grid</property>
+    <property name="name" type="text">m_grid</property>
     <property name="rows" type="text">5</property>
     <property name="cols" type="text">5</property>    
   </objectinfo> 
    
   <objectinfo class="wxStaticBitmap" icon="static_bitmap.xpm" type="widget">
     <inherits class="wxWindow" />
-    <property name="name" type="text" hidden="1">m_bitmap</property>
+    <property name="name" type="text">m_bitmap</property>
     <property name="bitmap" type="bitmap" />
   </objectinfo>
     
   <objectinfo class="wxStaticLine" icon="static_line.xpm" type="widget">
     <inherits class="wxWindow" />
-    <property name="name" type="text" hidden="1">m_staticline</property>
+    <property name="name" type="text">m_staticline</property>
     <property name="style" type="bitlist">
       <option name="wxLI_HORIZONTAL" />
       <option name="wxLI_VERTICAL" />wxLI_HORIZONTAL</property>
@@ -153,7 +150,7 @@
    
   <objectinfo class="wxNotebook" icon="notebook.xpm" type="notebook">
     <inherits class="wxWindow" />
-    <property name="name" type="text" hidden="1">m_notebook</property>
+    <property name="name" type="text">m_notebook</property>
     <property name="style" type="bitlist">
       <option name="wxNB_TOP" />
       <option name="wxNB_LEFT" />
@@ -172,26 +169,26 @@
 
   <objectinfo class="wxMenuBar" icon="menubar.xpm" type="menubar">
     <inherits class="wxWindow" />
-    <property name="name" type="text" hidden="1">m_menubar</property>
+    <property name="name" type="text">m_menubar</property>
     <property name="label" type="wxString">MyMenuBar</property>
   </objectinfo>
   
   <objectinfo class="wxMenu" icon="menu.xpm" type="menu">
-    <property name="name" type="text" hidden="1">m_menu</property>
+    <property name="name" type="text">m_menu</property>
     <property name="label" type="wxString">MyMenu</property>
   </objectinfo>
   
   <objectinfo class="submenu" icon="menu.xpm" type="submenu">
-    <property name="name" type="text" hidden="1">m_menu</property>
+    <property name="name" type="text">m_menu</property>
     <property name="label" type="wxString">MyMenu</property>
   </objectinfo>
   
   <objectinfo class="wxMenuItem" icon="menuitem.xpm" type="menuitem">
-    <property name="name" type="text" hidden="1">menuItem</property>
+    <property name="name" type="text">menuItem</property>
     <property name="label" type="wxString">MyMenuItem</property>
     <property name="shortcut" type="wxString"></property>
     <property name="help" type="wxString"></property>
-    <property name="id" type="macro" hidden="1">ID_DEFAULT</property>
+    <property name="id" type="macro">ID_DEFAULT</property>
     <property name="bitmap" type="bitmap" />
     <property name="checked" type="bool">0</property>
     <property name="enabled" type="bool">1</property>
