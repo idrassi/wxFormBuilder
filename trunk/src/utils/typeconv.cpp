@@ -30,7 +30,7 @@
 #include "icons/unknown.xpm"
 #include <wx/filename.h>
 #include "rad/global.h"
- 
+
 ////////////////////////////////////
 
 using namespace TypeConv;
@@ -40,24 +40,24 @@ wxString TypeConv::_StringToWxString(const string &str)
   wxString newstr(str.c_str(),wxConvUTF8);
   return newstr;
 }
-  
+
 string TypeConv::_WxStringToString(const wxString &str)
 {
   string newstr(str.mb_str());
   return newstr;
-}  
+}
 
 bool TypeConv::StringToPoint(const wxString &val, wxPoint *point)
 {
   wxPoint result;
-  
+
   bool error = false;
   wxString str_x,str_y;
   long val_x = -1, val_y = -1;
 
-  
+
   Debug::Print("[wxPointEditor::ParseValue] Parsing value %s",val.c_str());
-  
+
   if (val != wxT(""))
   {
     wxStringTokenizer tkz(val, wxT(","));
@@ -73,7 +73,7 @@ bool TypeConv::StringToPoint(const wxString &val, wxPoint *point)
         str_y.Trim(true);
         str_y.Trim(false);
         Debug::Print("[wxPointEditor::ParseValue] Parse %s", str_y.c_str());
-      }  
+      }
       else
         error = true;
     }
@@ -82,22 +82,22 @@ bool TypeConv::StringToPoint(const wxString &val, wxPoint *point)
 
     if (!error)
       error = !str_x.ToLong(&val_x);
-  
+
     if (!error)
       error = !str_y.ToLong(&val_y);
-  
+
     if (!error)
       result = wxPoint(val_x,val_y);
   }
-  else 
+  else
     result = wxDefaultPosition;
 
   if (error)
     result = wxDefaultPosition;
-    
+
   point->x = result.x;
   point->y = result.y;
-    
+
   return !error;
 }
 
@@ -106,13 +106,13 @@ wxPoint TypeConv::StringToPoint (const wxString &val)
   wxPoint result;
   StringToPoint (val,&result);
   return result;
-}  
+}
 
 wxSize TypeConv::StringToSize (const wxString &val)
 {
   wxPoint point = StringToPoint(val);
   return wxSize(point.x, point.y);
-}  
+}
 
 int TypeConv::BitlistToInt (const wxString &str)
 {
@@ -124,18 +124,18 @@ int TypeConv::BitlistToInt (const wxString &str)
     token = tkz.GetNextToken();
     token.Trim(true);
     token.Trim(false);
-    
+
     result |= GetMacroValue(token);
   }
-  
+
   return result;
-}  
+}
 
 wxString TypeConv::PointToString(const wxPoint &point)
 {
   wxString value = wxString::Format(wxT("%d,%d"),point.x,point.y);
   return value;
-}  
+}
 
 wxString TypeConv::SizeToString(const wxSize &size)
 {
@@ -146,20 +146,20 @@ wxString TypeConv::SizeToString(const wxSize &size)
 int TypeConv::GetMacroValue(const wxString &str)
 {
   int value = 0;
-  
+
   PMacroDictionary dic = MacroDictionary::GetInstance();
   dic->SearchMacro(_STDSTR(str),&value);
 
   return value;
-}  
+}
 
 int TypeConv::StringToInt(const wxString &str)
 {
   long l = 0;
   str.ToLong(&l);
-  
+
   return (int)l;
-}  
+}
 
 
 
@@ -175,8 +175,8 @@ wxFont TypeConv::StringToFont (const wxString &str)
 
   bool set_face_name, set_style, set_weight, set_size;
 
-  set_face_name = set_style = set_weight = set_size = false;  
-  
+  set_face_name = set_style = set_weight = set_size = false;
+
   if (tkz.HasMoreTokens())
   {
     face_name = tkz.GetNextToken();
@@ -223,10 +223,10 @@ wxFont TypeConv::StringToFont (const wxString &str)
   if (set_face_name)
     font.SetFaceName(face_name);
 
-  if (set_style)  
+  if (set_style)
     font.SetStyle(style);
 
-  if (set_weight)  
+  if (set_weight)
     font.SetWeight(weight);
 
   if (set_size)
@@ -242,14 +242,14 @@ wxString TypeConv::FontToString (const wxFont &font)
     wxString::Format(wxT("%s,%d,%d,%d"),font.GetFaceName().c_str(), font.GetStyle(),
                                        font.GetWeight(), font.GetPointSize());
 
-  return str;                                                                               
+  return str;
 }
 
 wxBitmap TypeConv::StringToBitmap(const wxString &filename)
 {
   wxString basePath = GlobalData()->GetProjectPath();
   wxString fullpath = TypeConv::MakeAbsolutePath(filename,basePath);
-  
+
   if (::wxFileExists(fullpath))
   {
     wxBitmap bitmap(fullpath,wxBITMAP_TYPE_ANY);
@@ -273,16 +273,16 @@ wxString TypeConv::MakeAbsolutePath (const wxString &filename,
     {
       if (fnFile.MakeAbsolute(basePath))
         return fnFile.GetFullPath();
-      
+
     }
   }
   else
     return filename; // es una ruta absoluta, la devolvemos sin más
-  
+
   return wxString();
 }
 
-wxString TypeConv::MakeRelativePath(const wxString &filename, 
+wxString TypeConv::MakeRelativePath(const wxString &filename,
                                     const wxString &basePath)
 {
   wxFileName fnFile(filename);
@@ -297,26 +297,26 @@ wxString TypeConv::MakeRelativePath(const wxString &filename,
   }
   else
     return filename;
-  
-  return wxString();  
+
+  return wxString();
 }
 
 wxColour TypeConv::StringToColour(const wxString &str)
 {
   wxStringTokenizer tkz(str,wxT(","));
   unsigned char red,green,blue;
-  
+
   red = green = blue = 0;
-  
+
 //  bool set_red, set_green, set_blue;
-  
+
 //  set_red = set_green = set_blue = false;
-  
+
   if (tkz.HasMoreTokens())
   {
     wxString s_red = tkz.GetNextToken();
     long l_red;
-    
+
     if (s_red.ToLong(&l_red) && (l_red >= 0 && l_red <= 255))
     {
       red = (int)l_red;
@@ -328,7 +328,7 @@ wxColour TypeConv::StringToColour(const wxString &str)
   {
     wxString s_green = tkz.GetNextToken();
     long l_green;
-    
+
     if (s_green.ToLong(&l_green) && (l_green >= 0 && l_green <= 255))
     {
       green = (int)l_green;
@@ -340,14 +340,14 @@ wxColour TypeConv::StringToColour(const wxString &str)
   {
     wxString s_blue = tkz.GetNextToken();
     long l_blue;
-    
+
     if (s_blue.ToLong(&l_blue) && (l_blue >= 0 && l_blue <= 255))
     {
       blue = (int)l_blue;
 //      set_size = true;
     }
   }
-  
+
 
   return wxColour(red,green,blue);
 }
@@ -370,7 +370,7 @@ bool TypeConv::StringToBool(const wxString &str)
 wxString TypeConv::BoolToString(bool val)
 {
   wxString result;
-  
+
   if (val)
     result = wxT("1");
   else
@@ -389,16 +389,19 @@ bool TypeConv::FlagSet  (const wxString &flag, const wxString &currentValue)
     token = tkz.GetNextToken();
     token.Trim(true);
     token.Trim(false);
-    
+
     if (token == flag)
       set = true;
   }
-  
+
   return set;
 }
 
 wxString TypeConv::ClearFlag(const wxString &flag, const wxString &currentValue)
 {
+  if (flag == wxT(""))
+    return currentValue;
+
   wxString result;
   wxStringTokenizer tkz(currentValue, wxT("|"));
   while (tkz.HasMoreTokens())
@@ -407,21 +410,24 @@ wxString TypeConv::ClearFlag(const wxString &flag, const wxString &currentValue)
     token = tkz.GetNextToken();
     token.Trim(true);
     token.Trim(false);
-    
+
     if (token != flag)
     {
       if (result != wxT(""))
         result = result + wxT('|');
-        
+
       result = result + token;
     }
   }
-  
+
   return result;
 }
 
 wxString TypeConv::SetFlag  (const wxString &flag, const wxString &currentValue)
 {
+  if (flag == wxT(""))
+    return currentValue;
+
   bool found = false;
   wxString result = currentValue;
   wxStringTokenizer tkz(currentValue, wxT("|"));
@@ -431,16 +437,16 @@ wxString TypeConv::SetFlag  (const wxString &flag, const wxString &currentValue)
     token = tkz.GetNextToken();
     token.Trim(true);
     token.Trim(false);
-    
+
     if (token == flag)
       found = true;
   }
-  
+
   if (!found)
   {
     if (result != wxT(""))
       result = result + wxT('|');
-        
+
     result = result + flag;
   }
   return result;
@@ -481,12 +487,12 @@ wxArrayString TypeConv::StringToArrayString(const wxString &str)
         }
         else
           substr = substr + c; // seguimos guardado la cadena
-        
+
         break;
     }
     i++;
   }
-  
+
   return result;
 }
 
@@ -495,13 +501,13 @@ wxString TypeConv::ArrayStringToString(const wxArrayString &arrayStr)
   wxString result;
   wxString substr;
   int i, size= arrayStr.Count();
-  
+
   if (size > 0)
     result = wxT('\'') + arrayStr[0] + wxT('\'');
-  
+
   for (i=1 ; i < size ; i++)
     result = result +  wxT(" '") + arrayStr[i] + wxT('\'');
-  
+
   return result;
 }
 
@@ -517,11 +523,11 @@ wxString TypeConv::ReplaceSynonymous(const wxString &bitlist)
     token = tkz.GetNextToken();
     token.Trim(true);
     token.Trim(false);
-    
+
     if (result != wxT(""))
         result = result + wxChar('|');
-    
-    if (MacroDictionary::GetInstance()->SearchSynonymous(_STDSTR(token), translation))  
+
+    if (MacroDictionary::GetInstance()->SearchSynonymous(_STDSTR(token), translation))
       result += _WXSTR(translation);
     else
       result += token;
@@ -531,11 +537,11 @@ wxString TypeConv::ReplaceSynonymous(const wxString &bitlist)
   return result;
 }
 
-  
+
 string TypeConv::TextToString(const string &str)
 {
   string result;
-  
+
   for (unsigned int i=0 ; i < str.length() ; i++)
   {
     char c = str[i];
@@ -544,18 +550,18 @@ string TypeConv::TextToString(const string &str)
       if (i < str.length() - 1)
       {
         char next = str[i+1];
-      
+
         switch (next)
         {
           case 'n': result = result + '\n'; i++;
                     break;
-          
+
           case 't': result = result + '\t'; i++;
                     break;
-          
+
           case 'r': result = result + '\r'; i++;
                     break;
-                          
+
           case '\\': result = result + '\\'; i++;
                      break;
         }
@@ -564,32 +570,32 @@ string TypeConv::TextToString(const string &str)
     else
       result = result + c;
   }
-  
+
   return result;
 }
 
 string TypeConv::StringToText(const string &str)
 {
   string result;
-  
+
   for (unsigned int i=0 ; i < str.length() ; i++)
   {
     char c = str[i];
-    
+
     switch (c)
     {
       case '\n': result = result + "\\n";
                  break;
-          
+
       case '\t': result = result + "\\t";
                  break;
-          
+
       case '\r': result = result + "\\r";
                  break;
-                          
+
       case '\\': result = result + "\\\\";
                  break;
-      
+
       default:   result = result + c;
                  break;
     }
@@ -608,7 +614,7 @@ PMacroDictionary MacroDictionary::GetInstance()
   {
     s_instance = new MacroDictionary();
   }
-  
+
   return s_instance;
 }
 
@@ -621,7 +627,7 @@ bool MacroDictionary::SearchMacro(string name, int *result)
     found = true;
     *result = it->second;
   }
-  
+
   return found;
 }
 
@@ -634,7 +640,7 @@ bool MacroDictionary::SearchSynonymous(string synName, string& result)
     found = true;
     result = it->second;
   }
-  
+
   return found;
 }
 
@@ -653,7 +659,7 @@ void MacroDictionary::AddSynonymous(string synName, string name)
 
 MacroDictionary::MacroDictionary()
 {
-  // Las macros serán incluidas en las bibliotecas de componentes... 
+  // Las macros serán incluidas en las bibliotecas de componentes...
   // Sizers macros
 }
 
