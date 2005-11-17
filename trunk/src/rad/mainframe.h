@@ -61,7 +61,6 @@ class MainFrame : public DataObserver, public wxFrame
 
   // Actualiza los projectos más recientes en el menu
   void UpdateRecentProjects();
-  void InsertRecentProject(const wxString &file);
   void OnOpenRecent(wxCommandEvent &event);
   void UpdateLayoutTools();
 
@@ -103,6 +102,8 @@ class MainFrame : public DataObserver, public wxFrame
   void PropertyModified(PProperty prop);
   void CodeGeneration();
   void ProjectRefresh();
+
+  void InsertRecentProject(const wxString &file);
 };
 
 

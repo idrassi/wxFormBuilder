@@ -116,7 +116,9 @@ bool MyApp::OnInit()
     if (::wxFileExists(arg))
     {
       // No va bien (en mainframe aparece untitled)
-      data->LoadProject(arg);
+      if (data->LoadProject(arg))
+        frame->InsertRecentProject(arg);
+
       return TRUE;
     }
   }

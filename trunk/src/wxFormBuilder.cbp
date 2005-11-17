@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<!DOCTYPE Code::Blocks_project_file>
-<Code::Blocks_project_file>
+<!DOCTYPE CodeBlocks_project_file>
+<CodeBlocks_project_file>
 	<FileVersion major="1" minor="1"/>
 	<Project>
 		<Option title="wxFormBuilder"/>
@@ -13,7 +13,6 @@
 				<Option working_dir="..\bin"/>
 				<Option object_output="_objs"/>
 				<Option deps_output=".deps"/>
-				<Option external_deps=""/>
 				<Option type="0"/>
 				<Option compiler="0"/>
 				<Option projectResourceIncludeDirsRelation="0"/>
@@ -33,11 +32,11 @@
 			<Add option="-DTIXML_USE_STL"/>
 			<Add directory="..\libs\boost_1_31_0_smart_ptr"/>
 			<Add directory="..\libs\tinyxml"/>
-			<Add directory="..\libs\wxwidgets-2.6.0_dll\include"/>
+			<Add directory="..\libs\wxwidgets\include"/>
 			<Add directory="..\src"/>
 		</Compiler>
 		<ResourceCompiler>
-			<Add directory="..\libs\wxwidgets-2.6.0_dll\include"/>
+			<Add directory="..\libs\wxwidgets\include"/>
 		</ResourceCompiler>
 		<Linker>
 			<Add option="-mthreads"/>
@@ -70,7 +69,7 @@
 			<Add library="stdc++"/>
 			<Add library="wxmsw26_propgrid"/>
 			<Add directory="..\libs\tinyxml"/>
-			<Add directory="..\libs\wxwidgets-2.6.0_dll\lib"/>
+			<Add directory="..\libs\wxwidgets\lib"/>
 		</Linker>
 		<Unit filename="codegen\codegen.cpp">
 			<Option compilerVar="CPP"/>
@@ -408,4 +407,4 @@
 			<Option target="default"/>
 		</Unit>
 	</Project>
-</Code::Blocks_project_file>
+</CodeBlocks_project_file>

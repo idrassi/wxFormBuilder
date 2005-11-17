@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<!DOCTYPE Code::Blocks_project_file>
-<Code::Blocks_project_file>
+<!DOCTYPE CodeBlocks_project_file>
+<CodeBlocks_project_file>
 	<FileVersion major="1" minor="1"/>
 	<Project>
 		<Option title="Additional Components Plugin"/>
@@ -10,10 +10,9 @@
 		<Build>
 			<Target title="default">
 				<Option output="..\..\..\bin\xml\libadditional.dll"/>
-				<Option working_dir=""/>
+				<Option working_dir="."/>
 				<Option object_output=".objs"/>
 				<Option deps_output=".deps"/>
-				<Option external_deps=""/>
 				<Option type="3"/>
 				<Option compiler="0"/>
 			</Target>
@@ -32,7 +31,7 @@
 			<Add option="-DNO_GCC_PRAGMA"/>
 			<Add option="-DTIXML_USE_STL"/>
 			<Add directory="..\..\..\libs\tinyxml"/>
-			<Add directory="..\..\..\libs\wxwidgets-2.6.0_dll\include"/>
+			<Add directory="..\..\..\libs\wxwidgets\include"/>
 			<Add directory="..\.."/>
 		</Compiler>
 		<Linker>
@@ -64,7 +63,7 @@
 			<Add library="tinyxml"/>
 			<Add library="stdc++"/>
 			<Add directory="..\..\..\libs\tinyxml"/>
-			<Add directory="..\..\..\libs\wxwidgets-2.6.0_dll\lib"/>
+			<Add directory="..\..\..\libs\wxwidgets\lib"/>
 		</Linker>
 		<Unit filename="..\component.h">
 			<Option compilerVar=""/>
@@ -93,4 +92,4 @@
 			<Option target="default"/>
 		</Unit>
 	</Project>
-</Code::Blocks_project_file>
+</CodeBlocks_project_file>

@@ -52,10 +52,10 @@ class FrameFormComponent : public ComponentBase
     panel->SetBackgroundColour(wxColour(50,50,50));
     return panel;
   }
-  
+
   TiXmlElement* ExportToXrc(IObject *obj)
   {
-    ObjectToXrcFilter xrc(obj, _("wxFrame"), obj->GetPropertyAsString(_("name")));                       
+    ObjectToXrcFilter xrc(obj, _("wxFrame"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();
     xrc.AddProperty( _("title"), _("title"), XRC_TYPE_TEXT);
     return xrc.GetXrcObject();
@@ -78,7 +78,7 @@ class PanelFormComponent : public ComponentBase
     wxPanel *panel = new wxPanel((wxWindow *)parent,-1);
     return panel;
   }
-  
+
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxPanel"), obj->GetPropertyAsString(_("name")));
@@ -86,7 +86,7 @@ class PanelFormComponent : public ComponentBase
     //xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     return xrc.GetXrcObject();
   }
-  
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("Panel"));
@@ -104,7 +104,7 @@ class DialogFormComponent : public ComponentBase
     wxPanel *panel = new wxPanel((wxWindow *)parent,-1);
     return panel;
   }
-  
+
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxDialog"), obj->GetPropertyAsString(_("name")));
@@ -112,7 +112,7 @@ class DialogFormComponent : public ComponentBase
     xrc.AddProperty( _("title"), _("title"), XRC_TYPE_TEXT);
     return xrc.GetXrcObject();
   }
-  
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("Dialog"));
@@ -128,8 +128,8 @@ class DialogFormComponent : public ComponentBase
 
 class ButtonComponent : public ComponentBase
 {
- public: 
-    
+ public:
+
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxButton((wxWindow*)parent,-1,
@@ -138,7 +138,7 @@ class ButtonComponent : public ComponentBase
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
   }
-  
+
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxButton"), obj->GetPropertyAsString(_("name")));
@@ -147,7 +147,7 @@ class ButtonComponent : public ComponentBase
     xrc.AddPropertyValue(_("default"),_("0"));
     return xrc.GetXrcObject();
   }
-  
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("wxButton"));
@@ -159,8 +159,8 @@ class ButtonComponent : public ComponentBase
 
 class BitmapButtonComponent : public ComponentBase
 {
- public: 
-    
+ public:
+
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxBitmapButton((wxWindow*)parent,-1,
@@ -178,7 +178,7 @@ class BitmapButtonComponent : public ComponentBase
     xrc.AddPropertyValue(_("default"),_("0"));
     return xrc.GetXrcObject();
   }
-  
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("wxBitmapButton"));
@@ -192,7 +192,7 @@ class BitmapButtonComponent : public ComponentBase
 class TextCtrlComponent : public ComponentBase
 {
  public:
-     
+
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxTextCtrl((wxWindow *)parent,-1,
@@ -201,16 +201,16 @@ class TextCtrlComponent : public ComponentBase
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
   }
-  
+
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxTextCtrl"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties();    
+    xrc.AddWindowProperties();
     //xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     xrc.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
     return xrc.GetXrcObject();
   }
-  
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("wxTextCtrl"));
@@ -225,7 +225,7 @@ class TextCtrlComponent : public ComponentBase
 class StaticTextComponent : public ComponentBase
 {
  public:
-     
+
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return  new wxStaticText((wxWindow *)parent,-1,
@@ -238,12 +238,12 @@ class StaticTextComponent : public ComponentBase
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxStaticText"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties();    
+    xrc.AddWindowProperties();
     //xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
     return xrc.GetXrcObject();
   }
-  
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("wxStaticText"));
@@ -256,7 +256,7 @@ class StaticTextComponent : public ComponentBase
 class PanelComponent : public ComponentBase
 {
  public:
-     
+
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxPanel((wxWindow *)parent,-1,
@@ -264,11 +264,11 @@ class PanelComponent : public ComponentBase
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
   }
-  
+
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxPanel"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties();    
+    xrc.AddWindowProperties();
     //xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     return xrc.GetXrcObject();
   }
@@ -286,18 +286,18 @@ class PanelComponent : public ComponentBase
 class GridComponent : public ComponentBase
 {
  public:
-     
+
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     wxGrid *grid = new wxGrid((wxWindow *)parent,-1,
       obj->GetPropertyAsPoint(_("pos")),
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
-      
+
       grid->CreateGrid(
         obj->GetPropertyAsInteger(_("rows")),
         obj->GetPropertyAsInteger(_("cols")));
-      
+
     return grid;
   }
 };
@@ -305,7 +305,7 @@ class GridComponent : public ComponentBase
 
 class ComboBoxComponent : public ComponentBase
 {
- public: 
+ public:
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     wxComboBox *combo = new wxComboBox((wxWindow *)parent,-1,
@@ -315,25 +315,25 @@ class ComboBoxComponent : public ComponentBase
       0,
       NULL,
       obj->GetPropertyAsInteger(_("style")));
-    
+
     // choices
     wxArrayString choices = obj->GetPropertyAsArrayString(_("choices"));
     for (unsigned int i=0; i<choices.Count(); i++)
       combo->Append(choices[i]);
-      
+
     return combo;
   }
-  
+
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxComboBox"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties();    
+    xrc.AddWindowProperties();
     //xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     xrc.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
     xrc.AddProperty(_("choices"),_("content"),XRC_TYPE_STRINGLIST);
     return xrc.GetXrcObject();
   }
-  
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("wxComboBox"));
@@ -347,7 +347,7 @@ class ComboBoxComponent : public ComponentBase
 
 class CheckBoxComponent : public ComponentBase
 {
- public:  
+ public:
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxCheckBox((wxWindow *)parent,-1,
@@ -356,15 +356,15 @@ class CheckBoxComponent : public ComponentBase
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
   }
-  
+
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxCheckBox"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties();    
+    xrc.AddWindowProperties();
     xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
     return xrc.GetXrcObject();
   }
-  
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("wxCheckBox"));
@@ -376,7 +376,7 @@ class CheckBoxComponent : public ComponentBase
 
 class StaticBitmapComponent : public ComponentBase
 {
- public: 
+ public:
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxStaticBitmap((wxWindow *)parent,-1,
@@ -385,11 +385,11 @@ class StaticBitmapComponent : public ComponentBase
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
   }
-  
+
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxStaticBitmap"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties();    
+    xrc.AddWindowProperties();
     xrc.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_TEXT);
     return xrc.GetXrcObject();
   }
@@ -401,7 +401,7 @@ class StaticBitmapComponent : public ComponentBase
     filter.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_TEXT);
     return filter.GetXfbObject();
   }
-};	
+};
 
 class XpmStaticBitmapComponent : public StaticBitmapComponent
 {
@@ -416,12 +416,12 @@ class StaticLineComponent : public ComponentBase
       obj->GetPropertyAsPoint(_("pos")),
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
-  }	
+  }
 
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxStaticLine"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties();    
+    xrc.AddWindowProperties();
     //xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     return xrc.GetXrcObject();
   }
@@ -437,7 +437,7 @@ class StaticLineComponent : public ComponentBase
 
 class NotebookComponent : public ComponentBase
 {
- public: 
+ public:
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     return new wxNotebook((wxWindow *)parent,-1,
@@ -449,11 +449,11 @@ class NotebookComponent : public ComponentBase
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxNotebook"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties();    
+    xrc.AddWindowProperties();
     //xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     return xrc.GetXrcObject();
-  }  
-  
+  }
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("wxNotebook"));
@@ -461,7 +461,7 @@ class NotebookComponent : public ComponentBase
     //filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     return filter.GetXfbObject();
   }
-  
+
   bool KeepEvtHandler() { return true; }
 };
 
@@ -491,7 +491,7 @@ class NotebookPageComponent : public ComponentBase
     xrc.AddProperty(_("selected"),_("selected"),XRC_TYPE_BOOL);
     return xrc.GetXrcObject();
   }
-  
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("notebookpage"));
@@ -504,22 +504,49 @@ class NotebookPageComponent : public ComponentBase
 
 class ListCtrlComponent : public ComponentBase
 {
- public: 
+ public:
   wxObject* Create(IObject *obj, wxObject *parent)
   {
-    return new wxListCtrl((wxWindow*)parent, -1,
+    wxListCtrl *lc = new wxListCtrl((wxWindow*)parent, -1,
       obj->GetPropertyAsPoint(_("pos")),
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
+
+
+    // Rellenamos
+    int i,j;
+    wxString buf;
+    for (i=0;i<4;i++)
+    {
+      buf.Printf(_T("Label %d"),i);
+      wxListItem itemCol;
+      itemCol.SetText(buf);
+      itemCol.SetAlign(wxLIST_FORMAT_LEFT);
+      lc->InsertColumn(i, itemCol);
+    }
+
+    for (j=0;j<10;j++)
+    {
+      long temp;
+      buf.Printf(_T("Cell (0,%d)"),j);
+      temp = lc->InsertItem(j,buf);
+      for (i=1;i<4;i++)
+      {
+        buf.Printf(_T("Cell (%d,%d)"),i,j);
+        lc->SetItem(temp,i,buf);
+      }
+    }
+
+		return lc;
   }
 
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxListCtrl"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties();    
+    xrc.AddWindowProperties();
     //xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     return xrc.GetXrcObject();
-  } 
+  }
 
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
@@ -546,18 +573,18 @@ class ListBoxComponent : public ComponentBase
     wxArrayString choices = obj->GetPropertyAsArrayString(_("choices"));
     for (unsigned int i=0; i<choices.Count(); i++)
       listbox->Append(choices[i]);
-      
+
     return listbox;
   }
-  
+
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxListBox"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties();    
+    xrc.AddWindowProperties();
     //xrc.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
     xrc.AddProperty(_("choices"), _("content"), XRC_TYPE_STRINGLIST);
     return xrc.GetXrcObject();
-  } 
+  }
 
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
@@ -578,14 +605,14 @@ class RadioBoxComponent : public ComponentBase
     wxString *strings = new wxString[choices.Count()];
     for (unsigned int i=0; i < choices.Count(); i++)
       strings[i] = choices[i];
-      
+
     int majorDim = obj->GetPropertyAsInteger(_("majorDimension"));
     if (majorDim < 1)
     {
       wxLogWarning(wxT("Property majorDimension of wxRadioBox set to \'1\'"));
       majorDim = 1;
     }
-    
+
     wxRadioBox *radiobox = new wxRadioBox((wxWindow*)parent, -1,
       obj->GetPropertyAsString(_("label")),
       obj->GetPropertyAsPoint(_("pos")),
@@ -594,21 +621,21 @@ class RadioBoxComponent : public ComponentBase
       strings,
       majorDim,
       obj->GetPropertyAsInteger(_("style")));
- 
+
     delete []strings;
-         
+
     return radiobox;
   }
-  
+
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxRadioBox"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties();    
+    xrc.AddWindowProperties();
     //xrc.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
     xrc.AddProperty(_("choices"), _("content"), XRC_TYPE_STRINGLIST);
     xrc.AddProperty(_("majorDimension"), _("dimension"), XRC_TYPE_INTEGER);
     return xrc.GetXrcObject();
-  } 
+  }
 
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
@@ -623,7 +650,7 @@ class RadioBoxComponent : public ComponentBase
 
 class StatusBarComponent : public ComponentBase
 {
- public: 
+ public:
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     wxStatusBar *sb = new wxStatusBar((wxWindow*)parent, -1,
@@ -635,12 +662,12 @@ class StatusBarComponent : public ComponentBase
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxStatusBar"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties();    
+    xrc.AddWindowProperties();
     //xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
     xrc.AddProperty(_("fields"),_("fields"),XRC_TYPE_INTEGER);
     return xrc.GetXrcObject();
-  } 
-  
+  }
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("wxStatusBar"));
@@ -661,7 +688,7 @@ class MenuBarComponent : public ComponentBase
     xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
     return xrc.GetXrcObject();
   }
-  
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("wxMenuBar"));
@@ -680,7 +707,7 @@ class MenuComponent : public ComponentBase
     xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
     return xrc.GetXrcObject();
   }
-  
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("wxMenu"));
@@ -703,34 +730,34 @@ class MenuItemComponent : public ComponentBase
       label = obj->GetPropertyAsString(_("label"));
     else
       label = obj->GetPropertyAsString(_("label")) + _T("\\t") + shortcut;
-      
+
     xrc.AddPropertyValue(_("label"), label);
     xrc.AddProperty(_("help"),_("help"),XRC_TYPE_TEXT);
     xrc.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_TEXT);
-    
+
     int kind = obj->GetPropertyAsInteger(_("kind"));
-    
+
     if (obj->GetPropertyAsInteger(_("checked")) && (kind == wxITEM_RADIO || kind == wxITEM_CHECK))
       xrc.AddProperty(_("checked"), _("checked"), XRC_TYPE_BOOL);
-    
+
     if (obj->GetPropertyAsInteger(_("enabled")) == 0)
       xrc.AddProperty(_("enabled"), _("enabled"), XRC_TYPE_BOOL);
-    
+
     switch (kind)
     {
       case wxITEM_CHECK: xrc.AddPropertyValue(_("checkable"), _("1")); break;
       case wxITEM_RADIO: xrc.AddPropertyValue(_("radio"), _("1")); break;
     }
-    
+
     return xrc.GetXrcObject();
   }
-  
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("wxMenuItem"));
     //filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
     TiXmlElement *labelElement = xrcObj->FirstChildElement("label");
-    
+
     wxString label, shortcut;
     if (labelElement)
     {
@@ -747,7 +774,7 @@ class MenuItemComponent : public ComponentBase
         }
       }
     }
-    
+
     filter.AddPropertyValue(_("label"), label);
     filter.AddPropertyValue(_("shortcut"), shortcut);
     filter.AddProperty(_("help"),_("help"),XRC_TYPE_TEXT);
@@ -775,14 +802,14 @@ class SeparatorComponent : public ComponentBase
 
 class ToolBarComponent : public ComponentBase
 {
- public: 
+ public:
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     wxToolBar *tb = new wxToolBar((wxWindow*)parent, -1,
       obj->GetPropertyAsPoint(_("pos")),
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")) | wxTB_NOALIGN | wxTB_NODIVIDER | wxNO_BORDER);
-    
+
     if (!obj->IsNull(_("bitmapsize")))
       tb->SetToolBitmapSize(obj->GetPropertyAsSize(_("bitmapsize")));
     if (!obj->IsNull(_("marings")))
@@ -795,10 +822,10 @@ class ToolBarComponent : public ComponentBase
       tb->SetToolPacking(obj->GetPropertyAsInteger(_("packing")));
     if (!obj->IsNull(_("separation")))
       tb->SetToolSeparation(obj->GetPropertyAsInteger(_("separation")));
-      
+
     return tb;
   }
-  
+
   void OnCreated(IObjectView *objview, wxWindow *wxparent, IObjectView *parent,
                  IObjectView *first_child)
   {
@@ -810,15 +837,15 @@ class ToolBarComponent : public ComponentBase
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxToolBar"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties();    
+    xrc.AddWindowProperties();
     xrc.AddProperty(_("bitmapsize"), _("bitmapsize"), XRC_TYPE_SIZE);
     xrc.AddProperty(_("margins"), _("margins"), XRC_TYPE_SIZE);
     xrc.AddProperty(_("packing"), _("packing"), XRC_TYPE_INTEGER);
     xrc.AddProperty(_("separation"), _("separation"), XRC_TYPE_INTEGER);
     //xrc.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
     return xrc.GetXrcObject();
-  } 
-  
+  }
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("wxToolBar"));
@@ -830,18 +857,18 @@ class ToolBarComponent : public ComponentBase
     //filter.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
     return filter.GetXfbObject();
   }
-};  
+};
 
 class ToolComponent : public ComponentBase
 {
- public: 
+ public:
   wxObject* Create(IObject *obj, wxObject *parent)
   {
     wxToolBar *tb = (wxToolBar*) parent;
     tb->AddTool(wxID_HIGHEST + 200,
       obj->GetPropertyAsString(_("label")),
       obj->GetPropertyAsBitmap(_("bitmap")),
-      obj->GetPropertyAsString(_("help"))); 
+      obj->GetPropertyAsString(_("help")));
 
     return NULL;
   }
@@ -849,12 +876,12 @@ class ToolComponent : public ComponentBase
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("tool"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties();    
+    xrc.AddWindowProperties();
     xrc.AddProperty(_("label"), _("label"), XRC_TYPE_TEXT);
     xrc.AddProperty(_("bitmap"), _("bitmap"), XRC_TYPE_TEXT);
     return xrc.GetXrcObject();
-  } 
-  
+  }
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("tool"));
@@ -863,7 +890,7 @@ class ToolComponent : public ComponentBase
     filter.AddProperty(_("bitmap"), _("bitmap"), XRC_TYPE_TEXT);
     return filter.GetXfbObject();
   }
-};   
+};
 
 class ChoiceComponent : public ComponentBase
 {
@@ -874,30 +901,30 @@ class ChoiceComponent : public ComponentBase
     wxString *strings = new wxString[choices.Count()];
     for (unsigned int i=0; i < choices.Count(); i++)
       strings[i] = choices[i];
-      
+
     wxChoice *choice = new wxChoice((wxWindow*)parent, -1,
       obj->GetPropertyAsPoint(_("pos")),
       obj->GetPropertyAsSize(_("size")),
       choices.Count(),
       strings,
       obj->GetPropertyAsInteger(_("style")));
-    
+
     choice->SetSelection(obj->GetPropertyAsInteger(_("selection")));
-    
+
     delete []strings;
-         
+
     return choice;
   }
-  
+
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxChoice"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties();    
+    xrc.AddWindowProperties();
     //xrc.AddProperty(_("style"), _("style"), XRC_TYPE_BITLIST);
     xrc.AddProperty(_("choices"), _("content"), XRC_TYPE_STRINGLIST);
     xrc.AddProperty(_("selection"), _("selection"), XRC_TYPE_INTEGER);
     return xrc.GetXrcObject();
-  } 
+  }
 
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
@@ -908,7 +935,7 @@ class ChoiceComponent : public ComponentBase
     filter.AddProperty(_("selection"), _("selection"), XRC_TYPE_INTEGER);
     return filter.GetXfbObject();
   }
-  
+
 };
 
 class SliderComponent : public ComponentBase
@@ -924,18 +951,18 @@ class SliderComponent : public ComponentBase
       obj->GetPropertyAsSize(_("size")),
       obj->GetPropertyAsInteger(_("style")));
   }
-  
+
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxSlider"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties(); 
+    xrc.AddWindowProperties();
     //xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
     xrc.AddProperty(_("value"), _("value"), XRC_TYPE_INTEGER);
     xrc.AddProperty(_("min"), _("minValue"), XRC_TYPE_INTEGER);
     xrc.AddProperty(_("max"), _("maxValue"), XRC_TYPE_INTEGER);
     return xrc.GetXrcObject();
-  } 
-  
+  }
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("wxSlider"));
@@ -946,7 +973,7 @@ class SliderComponent : public ComponentBase
     filter.AddProperty(_("max"), _("maxValue"), XRC_TYPE_INTEGER);
     return filter.GetXfbObject();
   }
-  
+
 };
 
 class GaugeComponent : public ComponentBase
@@ -962,17 +989,17 @@ public:
     gauge->SetValue(obj->GetPropertyAsInteger(_("value")));
     return gauge;
   }
-  
+
   TiXmlElement* ExportToXrc(IObject *obj)
   {
     ObjectToXrcFilter xrc(obj, _("wxGauge"), obj->GetPropertyAsString(_("name")));
-    xrc.AddWindowProperties(); 
-    //xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);   
+    xrc.AddWindowProperties();
+    //xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
     xrc.AddProperty(_("range"), _("range"), XRC_TYPE_INTEGER);
     xrc.AddProperty(_("value"), _("value"), XRC_TYPE_INTEGER);
     return xrc.GetXrcObject();
-  } 
-  
+  }
+
   TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
   {
     XrcToXfbFilter filter(xrcObj, _("wxGauge"));
@@ -982,7 +1009,7 @@ public:
     filter.AddProperty(_("value"), _("value"), XRC_TYPE_INTEGER);
     return filter.GetXfbObject();
   }
-  
+
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -993,7 +1020,7 @@ BEGIN_LIBRARY()
   ABSTRACT_COMPONENT("Frame",FrameFormComponent)
   ABSTRACT_COMPONENT("Panel",PanelFormComponent)
   ABSTRACT_COMPONENT("Dialog",DialogFormComponent)
-    
+
   ABSTRACT_COMPONENT("notebookpage",NotebookPageComponent)
   WINDOW_COMPONENT("wxButton",ButtonComponent)
   WINDOW_COMPONENT("wxBitmapButton",BitmapButtonComponent)
@@ -1036,7 +1063,7 @@ BEGIN_LIBRARY()
   MACRO(wxTRANSPARENT_WINDOW)
   MACRO(wxVSCROLL)
   MACRO(wxWANTS_CHARS)
-  
+
   // wxFrame style macros
   MACRO(wxCAPTION)
   MACRO(wxCLOSE_BOX)
@@ -1063,22 +1090,22 @@ BEGIN_LIBRARY()
   MACRO(wxBU_BOTTOM)
   MACRO(wxBU_EXACTFIT)
   MACRO(wxBU_AUTODRAW)
-  
+
   // wxStaticText
   MACRO(wxALIGN_LEFT)
   MACRO(wxALIGN_CENTRE)
   MACRO(wxALIGN_RIGHT)
   MACRO(wxST_NO_AUTORESIZE)
-  
+
   // wxTextCtrl
   MACRO(wxTE_MULTILINE)
   MACRO(wxTE_READONLY)
-  MACRO(wxTE_RICH)  
-  
+  MACRO(wxTE_RICH)
+
   // wxStaticLine
   MACRO(wxLI_HORIZONTAL)
   MACRO(wxLI_VERTICAL)
-  
+
   // wxNotebook
   MACRO(wxNB_TOP)
   MACRO(wxNB_LEFT)
@@ -1088,7 +1115,7 @@ BEGIN_LIBRARY()
   MACRO(wxNB_MULTILINE)
   MACRO(wxNB_NOPAGETHEME)
   MACRO(wxNB_FLAT)
-  
+
   // wxListCtrl
   MACRO(wxLC_LIST)
   MACRO(wxLC_REPORT)
@@ -1105,7 +1132,7 @@ BEGIN_LIBRARY()
   MACRO(wxLC_SORT_DESCENDING)
   MACRO(wxLC_HRULES)
   MACRO(wxLC_VRULES)
-  
+
   // wxListBox
   MACRO(wxLB_SINGLE)
   MACRO(wxLB_MULTIPLE)
@@ -1114,22 +1141,22 @@ BEGIN_LIBRARY()
   MACRO(wxLB_ALWAYS_SB)
   MACRO(wxLB_NEEDED_SB)
   MACRO(wxLB_SORT)
-  
+
   // wxRadioBox
   MACRO(wxRA_SPECIFY_ROWS)
   MACRO(wxRA_SPECIFY_COLS)
   MACRO(wxRA_USE_CHECKBOX)
-  
+
   // wxStatusBar
   MACRO(wxST_SIZEGRIP)
-  
+
   // wxMenuItem
   MACRO(wxITEM_NORMAL)
   MACRO(wxITEM_CHECK)
   MACRO(wxITEM_RADIO)
-  
+
   // wxToolBar
-  MACRO(wxTB_FLAT)  
+  MACRO(wxTB_FLAT)
   MACRO(wxTB_DOCKABLE)
   MACRO(wxTB_HORIZONTAL)
   MACRO(wxTB_VERTICAL)
@@ -1138,8 +1165,8 @@ BEGIN_LIBRARY()
   MACRO(wxTB_NODIVIDER)
   MACRO(wxTB_NOALIGN)
   MACRO(wxTB_HORZ_LAYOUT)
-  MACRO(wxTB_HORZ_TEXT) 
-  
+  MACRO(wxTB_HORZ_TEXT)
+
   // wxSlider
   MACRO(wxSL_AUTOTICKS)
   MACRO(wxSL_BOTTOM)
@@ -1151,17 +1178,17 @@ BEGIN_LIBRARY()
   MACRO(wxSL_SELRANGE)
   MACRO(wxSL_TOP)
   MACRO(wxSL_VERTICAL)
-  
+
   // wxComboBox
   MACRO(wxCB_DROPDOWN)
   MACRO(wxCB_READONLY)
   MACRO(wxCB_SIMPLE)
-  
+
   // wxGauge
   MACRO(wxGA_HORIZONTAL)
   MACRO(wxGA_SMOOTH)
   MACRO(wxGA_VERTICAL)
 
-  
+
 END_LIBRARY()
 
