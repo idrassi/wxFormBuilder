@@ -67,9 +67,24 @@
     <inherits class="wxWindow" />
     <property name="name" type="text">m_textCtrl</property>
     <property name="style" type="bitlist">
+      <option name="wxTE_PROCESS_ENTER" />
+      <option name="wxTE_PROCESS_TAB" />
       <option name="wxTE_MULTILINE" />
+      <option name="wxTE_PASSWORD" />
       <option name="wxTE_READONLY" />
-      <option name="wxTE_RICH" /></property>
+      <option name="wxTE_RICH" />
+      <option name="wxTE_RICH2" />
+      <option name="wxTE_AUTO_URL" />
+      <option name="wxTE_NOHIDESEL" />
+      <option name="wxHSCROLL" />
+      <option name="wxTE_LEFT" />
+      <option name="wxTE_CENTRE" />
+      <option name="wxTE_RIGHT" />
+      <option name="wxTE_DONTWRAP" />
+      <option name="wxTE_CHARWRAP" />
+      <option name="wxTE_WORDWRAP" />
+      <option name="wxTE_BESTWRAP" />
+      <option name="wxTE_CAPITALIZE" /></property>
     <property name="value" type="wxString" /> 
   </objectinfo>
   

@@ -1,8 +1,15 @@
 <codegen language="C++">
-
-
-  
-
-  
+  <templates class="Project">
+    <template name="header_preamble">
+      @#include "wx/wxprec.h" #nl #nl
+      @#ifdef __BORLANDC__    #nl
+        @#pragma hdrstop      #nl
+      @#endif                 #nl
+                              #nl
+      @#ifndef WX_PRECOMP     #nl
+      @#include "wx/wx.h"     #nl
+      @#endif
+    </template>
+  </templates>
 </codegen>
 

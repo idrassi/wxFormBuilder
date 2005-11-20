@@ -26,7 +26,7 @@
 #include "plugins/component.h"
 #include "plugins/plugin.h"
 #include "utils/xrcconv.h"
-#include "icons/unknown.xpm"
+//#include "icons/unknown.xpm"
 
 #include "wx/grid.h"
 #include "wx/statline.h"
@@ -1083,6 +1083,13 @@ BEGIN_LIBRARY()
   MACRO(wxSTAY_ON_TOP)
   MACRO(wxSYSTEM_MENU)
 
+  // wxDialog style macros
+  MACRO(wxDEFAULT_DIALOG_STYLE)
+  MACRO(wxDIALOG_EX_CONTEXTHELP)
+  MACRO(wxDIALOG_EX_METAL)
+  MACRO(wxDIALOG_NO_PARENT)
+  MACRO(wxTHICK_FRAME)
+
   // wxButton
   MACRO(wxBU_LEFT)
   MACRO(wxBU_TOP)
@@ -1101,6 +1108,20 @@ BEGIN_LIBRARY()
   MACRO(wxTE_MULTILINE)
   MACRO(wxTE_READONLY)
   MACRO(wxTE_RICH)
+  MACRO(wxTE_AUTO_URL)
+  MACRO(wxTE_BESTWRAP)
+  MACRO(wxTE_CAPITALIZE)
+  MACRO(wxTE_CENTRE)
+  MACRO(wxTE_CHARWRAP)
+  MACRO(wxTE_DONTWRAP)
+  MACRO(wxTE_LEFT)
+  MACRO(wxTE_NOHIDESEL)
+  MACRO(wxTE_PASSWORD)
+  MACRO(wxTE_PROCESS_ENTER)
+  MACRO(wxTE_PROCESS_TAB)
+  MACRO(wxTE_RICH2)
+  MACRO(wxTE_RIGHT)
+  MACRO(wxTE_WORDWRAP)
 
   // wxStaticLine
   MACRO(wxLI_HORIZONTAL)

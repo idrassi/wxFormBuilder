@@ -23,13 +23,16 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifndef __WXMSW__
+  #include "icons/wxwin16x16.xpm"
+#endif //__WXMSW__
+
 #include "mainframe.h"
 #include "wx/splitter.h"
 #include "wx/config.h"
 #include "utils/debug.h"
 #include "rad/title.h"
 #include "rad/bitmaps.h"
-#include "icons/wxwin16x16.xpm"
 #include "icons/system.xpm"
 #include "icons/undo.xpm"
 #include "icons/redo.xpm"
@@ -125,7 +128,12 @@ END_EVENT_TABLE()
 MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   : wxFrame(parent,id,wxT("wxFormBuilder v.0.1"),wxDefaultPosition,wxSize(1000,800))
 {
+  #ifdef __WXMSW__
+  SetIcon(wxICON(A));
+  #elif
   SetIcon(wxIcon(wxwin16x16_xpm));
+  #endif
+
   wxString date(wxT(__DATE__));
   wxString time(wxT(__TIME__));
   SetTitle(wxT("wxFormBuilder (Build on ") + date +wxT(" - ")+ time + wxT(")"));
