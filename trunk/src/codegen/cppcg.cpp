@@ -274,7 +274,7 @@ bool CppCodeGenerator::GenerateCode(PObjectBase project)
   string code_header (
    "///////////////////////////////////////////////////////////////////////////\n"
    "// C++ code generated with wxFormBuilder (version " __DATE__ ")\n"
-   "// http://wxformbuilder.software-libre.org/\n"
+   "// http://wxformbuilder.sourceforge.net/\n"
    "//\n"
    "// PLEASE DO \"NOT\" EDIT THIS FILE!\n"
    "///////////////////////////////////////////////////////////////////////////\n");
@@ -301,13 +301,17 @@ bool CppCodeGenerator::GenerateCode(PObjectBase project)
   m_header->WriteLn(code_header);
   m_header->WriteLn("");
 
+  // generamos en el h los includes de las dependencias de los componentes.
+  GenIncludes(project);
+
+  code_header = GetCode(project,"header_epilogue");
+  m_header->WriteLn(code_header);
+  m_header->WriteLn("");
+
   // en el cpp generamos el include del .h generado y los xpm
   m_source->WriteLn("#include \""+file+".h\"");
   m_source->WriteLn("");
   GenXpmIncludes(project);
-
-  // generamos en el h los includes de las dependencias de los componentes.
-  GenIncludes(project);
 
   // generamos los defines de las macros
   GenDefines(project);
@@ -437,7 +441,7 @@ void CppCodeGenerator::GenClassDeclaration(PObjectBase class_obj)
 
 void CppCodeGenerator::GenIncludes(PObjectBase project)
 {
-  m_header->WriteLn("#include <wx/wx.h>");
+  //m_header->WriteLn("#include <wx/wx.h>");
   // almacenaremos todos los objetos diferentes que se encuentran en el
   // proyecto para luego generar los includes.
   set<PObjectInfo> info_set;

@@ -1,14 +1,27 @@
 <codegen language="C++">
   <templates class="Project">
     <template name="header_preamble">
-      @#include "wx/wxprec.h" #nl #nl
-      @#ifdef __BORLANDC__    #nl
-        @#pragma hdrstop      #nl
-      @#endif                 #nl
-                              #nl
-      @#ifndef WX_PRECOMP     #nl
-      @#include "wx/wx.h"     #nl
-      @#endif
+      // Define WX_GCH in order to support precompiled headers with GCC compiler. #nl
+      // You have to create the header "wx_pch.h" and include all files needed    #nl
+      // for compile your gui inside it. #nl
+      // Then, compile it and place the file "wx_pch.h.gch" into the same #nl
+      // directory that "wx_pch.h". #nl
+      @#ifdef WX_GCH               #nl
+	@#include &lt;wx_pch.h&gt; #nl
+      @#else //No WX_GCH           #nl
+                                   #nl
+      @#include "wx/wxprec.h"   #nl
+                                #nl
+      @#ifdef __BORLANDC__      #nl
+        @#pragma hdrstop        #nl
+      @#endif //__BORLANDC__    #nl
+                                #nl
+      @#ifndef WX_PRECOMP       #nl
+      @#include &lt;wx/wx.h&gt; #nl
+      @#endif //WX_PRECOMP
+    </template>
+    <template name="header_epilogue">
+      @#endif //WX_GCH
     </template>
   </templates>
 </codegen>
