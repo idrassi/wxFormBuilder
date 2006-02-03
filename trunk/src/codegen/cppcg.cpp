@@ -459,6 +459,9 @@ void CppCodeGenerator::GenIncludes(PObjectBase project)
     if (code_info)
     {
       string include = code_info->GetTemplate("include");
+
+      //Todo: Remove duplicated headers
+	    
       if (include != "")
         m_header->WriteLn(include);
     }

@@ -11,7 +11,19 @@
       <option name="wxCAL_SHOW_SURROUNDING_WEEKS" />
       <option name="wxCAL_SEQUENTIAL_MONTH_SELECTION" />wxCAL_SHOW_HOLIDAYS</property>
   </objectinfo>
-  
+
+  <objectinfo class="wxDatePickerCtrl" icon="datepicker.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_datePicker</property>
+    <property name="style" type="bitlist">
+      <option name="wxDP_SPIN" />
+      <option name="wxDP_DROPDOWN" />
+      <option name="wxDP_DEFAULT" />
+      <option name="wxDP_ALLOWNONE" />
+      <option name="wxCAL_NO_MONTH_CHANGE" />
+      <option name="wxDP_SHOWCENTURY" />wxDP_DROPDOWN</property>
+  </objectinfo>
+
   <objectinfo class="wxHtmlWindow" icon="htmlwin.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text">m_htmlWin</property>

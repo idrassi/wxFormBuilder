@@ -6,6 +6,12 @@
     <template name="include">#include &lt;wx/calctrl.h&gt;</template>
   </templates>
 
+  <templates class="wxDatePickerCtrl">
+    <template name="declaration">wxDatePickerCtrl *$name;</template>
+    <template name="construction">$name = new wxDatePickerCtrl(#wxparent $name, $id, wxDefaultDateTime, $pos, $size, $style);</template>
+    <template name="include">#include &lt;wx/datectrl.h&gt;</template>
+  </templates>
+
   <templates class="wxHtmlWindow">
     <template name="declaration">wxHtmlWindow *$name;</template>
     <template name="construction">$name = new wxHtmlWindow(#wxparent $name, $id, $pos, $size, $style);</template>

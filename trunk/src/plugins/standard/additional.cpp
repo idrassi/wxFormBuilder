@@ -29,6 +29,7 @@
 //#include "icons/unknown.xpm"
 
 #include <wx/calctrl.h>
+#include <wx/datectrl.h>
 #include <wx/html/htmlwin.h>
 #include <wx/treectrl.h>
 #include <wx/spinbutt.h>
@@ -129,6 +130,21 @@ public:
     return filter.GetXfbObject();
   }
 };
+
+class DatePickerCtrlComponent : public ComponentBase
+{
+public:
+
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    return new wxDatePickerCtrl((wxWindow *)parent,-1,
+      wxDefaultDateTime,
+      obj->GetPropertyAsPoint(_("pos")),
+      obj->GetPropertyAsSize(_("size")),
+      obj->GetPropertyAsInteger(_("style")));
+  }
+};
+
 
 class HtmlWindowComponent : public ComponentBase
 {
@@ -461,11 +477,14 @@ public:
     return filter.GetXfbObject();
   }
 };
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()
 
   WINDOW_COMPONENT("wxCalendarCtrl",CalendarCtrlComponent)
+  WINDOW_COMPONENT("wxDatePickerCtrl",DatePickerCtrlComponent)
   WINDOW_COMPONENT("wxHtmlWindow",HtmlWindowComponent)
   WINDOW_COMPONENT("wxRadioButton",RadioButtonComponent)
   WINDOW_COMPONENT("wxToggleButton",ToggleButtonComponent)
@@ -487,6 +506,14 @@ BEGIN_LIBRARY()
   MACRO(wxCAL_NO_MONTH_CHANGE)
   MACRO(wxCAL_SHOW_SURROUNDING_WEEKS)
   MACRO(wxCAL_SEQUENTIAL_MONTH_SELECTION)
+
+  // wxDatePickerCtrl
+  MACRO(wxDP_SPIN)
+  MACRO(wxDP_DROPDOWN)
+  MACRO(wxDP_DEFAULT)
+  MACRO(wxDP_ALLOWNONE)
+  MACRO(wxCAL_NO_MONTH_CHANGE)
+  MACRO(wxDP_SHOWCENTURY)
 
   // wxHtmlWindow
   MACRO(wxHW_SCROLLBAR_NEVER)
