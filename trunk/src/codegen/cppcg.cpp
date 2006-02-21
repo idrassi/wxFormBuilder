@@ -309,9 +309,17 @@ bool CppCodeGenerator::GenerateCode(PObjectBase project)
   m_header->WriteLn("");
 
   // en el cpp generamos el include del .h generado y los xpm
+  code_header = GetCode(project,"cpp_preamble");
+  m_source->WriteLn(code_header);
+  m_source->WriteLn("");
+
   m_source->WriteLn("#include \""+file+".h\"");
   m_source->WriteLn("");
   GenXpmIncludes(project);
+
+  code_header = GetCode(project,"cpp_epilogue");
+  m_source->WriteLn(code_header);
+  m_source->WriteLn("");
 
   // generamos los defines de las macros
   GenDefines(project);
@@ -461,7 +469,7 @@ void CppCodeGenerator::GenIncludes(PObjectBase project)
       string include = code_info->GetTemplate("include");
 
       //Todo: Remove duplicated headers
-	    
+
       if (include != "")
         m_header->WriteLn(include);
     }
@@ -571,19 +579,21 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
 
       if (is_widget)
       {
-        // hay que hacer un SetSizer, pero
-        // no hay una plantilla para esta operación :-(
-        // No conviene empotrar plantillas en la aplicación, ya que
-        // para hacer cambios hay que recompilar el código (sin que
-        // sirva de precedente, vamos a hacerlo aquí)
-        string _template = "#wxparent $name->SetSizer($name);\n"
-                           "#wxparent $name->SetAutoLayout(true);\n"
-                           "#wxparent $name->Layout();";
+        // the parent object is not a sizer. There is no template for
+        // this so we'll make it manually.
+        // It's not a good practice to embed templates into the source code,
+        // because you will need to recompile...
+        string _template;
+
+        if (obj->GetParent()->GetObjectTypeName() == "form") // is a top-level sizer?
+          _template = "#wxparent $name->SetSizerAndFit($name);\n";
+        else
+          _template = "#wxparent $name->SetSizer($name);\n";
+
         CppTemplateParser parser(obj,_template);
         parser.UseRelativePath(m_useRelativePath, m_basePath);
         m_source->WriteLn(parser.ParseTemplate());
       }
-
   }
   else if (type == "menu" || type == "submenu")
   {

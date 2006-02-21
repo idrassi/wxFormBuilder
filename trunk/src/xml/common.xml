@@ -269,6 +269,7 @@
     <property name="label" type="wxString">tool</property>
     <property name="bitmap" type="bitmap" />
     <property name="help" type="wxString" />
+    <property name="id" type="macro">ID_DEFAULT</property>
   </objectinfo>
   
   <objectinfo class="wxChoice" icon="choice.xpm" type="widget">

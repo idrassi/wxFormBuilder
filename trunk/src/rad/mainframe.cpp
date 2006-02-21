@@ -130,7 +130,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
 {
   #ifdef __WXMSW__
   SetIcon(wxICON(A));
-  #elif
+  #else
   SetIcon(wxIcon(wxwin16x16_xpm));
   #endif
 

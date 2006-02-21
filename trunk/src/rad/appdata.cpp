@@ -394,6 +394,32 @@ void ApplicationData::ResolveNameConflict(PObjectBase obj)
   nameProp->SetValue(name);
 }
 
+void ApplicationData::ResolveSubtreeNameConflicts(PObjectBase obj, PObjectBase topObj)
+{
+  if (!topObj)
+  {
+    topObj = obj->FindNearAncestor("form");
+    if (!topObj)
+      topObj = m_project; // object is the project
+  }
+
+  // Ignore item objects
+  while (obj && obj->GetObjectInfo()->GetObjectType()->IsItem())
+  {
+    if (obj->GetChildCount() > 0)
+      obj = obj->GetChild(0);
+    else
+      return; // error
+  }
+
+  // Resolve a possible name conflict
+  ResolveNameConflict(obj);
+
+  // Recurse through all children
+  for (unsigned int i=0 ; i < obj->GetChildCount() ; i++)
+    ResolveSubtreeNameConflicts(obj->GetChild(i), topObj);
+}
+
 int ApplicationData::CalcPositionOfInsertion(PObjectBase selected,PObjectBase parent)
 {
   int pos = -1;
@@ -654,6 +680,8 @@ void ApplicationData::PasteObject(PObjectBase parent)
 
       if (!m_copyOnPaste)
         m_clipboard.reset();
+
+      ResolveSubtreeNameConflicts(obj);
 
       DataObservable::NotifyProjectRefresh();
 

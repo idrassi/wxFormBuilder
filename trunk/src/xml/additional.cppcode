@@ -22,7 +22,6 @@
   <templates class="wxRadioButton">
     <template name="declaration">wxRadioButton *$name;</template>
     <template name="construction">$name = new wxRadioButton(#wxparent $name, $id, $label, $pos, $size, $style);</template>
-    <template name="include">#include &lt;wx/radiobut.h&gt;</template>
   </templates>
 
   <templates class="wxToggleButton">
@@ -40,7 +39,6 @@
   <templates class="wxScrollBar">
     <template name="declaration">wxScrollBar *$name;</template>
     <template name="construction">$name = new wxScrollBar(#wxparent $name, $id, $pos, $size, $style);</template>
-    <template name="include">#include &lt;wx/scrolbar.h&gt;</template>
   </templates>
 
   <templates class="wxSpinCtrl">
@@ -70,7 +68,5 @@
         $name = new wxCheckListBox(#wxparent $name, $id, $pos, $size,__nchoices,__choices,$style);
       }#nl
     </template>
-    <template name="include">#include &lt;wx/checklst.h&gt;</template>
   </templates>
-  
 </codegen>

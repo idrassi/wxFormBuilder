@@ -62,6 +62,11 @@ class ApplicationData : public DataObservable
   void ResolveNameConflict(PObjectBase obj);
 
   /**
+   *
+   */
+  void ResolveSubtreeNameConflicts(PObjectBase obj, PObjectBase topObj = PObjectBase());
+
+  /**
    * Rutina auxiliar de ResolveNameConflict
    */
   void BuildNameSet(PObjectBase obj, PObjectBase top, set<string> &name_set);
