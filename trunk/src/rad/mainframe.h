@@ -91,6 +91,8 @@ class MainFrame : public DataObserver, public wxFrame
   void OnToggleStretch (wxCommandEvent &event);
   void OnMoveUp (wxCommandEvent &event);
   void OnMoveDown (wxCommandEvent &event);
+  void OnMoveLeft (wxCommandEvent &event);
+  void OnMoveRight (wxCommandEvent &event);
   void OnChangeAlignment (wxCommandEvent &event);
   void OnChangeBorder(wxCommandEvent& e);
 

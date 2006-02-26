@@ -68,5 +68,14 @@
         $name = new wxCheckListBox(#wxparent $name, $id, $pos, $size,__nchoices,__choices,$style);
       }#nl
     </template>
+  </templates> 
+  
+  <templates class="wxScrolledWindow">
+    <template name="declaration">wxScrolledWindow *$name;</template>
+    <template name="construction">
+      $name = new wxScrolledWindow(#wxparent $name, $id, $pos, $size, $style); #nl
+      $name->SetScrollRate($scroll_rate_x,$scroll_rate_y);
+    </template>
   </templates>
+
 </codegen>

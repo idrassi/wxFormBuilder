@@ -25,10 +25,10 @@
 
 /*
   NOTAS:
-  
+
   La implementación realizada para la generación de las rutas relativas
   es un "apaño" y no una solución.
-  
+
   En valor de toda propiedad que sea una ruta de un fichero o un directorio
   debe estar de forma absoluta, de lo contrario no funcionará la generación
   de código.
@@ -50,16 +50,16 @@ class CppTemplateParser : public TemplateParser
  private:
   bool m_useRelativePath;
   string m_basePath;
-  
+
  public:
-  CppTemplateParser(PObjectBase obj, string _template); 
-  
+  CppTemplateParser(PObjectBase obj, string _template);
+
   // redefinidas para C++
-  PTemplateParser CreateParser(PObjectBase obj, string _template); 
+  PTemplateParser CreateParser(PObjectBase obj, string _template);
   string RootWxParentToCode();
-  //string PropertyToCode(PProperty property); 
+  //string PropertyToCode(PProperty property);
   string ValueToCode(PropertyType type, string value);
-  
+
   // genera rutas relativas en los nombres de archivo
   bool UseRelativePath(bool relative = false, string basePath = "");
 };
@@ -71,18 +71,18 @@ class CppCodeGenerator : public CodeGenerator
 {
  private:
   typedef enum {P_PRIVATE, P_PROTECTED, P_PUBLIC} Permission;
-  
+
   PCodeWriter m_header;
   PCodeWriter m_source;
-  
+
   bool m_useRelativePath;
   string m_basePath;
-  
+
   /**
    * Las macros predefinidas no generarán defines.
    */
   set<string> m_predMacros;
-  
+
   void SetupPredefinedMacros();
 
   /**
@@ -95,13 +95,13 @@ class CppCodeGenerator : public CodeGenerator
    * los includes.
    */
   void FindDependencies(PObjectBase obj, set<PObjectInfo> &info_set);
-  
+
   /**
    * Guarda el conjunto de "includes" que hay que generar para las propiedades
    * PT_XPM_BITMAP.
    */
   void FindXpmProperties(PObjectBase obj, set<string> &set);
-  
+
   /**
    * Guarda todos las propiedades de objetos de tipo "macro" para generar
    * su posterior '#define'.
@@ -111,78 +111,83 @@ class CppCodeGenerator : public CodeGenerator
   /**
    * Genera la declaración de clases en el fichero de cabecera.
    */
-  void GenClassDeclaration(PObjectBase class_obj);   
-  
+  void GenClassDeclaration(PObjectBase class_obj, bool use_enum);
+
   /**
    * Función recursiva para la declaración de atributos, usada dentro
    * de GenClassDeclaration.
    */
   void GenAttributeDeclaration(PObjectBase obj, Permission perm);
-  
+
   /**
    * Genera la sección de '#include' fichero.
    */
   void GenIncludes(PObjectBase project);
-  
+
   /**
    * Genera la sección de '#include' para las propiedades XPM.
    */
   void GenXpmIncludes(PObjectBase project);
-  
+
   /**
    * Genera la sección de '#define' macro.
    */
   void GenDefines(PObjectBase project);
 
   /**
+   * Generate a enum with wxWindow identifiers.
+   */
+  void GenEnumIds(PObjectBase class_obj);
+
+  /**
    * Genera el constructor de una clase.
-   */ 
+   */
   void GenConstructor(PObjectBase class_obj);
-  
+
   /**
    * Realiza la construcción de los objetos, configurando las propiedades del
    * objeto y las de layout.
    * El algoritmo es similar al de generación de la vista previa en el designer.
    */
   void GenConstruction(PObjectBase obj, bool is_widget);
-  
+
   /**
    * Configura las propiedades del objeto, tanto las propias como las heredadas.
    * Se le pasa la información de la clase porque recursivamente, realizará
    * la configuración en las super-clases.
    */
   void GenSettings(PObjectInfo info, PObjectBase obj);
-  
+
   /**
    * Añade un control a una toolbar. Hay que pasarle el objectinfo de tipo
    * wxWindow, donde se encuentra la plantilla, y el objectbase del control
    */
   void GenAddToolbar(PObjectInfo info, PObjectBase obj);
-  
+
  public:
   /**
    * Convierte una cadena de texto a formato "C/C++"
    */
-  static string ConvertCppString(string text); 
-  
+  static string ConvertCppString(string text);
+
   /**
    * Convierte un path a path relativo.
    */
   //static string ConvertToRelativePath(string path, string basePath);
-  
+
   /**
    * Convierte una cadena de texto con el nombre de un fichero XPM
    * y genera el nombre del identificador de "C/C++" asociado.
    */
   static string ConvertXpmName(string text);
-  
+
   CppCodeGenerator();
-    
+
   /**
    * Configura el escritor de código para el fichero de cabecera.
-   */ 
+   */
   void SetHeaderWriter(PCodeWriter cw) { m_header = cw; }
-  
+
   /**
    * Configura el escritor de código para el fichero de fuente.
    */
@@ -201,8 +206,8 @@ class CppCodeGenerator : public CodeGenerator
 
   /**
    * Genera el código del proyecto.
-   */  
-  bool GenerateCode(PObjectBase project); 
+   */
+  bool GenerateCode(PObjectBase project);
 };
 
 

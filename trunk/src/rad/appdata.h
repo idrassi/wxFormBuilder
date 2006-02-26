@@ -62,7 +62,7 @@ class ApplicationData : public DataObservable
   void ResolveNameConflict(PObjectBase obj);
 
   /**
-   *
+   * Rename all objects that have the same name than any object of a subtree.
    */
   void ResolveSubtreeNameConflicts(PObjectBase obj, PObjectBase topObj = PObjectBase());
 
@@ -104,6 +104,11 @@ class ApplicationData : public DataObservable
 
    void Execute(PCommand cmd);
 
+   /**
+    * Search a size in the hierarchy of an object
+    */
+   PObjectBase SearchSizerInto(PObjectBase obj);
+
  public:
   ApplicationData(const string &rootdir = ".");
 
@@ -122,6 +127,7 @@ class ApplicationData : public DataObservable
   void ModifyProperty(PProperty prop, wxString value);
   void GenerateCode();
   void MovePosition(PObjectBase, bool right, unsigned int num = 1);
+  void MoveHierarchy(PObjectBase obj, bool up);
   void Undo();
   void Redo();
   void ToggleExpandLayout(PObjectBase obj);

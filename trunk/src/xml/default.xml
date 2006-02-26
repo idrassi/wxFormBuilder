@@ -7,9 +7,10 @@
     <property name="code_generation" type="bitlist">
       <option name="C++" />
       <option name="XRC" />C++</property>
+    <property name="use_enum" type="bool">0</property> 
   </objectinfo> 
   <objectinfo class="C++" type="interface">
-    <property name="permission" type="option" hidden="1">
+    <property name="permission" type="option">
       <option name="none" />
       <option name="private" />
       <option name="protected" />

@@ -478,6 +478,23 @@ public:
   }
 };
 
+class ScrolledWindowComponent : public ComponentBase
+{
+public:
+
+  wxObject* Create(IObject *obj, wxObject *parent)
+  {
+    wxScrolledWindow *sw = new wxScrolledWindow((wxWindow *)parent, -1,
+      obj->GetPropertyAsPoint(_("pos")),
+      obj->GetPropertyAsSize(_("size")),
+      obj->GetPropertyAsInteger(_("style")));
+
+    sw->SetScrollRate(
+      obj->GetPropertyAsInteger(_("scroll_rate_x")),
+      obj->GetPropertyAsInteger(_("scroll_rate_y")));
+    return sw;
+  }
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -493,10 +510,13 @@ BEGIN_LIBRARY()
   WINDOW_COMPONENT("wxSpinCtrl",SpinCtrlComponent)
   WINDOW_COMPONENT("wxSpinButton",SpinButtonComponent)
   WINDOW_COMPONENT("wxSplitterWindow",SplitterWindowComponent)
+  WINDOW_COMPONENT("wxScrolledWindow",ScrolledWindowComponent)
+  WINDOW_COMPONENT("wxCheckList",CheckListBoxComponent)
+
   ABSTRACT_COMPONENT("splitteritem",SplitterItemComponent)
 
   // wxCheckListBox
-  WINDOW_COMPONENT("wxCheckList",CheckListBoxComponent)
+
 
   // wxCalendarCtrl
   MACRO(wxCAL_SUNDAY_FIRST)
@@ -563,6 +583,10 @@ BEGIN_LIBRARY()
 
   MACRO(wxSPLIT_VERTICAL)
   MACRO(wxSPLIT_HORIZONTAL)
+
+  // wxScrolledWindow
+  MACRO(wxHSCROLL);
+  MACRO(wxVSCROLL);
 
 END_LIBRARY()
 

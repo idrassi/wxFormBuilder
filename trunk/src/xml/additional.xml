@@ -135,4 +135,13 @@
     <property name="choices" type="stringlist" />
   </objectinfo>
 
+  <objectinfo class="wxScrolledWindow" icon="scrollwin.xpm" type="container">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_scrolledWindow</property>
+    <property name="style" type="bitlist">
+      <option name="wxHSCROLL" />
+      <option name="wxVSCROLL" />wxHSCROLL|wxVSCROLL</property>
+    <property name="scroll_rate_x" type="text">5</property>
+    <property name="scroll_rate_y" type="text">5</property>
+  </objectinfo>
 </package>

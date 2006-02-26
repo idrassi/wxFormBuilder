@@ -92,6 +92,9 @@
 #define ID_BORDER_TOP     131
 #define ID_BORDER_BOTTOM  132
 
+#define ID_MOVE_LEFT 133
+#define ID_MOVE_RIGHT  134
+
 BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_NEW_PRJ,MainFrame::OnNewProject)
   EVT_MENU(ID_SAVE_PRJ,MainFrame::OnSaveProject)
@@ -111,6 +114,8 @@ BEGIN_EVENT_TABLE(MainFrame,wxFrame)
   EVT_MENU(ID_STRETCH,MainFrame::OnToggleStretch)
   EVT_MENU(ID_MOVE_UP,MainFrame::OnMoveUp)
   EVT_MENU(ID_MOVE_DOWN,MainFrame::OnMoveDown)
+  EVT_MENU(ID_MOVE_LEFT,MainFrame::OnMoveLeft)
+  EVT_MENU(ID_MOVE_RIGHT,MainFrame::OnMoveRight)
   EVT_MENU(ID_RECENT_0,MainFrame::OnOpenRecent)
   EVT_MENU(ID_RECENT_1,MainFrame::OnOpenRecent)
   EVT_MENU(ID_RECENT_2,MainFrame::OnOpenRecent)
@@ -167,6 +172,8 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
   menuEdit->Append(ID_STRETCH, _T("&Toggle Stretch\tALT+S"), _T("Toggle option property of sizeritem properties"));
   menuEdit->Append(ID_MOVE_UP, _T("&Move Up\tALT+Up"), _T("Move Up selected object"));
   menuEdit->Append(ID_MOVE_DOWN, _T("&Move Down\tALT+Down"), _T("Move Down selected object"));
+  menuEdit->Append(ID_MOVE_LEFT, _T("&Move Left\tALT+Left"), _T("Move Left selected object"));
+  menuEdit->Append(ID_MOVE_RIGHT, _T("&Move Right\tALT+Right"), _T("Move Right selected object"));
   menuEdit->AppendSeparator();
   menuEdit->Append(ID_ALIGN_LEFT,     _T("&Align Left"),           _T("Align item to the left"));
   menuEdit->Append(ID_ALIGN_CENTER_H, _T("&Align Center Horizontal"), _T("Align item to the center horizontally"));
@@ -413,7 +420,7 @@ void MainFrame::OnSaveProject(wxCommandEvent &event)
 void MainFrame::OnSaveAsProject(wxCommandEvent &event)
 {
   wxFileDialog *dialog = new wxFileDialog(this,wxT("Open Project"),m_currentDir,
-    wxT("example.fbp"),wxT("*.fbp | wxFormBuilder Project File"),wxSAVE);
+    wxT("example.fbp"),wxT("wxFormBuilder Project File (*.fbp)|*.fbp |All files (*.*)|*.*"),wxSAVE);
 
   if (dialog->ShowModal() == wxID_OK)
   {
@@ -432,7 +439,7 @@ void MainFrame::OnOpenProject(wxCommandEvent &event)
     return;
 
   wxFileDialog *dialog = new wxFileDialog(this,wxT("Open Project"),m_currentDir,
-    wxT("example.fbp"),wxT("*.fbp"),wxOPEN | wxHIDE_READONLY);
+    wxT("example.fbp"),wxT("wxFormBuilder Project File (*.fbp)|*.fbp |All files (*.*)|*.*"),wxOPEN | wxHIDE_READONLY);
 
   if (dialog->ShowModal() == wxID_OK)
   {
@@ -770,6 +777,16 @@ void MainFrame::OnMoveUp (wxCommandEvent &event)
 void MainFrame::OnMoveDown (wxCommandEvent &event)
 {
   GetData()->MovePosition(GetData()->GetSelectedObject(),true,1);
+}
+
+void MainFrame::OnMoveLeft (wxCommandEvent &event)
+{
+  GetData()->MoveHierarchy(GetData()->GetSelectedObject(),true);
+}
+
+void MainFrame::OnMoveRight (wxCommandEvent &event)
+{
+  GetData()->MoveHierarchy(GetData()->GetSelectedObject(),false);
 }
 
 void MainFrame::OnChangeAlignment (wxCommandEvent &event)

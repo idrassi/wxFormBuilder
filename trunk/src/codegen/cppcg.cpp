@@ -267,6 +267,12 @@ bool CppCodeGenerator::GenerateCode(PObjectBase project)
     return false;
   }
 
+  bool useEnum = false;
+
+  PProperty useEnumProperty = project->GetProperty("use_enum");
+  if (useEnumProperty && useEnumProperty->GetValueAsInteger())
+    useEnum = true;
+
   m_header->Clear();
   m_source->Clear();
   string date(__DATE__);
@@ -322,11 +328,12 @@ bool CppCodeGenerator::GenerateCode(PObjectBase project)
   m_source->WriteLn("");
 
   // generamos los defines de las macros
-  GenDefines(project);
+  if (!useEnum)
+    GenDefines(project);
 
   for (unsigned int i=0; i<project->GetChildCount(); i++)
   {
-    GenClassDeclaration(project->GetChild(i));
+    GenClassDeclaration(project->GetChild(i), useEnum);
     GenConstructor(project->GetChild(i));
   }
 
@@ -391,7 +398,7 @@ string CppCodeGenerator::GetCode(PObjectBase obj, string name)
   return code;
 }
 
-void CppCodeGenerator::GenClassDeclaration(PObjectBase class_obj)
+void CppCodeGenerator::GenClassDeclaration(PObjectBase class_obj, bool use_enum)
 {
   PProperty propName = class_obj->GetProperty("name");
   if (!propName)
@@ -419,6 +426,10 @@ void CppCodeGenerator::GenClassDeclaration(PObjectBase class_obj)
   // private
   m_header->WriteLn("private:");
   m_header->Indent();
+
+  if (use_enum)
+    GenEnumIds(class_obj);
+
   GenAttributeDeclaration(class_obj,P_PRIVATE);
   m_header->Unindent();
   m_header->WriteLn("");
@@ -446,6 +457,36 @@ void CppCodeGenerator::GenClassDeclaration(PObjectBase class_obj)
   m_header->WriteLn("");
 }
 
+void CppCodeGenerator::GenEnumIds(PObjectBase class_obj)
+{
+  set<string> macro_set;
+  FindMacros(class_obj,macro_set);
+
+  set<string>::iterator it = macro_set.begin();
+  if ( it != macro_set.end())
+  {
+    string id;
+
+    m_header->WriteLn("enum {");
+    m_header->Indent();
+
+    id = (*it);
+
+    it++;
+    while (it != macro_set.end())
+    {
+      id = id + ",";
+      m_header->WriteLn(id);
+      id = *it;
+      it++;
+    }
+
+    m_header->WriteLn(id);
+    m_header->Unindent();
+    m_header->WriteLn("};");
+    m_header->WriteLn("");
+  }
+}
 
 void CppCodeGenerator::GenIncludes(PObjectBase project)
 {

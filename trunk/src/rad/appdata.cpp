@@ -472,6 +472,21 @@ void ApplicationData::RemoveEmptyItems(PObjectBase obj)
     RemoveEmptyItems(obj->GetChild(i));
 }
 
+PObjectBase ApplicationData::SearchSizerInto(PObjectBase obj)
+{
+  PObjectBase theSizer;
+
+  if (obj->GetObjectTypeName() == "sizer")
+    theSizer = obj;
+  else
+  {
+    for (unsigned int i = 0; !theSizer && i < obj->GetChildCount(); i++)
+      theSizer = SearchSizerInto(obj->GetChild(i));
+  }
+
+  return theSizer;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 void ApplicationData::SelectObject(PObjectBase obj)
@@ -837,6 +852,53 @@ void ApplicationData::MovePosition(PObjectBase obj, bool right, unsigned int num
     }
   }
 }
+
+void ApplicationData::MoveHierarchy(PObjectBase obj, bool up)
+{
+  PObjectBase sizeritem = obj->GetParent();
+
+  // object must be inside a sizer
+  if (sizeritem && sizeritem->GetObjectTypeName() == "sizeritem")
+  {
+    PObjectBase nextSizer = sizeritem->GetParent(); // points to the object's sizer
+    if (nextSizer)
+    {
+      if (up)
+      {
+        do
+          nextSizer = nextSizer->GetParent();
+        while (nextSizer && nextSizer->GetObjectTypeName() != "sizer");
+
+        if (nextSizer && nextSizer->GetObjectTypeName() == "sizer")
+        {
+          PCommand cmdReparent(new ReparentObjectCmd(sizeritem,nextSizer));
+			    Execute(cmdReparent);
+			    DataObservable::NotifyProjectRefresh();
+			    SelectObject(obj);
+        }
+      }
+      else
+      {
+        // object will be move to the top sizer of the next sibling object
+        // subtree.
+        unsigned int pos = nextSizer->GetChildPosition(sizeritem) + 1;
+
+        if (pos < nextSizer->GetChildCount())
+        {
+          nextSizer = SearchSizerInto(nextSizer->GetChild(pos));
+          if (nextSizer)
+          {
+            PCommand cmdReparent(new ReparentObjectCmd(sizeritem,nextSizer));
+	  		    Execute(cmdReparent);
+  			    DataObservable::NotifyProjectRefresh();
+  			    SelectObject(obj);
+          }
+        }
+      }
+    }
+  }
+}
+
 
 void ApplicationData::Undo()
 {
