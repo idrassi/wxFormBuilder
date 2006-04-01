@@ -8,6 +8,7 @@
       <option name="C++" />
       <option name="XRC" />C++</property>
     <property name="use_enum" type="bool">0</property> 
+    <property name="xrc_encoding" type="text">ISO-8859-1</property>
   </objectinfo> 
   <objectinfo class="C++" type="interface">
     <property name="permission" type="option">
