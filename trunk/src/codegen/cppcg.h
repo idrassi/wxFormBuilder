@@ -49,6 +49,7 @@ class CppTemplateParser : public TemplateParser
 {
  private:
   bool m_useRelativePath;
+  bool m_i18n;
   string m_basePath;
 
  public:
@@ -62,6 +63,7 @@ class CppTemplateParser : public TemplateParser
 
   // genera rutas relativas en los nombres de archivo
   bool UseRelativePath(bool relative = false, string basePath = "");
+  void UseI18n(bool i18n);
 };
 
 /**
@@ -76,6 +78,7 @@ class CppCodeGenerator : public CodeGenerator
   PCodeWriter m_source;
 
   bool m_useRelativePath;
+  bool m_i18n;
   string m_basePath;
 
   /**

@@ -38,7 +38,7 @@
 #include "rad/mainframe.h"
 #include "rad/appdata.h"
 #include <wx/filename.h>
-
+#include <wx/sysopt.h>
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
     #include "wxwin32x32.xpm"
@@ -66,6 +66,8 @@ bool MyApp::OnInit()
 {
   GlobalDataInit();
   wxInitAllImageHandlers();
+
+  wxSystemOptions::SetOption(wxT("msw.staticbox.optimized-paint"), 0);
 
   // Obtenemos la ruta del ejecutable
   wxString exeFile(argv[0]);

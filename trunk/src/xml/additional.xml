@@ -56,7 +56,7 @@
   <objectinfo class="wxRadioButton" icon="radio_button.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text">m_radioBtn</property>
-    <property name="label" type="wxString">RadioBtn</property>
+    <property name="label" type="wxString_i18n">RadioBtn</property>
     <property name="style" type="bitlist">
       <option name="wxRB_GROUP" />
       <option name="wxRB_SINGLE" />
@@ -67,7 +67,7 @@
   <objectinfo class="wxToggleButton" icon="toggle_button.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text">m_toggleBtn</property>
-    <property name="label" type="wxString">Toggle me!</property>
+    <property name="label" type="wxString_i18n">Toggle me!</property>
     <property name="value" type="bool">0</property>
   </objectinfo>
   

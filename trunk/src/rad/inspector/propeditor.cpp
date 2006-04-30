@@ -43,13 +43,13 @@ wxWindow * PropertyEditor::CreatePropertyEditor(DataObservable *data,
   if (value == wxT(""))
     value = wxString(prop_desc->GetDefaultValue().c_str(),wxConvUTF8);
   */
-  
-  if (type == PT_TEXT || type == PT_MACRO || type == PT_WXSTRING)
+
+  if (type == PT_TEXT || type == PT_MACRO || type == PT_WXSTRING || type == PT_WXSTRING_I18N)
     result = new TextEditor(data,prop,parent,-1);
 
   else if (type == PT_BOOL)
     result = new BoolEditor(data,prop,parent,-1);
-    
+
   else if (type == PT_BITLIST)
     result = new BitlistEditor(data,prop,parent,-1);
 
@@ -64,7 +64,7 @@ wxWindow * PropertyEditor::CreatePropertyEditor(DataObservable *data,
 
   else if (type == PT_WXSIZE)
     result = new PointEditor(data,prop,parent,-1);
-  
+
   else if (type == PT_WXFONT)
     result = new FontEditor(data,prop,parent,-1);
 
@@ -73,10 +73,10 @@ wxWindow * PropertyEditor::CreatePropertyEditor(DataObservable *data,
 
   else if (type == PT_PATH)
     result = new PathEditor(data,prop,parent,-1);
-  
+
   else if (type == PT_BITMAP)
     result = new BitmapEditor(data,prop,parent,-1);
-    
+
   return result;
 }
 
@@ -87,28 +87,28 @@ PointEditor::PointEditor(DataObservable *data, PProperty prop, wxWindow *parent,
   RetrieveValue();
   PushEventHandler(new UpdateEventHandler(this));
 }
-  
+
 PointEditor::~PointEditor()
 {
 //  UpdateValue();
-}  
-   
+}
+
 void PointEditor::RetrieveValue()
 {
   SetValue(wxString(GetProperty()->GetValue().c_str(),wxConvUTF8));
 }
-  
+
 void PointEditor::UpdateValue()
 {
   wxString val = GetValue();
   wxPoint point;
   // chequeamos si es un valor bueno
-  
+
   if (!StringToPoint(val,&point))
     val = wxT("");
-    
+
   GetData()->ModifyProperty(GetProperty(),val);
-}  
+}
 
 
 OptionEditor::OptionEditor(DataObservable *data, PProperty prop, wxWindow *parent, int id)
@@ -119,27 +119,27 @@ OptionEditor::OptionEditor(DataObservable *data, PProperty prop, wxWindow *paren
   POptionList opt_list = prop_desc->GetOptionList();
   for (unsigned int i=0; i<opt_list->GetOptionCount() ;i++)
     Append(wxString(opt_list->GetOption(i).c_str(),wxConvUTF8));
-    
+
   RetrieveValue();
   PushEventHandler(new UpdateEventHandler(this));
-}  
+}
 
 void OptionEditor::RetrieveValue()
 {
   ParseValue(wxString(GetProperty()->GetValue().c_str(),wxConvUTF8));
-}  
-  
+}
+
 void OptionEditor::UpdateValue()
 {
  //GetProperty()->SetValue(GetString(GetSelection()).c_str());
   wxString val = GetString(GetSelection());
   GetData()->ModifyProperty(GetProperty(),val);
-}  
+}
 
 OptionEditor::~OptionEditor()
 {
 //  UpdateValue();
-}  
+}
 
 void OptionEditor::ParseValue(const wxString &val)
 {
@@ -148,7 +148,7 @@ void OptionEditor::ParseValue(const wxString &val)
     int i=0;
     while (i < GetCount() && val != GetString(i))
       i++;
-      
+
     if (i < GetCount())
       SetValue(GetString(i));
     else
@@ -166,25 +166,25 @@ BitlistEditor::BitlistEditor(DataObservable *data, PProperty prop, wxWindow *par
 {
   PPropertyInfo prop_desc = prop->GetPropertyInfo();
   POptionList opt_list = prop_desc->GetOptionList();
-  
+
   assert(opt_list && opt_list->GetOptionCount() > 0);
-  
+
   for (unsigned int i=0; i<opt_list->GetOptionCount() ;i++)
     Append(wxString(opt_list->GetOption(i).c_str(),wxConvUTF8));
-    
+
   RetrieveValue();
   PushEventHandler(new UpdateEventHandler(this));
-}  
+}
 
 BitlistEditor::~BitlistEditor()
 {
 //  UpdateValue();
-}  
+}
 
 void BitlistEditor::RetrieveValue()
 {
   ParseValue(wxString(GetProperty()->GetValue().c_str(),wxConvUTF8));
-}  
+}
 
 void BitlistEditor::ParseValue(const wxString &val)
 {
@@ -197,39 +197,39 @@ void BitlistEditor::ParseValue(const wxString &val)
       token = tkz.GetNextToken();
       token.Trim(true);
       token.Trim(false);
-      
+
       int i=0;
       while (i < GetCount() && token != GetString(i))
         i++;
-        
+
       if (i < GetCount())
         SetSelection(i);
-    }  
-  }  
-}  
-  
+    }
+  }
+}
+
 void BitlistEditor::UpdateValue()
 {
   wxString val;
-  
+
   for (int i=0; i < GetCount() ; i++)
   {
     if (Selected(i))
     {
       if (val != wxT(""))
         val = val + wxT("|");
-        
+
       val = val + GetString(i);
-    }  
-  }  
-  
+    }
+  }
+
   //GetProperty()->SetValue(val.c_str());
   GetData()->ModifyProperty(GetProperty(),val);
 }
 
 void BitlistEditor::OnSelectItem(wxCommandEvent &event)
 {
-  UpdateValue();  
+  UpdateValue();
 }
 
 TextEditor::TextEditor(DataObservable *data, PProperty prop, wxWindow *parent, int id)
@@ -238,27 +238,27 @@ TextEditor::TextEditor(DataObservable *data, PProperty prop, wxWindow *parent, i
   RetrieveValue();
   PushEventHandler(new UpdateEventHandler(this));
 }
-  
+
 TextEditor::~TextEditor()
 {
 //  UpdateValue();
-}  
-   
+}
+
 void TextEditor::RetrieveValue()
 {
   SetValue(wxString(GetProperty()->GetValue().c_str(),wxConvUTF8));
 }
-  
+
 void TextEditor::UpdateValue()
 {
-  
+
   wxString val = GetValue();
   if (val != wxT(""))
     //GetProperty()->SetValue(val.c_str());
     GetData()->ModifyProperty(GetProperty(),val);
-    
+
 //  GetProperty()->GetObject()->Notify();
-}  
+}
 
 
 
@@ -278,7 +278,7 @@ void IntlistEditor::RetrieveValue()
   m_list.SetList(GetProperty()->GetValue());
   SetValue(wxString(m_list.ToString().c_str(),wxConvUTF8));
 }
-  
+
 void IntlistEditor::UpdateValue()
 {
   m_list.SetList(string(GetValue().mb_str()));
@@ -286,7 +286,7 @@ void IntlistEditor::UpdateValue()
   if (val != wxT(""))
     //GetProperty()->SetValue(val.c_str());
     GetData()->ModifyProperty(GetProperty(),val);
-}  
+}
 
 
 BoolEditor::BoolEditor(DataObservable *data, PProperty prop, wxWindow *parent, int id)
@@ -299,18 +299,18 @@ BoolEditor::BoolEditor(DataObservable *data, PProperty prop, wxWindow *parent, i
 BoolEditor::~BoolEditor()
 {
 //  UpdateValue();
-}  
+}
 
-  
+
 void BoolEditor::RetrieveValue()
 {
   wxString val(GetProperty()->GetValue().c_str(),wxConvUTF8);
-  
+
   if (val == wxT("1"))
     SetValue(true);
   else
     SetValue(false);
-}  
+}
 
 void BoolEditor::UpdateValue()
 {
@@ -319,7 +319,7 @@ void BoolEditor::UpdateValue()
     val = wxT("1");
   else
     val = wxT("0");
-    
+
   //GetProperty()->SetValue(val.c_str());
   GetData()->ModifyProperty(GetProperty(),val);
 }
@@ -338,7 +338,7 @@ FontEditor::FontEditor(DataObservable *data, PProperty prop, wxWindow *parent, i
     m_text->PushEventHandler(new UpdateEventHandler(this));
 //    m_text->Disable();
     m_button = new wxButton(this,BUTTON_CHOOSE_FONT,wxT("Choose..."));
-    
+
     sizer->Add(m_text,1,wxADJUST_MINSIZE,0);
     sizer->Add(m_button,0,wxADJUST_MINSIZE,0);
     SetSizer(sizer);
@@ -348,20 +348,20 @@ FontEditor::FontEditor(DataObservable *data, PProperty prop, wxWindow *parent, i
 void FontEditor::OnChooseFont(wxCommandEvent &event)
 {
   wxFontData data;
-      
+
   wxFontDialog dialog(this, &data);
   if (dialog.ShowModal() == wxID_OK)
   {
     wxString value;
-    
+
     wxFontData ret_data = dialog.GetFontData();
     // tipo de letra
     wxFont font = ret_data.GetChosenFont();
-    
+
 //    value = wxString::Format(wxT("'%s','%d'"),font.GetFaceName().c_str(),font.GetPointSize());
 //    value = wxString::Format(wxT("'%d','%d'"),font.GetFamily(),font.GetPointSize());
     value = FontToString(font);
-    
+
     m_text->SetValue(value);
     UpdateValue();
   }
@@ -380,7 +380,7 @@ void FontEditor::RetrieveValue()
 void FontEditor::UpdateValue()
 {
   wxString val = m_text->GetValue();
-  GetData()->ModifyProperty(GetProperty(),val);  
+  GetData()->ModifyProperty(GetProperty(),val);
 }
 
 ////////
@@ -397,9 +397,9 @@ ColourEditor::ColourEditor(DataObservable *data, PProperty prop, wxWindow *paren
     m_text = new wxTextCtrl(this,-1,wxT(""));
     m_text->PushEventHandler(new UpdateEventHandler(this));
 //    m_text->Disable();
-    
+
     m_button = new wxButton(this,BUTTON_CHOOSE_COLOUR,wxT("Choose..."));
-    
+
     sizer->Add(m_text,1,wxADJUST_MINSIZE,0);
     sizer->Add(m_button,0,wxADJUST_MINSIZE,0);
     SetSizer(sizer);
@@ -409,7 +409,7 @@ ColourEditor::ColourEditor(DataObservable *data, PProperty prop, wxWindow *paren
 void ColourEditor::OnChooseColour(wxCommandEvent &event)
 {
   wxColourData data;
-    
+
   wxColourDialog dialog(this, &data);
   if (dialog.ShowModal() == wxID_OK)
   {
@@ -435,7 +435,7 @@ void ColourEditor::RetrieveValue()
 void ColourEditor::UpdateValue()
 {
   wxString val = m_text->GetValue();
-  GetData()->ModifyProperty(GetProperty(),val);  
+  GetData()->ModifyProperty(GetProperty(),val);
 }
 
 
@@ -453,10 +453,10 @@ PathEditor::PathEditor(DataObservable *data, PProperty prop, wxWindow *parent, i
     m_text = new wxTextCtrl(this,-1,wxT(""));
     m_text->PushEventHandler(new UpdateEventHandler(this));
 //    m_text->Disable();
-    
+
     m_button = new wxButton(this,BUTTON_SELECT_PATH,wxT("..."),
       wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-    
+
     sizer->Add(m_text,1,wxADJUST_MINSIZE,0);
     sizer->Add(m_button,0,wxADJUST_MINSIZE,0);
     SetSizer(sizer);
@@ -489,7 +489,7 @@ void PathEditor::RetrieveValue()
 void PathEditor::UpdateValue()
 {
   wxString val = m_text->GetValue();
-  GetData()->ModifyProperty(GetProperty(),val);  
+  GetData()->ModifyProperty(GetProperty(),val);
 }
 
 
@@ -506,10 +506,10 @@ BitmapEditor::BitmapEditor(DataObservable *data, PProperty prop, wxWindow *paren
     m_text = new wxTextCtrl(this,-1,wxT(""));
     m_text->PushEventHandler(new UpdateEventHandler(this));
 //    m_text->Disable();
-    
+
     m_button = new wxButton(this,BUTTON_SELECT_BITMAP,wxT("..."),
       wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-    
+
     sizer->Add(m_text,1,wxADJUST_MINSIZE,0);
     sizer->Add(m_button,0,wxADJUST_MINSIZE,0);
     SetSizer(sizer);
@@ -527,7 +527,7 @@ void BitmapEditor::OnSelectBitmap(wxCommandEvent &event)
     m_text->SetValue(path);
     UpdateValue();
   };
-  
+
   dialog->Destroy();
 }
 
@@ -545,12 +545,12 @@ void BitmapEditor::RetrieveValue()
 void BitmapEditor::UpdateValue()
 {
   wxString val = m_text->GetValue();
-  GetData()->ModifyProperty(GetProperty(),val);  
+  GetData()->ModifyProperty(GetProperty(),val);
 }
 
 BEGIN_EVENT_TABLE(UpdateEventHandler, wxEvtHandler)
   EVT_KILL_FOCUS(UpdateEventHandler::OnKillFocus)
-END_EVENT_TABLE()  
+END_EVENT_TABLE()
 
 void UpdateEventHandler::OnKillFocus(wxFocusEvent &event)
 {

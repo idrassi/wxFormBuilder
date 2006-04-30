@@ -24,7 +24,7 @@
       <option name="wxCLIP_CHILDREN" /></property>
     <property name="enabled" type="bool">1</property>
     <property name="hidden" type="bool">0</property>
-    <property name="tooltip" type="wxString" />
+    <property name="tooltip" type="wxString_i18n" />
   </objectinfo>
   
   <objectinfo class="wxButton" icon="button.xpm" type="widget">
@@ -36,7 +36,7 @@
       <option name="wxBU_RIGHT" />
       <option name="wxBU_BOTTOM" />
       <option name="wxBU_EXACTFIT" /></property>
-    <property name="label" type="wxString">MyButton</property>
+    <property name="label" type="wxString_i18n">MyButton</property>
   </objectinfo>
   
   <objectinfo class="wxBitmapButton" icon="bitmap_button.xpm" type="widget">
@@ -85,7 +85,7 @@
       <option name="wxTE_WORDWRAP" />
       <option name="wxTE_BESTWRAP" />
       <option name="wxTE_CAPITALIZE" /></property>
-    <property name="value" type="wxString" /> 
+    <property name="value" type="wxString_i18n" /> 
   </objectinfo>
   
   <objectinfo class="wxStaticText" icon="static_text.xpm" type="widget">
@@ -96,19 +96,19 @@
       <option name="wxALIGN_RIGHT" />
       <option name="wxALIGN_CENTRE" />
       <option name="wxST_NO_AUTORESIZE" /></property>
-    <property name="label" type="wxString">MyLabel</property>
+    <property name="label" type="wxString_i18n">MyLabel</property>
   </objectinfo>
   
   <objectinfo class="wxCheckBox" icon="checkbox.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text">m_checkBox</property>
-    <property name="label" type="wxString">Check Me!</property>
+    <property name="label" type="wxString_i18n">Check Me!</property>
   </objectinfo>  
   
   <objectinfo class="wxComboBox" icon="combo_box.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text">m_comboBox</property>
-    <property name="value" type="wxString">Combo!</property>
+    <property name="value" type="wxString_i18n">Combo!</property>
     <property name="choices" type="stringlist"></property>
     <property name="style" type="bitlist">
       <option name="wxCB_SIMPLE" />
@@ -134,7 +134,7 @@
     <inherits class="wxWindow" />
     <property name="name" type="text">m_radioBox</property>
     <property name="choices" type="stringlist"></property>
-    <property name="label" type="wxString">wxRadioBox</property>
+    <property name="label" type="wxString_i18n">wxRadioBox</property>
     <property name="majorDimension" type="text">1</property>
     <property name="style" type="bitlist">
       <option name="wxRA_SPECIFY_ROWS" />
@@ -178,31 +178,31 @@
   </objectinfo>
 
   <objectinfo class="notebookpage" type="notebookpage">
-    <property name="label" type="wxString">a page</property>
+    <property name="label" type="wxString_i18n">a page</property>
     <property name="select" type="bool">0</property>
   </objectinfo>
 
   <objectinfo class="wxMenuBar" icon="menubar.xpm" type="menubar">
     <inherits class="wxWindow" />
     <property name="name" type="text">m_menubar</property>
-    <property name="label" type="wxString">MyMenuBar</property>
+    <property name="label" type="wxString_i18n">MyMenuBar</property>
   </objectinfo>
   
   <objectinfo class="wxMenu" icon="menu.xpm" type="menu">
     <property name="name" type="text">m_menu</property>
-    <property name="label" type="wxString">MyMenu</property>
+    <property name="label" type="wxString_i18n">MyMenu</property>
   </objectinfo>
   
   <objectinfo class="submenu" icon="menu.xpm" type="submenu">
     <property name="name" type="text">m_menu</property>
-    <property name="label" type="wxString">MyMenu</property>
+    <property name="label" type="wxString_i18n">MyMenu</property>
   </objectinfo>
   
   <objectinfo class="wxMenuItem" icon="menuitem.xpm" type="menuitem">
     <property name="name" type="text">menuItem</property>
-    <property name="label" type="wxString">MyMenuItem</property>
+    <property name="label" type="wxString_i18n">MyMenuItem</property>
     <property name="shortcut" type="wxString"></property>
-    <property name="help" type="wxString"></property>
+    <property name="help" type="wxString_i18n"></property>
     <property name="id" type="macro">ID_DEFAULT</property>
     <property name="bitmap" type="bitmap" />
     <property name="checked" type="bool">0</property>
@@ -266,9 +266,9 @@
   </objectinfo>
   
   <objectinfo class="tool" icon="toolbar.xpm" type="tool">
-    <property name="label" type="wxString">tool</property>
+    <property name="label" type="wxString_i18n">tool</property>
     <property name="bitmap" type="bitmap" />
-    <property name="help" type="wxString" />
+    <property name="help" type="wxString_i18n" />
     <property name="id" type="macro">ID_DEFAULT</property>
   </objectinfo>
   

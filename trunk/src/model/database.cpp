@@ -830,6 +830,7 @@ void ObjectDatabase::InitPropertyTypes()
   PT("bitmap",PT_BITMAP);
   //PT("xpm_bitmap",PT_XPM_BITMAP);
   PT("stringlist",PT_STRINGLIST);
+  PT("wxString_i18n", PT_WXSTRING_I18N);
 }
 
 bool ObjectDatabase::LoadObjectTypes()

@@ -268,18 +268,18 @@ void ObjectInspector::Create(bool force)
   if (sel_obj && (sel_obj != m_currentSel || force))
   {
     Freeze();
-    
+
     m_currentSel = sel_obj;
-        
+
     m_pg->Clear();
     m_propmap.clear();
-    
+
     PObjectInfo obj_desc = sel_obj->GetObjectInfo();
     if (obj_desc)
     {
-      
+
       PropertyMap map, dummy;
-      
+
       // Creamos las categorías con las propiedades del objeto organizados por
       // "clases"
       CreateCategory(wxString(obj_desc->GetClassName().c_str(),wxConvUTF8), sel_obj,obj_desc,map);
@@ -288,18 +288,18 @@ void ObjectInspector::Create(bool force)
       {
         PObjectInfo info_base = obj_desc->GetBaseClass(i);
         CreateCategory(wxString(info_base->GetClassName().c_str(),wxConvUTF8), sel_obj,info_base,map);
-      }  
+      }
 
       /*
       // Añadimos la categoría "layout" si el objeto está contenido en un sizer
       PObjectBase layout;
-      layout = sel_obj->GetLayout();  
+      layout = sel_obj->GetLayout();
       if (layout)
       {
         Debug::Print("[ObjectInspector::Update] Has layout properties");
         CreateCategory(wxT("Layout"), layout ,layout->GetObjectInfo(),dummy);
       }
-      
+
       // Añadirmos la categoría "Notebook Page" si el objeto está contenido
       // en un Notebook (no me gusta)
       if (sel_obj->GetParent() && sel_obj->GetParent()->GetObjectTypeName()=="notebookpage")
@@ -308,16 +308,16 @@ void ObjectInspector::Create(bool force)
           sel_obj->GetParent()->GetObjectInfo(),dummy);
       }
       */
-      
+
       PObjectBase parent = sel_obj->GetParent();
       if (parent && parent->GetObjectInfo()->GetObjectType()->IsItem())
       {
         CreateCategory(_WXSTR(parent->GetObjectInfo()->GetClassName()), parent, parent->GetObjectInfo(),dummy);
       }
-      
+
       // bajo wxGTK no se actualiza adecuadamente
       m_pg->Refresh();
-      
+
     }
     Thaw();
   }
@@ -339,7 +339,7 @@ int ObjectInspector::StringToBits(const wxString& strVal, wxPGConstants& constan
         val |= constants.GetValue(i);
         done = true;
       }
-      i++;  
+      i++;
     }
   }
   return val;
@@ -350,13 +350,13 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
   wxPGProperty *result;
   PropertyType type = prop->GetType();
   wxString name = _WXSTR(prop->GetName());
-  
+
   if (type == PT_TEXT || type == PT_MACRO)
   {
     result = wxStringProperty(name, wxPG_LABEL, prop->GetValueAsString());
     result->SetAttribute(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING, true);
   }
-  else if (type == PT_WXSTRING)
+  else if (type == PT_WXSTRING || type == PT_WXSTRING_I18N)
   {
     result = wxStringProperty(name, wxPG_LABEL, prop->GetValueAsText());
     result->SetAttribute(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING, true);
@@ -365,14 +365,14 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
   {
     wxString valStr(prop->GetValue().c_str(),wxConvUTF8);
     result = wxBoolProperty(name, wxPG_LABEL, valStr == wxT("1"));
-  }  
+  }
   else if (type == PT_BITLIST)
   {
     PPropertyInfo prop_desc = prop->GetPropertyInfo();
     POptionList opt_list = prop_desc->GetOptionList();
-  
+
     assert(opt_list && opt_list->GetOptionCount() > 0);
-    
+
     wxPGConstants constants;
     for (unsigned int i = 0; i < opt_list->GetOptionCount(); i++)
     {
@@ -392,13 +392,13 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
   {
     PPropertyInfo prop_desc = prop->GetPropertyInfo();
     POptionList opt_list = prop_desc->GetOptionList();
-  
+
     assert(opt_list && opt_list->GetOptionCount() > 0);
-    
+
     wxPGConstants constants;
     for (unsigned int i=0; i<opt_list->GetOptionCount() ;i++)
       constants.Add(wxString(opt_list->GetOption(i).c_str(),wxConvUTF8), i);
-      
+
     result = wxEnumProperty(name, wxPG_LABEL, constants);
     result->SetValueFromString(prop->GetValueAsString(), 0);
   }
@@ -408,7 +408,7 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
 
   else if (type == PT_WXSIZE)
     result = wxSizeProperty(name, wxPG_LABEL, prop->GetValueAsSize());
-  
+
   else if (type == PT_WXFONT)
     result = wxFontProperty(name, wxPG_LABEL, prop->GetValueAsFont());
 
@@ -423,11 +423,11 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
 
   else if (type == PT_PATH)
     result = wxDirProperty(name, wxPG_LABEL, prop->GetValueAsString());
-  
+
   else if (type == PT_BITMAP)
     result = wxMyImageFileProperty(name, wxPG_LABEL,
       TypeConv::MakeAbsolutePath(prop->GetValueAsString(),GlobalData()->GetProjectPath()));
-    
+
   /*else if (type == PT_XPM_BITMAP){
     result = wxMyImageFileProperty(name, wxPG_LABEL,
       TypeConv::MakeAbsolutePath(prop->GetValueAsString(),GlobalData()->GetProjectPath()));
@@ -435,7 +435,7 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
   }*/
   else if (type == PT_STRINGLIST)
   {
-    result = wxArrayStringProperty(name, wxPG_LABEL,prop->GetValueAsArrayString());    
+    result = wxArrayStringProperty(name, wxPG_LABEL,prop->GetValueAsArrayString());
   }
   else // propiedad desconocida
   {
@@ -443,7 +443,7 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
     result->SetAttribute(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING, true);
     wxLogError(wxT("Property type Unknown"));
   }
-    
+
   return result;
 }
 
@@ -451,7 +451,7 @@ void ObjectInspector::CreateCategory(const wxString& name, PObjectBase obj, PObj
 {
   m_pg->AppendCategory(name);
   unsigned int prop_count = obj_info->GetPropertyCount();
-  
+
   if (prop_count > 0)
   {
     //wxFlexGridSizer* sizer = new wxFlexGridSizer(prop_count, 2, 0, 0);
@@ -460,25 +460,25 @@ void ObjectInspector::CreateCategory(const wxString& name, PObjectBase obj, PObj
       PPropertyInfo prop_desc = obj_info->GetPropertyInfo(i);
       PProperty     prop      = obj->GetProperty(prop_desc->GetName());
       //wxWindow *prop_editor = NULL;
-      
+
       assert(prop_desc && prop);
 
       wxString prop_name(prop_desc->GetName().c_str(),wxConvUTF8);
       Debug::Print("[ObjectInspector::CreatePropertyPanel] Creating Property Editor");
-      
+
       // no queremos duplicar propiedades heredadas
       if (map.find(prop_desc->GetName()) == map.end())
       {
         wxPGId id = m_pg->Append(GetProperty(prop));
-          
+
         map.insert(PropertyMap::value_type(prop_desc->GetName(),prop));
         m_propmap.insert(ObjInspectorMap::value_type(id.GetPropertyPtr(), prop));
-      }  
+      }
     }
 
-  }  
-                
-}  
+  }
+
+}
 
 void ObjectInspector::OnPropertyGridChange(wxPropertyGridEvent& event)
 {
@@ -492,15 +492,15 @@ void ObjectInspector::OnPropertyGridChange(wxPropertyGridEvent& event)
             case PT_TEXT: case PT_MACRO: case PT_OPTION:
               GetData()->ModifyProperty(prop, event.GetPropertyValueAsString());
               break;
-            
-            case PT_WXSTRING:
+
+            case PT_WXSTRING: case PT_WXSTRING_I18N:
             {
                 // las cadenas de texto del inspector son formateadas
                 wxString value = _WXSTR(TypeConv::TextToString(_STDSTR(event.GetPropertyValueAsString())));
                 GetData()->ModifyProperty(prop, value);
             }
             break;
-                
+
             case PT_BOOL:
                 GetData()->ModifyProperty(prop, event.GetPropertyValueAsBool() ? _T("1") : _T("0"));
                 break;
@@ -543,16 +543,16 @@ void ObjectInspector::OnPropertyGridChange(wxPropertyGridEvent& event)
                   GetData()->ModifyProperty(prop, TypeConv::ArrayStringToString(arraystr));
                 }
                 break;
-                
+
             // TODO: Usar ruta relativa al directorio de salida en el caso
             //       de que la imagen se encuentre en un subdirectorio de este.
              case PT_BITMAP:
              //case PT_XPM_BITMAP:
-               GetData()->ModifyProperty(prop, 
+               GetData()->ModifyProperty(prop,
                  TypeConv::MakeRelativePath(event.GetPropertyValueAsString(),
                    GlobalData()->GetProjectPath()));
                break;
-            
+
 
             default:
                 GetData()->ModifyProperty(prop, event.GetPropertyValueAsString());
@@ -599,7 +599,7 @@ void ObjectInspector::PropertyModified(PProperty prop)
     case PT_TEXT: case PT_MACRO: case PT_OPTION:
         pgProp->SetValueFromString(prop->GetValueAsString(), 0);
         break;
-    case PT_WXSTRING:
+    case PT_WXSTRING: case PT_WXSTRING_I18N:
         pgProp->SetValueFromString(prop->GetValueAsText(), 0);
         break;
     case PT_BOOL:
@@ -664,7 +664,7 @@ static const wxString& wxMyDefaultImageWildcard ()
 
         wxList::iterator node;
         wxArrayString ext;
-        
+
         for ( node = handlers.begin(); node != handlers.end(); node++ )
         {
             wxImageHandler *handler = (wxImageHandler*)*node;
@@ -674,13 +674,13 @@ static const wxString& wxMyDefaultImageWildcard ()
 
             ext.Add( ext_lo );
         }
-        
+
         if (ext.Count() > 0)
         {
           unsigned int i;
-          
+
           str.append ( wxT("All image files (") );
-        
+
           str.append(wxT("*."));
           str.append(ext[0]);
           for (i = 1; i < ext.Count(); i++)
@@ -698,8 +698,8 @@ static const wxString& wxMyDefaultImageWildcard ()
           }
           str.append ( wxT("|") );
         }
-  
-        
+
+
 
         // Let's iterate over the image handler list.
         //for ( wxList::Node *node = handlers.GetFirst(); node; node = node->GetNext() )
@@ -737,7 +737,7 @@ wxMyImageFilePropertyClass::wxMyImageFilePropertyClass ( const wxString& label, 
     m_pBitmap = (wxBitmap*) NULL;
 }
 
-wxMyImageFilePropertyClass::~wxMyImageFilePropertyClass () 
+wxMyImageFilePropertyClass::~wxMyImageFilePropertyClass ()
 {
     if ( m_pBitmap )
         delete m_pBitmap;

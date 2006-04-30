@@ -34,6 +34,7 @@ CppTemplateParser::CppTemplateParser(PObjectBase obj, string _template)
   : TemplateParser(obj,_template)
 {
   m_useRelativePath = false;
+  m_i18n = false;
 }
 string CppTemplateParser::RootWxParentToCode()
 {
@@ -60,6 +61,11 @@ bool CppTemplateParser::UseRelativePath(bool relative, string basePath)
   return result;
 }
 
+void CppTemplateParser::UseI18n(bool i18n)
+{
+  m_i18n = i18n;
+}
+
 /**
  * Convierte el valor de una propiedad a código C++.
  */
@@ -78,6 +84,12 @@ string CppTemplateParser::ValueToCode(PropertyType type, string value)
     // Las cadenas de caracteres (wxString) hay que pasarlas a cadenas tipo "C"
     // "Hola" -> wxT("\"Hola\"")
       result = "wxT(\"" + CppCodeGenerator::ConvertCppString(value) + "\")";
+      break;
+    case PT_WXSTRING_I18N:
+      if (m_i18n)
+        result = "_(\"" + CppCodeGenerator::ConvertCppString(value) + "\")";
+      else
+        result = "wxT(\"" + CppCodeGenerator::ConvertCppString(value) + "\")";
       break;
     case PT_MACRO:
     case PT_TEXT:
@@ -176,10 +188,10 @@ string CppTemplateParser::ValueToCode(PropertyType type, string value)
       {
         wxArrayString array = TypeConv::StringToArrayString(_WXSTR(value));
         if (array.Count() > 0)
-          result = ValueToCode(PT_WXSTRING,_STDSTR(array[0]));
+          result = ValueToCode(PT_WXSTRING_I18N,_STDSTR(array[0]));
 
         for (unsigned int i=1 ; i< array.Count() ; i++)
-          result = result + ", " + ValueToCode(PT_WXSTRING,_STDSTR(array[i]));
+          result = result + ", " + ValueToCode(PT_WXSTRING_I18N,_STDSTR(array[i]));
 
       }
       break;
@@ -198,6 +210,7 @@ CppCodeGenerator::CppCodeGenerator()
 {
   SetupPredefinedMacros();
   m_useRelativePath = false;
+  m_i18n = false;
 }
 
 string CppCodeGenerator::ConvertCppString(string text)
@@ -272,6 +285,11 @@ bool CppCodeGenerator::GenerateCode(PObjectBase project)
   PProperty useEnumProperty = project->GetProperty("use_enum");
   if (useEnumProperty && useEnumProperty->GetValueAsInteger())
     useEnum = true;
+
+  m_i18n = false;
+  PProperty i18nProperty = project->GetProperty("internationalize");
+  if (i18nProperty && i18nProperty->GetValueAsInteger())
+    m_i18n = true;
 
   m_header->Clear();
   m_source->Clear();
@@ -393,6 +411,7 @@ string CppCodeGenerator::GetCode(PObjectBase obj, string name)
 
   CppTemplateParser parser(obj,_template);
   parser.UseRelativePath(m_useRelativePath, m_basePath);
+  parser.UseI18n(m_i18n);
   string code = parser.ParseTemplate();
 
   return code;
@@ -595,6 +614,7 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
 
           CppTemplateParser parser(obj,_template);
           parser.UseRelativePath(m_useRelativePath, m_basePath);
+          parser.UseI18n(m_i18n);
           m_source->WriteLn(parser.ParseTemplate());
         }
         else
@@ -633,6 +653,7 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
 
         CppTemplateParser parser(obj,_template);
         parser.UseRelativePath(m_useRelativePath, m_basePath);
+        parser.UseI18n(m_i18n);
         m_source->WriteLn(parser.ParseTemplate());
       }
   }
@@ -769,6 +790,7 @@ void CppCodeGenerator::GenSettings(PObjectInfo info, PObjectBase obj)
   {
     CppTemplateParser parser(obj,_template);
     parser.UseRelativePath(m_useRelativePath, m_basePath);
+    parser.UseI18n(m_i18n);
     string code = parser.ParseTemplate();
     if (code != "")
       m_source->WriteLn(code);
@@ -796,6 +818,7 @@ void CppCodeGenerator::GenAddToolbar(PObjectInfo info, PObjectBase obj)
   {
     CppTemplateParser parser(obj,_template);
     parser.UseRelativePath(m_useRelativePath, m_basePath);
+    parser.UseI18n(m_i18n);
     string code = parser.ParseTemplate();
     if (code != "")
       m_source->WriteLn(code);

@@ -610,11 +610,14 @@ void XrcToXfbFilter::ImportFontProperty(const wxString &xrcPropName,
     font.SetFaceName(face);
   }
 
-  // Ya tenemos el tipo de letra, sólo nos queda pasarlo a formato wxFB
-  wxString font_str =
-    wxString::Format(wxT("%s,%d,%d,%d"),font.GetFaceName().c_str(), font.GetStyle(),
-                                       font.GetWeight(), font.GetPointSize());
-  property->LinkEndChild(new TiXmlText(font_str.mb_str()));
+  if (font.Ok())
+  {
+    // Ya tenemos el tipo de letra, sólo nos queda pasarlo a formato wxFB
+    wxString font_str =
+      wxString::Format(wxT("%s,%d,%d,%d"),font.GetFaceName().c_str(), font.GetStyle(),
+                                         font.GetWeight(), font.GetPointSize());
+    property->LinkEndChild(new TiXmlText(font_str.mb_str()));
+  }
 
 }
 
