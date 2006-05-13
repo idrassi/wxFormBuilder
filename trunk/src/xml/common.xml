@@ -266,6 +266,7 @@
   </objectinfo>
   
   <objectinfo class="tool" icon="toolbar.xpm" type="tool">
+    <property name="name" type="text">m_tool</property>
     <property name="label" type="wxString_i18n">tool</property>
     <property name="bitmap" type="bitmap" />
     <property name="help" type="wxString_i18n" />

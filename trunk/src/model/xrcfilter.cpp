@@ -42,15 +42,15 @@ TiXmlElement* XrcFilter::GetXrcClassInfo(const string &classname)
     while (result && result->Attribute("class") != classname)
       result = result->NextSiblingElement("object");
   }
-  
+
   return result;
 }
 
 TiXmlElement* XrcFilter::GetElement(const PObjectBase obj)
 {
-  TiXmlElement *element = new TiXmlElement("object"); 
+  TiXmlElement *element = new TiXmlElement("object");
   TiXmlElement *xrcInfo = GetXrcClassInfo(GetXrcClassName(obj));
-  
+
   if (xrcInfo)
   {
     element->SetAttribute("class", GetXrcClassName(obj));
@@ -65,14 +65,14 @@ TiXmlElement* XrcFilter::GetElement(const PObjectBase obj)
       element->SetAttribute(attrName, _STDSTR(obj->GetPropertyAsString(_WXSTR(propName))));
       attr = attr->NextSiblingElement("attribute");
     }
-    
+
     // enlazamos los sub-elementos
 
     // FIXME! no todos los objetos xrc heredan de wxWindow...
     string typeName = obj->GetObjectTypeName();
     if ( typeName == "container" || typeName == "widget" || typeName == "form" || typeName == "statusbar")
       LinkValues(element,GetXrcClassInfo("wxWindow"),obj);
-          
+
     LinkValues(element,xrcInfo,obj); // los propios del objeto
   }
   else
@@ -80,7 +80,7 @@ TiXmlElement* XrcFilter::GetElement(const PObjectBase obj)
     // clase no soportada por XRC.
     element->SetAttribute("class", "unknown");
   }
-  
+
   for (unsigned int i = 0; i < obj->GetChildCount(); i++)
       element->LinkEndChild(GetElement(obj->GetChild(i)));
 
@@ -98,9 +98,9 @@ void XrcFilter::LinkValues(TiXmlElement *element, TiXmlElement *xrcInfo,
     PProperty prop = (attr->Attribute("property")  ?
       obj->GetProperty(attr->Attribute("property")) :
       obj->GetProperty(attr->Attribute("name")));
-      
+
     if (prop && prop->GetValue() != "")
-    {  
+    {
       TiXmlElement *propElement = new TiXmlElement(attr->Attribute("name"));
       LinkValue(prop,propElement);
       element->LinkEndChild(propElement);
@@ -117,15 +117,15 @@ void XrcFilter::LinkValues(TiXmlElement *element, TiXmlElement *xrcInfo,
       // interfaz wxSizer son dos propiedades de tipo "int" separadas.
       int width = obj->GetPropertyAsInteger(_T("width"));
       int height = obj->GetPropertyAsInteger(_T("height"));
-      
+
       TiXmlElement *propElement = new TiXmlElement("size");
-      
+
       string sizeValue = _STDSTR(TypeConv::SizeToString(wxSize(width,height)));
       propElement->LinkEndChild(new TiXmlText(sizeValue));
       element->LinkEndChild(propElement);
     }
     ///************************************************************************
-    
+
     attr = attr->NextSiblingElement("element");
   }
 }
@@ -138,7 +138,7 @@ bool XrcFilter::IsSupported(const string& className)
 string XrcFilter::GetXrcClassName(const PObjectBase obj)
 {
   string className = obj->GetObjectInfo()->GetClassName();
-  
+
   if (className == "Panel" || className == "Dialog" || className == "Frame")
       className = "wx" + className;
 
@@ -153,11 +153,11 @@ void XrcFilter::LinkValue(const PProperty prop, TiXmlElement *propElement)
     if (prop->GetType() == PT_WXCOLOUR)
     {
         colour = prop->GetValueAsColour();
-        value = _STDSTR(wxString::Format(_T("#%02x%02x%02x"), 
+        value = _STDSTR(wxString::Format(_T("#%02x%02x%02x"),
             colour.Red(), colour.Green(), colour.Blue()));
     }
     if (prop->GetType() == PT_WXFONT)
-        LinkFont(prop->GetValueAsFont(), propElement);    
+        LinkFont(prop->GetValueAsFont(), propElement);
     else
         propElement->LinkEndChild(new TiXmlText(value));
 }
@@ -169,7 +169,7 @@ void XrcFilter::LinkFont(const wxFont &font, TiXmlElement *propElement)
     aux.Printf(_T("%d"), font.GetPointSize());
     element->LinkEndChild(new TiXmlText(_STDSTR(aux)));
     propElement->LinkEndChild(element);
-    
+
     element = new TiXmlElement("family");
     switch (font.GetFamily())
     {
@@ -190,7 +190,7 @@ void XrcFilter::LinkFont(const wxFont &font, TiXmlElement *propElement)
             break;
     }
     propElement->LinkEndChild(element);
-    
+
     element = new TiXmlElement("style");
     switch (font.GetStyle())
     {
@@ -205,7 +205,7 @@ void XrcFilter::LinkFont(const wxFont &font, TiXmlElement *propElement)
             break;
     }
     propElement->LinkEndChild(element);
-    
+
     element = new TiXmlElement("weight");
     switch (font.GetWeight())
     {
@@ -220,11 +220,11 @@ void XrcFilter::LinkFont(const wxFont &font, TiXmlElement *propElement)
             break;
     }
     propElement->LinkEndChild(element);
-    
+
     element = new TiXmlElement("underlined");
     element->LinkEndChild(new TiXmlText(font.GetUnderlined() ? "1" : "0"));
     propElement->LinkEndChild(element);
-    
+
     element = new TiXmlElement("face");
     element->LinkEndChild(new TiXmlText(_STDSTR(font.GetFaceName())));
     propElement->LinkEndChild(element);
@@ -236,7 +236,7 @@ void XrcFilter::ImportXrcProperty(TiXmlElement *xrcProperty, PProperty property)
 {
   if (!xrcProperty)
     return;
-    
+
   if (property->GetType() == PT_WXCOLOUR)
   {
     ImportColour(xrcProperty, property);
@@ -262,21 +262,21 @@ void XrcFilter::ImportColour(TiXmlElement *xrcProperty, PProperty property)
   if (xmlValue && xmlValue->ToText())
   {
     string value = xmlValue->ToText()->Value();
-    
+
     // convertimos el formato "#rrggbb" a "rrr,ggg,bbb"
     string hexColour = "0x" + value.substr(1,2) + " 0x" + value.substr(3,2) +
                        " 0x" + value.substr(5,2);
     istringstream strIn;
     ostringstream strOut;
     unsigned int red,green,blue;
-    
+
     strIn.str(hexColour);
     strIn >> hex;
-    
+
     strIn >> red;
     strIn >> green;
     strIn >> blue;
-    
+
     strOut << red << "," << green << "," << blue;
     property->SetValue(strOut.str());
   }
@@ -287,8 +287,8 @@ void XrcFilter::ImportFont(TiXmlElement *xrcProperty, PProperty property)
   TiXmlElement *element;
   TiXmlNode *xmlValue;
   wxFont font;
-  
-  
+
+
   // el tamaño
   element = xrcProperty->FirstChildElement("size");
   if (element)
@@ -297,7 +297,7 @@ void XrcFilter::ImportFont(TiXmlElement *xrcProperty, PProperty property)
     xmlValue = element->FirstChild();
     if (xmlValue && xmlValue->ToText())
       size_str = _WXSTR(xmlValue->ToText()->Value());
-      
+
     long size;
     if (size_str.ToLong(&size))
       font.SetPointSize(size);
@@ -311,7 +311,7 @@ void XrcFilter::ImportFont(TiXmlElement *xrcProperty, PProperty property)
     xmlValue = element->FirstChild();
     if (xmlValue && xmlValue->ToText())
       family_str = xmlValue->ToText()->Value();
-      
+
     if (family_str == "decorative")
       font.SetFamily(wxDECORATIVE);
     else if (family_str == "roman")
@@ -323,7 +323,7 @@ void XrcFilter::ImportFont(TiXmlElement *xrcProperty, PProperty property)
     else //if (family_str == "default")
       font.SetFamily(wxDEFAULT);
   }
-  
+
   // el estilo
   element = xrcProperty->FirstChildElement("style");
   if (element)
@@ -332,16 +332,16 @@ void XrcFilter::ImportFont(TiXmlElement *xrcProperty, PProperty property)
     xmlValue = element->FirstChild();
     if (xmlValue && xmlValue->ToText())
       style_str = xmlValue->ToText()->Value();
-      
+
     if (style_str == "slant")
       font.SetStyle(wxSLANT);
     else if (style_str == "italic")
       font.SetStyle(wxITALIC);
     else //if (style_str == "normal")
       font.SetStyle(wxNORMAL);
-  }    
-  
-  
+  }
+
+
   // grosor
   element = xrcProperty->FirstChildElement("weight");
   if (element)
@@ -350,15 +350,15 @@ void XrcFilter::ImportFont(TiXmlElement *xrcProperty, PProperty property)
     xmlValue = element->FirstChild();
     if (xmlValue && xmlValue->ToText())
       weight_str = xmlValue->ToText()->Value();
-      
+
     if (weight_str == "light")
       font.SetWeight(wxLIGHT);
     else if (weight_str == "bold")
       font.SetWeight(wxBOLD);
     else //if (sweight_str == "normal")
       font.SetWeight(wxNORMAL);
-  }    
-  
+  }
+
   // subrayado
   element = xrcProperty->FirstChildElement("underlined");
   if (element)
@@ -367,13 +367,13 @@ void XrcFilter::ImportFont(TiXmlElement *xrcProperty, PProperty property)
     xmlValue = element->FirstChild();
     if (xmlValue && xmlValue->ToText())
       underlined_str = xmlValue->ToText()->Value();
-      
+
     if (underlined_str == "1")
       font.SetUnderlined(TRUE);
     else
       font.SetUnderlined(FALSE);
   }
-  
+
   // tipo de letra
   element = xrcProperty->FirstChildElement("face");
   if (element)
@@ -382,10 +382,10 @@ void XrcFilter::ImportFont(TiXmlElement *xrcProperty, PProperty property)
     xmlValue = element->FirstChild();
     if (xmlValue && xmlValue->ToText())
       face = _WXSTR(xmlValue->ToText()->Value());
-      
+
     font.SetFaceName(face);
   }
-  
+
   property->SetValue(font);
 }
 
@@ -402,7 +402,7 @@ void XrcFilter::ImportXrcElements(TiXmlElement *xrcObj, TiXmlElement *xrcInfo,
 
     if (property)
       ImportXrcProperty(xrcObj->FirstChildElement(element->Attribute("name")),property);
-      
+
     else if (!property && xrcInfo->Attribute("class") == string("spacer") &&
                           element->Attribute("name") == string("size"))
     {
@@ -412,19 +412,19 @@ void XrcFilter::ImportXrcElements(TiXmlElement *xrcObj, TiXmlElement *xrcInfo,
       TiXmlElement* xrcProperty = xrcObj->FirstChildElement("size");
 
       assert(xrcProperty);
-      
+
       TiXmlNode *xmlValue = xrcProperty->FirstChild();
       if (xmlValue && xmlValue->ToText())
       {
         str_size = xmlValue->ToText()->Value();
-        
+
         PProperty propWidth = obj->GetProperty("width");
         PProperty propHeight = obj->GetProperty("height");
         assert (propWidth && propHeight);
- 
+
         wxSize size = TypeConv::StringToSize(_WXSTR(str_size));
         propWidth->SetValue(size.GetWidth());
-        propHeight->SetValue(size.GetHeight());      
+        propHeight->SetValue(size.GetHeight());
       }
       ///***********************************************************************
     }
@@ -438,7 +438,7 @@ void XrcFilter::ImportXrcProperties(TiXmlElement *xrcObj, PObjectBase obj)
   assert(xrcObj->Attribute("class"));
   TiXmlElement *xrcInfo = GetXrcClassInfo(xrcObj->Attribute("class"));
   assert(xrcInfo);
-  
+
 
   // comenzamos por los atributos
   TiXmlElement *attr = xrcInfo->FirstChildElement("attribute");
@@ -449,13 +449,13 @@ void XrcFilter::ImportXrcProperties(TiXmlElement *xrcObj, PObjectBase obj)
 
     PProperty property = obj->GetProperty(propName);
 
-    // los atributos siempre son texto 
+    // los atributos siempre son texto
     if (property && xrcObj->Attribute(attr->Attribute("name")))
       property->SetValue(string(xrcObj->Attribute(attr->Attribute("name"))));
 
     attr = attr->NextSiblingElement("attribute");
   }
-  
+
   // y seguimos por los sub-elementos
   ImportXrcElements(xrcObj,xrcInfo,obj);
 
@@ -472,24 +472,24 @@ PObjectBase XrcFilter::GetObject(TiXmlElement *xrcObj, PObjectBase parent,
   // para posteriormente modificar las propiedades.
   // Con el atributo is_form intentaremos arreglar el problema del conflicto
   // de nombres (wxPanel como form o como widget).
-  
+
   string className = xrcObj->Attribute("class");
-  
+
   if (is_form)
   {
     // hay que quitarle el "wx" del principio
     className = className.substr(2,className.size() - 2);
   }
-  
+
   Debug::Print("[XrcFilter::GetObject] importing %s",className.c_str());
-  
+
   PObjectBase obj = m_objDb->CreateObject(className,parent);
-  
+
   if (obj)
   {
     // ahora hay que importar todas las propiedades del objeto xrc
     ImportXrcProperties(xrcObj,obj);
-    
+
     TiXmlElement *element = xrcObj->FirstChildElement("object");
     while (element)
     {
@@ -511,27 +511,27 @@ XrcFilter::XrcFilter()
 TiXmlDocument *XrcFilter::GetXrcDocument (PObjectBase project)
 {
   TiXmlDocument *doc = new TiXmlDocument();
-  
+
   TiXmlElement *element = new TiXmlElement("resource");
   element->SetAttribute("xmlns", "http://www.wxwindows.org/wxxrc");
   element->SetAttribute("version", "2.3.0.1");
-  
+
   for (unsigned int i=0; i<project->GetChildCount(); i++)
       element->LinkEndChild(GetElement(project->GetChild(i)));
-  
+
   doc->LinkEndChild(element);
 
-  return doc;  
+  return doc;
 }
 
 PObjectBase XrcFilter::GetProject(TiXmlDocument *xrcDoc)
 {
   assert(m_objDb);
   Debug::Print("[XrcFilter::GetProject]");
-  
+
   PObjectBase project(m_objDb->CreateObject("Project"));
-  
-  
+
+
   TiXmlElement *root = xrcDoc->FirstChildElement("resource");
   TiXmlElement *element = root->FirstChildElement("object");
   while (element)
@@ -539,7 +539,7 @@ PObjectBase XrcFilter::GetProject(TiXmlDocument *xrcDoc)
     PObjectBase obj = GetObject(element,project,true);
     element = element->NextSiblingElement("object");
   }
-  
+
   return project;
 }
 
@@ -550,10 +550,10 @@ PObjectBase XrcLoader::GetProject(TiXmlDocument *xrcDoc)
 {
   assert(m_objDb);
   Debug::Print("[XrcFilter::GetProject]");
-  
+
   PObjectBase project(m_objDb->CreateObject("Project"));
-  
-  
+
+
   TiXmlElement *root = xrcDoc->FirstChildElement("resource");
   TiXmlElement *element = root->FirstChildElement("object");
   while (element)
@@ -561,7 +561,7 @@ PObjectBase XrcLoader::GetProject(TiXmlDocument *xrcDoc)
     PObjectBase obj = GetObject(element,project);
     element = element->NextSiblingElement("object");
   }
-  
+
   return project;
 }
 
@@ -569,7 +569,7 @@ PObjectBase XrcLoader::GetObject(TiXmlElement *xrcObj, PObjectBase parent)
 {
   // La estrategia será construir el objeto a partir del nombre
   // para posteriormente modificar las propiedades.
-    
+
   string className = xrcObj->Attribute("class");
   if (parent->GetObjectTypeName() == "project")
   {
@@ -578,6 +578,13 @@ PObjectBase XrcLoader::GetObject(TiXmlElement *xrcObj, PObjectBase parent)
     // como "Panel" para distinguirlo de un "form" y un "container"
     className = className.substr(2,className.size() - 2);
   }
+
+  // Well, this is not nice. wxMenu class name is ambiguous, so we'll get the
+  // correct class by the context. If the parent of a wxMenu is another wxMenu
+  // then the class name will be "submenu"
+  else if (className == "wxMenu" &&
+    (parent->GetClassName() == "wxMenu" || parent->GetClassName() == "submenu"))
+    className = "submenu";
 
   PObjectBase object;
   PObjectInfo objInfo = m_objDb->GetObjectInfo(className);
@@ -590,16 +597,16 @@ PObjectBase XrcLoader::GetObject(TiXmlElement *xrcObj, PObjectBase parent)
       if (fbObj)
       {
       	object = m_objDb->CreateObject(fbObj,parent);
-      	
-      	// Es posible que sea haya creado el objeto, creando un item 
+
+      	// Es posible que sea haya creado el objeto, creando un item
         // previamente (ocurren en el caso de wxSplitterWindow). Por tanto,
         // hay que asegurarse de que el objeto apuntado por "object" no sea
         // el item.
       	if (object && object->GetClassName() != className && object->GetChildCount()>0)
       	  object = object->GetChild(0);
-        
+
         if (object)
-        {  
+        {
           // recursivamente importamos los objetos que están por debajo
           TiXmlElement *element = xrcObj->FirstChildElement("object");
           while (element)
@@ -627,7 +634,7 @@ PObjectBase XrcLoader::GetObject(TiXmlElement *xrcObj, PObjectBase parent)
       wxString msg(wxString::Format(
         wxT("Can't create unknown object (wxPanel) as child of \"%s:%s\""),
         parent->GetPropertyAsString(_T("name")).c_str(), parent->GetClassName().c_str()));
-        
+
       wxLogError(msg);
     }
   }

@@ -193,6 +193,10 @@ void ObjectToXrcFilter::AddProperty(const wxString &objPropName,
       // LinkStringList convierte las cadenas a formato XRC
       LinkStringList(m_obj->GetPropertyAsArrayString(objPropName), propElement, true);
       break;
+
+    case XRC_TYPE_BITMAP:
+      LinkText(m_obj->GetPropertyAsString(objPropName), propElement);
+      break;
   }
 
   m_xrcObj->LinkEndChild(propElement);
@@ -423,6 +427,10 @@ void XrcToXfbFilter::AddProperty(const wxString &xrcPropName,
 
     case XRC_TYPE_STRINGLIST:
       ImportStringListProperty(xrcPropName, propElement, true);
+      break;
+
+    case XRC_TYPE_BITMAP:
+      ImportTextProperty(xrcPropName, propElement, false);
       break;
 
   }

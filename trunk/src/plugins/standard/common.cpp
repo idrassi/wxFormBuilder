@@ -174,7 +174,7 @@ class BitmapButtonComponent : public ComponentBase
   {
     ObjectToXrcFilter xrc(obj, _("wxBitmapButton"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();
-    xrc.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_TEXT);
+    xrc.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_BITMAP);
     xrc.AddPropertyValue(_("default"),_("0"));
     return xrc.GetXrcObject();
   }
@@ -183,7 +183,7 @@ class BitmapButtonComponent : public ComponentBase
   {
     XrcToXfbFilter filter(xrcObj, _("wxBitmapButton"));
     filter.AddWindowProperties();
-    filter.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_TEXT);
+    filter.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_BITMAP);
     return filter.GetXfbObject();
   }
 };
@@ -390,7 +390,7 @@ class StaticBitmapComponent : public ComponentBase
   {
     ObjectToXrcFilter xrc(obj, _("wxStaticBitmap"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();
-    xrc.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_TEXT);
+    xrc.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_BITMAP);
     return xrc.GetXrcObject();
   }
 
@@ -398,7 +398,7 @@ class StaticBitmapComponent : public ComponentBase
   {
     XrcToXfbFilter filter(xrcObj, _("wxStaticBitmap"));
     filter.AddWindowProperties();
-    filter.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_TEXT);
+    filter.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_BITMAP);
     return filter.GetXfbObject();
   }
 };
@@ -716,6 +716,25 @@ class MenuComponent : public ComponentBase
   }
 };
 
+class SubMenuComponent : public ComponentBase
+{
+ public:
+
+  TiXmlElement* ExportToXrc(IObject *obj)
+  {
+    ObjectToXrcFilter xrc(obj, _("wxMenu"), obj->GetPropertyAsString(_("name")));
+    xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+    return xrc.GetXrcObject();
+  }
+
+  TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+  {
+    XrcToXfbFilter filter(xrcObj, _("submenu"));
+    filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+    return filter.GetXfbObject();
+  }
+};
+
 class MenuItemComponent : public ComponentBase
 {
  public:
@@ -733,7 +752,9 @@ class MenuItemComponent : public ComponentBase
 
     xrc.AddPropertyValue(_("label"), label);
     xrc.AddProperty(_("help"),_("help"),XRC_TYPE_TEXT);
-    xrc.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_TEXT);
+
+    if (!obj->IsNull("bitmap"))
+      xrc.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_BITMAP);
 
     int kind = obj->GetPropertyAsInteger(_("kind"));
 
@@ -778,7 +799,7 @@ class MenuItemComponent : public ComponentBase
     filter.AddPropertyValue(_("label"), label);
     filter.AddPropertyValue(_("shortcut"), shortcut);
     filter.AddProperty(_("help"),_("help"),XRC_TYPE_TEXT);
-    filter.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_TEXT);
+    filter.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_BITMAP);
     return filter.GetXfbObject();
   }
 };
@@ -878,7 +899,7 @@ class ToolComponent : public ComponentBase
     ObjectToXrcFilter xrc(obj, _("tool"), obj->GetPropertyAsString(_("name")));
     xrc.AddWindowProperties();
     xrc.AddProperty(_("label"), _("label"), XRC_TYPE_TEXT);
-    xrc.AddProperty(_("bitmap"), _("bitmap"), XRC_TYPE_TEXT);
+    xrc.AddProperty(_("bitmap"), _("bitmap"), XRC_TYPE_BITMAP);
     return xrc.GetXrcObject();
   }
 
@@ -887,7 +908,7 @@ class ToolComponent : public ComponentBase
     XrcToXfbFilter filter(xrcObj, _("tool"));
     filter.AddWindowProperties();
     filter.AddProperty(_("label"), _("label"), XRC_TYPE_TEXT);
-    filter.AddProperty(_("bitmap"), _("bitmap"), XRC_TYPE_TEXT);
+    filter.AddProperty(_("bitmap"), _("bitmap"), XRC_TYPE_BITMAP);
     return filter.GetXfbObject();
   }
 };
@@ -1038,7 +1059,7 @@ BEGIN_LIBRARY()
   WINDOW_COMPONENT("wxNotebook", NotebookComponent)
   WINDOW_COMPONENT("wxMenuBar", MenuBarComponent)
   WINDOW_COMPONENT("wxMenu", MenuComponent)
-  WINDOW_COMPONENT("submenu", MenuComponent)
+  WINDOW_COMPONENT("submenu", SubMenuComponent)
   WINDOW_COMPONENT("wxMenuItem", MenuItemComponent)
   WINDOW_COMPONENT("separator", SeparatorComponent)
   WINDOW_COMPONENT("wxListCtrl", ListCtrlComponent)
