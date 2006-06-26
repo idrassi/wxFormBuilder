@@ -1,0 +1,14 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML><HEAD></HEAD><BODY>
+<OBJECT type="text/site properties">
+<param name="FrameName" value="right">
+</OBJECT>
+<UL>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="classwx_page_container.html#eb301707bcf5f6c2044632c5a7315c43"><param name="Name" value="DoDeletePage"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="classwx_page_container.html#a000feb5ca0e977d142f9999174db711"><param name="Name" value="GetNumTabsCanScrollLeft"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="classwx_page_container.html"><param name="Name" value="wxPageContainer"></OBJECT>
+  <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="classwx_page_container.html#eb301707bcf5f6c2044632c5a7315c43"><param name="Name" value="DoDeletePage"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="classwx_page_container.html#a000feb5ca0e977d142f9999174db711"><param name="Name" value="GetNumTabsCanScrollLeft"></OBJECT>
+  </UL>
+</UL>

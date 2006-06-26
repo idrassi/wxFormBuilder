@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="2" />
+	<Project>
+		<Option title="plot" />
+		<Option default_target="-1" />
+		<Option compiler="0" />
+		<Build>
+			<Target title="Win32 DLL Unicode Release">
+				<Option output="$(#WX.lib)\gcc_dll\wxmsw27u_plot.dll" />
+				<Option object_output="gcc_mswudll\plot" />
+				<Option type="3" />
+				<Option compiler="0" />
+				<Option includeInTargetAll="1" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Option projectResourceIncludeDirsRelation="0" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+					<Add option="-DWIN32" />
+					<Add option="-D_USRDLL" />
+					<Add option="-DDLL_EXPORTS" />
+					<Add option="-D__WXMSW__" />
+					<Add option="-D_UNICODE" />
+					<Add option="-DWXUSINGDLL" />
+					<Add option="-DWXMAKINGDLL_PLOT" />
+					<Add directory="$(#WX.lib)\gcc_dll\mswu" />
+				</Compiler>
+				<Linker>
+					<Add library="wxmsw270u_gcc" />
+					<Add directory="$(#WX.lib)\gcc_dll" />
+				</Linker>
+			</Target>
+			<Target title="Win32 DLL Release">
+				<Option output="$(#WX.lib)\gcc_dll\wxmsw27_plot.dll" />
+				<Option object_output="gcc_mswdll\plot" />
+				<Option type="3" />
+				<Option compiler="0" />
+				<Option includeInTargetAll="1" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Option projectResourceIncludeDirsRelation="0" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+					<Add option="-DWIN32" />
+					<Add option="-D_USRDLL" />
+					<Add option="-DDLL_EXPORTS" />
+					<Add option="-D__WXMSW__" />
+					<Add option="-DWXUSINGDLL" />
+					<Add option="-DWXMAKINGDLL_PLOT" />
+					<Add directory="$(#WX.lib)\gcc_dll\msw" />
+				</Compiler>
+				<Linker>
+					<Add library="wxmsw270_gcc" />
+					<Add directory="$(#WX.lib)\gcc_dll" />
+				</Linker>
+			</Target>
+			<Target title="Win32 Unicode Release">
+				<Option output="$(#WX.lib)\gcc_lib\libwxmsw26u_plot.a" />
+				<Option working_dir="" />
+				<Option object_output="gcc_mswu\plot" />
+				<Option type="2" />
+				<Option compiler="0" />
+				<Option includeInTargetAll="1" />
+				<Option createDefFile="1" />
+				<Option projectResourceIncludeDirsRelation="0" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+					<Add option="-DWIN32" />
+					<Add option="-D_LIB" />
+					<Add option="-D__WXMSW__" />
+					<Add option="-D_UNICODE" />
+					<Add directory="$(#WX.lib)\gcc_lib\mswu" />
+				</Compiler>
+			</Target>
+			<Target title="Win32 Release">
+				<Option output="$(#WX.lib)\gcc_lib\libwxmsw26_plot.a" />
+				<Option working_dir="" />
+				<Option object_output="gcc_msw\plot" />
+				<Option type="2" />
+				<Option compiler="0" />
+				<Option includeInTargetAll="1" />
+				<Option createDefFile="1" />
+				<Option projectResourceIncludeDirsRelation="0" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+					<Add option="-DWIN32" />
+					<Add option="-D_LIB" />
+					<Add option="-D__WXMSW__" />
+					<Add directory="$(#WX.lib)\gcc_lib\msw" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add directory="$(#WX.include)" />
+			<Add directory="$(#WX)\contrib\include" />
+		</Compiler>
+		<Unit filename="../../src/plot\..\..\..\src\msw\dummy.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Win32 DLL Unicode Release" />
+			<Option target="Win32 DLL Release" />
+			<Option target="Win32 Unicode Release" />
+			<Option target="Win32 Release" />
+		</Unit>
+		<Unit filename="../../src/plot\plot.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Win32 DLL Unicode Release" />
+			<Option target="Win32 DLL Release" />
+			<Option target="Win32 Unicode Release" />
+			<Option target="Win32 Release" />
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
