@@ -104,6 +104,189 @@
 					<Variable name="WX_SUFFIX" value="u" />
 				</Environment>
 			</Target>
+			<Target title="Debug Using Dll">
+				<Option output="..\..\lib\gcc_libdll\libwxmsw26d_scintilla.a" />
+				<Option working_dir="" />
+				<Option object_output=".libdllobjsd" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option includeInTargetAll="1" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-O0" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D__WXDEBUG" />
+					<Add option="-DLIB_USINGDLL" />
+					<Add option="-DWXUSINGDLL" />
+				</Compiler>
+				<Linker>
+					<Add library="wxmsw$(WX_VER)$(WX_SUFFIX)" />
+					<Add directory="$(#WX.lib)\gcc_dll" />
+				</Linker>
+				<Environment>
+					<Variable name="WX_SUFFIX" value="d" />
+				</Environment>
+			</Target>
+			<Target title="Debug Using Dll (Unicode)">
+				<Option output="..\..\lib\gcc_libdll\libwxmsw26ud_scintilla.a" />
+				<Option working_dir="" />
+				<Option object_output=".libdllobjsud" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option includeInTargetAll="1" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-O0" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D__WXDEBUG" />
+					<Add option="-DLIB_USINGDLL" />
+					<Add option="-DWXUSINGDLL" />
+					<Add option="-DwxUSE_UNICODE" />
+				</Compiler>
+				<Linker>
+					<Add library="wxmsw$(WX_VER)$(WX_SUFFIX)" />
+					<Add directory="$(#WX.lib)\gcc_dll" />
+				</Linker>
+				<Environment>
+					<Variable name="WX_SUFFIX" value="ud" />
+				</Environment>
+			</Target>
+			<Target title="Release Using Dll">
+				<Option output="..\..\lib\gcc_libdll\libwxmsw26_scintilla.a" />
+				<Option working_dir="" />
+				<Option object_output=".libdllobjs" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option includeInTargetAll="1" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-Os" />
+					<Add option="-O3" />
+					<Add option="-DNDEBUG" />
+					<Add option="-DLIB_USINGDLL" />
+					<Add option="-DWXUSINGDLL" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="wxmsw$(WX_VER)$(WX_SUFFIX)" />
+					<Add directory="$(#WX.lib)\gcc_dll" />
+				</Linker>
+				<Environment>
+					<Variable name="WX_SUFFIX" value="" />
+				</Environment>
+			</Target>
+			<Target title="Release Using Dll (Unicode)">
+				<Option output="..\..\lib\gcc_libdll\libwxmsw26u_scintilla.a" />
+				<Option working_dir="" />
+				<Option object_output=".libdllobjsu" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option includeInTargetAll="1" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-Os" />
+					<Add option="-O3" />
+					<Add option="-DNDEBUG" />
+					<Add option="-DLIB_USINGDLL" />
+					<Add option="-DWXUSINGDLL" />
+					<Add option="-DwxUSE_UNICODE" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="wxmsw$(WX_VER)$(WX_SUFFIX)" />
+					<Add directory="$(#WX.lib)\gcc_dll" />
+				</Linker>
+				<Environment>
+					<Variable name="WX_SUFFIX" value="u" />
+				</Environment>
+			</Target>
+			<Target title="Debug">
+				<Option output="..\..\lib\gcc_lib\libwxmsw26d_scintilla.a" />
+				<Option working_dir="" />
+				<Option object_output=".objsd" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option includeInTargetAll="1" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-O0" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D__WXDEBUG" />
+				</Compiler>
+				<Linker>
+					<Add directory="$(#WX.lib)\gcc_dll" />
+				</Linker>
+				<Environment>
+					<Variable name="WX_SUFFIX" value="d" />
+				</Environment>
+			</Target>
+			<Target title="Debug (Unicode)">
+				<Option output="..\..\lib\gcc_lib\libwxmsw26ud_scintilla.a" />
+				<Option working_dir="" />
+				<Option object_output=".objsud" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option includeInTargetAll="1" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-O0" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D__WXDEBUG" />
+					<Add option="-DwxUSE_UNICODE" />
+				</Compiler>
+				<Linker>
+					<Add directory="$(#WX.lib)\gcc_dll" />
+				</Linker>
+				<Environment>
+					<Variable name="WX_SUFFIX" value="ud" />
+				</Environment>
+			</Target>
+			<Target title="Release">
+				<Option output="..\..\lib\gcc_lib\libwxmsw26_scintilla.a" />
+				<Option working_dir="" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option includeInTargetAll="1" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-Os" />
+					<Add option="-O3" />
+					<Add option="-DNDEBUG" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add directory="$(#WX.lib)\gcc_dll" />
+				</Linker>
+				<Environment>
+					<Variable name="WX_SUFFIX" value="" />
+				</Environment>
+			</Target>
+			<Target title="Release (Unicode)">
+				<Option output="..\..\lib\gcc_lib\libwxmsw26u_scintilla.a" />
+				<Option working_dir="" />
+				<Option object_output=".objsu" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option includeInTargetAll="1" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-Os" />
+					<Add option="-O3" />
+					<Add option="-DNDEBUG" />
+					<Add option="-DwxUSE_UNICODE" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add directory="$(#WX.lib)\gcc_dll" />
+				</Linker>
+				<Environment>
+					<Variable name="WX_SUFFIX" value="u" />
+				</Environment>
+			</Target>
 			<Environment>
 				<Variable name="WX_SUFFIX" value="" />
 				<Variable name="WX_VER" value="26" />
@@ -135,6 +318,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\PlatWX.cpp">
 			<Option compilerVar="CPP" />
@@ -142,6 +333,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\PlatWX.h">
 			<Option compilerVar="CPP" />
@@ -151,6 +350,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\ScintillaWX.cpp">
 			<Option compilerVar="CPP" />
@@ -158,6 +365,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\ScintillaWX.h">
 			<Option compilerVar="CPP" />
@@ -167,6 +382,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\include\Accessor.h">
 			<Option compilerVar="CPP" />
@@ -176,6 +399,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\include\KeyWords.h">
 			<Option compilerVar="CPP" />
@@ -185,6 +416,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\include\Platform.h">
 			<Option compilerVar="CPP" />
@@ -194,6 +433,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\include\PropSet.h">
 			<Option compilerVar="CPP" />
@@ -203,6 +450,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\include\SString.h">
 			<Option compilerVar="CPP" />
@@ -212,6 +467,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\include\SciLexer.h">
 			<Option compilerVar="CPP" />
@@ -221,6 +484,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\include\Scintilla.h">
 			<Option compilerVar="CPP" />
@@ -230,6 +501,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\include\ScintillaWidget.h">
 			<Option compilerVar="CPP" />
@@ -239,6 +518,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\include\WindowAccessor.h">
 			<Option compilerVar="CPP" />
@@ -248,6 +535,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\AutoComplete.cxx">
 			<Option compilerVar="CPP" />
@@ -255,6 +550,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\AutoComplete.h">
 			<Option compilerVar="CPP" />
@@ -264,6 +567,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\CallTip.cxx">
 			<Option compilerVar="CPP" />
@@ -271,6 +582,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\CallTip.h">
 			<Option compilerVar="CPP" />
@@ -280,6 +599,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\CellBuffer.cxx">
 			<Option compilerVar="CPP" />
@@ -287,6 +614,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\CellBuffer.h">
 			<Option compilerVar="CPP" />
@@ -296,6 +631,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\CharClassify.cxx">
 			<Option compilerVar="CPP" />
@@ -303,6 +646,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\CharClassify.h">
 			<Option compilerVar="CPP" />
@@ -312,6 +663,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\ContractionState.cxx">
 			<Option compilerVar="CPP" />
@@ -319,6 +678,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\ContractionState.h">
 			<Option compilerVar="CPP" />
@@ -328,6 +695,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\Document.cxx">
 			<Option compilerVar="CPP" />
@@ -335,6 +710,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\Document.h">
 			<Option compilerVar="CPP" />
@@ -344,6 +727,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\DocumentAccessor.cxx">
 			<Option compilerVar="CPP" />
@@ -351,6 +742,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\DocumentAccessor.h">
 			<Option compilerVar="CPP" />
@@ -360,6 +759,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\Editor.cxx">
 			<Option compilerVar="CPP" />
@@ -367,6 +774,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\Editor.h">
 			<Option compilerVar="CPP" />
@@ -376,6 +791,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\ExternalLexer.cxx">
 			<Option compilerVar="CPP" />
@@ -383,6 +806,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\ExternalLexer.h">
 			<Option compilerVar="CPP" />
@@ -392,6 +823,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\Indicator.cxx">
 			<Option compilerVar="CPP" />
@@ -399,6 +838,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\Indicator.h">
 			<Option compilerVar="CPP" />
@@ -408,6 +855,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\KeyMap.cxx">
 			<Option compilerVar="CPP" />
@@ -415,6 +870,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\KeyMap.h">
 			<Option compilerVar="CPP" />
@@ -424,6 +887,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\KeyWords.cxx">
 			<Option compilerVar="CPP" />
@@ -431,6 +902,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexAPDL.cxx">
 			<Option compilerVar="CPP" />
@@ -438,6 +917,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexAU3.cxx">
 			<Option compilerVar="CPP" />
@@ -445,6 +932,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexAVE.cxx">
 			<Option compilerVar="CPP" />
@@ -452,6 +947,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexAda.cxx">
 			<Option compilerVar="CPP" />
@@ -459,6 +962,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexAsm.cxx">
 			<Option compilerVar="CPP" />
@@ -466,6 +977,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexAsn1.cxx">
 			<Option compilerVar="CPP" />
@@ -473,6 +992,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexBaan.cxx">
 			<Option compilerVar="CPP" />
@@ -480,6 +1007,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexBash.cxx">
 			<Option compilerVar="CPP" />
@@ -487,6 +1022,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexBasic.cxx">
 			<Option compilerVar="CPP" />
@@ -494,6 +1037,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexBullant.cxx">
 			<Option compilerVar="CPP" />
@@ -501,6 +1052,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexCLW.cxx">
 			<Option compilerVar="CPP" />
@@ -508,6 +1067,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexCPP.cxx">
 			<Option compilerVar="CPP" />
@@ -515,6 +1082,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexCSS.cxx">
 			<Option compilerVar="CPP" />
@@ -522,6 +1097,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexCaml.cxx">
 			<Option compilerVar="CPP" />
@@ -529,6 +1112,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexConf.cxx">
 			<Option compilerVar="CPP" />
@@ -536,6 +1127,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexCrontab.cxx">
 			<Option compilerVar="CPP" />
@@ -543,6 +1142,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexCsound.cxx">
 			<Option compilerVar="CPP" />
@@ -550,6 +1157,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexEScript.cxx">
 			<Option compilerVar="CPP" />
@@ -557,6 +1172,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexEiffel.cxx">
 			<Option compilerVar="CPP" />
@@ -564,6 +1187,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexErlang.cxx">
 			<Option compilerVar="CPP" />
@@ -571,6 +1202,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexFlagship.cxx">
 			<Option compilerVar="CPP" />
@@ -578,6 +1217,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexForth.cxx">
 			<Option compilerVar="CPP" />
@@ -585,6 +1232,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexFortran.cxx">
 			<Option compilerVar="CPP" />
@@ -592,6 +1247,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexGui4Cli.cxx">
 			<Option compilerVar="CPP" />
@@ -599,6 +1262,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexHTML.cxx">
 			<Option compilerVar="CPP" />
@@ -606,6 +1277,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexHaskell.cxx">
 			<Option compilerVar="CPP" />
@@ -613,6 +1292,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexInno.cxx">
 			<Option compilerVar="CPP" />
@@ -620,6 +1307,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexKix.cxx">
 			<Option compilerVar="CPP" />
@@ -627,6 +1322,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexLisp.cxx">
 			<Option compilerVar="CPP" />
@@ -634,6 +1337,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexLout.cxx">
 			<Option compilerVar="CPP" />
@@ -641,6 +1352,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexLua.cxx">
 			<Option compilerVar="CPP" />
@@ -648,6 +1367,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexMMIXAL.cxx">
 			<Option compilerVar="CPP" />
@@ -655,6 +1382,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexMPT.cxx">
 			<Option compilerVar="CPP" />
@@ -662,6 +1397,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexMSSQL.cxx">
 			<Option compilerVar="CPP" />
@@ -669,6 +1412,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexMatlab.cxx">
 			<Option compilerVar="CPP" />
@@ -676,6 +1427,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexMetapost.cxx">
 			<Option compilerVar="CPP" />
@@ -683,6 +1442,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexNsis.cxx">
 			<Option compilerVar="CPP" />
@@ -690,6 +1457,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexOpal.cxx">
 			<Option compilerVar="CPP" />
@@ -697,6 +1472,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexOthers.cxx">
 			<Option compilerVar="CPP" />
@@ -704,6 +1487,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexPB.cxx">
 			<Option compilerVar="CPP" />
@@ -711,6 +1502,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexPOV.cxx">
 			<Option compilerVar="CPP" />
@@ -718,6 +1517,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexPS.cxx">
 			<Option compilerVar="CPP" />
@@ -725,6 +1532,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexPascal.cxx">
 			<Option compilerVar="CPP" />
@@ -732,6 +1547,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexPerl.cxx">
 			<Option compilerVar="CPP" />
@@ -739,6 +1562,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexPython.cxx">
 			<Option compilerVar="CPP" />
@@ -746,6 +1577,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexRebol.cxx">
 			<Option compilerVar="CPP" />
@@ -753,6 +1592,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexRuby.cxx">
 			<Option compilerVar="CPP" />
@@ -760,6 +1607,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexSQL.cxx">
 			<Option compilerVar="CPP" />
@@ -767,6 +1622,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexScriptol.cxx">
 			<Option compilerVar="CPP" />
@@ -774,6 +1637,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexSmalltalk.cxx">
 			<Option compilerVar="CPP" />
@@ -781,6 +1652,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexSpecman.cxx">
 			<Option compilerVar="CPP" />
@@ -788,6 +1667,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexTADS3.cxx">
 			<Option compilerVar="CPP" />
@@ -795,6 +1682,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexTCL.cxx">
 			<Option compilerVar="CPP" />
@@ -802,6 +1697,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexTeX.cxx">
 			<Option compilerVar="CPP" />
@@ -809,6 +1712,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexVB.cxx">
 			<Option compilerVar="CPP" />
@@ -816,6 +1727,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexVHDL.cxx">
 			<Option compilerVar="CPP" />
@@ -823,6 +1742,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexVerilog.cxx">
 			<Option compilerVar="CPP" />
@@ -830,6 +1757,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexYAML.cxx">
 			<Option compilerVar="CPP" />
@@ -837,6 +1772,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LineMarker.cxx">
 			<Option compilerVar="CPP" />
@@ -844,6 +1787,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\LineMarker.h">
 			<Option compilerVar="CPP" />
@@ -853,6 +1804,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\PropSet.cxx">
 			<Option compilerVar="CPP" />
@@ -860,6 +1819,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\RESearch.cxx">
 			<Option compilerVar="CPP" />
@@ -867,6 +1834,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\RESearch.h">
 			<Option compilerVar="CPP" />
@@ -876,6 +1851,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\SVector.h">
 			<Option compilerVar="CPP" />
@@ -885,6 +1868,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\ScintillaBase.cxx">
 			<Option compilerVar="CPP" />
@@ -892,6 +1883,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\ScintillaBase.h">
 			<Option compilerVar="CPP" />
@@ -901,6 +1900,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\Style.cxx">
 			<Option compilerVar="CPP" />
@@ -908,6 +1915,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\Style.h">
 			<Option compilerVar="CPP" />
@@ -917,6 +1932,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\StyleContext.cxx">
 			<Option compilerVar="CPP" />
@@ -924,6 +1947,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\StyleContext.h">
 			<Option compilerVar="CPP" />
@@ -933,6 +1964,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\UniConversion.cxx">
 			<Option compilerVar="CPP" />
@@ -940,6 +1979,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\UniConversion.h">
 			<Option compilerVar="CPP" />
@@ -949,6 +1996,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\ViewStyle.cxx">
 			<Option compilerVar="CPP" />
@@ -956,6 +2011,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\ViewStyle.h">
 			<Option compilerVar="CPP" />
@@ -965,6 +2028,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\WindowAccessor.cxx">
 			<Option compilerVar="CPP" />
@@ -972,6 +2043,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\XPM.cxx">
 			<Option compilerVar="CPP" />
@@ -979,6 +2058,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\scintilla\src\XPM.h">
 			<Option compilerVar="CPP" />
@@ -988,6 +2075,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Unit filename="..\..\src\wxScintilla\wxscintilla.cpp">
 			<Option compilerVar="CPP" />
@@ -995,6 +2090,14 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
+			<Option target="Debug Using Dll" />
+			<Option target="Debug Using Dll (Unicode)" />
+			<Option target="Release Using Dll" />
+			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
 		</Unit>
 		<Extensions />
 	</Project>
