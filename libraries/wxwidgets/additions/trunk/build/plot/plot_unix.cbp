@@ -2,15 +2,14 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="4" />
 	<Project>
-		<Option title="propgrid" />
+		<Option title="wxPlot (Unix)" />
 		<Option pch_mode="0" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Shared Library">
-				<Option output="/usr/lib/libwx_gtk2u_propgrid-2.6.so" />
+				<Option output="/usr/lib/libwx_gtk2u_plot-2.6.so" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option includeInTargetAll="1" />
 				<Option createStaticLib="1" />
 				<Compiler>
 					<Add option="-DWXMAKINGDLL_PROPGRID" />
@@ -26,75 +25,49 @@
 		<Linker>
 			<Add option="`wx-config --libs`" />
 		</Linker>
-		<Unit filename="../../include/wx/propgrid/advprops.h">
+		<Unit filename="../../include/wx/plot/plot.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
 			<Option target="Shared Library" />
 		</Unit>
-		<Unit filename="../../include/wx/propgrid/extras.h">
+		<Unit filename="../../include/wx/plot/res/plot_dwn.xpm">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
 			<Option target="Shared Library" />
 		</Unit>
-		<Unit filename="../../include/wx/propgrid/manager.h">
+		<Unit filename="../../include/wx/plot/res/plot_enl.xpm">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
 			<Option target="Shared Library" />
 		</Unit>
-		<Unit filename="../../include/wx/propgrid/odcombo.h">
+		<Unit filename="../../include/wx/plot/res/plot_shr.xpm">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
 			<Option target="Shared Library" />
 		</Unit>
-		<Unit filename="../../include/wx/propgrid/pg_dox_mainpage.h">
+		<Unit filename="../../include/wx/plot/res/plot_up.xpm">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
 			<Option target="Shared Library" />
 		</Unit>
-		<Unit filename="../../include/wx/propgrid/propdev.h">
+		<Unit filename="../../include/wx/plot/res/plot_zin.xpm">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
 			<Option target="Shared Library" />
 		</Unit>
-		<Unit filename="../../include/wx/propgrid/propgrid.doxygen">
+		<Unit filename="../../include/wx/plot/res/plot_zot.xpm">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
 			<Option target="Shared Library" />
 		</Unit>
-		<Unit filename="../../include/wx/propgrid/propgrid.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Shared Library" />
-		</Unit>
-		<Unit filename="../../src/propgrid/advprops.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
-		</Unit>
-		<Unit filename="../../src/propgrid/extras.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
-		</Unit>
-		<Unit filename="../../src/propgrid/manager.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
-		</Unit>
-		<Unit filename="../../src/propgrid/odcombo.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
-		</Unit>
-		<Unit filename="../../src/propgrid/propgrid.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
-		</Unit>
-		<Unit filename="../../src/propgrid/props.cpp">
+		<Unit filename="../../src/plot/plot.cpp">
 			<Option compilerVar="CPP" />
 			<Option target="Shared Library" />
 		</Unit>

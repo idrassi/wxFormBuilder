@@ -2,14 +2,15 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="4" />
 	<Project>
-		<Option title="awx" />
+		<Option title="PropGrid (Unix)" />
 		<Option pch_mode="0" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Shared Library">
-				<Option output="/usr/lib/libwx_gtk2u_awx-2.6.so" />
+				<Option output="/usr/lib/libwx_gtk2u_propgrid-2.6.so" />
 				<Option type="3" />
 				<Option compiler="gcc" />
+				<Option includeInTargetAll="1" />
 				<Option createStaticLib="1" />
 				<Compiler>
 					<Add option="-DWXMAKINGDLL_PROPGRID" />
@@ -25,72 +26,76 @@
 		<Linker>
 			<Add option="`wx-config --libs`" />
 		</Linker>
-		<Unit filename="../../include/wx/awx/awx.h">
+		<Unit filename="../../include/wx/propgrid/advprops.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
 			<Option target="Shared Library" />
 		</Unit>
-		<Unit filename="../../include/wx/awx/button.h">
+		<Unit filename="../../include/wx/propgrid/extras.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
 			<Option target="Shared Library" />
 		</Unit>
-		<Unit filename="../../include/wx/awx/led.h">
+		<Unit filename="../../include/wx/propgrid/manager.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
 			<Option target="Shared Library" />
 		</Unit>
-		<Unit filename="../../include/wx/awx/obdlg.h">
+		<Unit filename="../../include/wx/propgrid/odcombo.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
 			<Option target="Shared Library" />
 		</Unit>
-		<Unit filename="../../include/wx/awx/outbar.h">
+		<Unit filename="../../include/wx/propgrid/pg_dox_mainpage.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
 			<Option target="Shared Library" />
 		</Unit>
-		<Unit filename="../../include/wx/awx/toolbar.h">
+		<Unit filename="../../include/wx/propgrid/propdev.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
 			<Option target="Shared Library" />
 		</Unit>
-		<Unit filename="../../src/awx/button.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
-		</Unit>
-		<Unit filename="../../src/awx/led.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
-		</Unit>
-		<Unit filename="../../src/awx/leds.xpm">
+		<Unit filename="../../include/wx/propgrid/propgrid.doxygen">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
 			<Option target="Shared Library" />
 		</Unit>
-		<Unit filename="../../src/awx/obdlg.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
-		</Unit>
-		<Unit filename="../../src/awx/outbar.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
-		</Unit>
-		<Unit filename="../../src/awx/toolbar.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
-		</Unit>
-		<Unit filename="../../src/awx/xp_theme.xpm">
+		<Unit filename="../../include/wx/propgrid/propgrid.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../src/propgrid/advprops.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../src/propgrid/extras.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../src/propgrid/manager.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../src/propgrid/odcombo.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../src/propgrid/propgrid.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../src/propgrid/props.cpp">
+			<Option compilerVar="CPP" />
 			<Option target="Shared Library" />
 		</Unit>
 		<Extensions />

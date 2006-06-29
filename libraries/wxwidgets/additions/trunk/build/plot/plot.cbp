@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="2" />
 	<Project>
-		<Option title="plot" />
+		<Option title="wxPlot" />
 		<Option default_target="-1" />
 		<Option compiler="0" />
 		<Build>
 			<Target title="Win32 DLL Unicode Release">
-				<Option output="$(#WX.lib)\gcc_dll\wxmsw27u_plot.dll" />
+				<Option output="$(#WX.lib)\gcc_dll\wxmsw26u_plot.dll" />
 				<Option object_output="gcc_mswudll\plot" />
 				<Option type="3" />
 				<Option compiler="0" />
@@ -28,12 +28,12 @@
 					<Add directory="$(#WX.lib)\gcc_dll\mswu" />
 				</Compiler>
 				<Linker>
-					<Add library="wxmsw270u_gcc" />
+					<Add library="wxmsw260u_gcc" />
 					<Add directory="$(#WX.lib)\gcc_dll" />
 				</Linker>
 			</Target>
 			<Target title="Win32 DLL Release">
-				<Option output="$(#WX.lib)\gcc_dll\wxmsw27_plot.dll" />
+				<Option output="$(#WX.lib)\gcc_dll\wxmsw26_plot.dll" />
 				<Option object_output="gcc_mswdll\plot" />
 				<Option type="3" />
 				<Option compiler="0" />
@@ -53,7 +53,7 @@
 					<Add directory="$(#WX.lib)\gcc_dll\msw" />
 				</Compiler>
 				<Linker>
-					<Add library="wxmsw270_gcc" />
+					<Add library="wxmsw260_gcc" />
 					<Add directory="$(#WX.lib)\gcc_dll" />
 				</Linker>
 			</Target>
