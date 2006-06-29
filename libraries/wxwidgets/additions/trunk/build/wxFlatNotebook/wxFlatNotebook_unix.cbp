@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="4" />
+	<Project>
+		<Option title="wxFlatNotebook (Unix)" />
+		<Option pch_mode="0" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Shared Library">
+				<Option output="/usr/lib/libwx_gtk2u_flatnotebook-2.6.so" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option includeInTargetAll="1" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-DWXMAKINGDLL_FNB" />
+					<Add option="-DWXUSINGDLL" />
+					<Add option="-DMONOLITHIC" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="`wx-config --cflags`" />
+			<Add option="-D__WXGTK__" />
+			<Add directory="../../include" />
+		</Compiler>
+		<Linker>
+			<Add option="`wx-config --libs`" />
+		</Linker>
+		<Unit filename="../../include/wx/wxFlatNotebook/wxFNBDropTarget.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../include/wx/wxFlatNotebook/wxFlatNotebook.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../src/wxFlatNotebook/wxFlatNotebook.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>
