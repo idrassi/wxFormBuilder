@@ -1373,7 +1373,32 @@ int wxFlagsPropertyClass::GetChoiceInfo( wxPGChoiceInfo* choiceinfo )
 // wxDirProperty
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_STRING_PROPERTY_WITH_VALIDATOR(wxDirProperty,wxPG_NO_ESCAPE)
+
+class wxDirPropertyClass : public wxLongStringPropertyClass
+{
+    WX_PG_DECLARE_DERIVED_PROPERTY_CLASS()
+public:
+    wxDirPropertyClass( const wxString& name, const wxString& label, const wxString& value );
+    virtual ~wxDirPropertyClass();
+
+    WX_PG_DECLARE_ATTRIBUTE_METHODS()
+    WX_PG_DECLARE_VALIDATOR_METHODS()
+
+    virtual bool OnButtonClick ( wxPropertyGrid* propgrid, wxString& value );
+
+protected:
+    wxString    m_dlgMessage;
+};
+
+
+WX_PG_IMPLEMENT_DERIVED_PROPERTY_CLASS(wxDirProperty,wxLongStringProperty,const wxString&)
+
+wxDirPropertyClass::wxDirPropertyClass( const wxString& name, const wxString& label, const wxString& value )
+  : wxLongStringPropertyClass(name,label,value)
+{
+    m_flags |= wxPG_NO_ESCAPE;
+}
+wxDirPropertyClass::~wxDirPropertyClass() { }
 
 #if wxUSE_VALIDATORS
 
@@ -1388,12 +1413,16 @@ bool wxDirPropertyClass::OnButtonClick( wxPropertyGrid* propgrid, wxString& valu
 {
     wxSize dlg_sz(300,400);
 
-    wxDirDialog dlg( propgrid,_("Choose a directory:"),
-                     value,0,
+    wxDirDialog dlg( propgrid,
+                     m_dlgMessage.length() ? m_dlgMessage : wxString(_("Choose a directory:")),
+                     value,
+                     0,
 #if !wxPG_SMALL_SCREEN
-                     propgrid->GetGoodEditorDialogPosition(this,dlg_sz),dlg_sz );
+                     propgrid->GetGoodEditorDialogPosition(this,dlg_sz),
+                     dlg_sz );
 #else
-                     wxDefaultPosition,wxDefaultSize );
+                     wxDefaultPosition,
+                     wxDefaultSize );
 #endif
 
     if ( dlg.ShowModal() == wxID_OK )
@@ -1402,6 +1431,14 @@ bool wxDirPropertyClass::OnButtonClick( wxPropertyGrid* propgrid, wxString& valu
         return true;
     }
     return false;
+}
+
+void wxDirPropertyClass::SetAttribute( int id, wxVariant& value )
+{
+    if ( id == wxPG_DIR_DIALOG_MESSAGE )
+    {
+        m_dlgMessage = value.GetString();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1548,7 +1585,7 @@ bool wxFilePropertyClass::OnEvent( wxPropertyGrid* propgrid,
         path = m_filename.GetPath();
 
         wxFileDialog dlg( propgrid,
-                          _("Choose a file"),
+                          m_dlgTitle.length() ? m_dlgTitle : wxString(_("Choose a file")),
                           !m_initialPath.empty() ? m_initialPath : m_filename.GetPath(),
                           wxEmptyString,
                           m_wildcard,
@@ -1614,6 +1651,10 @@ void wxFilePropertyClass::SetAttribute( int id, wxVariant& value )
     else if ( id == wxPG_FILE_INITIAL_PATH )
     {
         m_initialPath = value.GetString();
+    }
+    else if ( id == wxPG_FILE_DIALOG_TITLE )
+    {
+        m_dlgTitle = value.GetString();
     }
 }
 

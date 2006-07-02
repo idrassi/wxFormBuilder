@@ -9,7 +9,7 @@
 <a href="#_details">More...</a><table border=0 cellpadding=0 cellspacing=0>
 <tr><td></td></tr>
 <tr><td colspan=2><br><h2>Defines</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__miscellaneous.htm#ga10">WX_PG_CLASSINFO</a>(NAME)&nbsp;&nbsp;&nbsp;NAME##ClassInfo</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__miscellaneous.htm#ga13">WX_PG_CLASSINFO</a>(NAME)&nbsp;&nbsp;&nbsp;NAME##ClassInfo</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__miscellaneous.htm#ga8">wxPG_COLOUR</a>(R, G, B)&nbsp;&nbsp;&nbsp;((wxUint32)(R+(G&lt;&lt;8)+(B&lt;&lt;16)))</td></tr>
 
@@ -23,6 +23,13 @@
 #define&nbsp;</td><td class="memItemRight" valign=bottom><b>wxPG_EMPTY_ARRAYSTRING</b>&nbsp;&nbsp;&nbsp;(*((wxArrayString*)NULL))</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__miscellaneous.htm#ga9">wxPG_FLEXIBLE_SIZE</a>(PREFWID, PREFHEI)&nbsp;&nbsp;&nbsp;wxSize(-(PREFWID),-(PREFHEI))</td></tr>
+
+<tr><td class="memItemLeft" nowrap align=right valign=top>#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__miscellaneous.htm#ga12">wxPG_FULL_CUSTOM_PAINT_FLEXIBLE_SIZE</a>(PREFHEI)&nbsp;&nbsp;&nbsp;wxSize(wxPG_FULL_CUSTOM_PAINT_WIDTH,-(PREFHEI))</td></tr>
+
+<tr><td class="memItemLeft" nowrap align=right valign=top>#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__miscellaneous.htm#ga11">wxPG_FULL_CUSTOM_PAINT_SIZE</a>(HEI)&nbsp;&nbsp;&nbsp;wxSize(wxPG_FULL_CUSTOM_PAINT_WIDTH,HEI)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="ga10" doxytag="miscellaneous::wxPG_FULL_CUSTOM_PAINT_WIDTH" ></a>
+#define&nbsp;</td><td class="memItemRight" valign=bottom><b>wxPG_FULL_CUSTOM_PAINT_WIDTH</b>&nbsp;&nbsp;&nbsp;-99999</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="ga7" doxytag="miscellaneous::wxPG_INVALID_VALUE" ></a>
 #define&nbsp;</td><td class="memItemRight" valign=bottom><b>wxPG_INVALID_VALUE</b>&nbsp;&nbsp;&nbsp;2147483647</td></tr>
@@ -42,7 +49,7 @@
 This section describes some miscellanous values, types and macros. 
 <p>
 <hr><h2>Define Documentation</h2>
-<a class="anchor" name="ga10" doxytag="propgrid.h::WX_PG_CLASSINFO" ></a><p>
+<a class="anchor" name="ga13" doxytag="propgrid.h::WX_PG_CLASSINFO" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -66,9 +73,9 @@ This section describes some miscellanous values, types and macros.
     <td>
 
 <p>
-Use this with <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagere6">wxPropertyGrid::IsPropertyKindOf</a>. 
+Use this with <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee10">wxPropertyGrid::IsPropertyKindOf</a>. 
 <p>
-For example, as in <pre class="fragment"><div>        pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagere6">IsPropertyKindOf</a>(<a class="code" href="group__miscellaneous.htm#ga10">WX_PG_CLASSINFO</a>(wxStringProperty))
+For example, as in <pre class="fragment"><div>        pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee10">IsPropertyKindOf</a>(<a class="code" href="group__miscellaneous.htm#ga13">WX_PG_CLASSINFO</a>(wxStringProperty))
 </div></pre>    </td>
   </tr>
 </table>
@@ -134,9 +141,67 @@ Convert Red, Green and Blue to a single 32-bit value.
     <td>
 
 <p>
-Return this in GetImageSize() to indicate that the property custom paint is flexible. 
+Return this in GetImageSize() to indicate that the custom painted property image is flexible. 
 <p>
-That is, it will paint (dropdown) list items with PREFWID,PREFHEI size, and in with required default size in the value cell.     </td>
+That is, it will paint (dropdown) list item images with PREFWID,PREFHEI size.     </td>
+  </tr>
+</table>
+<a class="anchor" name="ga12" doxytag="propgrid.h::wxPG_FULL_CUSTOM_PAINT_FLEXIBLE_SIZE" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> #define wxPG_FULL_CUSTOM_PAINT_FLEXIBLE_SIZE</td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">PREFHEI&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;wxSize(wxPG_FULL_CUSTOM_PAINT_WIDTH,-(PREFHEI))
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Return this in GetImageSize() to indicate that the property is custom painted completely (ie. 
+<p>
+the text as well), and with flexible height.     </td>
+  </tr>
+</table>
+<a class="anchor" name="ga11" doxytag="propgrid.h::wxPG_FULL_CUSTOM_PAINT_SIZE" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> #define wxPG_FULL_CUSTOM_PAINT_SIZE</td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">HEI&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;wxSize(wxPG_FULL_CUSTOM_PAINT_WIDTH,HEI)
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Return this in GetImageSize() to indicate that the property is custom painted completely (ie. 
+<p>
+the text as well).     </td>
   </tr>
 </table>
 <a class="anchor" name="ga2" doxytag="propgrid.h::wxPG_LABEL" ></a><p>
@@ -225,7 +290,7 @@ This callback function is used by atleast wxCustomProperty to facilitiate easy c
     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Fri May 5 19:58:24 2006 for wxPropertyGrid by
+<hr size="1"><address style="align: right;"><small>Generated on Thu Jun 8 20:02:24 2006 for wxPropertyGrid by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.6 </small></address>

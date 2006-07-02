@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="4" />
 	<Project>
-		<Option title="wxPropGrid" />
+		<Option title="wxAWX" />
 		<Option pch_mode="0" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug Mono Dll">
-				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)md_propgrid_gcc.dll" />
+				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)md_awx_gcc.dll" />
 				<Option object_output=".dllobjsd" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -19,7 +19,7 @@
 					<Add option="-O0" />
 					<Add option="-D_DEBUG" />
 					<Add option="-D__WXDEBUG" />
-					<Add option="-DWXMAKINGDLL_PROPGRID" />
+					<Add option="-DWXMAKINGDLL_AWX" />
 					<Add option="-DWXUSINGDLL" />
 				</Compiler>
 				<Linker>
@@ -31,7 +31,7 @@
 				</Environment>
 			</Target>
 			<Target title="Debug Mono Dll (Unicode)">
-				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)umd_propgrid_gcc.dll" />
+				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)umd_awx_gcc.dll" />
 				<Option object_output=".dllobjsud" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -43,7 +43,7 @@
 					<Add option="-O0" />
 					<Add option="-D_DEBUG" />
 					<Add option="-D__WXDEBUG" />
-					<Add option="-DWXMAKINGDLL_PROPGRID" />
+					<Add option="-DWXMAKINGDLL_AWX" />
 					<Add option="-DWXUSINGDLL" />
 					<Add option="-DwxUSE_UNICODE" />
 				</Compiler>
@@ -56,7 +56,7 @@
 				</Environment>
 			</Target>
 			<Target title="Release Mono Dll">
-				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)m_propgrid_gcc.dll" />
+				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)m_awx_gcc.dll" />
 				<Option object_output=".dllobjs" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -67,7 +67,7 @@
 					<Add option="-Os" />
 					<Add option="-O3" />
 					<Add option="-DNDEBUG" />
-					<Add option="-DWXMAKINGDLL_PROPGRID" />
+					<Add option="-DWXMAKINGDLL_AWX" />
 					<Add option="-DWXUSINGDLL" />
 				</Compiler>
 				<Linker>
@@ -80,7 +80,7 @@
 				</Environment>
 			</Target>
 			<Target title="Release Mono Dll (Unicode)">
-				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)um_propgrid_gcc.dll" />
+				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)um_awx_gcc.dll" />
 				<Option object_output=".dllobjsu" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -91,7 +91,7 @@
 					<Add option="-Os" />
 					<Add option="-O3" />
 					<Add option="-DNDEBUG" />
-					<Add option="-DWXMAKINGDLL_PROPGRID" />
+					<Add option="-DWXMAKINGDLL_AWX" />
 					<Add option="-DWXUSINGDLL" />
 					<Add option="-DwxUSE_UNICODE" />
 				</Compiler>
@@ -105,7 +105,7 @@
 				</Environment>
 			</Target>
 			<Target title="Debug Using Dll">
-				<Option output="..\..\lib\gcc_libdll\libwxmsw$(WX_VER)d_propgrid.a" />
+				<Option output="..\..\lib\gcc_libdll\libwxmsw$(WX_VER)d_awx.a" />
 				<Option working_dir="" />
 				<Option object_output=".libdllobjsd" />
 				<Option type="2" />
@@ -120,12 +120,9 @@
 					<Add option="-DLIB_USINGDLL" />
 					<Add option="-DWXUSINGDLL" />
 				</Compiler>
-				<Linker>
-					<Add directory="$(#WX.lib)\gcc_dll" />
-				</Linker>
 			</Target>
 			<Target title="Debug Using Dll (Unicode)">
-				<Option output="..\..\lib\gcc_libdll\libwxmsw$(WX_VER)ud_propgrid.a" />
+				<Option output="..\..\lib\gcc_libdll\libwxmsw$(WX_VER)ud_awx.a" />
 				<Option working_dir="" />
 				<Option object_output=".libdllobjsud" />
 				<Option type="2" />
@@ -141,12 +138,9 @@
 					<Add option="-DWXUSINGDLL" />
 					<Add option="-DwxUSE_UNICODE" />
 				</Compiler>
-				<Linker>
-					<Add directory="$(#WX.lib)\gcc_dll" />
-				</Linker>
 			</Target>
 			<Target title="Release Using Dll">
-				<Option output="..\..\lib\gcc_libdll\libwxmsw$(WX_VER)_propgrid.a" />
+				<Option output="..\..\lib\gcc_libdll\libwxmsw$(WX_VER)_awx.a" />
 				<Option working_dir="" />
 				<Option object_output=".libdllobjs" />
 				<Option type="2" />
@@ -162,11 +156,10 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add directory="$(#WX.lib)\gcc_dll" />
 				</Linker>
 			</Target>
 			<Target title="Release Using Dll (Unicode)">
-				<Option output="..\..\lib\gcc_libdll\libwxmsw$(WX_VER)u_propgrid.a" />
+				<Option output="..\..\lib\gcc_libdll\libwxmsw$(WX_VER)u_awx.a" />
 				<Option working_dir="" />
 				<Option object_output=".libdllobjsu" />
 				<Option type="2" />
@@ -183,11 +176,10 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add directory="$(#WX.lib)\gcc_dll" />
 				</Linker>
 			</Target>
 			<Target title="Debug">
-				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)d_propgrid.a" />
+				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)d_awx.a" />
 				<Option working_dir="" />
 				<Option object_output=".objsd" />
 				<Option type="2" />
@@ -200,12 +192,9 @@
 					<Add option="-D_DEBUG" />
 					<Add option="-D__WXDEBUG" />
 				</Compiler>
-				<Linker>
-					<Add directory="$(#WX.lib)\gcc_dll" />
-				</Linker>
 			</Target>
 			<Target title="Debug (Unicode)">
-				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)ud_propgrid.a" />
+				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)ud_awx.a" />
 				<Option working_dir="" />
 				<Option object_output=".objsud" />
 				<Option type="2" />
@@ -219,12 +208,9 @@
 					<Add option="-D__WXDEBUG" />
 					<Add option="-DwxUSE_UNICODE" />
 				</Compiler>
-				<Linker>
-					<Add directory="$(#WX.lib)\gcc_dll" />
-				</Linker>
 			</Target>
 			<Target title="Release">
-				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)_propgrid.a" />
+				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)_awx.a" />
 				<Option working_dir="" />
 				<Option type="2" />
 				<Option compiler="gcc" />
@@ -237,11 +223,10 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add directory="$(#WX.lib)\gcc_dll" />
 				</Linker>
 			</Target>
 			<Target title="Release (Unicode)">
-				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)u_propgrid.a" />
+				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)u_awx.a" />
 				<Option working_dir="" />
 				<Option object_output=".objsu" />
 				<Option type="2" />
@@ -256,7 +241,6 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add directory="$(#WX.lib)\gcc_dll" />
 				</Linker>
 			</Target>
 			<Environment>
@@ -274,7 +258,7 @@
 			<Add directory="$(#WX.include)" />
 			<Add directory="..\..\include" />
 		</Compiler>
-		<Unit filename="..\..\include\wx\propgrid\advprops.h">
+		<Unit filename="..\..\include\wx\awx\awx.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
@@ -291,7 +275,7 @@
 			<Option target="Release" />
 			<Option target="Release (Unicode)" />
 		</Unit>
-		<Unit filename="..\..\include\wx\propgrid\extras.h">
+		<Unit filename="..\..\include\wx\awx\button.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
@@ -308,7 +292,7 @@
 			<Option target="Release" />
 			<Option target="Release (Unicode)" />
 		</Unit>
-		<Unit filename="..\..\include\wx\propgrid\manager.h">
+		<Unit filename="..\..\include\wx\awx\led.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
@@ -325,7 +309,7 @@
 			<Option target="Release" />
 			<Option target="Release (Unicode)" />
 		</Unit>
-		<Unit filename="..\..\include\wx\propgrid\odcombo.h">
+		<Unit filename="..\..\include\wx\awx\obdlg.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
@@ -342,7 +326,7 @@
 			<Option target="Release" />
 			<Option target="Release (Unicode)" />
 		</Unit>
-		<Unit filename="..\..\include\wx\propgrid\pg_dox_mainpage.h">
+		<Unit filename="..\..\include\wx\awx\outbar.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
@@ -359,7 +343,7 @@
 			<Option target="Release" />
 			<Option target="Release (Unicode)" />
 		</Unit>
-		<Unit filename="..\..\include\wx\propgrid\propdev.h">
+		<Unit filename="..\..\include\wx\awx\toolbar.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
@@ -376,24 +360,7 @@
 			<Option target="Release" />
 			<Option target="Release (Unicode)" />
 		</Unit>
-		<Unit filename="..\..\include\wx\propgrid\propgrid.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug Mono Dll" />
-			<Option target="Debug Mono Dll (Unicode)" />
-			<Option target="Release Mono Dll" />
-			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
-			<Option target="Debug" />
-			<Option target="Debug (Unicode)" />
-			<Option target="Release" />
-			<Option target="Release (Unicode)" />
-		</Unit>
-		<Unit filename="..\..\src\propgrid\advprops.cpp">
+		<Unit filename="..\..\src\awx\button.cpp">
 			<Option compilerVar="CPP" />
 			<Option target="Debug Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
@@ -408,7 +375,7 @@
 			<Option target="Release" />
 			<Option target="Release (Unicode)" />
 		</Unit>
-		<Unit filename="..\..\src\propgrid\extras.cpp">
+		<Unit filename="..\..\src\awx\led.cpp">
 			<Option compilerVar="CPP" />
 			<Option target="Debug Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
@@ -423,7 +390,7 @@
 			<Option target="Release" />
 			<Option target="Release (Unicode)" />
 		</Unit>
-		<Unit filename="..\..\src\propgrid\manager.cpp">
+		<Unit filename="..\..\src\awx\obdlg.cpp">
 			<Option compilerVar="CPP" />
 			<Option target="Debug Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
@@ -438,7 +405,7 @@
 			<Option target="Release" />
 			<Option target="Release (Unicode)" />
 		</Unit>
-		<Unit filename="..\..\src\propgrid\odcombo.cpp">
+		<Unit filename="..\..\src\awx\outbar.cpp">
 			<Option compilerVar="CPP" />
 			<Option target="Debug Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
@@ -453,22 +420,7 @@
 			<Option target="Release" />
 			<Option target="Release (Unicode)" />
 		</Unit>
-		<Unit filename="..\..\src\propgrid\propgrid.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Debug Mono Dll" />
-			<Option target="Debug Mono Dll (Unicode)" />
-			<Option target="Release Mono Dll" />
-			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
-			<Option target="Debug" />
-			<Option target="Debug (Unicode)" />
-			<Option target="Release" />
-			<Option target="Release (Unicode)" />
-		</Unit>
-		<Unit filename="..\..\src\propgrid\props.cpp">
+		<Unit filename="..\..\src\awx\toolbar.cpp">
 			<Option compilerVar="CPP" />
 			<Option target="Debug Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />

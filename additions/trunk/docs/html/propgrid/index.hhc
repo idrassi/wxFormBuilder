@@ -25,6 +25,7 @@
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPropertyGrid"><param name="Local" value="classwxPropertyGrid.htm"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPropertyGridEvent"><param name="Local" value="classwxPropertyGridEvent.htm"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPropertyGridManager"><param name="Local" value="classwxPropertyGridManager.htm"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPropertyGridPage"><param name="Local" value="classwxPropertyGridPage.htm"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPropertyGridPopulator"><param name="Local" value="classwxPropertyGridPopulator.htm"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPropertyGridState"><param name="Local" value="classwxPropertyGridState.htm"><param name="ImageNumber" value="11"></OBJECT>
   </UL>
@@ -38,10 +39,10 @@
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGChoices"><param name="Local" value="classwxPGChoices.htm"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGChoicesData"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGComboBoxEditor"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGComboControl"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGComboControlBase"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGComboControlFeatures"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGComboPopup"><param name="ImageNumber" value="11"></OBJECT>
-  <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGCustomComboControl"><param name="ImageNumber" value="11"></OBJECT>
-  <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGCustomComboControlBase"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGEditor"><param name="ImageNumber" value="1"></OBJECT>
     <UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGChoiceEditor"><param name="ImageNumber" value="11"></OBJECT>
@@ -78,10 +79,14 @@
     <UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPropertyGrid"><param name="Local" value="classwxPropertyGrid.htm"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPropertyGridManager"><param name="Local" value="classwxPropertyGridManager.htm"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPropertyGridPage"><param name="Local" value="classwxPropertyGridPage.htm"><param name="ImageNumber" value="11"></OBJECT>
     </UL>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPropertyGridEvent"><param name="Local" value="classwxPropertyGridEvent.htm"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPropertyGridPopulator"><param name="Local" value="classwxPropertyGridPopulator.htm"><param name="ImageNumber" value="11"></OBJECT>
-  <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPropertyGridState"><param name="Local" value="classwxPropertyGridState.htm"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPropertyGridState"><param name="ImageNumber" value="1"></OBJECT>
+    <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPropertyGridPage"><param name="Local" value="classwxPropertyGridPage.htm"><param name="ImageNumber" value="11"></OBJECT>
+    </UL>
   </UL>
 <LI><OBJECT type="text/sitemap"><param name="Name" value="Class Members"><param name="Local" value="functions.htm"><param name="ImageNumber" value="11"></OBJECT>
 <LI><OBJECT type="text/sitemap"><param name="Name" value="Modules"><param name="ImageNumber" value="1"></OBJECT>

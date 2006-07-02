@@ -30,7 +30,7 @@ Sections that are new in this version have NEW! appended to their name. Sections
  <a class="el" href="index.htm#populating">Populating wxPropertyGrid Automatically</a><br>
  <a class="el" href="index.htm#customizing">Customizing Properties (without sub-classing)</a><br>
  <a class="el" href="index.htm#custprop">wxCustomProperty</a><br>
- <a class="el" href="index.htm#usage2">Using wxPropertyGridManager</a><br>
+ <a class="el" href="index.htm#usage2">Using wxPropertyGridManager (Updated!)</a><br>
  <a class="el" href="index.htm#misc">Miscellaneous Topics (Updated!)</a><br>
  <a class="el" href="index.htm#proplist">Property Descriptions</a><br>
  <a class="el" href="index.htm#userhelp">Using wxPropertyGrid</a><br>
@@ -44,7 +44,7 @@ Sections that are new in this version have NEW! appended to their name. Sections
 wxPropertyGrid Features</a></h2>
 Following is a list of various <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> features and classes or methods necessary to use them.<p>
 <ul>
-<li>Hiding property editor: You can either use limited editing mode (wxPG_LIMITED_EDITING window style, <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida190">wxPropertyGrid::LimitPropertyEditing</a>), which hides wxTextCtrl based editor when other methods (dialog or sub-properties) are available, <b>or</b> you can disable the property, which effectively hides the editor and makes the property label to be drawn in grey colour.</li><li>Unspecified, empty values (<a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida239">wxPropertyGrid::SetPropertyUnspecified</a>, <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera155">wxPropertyGrid::IsPropertyUnspecified</a>).</li><li>Client data (void* for user to store value into) (<a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera196">wxPropertyGrid::SetPropertyClientData</a>, <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera73">wxPropertyGrid::GetPropertyClientData</a>).</li><li>Multi-page management (<a class="el" href="index.htm#usage2">Using wxPropertyGridManager</a>).</li><li>Setting wxValidator for editor (<a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera217">wxPropertyGrid::SetPropertyValidator</a>).</li><li>Changing editor of property (<a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera204">wxPropertyGrid::SetPropertyEditor</a>).</li><li>Property's value bitmap - small image shown in front of the value text (<a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera208">wxPropertyGrid::SetPropertyImage</a>).</li><li>Help text shown in parent frame's status bar or in manager's description text box (<a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera206">wxPropertyGrid::SetPropertyHelpString</a>, <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera79">wxPropertyGrid::GetPropertyHelpString</a>).</li><li>Changing set of choices used by wxEnumProperty, wxEditEnumProperty or wxMultiChoiceProperty (<a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagere11">wxPropertyGrid::SetPropertyChoices</a>).</li><li>Changing background colour of property's cell (<a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida219">wxPropertyGrid::SetPropertyColour</a>).</li><li>Populating <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> (<a class="el" href="index.htm#populating">Populating wxPropertyGrid Automatically</a>).</li><li>Setting property attributes (<a class="el" href="index.htm#attributes">Property Attributes</a>)</li></ul>
+<li>Hiding property editor: You can either use limited editing mode (wxPG_LIMITED_EDITING window style, <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida190">wxPropertyGrid::LimitPropertyEditing</a>), which hides wxTextCtrl based editor when other methods (dialog or sub-properties) are available, <b>or</b> you can disable the property, which effectively hides the editor and makes the property label to be drawn in grey colour.</li><li>Unspecified, empty values (<a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida239">wxPropertyGrid::SetPropertyUnspecified</a>, <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea119">wxPropertyGrid::IsPropertyUnspecified</a>).</li><li>Client data (void*) (<a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea135">wxPropertyGrid::SetPropertyClientData</a>, <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea43">wxPropertyGrid::GetPropertyClientData</a>).</li><li>Multi-page management (<a class="el" href="index.htm#usage2">Using wxPropertyGridManager (Updated!)</a>).</li><li>Setting wxValidator for editor (<a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea152">wxPropertyGrid::SetPropertyValidator</a>).</li><li>Changing editor of property (<a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea139">wxPropertyGrid::SetPropertyEditor</a>).</li><li>Property's value bitmap - small image shown in front of the value text (<a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea143">wxPropertyGrid::SetPropertyImage</a>).</li><li>Help text shown in parent frame's status bar or in manager's description text box (<a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea141">wxPropertyGrid::SetPropertyHelpString</a>, <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea47">wxPropertyGrid::GetPropertyHelpString</a>).</li><li>Changing set of choices used by wxEnumProperty, wxEditEnumProperty or wxMultiChoiceProperty (<a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee16">wxPropertyGrid::SetPropertyChoices</a>).</li><li>Changing background colour of property's cell (<a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida219">wxPropertyGrid::SetPropertyColour</a>).</li><li>Setting property text max length (<a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea146">wxPropertyGrid::SetPropertyMaxLength</a>)</li><li>Hiding a property (<a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea96">wxPropertyGrid::HideProperty</a>)</li><li>Setting property attributes (<a class="el" href="index.htm#attributes">Property Attributes</a>)</li><li>Populating <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> (<a class="el" href="index.htm#populating">Populating wxPropertyGrid Automatically</a>).</li></ul>
 <h2><a class="anchor" name="basics">
 Creating and Populating wxPropertyGrid</a></h2>
 As seen here, <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> is constructed in the same way as other wxWidgets controls:<p>
@@ -95,7 +95,7 @@ To demonstrate other common property classes, here's another code snippet:<p>
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#wxPropertyGrida6">Append</a> ( wxFileProperty( wxT(<span class="stringliteral">"FileProperty"</span>), wxPG_LABEL, wxEmptyString ) );
 
         <span class="comment">// Extra: set wildcard for file property (format same as in wxFileDialog).</span>
-        pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera190">SetPropertyAttribute</a>(wxT(<span class="stringliteral">"TextFile"</span>),
+        pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea130">SetPropertyAttribute</a>(wxT(<span class="stringliteral">"TextFile"</span>),
                                  wxPG_FILE_WILDCARD,
                                  wxT(<span class="stringliteral">"All files (*.*)|*.*"</span>));
 </div></pre><h2><a class="anchor" name="categories">
@@ -239,14 +239,14 @@ You can use it directly as well, filling it and then passing it to the construct
 If you later need to change choices used by a property, there is function for that as well.<p>
 <pre class="fragment"><div>        <span class="comment">//</span>
         <span class="comment">// Example 1: Add one extra item</span>
-        <a class="code" href="classwxPGChoices.htm">wxPGChoices</a>&amp; choices = pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera69">GetPropertyChoices</a>(wxT(<span class="stringliteral">"Diet"</span>));
+        <a class="code" href="classwxPGChoices.htm">wxPGChoices</a>&amp; choices = pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea39">GetPropertyChoices</a>(wxT(<span class="stringliteral">"Diet"</span>));
         choices.<a class="code" href="classwxPGChoices.htm#wxPGChoicesa3">Add</a>(wxT(<span class="stringliteral">"Custom"</span>),55);
 
         <span class="comment">//</span>
         <span class="comment">// Example 2: Replace all the choices</span>
         <a class="code" href="classwxPGChoices.htm">wxPGChoices</a> chs;
         chs.<a class="code" href="classwxPGChoices.htm#wxPGChoicesa3">Add</a>(wxT(<span class="stringliteral">"&lt;No valid items yet&gt;"</span>),0);
-        pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagere11">SetPropertyChoices</a>(wxT(<span class="stringliteral">"Diet"</span>),chs);
+        pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee16">SetPropertyChoices</a>(wxT(<span class="stringliteral">"Diet"</span>),chs);
 </div></pre><p>
 If you want to create your enum properties with simple (label,name,value) constructor, then you need to create a new property class using one of the supplied macro pairs. See <a class="el" href="index.htm#newprops">Creating New Properties</a> for details.<p>
 <b>wxEditEnumProperty</b> is works exactly like wxEnumProperty, except is uses non-readonly combobox as default editor, and has string values.<p>
@@ -351,13 +351,13 @@ Getting value of selected wxSystemColourProperty (which value type is derived fr
         {
 
             <span class="comment">// Get name of property</span>
-            <span class="keyword">const</span> wxString&amp; name = pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera86">GetPropertyName</a> ( <span class="keywordtype">id</span> );
+            <span class="keyword">const</span> wxString&amp; name = pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea54">GetPropertyName</a> ( <span class="keywordtype">id</span> );
 
             <span class="comment">// If type is not correct, GetColour() method will produce run-time error</span>
-            <span class="keywordflow">if</span> ( pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera161">IsPropertyValueType</a> ( <span class="keywordtype">id</span>, CLASSINFO(<a class="code" href="classwxColourPropertyValue.htm">wxColourPropertyValue</a>) ) )
+            <span class="keywordflow">if</span> ( pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea125">IsPropertyValueType</a> ( <span class="keywordtype">id</span>, CLASSINFO(<a class="code" href="classwxColourPropertyValue.htm">wxColourPropertyValue</a>) ) )
             {
                 <a class="code" href="classwxColourPropertyValue.htm">wxColourPropertyValue</a>* pcolval =
-                    wxDynamicCast(pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera116">GetPropertyValueAsWxObjectPtr</a>(<span class="keywordtype">id</span>),
+                    wxDynamicCast(pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea84">GetPropertyValueAsWxObjectPtr</a>(<span class="keywordtype">id</span>),
                                   <a class="code" href="classwxColourPropertyValue.htm">wxColourPropertyValue</a>);
 
                 <span class="comment">// Report value</span>
@@ -387,7 +387,7 @@ Example of populating an empty <a class="el" href="classwxPropertyGrid.htm">wxPr
         <span class="comment">// available, including those for wxColour and wxFont. Refers to *all*</span>
         <span class="comment">// included properties, so when compiling with static library, this</span>
         <span class="comment">// method may increase the executable size significantly.</span>
-        pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGride7">InitAllTypeHandlers</a> ();
+        pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee8">InitAllTypeHandlers</a> ();
 
         <span class="comment">// Get contents of the grid as a wxVariant list</span>
         wxVariant all_values = pg-&gt;<a class="code" href="classwxPropertyGrid.htm#wxPropertyGrida133">GetPropertyValues</a>();
@@ -399,7 +399,7 @@ Example of populating an empty <a class="el" href="classwxPropertyGrid.htm">wxPr
         <span class="comment">// In order to get wxObject ptr from a variant value,</span>
         <span class="comment">// wxGetVariantCast(VARIANT,CLASSNAME) macro has to be called.</span>
         <span class="comment">// Like this:</span>
-        wxVariant v_txcol = pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera95">GetPropertyValue</a>(wxT(<span class="stringliteral">"Text Colour"</span>));
+        wxVariant v_txcol = pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea63">GetPropertyValue</a>(wxT(<span class="stringliteral">"Text Colour"</span>));
         <span class="keyword">const</span> wxColour&amp; txcol = wxGetVariantCast(v_txcol,wxColour);
 </div></pre><h3><a class="anchor" name="tofile">
 Saving Population to a Text-based Storage</a></h3>
@@ -420,7 +420,7 @@ Saving Population to a Text-based Storage</a></h3>
             <span class="comment">//   wxPropertyGrid::GetPropertyAttributes</span>
 
             <span class="comment">// Example for adding choices:</span>
-            <a class="code" href="classwxPGChoices.htm">wxPGChoices</a>&amp; choices = pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera69">GetPropertyChoices</a>(<span class="keywordtype">id</span>);
+            <a class="code" href="classwxPGChoices.htm">wxPGChoices</a>&amp; choices = pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea39">GetPropertyChoices</a>(<span class="keywordtype">id</span>);
             <span class="keywordflow">if</span> ( choices.<a class="code" href="classwxPGChoices.htm#wxPGChoicesa23">IsOk</a>() )
             {
                 <span class="comment">// First add id of the choices list inorder to optimize</span>
@@ -446,7 +446,7 @@ Saving Population to a Text-based Storage</a></h3>
             }
 
             <span class="comment">// Write children, if any</span>
-            wxPGId firstChild = pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera46">GetFirstChild</a>(<span class="keywordtype">id</span>);
+            wxPGId firstChild = pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea26">GetFirstChild</a>(<span class="keywordtype">id</span>);
             <span class="keywordflow">if</span> ( firstChild.IsOk() )
             {
                 WritePropertiesToMyStorage( pg, firstChild, f, depth+1 );
@@ -454,14 +454,14 @@ Saving Population to a Text-based Storage</a></h3>
                 <span class="comment">// TODO: Add parent's terminator</span>
             }
 
-            <span class="keywordtype">id</span> = pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera54">GetNextSibling</a>(<span class="keywordtype">id</span>);
+            <span class="keywordtype">id</span> = pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea33">GetNextSibling</a>(<span class="keywordtype">id</span>);
         }
     }
 
     ...
 
         <span class="comment">// Then you can use this to store the entire hierarchy</span>
-        wxPGId firstChild = pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera46">GetFirstChild</a>(pg-&gt;<a class="code" href="classwxPropertyGrid.htm#wxPropertyGrida140">GetRoot</a>());
+        wxPGId firstChild = pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea26">GetFirstChild</a>(pg-&gt;<a class="code" href="classwxPropertyGrid.htm#wxPropertyGrida140">GetRoot</a>());
         <span class="keywordflow">if</span> ( firstChild.IsOk() )
             WritePropertiesToFile(pg,first_child,InstanceOfMyStorage,0);
 </div></pre><p>
@@ -560,21 +560,21 @@ Here's a small sample:<p>
 Customizing Properties (without sub-classing)</a></h2>
 In this section are presented various ways to have custom appearance and behaviour for your properties without all the necessary hassle of sub-classing a property class etc.<h3><a class="anchor" name="customimage">
 Setting Value Image</a></h3>
-Every property can have a small value image placed in front of the actual value text. Built-in example of this can be seen with wxColourProperty and wxImageFileProperty, but for others it can be set using <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera208">wxPropertyGrid::SetPropertyImage</a> method.<h3><a class="anchor" name="customvalidator">
+Every property can have a small value image placed in front of the actual value text. Built-in example of this can be seen with wxColourProperty and wxImageFileProperty, but for others it can be set using <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea143">wxPropertyGrid::SetPropertyImage</a> method.<h3><a class="anchor" name="customvalidator">
 Setting Validator</a></h3>
-You can set wxValidator for a property using <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera217">wxPropertyGrid::SetPropertyValidator</a>.<h3><a class="anchor" name="customeditor">
+You can set wxValidator for a property using <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea152">wxPropertyGrid::SetPropertyValidator</a>.<h3><a class="anchor" name="customeditor">
 Setting Property's Editor Control(s)</a></h3>
-You can set editor control (or controls, in case of a control and button), of any property using <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera204">wxPropertyGrid::SetPropertyEditor</a>. Editors are passed using wxPG_EDITOR(EditorName) macro, and valid built-in EditorNames are TextCtrl, Choice, ComboBox, CheckBox, TextCtrlAndButton, and ChoiceAndButton.<p>
+You can set editor control (or controls, in case of a control and button), of any property using <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea139">wxPropertyGrid::SetPropertyEditor</a>. Editors are passed using wxPG_EDITOR(EditorName) macro, and valid built-in EditorNames are TextCtrl, Choice, ComboBox, CheckBox, TextCtrlAndButton, and ChoiceAndButton.<p>
 Following example changes wxColourProperty's editor from default Choice to TextCtrlAndButton. wxColourProperty has its internal event handling set up so that button click events of the button will be used to trigger colour selection dialog.<p>
 <pre class="fragment"><div>        wxPGId colProp = pg-&gt;<a class="code" href="classwxPropertyGrid.htm#wxPropertyGrida6">Append</a>(wxColourProperty(wxT(<span class="stringliteral">"Text Colour"</span>)));
 
-        pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera204">SetPropertyEditor</a>(colProp,wxPG_EDITOR(TextCtrlAndButton));
+        pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea139">SetPropertyEditor</a>(colProp,wxPG_EDITOR(TextCtrlAndButton));
 </div></pre><p>
 Naturally, creating and setting custom editor classes is a possibility as well. For more information, see <a class="el" href="classwxPGEditor.htm">wxPGEditor</a> class reference.<h3><a class="anchor" name="customeventhandling">
 Handling Events Passed from Properties</a></h3>
 <b>wxEVT_COMMAND_BUTTON_CLICKED </b>(corresponds to event table macro EVT_BUTTON): Occurs when editor button click is not handled by the property itself (as is the case, for example, if you set property's editor to TextCtrlAndButton from the original TextCtrl).<h3><a class="anchor" name="attributes">
 Property Attributes</a></h3>
-Miscellaneous values, often specific to a property type, can be set using <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera190">wxPropertyGrid::SetPropertyAttribute</a> and <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida212">wxPropertyGrid::SetPropertyAttributeAll</a> methods.<p>
+Miscellaneous values, often specific to a property type, can be set using <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea130">wxPropertyGrid::SetPropertyAttribute</a> and <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida212">wxPropertyGrid::SetPropertyAttributeAll</a> methods.<p>
 For complete list of attributes, see <a class="el" href="group__attrids.htm">Property Attributes</a>.<h3><a class="anchor" name="boolcheckbox">
 Setting wxBoolProperties to Use Check Box</a></h3>
 To have all wxBoolProperties to use CheckBox editor instead of Choice, use following (call after bool properties have been added):<p>
@@ -592,7 +592,7 @@ For more info on attributes, see <a class="el" href="group__attrids.htm">wxPrope
 <b>Limitations:</b><ul>
 <li>Currently wxCustomProperty is limited to wxString value type.</li><li>As in wxParentProperty: names of child properties are not visible globally. You need to use "Parent.SubProperty" name format to access them.</li></ul>
 <h2><a class="anchor" name="usage2">
-Using wxPropertyGridManager</a></h2>
+Using wxPropertyGridManager (Updated!)</a></h2>
 <a class="el" href="classwxPropertyGridManager.htm">wxPropertyGridManager</a> is an efficient multi-page version of <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a>, which can optionally have toolbar for mode and page selection, help text box, and a compactor button.<p>
 <a class="el" href="classwxPropertyGridManager.htm">wxPropertyGridManager</a> mirrors most non-visual methods of <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a>, some identically, some so that they can affect a property on any page, and some so that they can only affect selected target page.<p>
 Generally, methods that operate on a property ( such as GetPropertyValue, SetPropertyValue, EnableProperty, LimitPropertyEditing, Delete, etc. ), work globally (so the given property can exist on any managed page).<p>
@@ -635,8 +635,11 @@ Here's some example code for creating and populating a <a class="el" href="class
         pgMan-&gt;<a class="code" href="classwxPropertyGridManager.htm#wxPropertyGridManagera7">Append</a>( wxFontProperty(wxT(<span class="stringliteral">"Font"</span>),wxPG_LABEL) );
 
         <span class="comment">// For total safety, finally reset the target page.</span>
-        pgMan-&gt;<a class="code" href="classwxPropertyGridManager.htm#wxPropertyGridManagera240">SetTargetPage</a>(0);
-</div></pre><h2><a class="anchor" name="misc">
+        pgMan-&gt;<a class="code" href="classwxPropertyGridManager.htm#wxPropertyGridManagera242">SetTargetPage</a>(0);
+</div></pre><h3><a class="anchor" name="propgridpage">
+wxPropertyGridPage (New!)</a></h3>
+<a class="el" href="classwxPropertyGridPage.htm">wxPropertyGridPage</a> is holder of properties for one page in manager. It is derived from wxEvtHandler, so you can subclass it to process page-specific property grid events. Hand over your page instance in <a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera0">wxPropertyGridManager::AddPage</a>.<p>
+Please note that the <a class="el" href="classwxPropertyGridPage.htm">wxPropertyGridPage</a> itself only sports subset of <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> API. Naturally it inherits from wxPropertyGridMethods and <a class="el" href="classwxPropertyGridState.htm">wxPropertyGridState</a>, but, for instance, setting property values is not yet supported. Use parent manager (m_manager member) instead when needed. Basic property appending and insertion is supported, however.<h2><a class="anchor" name="misc">
 Miscellaneous Topics (Updated!)</a></h2>
 <h3><a class="anchor" name="namescope">
 Property Name Scope</a></h3>
@@ -648,7 +651,7 @@ Property Name Scope</a></h3>
 <h3><a class="anchor" name="boolproperty">
 wxBoolProperty</a></h3>
 There are few points about wxBoolProperty that require futher discussion:<ul>
-<li>wxBoolProperty can be shown as either normal combobox or as a checkbox. Property attribute wxPG_BOOL_USE_CHECKBOX is used to change this. For example, if you have a wxFlagsProperty, you can set its all items to use check box using the following: <pre class="fragment"><div>            pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera190">SetPropertyAttribute</a>(wxT(<span class="stringliteral">"MyFlagsProperty"</span>),wxPG_BOOL_USE_CHECKBOX,(<span class="keywordtype">long</span>)1,wxPG_RECURSE);
+<li>wxBoolProperty can be shown as either normal combobox or as a checkbox. Property attribute wxPG_BOOL_USE_CHECKBOX is used to change this. For example, if you have a wxFlagsProperty, you can set its all items to use check box using the following: <pre class="fragment"><div>            pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea130">SetPropertyAttribute</a>(wxT(<span class="stringliteral">"MyFlagsProperty"</span>),wxPG_BOOL_USE_CHECKBOX,(<span class="keywordtype">long</span>)1,wxPG_RECURSE);
 </div></pre></li></ul>
 <p>
 <ul>
@@ -660,7 +663,7 @@ Because of this, you may find it useful, in some apps, to monitor wxEVT_COMMAND_
 Centering the Splitter (New!)</a></h3>
 If you need to center the splitter, but only once when the program starts, then do <b>not</b> use the wxPG_SPLITTER_AUTO_CENTER window style, but the <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida13">wxPropertyGrid::CenterSplitter()</a> method. <b>However, be sure to call it after the sizer setup and SetSize calls!</b> (ie. usually at the end of the frame/dialog constructor)<h2><a class="anchor" name="proplist">
 Property Descriptions</a></h2>
-Here are descriptions of built-in properties, with attributes (see <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera190">wxPropertyGrid::SetPropertyAttribute</a>) that apply to them.<h3><a class="anchor" name="wxPropertyCategory">
+Here are descriptions of built-in properties, with attributes (see <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea130">wxPropertyGrid::SetPropertyAttribute</a>) that apply to them.<h3><a class="anchor" name="wxPropertyCategory">
 wxPropertyCategory</a></h3>
 <b>Inheritable Class:</b> <a class="el" href="classwxPropertyCategoryClass.htm">wxPropertyCategoryClass</a>.<p>
 Not an actual property per se, but a header for a group of properties.<h3><a class="anchor" name="wxParentProperty">
@@ -1007,7 +1010,7 @@ Creating Custom Property Editor</a></h2>
 <p>
 <ul>
 <li>Also, sources of built-in editors in contrib/src/propgrid/propgrid.cpp may also be helpful (search for wxPGTextCtrlEditor). </li></ul>
-<hr size="1"><address style="align: right;"><small>Generated on Fri May 5 19:58:21 2006 for wxPropertyGrid by
+<hr size="1"><address style="align: right;"><small>Generated on Thu Jun 8 20:02:19 2006 for wxPropertyGrid by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.6 </small></address>

@@ -59,9 +59,6 @@
 // to trigger a double-click.
 #define DOUBLE_CLICK_CONVERSION_TRESHOLD        500
 
-// TODO: ONCE IN BASE, UNDEF THE FOLLOWING LINE
-//#define DEFAULT_DROPBUTTON_WIDTH                19
-
 #define BMP_BUTTON_MARGIN                       4
 
 //#define DEFAULT_POPUP_HEIGHT                    -1
@@ -191,6 +188,13 @@
 #endif
 
 
+//
+// *** TODO WHEN BACKPORTING wxW2.7 PATCH ***
+// * wxODCIndex
+// * DrawPushButton
+// * ItemHeight -1 handling (if vlbox.cpp modded).
+// * SetFont, SetTextForeground in DrawItem (if vlbox.cpp modded).
+//
 
 //
 // ** TODO **
@@ -223,7 +227,7 @@ static const wxCoord g_comboMargin = 2;
 
 
 // ----------------------------------------------------------------------------
-// wxComboFrameEventHandler takes care of hiding the popup when events happen
+// wxPGComboFrameEventHandler takes care of hiding the popup when events happen
 // in its top level parent.
 // ----------------------------------------------------------------------------
 
@@ -234,11 +238,11 @@ static const wxCoord g_comboMargin = 2;
 // works well on all platforms.
 //
 
-class wxComboFrameEventHandler : public wxEvtHandler
+class wxPGComboFrameEventHandler : public wxEvtHandler
 {
 public:
-    wxComboFrameEventHandler( wxPGCustomComboControlBase* pCb );
-    ~wxComboFrameEventHandler();
+    wxPGComboFrameEventHandler( wxPGComboControlBase* pCb );
+    ~wxPGComboFrameEventHandler();
 
     void OnPopup();
 
@@ -252,40 +256,40 @@ public:
 
 protected:
     wxWindow*                       m_focusStart;
-    wxPGCustomComboControlBase*     m_combo;
+    wxPGComboControlBase*     m_combo;
 
 private:
     DECLARE_EVENT_TABLE()
 };
 
-BEGIN_EVENT_TABLE(wxComboFrameEventHandler, wxEvtHandler)
-    EVT_IDLE(wxComboFrameEventHandler::OnIdle)
-    EVT_LEFT_DOWN(wxComboFrameEventHandler::OnMouseEvent)
-    EVT_RIGHT_DOWN(wxComboFrameEventHandler::OnMouseEvent)
-    EVT_SIZE(wxComboFrameEventHandler::OnResize)
-    EVT_MOVE(wxComboFrameEventHandler::OnMove)
-    EVT_MENU_HIGHLIGHT(wxID_ANY,wxComboFrameEventHandler::OnMenuEvent)
-    EVT_MENU_OPEN(wxComboFrameEventHandler::OnMenuEvent)
-    EVT_ACTIVATE(wxComboFrameEventHandler::OnActivate)
-    EVT_CLOSE(wxComboFrameEventHandler::OnClose)
+BEGIN_EVENT_TABLE(wxPGComboFrameEventHandler, wxEvtHandler)
+    EVT_IDLE(wxPGComboFrameEventHandler::OnIdle)
+    EVT_LEFT_DOWN(wxPGComboFrameEventHandler::OnMouseEvent)
+    EVT_RIGHT_DOWN(wxPGComboFrameEventHandler::OnMouseEvent)
+    EVT_SIZE(wxPGComboFrameEventHandler::OnResize)
+    EVT_MOVE(wxPGComboFrameEventHandler::OnMove)
+    EVT_MENU_HIGHLIGHT(wxID_ANY,wxPGComboFrameEventHandler::OnMenuEvent)
+    EVT_MENU_OPEN(wxPGComboFrameEventHandler::OnMenuEvent)
+    EVT_ACTIVATE(wxPGComboFrameEventHandler::OnActivate)
+    EVT_CLOSE(wxPGComboFrameEventHandler::OnClose)
 END_EVENT_TABLE()
 
-wxComboFrameEventHandler::wxComboFrameEventHandler( wxPGCustomComboControlBase* combo )
+wxPGComboFrameEventHandler::wxPGComboFrameEventHandler( wxPGComboControlBase* combo )
     : wxEvtHandler()
 {
     m_combo = combo;
 }
 
-wxComboFrameEventHandler::~wxComboFrameEventHandler()
+wxPGComboFrameEventHandler::~wxPGComboFrameEventHandler()
 {
 }
 
-void wxComboFrameEventHandler::OnPopup()
+void wxPGComboFrameEventHandler::OnPopup()
 {
     m_focusStart = ::wxWindow::FindFocus();
 }
 
-void wxComboFrameEventHandler::OnIdle( wxIdleEvent& event )
+void wxPGComboFrameEventHandler::OnIdle( wxIdleEvent& event )
 {
     wxWindow* winFocused = ::wxWindow::FindFocus();
 
@@ -308,37 +312,37 @@ void wxComboFrameEventHandler::OnIdle( wxIdleEvent& event )
     event.Skip();
 }
 
-void wxComboFrameEventHandler::OnMenuEvent( wxMenuEvent& event )
+void wxPGComboFrameEventHandler::OnMenuEvent( wxMenuEvent& event )
 {
     m_combo->HidePopup();
     event.Skip();
 }
 
-void wxComboFrameEventHandler::OnMouseEvent( wxMouseEvent& event )
+void wxPGComboFrameEventHandler::OnMouseEvent( wxMouseEvent& event )
 {
     m_combo->HidePopup();
     event.Skip();
 }
 
-void wxComboFrameEventHandler::OnClose( wxCloseEvent& event )
+void wxPGComboFrameEventHandler::OnClose( wxCloseEvent& event )
 {
     m_combo->HidePopup();
     event.Skip();
 }
 
-void wxComboFrameEventHandler::OnActivate( wxActivateEvent& event )
+void wxPGComboFrameEventHandler::OnActivate( wxActivateEvent& event )
 {
     m_combo->HidePopup();
     event.Skip();
 }
 
-void wxComboFrameEventHandler::OnResize( wxSizeEvent& event )
+void wxPGComboFrameEventHandler::OnResize( wxSizeEvent& event )
 {
     m_combo->HidePopup();
     event.Skip();
 }
 
-void wxComboFrameEventHandler::OnMove( wxMoveEvent& event )
+void wxPGComboFrameEventHandler::OnMove( wxMoveEvent& event )
 {
     m_combo->HidePopup();
     event.Skip();
@@ -355,7 +359,7 @@ class wxPGComboPopupWindow : public wxPGComboPopupWindowBase
 {
 public:
 
-    wxPGComboPopupWindow( wxPGCustomComboControlBase *parent, int style = wxBORDER_NONE );
+    wxPGComboPopupWindow( wxPGComboControlBase *parent, int style = wxBORDER_NONE );
 
 #if USE_TRANSIENT_POPUP
     virtual bool ProcessLeftDown(wxMouseEvent& event);
@@ -389,7 +393,7 @@ BEGIN_EVENT_TABLE(wxPGComboPopupWindow, wxPGComboPopupWindowBase)
 END_EVENT_TABLE()
 
 
-wxPGComboPopupWindow::wxPGComboPopupWindow( wxPGCustomComboControlBase *parent,
+wxPGComboPopupWindow::wxPGComboPopupWindow( wxPGComboControlBase *parent,
                                         int style )
 #if wxUSE_POPUPWIN
                                        : wxPGComboPopupWindowBase(parent,style)
@@ -425,9 +429,9 @@ void wxPGComboPopupWindow::OnActivate( wxActivateEvent& event )
     if ( !event.GetActive() )
     {
         // Tell combo control that we are dismissed.
-        wxPGCustomComboControl* combo = (wxPGCustomComboControl*) GetParent();
+        wxPGComboControl* combo = (wxPGComboControl*) GetParent();
         wxASSERT( combo );
-        wxASSERT( combo->IsKindOf(CLASSINFO(wxPGCustomComboControl)) );
+        wxASSERT( combo->IsKindOf(CLASSINFO(wxPGComboControl)) );
 
         combo->HidePopup();
 
@@ -447,8 +451,8 @@ bool wxPGComboPopupWindow::ProcessLeftDown(wxMouseEvent& event )
 // First thing that happens when a transient popup closes is that this method gets called.
 void wxPGComboPopupWindow::OnDismiss()
 {
-    wxPGCustomComboControlBase* combo = (wxPGCustomComboControlBase*) GetParent();
-    wxASSERT ( combo->IsKindOf(CLASSINFO(wxPGCustomComboControlBase)) );
+    wxPGComboControlBase* combo = (wxPGComboControlBase*) GetParent();
+    wxASSERT ( combo->IsKindOf(CLASSINFO(wxPGComboControlBase)) );
 
     combo->OnPopupDismiss();
 }
@@ -495,7 +499,7 @@ void wxPGComboPopup::OnComboKeyEvent( wxKeyEvent& event )
     event.Skip();
 }
 
-void wxPGComboPopup::OnDoubleClick()
+void wxPGComboPopup::OnComboDoubleClick()
 {
 }
 
@@ -526,7 +530,7 @@ BEGIN_EVENT_TABLE(wxPGVListBoxComboPopup, wxVListBox)
 END_EVENT_TABLE()
 
 
-wxPGVListBoxComboPopup::wxPGVListBoxComboPopup(wxPGCustomComboControl* combo)
+wxPGVListBoxComboPopup::wxPGVListBoxComboPopup(wxPGComboControl* combo)
                                            : wxVListBox(), wxPGComboPopup(combo)
 {
     //m_callback = callback;
@@ -727,7 +731,7 @@ bool wxPGVListBoxComboPopup::HandleKey( int keycode, bool saturate )
     return true;
 }
 
-void wxPGVListBoxComboPopup::OnDoubleClick()
+void wxPGVListBoxComboPopup::OnComboDoubleClick()
 {
     // Cycle on dclick (disable saturation to allow true cycling).
     if ( !::wxGetKeyState(WXK_SHIFT) )
@@ -1038,34 +1042,34 @@ void wxPGVListBoxComboPopup::Populate( int n, const wxString choices[] )
 // This is pushed to the event handler queue of either combo box
 // or its textctrl (latter if not readonly combo).
 //
-class wxComboBoxExtraInputHandler : public wxEvtHandler
+class wxPGComboBoxExtraInputHandler : public wxEvtHandler
 {
 public:
 
-    wxComboBoxExtraInputHandler( wxPGCustomComboControlBase* combo )
+    wxPGComboBoxExtraInputHandler( wxPGComboControlBase* combo )
         : wxEvtHandler()
     {
         m_combo = combo;
     }
-    ~wxComboBoxExtraInputHandler() { }
+    ~wxPGComboBoxExtraInputHandler() { }
     void OnKey(wxKeyEvent& event);
     void OnFocus(wxFocusEvent& event);
 
 protected:
-    wxPGCustomComboControlBase*   m_combo;
+    wxPGComboControlBase*   m_combo;
 
 private:
     DECLARE_EVENT_TABLE()
 };
 
 
-BEGIN_EVENT_TABLE(wxComboBoxExtraInputHandler, wxEvtHandler)
-    EVT_KEY_DOWN(wxComboBoxExtraInputHandler::OnKey)
-    EVT_SET_FOCUS(wxComboBoxExtraInputHandler::OnFocus)
+BEGIN_EVENT_TABLE(wxPGComboBoxExtraInputHandler, wxEvtHandler)
+    EVT_KEY_DOWN(wxPGComboBoxExtraInputHandler::OnKey)
+    EVT_SET_FOCUS(wxPGComboBoxExtraInputHandler::OnFocus)
 END_EVENT_TABLE()
 
 
-void wxComboBoxExtraInputHandler::OnKey(wxKeyEvent& event)
+void wxPGComboBoxExtraInputHandler::OnKey(wxKeyEvent& event)
 {
     int keycode = event.GetKeyCode();
 
@@ -1119,7 +1123,7 @@ void wxComboBoxExtraInputHandler::OnKey(wxKeyEvent& event)
     }
 }
 
-void wxComboBoxExtraInputHandler::OnFocus(wxFocusEvent& event)
+void wxPGComboBoxExtraInputHandler::OnFocus(wxFocusEvent& event)
 {
     // FIXME: This code does run when control is clicked,
     //        yet on Windows it doesn't select all the text.
@@ -1149,17 +1153,17 @@ void wxComboBoxExtraInputHandler::OnFocus(wxFocusEvent& event)
 // This is pushed to the event handler queue of the control in popup.
 //
 
-class wxComboPopupExtraEventHandler : public wxEvtHandler
+class wxPGComboPopupExtraEventHandler : public wxEvtHandler
 {
 public:
 
-    wxComboPopupExtraEventHandler( wxPGCustomComboControlBase* combo )
+    wxPGComboPopupExtraEventHandler( wxPGComboControlBase* combo )
         : wxEvtHandler()
     {
         m_combo = combo;
         m_beenInside = false;
     }
-    ~wxComboPopupExtraEventHandler() { }
+    ~wxPGComboPopupExtraEventHandler() { }
 
     void OnMouseEvent( wxMouseEvent& event );
 
@@ -1170,7 +1174,7 @@ public:
     }
 
 protected:
-    wxPGCustomComboControlBase*     m_combo;
+    wxPGComboControlBase*     m_combo;
 
     bool                            m_beenInside;
 
@@ -1179,12 +1183,12 @@ private:
 };
 
 
-BEGIN_EVENT_TABLE(wxComboPopupExtraEventHandler, wxEvtHandler)
-    EVT_MOUSE_EVENTS(wxComboPopupExtraEventHandler::OnMouseEvent)
+BEGIN_EVENT_TABLE(wxPGComboPopupExtraEventHandler, wxEvtHandler)
+    EVT_MOUSE_EVENTS(wxPGComboPopupExtraEventHandler::OnMouseEvent)
 END_EVENT_TABLE()
 
 
-void wxComboPopupExtraEventHandler::OnMouseEvent( wxMouseEvent& event )
+void wxPGComboPopupExtraEventHandler::OnMouseEvent( wxMouseEvent& event )
 {
     wxPoint pt = event.GetPosition();
     wxSize sz = m_combo->GetPopupControl()->GetClientSize();
@@ -1241,27 +1245,27 @@ void wxComboPopupExtraEventHandler::OnMouseEvent( wxMouseEvent& event )
 }
 
 // ----------------------------------------------------------------------------
-// wxPGCustomComboControlBase
+// wxPGComboControlBase
 // ----------------------------------------------------------------------------
 
 
-BEGIN_EVENT_TABLE(wxPGCustomComboControlBase, wxControl)
-    EVT_TEXT(wxID_ANY,wxPGCustomComboControlBase::OnTextCtrlEvent)
-    EVT_SIZE(wxPGCustomComboControlBase::OnSizeEvent)
-    EVT_SET_FOCUS(wxPGCustomComboControlBase::OnFocusEvent)
-    EVT_KILL_FOCUS(wxPGCustomComboControlBase::OnFocusEvent)
-    //EVT_BUTTON(wxID_ANY,wxPGCustomComboControlBase::OnButtonClickEvent)
-    EVT_TEXT_ENTER(wxID_ANY,wxPGCustomComboControlBase::OnTextCtrlEvent)
-    EVT_SYS_COLOUR_CHANGED(wxPGCustomComboControlBase::OnSysColourChanged)
+BEGIN_EVENT_TABLE(wxPGComboControlBase, wxControl)
+    EVT_TEXT(wxID_ANY,wxPGComboControlBase::OnTextCtrlEvent)
+    EVT_SIZE(wxPGComboControlBase::OnSizeEvent)
+    EVT_SET_FOCUS(wxPGComboControlBase::OnFocusEvent)
+    EVT_KILL_FOCUS(wxPGComboControlBase::OnFocusEvent)
+    //EVT_BUTTON(wxID_ANY,wxPGComboControlBase::OnButtonClickEvent)
+    EVT_TEXT_ENTER(wxID_ANY,wxPGComboControlBase::OnTextCtrlEvent)
+    EVT_SYS_COLOUR_CHANGED(wxPGComboControlBase::OnSysColourChanged)
 END_EVENT_TABLE()
 
 
-IMPLEMENT_ABSTRACT_CLASS(wxPGCustomComboControlBase, wxControl)
+IMPLEMENT_ABSTRACT_CLASS(wxPGComboControlBase, wxControl)
 
 // Have global double buffer - should be enough for multiple combos
 static wxBitmap* gs_doubleBuffer = (wxBitmap*) NULL;
 
-void wxPGCustomComboControlBase::Init()
+void wxPGComboControlBase::Init()
 {
     m_winPopup = (wxWindow *)NULL;
     m_popup = (wxWindow *)NULL;
@@ -1309,7 +1313,7 @@ void wxPGCustomComboControlBase::Init()
     m_timeCanAcceptClick = 0;
 }
 
-bool wxPGCustomComboControlBase::Create(wxWindow *parent,
+bool wxPGComboControlBase::Create(wxWindow *parent,
                                     wxWindowID id,
                                     const wxString& value,
                                     const wxPoint& pos,
@@ -1336,20 +1340,20 @@ bool wxPGCustomComboControlBase::Create(wxWindow *parent,
     return true;
 }
 
-void wxPGCustomComboControlBase::InstallInputHandlers( bool alsoTextCtrl )
+void wxPGComboControlBase::InstallInputHandlers( bool alsoTextCtrl )
 {
     if ( m_text && alsoTextCtrl )
     {
-        m_textEvtHandler = new wxComboBoxExtraInputHandler(this);
+        m_textEvtHandler = new wxPGComboBoxExtraInputHandler(this);
         m_text->PushEventHandler(m_textEvtHandler);
     }
 
-    wxComboBoxExtraInputHandler* inputHandler = new wxComboBoxExtraInputHandler(this);
+    wxPGComboBoxExtraInputHandler* inputHandler = new wxPGComboBoxExtraInputHandler(this);
     PushEventHandler(inputHandler);
     m_extraEvtHandler = inputHandler;
 }
 
-void wxPGCustomComboControlBase::CreateTextCtrl( int extraStyle, const wxValidator& validator )
+void wxPGComboControlBase::CreateTextCtrl( int extraStyle, const wxValidator& validator )
 {
     if ( !(m_windowStyle & wxCB_READONLY) )
     {
@@ -1373,12 +1377,12 @@ void wxPGCustomComboControlBase::CreateTextCtrl( int extraStyle, const wxValidat
     }
 }
 
-void wxPGCustomComboControlBase::OnThemeChange()
+void wxPGComboControlBase::OnThemeChange()
 {
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 }
 
-wxPGCustomComboControlBase::~wxPGCustomComboControlBase()
+wxPGComboControlBase::~wxPGComboControlBase()
 {
     if ( HasCapture() )
         ReleaseMouse();
@@ -1387,7 +1391,7 @@ wxPGCustomComboControlBase::~wxPGCustomComboControlBase()
     gs_doubleBuffer = (wxBitmap*) NULL;
 
 #if INSTALL_TOPLEV_HANDLER
-    delete ((wxComboFrameEventHandler*)m_toplevEvtHandler);
+    delete ((wxPGComboFrameEventHandler*)m_toplevEvtHandler);
     m_toplevEvtHandler = (wxEvtHandler*) NULL;
 #endif
 
@@ -1416,7 +1420,7 @@ wxPGCustomComboControlBase::~wxPGCustomComboControlBase()
 // ----------------------------------------------------------------------------
 
 // Recalculates button and textctrl areas
-void wxPGCustomComboControlBase::CalculateAreas( int btnWidth )
+void wxPGComboControlBase::CalculateAreas( int btnWidth )
 {
     wxSize sz = GetClientSize();
     int customBorder = m_widthCustomBorder;
@@ -1522,7 +1526,7 @@ void wxPGCustomComboControlBase::CalculateAreas( int btnWidth )
 */
 }
 
-void wxPGCustomComboControlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust )
+void wxPGComboControlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust )
 {
     if ( !m_text )
         return;
@@ -1564,7 +1568,7 @@ void wxPGCustomComboControlBase::PositionTextCtrl( int textCtrlXAdjust, int text
     }
 }
 
-wxSize wxPGCustomComboControlBase::DoGetBestSize() const
+wxSize wxPGComboControlBase::DoGetBestSize() const
 {
     wxSize sizeText(150,0);
 
@@ -1611,7 +1615,7 @@ wxSize wxPGCustomComboControlBase::DoGetBestSize() const
     return ret;
 }
 
-void wxPGCustomComboControlBase::DoMoveWindow(int x, int y, int width, int height)
+void wxPGComboControlBase::DoMoveWindow(int x, int y, int width, int height)
 {
     // SetSize is called last in create, so it marks the end of creation
     m_iFlags |= wxPGCC_IFLAG_CREATED;
@@ -1619,7 +1623,7 @@ void wxPGCustomComboControlBase::DoMoveWindow(int x, int y, int width, int heigh
     wxControl::DoMoveWindow(x, y, width, height);
 }
 
-void wxPGCustomComboControlBase::OnSizeEvent( wxSizeEvent& event )
+void wxPGComboControlBase::OnSizeEvent( wxSizeEvent& event )
 {
     if ( !IsCreated() )
         return;
@@ -1634,7 +1638,7 @@ void wxPGCustomComboControlBase::OnSizeEvent( wxSizeEvent& event )
 // standard operations
 // ----------------------------------------------------------------------------
 
-bool wxPGCustomComboControlBase::Enable(bool enable)
+bool wxPGComboControlBase::Enable(bool enable)
 {
     if ( !wxControl::Enable(enable) )
         return false;
@@ -1647,7 +1651,7 @@ bool wxPGCustomComboControlBase::Enable(bool enable)
     return true;
 }
 
-bool wxPGCustomComboControlBase::Show(bool show)
+bool wxPGComboControlBase::Show(bool show)
 {
     if ( !wxControl::Show(show) )
         return false;
@@ -1661,7 +1665,7 @@ bool wxPGCustomComboControlBase::Show(bool show)
     return true;
 }
 
-bool wxPGCustomComboControlBase::SetFont ( const wxFont& font )
+bool wxPGComboControlBase::SetFont ( const wxFont& font )
 {
     if ( !wxControl::SetFont(font) )
         return false;
@@ -1673,7 +1677,7 @@ bool wxPGCustomComboControlBase::SetFont ( const wxFont& font )
 }
 
 #if wxUSE_TOOLTIPS
-void wxPGCustomComboControlBase::DoSetToolTip(wxToolTip *tooltip)
+void wxPGComboControlBase::DoSetToolTip(wxToolTip *tooltip)
 {
     wxControl::DoSetToolTip(tooltip);
 
@@ -1697,7 +1701,7 @@ void wxPGCustomComboControlBase::DoSetToolTip(wxToolTip *tooltip)
 // ----------------------------------------------------------------------------
 
 // draw focus background on area in a way typical on platform
-void wxPGCustomComboControlBase::DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags )
+void wxPGComboControlBase::DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags )
 {
     wxSize sz = GetClientSize();
     bool isEnabled;
@@ -1714,8 +1718,9 @@ void wxPGCustomComboControlBase::DrawFocusBackground( wxDC& dc, const wxRect& re
         isFocused = ShouldDrawFocus();
 
         // Windows-style: for smaller size control (and for disabled background) use less spacing
-        focusSpacingX = isEnabled ? 2 : 1;
-        focusSpacingY = sz.y > (GetCharHeight()+2) && isEnabled ? 2 : 1;
+        //focusSpacingX = isEnabled ? 2 : 1;
+        focusSpacingX = 1;
+        focusSpacingY = sz.y > (GetCharHeight()+500) && isEnabled ? 2 : 1;
     }
     else
     {
@@ -1731,7 +1736,11 @@ void wxPGCustomComboControlBase::DrawFocusBackground( wxDC& dc, const wxRect& re
     wxRect selRect(rect);
     selRect.y += focusSpacingY;
     selRect.height -= (focusSpacingY*2);
-    int wcp = m_widthCustomPaint;
+    int wcp = 0;
+
+    if ( !(flags & wxCONTROL_ISSUBMENU) )
+        wcp += m_widthCustomPaint;
+
     selRect.x += wcp + focusSpacingX;
     selRect.width -= wcp + (focusSpacingX*2);
 
@@ -1763,7 +1772,7 @@ void wxPGCustomComboControlBase::DrawFocusBackground( wxDC& dc, const wxRect& re
     dc.DrawRectangle( selRect );
 }
 
-void wxPGCustomComboControlBase::DrawButton( wxDC& dc, const wxRect& rect, bool paintBg )
+void wxPGComboControlBase::DrawButton( wxDC& dc, const wxRect& rect, bool paintBg )
 {
     int drawState = m_btnState;
 
@@ -1816,7 +1825,7 @@ void wxPGCustomComboControlBase::DrawButton( wxDC& dc, const wxRect& rect, bool 
         else
             pBmp = &m_bmpNormal;
 
-#if wxMINOR_VERSION >= 8
+#if wxMINOR_VERSION >= 7
         if ( m_blankButtonBg )
         {
             // If using blank button background, we need to clear its background
@@ -1854,7 +1863,7 @@ void wxPGCustomComboControlBase::DrawButton( wxDC& dc, const wxRect& rect, bool 
     }
 }
 
-void wxPGCustomComboControlBase::RecalcAndRefresh()
+void wxPGComboControlBase::RecalcAndRefresh()
 {
     if ( IsCreated() )
     {
@@ -1864,7 +1873,7 @@ void wxPGCustomComboControlBase::RecalcAndRefresh()
     }
 }
 
-bool wxPGCustomComboControlBase::OnDrawListItem( wxDC& WXUNUSED(dc),
+bool wxPGComboControlBase::OnDrawListItem( wxDC& WXUNUSED(dc),
                                                  const wxRect& WXUNUSED(rect),
                                                  int WXUNUSED(item),
                                                  int WXUNUSED(flags) )
@@ -1872,12 +1881,12 @@ bool wxPGCustomComboControlBase::OnDrawListItem( wxDC& WXUNUSED(dc),
     return false; // signals caller to make default drawing
 }
 
-wxCoord wxPGCustomComboControlBase::OnMeasureListItem( int WXUNUSED(item) )
+wxCoord wxPGComboControlBase::OnMeasureListItem( int WXUNUSED(item) )
 {
     return -1; // signals caller to use default
 }
 
-wxCoord wxPGCustomComboControlBase::OnMeasureListItemWidth( int WXUNUSED(item) )
+wxCoord wxPGComboControlBase::OnMeasureListItemWidth( int WXUNUSED(item) )
 {
     return -1; // signals caller to use default
 }
@@ -1886,7 +1895,7 @@ wxCoord wxPGCustomComboControlBase::OnMeasureListItemWidth( int WXUNUSED(item) )
 // miscellaneous event handlers
 // ----------------------------------------------------------------------------
 
-void wxPGCustomComboControlBase::OnTextCtrlEvent(wxCommandEvent& event)
+void wxPGComboControlBase::OnTextCtrlEvent(wxCommandEvent& event)
 {
     // Change event id and relay it forward
     event.SetId(GetId());
@@ -1894,7 +1903,7 @@ void wxPGCustomComboControlBase::OnTextCtrlEvent(wxCommandEvent& event)
 }
 
 /*
-void wxPGCustomComboControlBase::OnButtonClickEvent( wxCommandEvent& WXUNUSED(event) )
+void wxPGComboControlBase::OnButtonClickEvent( wxCommandEvent& WXUNUSED(event) )
 {
     wxLongLong t = ::wxGetLocalTimeMillis();
 
@@ -1928,8 +1937,8 @@ void wxPGCustomComboControlBase::OnButtonClickEvent( wxCommandEvent& WXUNUSED(ev
 */
 
 // call if cursor is on button area or mouse is captured for the button
-//bool wxPGCustomComboControlBase::HandleButtonMouseEvent( wxMouseEvent& event, bool isInside )
-bool wxPGCustomComboControlBase::HandleButtonMouseEvent( wxMouseEvent& event,
+//bool wxPGComboControlBase::HandleButtonMouseEvent( wxMouseEvent& event, bool isInside )
+bool wxPGComboControlBase::HandleButtonMouseEvent( wxMouseEvent& event,
                                                          int flags )
 {
     int type = event.GetEventType();
@@ -2019,8 +2028,8 @@ bool wxPGCustomComboControlBase::HandleButtonMouseEvent( wxMouseEvent& event,
 
 // Conversion to double-clicks and some basic filtering
 // returns true if event was consumed or filtered
-//bool wxPGCustomComboControlBase::PreprocessMouseEvent( wxMouseEvent& event, bool isOnButtonArea )
-bool wxPGCustomComboControlBase::PreprocessMouseEvent( wxMouseEvent& event,
+//bool wxPGComboControlBase::PreprocessMouseEvent( wxMouseEvent& event, bool isOnButtonArea )
+bool wxPGComboControlBase::PreprocessMouseEvent( wxMouseEvent& event,
                                                        int flags )
 {
     wxLongLong t = ::wxGetLocalTimeMillis();
@@ -2078,7 +2087,7 @@ bool wxPGCustomComboControlBase::PreprocessMouseEvent( wxMouseEvent& event,
     return false;
 }
 
-void wxPGCustomComboControlBase::HandleNormalMouseEvent( wxMouseEvent& event )
+void wxPGComboControlBase::HandleNormalMouseEvent( wxMouseEvent& event )
 {
     int evtType = event.GetEventType();
 
@@ -2111,7 +2120,7 @@ void wxPGCustomComboControlBase::HandleNormalMouseEvent( wxMouseEvent& event )
                 //if ( m_popupInterface->CycleValue() )
                 //    Refresh();
                 if ( m_popupInterface )
-                    m_popupInterface->OnDoubleClick();
+                    m_popupInterface->OnComboDoubleClick();
             }
         }
     }
@@ -2126,7 +2135,7 @@ void wxPGCustomComboControlBase::HandleNormalMouseEvent( wxMouseEvent& event )
         event.Skip();
 }
 
-void wxPGCustomComboControlBase::OnFocusEvent( wxFocusEvent& )
+void wxPGComboControlBase::OnFocusEvent( wxFocusEvent& )
 {
     // First click is the first part of double-click
     // Some platforms don't generate down-less mouse up-event
@@ -2145,7 +2154,7 @@ void wxPGCustomComboControlBase::OnFocusEvent( wxFocusEvent& )
         Refresh();
 }
 
-void wxPGCustomComboControlBase::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
+void wxPGComboControlBase::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 {
     OnThemeChange();
     // indentation may also have changed
@@ -2159,7 +2168,7 @@ void wxPGCustomComboControlBase::OnSysColourChanged(wxSysColourChangedEvent& WXU
 // ----------------------------------------------------------------------------
 
 // Create popup window and the child control
-void wxPGCustomComboControlBase::CreatePopup()
+void wxPGComboControlBase::CreatePopup()
 {
     wxPGComboPopup* popupInterface = m_popupInterface;
     wxWindow* popup;
@@ -2170,13 +2179,13 @@ void wxPGCustomComboControlBase::CreatePopup()
     popupInterface->Create(m_winPopup);
     m_popup = popup = popupInterface->GetControl();
 
-    m_popupExtraHandler = new wxComboPopupExtraEventHandler(this);
+    m_popupExtraHandler = new wxPGComboPopupExtraEventHandler(this);
     popup->PushEventHandler( m_popupExtraHandler );
 
     popupInterface->m_iFlags |= wxCP_IFLAG_CREATED;
 }
 
-void wxPGCustomComboControlBase::SetPopup( wxPGComboPopup* iface )
+void wxPGComboControlBase::SetPopup( wxPGComboPopup* iface )
 {
     delete m_popupInterface;
     delete m_winPopup;
@@ -2196,7 +2205,7 @@ void wxPGCustomComboControlBase::SetPopup( wxPGComboPopup* iface )
         // Create popup right away
         iface->Create(m_winPopup);
         m_popup = iface->GetControl();
-        m_popupExtraHandler = new wxComboPopupExtraEventHandler(this);
+        m_popupExtraHandler = new wxPGComboPopupExtraEventHandler(this);
         m_popup->PushEventHandler( m_popupExtraHandler );
 
         // Add interface as event handler
@@ -2222,14 +2231,14 @@ void wxPGCustomComboControlBase::SetPopup( wxPGComboPopup* iface )
 
 }
 
-void wxPGCustomComboControlBase::OnButtonClick()
+void wxPGComboControlBase::OnButtonClick()
 {
     // Derived classes can override this method for totally custom
     // popup action
     ShowPopup();
 }
 
-void wxPGCustomComboControlBase::ShowPopup()
+void wxPGComboControlBase::ShowPopup()
 {
     wxCHECK_RET( m_popupInterface, wxT("no popup interface set for wxComboControl") );
     wxCHECK_RET( !IsPopupShown(), wxT("popup window already shown") );
@@ -2462,18 +2471,18 @@ void wxPGCustomComboControlBase::ShowPopup()
     {
         // Put top level window event handler into place
         if ( !m_toplevEvtHandler )
-            m_toplevEvtHandler = new wxComboFrameEventHandler(this);
+            m_toplevEvtHandler = new wxPGComboFrameEventHandler(this);
 
         wxWindow* toplev = ::wxGetTopLevelParent( this );
         wxASSERT( toplev );
-        ((wxComboFrameEventHandler*)m_toplevEvtHandler)->OnPopup();
+        ((wxPGComboFrameEventHandler*)m_toplevEvtHandler)->OnPopup();
         toplev->PushEventHandler( m_toplevEvtHandler );
     }
 #endif
 
 }
 
-void wxPGCustomComboControlBase::OnPopupDismiss()
+void wxPGComboControlBase::OnPopupDismiss()
 {
     // Just in case, avoid double dismiss
     if ( !m_isPopupShown )
@@ -2488,7 +2497,7 @@ void wxPGCustomComboControlBase::OnPopupDismiss()
     //((wxComboDropButton*)m_btn)->SetPopup( (wxWindow*) NULL );
 
     if ( m_popupExtraHandler )
-        ((wxComboPopupExtraEventHandler*)m_popupExtraHandler)->OnPopupDismiss();
+        ((wxPGComboPopupExtraEventHandler*)m_popupExtraHandler)->OnPopupDismiss();
 
 #if INSTALL_TOPLEV_HANDLER
     // Remove top level window event handler
@@ -2526,7 +2535,7 @@ void wxPGCustomComboControlBase::OnPopupDismiss()
 
 }
 
-void wxPGCustomComboControlBase::HidePopup()
+void wxPGComboControlBase::HidePopup()
 {
     // Should be able to call this without popup interface
     //wxCHECK_RET( m_popupInterface, _T("no popup interface") );
@@ -2549,7 +2558,7 @@ void wxPGCustomComboControlBase::HidePopup()
 // customization methods
 // ----------------------------------------------------------------------------
 
-void wxPGCustomComboControlBase::SetButtonPosition( int width, int height,
+void wxPGComboControlBase::SetButtonPosition( int width, int height,
                                                     int side, int spacingX )
 {
     m_btnWid = width;
@@ -2560,7 +2569,7 @@ void wxPGCustomComboControlBase::SetButtonPosition( int width, int height,
     RecalcAndRefresh();
 }
 
-void wxPGCustomComboControlBase::SetButtonBitmaps( const wxBitmap& bmpNormal,
+void wxPGComboControlBase::SetButtonBitmaps( const wxBitmap& bmpNormal,
                                                bool blankButtonBg,
                                                const wxBitmap& bmpPressed,
                                                const wxBitmap& bmpHover,
@@ -2587,7 +2596,7 @@ void wxPGCustomComboControlBase::SetButtonBitmaps( const wxBitmap& bmpNormal,
     RecalcAndRefresh();
 }
 
-void wxPGCustomComboControlBase::SetCustomPaintWidth( int width )
+void wxPGComboControlBase::SetCustomPaintWidth( int width )
 {
     if ( m_text )
     {
@@ -2604,7 +2613,7 @@ void wxPGCustomComboControlBase::SetCustomPaintWidth( int width )
     RecalcAndRefresh();
 }
 
-void wxPGCustomComboControlBase::SetTextIndent( int indent )
+void wxPGComboControlBase::SetTextIndent( int indent )
 {
     if ( indent < 0 )
     {
@@ -2620,7 +2629,7 @@ void wxPGCustomComboControlBase::SetTextIndent( int indent )
     RecalcAndRefresh();
 }
 
-wxCoord wxPGCustomComboControlBase::GetNativeTextIndent() const
+wxCoord wxPGComboControlBase::GetNativeTextIndent() const
 {
     return DEFAULT_TEXT_INDENT;
 }
@@ -2629,14 +2638,14 @@ wxCoord wxPGCustomComboControlBase::GetNativeTextIndent() const
 // methods forwarded to wxTextCtrl
 // ----------------------------------------------------------------------------
 
-wxString wxPGCustomComboControlBase::GetValue() const
+wxString wxPGComboControlBase::GetValue() const
 {
     if ( m_text )
         return m_text->GetValue();
     return m_valueString;
 }
 
-void wxPGCustomComboControlBase::SetValue(const wxString& value)
+void wxPGComboControlBase::SetValue(const wxString& value)
 {
     if ( m_text )
     {
@@ -2657,37 +2666,37 @@ void wxPGCustomComboControlBase::SetValue(const wxString& value)
     Refresh();
 }
 
-void wxPGCustomComboControlBase::Copy()
+void wxPGComboControlBase::Copy()
 {
     if ( m_text )
         m_text->Copy();
 }
 
-void wxPGCustomComboControlBase::Cut()
+void wxPGComboControlBase::Cut()
 {
     if ( m_text )
         m_text->Cut();
 }
 
-void wxPGCustomComboControlBase::Paste()
+void wxPGComboControlBase::Paste()
 {
     if ( m_text )
         m_text->Paste();
 }
 
-void wxPGCustomComboControlBase::SetInsertionPoint(long pos)
+void wxPGComboControlBase::SetInsertionPoint(long pos)
 {
     if ( m_text )
         m_text->SetInsertionPoint(pos);
 }
 
-void wxPGCustomComboControlBase::SetInsertionPointEnd()
+void wxPGComboControlBase::SetInsertionPointEnd()
 {
     if ( m_text )
         m_text->SetInsertionPointEnd();
 }
 
-long wxPGCustomComboControlBase::GetInsertionPoint() const
+long wxPGComboControlBase::GetInsertionPoint() const
 {
     if ( m_text )
         return m_text->GetInsertionPoint();
@@ -2695,7 +2704,7 @@ long wxPGCustomComboControlBase::GetInsertionPoint() const
     return 0;
 }
 
-long wxPGCustomComboControlBase::GetLastPosition() const
+long wxPGComboControlBase::GetLastPosition() const
 {
     if ( m_text )
         return m_text->GetLastPosition();
@@ -2703,25 +2712,25 @@ long wxPGCustomComboControlBase::GetLastPosition() const
     return 0;
 }
 
-void wxPGCustomComboControlBase::Replace(long from, long to, const wxString& value)
+void wxPGComboControlBase::Replace(long from, long to, const wxString& value)
 {
     if ( m_text )
         m_text->Replace(from, to, value);
 }
 
-void wxPGCustomComboControlBase::Remove(long from, long to)
+void wxPGComboControlBase::Remove(long from, long to)
 {
     if ( m_text )
         m_text->Remove(from, to);
 }
 
-void wxPGCustomComboControlBase::SetSelection(long from, long to)
+void wxPGComboControlBase::SetSelection(long from, long to)
 {
     if ( m_text )
         m_text->SetSelection(from, to);
 }
 
-void wxPGCustomComboControlBase::Undo()
+void wxPGComboControlBase::Undo()
 {
     if ( m_text )
         m_text->Undo();
@@ -2732,14 +2741,14 @@ void wxPGCustomComboControlBase::Undo()
 // wxPGGenericComboControl
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxPGGenericComboControl, wxPGCustomComboControlBase)
+BEGIN_EVENT_TABLE(wxPGGenericComboControl, wxPGComboControlBase)
     //EVT_SIZE(wxPGGenericComboControl::OnSizeEvent)
     EVT_PAINT(wxPGGenericComboControl::OnPaintEvent)
     EVT_MOUSE_EVENTS(wxPGGenericComboControl::OnMouseEvent)
 END_EVENT_TABLE()
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxPGGenericComboControl, wxPGCustomComboControlBase)
+IMPLEMENT_DYNAMIC_CLASS(wxPGGenericComboControl, wxPGComboControlBase)
 
 void wxPGGenericComboControl::Init()
 {
@@ -2788,7 +2797,7 @@ bool wxPGGenericComboControl::Create(wxWindow *parent,
 #endif
 
     // create main window
-    if ( !wxPGCustomComboControlBase::Create(parent,
+    if ( !wxPGComboControlBase::Create(parent,
                             id,
                             value,
                             wxDefaultPosition,
@@ -3009,19 +3018,19 @@ void wxPGGenericComboControl::OnMouseEvent( wxMouseEvent& event )
 #define TEXTCTRLYADJUST_CLASSIC     4
 
 
-BEGIN_EVENT_TABLE(wxPGCustomComboControl, wxPGCustomComboControlBase)
-    EVT_PAINT(wxPGCustomComboControl::OnPaintEvent)
-    EVT_MOUSE_EVENTS(wxPGCustomComboControl::OnMouseEvent)
+BEGIN_EVENT_TABLE(wxPGComboControl, wxPGComboControlBase)
+    EVT_PAINT(wxPGComboControl::OnPaintEvent)
+    EVT_MOUSE_EVENTS(wxPGComboControl::OnMouseEvent)
 END_EVENT_TABLE()
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxPGCustomComboControl, wxPGCustomComboControlBase)
+IMPLEMENT_DYNAMIC_CLASS(wxPGComboControl, wxPGComboControlBase)
 
-void wxPGCustomComboControl::Init()
+void wxPGComboControl::Init()
 {
 }
 
-bool wxPGCustomComboControl::Create(wxWindow *parent,
+bool wxPGComboControl::Create(wxWindow *parent,
                                    wxWindowID id,
                                    const wxString& value,
                                    const wxPoint& pos,
@@ -3053,7 +3062,7 @@ bool wxPGCustomComboControl::Create(wxWindow *parent,
     //Customize( wxPGCC_BUTTON_OUTSIDE_BORDER );
 
     // create main window
-    if ( !wxPGCustomComboControlBase::Create(parent,
+    if ( !wxPGComboControlBase::Create(parent,
                             id,
                             value,
                             wxDefaultPosition,
@@ -3078,11 +3087,11 @@ bool wxPGCustomComboControl::Create(wxWindow *parent,
     return true;
 }
 
-wxPGCustomComboControl::~wxPGCustomComboControl()
+wxPGComboControl::~wxPGComboControl()
 {
 }
 
-void wxPGCustomComboControl::OnThemeChange()
+void wxPGComboControl::OnThemeChange()
 {
     wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
     if ( theme )
@@ -3102,8 +3111,8 @@ void wxPGCustomComboControl::OnThemeChange()
     }
 }
 
-//void wxPGCustomComboControl::OnSizeEvent( wxSizeEvent& event )
-void wxPGCustomComboControl::OnResize()
+//void wxPGComboControl::OnSizeEvent( wxSizeEvent& event )
+void wxPGComboControl::OnResize()
 {
     //
     // Recalculates button and textctrl areas
@@ -3158,9 +3167,9 @@ static void wxMSWDrawFocusRect( wxDC& dc, const wxRect& rect )
 #endif
 }
 */
-
+/*
 // draw focus background on area in a way typical on platform
-void wxPGCustomComboControl::DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags )
+void wxPGComboControl::DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags )
 {
     wxUxThemeEngine* theme = (wxUxThemeEngine*) NULL;
     wxUxThemeHandle hTheme(this, L"COMBOBOX");
@@ -3216,7 +3225,11 @@ void wxPGCustomComboControl::DrawFocusBackground( wxDC& dc, const wxRect& rect, 
     wxRect selRect(rect);
     selRect.y += focusSpacingY;
     selRect.height -= (focusSpacingY*2);
-    int wcp = m_widthCustomPaint;
+    int wcp = 0;
+
+    if ( !(flags & wxCONTROL_ISSUBMENU) )
+        wcp += m_widthCustomPaint;
+
     selRect.x += wcp + focusSpacingX;
     selRect.width -= wcp + (focusSpacingX*2);
 
@@ -3253,34 +3266,13 @@ void wxPGCustomComboControl::DrawFocusBackground( wxDC& dc, const wxRect& rect, 
         }
         else
         {
-            /*if ( hTheme )
-            {
-                theme->GetThemeColor(hTheme,EP_EDITTEXT,ETS_NORMAL,TMT_TEXTCOLOR,&cref);
-                dc.SetTextForeground( wxRGBToColour(cref) );
-                theme->GetThemeColor(hTheme,EP_EDITTEXT,ETS_NORMAL,TMT_FILLCOLOR,&cref);
-                bgCol = wxRGBToColour(cref);
-            }
-            else
-            {*/
-                dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) );
-                bgCol = GetBackgroundColour();
-            //}
+            bgCol = GetBackgroundColour();
         }
     }
     else
     {
-        /*if ( hTheme )
-        {
-            theme->GetThemeColor(hTheme,EP_EDITTEXT,ETS_DISABLED,TMT_TEXTCOLOR,&cref);
-            dc.SetTextForeground( wxRGBToColour(cref) );
-            theme->GetThemeColor(hTheme,EP_EDITTEXT,ETS_DISABLED,TMT_EDGEFILLCOLOR,&cref);
-            bgCol = wxRGBToColour(cref);
-        }
-        else
-        {*/
-            dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT) );
-            bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
-        //}
+        dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT) );
+        bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
     }
 
     dc.SetBrush(bgCol);
@@ -3289,8 +3281,8 @@ void wxPGCustomComboControl::DrawFocusBackground( wxDC& dc, const wxRect& rect, 
     //if ( drawDottedEdge )
     //    wxMSWDrawFocusRect(dc,selRect);
 }
-
-void wxPGCustomComboControl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
+*/
+void wxPGComboControl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 {
     // TODO: Convert drawing in this function to Windows API Code
 
@@ -3386,7 +3378,7 @@ void wxPGCustomComboControl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
     }
 }
 
-void wxPGCustomComboControl::OnMouseEvent( wxMouseEvent& event )
+void wxPGComboControl::OnMouseEvent( wxMouseEvent& event )
 {
     bool isOnButtonArea = m_btnArea.Inside(event.m_x,event.m_y);
     int handlerFlags = isOnButtonArea ? wxPGCC_MF_ON_BUTTON : 0;
@@ -3426,7 +3418,7 @@ void wxPGCustomComboControl::OnMouseEvent( wxMouseEvent& event )
 
 }
 
-wxCoord wxPGCustomComboControl::GetNativeTextIndent() const
+wxCoord wxPGComboControl::GetNativeTextIndent() const
 {
     if ( wxUxThemeEngine::GetIfActive() )
         return NATIVE_TEXT_INDENT_XP;
@@ -3435,7 +3427,7 @@ wxCoord wxPGCustomComboControl::GetNativeTextIndent() const
 
 #else
 
-IMPLEMENT_DYNAMIC_CLASS(wxPGCustomComboControl, wxPGCustomComboControlBase)
+IMPLEMENT_DYNAMIC_CLASS(wxPGComboControl, wxPGComboControlBase)
 
 #endif // #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
 
@@ -3444,10 +3436,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxPGCustomComboControl, wxPGCustomComboControlBase)
 // ----------------------------------------------------------------------------
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxPGOwnerDrawnComboBox, wxPGCustomComboControl)
+IMPLEMENT_DYNAMIC_CLASS(wxPGOwnerDrawnComboBox, wxPGComboControl)
 
 
-BEGIN_EVENT_TABLE(wxPGOwnerDrawnComboBox, wxPGCustomComboControl)
+BEGIN_EVENT_TABLE(wxPGOwnerDrawnComboBox, wxPGComboControl)
 END_EVENT_TABLE()
 
 
@@ -3464,7 +3456,7 @@ bool wxPGOwnerDrawnComboBox::Create(wxWindow *parent,
                             const wxValidator& validator,
                             const wxString& name)
 {
-    return wxPGCustomComboControl::Create(parent,id,value,pos,size,style,validator,name);
+    return wxPGComboControl::Create(parent,id,value,pos,size,style,validator,name);
 }
 
 wxPGOwnerDrawnComboBox::wxPGOwnerDrawnComboBox(wxWindow *parent,
@@ -3476,7 +3468,7 @@ wxPGOwnerDrawnComboBox::wxPGOwnerDrawnComboBox(wxWindow *parent,
                        long style,
                        const wxValidator& validator,
                        const wxString& name)
-    : wxPGCustomComboControl()
+    : wxPGComboControl()
 {
     Init();
 

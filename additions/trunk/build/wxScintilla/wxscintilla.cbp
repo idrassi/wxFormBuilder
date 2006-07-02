@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="4" />
 	<Project>
-		<Option title="wxscintilla" />
+		<Option title="wxScintilla" />
 		<Option pch_mode="0" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug Mono Dll">
-				<Option output="..\..\lib\gcc_dll\wxmsw26md_scintilla_gcc.dll" />
+				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)md_scintilla_gcc.dll" />
 				<Option object_output=".dllobjsd" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -31,7 +31,7 @@
 				</Environment>
 			</Target>
 			<Target title="Debug Mono Dll (Unicode)">
-				<Option output="..\..\lib\gcc_dll\wxmsw26umd_scintilla_gcc.dll" />
+				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)umd_scintilla_gcc.dll" />
 				<Option object_output=".dllobjsud" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -56,7 +56,7 @@
 				</Environment>
 			</Target>
 			<Target title="Release Mono Dll">
-				<Option output="..\..\lib\gcc_dll\wxmsw26m_scintilla_gcc.dll" />
+				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)m_scintilla_gcc.dll" />
 				<Option object_output=".dllobjs" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -80,7 +80,7 @@
 				</Environment>
 			</Target>
 			<Target title="Release Mono Dll (Unicode)">
-				<Option output="..\..\lib\gcc_dll\wxmsw26um_scintilla_gcc.dll" />
+				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)um_scintilla_gcc.dll" />
 				<Option object_output=".dllobjsu" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -105,7 +105,7 @@
 				</Environment>
 			</Target>
 			<Target title="Debug Using Dll">
-				<Option output="..\..\lib\gcc_libdll\libwxmsw26d_scintilla.a" />
+				<Option output="..\..\lib\gcc_libdll\libwxmsw$(WX_VER)d_scintilla.a" />
 				<Option working_dir="" />
 				<Option object_output=".libdllobjsd" />
 				<Option type="2" />
@@ -120,16 +120,9 @@
 					<Add option="-DLIB_USINGDLL" />
 					<Add option="-DWXUSINGDLL" />
 				</Compiler>
-				<Linker>
-					<Add library="wxmsw$(WX_VER)$(WX_SUFFIX)" />
-					<Add directory="$(#WX.lib)\gcc_dll" />
-				</Linker>
-				<Environment>
-					<Variable name="WX_SUFFIX" value="d" />
-				</Environment>
 			</Target>
 			<Target title="Debug Using Dll (Unicode)">
-				<Option output="..\..\lib\gcc_libdll\libwxmsw26ud_scintilla.a" />
+				<Option output="..\..\lib\gcc_libdll\libwxmsw$(WX_VER)ud_scintilla.a" />
 				<Option working_dir="" />
 				<Option object_output=".libdllobjsud" />
 				<Option type="2" />
@@ -145,16 +138,9 @@
 					<Add option="-DWXUSINGDLL" />
 					<Add option="-DwxUSE_UNICODE" />
 				</Compiler>
-				<Linker>
-					<Add library="wxmsw$(WX_VER)$(WX_SUFFIX)" />
-					<Add directory="$(#WX.lib)\gcc_dll" />
-				</Linker>
-				<Environment>
-					<Variable name="WX_SUFFIX" value="ud" />
-				</Environment>
 			</Target>
 			<Target title="Release Using Dll">
-				<Option output="..\..\lib\gcc_libdll\libwxmsw26_scintilla.a" />
+				<Option output="..\..\lib\gcc_libdll\libwxmsw$(WX_VER)_scintilla.a" />
 				<Option working_dir="" />
 				<Option object_output=".libdllobjs" />
 				<Option type="2" />
@@ -170,15 +156,10 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add library="wxmsw$(WX_VER)$(WX_SUFFIX)" />
-					<Add directory="$(#WX.lib)\gcc_dll" />
 				</Linker>
-				<Environment>
-					<Variable name="WX_SUFFIX" value="" />
-				</Environment>
 			</Target>
 			<Target title="Release Using Dll (Unicode)">
-				<Option output="..\..\lib\gcc_libdll\libwxmsw26u_scintilla.a" />
+				<Option output="..\..\lib\gcc_libdll\libwxmsw$(WX_VER)u_scintilla.a" />
 				<Option working_dir="" />
 				<Option object_output=".libdllobjsu" />
 				<Option type="2" />
@@ -195,15 +176,10 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add library="wxmsw$(WX_VER)$(WX_SUFFIX)" />
-					<Add directory="$(#WX.lib)\gcc_dll" />
 				</Linker>
-				<Environment>
-					<Variable name="WX_SUFFIX" value="u" />
-				</Environment>
 			</Target>
 			<Target title="Debug">
-				<Option output="..\..\lib\gcc_lib\libwxmsw26d_scintilla.a" />
+				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)d_scintilla.a" />
 				<Option working_dir="" />
 				<Option object_output=".objsd" />
 				<Option type="2" />
@@ -216,15 +192,9 @@
 					<Add option="-D_DEBUG" />
 					<Add option="-D__WXDEBUG" />
 				</Compiler>
-				<Linker>
-					<Add directory="$(#WX.lib)\gcc_dll" />
-				</Linker>
-				<Environment>
-					<Variable name="WX_SUFFIX" value="d" />
-				</Environment>
 			</Target>
 			<Target title="Debug (Unicode)">
-				<Option output="..\..\lib\gcc_lib\libwxmsw26ud_scintilla.a" />
+				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)ud_scintilla.a" />
 				<Option working_dir="" />
 				<Option object_output=".objsud" />
 				<Option type="2" />
@@ -238,15 +208,9 @@
 					<Add option="-D__WXDEBUG" />
 					<Add option="-DwxUSE_UNICODE" />
 				</Compiler>
-				<Linker>
-					<Add directory="$(#WX.lib)\gcc_dll" />
-				</Linker>
-				<Environment>
-					<Variable name="WX_SUFFIX" value="ud" />
-				</Environment>
 			</Target>
 			<Target title="Release">
-				<Option output="..\..\lib\gcc_lib\libwxmsw26_scintilla.a" />
+				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)_scintilla.a" />
 				<Option working_dir="" />
 				<Option type="2" />
 				<Option compiler="gcc" />
@@ -259,14 +223,10 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add directory="$(#WX.lib)\gcc_dll" />
 				</Linker>
-				<Environment>
-					<Variable name="WX_SUFFIX" value="" />
-				</Environment>
 			</Target>
 			<Target title="Release (Unicode)">
-				<Option output="..\..\lib\gcc_lib\libwxmsw26u_scintilla.a" />
+				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)u_scintilla.a" />
 				<Option working_dir="" />
 				<Option object_output=".objsu" />
 				<Option type="2" />
@@ -281,11 +241,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add directory="$(#WX.lib)\gcc_dll" />
 				</Linker>
-				<Environment>
-					<Variable name="WX_SUFFIX" value="u" />
-				</Environment>
 			</Target>
 			<Environment>
 				<Variable name="WX_SUFFIX" value="" />

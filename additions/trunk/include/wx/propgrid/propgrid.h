@@ -78,8 +78,7 @@
     #define wxPG_XBEFORETEXT            6 // space between vertical line and value text
     #define wxPG_XBEFOREWIDGET          1 // space between vertical line and value editor control
 
-    #define wxPG_TEXTCTRLXADJUST        2 // x position adjustment for wxTextCtrl (and like)
-                                          // NOTE: Changed from 3 for v1.1.5
+    #define wxPG_TEXTCTRLXADJUST        3 // x position adjustment for wxTextCtrl (and like)
 
     #define wxPG_ICON_WIDTH             9 // comment to use bitmap buttons
     #define wxPG_USE_RENDERER_NATIVE    0 // 1 if wxRendererNative should be employed
@@ -327,12 +326,27 @@ extern WXDLLIMPEXP_PG const wxChar *wxPropertyGridNameStr;
 */
 #define wxPG_COLOUR(R,G,B) ((wxUint32)(R+(G<<8)+(B<<16)))
 
-/** Return this in GetImageSize() to indicate that the property
-    custom paint is flexible. That is, it will paint (dropdown)
-    list items with PREFWID,PREFHEI size, and in with required
-    default size in the value cell.
+/** Return this in GetImageSize() to indicate that the custom painted
+    property image is flexible. That is, it will paint (dropdown)
+    list item images with PREFWID,PREFHEI size.
 */
 #define wxPG_FLEXIBLE_SIZE(PREFWID,PREFHEI) wxSize(-(PREFWID),-(PREFHEI))
+
+#define wxPG_FULL_CUSTOM_PAINT_WIDTH        -99999
+
+/** Return this in GetImageSize() to indicate that the property is
+    custom painted completely (ie. the text as well).
+*/
+#define wxPG_FULL_CUSTOM_PAINT_SIZE(HEI)                \
+    wxSize(wxPG_FULL_CUSTOM_PAINT_WIDTH,HEI)
+
+/** Return this in GetImageSize() to indicate that the property is
+    custom painted completely (ie. the text as well), and with flexible
+    height.
+*/
+#define wxPG_FULL_CUSTOM_PAINT_FLEXIBLE_SIZE(PREFHEI)    \
+    wxSize(wxPG_FULL_CUSTOM_PAINT_WIDTH,-(PREFHEI))
+
 
 /** This callback function is used by atleast wxCustomProperty
     to facilitiate easy custom action on button press.
@@ -472,6 +486,11 @@ typedef void (*wxPGPaintCallback)(wxPGProperty* property,
 /** Shows alphabetic/categoric mode buttons from toolbar.
 */
 #define wxPG_EX_MODE_BUTTONS        0x00008000
+
+/** Show property help strings as tool tips instead as text on the status bar.
+    This requires wxPG_TOOLTIPS window style.
+*/
+#define wxPG_EX_HELP_AS_TOOLTIPS    0x00010000
 
 /** Combines various styles.
 */
@@ -679,10 +698,20 @@ WXDLLIMPEXP_PG void wxPGGetFailed ( const wxPGProperty* p, const wxChar* typestr
 */
 #define wxPG_FILE_SHOW_RELATIVE_PATH        72
 
-/** Specific to wxFileProperty and derived properties, wxString, default is empty
+/** Specific to wxFileProperty and derived properties, wxString, default is empty.
     Sets the initial path of where to look for files.
 */
 #define wxPG_FILE_INITIAL_PATH              73
+
+/** Specific to wxFileProperty and derivatives, wxString, default is empty.
+    Sets a specific title for the dir dialog.
+*/
+#define wxPG_FILE_DIALOG_TITLE              74
+
+/** Specific to wxDirProperty, wxString, default is empty.
+    Sets a specific message for the dir dialog.
+*/
+#define wxPG_DIR_DIALOG_MESSAGE             75
 
 
 #ifdef wxPG_COMPATIBILITY_1_0_0
@@ -1479,9 +1508,18 @@ public:
     */
     virtual bool SetValueFromInt( long value, int flags = 0 );
 
-    /** Returns size of the custom paint image in front of property.
-        Returning -1 for either dimension means using default value.
-        Default behaviour is to return wxSize(0,0), which means no image.
+    /** Returns size of the custom painted image in front of property. This method
+        must be overridden to return non-default value if OnCustomPaint is to be
+        called.
+        \remarks
+        - If flexible image size is desired, return wxPG_FLEXIBLE_SIZE(wid,hei).
+          OnCustomPaint is then called to measure items as well (see for
+          wxPGProperty::OnCustomPaint for measure call specs).
+        - If entire property, including text, is to be custom painted, then
+          wxPG_FULL_CUSTOM_PAINT_SIZE(hei) or wxPG_FULL_CUSTOM_PAINT_FLEXIBLE_SIZE(hei)
+          is to be returned.
+        - Default behaviour is to return wxSize(0,0), which means no image.
+        - Default image width or height is indicated with dimension -1.
     */
     virtual wxSize GetImageSize() const;
 
@@ -1572,10 +1610,11 @@ public:
         - Must not crash even if property's set of choices is uninitialized
           (i.e. it points to wxPGGlobalVars->m_emptyConstants).
     */
-    virtual int GetChoiceInfo ( wxPGChoiceInfo* choiceinfo );
+    virtual int GetChoiceInfo( wxPGChoiceInfo* choiceinfo );
 
     /** Override to paint an image in front of the property value text or drop-down
-        list item.
+        list item (but only if wxPGProperty::GetImageSize is overridden as well).
+
         If property's GetImageSize() returns size that has height != 0 but less than
         row height ( < 0 has special meanings), wxPropertyGrid calls this method to
         draw a custom image in a limited area in front of the editor control or
@@ -1589,6 +1628,7 @@ public:
         dc is invalid and only thing that should be done is to set paintdata.m_drawnHeight
         to the height of the image of item at index paintdata.m_choiceItem. This call
         may be done even as often as once every drop-down popup show.
+
         \param dc
         wxDC to paint on.
         \param rect
@@ -1596,12 +1636,14 @@ public:
         If x is < 0, then this is a measure item call (see above).
         \param paintdata
         wxPGPaintData structure with much useful data.
+
         \remarks
             - You can actually exceed rect width, but if you do so then paintdata.m_drawnWidth
               must be set to the full width drawn in pixels.
             - Due to technical reasons, rect's height will be default even if custom height
               was reported during measure call.
-            - Font and text colour should not be modified.
+            - Changing font and text colour affects the text drawn next to the painted image
+              (which is done immediately after the OnCustomPaint call finishes).
             - Brush is guaranteed to be default background colour. It has been already used to
               clear the background of area being painted. It can be modified.
             - Pen is guaranteed to be 1-wide 'black' (or whatever is the proper colour) pen for
@@ -1669,7 +1711,7 @@ public:
 
     void UpdateControl( wxWindow* primary );
 
-    inline wxString GetDisplayedString () const
+    inline wxString GetDisplayedString() const
     {
         return GetValueAsString(0);
     }
@@ -1762,7 +1804,7 @@ public:
     inline wxVariant GetValueAsVariant() const;
 #endif
 
-    inline wxBitmap* GetValueImage () const
+    inline wxBitmap* GetValueImage() const
     {
         if ( m_dataExt )
             return m_dataExt->m_valueBitmap;
@@ -1817,7 +1859,7 @@ public:
     /** Set wxBitmap in front of the value. This bitmap will be ignored if
         property class has implemented OnCustomPaint.
     */
-    void SetValueImage ( wxBitmap& bmp );
+    void SetValueImage( wxBitmap& bmp );
 
     /** If property has choices and they are not yet exclusive, new such copy
         of them will be created.
@@ -1826,7 +1868,7 @@ public:
 
     inline void SetFlag( unsigned char flag ) { m_flags |= flag; }
 
-    inline void SetHelpString ( const wxString& help_string )
+    inline void SetHelpString( const wxString& help_string )
     {
         EnsureDataExt();
         m_dataExt->m_helpString = help_string;
@@ -1836,14 +1878,14 @@ public:
 
 #if wxUSE_VALIDATORS
     /** Sets wxValidator for a property*/
-    inline void SetValidator ( wxValidator& validator )
+    inline void SetValidator( wxValidator& validator )
     {
         EnsureDataExt();
         m_dataExt->m_validator = wxDynamicCast(validator.Clone(),wxValidator);
     }
 
     /** Gets assignable version of property's validator. */
-    inline wxValidator* GetValidator () const
+    inline wxValidator* GetValidator() const
     {
         if ( m_dataExt )
             return m_dataExt->m_validator;
@@ -1891,13 +1933,13 @@ public:
     bool PrepareValueForDialogEditing( wxPropertyGrid* propgrid );
 
 #if wxPG_USE_CLIENT_DATA
-    inline void* GetClientData () const { return m_clientData; }
+    inline void* GetClientData() const { return m_clientData; }
 
-    /** Sets client data (void*) of a property. 
+    /** Sets client data (void*) of a property.
         \remarks
         This untyped client data has to be deleted manually.
     */
-    inline void SetClientData ( void* clientData ) { m_clientData = clientData; }
+    inline void SetClientData( void* clientData ) { m_clientData = clientData; }
 #endif
 
     /** Sets new set of choices for property.
@@ -2028,43 +2070,22 @@ class WXDLLIMPEXP_PG wxPGHashMapS2P;
 
 #ifndef SWIG
 
-/*
-// Hash map for int-to-int mapping
-WX_DECLARE_HASH_MAP_WITH_DECL(size_t,
-                              size_t,
-                              wxIntegerHash,
-                              wxIntegerEqual,
-                              wxPGHashMapI2I,
-                              class WXDLLIMPEXP_PG);
-*/
-
 WX_DECLARE_VOIDPTR_HASH_MAP_WITH_DECL(void*,
                                       wxPGHashMapP2P,
                                       class WXDLLIMPEXP_PG);
 
-/*
-WX_DECLARE_HASH_MAP_WITH_DECL(size_t,
-                              void*,
-                              wxIntegerHash,
-                              wxIntegerEqual,
-                              wxPGHashMapI2P,
-                              class WXDLLIMPEXP_PG); // name of the class
-*/
-
 #else
-//class WXDLLIMPEXP_PG wxPGHashMapI2I;
 class WXDLLIMPEXP_PG wxPGHashMapP2P;
-//class WXDLLIMPEXP_PG wxPGHashMapI2P;
 #endif // #ifndef SWIG
 
 // -----------------------------------------------------------------------
 
-inline wxVariant wxPGProperty::GetValueAsVariant () const
+inline wxVariant wxPGProperty::GetValueAsVariant() const
 {
     wxPGVariant value = DoGetValue();
-    const wxPGValueType* typeclass = GetValueType();
-    wxASSERT_MSG ( typeclass, wxT("Did you forgot to use wxPG_INIT_REQUIRED_TYPE(T) in constructor?") );
-    return typeclass->GenerateVariant(value,m_name);
+    const wxPGValueType* typeClass = GetValueType();
+    wxASSERT_MSG( typeClass, wxT("Did you forgot to use wxPG_INIT_REQUIRED_TYPE(T) in constructor?") );
+    return typeClass->GenerateVariant(value,m_name);
 }
 
 
@@ -2104,12 +2125,12 @@ public:
         contains sequence of text representations of sub-properties.
     */
     // Advanced version that gives property list and index to this item
-    virtual wxString GetValueAsString ( int arg_flags = 0 ) const;
+    virtual wxString GetValueAsString( int arg_flags = 0 ) const;
 
     /** This overridden version converts comma or semicolon separated
         tokens into child values.
     */
-    virtual bool SetValueFromString ( const wxString& text, int flags );
+    virtual bool SetValueFromString( const wxString& text, int flags );
 
     /** Refresh values of child properties.
     */
@@ -2118,25 +2139,25 @@ public:
     /** Called after child property p has been altered.
         The value of this parent property should now be updated accordingly.
     */
-    virtual void ChildChanged ( wxPGProperty* p );
+    virtual void ChildChanged( wxPGProperty* p );
 
     /** This is used by properties that have fixed sub-properties. */
-    void AddChild ( wxPGProperty* prop );
+    void AddChild( wxPGProperty* prop );
 
     /** This is used by Insert etc. */
-    void AddChild2 ( wxPGProperty* prop, int index = -1, bool correct_mode = true );
+    void AddChild2( wxPGProperty* prop, int index = -1, bool correct_mode = true );
 
     /** Returns number of sub-properties. */
     inline size_t GetCount() const { return m_children.GetCount(); }
 
     /** Returns sub-property at index i. */
-    inline wxPGProperty* Item ( size_t i ) const { return (wxPGProperty*)m_children.Item(i); }
+    inline wxPGProperty* Item( size_t i ) const { return (wxPGProperty*)m_children.Item(i); }
 
     /** Returns last sub-property. */
-    inline wxPGProperty* Last () const { return (wxPGProperty*)m_children.Last(); }
+    inline wxPGProperty* Last() const { return (wxPGProperty*)m_children.Last(); }
 
     /** Returns index of given sub-property. */
-    inline int Index ( const wxPGProperty* p ) const { return m_children.Index((void*)p); }
+    inline int Index( const wxPGProperty* p ) const { return m_children.Index((void*)p); }
 
     /** Deletes all sub-properties. */
     void Empty();
@@ -2147,14 +2168,14 @@ public:
     }
 
     // Puts correct indexes to children
-    void FixIndexesOfChildren ( size_t starthere = 0 );
+    void FixIndexesOfChildren( size_t starthere = 0 );
 
 #ifndef SWIG
     // Returns wxPropertyGridState in which this property resides.
     wxPropertyGridState* GetParentState() const { return m_parentState; }
 #endif
 
-    wxPGProperty* GetItemAtY ( unsigned int y, unsigned int lh );
+    wxPGProperty* GetItemAtY( unsigned int y, unsigned int lh );
 
     /** Returns (direct) child property with given name (or NULL if not found).
     */
@@ -2164,7 +2185,7 @@ public:
     // Call for after sub-properties added with AddChild
     void PrepareSubProperties();
 
-    inline void SetParentState ( wxPropertyGridState* pstate ) { m_parentState = pstate; }
+    inline void SetParentState( wxPropertyGridState* pstate ) { m_parentState = pstate; }
 
     // Call after fixed sub-properties added/removed after creation.
     // if oldSelInd >= 0 and < new max items, then selection is
@@ -2398,7 +2419,7 @@ public:
     /** Version that works with wxArrayString.
         TODO: Deprecate this.
     */
-    void Set ( wxArrayString& arr, const long* values = (const long*) NULL )
+    void Set( wxArrayString& arr, const long* values = (const long*) NULL )
     {
         Free();
         Add(arr,values);
@@ -2406,7 +2427,7 @@ public:
 #endif // SWIG
 
     /** Version that works with wxArrayString and wxArrayInt. */
-    void Set ( const wxArrayString& labels, const wxArrayInt& values = wxPG_EMPTY_ARRAYINT )
+    void Set( const wxArrayString& labels, const wxArrayInt& values = wxPG_EMPTY_ARRAYINT )
     {
         Free();
         if ( &values )
@@ -2699,15 +2720,15 @@ public:
     wxPropertyGridState();
 
     /** Destructor. */
-    ~wxPropertyGridState();
+    virtual ~wxPropertyGridState();
 
     /** Base append. */
-    wxPGId Append ( wxPGProperty* property );
+    wxPGId Append( wxPGProperty* property );
 
-    wxPGId AppendIn ( wxPGPropertyWithChildren* pwc, const wxString& label, const wxString& propname, wxVariant& value );
+    wxPGId AppendIn( wxPGPropertyWithChildren* pwc, const wxString& label, const wxString& propname, wxVariant& value );
 
     /** Returns property by its name. */
-    wxPGId BaseGetPropertyByName ( wxPGPropNameStr name ) const;
+    wxPGId BaseGetPropertyByName( wxPGPropNameStr name ) const;
 
     /** Called in, for example, wxPropertyGrid::Clear. */
     void Clear();
@@ -2726,7 +2747,13 @@ public:
 
     bool Collapse( wxPGProperty* p );
 
-    void DoDelete( wxPGProperty* item );
+    /** Override this member function to add custom behaviour on property deletion.
+    */
+    virtual void DoDelete( wxPGProperty* item );
+
+    /** Override this member function to add custom behaviour on property insertion.
+    */
+    virtual wxPGId DoInsert( wxPGPropertyWithChildren* parent, int index, wxPGProperty* property );
 
     bool EnableCategories( bool enable );
 
@@ -2770,9 +2797,6 @@ public:
 
     /** Used by SetSplitterLeft. */
     int GetLeftSplitterPos( wxClientDC& dc, wxPGPropertyWithChildren* pwc, bool subProps );
-
-    /** Base insert. */
-    wxPGId Insert ( wxPGPropertyWithChildren* parent, int index, wxPGProperty* property );
 
     inline bool IsDisplayed() const;
 
@@ -2867,9 +2891,9 @@ public:
     void Sort( wxPGProperty* p );
     void Sort();
 
-#ifndef DOXYGEN
 protected:
 
+#ifndef DOXYGEN
     int PrepareToAddItem ( wxPGProperty* property, wxPGPropertyWithChildren* scheduledParent );
 
     /** If visible, then this is pointer to wxPropertyGrid.
@@ -2937,6 +2961,9 @@ class WXDLLIMPEXP_PG wxPropertyContainerMethods
 // BM_METHODS
 {
 public:
+
+    /** Destructor */
+    virtual ~wxPropertyContainerMethods() { };
 
     /** Adds choice to a property that can accept one.
         \remarks
@@ -3580,7 +3607,7 @@ public:
 
         wxPropertyGridState* state = replaced->GetParentState();
         Delete(replaced); // Must use generic Delete
-        state->Insert(parent,ind,property);
+        state->DoInsert(parent,ind,property);
 
         return wxPGIdGen(property);
     }
@@ -3638,7 +3665,7 @@ public:
         wxVariant doesn't have int constructor (as of 2.5.4), so <b>you will
         need to cast int values (including most numeral constants) to long</b>.
     */
-    inline void SetPropertyAttribute ( wxPGId id, int attrid, wxVariant value, long arg_flags = 0 )
+    inline void SetPropertyAttribute( wxPGId id, int attrid, wxVariant value, long arg_flags = 0 )
     {
         DoSetPropertyAttribute(id,attrid,value,arg_flags);
     }
@@ -3652,14 +3679,14 @@ public:
         wxPG_EDITOR(EditorName), where built-in editor names are TextCtrl, Choice,
         ComboBox, CheckBox, TextCtrlAndButton, and ChoiceAndButton.
     */
-    inline void SetPropertyEditor ( wxPGId id, const wxPGEditor* editor )
+    inline void SetPropertyEditor( wxPGId id, const wxPGEditor* editor )
     {
         wxPGProperty* p = wxPGIdToPtr(id);
         wxASSERT(p);
         p->SetEditor(editor);
         RefreshProperty(p);
     }
-    inline void SetPropertyEditor ( wxPGPropNameStr name, const wxPGEditor* editor )
+    inline void SetPropertyEditor( wxPGPropNameStr name, const wxPGEditor* editor )
     {
         SetPropertyEditor(GetPropertyByName(name),editor);
     }
@@ -3668,11 +3695,11 @@ public:
     /** Sets editor control of a property. As editor argument, use
         editor name string, such as wxT("TextCtrl") or wxT("Choice").
     */
-    inline void SetPropertyEditor ( wxPGId id, const wxString& editor_name )
+    inline void SetPropertyEditor( wxPGId id, const wxString& editor_name )
     {
         SetPropertyEditor(id,GetEditorByName(editor_name));
     }
-    inline void SetPropertyEditor ( wxPGPropNameStr name, const wxString& editor_name )
+    inline void SetPropertyEditor( wxPGPropNameStr name, const wxString& editor_name )
     {
         SetPropertyEditor(GetPropertyByName(name),editor_name);
     }
@@ -3682,12 +3709,12 @@ public:
         \remarks
         This untyped client data has to be deleted manually.
     */
-    inline void SetPropertyClientData ( wxPGId id, void* clientData )
+    inline void SetPropertyClientData( wxPGId id, void* clientData )
     {
         wxASSERT ( wxPGIdIsOk(id) );
         wxPGIdToPtr(id)->SetClientData(clientData);
     }
-    /** Sets client data (void*) of a property. 
+    /** Sets client data (void*) of a property.
         \remarks
         This untyped client data has to be deleted manually.
     */
@@ -3700,13 +3727,13 @@ public:
     /** Associates the help string with property (text will shown either in
         manager's "description" text box or in the status bar.
     */
-    inline void SetPropertyHelpString ( wxPGId id, const wxString& help_string )
+    inline void SetPropertyHelpString( wxPGId id, const wxString& help_string )
     {
         wxASSERT ( wxPGIdIsOk(id) );
         wxPGIdToPtr(id)->SetHelpString(help_string);
     }
 
-    inline void SetPropertyHelpString ( wxPGPropNameStr name, const wxString& help_string )
+    inline void SetPropertyHelpString( wxPGPropNameStr name, const wxString& help_string )
     {
         SetPropertyHelpString(GetPropertyByName(name),help_string);
     }
@@ -3740,12 +3767,12 @@ public:
         return SetPropertyMaxLength(GetPropertyByName(name),maxLen);
     }
 
-    /** Property is be hidden/shown when hider button is toggled or
+    /** Property is to be hidden/shown when hider button is toggled or
         when wxPropertyGrid::Compact is called.
     */
     bool SetPropertyPriority( wxPGId id, int priority );
 
-    /** Property is be hidden/shown when hider button is toggled or
+    /** Property is to be hidden/shown when hider button is toggled or
         when wxPropertyGrid::Compact is called.
     */
     inline bool SetPropertyPriority( wxPGPropNameStr name, int priority )
@@ -3785,7 +3812,7 @@ public:
 
     /** Toggles priority of a property between wxPG_HIGH and wxPG_LOW.
     */
-    inline void TogglePropertyPriority ( wxPGPropNameStr name )
+    inline void TogglePropertyPriority( wxPGPropNameStr name )
     {
         TogglePropertyPriority(GetPropertyByName(name));
     }
@@ -4190,6 +4217,7 @@ protected:
 #define wxPG_FL_STRING_IN_STATUSBAR         0x00200000 // Set when help string is shown in status bar
 #define wxPG_FL_SPLITTER_PRE_SET            0x00400000 // Splitter position has been custom-set by the user
 #define wxPG_FL_VALIDATION_FAILED           0x00800000 // Validation failed. Clear on modify event.
+#define wxPG_FL_SELECTED_IS_FULL_PAINT      0x01000000 // Set if selected is fully painted (ie. both image and text)
 
 #endif // #ifndef SWIG
 
@@ -5636,6 +5664,10 @@ public:
 
     virtual bool SetFont ( const wxFont& font );
 
+#if wxPG_SUPPORT_TOOLTIPS
+    void SetToolTip( const wxString& tipString );
+#endif
+
     virtual void Freeze();
 
     virtual void SetExtraStyle ( long exStyle );
@@ -5741,7 +5773,7 @@ protected:
     unsigned char       m_dragStatus;
 
     /** helper used in OnResize. */
-    signed char         m_widDiffCarry;
+    //signed char         m_widDiffCarry;
 
     /** x - m_splitterx. */
     signed char         m_dragOffset;
@@ -5778,6 +5810,8 @@ protected:
     wxPGProperty*       m_propHover;    // pointer to property that has mouse on itself
 
     int                 m_splitterx; // x position for the vertical line dividing name and value
+
+    float               m_fSplitterX; // accurate splitter position
 
     int                 m_ctrlXAdjust; // x relative to splitter (needed for resize).
 
@@ -5901,7 +5935,7 @@ protected:
 
     inline wxPGId _Insert ( wxPGPropertyWithChildren* parent, int index, wxPGProperty* newproperty )
     {
-        return m_pState->Insert(parent,index,newproperty);
+        return m_pState->DoInsert(parent,index,newproperty);
     }
 
     /** Reloads all non-customized colours from system settings. */
@@ -6094,14 +6128,14 @@ public:
     /** Returns label of associated property. */
     const wxString& GetPropertyLabel() const
     {
-        wxASSERT ( m_property );
+        wxASSERT( m_property );
         return m_property->GetLabel();
     }
 
     /** Returns name of associated property. */
     const wxString& GetPropertyName() const
     {
-        wxASSERT ( m_property );
+        wxASSERT( m_property );
         return m_property->GetName();
     }
 
@@ -6109,7 +6143,7 @@ public:
     /** Returns client data of relevant property. */
     void* GetPropertyClientData() const
     {
-        wxASSERT ( m_property );
+        wxASSERT( m_property );
         return m_property->GetClientData();
     }
 #endif
@@ -6118,48 +6152,51 @@ public:
     /** Returns value of relevant property. */
     wxVariant GetPropertyValue() const
     {
-        wxASSERT ( m_property );
+        wxASSERT( m_property );
         return m_property->GetValueAsVariant();
     }
 
-    inline wxString GetPropertyValueAsString () const
+    inline wxString GetPropertyValueAsString() const
     {
         return m_pg->GetPropertyValueAsString( wxPGIdGen(m_property) );
     }
-    inline long GetPropertyValueAsLong () const
+    inline long GetPropertyValueAsLong() const
     {
         return m_pg->GetPropertyValueAsLong( wxPGIdGen(m_property) );
     }
-    inline int GetPropertyValueAsInt () { return (int)GetPropertyValueAsLong(); }
-    inline long GetPropertyValueAsBool () const
+    inline int GetPropertyValueAsInt() const
+    {
+        return (int)GetPropertyValueAsLong();
+    }
+    inline long GetPropertyValueAsBool() const
     {
         return m_pg->GetPropertyValueAsBool( wxPGIdGen(m_property) );
     }
-    inline double GetPropertyValueAsDouble () const
+    inline double GetPropertyValueAsDouble() const
     {
         return m_pg->GetPropertyValueAsDouble( wxPGIdGen(m_property) );
     }
-    inline const wxArrayString& GetPropertyValueAsArrayString () const
+    inline const wxArrayString& GetPropertyValueAsArrayString() const
     {
         return m_pg->GetPropertyValueAsArrayString( wxPGIdGen(m_property) );
     }
-    inline const wxObject* GetPropertyValueAsWxObjectPtr () const
+    inline const wxObject* GetPropertyValueAsWxObjectPtr() const
     {
         return m_pg->GetPropertyValueAsWxObjectPtr( wxPGIdGen(m_property) );
     }
-    inline void* GetPropertyValueAsVoidPtr () const
+    inline void* GetPropertyValueAsVoidPtr() const
     {
         return m_pg->GetPropertyValueAsVoidPtr( wxPGIdGen(m_property) );
     }
-    inline const wxPoint& GetPropertyValueAsPoint () const
+    inline const wxPoint& GetPropertyValueAsPoint() const
     {
         return m_pg->GetPropertyValueAsPoint( wxPGIdGen(m_property) );
     }
-    inline const wxSize& GetPropertyValueAsSize () const
+    inline const wxSize& GetPropertyValueAsSize() const
     {
         return m_pg->GetPropertyValueAsSize( wxPGIdGen(m_property) );
     }
-    inline const wxArrayInt& GetPropertyValueAsArrayInt () const
+    inline const wxArrayInt& GetPropertyValueAsArrayInt() const
     {
         return m_pg->GetPropertyValueAsArrayInt( wxPGIdGen(m_property) );
     }
@@ -6189,13 +6226,13 @@ public:
 
 #if !wxPG_ID_IS_PTR
     /** Changes the associated property. */
-    void SetProperty ( wxPGId id ) { m_property = wxPGIdToPtr(id); }
+    void SetProperty( wxPGId id ) { m_property = wxPGIdToPtr(id); }
 #endif
 
     /** Changes the associated property. */
-    void SetProperty ( wxPGProperty* p ) { m_property = p; }
+    void SetProperty( wxPGProperty* p ) { m_property = p; }
 
-    void SetPropertyGrid ( wxPropertyGrid* pg ) { m_pg = pg; }
+    void SetPropertyGrid( wxPropertyGrid* pg ) { m_pg = pg; }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxPropertyGridEvent)
@@ -6205,19 +6242,22 @@ private:
 #endif
 };
 
+
+#define wxPG_BASE_EVT_PRE_ID     1775
+
 #ifndef SWIG
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PG, wxEVT_PG_SELECTED,           1775)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PG, wxEVT_PG_CHANGED,            1776)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PG, wxEVT_PG_HIGHLIGHTED,        1777)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PG, wxEVT_PG_RIGHT_CLICK,        1778)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PG, wxEVT_PG_PAGE_CHANGED,       1779)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PG, wxEVT_PG_ITEM_COLLAPSED,     1780)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PG, wxEVT_PG_ITEM_EXPANDED,      1781)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PG, wxEVT_PG_SELECTED,           wxPG_BASE_EVT_PRE_ID)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PG, wxEVT_PG_CHANGED,            wxPG_BASE_EVT_PRE_ID+1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PG, wxEVT_PG_HIGHLIGHTED,        wxPG_BASE_EVT_PRE_ID+2)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PG, wxEVT_PG_RIGHT_CLICK,        wxPG_BASE_EVT_PRE_ID+3)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PG, wxEVT_PG_PAGE_CHANGED,       wxPG_BASE_EVT_PRE_ID+4)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PG, wxEVT_PG_ITEM_COLLAPSED,     wxPG_BASE_EVT_PRE_ID+5)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PG, wxEVT_PG_ITEM_EXPANDED,      wxPG_BASE_EVT_PRE_ID+6)
 END_DECLARE_EVENT_TYPES()
 #else
     enum {
-        wxEVT_PG_SELECTED = 1775,
+        wxEVT_PG_SELECTED = wxPG_BASE_EVT_PRE_ID,
         wxEVT_PG_CHANGED,
         wxEVT_PG_HIGHLIGHTED,
         wxEVT_PG_RIGHT_CLICK,
@@ -6226,6 +6266,10 @@ END_DECLARE_EVENT_TYPES()
         wxEVT_PG_ITEM_EXPANDED
     };
 #endif
+
+
+#define wxPG_BASE_EVT_TYPE       wxEVT_PG_SELECTED
+#define wxPG_MAX_EVT_TYPE        (wxPG_BASE_EVT_TYPE+30)
 
 
 #ifndef SWIG

@@ -24,6 +24,107 @@
 extern WXDLLIMPEXP_PG const wxChar *wxPropertyGridManagerNameStr;
 #endif
 
+/** \class wxPropertyGridPage
+    \ingroup classes
+    \brief
+    Holder of property grid page information. You can subclass this and
+    give instance in wxPropertyGridManager::AddPage. It inherits from
+    wxEvtHandler and can be used to process events specific to this
+    page (id of events will still be same as manager's). If you don't
+    want to use it to process all events of the page, you need to
+    return false in the derived wxPropertyGridPage::IsHandlingAllEvents.
+
+    Please note that wxPropertyGridPage lacks many non-const property
+    manipulation functions found in wxPropertyGridManager. Please use
+    parent manager (m_manager member variable) when needed.
+
+    <h4>Derived from</h4>
+
+    wxPropertyGridState\n
+    wxPropertyContainerMethods\n
+    wxEvtHandler\n
+    wxObject\n
+
+    <h4>Include files</h4>
+
+    <wx/propgrid/manager.h>
+
+    <h4>Event handling</h4>
+
+    wxPropertyGridPage receives events emitted by its wxPropertyGridManager, but
+    only those events that are specific to that page. If wxPropertyGridPage::IsHandlingAllEvents
+    returns false, then unhandled events are sent to the manager's parent, as usual.
+*/
+class WXDLLIMPEXP_PG wxPropertyGridPage : public wxEvtHandler,
+                                          public wxPropertyContainerMethods,
+                                          public wxPropertyGridState
+{
+    friend class wxPropertyGridManager;
+#ifndef SWIG
+	DECLARE_CLASS(wxPropertyGridPage)
+#endif
+public:
+
+    wxPropertyGridPage();
+    virtual ~wxPropertyGridPage();
+
+    /** See wxPropertyGrid::AppendIn. */
+    inline wxPGId AppendIn( wxPGId id, wxPGProperty* property )
+    {
+        return DoInsert((wxPGPropertyWithChildren*)(wxPGProperty*)id,-1,property);
+    }
+
+    /** See wxPropertyGrid::AppendIn. */
+    inline wxPGId AppendIn( wxPGPropNameStr name, wxPGProperty* property )
+    {
+        return DoInsert((wxPGPropertyWithChildren*)(wxPGProperty*)BaseGetPropertyByName(name),-1,property);
+    }
+
+    /** Return pointer to contained property grid state.
+    */
+    inline wxPropertyGridState* GetStatePtr()
+    {
+        return this;
+    }
+
+    /** See wxPropertyGrid::Insert. */
+    wxPGId Insert( wxPGId id, int index, wxPGProperty* property );
+
+    /** See wxPropertyGrid::Insert. */
+    wxPGId Insert( wxPGPropNameStr name, int index, wxPGProperty* property );
+
+    /** Do any member initialization in this method.
+        \remarks
+        - Called every time the page is added into a manager.
+        - You can add properties to the page here.
+    */
+    virtual void Init() {};
+
+    /** Return false here to indicate unhandled events should be
+        propagated to manager's parent, as normal.
+    */
+    virtual bool IsHandlingAllEvents() const { return true; }
+
+#ifndef SWIG
+protected:
+
+    virtual void RefreshProperty( wxPGProperty* p );
+
+    virtual bool ProcessEvent( wxEvent& event );
+
+    wxPropertyGridManager*  m_manager;
+    wxString                m_label;
+    //wxPropertyGridState     m_state;
+    int                     m_id;  // toolbar index
+
+private:
+    bool                    m_isDefault; // is this base page object?
+
+private:
+    DECLARE_EVENT_TABLE()
+#endif
+};
+
 // -----------------------------------------------------------------------
 
 // _P1 version doesn't have overloaded version that accepts name instead of id.
@@ -50,25 +151,8 @@ wxPG_IPAM_DECL void wxPropertyGridManager::NAME( wxPGPropNameStr name, AT1 _av1_
     NAME(GetPropertyByName(name),_av1_); \
 }
 
-/*
-    wxPrintf(wxT("%s\n"),name.c_str());
-    wxPrintf(wxT("0x%X\n"),GetPropertyByName(name));
-*/
 
-/*
-
-wxPG_IPAM_DECL void wxPropertyGridManager::NAME ( wxPGPropNameStr name, AT1 _av1_ ) \
-{ \
-    wxPropertyGridState* pState; \
-    wxPGId id = GetPropertyByName2(name,&pState); \
-    wxASSERT ( pState != (wxPropertyGridState*) NULL ); \
-    if ( pState == m_propGrid.m_pState ) m_propGrid.NAME(id,_av1_); \
-    else pState->NAME(wxPGIdToPtr(id),_av1_); \
-}
-
-*/
-
-class wxPropertyGridPageData;
+//class wxPropertyGridPageData;
 
 #define wxPG_IPAM_DECL inline
 
@@ -120,7 +204,7 @@ class WXDLLIMPEXP_PG wxPropertyGridManager : public wxPanel, public wxPropertyCo
 #ifndef SWIG
 	DECLARE_CLASS(wxPropertyGridManager)
 #endif
-
+    friend class wxPropertyGridPage;
 public:
 
 #ifdef SWIG
@@ -164,15 +248,15 @@ public:
 #endif
 
     /** Creates new property page. Note that the first page is not created
-        automatically, and before you have created any pages you are basicly
-        in a non-paged mode. When you create the first page, contents
-        of the underlying propertygrid is added into it (or this is how it
-        will seem to to the user).
+        automatically.
         \param label
         A label for the page. This may be shown as a toolbar tooltip etc.
         \param bmp
         Bitmap image for toolbar. If wxNullBitmap is used, then a built-in
         default image is used.
+        \param pageObj
+        wxPropertyGridPage instance. Manager will take ownership of this object.
+        NULL indicates that a default page instance should be created.
         \retval
         Returns index to the page created.
         \remarks
@@ -180,9 +264,11 @@ public:
         added when the toolbar is not turned off using window style flag
         switching.
     */
-    inline int AddPage( const wxString& label = wxEmptyString, const wxBitmap& bmp = wxPG_NULL_BITMAP )
+    inline int AddPage( const wxString& label = wxEmptyString,
+                        const wxBitmap& bmp = wxPG_NULL_BITMAP,
+                        wxPropertyGridPage* pageObj = (wxPropertyGridPage*) NULL )
     {
-        return InsertPage(-1,label,bmp);
+        return InsertPage(-1,label,bmp,pageObj);
     }
 
     /** See wxPropertyGrid::Append. */
@@ -233,7 +319,7 @@ public:
     {
         wxASSERT ( m_targetState );
         wxASSERT_MSG( m_selPage >= 0, wxT("You need to add a page before adding properties") );
-        return m_targetState->Insert((wxPGPropertyWithChildren*)(wxPGProperty*)id,-1,property);
+        return m_targetState->DoInsert((wxPGPropertyWithChildren*)(wxPGProperty*)id,-1,property);
     }
 
     /** See wxPropertyGrid::AppendIn. */
@@ -241,7 +327,7 @@ public:
     {
         wxASSERT ( m_targetState );
         wxASSERT_MSG( m_selPage >= 0, wxT("You need to add a page before adding properties") );
-        return m_targetState->Insert((wxPGPropertyWithChildren*)(wxPGProperty*)m_targetState->BaseGetPropertyByName(name),-1,property);
+        return m_targetState->DoInsert((wxPGPropertyWithChildren*)(wxPGProperty*)m_targetState->BaseGetPropertyByName(name),-1,property);
     }
 
     /** Returns true if all property grid data changes have been committed. Usually
@@ -302,10 +388,6 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = wxPGMAN_DEFAULT_STYLE,
                  const wxChar* name = wxPropertyGridManagerNameStr );
-
-    /** Deletes a property. */
-    //void Delete ( wxPGId id );
-    //void Delete ( wxPGPropNameStr name );
 
     /** Disables a property. */
     inline bool DisableProperty( wxPGId id ) { return EnableProperty (id,false); }
@@ -374,13 +456,13 @@ public:
     inline size_t GetChildrenCount( wxPGPropNameStr name ) { return GetChildrenCount( GetPropertyByName(name) ); }
 
     /** Returns id of first item (in target page), whether it is a category or a property. */
-    inline wxPGId GetFirst () const
+    inline wxPGId GetFirst() const
     {
         return m_targetState->GetFirst();
     }
 
     /** Returns id of first category (in target page). */
-    inline wxPGId GetFirstCategory () const
+    inline wxPGId GetFirstCategory() const
     {
         return m_targetState->GetFirstCategory ();
     }
@@ -406,17 +488,17 @@ public:
         \remarks
         Returns even sub-properties.
     */
-    inline wxPGId GetLastChild ( wxPGId parent )
+    inline wxPGId GetLastChild( wxPGId parent )
     {
         wxASSERT ( wxPGIdIsOk(parent) );
         wxPGPropertyWithChildren& p = (wxPGPropertyWithChildren&) *wxPGIdToPtr(parent);
         if ( !p.GetParentingType() || !p.GetCount() ) return wxNullProperty;
         return wxPGIdGen(p.Last());
     }
-    inline wxPGId GetLastChild ( wxPGPropNameStr name ) { return GetLastChild ( GetPropertyByName(name) ); }
+    inline wxPGId GetLastChild( wxPGPropNameStr name ) { return GetLastChild ( GetPropertyByName(name) ); }
 
     /** Returns id of next category after a given property (which does not have to be category). */
-    inline wxPGId GetNextCategory ( wxPGId id ) const
+    inline wxPGId GetNextCategory( wxPGId id ) const
     {
         wxASSERT ( m_targetState );
         return m_targetState->GetNextCategory(id);
@@ -425,14 +507,21 @@ public:
     /** Returns id of next property (from target page). This does <b>not</b> iterate
         to sub-properties or categories.
     */
-    inline wxPGId GetNextProperty ( wxPGId id ) const
+    inline wxPGId GetNextProperty( wxPGId id ) const
     {
         wxASSERT ( m_targetState );
         return m_targetState->GetNextProperty(id);
     }
 
+    /** Returns page object for given page index.
+    */
+    inline wxPropertyGridPage* GetPage( unsigned int ind ) const
+    {
+        return (wxPropertyGridPage*)m_arrPages.Item(ind);
+    }
+
     /** Returns index for a page name. If no match is found, wxNOT_FOUND is returned. */
-    int GetPageByName ( const wxChar* name ) const;
+    int GetPageByName( const wxChar* name ) const;
 
     /** Returns index for a relevant propertygrid state. If no match is found,
         wxNOT_FOUND is returned.
@@ -457,11 +546,11 @@ public:
     }
 
     /** Returns id of previous item under the same parent. */
-    inline wxPGId GetPrevSibling ( wxPGId id )
+    inline wxPGId GetPrevSibling( wxPGId id )
     {
         return wxPropertyGridState::GetPrevSibling(id);
     }
-    inline wxPGId GetPrevSibling ( wxPGPropNameStr name )
+    inline wxPGId GetPrevSibling( wxPGPropNameStr name )
     {
         return wxPropertyGridState::GetPrevSibling(GetPropertyByName(name));
     }
@@ -471,27 +560,27 @@ public:
         false with IsOk method). If there are multiple properties with identical name,
         most recent added is returned.
     */
-    wxPGId GetPropertyByLabel ( const wxString& name,
+    wxPGId GetPropertyByLabel( const wxString& name,
         wxPropertyGridState** ppState = (wxPropertyGridState**)NULL ) const;
 
     /** Returns id of property's nearest parent category. If no category
         found, returns invalid wxPGId.
     */
-    inline wxPGId GetPropertyCategory ( wxPGId id ) const
+    inline wxPGId GetPropertyCategory( wxPGId id ) const
     {
         return m_propGrid.GetPropertyCategory(id);
     }
-    wxPGId GetPropertyCategory ( wxPGPropNameStr name ) const
+    wxPGId GetPropertyCategory( wxPGPropNameStr name ) const
     {
         return m_propGrid.GetPropertyCategory(GetPropertyByName(name));
     }
 
     /** Returns cell background colour of a property. */
-    inline wxColour GetPropertyColour ( wxPGId id ) const
+    inline wxColour GetPropertyColour( wxPGId id ) const
     {
         return m_propGrid.GetPropertyColour(id);
     }
-    inline wxColour GetPropertyColour ( wxPGPropNameStr name ) const
+    inline wxColour GetPropertyColour( wxPGPropNameStr name ) const
     {
         return m_propGrid.GetPropertyColour(GetPropertyByName(name));
     }
@@ -500,12 +589,12 @@ public:
     /** Returns validator of a property as a reference, which you
         can pass to any number of SetPropertyValidator.
     */
-    inline wxPropertyValidator& GetPropertyValidator ( wxPGId id )
+    inline wxPropertyValidator& GetPropertyValidator( wxPGId id )
     {
         wxASSERT( wxPGIdIsOk(id) );
         return wxPGIdToPtr(id)->GetValidator();
     }
-    inline wxPropertyValidator& GetPropertyValidator ( wxPGPropNameStr name )
+    inline wxPropertyValidator& GetPropertyValidator( wxPGPropNameStr name )
     {
         return GetPropertyValidator(GetPropertyByName(name));
     }
@@ -521,7 +610,7 @@ public:
         This works on the target page.
     */
 #ifndef SWIG
-    wxVariant GetPropertyValues ( const wxString& listname = wxEmptyString,
+    wxVariant GetPropertyValues( const wxString& listname = wxEmptyString,
         wxPGId baseparent = wxNullProperty, long flags = 0 ) const
     {
         return m_targetState->GetPropertyValues(listname,baseparent,flags);
@@ -531,19 +620,19 @@ public:
     /** Returns "root property" of the target page. It does not have name, etc.
         and it is not visible. It is only useful for accessing its children.
     */
-    wxPGId GetRoot () const { return wxPGIdGen(m_targetState->m_properties); }
+    wxPGId GetRoot() const { return wxPGIdGen(m_targetState->m_properties); }
 
     /** Returns index to currently selected page. */
-    inline int GetSelectedPage () const { return m_selPage; }
+    inline int GetSelectedPage() const { return m_selPage; }
 
     /** Shortcut for GetGrid()->GetSelection(). */
-    inline wxPGId GetSelectedProperty () const
+    inline wxPGId GetSelectedProperty() const
     {
         return m_propGrid.GetSelection();
     }
 
     /** Synonyme for GetSelectedPage. */
-    inline int GetSelection () const { return m_selPage; }
+    inline int GetSelection() const { return m_selPage; }
 
     /** Returns index of page that is target for insert operations etc. */
     inline int GetTargetPage() const { return m_targetPage; }
@@ -552,36 +641,33 @@ public:
         wxPropertyGridManager (if any). */
     inline wxToolBar* GetToolBar() const { return m_pToolbar; }
 
-    inline void InitAllTypeHandlers ()
+    inline void InitAllTypeHandlers()
     {
         wxPropertyGrid::InitAllTypeHandlers();
     }
 
     /** See wxPropertyGrid::Insert. */
-    inline wxPGId Insert ( wxPGId id, int index, wxPGProperty* property )
+    inline wxPGId Insert( wxPGId id, int index, wxPGProperty* property )
     {
         wxASSERT ( m_targetState );
-        wxPGId res_id = m_targetState->Insert((wxPGPropertyWithChildren*)wxPGIdToPtr(id),index,property);
+        wxPGId res_id = m_targetState->DoInsert((wxPGPropertyWithChildren*)wxPGIdToPtr(id),index,property);
         if ( m_targetState == m_propGrid.m_pState )
             m_propGrid.DrawItems ( property, (wxPGProperty*) NULL );
         return res_id;
     }
 
     /** See wxPropertyGrid::Insert. */
-    inline wxPGId Insert ( wxPGPropNameStr name, int index, wxPGProperty* property )
+    inline wxPGId Insert( wxPGPropNameStr name, int index, wxPGProperty* property )
     {
         wxASSERT ( m_targetState );
-        wxPGId res_id = m_targetState->Insert((wxPGPropertyWithChildren*)wxPGIdToPtr(m_targetState->BaseGetPropertyByName(name)),index,property);
+        wxPGId res_id = m_targetState->DoInsert((wxPGPropertyWithChildren*)wxPGIdToPtr(m_targetState->BaseGetPropertyByName(name)),index,property);
         if ( m_targetState == m_propGrid.m_pState )
             m_propGrid.DrawItems ( property, (wxPGProperty*) NULL );
         return res_id;
     }
 
     /** Creates new property page. Note that the first page is not created
-        automatically, and before you have created any pages you are basicly
-        in a non-paged mode. When you create the first page, contents
-        of the underlying propertygrid is added into it (or this is how it
-        will seem to to the user).
+        automatically.
         \param index
         Add to this position. -1 will add as the last item.
         \param label
@@ -589,10 +675,14 @@ public:
         \param bmp
         Bitmap image for toolbar. If wxNullBitmap is used, then a built-in
         default image is used.
+        \param pageObj
+        wxPropertyGridPage instance. Manager will take ownership of this object.
+        If NULL, default page object is constructed.
         \retval
         Returns index to the page created.
     */
-    int InsertPage( int index, const wxString& label, const wxBitmap& bmp = wxNullBitmap );
+    virtual int InsertPage( int index, const wxString& label, const wxBitmap& bmp = wxNullBitmap,
+                            wxPropertyGridPage* pageObj = (wxPropertyGridPage*) NULL );
 
     /** Returns true if any property on any page has been modified by the user. */
     bool IsAnyModified() const;
@@ -616,6 +706,12 @@ public:
 
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect* rect = (const wxRect*) NULL );
+
+    /** Removes a page.
+        \retval
+        Returns false if it was not possible to remove page in question.
+    */
+    virtual bool RemovePage( int page );
 
     /** Select and displays a given page. Also makes it target page for
         insert operations etc. */
@@ -1012,10 +1108,10 @@ protected:
 
 
 
-    virtual wxPGId DoGetPropertyByName ( wxPGPropNameStr name ) const;
+    virtual wxPGId DoGetPropertyByName( wxPGPropNameStr name ) const;
 
     /** Select and displays a given page. */
-    bool DoSelectPage( int index );
+    virtual bool DoSelectPage( int index );
 
     virtual void RefreshProperty( wxPGProperty* p );
 
@@ -1028,21 +1124,18 @@ protected:
     /** Recalculates new positions for components, according to the
         given size.
     */
-    void RecalculatePositions ( int width, int height );
+    void RecalculatePositions( int width, int height );
 
     /** (Re)creates/destroys controls, according to the window style bits. */
-    void RecreateControls ();
+    void RecreateControls();
 
-    void RefreshHelpBox ( int new_splittery, int new_width, int new_height );
+    void RefreshHelpBox( int new_splittery, int new_width, int new_height );
 
-    void RepaintSplitter ( int new_splittery, int new_width, int new_height, bool desc_too );
+    void RepaintSplitter( int new_splittery, int new_width, int new_height, bool desc_too );
 
-    void SetDescribedProperty ( wxPGProperty* p );
+    void SetDescribedProperty( wxPGProperty* p );
 
-    inline wxPropertyGridPageData* GetPage ( size_t ind ) const
-    {
-        return (wxPropertyGridPageData*)m_arrPages.Item(ind);
-    }
+    virtual bool ProcessEvent( wxEvent& event );
 
 private:
     DECLARE_EVENT_TABLE()

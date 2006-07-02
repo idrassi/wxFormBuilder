@@ -69,7 +69,7 @@
       label to be drawn in grey colour.
     - Unspecified, empty values (wxPropertyGrid::SetPropertyUnspecified,
       wxPropertyGrid::IsPropertyUnspecified).
-    - Client data (void* for user to store value into) (wxPropertyGrid::SetPropertyClientData,
+    - Client data (void*) (wxPropertyGrid::SetPropertyClientData,
       wxPropertyGrid::GetPropertyClientData).
     - Multi-page management (\ref usage2).
     - Setting wxValidator for editor (wxPropertyGrid::SetPropertyValidator).
@@ -81,8 +81,10 @@
     - Changing set of choices used by wxEnumProperty, wxEditEnumProperty or wxMultiChoiceProperty
       (wxPropertyGrid::SetPropertyChoices).
     - Changing background colour of property's cell (wxPropertyGrid::SetPropertyColour).
-    - Populating wxPropertyGrid (\ref populating).
+    - Setting property text max length (wxPropertyGrid::SetPropertyMaxLength)
+    - Hiding a property (wxPropertyGrid::HideProperty)
     - Setting property attributes (\ref attributes)
+    - Populating wxPropertyGrid (\ref populating).
 
     \section basics Creating and Populating wxPropertyGrid
 
@@ -870,7 +872,7 @@
       them.
 
 
-    \section usage2 Using wxPropertyGridManager
+    \section usage2 Using wxPropertyGridManager (Updated!)
 
     wxPropertyGridManager is an efficient multi-page version of wxPropertyGrid,
     which can optionally have toolbar for mode and page selection, help text box,
@@ -941,6 +943,18 @@
         pgMan->SetTargetPage(0);
 
     \endcode
+
+    \subsection propgridpage wxPropertyGridPage (New!)
+
+    wxPropertyGridPage is holder of properties for one page in manager. It is derived from
+    wxEvtHandler, so you can subclass it to process page-specific property grid events. Hand
+    over your page instance in wxPropertyGridManager::AddPage.
+
+    Please note that the wxPropertyGridPage itself only sports subset of wxPropertyGrid API.
+    Naturally it inherits from wxPropertyGridMethods and wxPropertyGridState, but, for instance, setting property values is
+    not yet supported. Use parent manager (m_manager member) instead when needed. Basic property
+    appending and insertion is supported, however.
+
 
     \section misc Miscellaneous Topics (Updated!)
 

@@ -18,12 +18,12 @@
 <a href="classwxPropertyGridManager-members.htm">List of all members.</a><table border=0 cellpadding=0 cellspacing=0>
 <tr><td></td></tr>
 <tr><td colspan=2><br><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera0">AddPage</a> (const wxString &amp;label=wxEmptyString, const wxBitmap &amp;bmp=wxPG_NULL_BITMAP)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera0">AddPage</a> (const wxString &amp;label=wxEmptyString, const wxBitmap &amp;bmp=wxPG_NULL_BITMAP, <a class="el" href="classwxPropertyGridPage.htm">wxPropertyGridPage</a> *pageObj=(<a class="el" href="classwxPropertyGridPage.htm">wxPropertyGridPage</a> *) NULL)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera1" doxytag="wxPropertyGridManager::AddPropertyChoice" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea0" doxytag="wxPropertyGridManager::AddPropertyChoice" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>AddPropertyChoice</b> (wxPGPropNameStr name, const wxString &amp;label, int value=wxPG_INVALID_VALUE)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera2">AddPropertyChoice</a> (wxPGId id, const wxString &amp;label, int value=wxPG_INVALID_VALUE)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea1">AddPropertyChoice</a> (wxPGId id, const wxString &amp;label, int value=wxPG_INVALID_VALUE)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera3" doxytag="wxPropertyGridManager::Append" ></a>
 wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><b>Append</b> (const wxString &amp;label, const wxString &amp;name, bool value)</td></tr>
@@ -74,14 +74,14 @@ bool&nbsp;</td><td class="memItemRight" valign=bottom><b>Collapse</b> (wxPGPropN
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera22">Create</a> (wxWindow *parent, wxWindowID id=wxID_ANY, const wxPoint &amp;pos=wxDefaultPosition, const wxSize &amp;size=wxDefaultSize, long style=wxPGMAN_DEFAULT_STYLE, const wxChar *name=wxPropertyGridManagerNameStr)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera23">Delete</a> (wxPGPropNameStr name)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea12">Delete</a> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera24">Delete</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea13">Delete</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera25" doxytag="wxPropertyGridManager::DeletePropertyChoice" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea14" doxytag="wxPropertyGridManager::DeletePropertyChoice" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>DeletePropertyChoice</b> (wxPGPropNameStr name, int index)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera26">DeletePropertyChoice</a> (wxPGId id, int index)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea15">DeletePropertyChoice</a> (wxPGId id, int index)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera27">DisableProperty</a> (wxPGPropNameStr name)</td></tr>
 
@@ -123,10 +123,10 @@ virtual void&nbsp;</td><td class="memItemRight" valign=bottom><b>Freeze</b> ()</
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera44">GetFirstCategory</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera45" doxytag="wxPropertyGridManager::GetFirstChild" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea25" doxytag="wxPropertyGridManager::GetFirstChild" ></a>
 wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><b>GetFirstChild</b> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera46">GetFirstChild</a> (wxPGId parent)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea26">GetFirstChild</a> (wxPGId parent)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera47">GetFirstProperty</a> () const </td></tr>
 
@@ -141,540 +141,544 @@ wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><b>GetLastChild</b> (wxP
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera52">GetNextProperty</a> (wxPGId id) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera53" doxytag="wxPropertyGridManager::GetNextSibling" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea32" doxytag="wxPropertyGridManager::GetNextSibling" ></a>
 wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><b>GetNextSibling</b> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera54">GetNextSibling</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea33">GetNextSibling</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera55">GetPageByName</a> (const wxChar *name) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPropertyGridPage.htm">wxPropertyGridPage</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera55">GetPage</a> (unsigned int ind) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera56">GetPageByState</a> (<a class="el" href="classwxPropertyGridState.htm">wxPropertyGridState</a> *pstate) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera56">GetPageByName</a> (const wxChar *name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>size_t&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera57">GetPageCount</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera57">GetPageByState</a> (<a class="el" href="classwxPropertyGridState.htm">wxPropertyGridState</a> *pstate) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>const wxString &amp;&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera58">GetPageName</a> (int index) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>size_t&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera58">GetPageCount</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera59">GetPageRoot</a> (int index) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>const wxString &amp;&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera59">GetPageName</a> (int index) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera60">GetPrevProperty</a> (wxPGId id) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera60">GetPageRoot</a> (int index) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera61" doxytag="wxPropertyGridManager::GetPrevSibling" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera61">GetPrevProperty</a> (wxPGId id) const </td></tr>
+
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera62" doxytag="wxPropertyGridManager::GetPrevSibling" ></a>
 wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPrevSibling</b> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera62">GetPrevSibling</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera63">GetPrevSibling</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera63">GetPropertyByLabel</a> (const wxString &amp;name, <a class="el" href="classwxPropertyGridState.htm">wxPropertyGridState</a> **ppState=(<a class="el" href="classwxPropertyGridState.htm">wxPropertyGridState</a> **) NULL) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera64">GetPropertyByLabel</a> (const wxString &amp;name, <a class="el" href="classwxPropertyGridState.htm">wxPropertyGridState</a> **ppState=(<a class="el" href="classwxPropertyGridState.htm">wxPropertyGridState</a> **) NULL) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera64">GetPropertyByName</a> (wxPGPropNameStr name, wxPGPropNameStr subname) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea36">GetPropertyByName</a> (wxPGPropNameStr name, wxPGPropNameStr subname) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera65">GetPropertyByName</a> (wxPGPropNameStr name) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea37">GetPropertyByName</a> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera66" doxytag="wxPropertyGridManager::GetPropertyCategory" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera67" doxytag="wxPropertyGridManager::GetPropertyCategory" ></a>
 wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyCategory</b> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera67">GetPropertyCategory</a> (wxPGId id) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera68">GetPropertyCategory</a> (wxPGId id) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera68" doxytag="wxPropertyGridManager::GetPropertyChoices" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea38" doxytag="wxPropertyGridManager::GetPropertyChoices" ></a>
 <a class="el" href="classwxPGChoices.htm">wxPGChoices</a> &amp;&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyChoices</b> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGChoices.htm">wxPGChoices</a> &amp;&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera69">GetPropertyChoices</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGChoices.htm">wxPGChoices</a> &amp;&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea39">GetPropertyChoices</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>const wxChar *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera70">GetPropertyClassName</a> (wxPGPropNameStr name) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>const wxChar *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea40">GetPropertyClassName</a> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>const wxChar *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera71">GetPropertyClassName</a> (wxPGId id) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>const wxChar *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea41">GetPropertyClassName</a> (wxPGId id) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera72">GetPropertyClientData</a> (wxPGPropNameStr name) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea42">GetPropertyClientData</a> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera73">GetPropertyClientData</a> (wxPGId id) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea43">GetPropertyClientData</a> (wxPGId id) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera74" doxytag="wxPropertyGridManager::GetPropertyColour" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera75" doxytag="wxPropertyGridManager::GetPropertyColour" ></a>
 wxColour&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyColour</b> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxColour&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera75">GetPropertyColour</a> (wxPGId id) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxColour&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera76">GetPropertyColour</a> (wxPGId id) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera76" doxytag="wxPropertyGridManager::GetPropertyEditor" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea44" doxytag="wxPropertyGridManager::GetPropertyEditor" ></a>
 const <a class="el" href="classwxPGEditor.htm">wxPGEditor</a> *&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyEditor</b> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>const <a class="el" href="classwxPGEditor.htm">wxPGEditor</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera77">GetPropertyEditor</a> (wxPGId id) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>const <a class="el" href="classwxPGEditor.htm">wxPGEditor</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea45">GetPropertyEditor</a> (wxPGId id) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxString&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera78">GetPropertyHelpString</a> (wxPGPropNameStr name) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxString&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea46">GetPropertyHelpString</a> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxString&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera79">GetPropertyHelpString</a> (wxPGId id) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxString&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea47">GetPropertyHelpString</a> (wxPGId id) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera80" doxytag="wxPropertyGridManager::GetPropertyImage" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea48" doxytag="wxPropertyGridManager::GetPropertyImage" ></a>
 wxBitmap *&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyImage</b> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxBitmap *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera81">GetPropertyImage</a> (wxPGId id) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxBitmap *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea49">GetPropertyImage</a> (wxPGId id) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>unsigned int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera82">GetPropertyIndex</a> (wxPGPropNameStr name)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>unsigned int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea50">GetPropertyIndex</a> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>unsigned int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera83">GetPropertyIndex</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>unsigned int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea51">GetPropertyIndex</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera84" doxytag="wxPropertyGridManager::GetPropertyLabel" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea52" doxytag="wxPropertyGridManager::GetPropertyLabel" ></a>
 const wxString &amp;&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyLabel</b> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>const wxString &amp;&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera85">GetPropertyLabel</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>const wxString &amp;&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea53">GetPropertyLabel</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>const wxString &amp;&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera86">GetPropertyName</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>const wxString &amp;&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea54">GetPropertyName</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera87">GetPropertyParent</a> (wxPGPropNameStr name)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea55">GetPropertyParent</a> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera88">GetPropertyParent</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea56">GetPropertyParent</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera89">GetPropertyPriority</a> (wxPGPropNameStr name)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea57">GetPropertyPriority</a> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera90">GetPropertyPriority</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea58">GetPropertyPriority</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPG_PYTHON_STATIC wxString&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera91">GetPropertyShortClassName</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxPG_PYTHON_STATIC wxString&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea59">GetPropertyShortClassName</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera92" doxytag="wxPropertyGridManager::GetPropertyValidator" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea60" doxytag="wxPropertyGridManager::GetPropertyValidator" ></a>
 wxValidator *&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValidator</b> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxValidator *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera93">GetPropertyValidator</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxValidator *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea61">GetPropertyValidator</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxVariant&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera94">GetPropertyValue</a> (wxPGPropNameStr name)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxVariant&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea62">GetPropertyValue</a> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxVariant&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera95">GetPropertyValue</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxVariant&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea63">GetPropertyValue</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera96" doxytag="wxPropertyGridManager::GetPropertyValueAsArrayInt" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea64" doxytag="wxPropertyGridManager::GetPropertyValueAsArrayInt" ></a>
 const wxArrayInt &amp;&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsArrayInt</b> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera97" doxytag="wxPropertyGridManager::GetPropertyValueAsArrayInt" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea65" doxytag="wxPropertyGridManager::GetPropertyValueAsArrayInt" ></a>
 wxPG_PYTHON_STATIC const wxArrayInt &amp;&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsArrayInt</b> (wxPGId id) wxPG_GETVALUE_CONST</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera98" doxytag="wxPropertyGridManager::GetPropertyValueAsArrayString" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea66" doxytag="wxPropertyGridManager::GetPropertyValueAsArrayString" ></a>
 const wxArrayString &amp;&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsArrayString</b> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera99" doxytag="wxPropertyGridManager::GetPropertyValueAsArrayString" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea67" doxytag="wxPropertyGridManager::GetPropertyValueAsArrayString" ></a>
 wxPG_PYTHON_STATIC const wxArrayString &amp;&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsArrayString</b> (wxPGId id) wxPG_GETVALUE_CONST</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera100" doxytag="wxPropertyGridManager::GetPropertyValueAsBool" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea68" doxytag="wxPropertyGridManager::GetPropertyValueAsBool" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsBool</b> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera101" doxytag="wxPropertyGridManager::GetPropertyValueAsBool" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea69" doxytag="wxPropertyGridManager::GetPropertyValueAsBool" ></a>
 wxPG_PYTHON_STATIC bool&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsBool</b> (wxPGId id) wxPG_GETVALUE_CONST</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera102" doxytag="wxPropertyGridManager::GetPropertyValueAsDouble" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea70" doxytag="wxPropertyGridManager::GetPropertyValueAsDouble" ></a>
 double&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsDouble</b> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera103" doxytag="wxPropertyGridManager::GetPropertyValueAsDouble" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea71" doxytag="wxPropertyGridManager::GetPropertyValueAsDouble" ></a>
 wxPG_PYTHON_STATIC double&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsDouble</b> (wxPGId id) wxPG_GETVALUE_CONST</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera104" doxytag="wxPropertyGridManager::GetPropertyValueAsInt" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea72" doxytag="wxPropertyGridManager::GetPropertyValueAsInt" ></a>
 int&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsInt</b> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera105" doxytag="wxPropertyGridManager::GetPropertyValueAsInt" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea73" doxytag="wxPropertyGridManager::GetPropertyValueAsInt" ></a>
 wxPG_PYTHON_STATIC int&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsInt</b> (wxPGId id) wxPG_GETVALUE_CONST</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera106" doxytag="wxPropertyGridManager::GetPropertyValueAsLong" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea74" doxytag="wxPropertyGridManager::GetPropertyValueAsLong" ></a>
 long&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsLong</b> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera107" doxytag="wxPropertyGridManager::GetPropertyValueAsLong" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea75" doxytag="wxPropertyGridManager::GetPropertyValueAsLong" ></a>
 wxPG_PYTHON_STATIC long&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsLong</b> (wxPGId id) wxPG_GETVALUE_CONST</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera108" doxytag="wxPropertyGridManager::GetPropertyValueAsPoint" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea76" doxytag="wxPropertyGridManager::GetPropertyValueAsPoint" ></a>
 const wxPoint &amp;&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsPoint</b> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera109" doxytag="wxPropertyGridManager::GetPropertyValueAsPoint" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea77" doxytag="wxPropertyGridManager::GetPropertyValueAsPoint" ></a>
 wxPG_PYTHON_STATIC const wxPoint &amp;&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsPoint</b> (wxPGId id) wxPG_GETVALUE_CONST</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera110" doxytag="wxPropertyGridManager::GetPropertyValueAsSize" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea78" doxytag="wxPropertyGridManager::GetPropertyValueAsSize" ></a>
 const wxSize &amp;&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsSize</b> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera111" doxytag="wxPropertyGridManager::GetPropertyValueAsSize" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea79" doxytag="wxPropertyGridManager::GetPropertyValueAsSize" ></a>
 wxPG_PYTHON_STATIC const wxSize &amp;&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsSize</b> (wxPGId id) wxPG_GETVALUE_CONST</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera112" doxytag="wxPropertyGridManager::GetPropertyValueAsString" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea80" doxytag="wxPropertyGridManager::GetPropertyValueAsString" ></a>
 wxString&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsString</b> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera113" doxytag="wxPropertyGridManager::GetPropertyValueAsString" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea81" doxytag="wxPropertyGridManager::GetPropertyValueAsString" ></a>
 wxPG_PYTHON_STATIC wxString&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsString</b> (wxPGId id) wxPG_GETVALUE_CONST</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera114" doxytag="wxPropertyGridManager::GetPropertyValueAsVoidPtr" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea82" doxytag="wxPropertyGridManager::GetPropertyValueAsVoidPtr" ></a>
 wxPG_PYTHON_STATIC void *&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsVoidPtr</b> (wxPGId id) wxPG_GETVALUE_CONST</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera115" doxytag="wxPropertyGridManager::GetPropertyValueAsWxObjectPtr" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea83" doxytag="wxPropertyGridManager::GetPropertyValueAsWxObjectPtr" ></a>
 const wxObject *&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsWxObjectPtr</b> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera116" doxytag="wxPropertyGridManager::GetPropertyValueAsWxObjectPtr" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea84" doxytag="wxPropertyGridManager::GetPropertyValueAsWxObjectPtr" ></a>
 wxPG_PYTHON_STATIC const wxObject *&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueAsWxObjectPtr</b> (wxPGId id) wxPG_GETVALUE_CONST</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxVariant&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera117">GetPropertyValues</a> (const wxString &amp;listname=wxEmptyString, wxPGId baseparent=wxNullProperty, long flags=0) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxVariant&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera118">GetPropertyValues</a> (const wxString &amp;listname=wxEmptyString, wxPGId baseparent=wxNullProperty, long flags=0) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera118" doxytag="wxPropertyGridManager::GetPropertyValueType" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea86" doxytag="wxPropertyGridManager::GetPropertyValueType" ></a>
 const <a class="el" href="classwxPGValueType.htm">wxPGValueType</a> *&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValueType</b> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>const <a class="el" href="classwxPGValueType.htm">wxPGValueType</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera119">GetPropertyValueType</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>const <a class="el" href="classwxPGValueType.htm">wxPGValueType</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea87">GetPropertyValueType</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera120" doxytag="wxPropertyGridManager::GetPVTI" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea88" doxytag="wxPropertyGridManager::GetPVTI" ></a>
 size_t&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPVTI</b> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>size_t&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera121">GetPVTI</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>size_t&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea89">GetPVTI</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera122" doxytag="wxPropertyGridManager::GetPVTN" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea90" doxytag="wxPropertyGridManager::GetPVTN" ></a>
 wxString&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPVTN</b> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxString&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera123">GetPVTN</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxString&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea91">GetPVTN</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera124">GetRoot</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera125">GetRoot</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera125">GetSelectedPage</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera126">GetSelectedPage</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera126">GetSelectedProperty</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera127">GetSelectedProperty</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera127">GetSelection</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera128">GetSelection</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera128" doxytag="wxPropertyGridManager::GetState" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea93" doxytag="wxPropertyGridManager::GetState" ></a>
 <a class="el" href="classwxPropertyGridState.htm">wxPropertyGridState</a> *&nbsp;</td><td class="memItemRight" valign=bottom><b>GetState</b> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera129">GetTargetPage</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera130">GetTargetPage</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxToolBar *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera130">GetToolBar</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxToolBar *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera131">GetToolBar</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera131" doxytag="wxPropertyGridManager::HideProperty" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea95" doxytag="wxPropertyGridManager::HideProperty" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>HideProperty</b> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera132">HideProperty</a> (wxPGId id, bool hide=true)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea96">HideProperty</a> (wxPGId id, bool hide=true)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera133">InitAllTypeHandlers</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera134">InitAllTypeHandlers</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera134">Insert</a> (wxPGPropNameStr name, int index, <a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *property)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera135">Insert</a> (wxPGPropNameStr name, int index, <a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *property)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera135">Insert</a> (wxPGId id, int index, <a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *property)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera136">Insert</a> (wxPGId id, int index, <a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *property)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera136">InsertPage</a> (int index, const wxString &amp;label, const wxBitmap &amp;bmp=wxNullBitmap)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera137">InsertPage</a> (int index, const wxString &amp;label, const wxBitmap &amp;bmp=wxNullBitmap, <a class="el" href="classwxPropertyGridPage.htm">wxPropertyGridPage</a> *pageObj=(<a class="el" href="classwxPropertyGridPage.htm">wxPropertyGridPage</a> *) NULL)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera137" doxytag="wxPropertyGridManager::InsertPropertyChoice" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea101" doxytag="wxPropertyGridManager::InsertPropertyChoice" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>InsertPropertyChoice</b> (wxPGPropNameStr name, const wxString &amp;label, int index, int value=wxPG_INVALID_VALUE)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera138">InsertPropertyChoice</a> (wxPGId id, const wxString &amp;label, int index, int value=wxPG_INVALID_VALUE)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea102">InsertPropertyChoice</a> (wxPGId id, const wxString &amp;label, int index, int value=wxPG_INVALID_VALUE)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera139">IsAnyModified</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera140">IsAnyModified</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera140">IsFrozen</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera141">IsFrozen</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera141" doxytag="wxPropertyGridManager::IsModified" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea106" doxytag="wxPropertyGridManager::IsModified" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>IsModified</b> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera142">IsModified</a> (wxPGId id) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea107">IsModified</a> (wxPGId id) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera143">IsPageModified</a> (size_t index) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera144">IsPageModified</a> (size_t index) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera144" doxytag="wxPropertyGridManager::IsPropertyCategory" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera145" doxytag="wxPropertyGridManager::IsPropertyCategory" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>IsPropertyCategory</b> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera145">IsPropertyCategory</a> (wxPGId id) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera146">IsPropertyCategory</a> (wxPGId id) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera146">IsPropertyEnabled</a> (wxPGPropNameStr name)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea110">IsPropertyEnabled</a> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera147">IsPropertyEnabled</a> (wxPGId id) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea111">IsPropertyEnabled</a> (wxPGId id) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera148" doxytag="wxPropertyGridManager::IsPropertyExpanded" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea112" doxytag="wxPropertyGridManager::IsPropertyExpanded" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>IsPropertyExpanded</b> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera149" doxytag="wxPropertyGridManager::IsPropertyKindOf" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea113" doxytag="wxPropertyGridManager::IsPropertyKindOf" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>IsPropertyKindOf</b> (wxPGPropNameStr name, <a class="el" href="structwxPGPropertyClassInfo.htm">wxPGPropertyClassInfo</a> &amp;info)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera150" doxytag="wxPropertyGridManager::IsPropertyModified" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea114" doxytag="wxPropertyGridManager::IsPropertyModified" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>IsPropertyModified</b> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera151">IsPropertyModified</a> (wxPGId id) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea115">IsPropertyModified</a> (wxPGId id) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera152">IsPropertyShown</a> (wxPGPropNameStr name)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea116">IsPropertyShown</a> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera153">IsPropertyShown</a> (wxPGId id) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea117">IsPropertyShown</a> (wxPGId id) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera154" doxytag="wxPropertyGridManager::IsPropertyUnspecified" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea118" doxytag="wxPropertyGridManager::IsPropertyUnspecified" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>IsPropertyUnspecified</b> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera155">IsPropertyUnspecified</a> (wxPGId id) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea119">IsPropertyUnspecified</a> (wxPGId id) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera156">IsPropertyValueType</a> (wxPGPropNameStr name, const wxClassInfo *classinfo)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea120">IsPropertyValueType</a> (wxPGPropNameStr name, const wxClassInfo *classinfo)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera157">IsPropertyValueType</a> (wxPGPropNameStr name, const <a class="el" href="classwxPGValueType.htm">wxPGValueType</a> *valuetype)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea121">IsPropertyValueType</a> (wxPGPropNameStr name, const <a class="el" href="classwxPGValueType.htm">wxPGValueType</a> *valuetype)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera158">IsPropertyValueType</a> (wxPGPropNameStr name, const wxChar *typestr)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea122">IsPropertyValueType</a> (wxPGPropNameStr name, const wxChar *typestr)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera159">IsPropertyValueType</a> (wxPGId id, const wxClassInfo *classinfo)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea123">IsPropertyValueType</a> (wxPGId id, const wxClassInfo *classinfo)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera160">IsPropertyValueType</a> (wxPGId id, const <a class="el" href="classwxPGValueType.htm">wxPGValueType</a> *valuetype)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea124">IsPropertyValueType</a> (wxPGId id, const <a class="el" href="classwxPGValueType.htm">wxPGValueType</a> *valuetype)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera161">IsPropertyValueType</a> (wxPGId id, const wxChar *typestr)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea125">IsPropertyValueType</a> (wxPGId id, const wxChar *typestr)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera162" doxytag="wxPropertyGridManager::LimitPropertyEditing" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera163" doxytag="wxPropertyGridManager::LimitPropertyEditing" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>LimitPropertyEditing</b> (wxPGPropNameStr name, bool limit=true)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera163">LimitPropertyEditing</a> (wxPGId id, bool limit=true)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera164">LimitPropertyEditing</a> (wxPGId id, bool limit=true)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera164" doxytag="wxPropertyGridManager::OnCompactorClick" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera165" doxytag="wxPropertyGridManager::OnCompactorClick" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>OnCompactorClick</b> (wxCommandEvent &amp;event)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera165" doxytag="wxPropertyGridManager::OnMouseClick" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera166" doxytag="wxPropertyGridManager::OnMouseClick" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>OnMouseClick</b> (wxMouseEvent &amp;event)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera166" doxytag="wxPropertyGridManager::OnMouseEntry" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera167" doxytag="wxPropertyGridManager::OnMouseEntry" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>OnMouseEntry</b> (wxMouseEvent &amp;event)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera167" doxytag="wxPropertyGridManager::OnMouseMove" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera168" doxytag="wxPropertyGridManager::OnMouseMove" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>OnMouseMove</b> (wxMouseEvent &amp;event)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera168" doxytag="wxPropertyGridManager::OnMouseUp" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera169" doxytag="wxPropertyGridManager::OnMouseUp" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>OnMouseUp</b> (wxMouseEvent &amp;event)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera169" doxytag="wxPropertyGridManager::OnPaint" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera170" doxytag="wxPropertyGridManager::OnPaint" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>OnPaint</b> (wxPaintEvent &amp;event)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera170" doxytag="wxPropertyGridManager::OnPropertyGridSelect" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera171" doxytag="wxPropertyGridManager::OnPropertyGridSelect" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>OnPropertyGridSelect</b> (<a class="el" href="classwxPropertyGridEvent.htm">wxPropertyGridEvent</a> &amp;event)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera171" doxytag="wxPropertyGridManager::OnResize" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera172" doxytag="wxPropertyGridManager::OnResize" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>OnResize</b> (wxSizeEvent &amp;event)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera172" doxytag="wxPropertyGridManager::OnToolbarClick" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera173" doxytag="wxPropertyGridManager::OnToolbarClick" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>OnToolbarClick</b> (wxCommandEvent &amp;event)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera173" doxytag="wxPropertyGridManager::Refresh" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera174" doxytag="wxPropertyGridManager::Refresh" ></a>
 virtual void&nbsp;</td><td class="memItemRight" valign=bottom><b>Refresh</b> (bool eraseBackground=true, const wxRect *rect=(const wxRect *) NULL)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera174" doxytag="wxPropertyGridManager::ReplaceProperty" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera175">RemovePage</a> (int page)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea127" doxytag="wxPropertyGridManager::ReplaceProperty" ></a>
 wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><b>ReplaceProperty</b> (wxPGPropNameStr name, <a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *property)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera175">ReplaceProperty</a> (wxPGId id, <a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *property)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea128">ReplaceProperty</a> (wxPGId id, <a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *property)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera176">ResetDefaultPriority</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera178">ResetDefaultPriority</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera177">SelectPage</a> (const wxChar *name)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera179">SelectPage</a> (const wxChar *name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera178">SelectPage</a> (int index)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera180">SelectPage</a> (int index)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera179" doxytag="wxPropertyGridManager::SelectProperty" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera181" doxytag="wxPropertyGridManager::SelectProperty" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>SelectProperty</b> (wxPGPropNameStr name, bool focus=false)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera180">SelectProperty</a> (wxPGId id, bool focus=false)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera182">SelectProperty</a> (wxPGId id, bool focus=false)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera181">SetCurrentCategory</a> (wxPGPropNameStr name)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera183">SetCurrentCategory</a> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera182">SetCurrentCategory</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera184">SetCurrentCategory</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera183">SetDefaultPriority</a> (int priority)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera185">SetDefaultPriority</a> (int priority)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera184">SetDescBoxHeight</a> (int ht, bool refresh=true)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera186">SetDescBoxHeight</a> (int ht, bool refresh=true)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera185">SetDescription</a> (const wxString &amp;label, const wxString &amp;content)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera187">SetDescription</a> (const wxString &amp;label, const wxString &amp;content)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera186" doxytag="wxPropertyGridManager::SetExtraStyle" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera188" doxytag="wxPropertyGridManager::SetExtraStyle" ></a>
 virtual void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetExtraStyle</b> (long exStyle)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera187" doxytag="wxPropertyGridManager::SetFont" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera189" doxytag="wxPropertyGridManager::SetFont" ></a>
 virtual bool&nbsp;</td><td class="memItemRight" valign=bottom><b>SetFont</b> (const wxFont &amp;font)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera188" doxytag="wxPropertyGridManager::SetId" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera190" doxytag="wxPropertyGridManager::SetId" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetId</b> (wxWindowID winid)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera189" doxytag="wxPropertyGridManager::SetPropertyAttribute" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea129" doxytag="wxPropertyGridManager::SetPropertyAttribute" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyAttribute</b> (wxPGPropNameStr name, int attrid, wxVariant value, long arg_flags=0)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera190">SetPropertyAttribute</a> (wxPGId id, int attrid, wxVariant value, long arg_flags=0)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea130">SetPropertyAttribute</a> (wxPGId id, int attrid, wxVariant value, long arg_flags=0)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera191">SetPropertyAttributeAll</a> (int attrid, wxVariant value)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera193">SetPropertyAttributeAll</a> (int attrid, wxVariant value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera192">SetPropertyChoices</a> (wxPGPropNameStr name, <a class="el" href="classwxPGChoices.htm">wxPGChoices</a> &amp;choices)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea131">SetPropertyChoices</a> (wxPGPropNameStr name, <a class="el" href="classwxPGChoices.htm">wxPGChoices</a> &amp;choices)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera193" doxytag="wxPropertyGridManager::SetPropertyChoicesExclusive" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea132" doxytag="wxPropertyGridManager::SetPropertyChoicesExclusive" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyChoicesExclusive</b> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera194">SetPropertyChoicesExclusive</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea133">SetPropertyChoicesExclusive</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera195">SetPropertyClientData</a> (wxPGPropNameStr name, void *clientData)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea134">SetPropertyClientData</a> (wxPGPropNameStr name, void *clientData)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera196">SetPropertyClientData</a> (wxPGId id, void *clientData)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea135">SetPropertyClientData</a> (wxPGId id, void *clientData)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera197" doxytag="wxPropertyGridManager::SetPropertyColour" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera199" doxytag="wxPropertyGridManager::SetPropertyColour" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyColour</b> (wxPGPropNameStr name, const wxColour &amp;col)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera198">SetPropertyColour</a> (wxPGId id, const wxColour &amp;col)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera200">SetPropertyColour</a> (wxPGId id, const wxColour &amp;col)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera199" doxytag="wxPropertyGridManager::SetPropertyColourToDefault" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera201" doxytag="wxPropertyGridManager::SetPropertyColourToDefault" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyColourToDefault</b> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera200">SetPropertyColourToDefault</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera202">SetPropertyColourToDefault</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera201" doxytag="wxPropertyGridManager::SetPropertyEditor" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea136" doxytag="wxPropertyGridManager::SetPropertyEditor" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyEditor</b> (wxPGPropNameStr name, const wxString &amp;editor_name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera202">SetPropertyEditor</a> (wxPGId id, const wxString &amp;editor_name)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea137">SetPropertyEditor</a> (wxPGId id, const wxString &amp;editor_name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera203" doxytag="wxPropertyGridManager::SetPropertyEditor" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea138" doxytag="wxPropertyGridManager::SetPropertyEditor" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyEditor</b> (wxPGPropNameStr name, const <a class="el" href="classwxPGEditor.htm">wxPGEditor</a> *editor)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera204">SetPropertyEditor</a> (wxPGId id, const <a class="el" href="classwxPGEditor.htm">wxPGEditor</a> *editor)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea139">SetPropertyEditor</a> (wxPGId id, const <a class="el" href="classwxPGEditor.htm">wxPGEditor</a> *editor)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera205" doxytag="wxPropertyGridManager::SetPropertyHelpString" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea140" doxytag="wxPropertyGridManager::SetPropertyHelpString" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyHelpString</b> (wxPGPropNameStr name, const wxString &amp;help_string)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera206">SetPropertyHelpString</a> (wxPGId id, const wxString &amp;help_string)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea141">SetPropertyHelpString</a> (wxPGId id, const wxString &amp;help_string)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera207" doxytag="wxPropertyGridManager::SetPropertyImage" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea142" doxytag="wxPropertyGridManager::SetPropertyImage" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyImage</b> (wxPGPropNameStr name, wxBitmap &amp;bmp)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera208">SetPropertyImage</a> (wxPGId id, wxBitmap &amp;bmp)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea143">SetPropertyImage</a> (wxPGId id, wxBitmap &amp;bmp)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera209" doxytag="wxPropertyGridManager::SetPropertyLabel" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera211" doxytag="wxPropertyGridManager::SetPropertyLabel" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyLabel</b> (wxPGPropNameStr name, const wxString &amp;newlabel)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera210">SetPropertyLabel</a> (wxPGId id, const wxString &amp;newlabel)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera212">SetPropertyLabel</a> (wxPGId id, const wxString &amp;newlabel)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera211">SetPropertyMaxLength</a> (wxPGPropNameStr name, int maxLen)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea145">SetPropertyMaxLength</a> (wxPGPropNameStr name, int maxLen)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera212">SetPropertyMaxLength</a> (wxPGId id, int maxLen)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea146">SetPropertyMaxLength</a> (wxPGId id, int maxLen)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera213">SetPropertyPriority</a> (wxPGPropNameStr name, int priority)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea148">SetPropertyPriority</a> (wxPGPropNameStr name, int priority)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera214">SetPropertyPriority</a> (wxPGId id, int priority)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea149">SetPropertyPriority</a> (wxPGId id, int priority)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera215" doxytag="wxPropertyGridManager::SetPropertyUnspecified" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera217" doxytag="wxPropertyGridManager::SetPropertyUnspecified" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyUnspecified</b> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera216" doxytag="wxPropertyGridManager::SetPropertyValidator" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagea151" doxytag="wxPropertyGridManager::SetPropertyValidator" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValidator</b> (wxPGPropNameStr name, wxValidator &amp;validator)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera217">SetPropertyValidator</a> (wxPGId id, wxValidator &amp;validator)</td></tr>
-
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera218" doxytag="wxPropertyGridManager::SetPropertyValue" ></a>
-void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValue</b> (wxPGPropNameStr name, wxVariant &amp;value)</td></tr>
-
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera219" doxytag="wxPropertyGridManager::SetPropertyValue" ></a>
-void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValue</b> (wxPGPropNameStr name, void *value)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea152">SetPropertyValidator</a> (wxPGId id, wxValidator &amp;validator)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera220" doxytag="wxPropertyGridManager::SetPropertyValue" ></a>
-void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValue</b> (wxPGPropNameStr name, int value)</td></tr>
+void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValue</b> (wxPGPropNameStr name, wxVariant &amp;value)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera221" doxytag="wxPropertyGridManager::SetPropertyValue" ></a>
-void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValue</b> (wxPGId id, wxVariant &amp;value)</td></tr>
+void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValue</b> (wxPGPropNameStr name, void *value)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera222" doxytag="wxPropertyGridManager::SetPropertyValue" ></a>
-void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValue</b> (wxPGId id, void *value)</td></tr>
+void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValue</b> (wxPGPropNameStr name, int value)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera223" doxytag="wxPropertyGridManager::SetPropertyValue" ></a>
+void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValue</b> (wxPGId id, wxVariant &amp;value)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera224" doxytag="wxPropertyGridManager::SetPropertyValue" ></a>
+void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValue</b> (wxPGId id, void *value)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera225" doxytag="wxPropertyGridManager::SetPropertyValue" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValue</b> (wxPGId id, int value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera224" doxytag="wxPropertyGridManager::SetPropertyValueArrstr" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera226" doxytag="wxPropertyGridManager::SetPropertyValueArrstr" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValueArrstr</b> (wxPGPropNameStr name, const wxArrayString &amp;value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera225" doxytag="wxPropertyGridManager::SetPropertyValueArrstr" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera227" doxytag="wxPropertyGridManager::SetPropertyValueArrstr" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValueArrstr</b> (wxPGId id, const wxArrayString &amp;value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera226" doxytag="wxPropertyGridManager::SetPropertyValueBool" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera228" doxytag="wxPropertyGridManager::SetPropertyValueBool" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValueBool</b> (wxPGPropNameStr name, bool value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera227" doxytag="wxPropertyGridManager::SetPropertyValueBool" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera229" doxytag="wxPropertyGridManager::SetPropertyValueBool" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValueBool</b> (wxPGId id, bool value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera228" doxytag="wxPropertyGridManager::SetPropertyValueDouble" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera230" doxytag="wxPropertyGridManager::SetPropertyValueDouble" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValueDouble</b> (wxPGPropNameStr name, double value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera229" doxytag="wxPropertyGridManager::SetPropertyValueDouble" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera231" doxytag="wxPropertyGridManager::SetPropertyValueDouble" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValueDouble</b> (wxPGId id, double value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera230" doxytag="wxPropertyGridManager::SetPropertyValueLong" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera232" doxytag="wxPropertyGridManager::SetPropertyValueLong" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValueLong</b> (wxPGPropNameStr name, long value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera231">SetPropertyValueLong</a> (wxPGId id, long value)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera233">SetPropertyValueLong</a> (wxPGId id, long value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera232" doxytag="wxPropertyGridManager::SetPropertyValueString" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera234" doxytag="wxPropertyGridManager::SetPropertyValueString" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValueString</b> (wxPGPropNameStr name, const wxString &amp;value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera233" doxytag="wxPropertyGridManager::SetPropertyValueString" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera235" doxytag="wxPropertyGridManager::SetPropertyValueString" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValueString</b> (wxPGId id, const wxString &amp;value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera234" doxytag="wxPropertyGridManager::SetPropertyValueWxObjectPtr" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera236" doxytag="wxPropertyGridManager::SetPropertyValueWxObjectPtr" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValueWxObjectPtr</b> (wxPGPropNameStr name, wxObject *value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera235" doxytag="wxPropertyGridManager::SetPropertyValueWxObjectPtr" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera237" doxytag="wxPropertyGridManager::SetPropertyValueWxObjectPtr" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetPropertyValueWxObjectPtr</b> (wxPGId id, wxObject *value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera236">SetSplitterLeft</a> (bool subProps=false, bool allPages=true)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera238">SetSplitterLeft</a> (bool subProps=false, bool allPages=true)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera237" doxytag="wxPropertyGridManager::SetSplitterPosition" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera239" doxytag="wxPropertyGridManager::SetSplitterPosition" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetSplitterPosition</b> (int newx, bool refresh=true)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera238">SetStringSelection</a> (const wxChar *name)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera240">SetStringSelection</a> (const wxChar *name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera239">SetTargetPage</a> (const wxChar *name)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera241">SetTargetPage</a> (const wxChar *name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera240">SetTargetPage</a> (int index)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera242">SetTargetPage</a> (int index)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera241" doxytag="wxPropertyGridManager::SetWindowStyleFlag" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera243" doxytag="wxPropertyGridManager::SetWindowStyleFlag" ></a>
 virtual void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetWindowStyleFlag</b> (long style)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera242">Sort</a> (wxPGPropNameStr name)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera244">Sort</a> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera243">Sort</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera245">Sort</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera244">Sort</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera246">Sort</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera245" doxytag="wxPropertyGridManager::Thaw" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera247" doxytag="wxPropertyGridManager::Thaw" ></a>
 virtual void&nbsp;</td><td class="memItemRight" valign=bottom><b>Thaw</b> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera246">TogglePropertyPriority</a> (wxPGPropNameStr name)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea171">TogglePropertyPriority</a> (wxPGPropNameStr name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera247">TogglePropertyPriority</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea172">TogglePropertyPriority</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera248" doxytag="wxPropertyGridManager::wxPG_IMPLEMENT_PGMAN_METHOD_NORET1" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera250" doxytag="wxPropertyGridManager::wxPG_IMPLEMENT_PGMAN_METHOD_NORET1" ></a>
 const wxPoint &amp;&nbsp;</td><td class="memItemRight" valign=bottom><b>wxPG_IMPLEMENT_PGMAN_METHOD_NORET1</b> (SetPropertyValueSize, const wxSize &amp;) inline void SetPropertyValue(wxPGId id</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera249" doxytag="wxPropertyGridManager::wxPG_IMPLEMENT_PGMAN_METHOD_NORET1" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagera251" doxytag="wxPropertyGridManager::wxPG_IMPLEMENT_PGMAN_METHOD_NORET1" ></a>
 &nbsp;</td><td class="memItemRight" valign=bottom><b>wxPG_IMPLEMENT_PGMAN_METHOD_NORET1</b> (SetPropertyValueArrint, const wxArrayInt &amp;) wxPG_IMPLEMENT_PGMAN_METHOD_NORET1(SetPropertyValuePoint</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera250">wxPropertyGridManager</a> (wxWindow *parent, wxWindowID id=wxID_ANY, const wxPoint &amp;pos=wxDefaultPosition, const wxSize &amp;size=wxDefaultSize, long style=wxPGMAN_DEFAULT_STYLE, const wxChar *name=wxPropertyGridManagerNameStr)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera252">wxPropertyGridManager</a> (wxWindow *parent, wxWindowID id=wxID_ANY, const wxPoint &amp;pos=wxDefaultPosition, const wxSize &amp;size=wxDefaultSize, long style=wxPGMAN_DEFAULT_STYLE, const wxChar *name=wxPropertyGridManagerNameStr)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera251">wxPropertyGridManager</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera253">wxPropertyGridManager</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>virtual&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera252">~wxPropertyGridManager</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera254">~wxPropertyGridManager</a> ()</td></tr>
 
 <tr><td colspan=2><br><h2>Static Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagere0">CreatePropertyByClass</a> (const wxString &amp;classname, const wxString &amp;label, const wxString &amp;name)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee1">CreatePropertyByClass</a> (const wxString &amp;classname, const wxString &amp;label, const wxString &amp;name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagere1">CreatePropertyByType</a> (const wxString &amp;valuetype, const wxString &amp;label, const wxString &amp;name)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee2">CreatePropertyByType</a> (const wxString &amp;valuetype, const wxString &amp;label, const wxString &amp;name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagere2" doxytag="wxPropertyGridManager::GetEditorByName" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagee3" doxytag="wxPropertyGridManager::GetEditorByName" ></a>
 <a class="el" href="classwxPGEditor.htm">wxPGEditor</a> *&nbsp;</td><td class="memItemRight" valign=bottom><b>GetEditorByName</b> (const wxString &amp;editor_name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxString&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagere3">GetPropertyAttributes</a> (wxPGId id, unsigned int flagmask=0xFFFF)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxString&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee6">GetPropertyAttributes</a> (wxPGId id, unsigned int flagmask=0xFFFF)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGValueType.htm">wxPGValueType</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagere4">GetValueType</a> (const wxString &amp;type)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGValueType.htm">wxPGValueType</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee7">GetValueType</a> (const wxString &amp;type)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagere5">IsPropertyExpanded</a> (wxPGId id)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee9">IsPropertyExpanded</a> (wxPGId id)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagere6">IsPropertyKindOf</a> (wxPGId id, <a class="el" href="structwxPGPropertyClassInfo.htm">wxPGPropertyClassInfo</a> &amp;info)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee10">IsPropertyKindOf</a> (wxPGId id, <a class="el" href="structwxPGPropertyClassInfo.htm">wxPGPropertyClassInfo</a> &amp;info)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagere7">RegisterAdvancedPropertyClasses</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee11">RegisterAdvancedPropertyClasses</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagere8">RegisterPropertyClass</a> (const wxChar *name, <a class="el" href="structwxPGPropertyClassInfo.htm">wxPGPropertyClassInfo</a> *classinfo)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee12">RegisterPropertyClass</a> (const wxChar *name, <a class="el" href="structwxPGPropertyClassInfo.htm">wxPGPropertyClassInfo</a> *classinfo)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagere9">SetBoolChoices</a> (const wxChar *true_choice, const wxChar *false_choice)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee13">SetBoolChoices</a> (const wxChar *true_choice, const wxChar *false_choice)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagere10">SetPropertyAttributes</a> (wxPGId id, const wxString &amp;attributes)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee15">SetPropertyAttributes</a> (wxPGId id, const wxString &amp;attributes)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagere11">SetPropertyChoices</a> (wxPGId id, <a class="el" href="classwxPGChoices.htm">wxPGChoices</a> &amp;choices)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee16">SetPropertyChoices</a> (wxPGId id, <a class="el" href="classwxPGChoices.htm">wxPGChoices</a> &amp;choices)</td></tr>
 
 <tr><td colspan=2><br><h2>Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagerb0" doxytag="wxPropertyGridManager::DoGetPropertyByName" ></a>
 virtual wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><b>DoGetPropertyByName</b> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagerb1">DoSelectPage</a> (int index)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagerb1">DoSelectPage</a> (int index)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagerb2" doxytag="wxPropertyGridManager::GetPage" ></a>
-wxPropertyGridPageData *&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPage</b> (size_t ind) const </td></tr>
-
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagerb3" doxytag="wxPropertyGridManager::GetPropertyByNameWithAssert" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPageb1" doxytag="wxPropertyGridManager::GetPropertyByNameWithAssert" ></a>
 wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyByNameWithAssert</b> (wxPGPropNameStr name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagerb4" doxytag="wxPropertyGridManager::Init1" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagerb3" doxytag="wxPropertyGridManager::Init1" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>Init1</b> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagerb5" doxytag="wxPropertyGridManager::Init2" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagerb4" doxytag="wxPropertyGridManager::Init2" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>Init2</b> (int style)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagerb5" doxytag="wxPropertyGridManager::ProcessEvent" ></a>
+virtual bool&nbsp;</td><td class="memItemRight" valign=bottom><b>ProcessEvent</b> (wxEvent &amp;event)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagerb6">RecalculatePositions</a> (int width, int height)</td></tr>
 
@@ -693,7 +697,7 @@ void&nbsp;</td><td class="memItemRight" valign=bottom><b>RepaintSplitter</b> (in
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetDescribedProperty</b> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p)</td></tr>
 
 <tr><td colspan=2><br><h2>Static Protected Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagerf0" doxytag="wxPropertyGridManager::DoSetPropertyAttribute" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagef0" doxytag="wxPropertyGridManager::DoSetPropertyAttribute" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>DoSetPropertyAttribute</b> (wxPGId id, int attrid, wxVariant &amp;value, long arg_flags)</td></tr>
 
 <tr><td colspan=2><br><h2>Protected Attributes</h2></td></tr>
@@ -733,7 +737,7 @@ wxButton *&nbsp;</td><td class="memItemRight" valign=bottom><b>m_pButCompactor</
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagerp11" doxytag="wxPropertyGridManager::m_propGrid" ></a>
 <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a>&nbsp;</td><td class="memItemRight" valign=bottom><b>m_propGrid</b></td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagerp12" doxytag="wxPropertyGridManager::m_pState" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPagep3" doxytag="wxPropertyGridManager::m_pState" ></a>
 <a class="el" href="classwxPropertyGridState.htm">wxPropertyGridState</a> *&nbsp;</td><td class="memItemRight" valign=bottom><b>m_pState</b></td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridManagerp13" doxytag="wxPropertyGridManager::m_pTxtHelpCaption" ></a>
@@ -803,7 +807,7 @@ To process input from a propertygrid control, use these event handler macros to 
 
 <p>
 <hr><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" name="wxPropertyGridManagera251" doxytag="wxPropertyGridManager::wxPropertyGridManager" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera253" doxytag="wxPropertyGridManager::wxPropertyGridManager" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -833,7 +837,7 @@ Two step constructor.
 Call Create when this constructor is called to build up the wxPropertyGridManager.    </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera250" doxytag="wxPropertyGridManager::wxPropertyGridManager" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera252" doxytag="wxPropertyGridManager::wxPropertyGridManager" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -898,7 +902,7 @@ The styles to be used are styles valid for the wxWindow. <dl compact><dt><b>See 
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera252" doxytag="wxPropertyGridManager::~wxPropertyGridManager" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera254" doxytag="wxPropertyGridManager::~wxPropertyGridManager" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -944,7 +948,13 @@ Destructor.
           <td class="md" nowrap align="right"></td>
           <td></td>
           <td class="md" nowrap>const wxBitmap &amp;&nbsp;</td>
-          <td class="mdname" nowrap> <em>bmp</em> = wxPG_NULL_BITMAP</td>
+          <td class="mdname" nowrap> <em>bmp</em> = wxPG_NULL_BITMAP, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="classwxPropertyGridPage.htm">wxPropertyGridPage</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pageObj</em> = (<a class="el" href="classwxPropertyGridPage.htm">wxPropertyGridPage</a>*) NULL</td>
         </tr>
         <tr>
           <td></td>
@@ -966,10 +976,11 @@ Destructor.
 <p>
 Creates new property page. 
 <p>
-Note that the first page is not created automatically, and before you have created any pages you are basicly in a non-paged mode. When you create the first page, contents of the underlying propertygrid is added into it (or this is how it will seem to to the user). <dl compact><dt><b>Parameters:</b></dt><dd>
+Note that the first page is not created automatically. <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign=top><em>label</em>&nbsp;</td><td>A label for the page. This may be shown as a toolbar tooltip etc. </td></tr>
     <tr><td valign=top><em>bmp</em>&nbsp;</td><td>Bitmap image for toolbar. If wxNullBitmap is used, then a built-in default image is used. </td></tr>
+    <tr><td valign=top><em>pageObj</em>&nbsp;</td><td><a class="el" href="classwxPropertyGridPage.htm">wxPropertyGridPage</a> instance. Manager will take ownership of this object. NULL indicates that a default page instance should be created. </td></tr>
   </table>
 </dl>
 <dl compact><dt><b>Return values:</b></dt><dd>
@@ -981,7 +992,7 @@ Note that the first page is not created automatically, and before you have creat
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera2" doxytag="wxPropertyGridManager::AddPropertyChoice" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea1" doxytag="wxPropertyGridManager::AddPropertyChoice" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1439,7 +1450,7 @@ Whenever the control is created without any parameters, use Create to actually c
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagere0" doxytag="wxPropertyGridManager::CreatePropertyByClass" ></a><p>
+<a class="anchor" name="wxPropertyGridPagee1" doxytag="wxPropertyGridManager::CreatePropertyByClass" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1485,7 +1496,7 @@ Constructs a property.
 Class used is given as the first string argument. It may be either normal property class name, such as "wxIntProperty" or a short one such as "Int".     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagere1" doxytag="wxPropertyGridManager::CreatePropertyByType" ></a><p>
+<a class="anchor" name="wxPropertyGridPagee2" doxytag="wxPropertyGridManager::CreatePropertyByType" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1533,7 +1544,7 @@ Otherwise, this is similar as CreatePropertyByClass. <dl compact><dt><b>Remarks:
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera23" doxytag="wxPropertyGridManager::Delete" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea12" doxytag="wxPropertyGridManager::Delete" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1564,7 +1575,7 @@ Deletes a property by name.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera24" doxytag="wxPropertyGridManager::Delete" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea13" doxytag="wxPropertyGridManager::Delete" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1595,7 +1606,7 @@ Deletes a property by id.
 If category is deleted, all children are automatically deleted as well.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera26" doxytag="wxPropertyGridManager::DeletePropertyChoice" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea15" doxytag="wxPropertyGridManager::DeletePropertyChoice" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1703,12 +1714,12 @@ Disables a property.
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> bool wxPropertyGridManager::DoSelectPage </td>
+          <td class="md" nowrap valign="top"> virtual bool wxPropertyGridManager::DoSelectPage </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">int&nbsp;</td>
           <td class="mdname1" valign="top" nowrap> <em>index</em>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap><code> [protected]</code></td>
+          <td class="md" nowrap><code> [protected, virtual]</code></td>
         </tr>
 
       </table>
@@ -2110,7 +2121,7 @@ Returns id of first category (in target page).
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera46" doxytag="wxPropertyGridManager::GetFirstChild" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea26" doxytag="wxPropertyGridManager::GetFirstChild" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2296,7 +2307,7 @@ Returns id of next property (from target page).
 This does <b>not</b> iterate to sub-properties or categories.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera54" doxytag="wxPropertyGridManager::GetNextSibling" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea33" doxytag="wxPropertyGridManager::GetNextSibling" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2327,7 +2338,38 @@ Returns next item under the same parent.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera55" doxytag="wxPropertyGridManager::GetPageByName" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera55" doxytag="wxPropertyGridManager::GetPage" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> <a class="el" href="classwxPropertyGridPage.htm">wxPropertyGridPage</a>* wxPropertyGridManager::GetPage </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">unsigned int&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>ind</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap> const<code> [inline]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Returns page object for given page index. 
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="wxPropertyGridManagera56" doxytag="wxPropertyGridManager::GetPageByName" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2358,7 +2400,7 @@ Returns index for a page name.
 If no match is found, wxNOT_FOUND is returned.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera56" doxytag="wxPropertyGridManager::GetPageByState" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera57" doxytag="wxPropertyGridManager::GetPageByState" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2389,7 +2431,7 @@ Returns index for a relevant propertygrid state.
 If no match is found, wxNOT_FOUND is returned.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera57" doxytag="wxPropertyGridManager::GetPageCount" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera58" doxytag="wxPropertyGridManager::GetPageCount" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2419,7 +2461,7 @@ Returns number of managed pages.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera58" doxytag="wxPropertyGridManager::GetPageName" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera59" doxytag="wxPropertyGridManager::GetPageName" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2450,7 +2492,7 @@ Returns name of given page.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera59" doxytag="wxPropertyGridManager::GetPageRoot" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera60" doxytag="wxPropertyGridManager::GetPageRoot" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2481,7 +2523,7 @@ Returns "root property" of the given page.
 It does not have name, etc. and it is not visible. It is only useful for accessing its children.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera60" doxytag="wxPropertyGridManager::GetPrevProperty" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera61" doxytag="wxPropertyGridManager::GetPrevProperty" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2512,7 +2554,7 @@ Returns id of previous property (in target page).
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera62" doxytag="wxPropertyGridManager::GetPrevSibling" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera63" doxytag="wxPropertyGridManager::GetPrevSibling" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2543,7 +2585,7 @@ Returns id of previous item under the same parent.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagere3" doxytag="wxPropertyGridManager::GetPropertyAttributes" ></a><p>
+<a class="anchor" name="wxPropertyGridPagee6" doxytag="wxPropertyGridManager::GetPropertyAttributes" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2589,7 +2631,7 @@ Returns comma-delimited string with property's attributes (both pseudo-attribute
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera63" doxytag="wxPropertyGridManager::GetPropertyByLabel" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera64" doxytag="wxPropertyGridManager::GetPropertyByLabel" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2629,7 +2671,7 @@ Returns id of property with given label (case-sensitive).
 If there is no property with such label, returned property id is invalid ( i.e. it will return false with IsOk method). If there are multiple properties with identical name, most recent added is returned.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera64" doxytag="wxPropertyGridManager::GetPropertyByName" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea36" doxytag="wxPropertyGridManager::GetPropertyByName" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2669,7 +2711,7 @@ Returns id of a sub-property 'subname' of property 'name'.
 Same as calling GetPropertyByName(wxT("name.subname")), albeit slightly faster.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera65" doxytag="wxPropertyGridManager::GetPropertyByName" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea37" doxytag="wxPropertyGridManager::GetPropertyByName" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2703,7 +2745,7 @@ If there is no property with such name, returned property id is invalid ( i.e. i
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera67" doxytag="wxPropertyGridManager::GetPropertyCategory" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera68" doxytag="wxPropertyGridManager::GetPropertyCategory" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2734,7 +2776,7 @@ Returns id of property's nearest parent category.
 If no category found, returns invalid wxPGId.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera69" doxytag="wxPropertyGridManager::GetPropertyChoices" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea39" doxytag="wxPropertyGridManager::GetPropertyChoices" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2765,7 +2807,7 @@ Returns writable reference to property's list of choices (and relevant values).
 If property does not have any choices, will return reference to an invalid set of choices that will return false on IsOk call.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera70" doxytag="wxPropertyGridManager::GetPropertyClassName" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea40" doxytag="wxPropertyGridManager::GetPropertyClassName" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2796,7 +2838,7 @@ Gets name of property's constructor function.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera71" doxytag="wxPropertyGridManager::GetPropertyClassName" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea41" doxytag="wxPropertyGridManager::GetPropertyClassName" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2827,7 +2869,7 @@ Gets name of property's constructor function.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera72" doxytag="wxPropertyGridManager::GetPropertyClientData" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea42" doxytag="wxPropertyGridManager::GetPropertyClientData" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2858,7 +2900,7 @@ Returns client data (void*) of a property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera73" doxytag="wxPropertyGridManager::GetPropertyClientData" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea43" doxytag="wxPropertyGridManager::GetPropertyClientData" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2889,7 +2931,7 @@ Returns client data (void*) of a property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera75" doxytag="wxPropertyGridManager::GetPropertyColour" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera76" doxytag="wxPropertyGridManager::GetPropertyColour" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2920,7 +2962,7 @@ Returns cell background colour of a property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera77" doxytag="wxPropertyGridManager::GetPropertyEditor" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea45" doxytag="wxPropertyGridManager::GetPropertyEditor" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2951,7 +2993,7 @@ Returns property's editor.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera78" doxytag="wxPropertyGridManager::GetPropertyHelpString" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea46" doxytag="wxPropertyGridManager::GetPropertyHelpString" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2982,7 +3024,7 @@ Returns help string associated with a property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera79" doxytag="wxPropertyGridManager::GetPropertyHelpString" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea47" doxytag="wxPropertyGridManager::GetPropertyHelpString" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3013,7 +3055,7 @@ Returns help string associated with a property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera81" doxytag="wxPropertyGridManager::GetPropertyImage" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea49" doxytag="wxPropertyGridManager::GetPropertyImage" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3044,7 +3086,7 @@ Returns property's custom value image (NULL of none).
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera82" doxytag="wxPropertyGridManager::GetPropertyIndex" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea50" doxytag="wxPropertyGridManager::GetPropertyIndex" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3075,7 +3117,7 @@ Returns property's position under its parent.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera83" doxytag="wxPropertyGridManager::GetPropertyIndex" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea51" doxytag="wxPropertyGridManager::GetPropertyIndex" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3106,7 +3148,7 @@ Returns property's position under its parent.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera85" doxytag="wxPropertyGridManager::GetPropertyLabel" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea53" doxytag="wxPropertyGridManager::GetPropertyLabel" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3137,7 +3179,7 @@ Returns label of a property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera86" doxytag="wxPropertyGridManager::GetPropertyName" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea54" doxytag="wxPropertyGridManager::GetPropertyName" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3168,7 +3210,7 @@ Returns name of a property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera87" doxytag="wxPropertyGridManager::GetPropertyParent" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea55" doxytag="wxPropertyGridManager::GetPropertyParent" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3199,7 +3241,7 @@ Returns parent item of a property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera88" doxytag="wxPropertyGridManager::GetPropertyParent" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea56" doxytag="wxPropertyGridManager::GetPropertyParent" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3230,7 +3272,7 @@ Returns parent item of a property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera89" doxytag="wxPropertyGridManager::GetPropertyPriority" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea57" doxytag="wxPropertyGridManager::GetPropertyPriority" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3261,7 +3303,7 @@ Returns priority of a property (wxPG_HIGH or wxPG_LOW).
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera90" doxytag="wxPropertyGridManager::GetPropertyPriority" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea58" doxytag="wxPropertyGridManager::GetPropertyPriority" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3292,7 +3334,7 @@ Returns priority of a property (wxPG_HIGH or wxPG_LOW).
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera91" doxytag="wxPropertyGridManager::GetPropertyShortClassName" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea59" doxytag="wxPropertyGridManager::GetPropertyShortClassName" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3323,7 +3365,7 @@ Returns short name for property's class.
 For example, "wxPropertyCategory" translates to "Category" and "wxIntProperty" to "Int".     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera93" doxytag="wxPropertyGridManager::GetPropertyValidator" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea61" doxytag="wxPropertyGridManager::GetPropertyValidator" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3354,7 +3396,7 @@ Returns validator of a property as a reference, which you can pass to any number
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera94" doxytag="wxPropertyGridManager::GetPropertyValue" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea62" doxytag="wxPropertyGridManager::GetPropertyValue" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3385,7 +3427,7 @@ Returns value as wxVariant.
 To get wxObject pointer from it, you will have to use WX_PG_VARIANT_TO_WXOBJECT(VARIANT,CLASSNAME) macro.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera95" doxytag="wxPropertyGridManager::GetPropertyValue" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea63" doxytag="wxPropertyGridManager::GetPropertyValue" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3416,7 +3458,7 @@ Returns value as wxVariant.
 To get wxObject pointer from it, you will have to use WX_PG_VARIANT_TO_WXOBJECT(VARIANT,CLASSNAME) macro.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera117" doxytag="wxPropertyGridManager::GetPropertyValues" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera118" doxytag="wxPropertyGridManager::GetPropertyValues" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3468,7 +3510,7 @@ Order is not guaranteed, but generally it should match the visible order in the 
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera119" doxytag="wxPropertyGridManager::GetPropertyValueType" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea87" doxytag="wxPropertyGridManager::GetPropertyValueType" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3499,7 +3541,7 @@ Returns a <a class="el" href="classwxPGValueType.htm">wxPGValueType</a> class in
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera121" doxytag="wxPropertyGridManager::GetPVTI" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea89" doxytag="wxPropertyGridManager::GetPVTI" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3530,7 +3572,7 @@ Returns property value type identifier.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera123" doxytag="wxPropertyGridManager::GetPVTN" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea91" doxytag="wxPropertyGridManager::GetPVTN" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3561,7 +3603,7 @@ Returns property value type name.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera124" doxytag="wxPropertyGridManager::GetRoot" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera125" doxytag="wxPropertyGridManager::GetRoot" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3591,7 +3633,7 @@ Returns "root property" of the target page.
 It does not have name, etc. and it is not visible. It is only useful for accessing its children.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera125" doxytag="wxPropertyGridManager::GetSelectedPage" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera126" doxytag="wxPropertyGridManager::GetSelectedPage" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3621,7 +3663,7 @@ Returns index to currently selected page.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera126" doxytag="wxPropertyGridManager::GetSelectedProperty" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera127" doxytag="wxPropertyGridManager::GetSelectedProperty" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3646,12 +3688,12 @@ Returns index to currently selected page.
     <td>
 
 <p>
-Shortcut for <a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera48">GetGrid()</a>-&gt;<a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera127">GetSelection()</a>. 
+Shortcut for <a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera48">GetGrid()</a>-&gt;<a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagera128">GetSelection()</a>. 
 <p>
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera127" doxytag="wxPropertyGridManager::GetSelection" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera128" doxytag="wxPropertyGridManager::GetSelection" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3681,7 +3723,7 @@ Synonyme for GetSelectedPage.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera129" doxytag="wxPropertyGridManager::GetTargetPage" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera130" doxytag="wxPropertyGridManager::GetTargetPage" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3711,7 +3753,7 @@ Returns index of page that is target for insert operations etc.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera130" doxytag="wxPropertyGridManager::GetToolBar" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera131" doxytag="wxPropertyGridManager::GetToolBar" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3741,7 +3783,7 @@ Returns a pointer to the toolbar currently associated with the wxPropertyGridMan
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagere4" doxytag="wxPropertyGridManager::GetValueType" ></a><p>
+<a class="anchor" name="wxPropertyGridPagee7" doxytag="wxPropertyGridManager::GetValueType" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3772,7 +3814,7 @@ Returns value type class fro given value type name.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera132" doxytag="wxPropertyGridManager::HideProperty" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea96" doxytag="wxPropertyGridManager::HideProperty" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3818,7 +3860,7 @@ Hides or reveals a property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera133" doxytag="wxPropertyGridManager::InitAllTypeHandlers" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera134" doxytag="wxPropertyGridManager::InitAllTypeHandlers" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3847,10 +3889,10 @@ Initializes *all* property types.
 <p>
 Causes references to all property classes in the library, so calling this may cause significant increase in executable size when linking with static library. 
 <p>
-Reimplemented from <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGride7">wxPropertyContainerMethods</a>.    </td>
+Reimplemented from <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee8">wxPropertyContainerMethods</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera134" doxytag="wxPropertyGridManager::Insert" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera135" doxytag="wxPropertyGridManager::Insert" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3896,7 +3938,7 @@ See <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida161">wxPropertyGr
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera135" doxytag="wxPropertyGridManager::Insert" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera136" doxytag="wxPropertyGridManager::Insert" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3942,13 +3984,13 @@ See <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida161">wxPropertyGr
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera136" doxytag="wxPropertyGridManager::InsertPage" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera137" doxytag="wxPropertyGridManager::InsertPage" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> int wxPropertyGridManager::InsertPage </td>
+          <td class="md" nowrap valign="top"> virtual int wxPropertyGridManager::InsertPage </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">int&nbsp;</td>
           <td class="mdname" nowrap> <em>index</em>, </td>
@@ -3963,12 +4005,18 @@ See <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida161">wxPropertyGr
           <td class="md" nowrap align="right"></td>
           <td></td>
           <td class="md" nowrap>const wxBitmap &amp;&nbsp;</td>
-          <td class="mdname" nowrap> <em>bmp</em> = wxNullBitmap</td>
+          <td class="mdname" nowrap> <em>bmp</em> = wxNullBitmap, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="classwxPropertyGridPage.htm">wxPropertyGridPage</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pageObj</em> = (<a class="el" href="classwxPropertyGridPage.htm">wxPropertyGridPage</a> *) NULL</td>
         </tr>
         <tr>
           <td></td>
           <td class="md">)&nbsp;</td>
-          <td class="md" colspan="2"></td>
+          <td class="md" colspan="2"><code> [virtual]</code></td>
         </tr>
 
       </table>
@@ -3985,11 +4033,12 @@ See <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida161">wxPropertyGr
 <p>
 Creates new property page. 
 <p>
-Note that the first page is not created automatically, and before you have created any pages you are basicly in a non-paged mode. When you create the first page, contents of the underlying propertygrid is added into it (or this is how it will seem to to the user). <dl compact><dt><b>Parameters:</b></dt><dd>
+Note that the first page is not created automatically. <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign=top><em>index</em>&nbsp;</td><td>Add to this position. -1 will add as the last item. </td></tr>
     <tr><td valign=top><em>label</em>&nbsp;</td><td>A label for the page. This may be shown as a toolbar tooltip etc. </td></tr>
     <tr><td valign=top><em>bmp</em>&nbsp;</td><td>Bitmap image for toolbar. If wxNullBitmap is used, then a built-in default image is used. </td></tr>
+    <tr><td valign=top><em>pageObj</em>&nbsp;</td><td><a class="el" href="classwxPropertyGridPage.htm">wxPropertyGridPage</a> instance. Manager will take ownership of this object. If NULL, default page object is constructed. </td></tr>
   </table>
 </dl>
 <dl compact><dt><b>Return values:</b></dt><dd>
@@ -4000,7 +4049,7 @@ Note that the first page is not created automatically, and before you have creat
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera138" doxytag="wxPropertyGridManager::InsertPropertyChoice" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea102" doxytag="wxPropertyGridManager::InsertPropertyChoice" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4052,7 +4101,7 @@ Inserts choice to a property that can accept one.
 See AddPropertyChoice for more details.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera139" doxytag="wxPropertyGridManager::IsAnyModified" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera140" doxytag="wxPropertyGridManager::IsAnyModified" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4082,7 +4131,7 @@ Returns true if any property on any page has been modified by the user.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera140" doxytag="wxPropertyGridManager::IsFrozen" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera141" doxytag="wxPropertyGridManager::IsFrozen" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4112,7 +4161,7 @@ Returns true if updating is frozen (ie.
 Freeze() called but not yet Thaw() ).     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera142" doxytag="wxPropertyGridManager::IsModified" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea107" doxytag="wxPropertyGridManager::IsModified" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4143,7 +4192,7 @@ Returns true if property has been modified after value set or modify flag clear 
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera143" doxytag="wxPropertyGridManager::IsPageModified" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera144" doxytag="wxPropertyGridManager::IsPageModified" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4174,7 +4223,7 @@ Returns true if any property on given page has been modified by the user.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera145" doxytag="wxPropertyGridManager::IsPropertyCategory" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera146" doxytag="wxPropertyGridManager::IsPropertyCategory" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4204,10 +4253,10 @@ Returns true if property is a category.
 <p>
 
 <p>
-Reimplemented from <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGrida170">wxPropertyContainerMethods</a>.    </td>
+Reimplemented from <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea109">wxPropertyContainerMethods</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera146" doxytag="wxPropertyGridManager::IsPropertyEnabled" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea110" doxytag="wxPropertyGridManager::IsPropertyEnabled" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4238,7 +4287,7 @@ Returns true if property is enabled.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera147" doxytag="wxPropertyGridManager::IsPropertyEnabled" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea111" doxytag="wxPropertyGridManager::IsPropertyEnabled" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4269,7 +4318,7 @@ Returns true if property is enabled.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagere5" doxytag="wxPropertyGridManager::IsPropertyExpanded" ></a><p>
+<a class="anchor" name="wxPropertyGridPagee9" doxytag="wxPropertyGridManager::IsPropertyExpanded" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4300,7 +4349,7 @@ Returns true if given property is expanded.
 Naturally, always returns false for properties that cannot be expanded.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagere6" doxytag="wxPropertyGridManager::IsPropertyKindOf" ></a><p>
+<a class="anchor" name="wxPropertyGridPagee10" doxytag="wxPropertyGridManager::IsPropertyKindOf" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4339,13 +4388,13 @@ Returns true if property is of certain type.
 <p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>info</em>&nbsp;</td><td>Preferably use <a class="el" href="group__miscellaneous.htm#ga10">WX_PG_CLASSINFO(PROPERTYNAME)</a>. Alternative is PROPERTYNAMEClassInfo. </td></tr>
+    <tr><td valign=top><em>info</em>&nbsp;</td><td>Preferably use <a class="el" href="group__miscellaneous.htm#ga13">WX_PG_CLASSINFO(PROPERTYNAME)</a>. Alternative is PROPERTYNAMEClassInfo. </td></tr>
   </table>
 </dl>
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera151" doxytag="wxPropertyGridManager::IsPropertyModified" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea115" doxytag="wxPropertyGridManager::IsPropertyModified" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4376,7 +4425,7 @@ Returns true if property has been modified after value set or modify flag clear 
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera152" doxytag="wxPropertyGridManager::IsPropertyShown" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea116" doxytag="wxPropertyGridManager::IsPropertyShown" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4407,7 +4456,7 @@ Returns true if property is shown (ie.
 hideproperty with true not called for it).     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera153" doxytag="wxPropertyGridManager::IsPropertyShown" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea117" doxytag="wxPropertyGridManager::IsPropertyShown" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4438,7 +4487,7 @@ Returns true if property is shown (ie.
 hideproperty with true not called for it).     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera155" doxytag="wxPropertyGridManager::IsPropertyUnspecified" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea119" doxytag="wxPropertyGridManager::IsPropertyUnspecified" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4469,7 +4518,7 @@ Returns true if property value is set to unspecified.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera156" doxytag="wxPropertyGridManager::IsPropertyValueType" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea120" doxytag="wxPropertyGridManager::IsPropertyValueType" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4509,7 +4558,7 @@ Returns true if property's value type has same name as a class.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera157" doxytag="wxPropertyGridManager::IsPropertyValueType" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea121" doxytag="wxPropertyGridManager::IsPropertyValueType" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4549,7 +4598,7 @@ Returns true if property's value type is valuetype.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera158" doxytag="wxPropertyGridManager::IsPropertyValueType" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea122" doxytag="wxPropertyGridManager::IsPropertyValueType" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4589,7 +4638,7 @@ Returns true if property's value type has name typestr.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera159" doxytag="wxPropertyGridManager::IsPropertyValueType" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea123" doxytag="wxPropertyGridManager::IsPropertyValueType" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4629,7 +4678,7 @@ Returns true if property's value type has same name as a class.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera160" doxytag="wxPropertyGridManager::IsPropertyValueType" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea124" doxytag="wxPropertyGridManager::IsPropertyValueType" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4669,7 +4718,7 @@ Returns true if property's value type is valuetype.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera161" doxytag="wxPropertyGridManager::IsPropertyValueType" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea125" doxytag="wxPropertyGridManager::IsPropertyValueType" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4709,7 +4758,7 @@ Returns true if property's value type has name typestr.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera163" doxytag="wxPropertyGridManager::LimitPropertyEditing" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera164" doxytag="wxPropertyGridManager::LimitPropertyEditing" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4819,7 +4868,7 @@ Recalculates new positions for components, according to the given size.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagere7" doxytag="wxPropertyGridManager::RegisterAdvancedPropertyClasses" ></a><p>
+<a class="anchor" name="wxPropertyGridPagee11" doxytag="wxPropertyGridManager::RegisterAdvancedPropertyClasses" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4849,7 +4898,7 @@ Basic property classes are registered by the default, but this registers advance
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagere8" doxytag="wxPropertyGridManager::RegisterPropertyClass" ></a><p>
+<a class="anchor" name="wxPropertyGridPagee12" doxytag="wxPropertyGridManager::RegisterPropertyClass" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4889,7 +4938,43 @@ Registers property class info with specific name.
 Preferably use wxPGRegisterPropertyClass(PROPERTYNAME) macro.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera175" doxytag="wxPropertyGridManager::ReplaceProperty" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera175" doxytag="wxPropertyGridManager::RemovePage" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> virtual bool wxPropertyGridManager::RemovePage </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">int&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>page</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [virtual]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Removes a page. 
+<p>
+<dl compact><dt><b>Return values:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>Returns</em>&nbsp;</td><td>false if it was not possible to remove page in question. </td></tr>
+  </table>
+</dl>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="wxPropertyGridPagea128" doxytag="wxPropertyGridManager::ReplaceProperty" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4926,12 +5011,12 @@ Preferably use wxPGRegisterPropertyClass(PROPERTYNAME) macro.     </td>
 <p>
 Replaces property with id with newly created property. 
 <p>
-For example, this code replaces existing property named "Flags" with one that will have different set of items: <pre class="fragment"><div>            pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera175">ReplaceProperty</a>(wxT(<span class="stringliteral">"Flags"</span>),
+For example, this code replaces existing property named "Flags" with one that will have different set of items: <pre class="fragment"><div>            pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea128">ReplaceProperty</a>(wxT(<span class="stringliteral">"Flags"</span>),
                 wxFlagsProperty(wxT(<span class="stringliteral">"Flags"</span>),wxPG_LABEL,newItems))
 </div></pre>For more info, see <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida161">wxPropertyGrid::Insert</a>.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera176" doxytag="wxPropertyGridManager::ResetDefaultPriority" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera178" doxytag="wxPropertyGridManager::ResetDefaultPriority" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4961,7 +5046,7 @@ Same as SetDefaultPriority(wxPG_HIGH).
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera177" doxytag="wxPropertyGridManager::SelectPage" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera179" doxytag="wxPropertyGridManager::SelectPage" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -4992,7 +5077,7 @@ Select and displays a given page.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera178" doxytag="wxPropertyGridManager::SelectPage" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera180" doxytag="wxPropertyGridManager::SelectPage" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5023,7 +5108,7 @@ Select and displays a given page.
 Also makes it target page for insert operations etc.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera180" doxytag="wxPropertyGridManager::SelectProperty" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera182" doxytag="wxPropertyGridManager::SelectProperty" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5063,7 +5148,7 @@ Select a property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagere9" doxytag="wxPropertyGridManager::SetBoolChoices" ></a><p>
+<a class="anchor" name="wxPropertyGridPagee13" doxytag="wxPropertyGridManager::SetBoolChoices" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5103,7 +5188,7 @@ Lets user to set the strings listed in the choice dropdown of a wxBoolProperty.
 Defaults are "True" and "False", so changing them to, say, "Yes" and "No" may be useful in some less technical applications.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera181" doxytag="wxPropertyGridManager::SetCurrentCategory" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera183" doxytag="wxPropertyGridManager::SetCurrentCategory" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5134,7 +5219,7 @@ Sets the current category - Append will add non-categories under this one.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera182" doxytag="wxPropertyGridManager::SetCurrentCategory" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera184" doxytag="wxPropertyGridManager::SetCurrentCategory" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5165,7 +5250,7 @@ Sets the current category - Append will add non-categories under this one.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera183" doxytag="wxPropertyGridManager::SetDefaultPriority" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera185" doxytag="wxPropertyGridManager::SetDefaultPriority" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5201,7 +5286,7 @@ All properties added/inserted will have given priority by default.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera184" doxytag="wxPropertyGridManager::SetDescBoxHeight" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera186" doxytag="wxPropertyGridManager::SetDescBoxHeight" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5241,7 +5326,7 @@ Sets y coordinate of the description box splitter.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera185" doxytag="wxPropertyGridManager::SetDescription" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera187" doxytag="wxPropertyGridManager::SetDescription" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5281,7 +5366,7 @@ Sets label and text in description box.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera190" doxytag="wxPropertyGridManager::SetPropertyAttribute" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea130" doxytag="wxPropertyGridManager::SetPropertyAttribute" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5339,7 +5424,7 @@ Ids and relevants values are totally specific to property classes and may affect
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera191" doxytag="wxPropertyGridManager::SetPropertyAttributeAll" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera193" doxytag="wxPropertyGridManager::SetPropertyAttributeAll" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5379,7 +5464,7 @@ Sets property attribute for all applicapple properties.
 Be sure to use this method after all properties have been added to the grid.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagere10" doxytag="wxPropertyGridManager::SetPropertyAttributes" ></a><p>
+<a class="anchor" name="wxPropertyGridPagee15" doxytag="wxPropertyGridManager::SetPropertyAttributes" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5420,7 +5505,7 @@ Sets attributes from a string generated by GetPropertyAttributes.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera192" doxytag="wxPropertyGridManager::SetPropertyChoices" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea131" doxytag="wxPropertyGridManager::SetPropertyChoices" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5460,7 +5545,7 @@ Set choices of a property to specified set of labels and values.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagere11" doxytag="wxPropertyGridManager::SetPropertyChoices" ></a><p>
+<a class="anchor" name="wxPropertyGridPagee16" doxytag="wxPropertyGridManager::SetPropertyChoices" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5500,7 +5585,7 @@ Set choices of a property to specified set of labels and values.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera194" doxytag="wxPropertyGridManager::SetPropertyChoicesExclusive" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea133" doxytag="wxPropertyGridManager::SetPropertyChoicesExclusive" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5531,7 +5616,7 @@ If property's set of choices is shared, then calling this method converts it to 
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera195" doxytag="wxPropertyGridManager::SetPropertyClientData" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea134" doxytag="wxPropertyGridManager::SetPropertyClientData" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5572,7 +5657,7 @@ Sets client data (void*) of a property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera196" doxytag="wxPropertyGridManager::SetPropertyClientData" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea135" doxytag="wxPropertyGridManager::SetPropertyClientData" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5613,7 +5698,7 @@ Sets client data (void*) of a property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera198" doxytag="wxPropertyGridManager::SetPropertyColour" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera200" doxytag="wxPropertyGridManager::SetPropertyColour" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5653,7 +5738,7 @@ Sets background colour of property and all its children.
 Background brush cache is optimized for often set colours to be set last.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera200" doxytag="wxPropertyGridManager::SetPropertyColourToDefault" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera202" doxytag="wxPropertyGridManager::SetPropertyColourToDefault" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5684,7 +5769,7 @@ Sets background colour of property and all its children to the default.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera202" doxytag="wxPropertyGridManager::SetPropertyEditor" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea137" doxytag="wxPropertyGridManager::SetPropertyEditor" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5724,7 +5809,7 @@ Sets editor control of a property.
 As editor argument, use editor name string, such as wxT("TextCtrl") or wxT("Choice").     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera204" doxytag="wxPropertyGridManager::SetPropertyEditor" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea139" doxytag="wxPropertyGridManager::SetPropertyEditor" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5764,7 +5849,7 @@ Sets editor control of a property.
 As editor argument, use wxPG_EDITOR(EditorName), where built-in editor names are TextCtrl, Choice, ComboBox, CheckBox, TextCtrlAndButton, and ChoiceAndButton.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera206" doxytag="wxPropertyGridManager::SetPropertyHelpString" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea141" doxytag="wxPropertyGridManager::SetPropertyHelpString" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5804,7 +5889,7 @@ Associates the help string with property (text will shown either in manager's "d
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera208" doxytag="wxPropertyGridManager::SetPropertyImage" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea143" doxytag="wxPropertyGridManager::SetPropertyImage" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5847,7 +5932,7 @@ Set wxBitmap in front of the value.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera210" doxytag="wxPropertyGridManager::SetPropertyLabel" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera212" doxytag="wxPropertyGridManager::SetPropertyLabel" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5887,7 +5972,7 @@ Sets label of a property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera211" doxytag="wxPropertyGridManager::SetPropertyMaxLength" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea145" doxytag="wxPropertyGridManager::SetPropertyMaxLength" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5927,7 +6012,7 @@ Sets max length of property's text.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera212" doxytag="wxPropertyGridManager::SetPropertyMaxLength" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea146" doxytag="wxPropertyGridManager::SetPropertyMaxLength" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -5967,7 +6052,7 @@ Sets max length of property's text.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera213" doxytag="wxPropertyGridManager::SetPropertyPriority" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea148" doxytag="wxPropertyGridManager::SetPropertyPriority" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -6002,12 +6087,12 @@ Sets max length of property's text.
     <td>
 
 <p>
-Property is be hidden/shown when hider button is toggled or when <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida25">wxPropertyGrid::Compact</a> is called. 
+Property is to be hidden/shown when hider button is toggled or when <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida25">wxPropertyGrid::Compact</a> is called. 
 <p>
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera214" doxytag="wxPropertyGridManager::SetPropertyPriority" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea149" doxytag="wxPropertyGridManager::SetPropertyPriority" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -6042,12 +6127,12 @@ Property is be hidden/shown when hider button is toggled or when <a class="el" h
     <td>
 
 <p>
-Property is be hidden/shown when hider button is toggled or when <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida25">wxPropertyGrid::Compact</a> is called. 
+Property is to be hidden/shown when hider button is toggled or when <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida25">wxPropertyGrid::Compact</a> is called. 
 <p>
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera217" doxytag="wxPropertyGridManager::SetPropertyValidator" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea152" doxytag="wxPropertyGridManager::SetPropertyValidator" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -6087,11 +6172,11 @@ Sets validator of a property.
 For example <pre class="fragment"><div>          <span class="comment">// Allow property's value range from -100 to 100</span>
           wxIntPropertyValidator validator(-100,100);
           wxPGId <span class="keywordtype">id</span> = pg-&gt;<a class="code" href="classwxPropertyGrid.htm#wxPropertyGrida6">Append</a>( wxIntProperty(wxT(<span class="stringliteral">"Value 1"</span>,wxPG_LABEL,0)) );
-          pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridManagera217">SetPropertyValidator</a>( <span class="keywordtype">id</span>, validator );
+          pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea152">SetPropertyValidator</a>( <span class="keywordtype">id</span>, validator );
 </div></pre>    </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera231" doxytag="wxPropertyGridManager::SetPropertyValueLong" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera233" doxytag="wxPropertyGridManager::SetPropertyValueLong" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -6132,7 +6217,7 @@ Sets property value.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera236" doxytag="wxPropertyGridManager::SetSplitterLeft" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera238" doxytag="wxPropertyGridManager::SetSplitterLeft" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -6178,7 +6263,7 @@ Moves splitter as left as possible, while still allowing all labels to be shown 
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera238" doxytag="wxPropertyGridManager::SetStringSelection" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera240" doxytag="wxPropertyGridManager::SetStringSelection" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -6209,7 +6294,7 @@ Synonyme for SelectPage(name).
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera239" doxytag="wxPropertyGridManager::SetTargetPage" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera241" doxytag="wxPropertyGridManager::SetTargetPage" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -6240,7 +6325,7 @@ Sets page to which append, insert, etc.
 will add items. Every time a page is changed, target page is automatically switched to that.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera240" doxytag="wxPropertyGridManager::SetTargetPage" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera242" doxytag="wxPropertyGridManager::SetTargetPage" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -6271,7 +6356,7 @@ Sets page to which append, insert, etc.
 will add items. Every time a page is changed, target page is automatically switched to that.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera242" doxytag="wxPropertyGridManager::Sort" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera244" doxytag="wxPropertyGridManager::Sort" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -6302,7 +6387,7 @@ Sorts children of a category.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera243" doxytag="wxPropertyGridManager::Sort" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera245" doxytag="wxPropertyGridManager::Sort" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -6333,7 +6418,7 @@ Sorts children of a category.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera244" doxytag="wxPropertyGridManager::Sort" ></a><p>
+<a class="anchor" name="wxPropertyGridManagera246" doxytag="wxPropertyGridManager::Sort" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -6363,7 +6448,7 @@ Sorts all items at all levels of the target page (except sub-properties).
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera246" doxytag="wxPropertyGridManager::TogglePropertyPriority" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea171" doxytag="wxPropertyGridManager::TogglePropertyPriority" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -6394,7 +6479,7 @@ Toggles priority of a property between wxPG_HIGH and wxPG_LOW.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridManagera247" doxytag="wxPropertyGridManager::TogglePropertyPriority" ></a><p>
+<a class="anchor" name="wxPropertyGridPagea172" doxytag="wxPropertyGridManager::TogglePropertyPriority" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -6427,7 +6512,7 @@ Toggles priority of a property between wxPG_HIGH and wxPG_LOW.
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
 <li>manager.h</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Fri May 5 19:58:24 2006 for wxPropertyGrid by
+<hr size="1"><address style="align: right;"><small>Generated on Thu Jun 8 20:02:23 2006 for wxPropertyGrid by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.6 </small></address>

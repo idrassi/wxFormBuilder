@@ -10,6 +10,11 @@
 <p>
 <code>#include &lt;propgrid.h&gt;</code>
 <p>
+<p>Inheritance diagram for wxPropertyGridState:
+<p><center><img src="classwxPropertyGridState.png" usemap="#wxPropertyGridState_map" border="0" alt=""></center>
+<map name="wxPropertyGridState_map">
+<area href="classwxPropertyGridPage.htm" alt="wxPropertyGridPage" shape="rect" coords="0,56,129,80">
+</map>
 <a href="classwxPropertyGridState-members.htm">List of all members.</a><table border=0 cellpadding=0 cellspacing=0>
 <tr><td></td></tr>
 <tr><td colspan=2><br><h2>Public Member Functions</h2></td></tr>
@@ -34,57 +39,56 @@ bool&nbsp;</td><td class="memItemRight" valign=bottom><b>ClearSelection</b> ()</
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea7" doxytag="wxPropertyGridState::Collapse" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>Collapse</b> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea8" doxytag="wxPropertyGridState::DoDelete" ></a>
-void&nbsp;</td><td class="memItemRight" valign=bottom><b>DoDelete</b> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *item)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridState.htm#wxPropertyGridStatea8">DoDelete</a> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *item)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea9" doxytag="wxPropertyGridState::DoSelectProperty" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridState.htm#wxPropertyGridStatea9">DoInsert</a> (<a class="el" href="classwxPGPropertyWithChildren.htm">wxPGPropertyWithChildren</a> *parent, int index, <a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *property)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea10" doxytag="wxPropertyGridState::DoSelectProperty" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>DoSelectProperty</b> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p, bool focus=false)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea10" doxytag="wxPropertyGridState::EnableCategories" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea11" doxytag="wxPropertyGridState::EnableCategories" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>EnableCategories</b> (bool enable)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridState.htm#wxPropertyGridStatea11">EnableProperty</a> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p, bool enable)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridState.htm#wxPropertyGridStatea12">EnableProperty</a> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p, bool enable)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea12" doxytag="wxPropertyGridState::Expand" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea13" doxytag="wxPropertyGridState::Expand" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>Expand</b> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea13" doxytag="wxPropertyGridState::ExpandAll" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea14" doxytag="wxPropertyGridState::ExpandAll" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>ExpandAll</b> (unsigned char do_expand)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridState.htm#wxPropertyGridStatea14">GetFirst</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridState.htm#wxPropertyGridStatea15">GetFirst</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea15" doxytag="wxPropertyGridState::GetFirstCategory" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea16" doxytag="wxPropertyGridState::GetFirstCategory" ></a>
 wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><b>GetFirstCategory</b> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea16" doxytag="wxPropertyGridState::GetFirstProperty" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea17" doxytag="wxPropertyGridState::GetFirstProperty" ></a>
 wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><b>GetFirstProperty</b> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea17" doxytag="wxPropertyGridState::GetGrid" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea18" doxytag="wxPropertyGridState::GetGrid" ></a>
 <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> *&nbsp;</td><td class="memItemRight" valign=bottom><b>GetGrid</b> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridState.htm#wxPropertyGridStatea18">GetLeftSplitterPos</a> (wxClientDC &amp;dc, <a class="el" href="classwxPGPropertyWithChildren.htm">wxPGPropertyWithChildren</a> *pwc, bool subProps)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridState.htm#wxPropertyGridStatea19">GetLeftSplitterPos</a> (wxClientDC &amp;dc, <a class="el" href="classwxPGPropertyWithChildren.htm">wxPGPropertyWithChildren</a> *pwc, bool subProps)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea19" doxytag="wxPropertyGridState::GetNextCategory" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea20" doxytag="wxPropertyGridState::GetNextCategory" ></a>
 wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><b>GetNextCategory</b> (wxPGId id) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea20" doxytag="wxPropertyGridState::GetNextProperty" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea21" doxytag="wxPropertyGridState::GetNextProperty" ></a>
 wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><b>GetNextProperty</b> (wxPGId id) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea21" doxytag="wxPropertyGridState::GetPrevProperty" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea22" doxytag="wxPropertyGridState::GetPrevProperty" ></a>
 wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPrevProperty</b> (wxPGId id) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea22" doxytag="wxPropertyGridState::GetPropertyByLabel" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea23" doxytag="wxPropertyGridState::GetPropertyByLabel" ></a>
 wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyByLabel</b> (const wxString &amp;name, <a class="el" href="classwxPGPropertyWithChildren.htm">wxPGPropertyWithChildren</a> *parent=(<a class="el" href="classwxPGPropertyWithChildren.htm">wxPGPropertyWithChildren</a> *) NULL) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea23" doxytag="wxPropertyGridState::GetPropertyValues" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea24" doxytag="wxPropertyGridState::GetPropertyValues" ></a>
 wxVariant&nbsp;</td><td class="memItemRight" valign=bottom><b>GetPropertyValues</b> (const wxString &amp;listname, wxPGId baseparent, long flags) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea24" doxytag="wxPropertyGridState::GetSelection" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea25" doxytag="wxPropertyGridState::GetSelection" ></a>
 <a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td><td class="memItemRight" valign=bottom><b>GetSelection</b> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridState.htm#wxPropertyGridStatea25">InitNonCatMode</a> ()</td></tr>
-
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxPGId&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridState.htm#wxPropertyGridStatea26">Insert</a> (<a class="el" href="classwxPGPropertyWithChildren.htm">wxPGPropertyWithChildren</a> *parent, int index, <a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *property)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridState.htm#wxPropertyGridStatea26">InitNonCatMode</a> ()</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatea27" doxytag="wxPropertyGridState::IsDisplayed" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>IsDisplayed</b> () const </td></tr>
@@ -151,7 +155,7 @@ void&nbsp;</td><td class="memItemRight" valign=bottom><b>Sort</b> (<a class="el"
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridState.htm#wxPropertyGridStatea51">wxPropertyGridState</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridState.htm#wxPropertyGridStatea52">~wxPropertyGridState</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridState.htm#wxPropertyGridStatea52">~wxPropertyGridState</a> ()</td></tr>
 
 <tr><td colspan=2><br><h2>Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridStatee0" doxytag="wxPropertyGridState::ClearPropertyAndChildrenFlags" ></a>
@@ -209,11 +213,11 @@ Constructor.
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> wxPropertyGridState::~<a class="el" href="classwxPropertyGridState.htm">wxPropertyGridState</a> </td>
+          <td class="md" nowrap valign="top"> virtual wxPropertyGridState::~<a class="el" href="classwxPropertyGridState.htm">wxPropertyGridState</a> </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap></td>
+          <td class="md" nowrap><code> [virtual]</code></td>
         </tr>
 
       </table>
@@ -326,7 +330,84 @@ Called in, for example, <a class="el" href="classwxPropertyGrid.htm#wxPropertyGr
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridStatea11" doxytag="wxPropertyGridState::EnableProperty" ></a><p>
+<a class="anchor" name="wxPropertyGridStatea8" doxytag="wxPropertyGridState::DoDelete" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> virtual void wxPropertyGridState::DoDelete </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>item</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [virtual]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Override this member function to add custom behaviour on property deletion. 
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="wxPropertyGridStatea9" doxytag="wxPropertyGridState::DoInsert" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> virtual wxPGId wxPropertyGridState::DoInsert </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="classwxPGPropertyWithChildren.htm">wxPGPropertyWithChildren</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td></td>
+          <td class="md" nowrap>int&nbsp;</td>
+          <td class="mdname" nowrap> <em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>property</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [virtual]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Override this member function to add custom behaviour on property insertion. 
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="wxPropertyGridStatea12" doxytag="wxPropertyGridState::EnableProperty" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -366,7 +447,7 @@ Enables or disables given property and its subproperties.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridStatea14" doxytag="wxPropertyGridState::GetFirst" ></a><p>
+<a class="anchor" name="wxPropertyGridStatea15" doxytag="wxPropertyGridState::GetFirst" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -396,7 +477,7 @@ Returns id of first item, whether it is a category or property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridStatea18" doxytag="wxPropertyGridState::GetLeftSplitterPos" ></a><p>
+<a class="anchor" name="wxPropertyGridStatea19" doxytag="wxPropertyGridState::GetLeftSplitterPos" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -442,7 +523,7 @@ Used by SetSplitterLeft.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyGridStatea25" doxytag="wxPropertyGridState::InitNonCatMode" ></a><p>
+<a class="anchor" name="wxPropertyGridStatea26" doxytag="wxPropertyGridState::InitNonCatMode" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -468,52 +549,6 @@ Used by SetSplitterLeft.
 
 <p>
 Only inits arrays, doesn't migrate things or such. 
-<p>
-    </td>
-  </tr>
-</table>
-<a class="anchor" name="wxPropertyGridStatea26" doxytag="wxPropertyGridState::Insert" ></a><p>
-<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top"> wxPGId wxPropertyGridState::Insert </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top"><a class="el" href="classwxPGPropertyWithChildren.htm">wxPGPropertyWithChildren</a> *&nbsp;</td>
-          <td class="mdname" nowrap> <em>parent</em>, </td>
-        </tr>
-        <tr>
-          <td class="md" nowrap align="right"></td>
-          <td></td>
-          <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap> <em>index</em>, </td>
-        </tr>
-        <tr>
-          <td class="md" nowrap align="right"></td>
-          <td></td>
-          <td class="md" nowrap><a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td>
-          <td class="mdname" nowrap> <em>property</em></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td class="md">)&nbsp;</td>
-          <td class="md" colspan="2"></td>
-        </tr>
-
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing=5 cellpadding=0 border=0>
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Base insert. 
 <p>
     </td>
   </tr>
@@ -880,7 +915,7 @@ Sets value (wxSize&amp;) of a property.
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
 <li>propgrid.h</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Fri May 5 19:58:24 2006 for wxPropertyGrid by
+<hr size="1"><address style="align: right;"><small>Generated on Thu Jun 8 20:02:24 2006 for wxPropertyGrid by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.6 </small></address>

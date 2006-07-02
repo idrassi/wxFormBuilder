@@ -181,10 +181,16 @@ wxFontPropertyClass::wxFontPropertyClass ( const wxString& label, const wxString
 
         wxFontEnumerator enumerator;
         enumerator.EnumerateFacenames();
-        wxArrayString* faceNames = enumerator.GetFacenames();
-        faceNames->Sort();
 
-        wxPGGlobalVars->m_fontFamilyChoices = new wxPGChoices(*faceNames);
+#if wxMINOR_VERSION > 6
+        wxArrayString faceNames = enumerator.GetFacenames();
+#else
+        wxArrayString& faceNames = *enumerator.GetFacenames();
+#endif
+
+        faceNames.Sort();
+
+        wxPGGlobalVars->m_fontFamilyChoices = new wxPGChoices(faceNames);
     }
 
     wxString emptyString(wxEmptyString);

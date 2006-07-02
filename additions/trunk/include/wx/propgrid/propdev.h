@@ -1114,6 +1114,7 @@ protected:
     wxString    m_fnstr; // needed for return value
     wxString    m_basePath; // If set, then show path relative to it
     wxString    m_initialPath; // If set, start the file dialog here
+    wxString    m_dlgTitle; // If set, used as title for file dialog
     wxFileName  m_filename; // used as primary storage
     int         m_indFilter; // index to the selected filter
 };

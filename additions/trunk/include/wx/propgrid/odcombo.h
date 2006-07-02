@@ -21,7 +21,7 @@
 
 
 // Item counts in GUI components were changed in 2.7.0
-#if wxMINOR_VERSION > 7
+#if wxMINOR_VERSION > 6
     #define wxODCCount  unsigned int
     #define wxODCIndex  unsigned int
 #else
@@ -42,14 +42,14 @@ class WXDLLEXPORT wxButton;
 #endif
 
 class WXDLLEXPORT_PGODC wxPGComboPopup;
-class WXDLLEXPORT_PGODC wxPGCustomComboControlBase;
+class WXDLLEXPORT_PGODC wxPGComboControlBase;
 class WXDLLEXPORT_PGODC wxPGOwnerDrawnComboBox;
 
 
 // ----------------------------------------------------------------------------
 
 
-// New window styles for wxPGCustomComboControlBase
+// New window styles for wxPGComboControlBase
 
 enum
 {
@@ -63,7 +63,7 @@ enum
 
 
 // ----------------------------------------------------------------------------
-// wxPGCustomComboControlBase: a base class for generic control that looks like
+// wxPGComboControlBase: a base class for generic control that looks like
 // a wxComboBox but allows completely custom popup (in addition to other
 // customizations).
 // ----------------------------------------------------------------------------
@@ -130,13 +130,13 @@ struct wxPGComboControlFeatures
 class wxPGComboPopupWindow;
 
 
-class WXDLLEXPORT_PGODC wxPGCustomComboControlBase : public wxControl
+class WXDLLEXPORT_PGODC wxPGComboControlBase : public wxControl
 {
     friend class wxPGComboPopup;
     friend class wxPGComboPopupWindow;
 public:
     // ctors and such
-    wxPGCustomComboControlBase() : wxControl() { Init(); }
+    wxPGComboControlBase() : wxControl() { Init(); }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -147,7 +147,7 @@ public:
                 const wxValidator& validator,
                 const wxString& name);
 
-    virtual ~wxPGCustomComboControlBase();
+    virtual ~wxPGComboControlBase();
 
     // show/hide popup window
     virtual void ShowPopup();
@@ -518,16 +518,16 @@ private:
 
     DECLARE_EVENT_TABLE()
 
-    DECLARE_ABSTRACT_CLASS(wxPGCustomComboControlBase)
+    DECLARE_ABSTRACT_CLASS(wxPGComboControlBase)
 };
 
 
 
-class WXDLLEXPORT_PGODC wxPGGenericComboControl : public wxPGCustomComboControlBase
+class WXDLLEXPORT_PGODC wxPGGenericComboControl : public wxPGComboControlBase
 {
 public:
     // ctors and such
-    wxPGGenericComboControl() : wxPGCustomComboControlBase() { Init(); }
+    wxPGGenericComboControl() : wxPGComboControlBase() { Init(); }
 
     wxPGGenericComboControl(wxWindow *parent,
                           wxWindowID id = wxID_ANY,
@@ -537,7 +537,7 @@ public:
                           long style = 0,
                           const wxValidator& validator = wxDefaultValidator,
                           const wxString& name = wxComboBoxNameStr)
-        : wxPGCustomComboControlBase()
+        : wxPGComboControlBase()
     {
         Init();
 
@@ -578,13 +578,13 @@ private:
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
 
-class WXDLLEXPORT_PGODC wxPGCustomComboControl : public wxPGCustomComboControlBase
+class WXDLLEXPORT_PGODC wxPGComboControl : public wxPGComboControlBase
 {
 public:
     // ctors and such
-    wxPGCustomComboControl() : wxPGCustomComboControlBase() { Init(); }
+    wxPGComboControl() : wxPGComboControlBase() { Init(); }
 
-    wxPGCustomComboControl(wxWindow *parent,
+    wxPGComboControl(wxWindow *parent,
                           wxWindowID id = wxID_ANY,
                           const wxString& value = wxEmptyString,
                           const wxPoint& pos = wxDefaultPosition,
@@ -592,7 +592,7 @@ public:
                           long style = 0,
                           const wxValidator& validator = wxDefaultValidator,
                           const wxString& name = wxComboBoxNameStr)
-        : wxPGCustomComboControlBase()
+        : wxPGComboControlBase()
     {
         Init();
 
@@ -608,9 +608,9 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxComboBoxNameStr);
 
-    virtual ~wxPGCustomComboControl();
+    virtual ~wxPGComboControl();
 
-    virtual void DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags );
+    //virtual void DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags );
 
     static int GetFeatures() { return wxPGComboControlFeatures::All; }
 
@@ -631,18 +631,18 @@ private:
 
     DECLARE_EVENT_TABLE()
 
-    DECLARE_DYNAMIC_CLASS(wxPGCustomComboControl)
+    DECLARE_DYNAMIC_CLASS(wxPGComboControl)
 };
 
 #else
 
-class WXDLLEXPORT_PGODC wxPGCustomComboControl : public wxPGGenericComboControl
+class WXDLLEXPORT_PGODC wxPGComboControl : public wxPGGenericComboControl
 {
 public:
     // ctors and such
-    wxPGCustomComboControl() : wxPGGenericComboControl() {}
+    wxPGComboControl() : wxPGGenericComboControl() {}
 
-    wxPGCustomComboControl(wxWindow *parent,
+    wxPGComboControl(wxWindow *parent,
                           wxWindowID id = wxID_ANY,
                           const wxString& value = wxEmptyString,
                           const wxPoint& pos = wxDefaultPosition,
@@ -667,12 +667,12 @@ public:
         return wxPGGenericComboControl::Create(parent,id,value,pos,size,style,validator,name);
     }
 
-    virtual ~wxPGCustomComboControl() {}
+    virtual ~wxPGComboControl() {}
 
 protected:
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPGCustomComboControl)
+    DECLARE_DYNAMIC_CLASS(wxPGComboControl)
 };
 
 
@@ -693,9 +693,9 @@ enum
 
 class WXDLLEXPORT_PGODC wxPGComboPopup
 {
-    friend class wxPGCustomComboControlBase;
+    friend class wxPGComboControlBase;
 public:
-    wxPGComboPopup(wxPGCustomComboControl *combo)
+    wxPGComboPopup(wxPGComboControl *combo)
     {
         m_combo = combo;
         m_iFlags = 0;
@@ -733,7 +733,7 @@ public:
 
     // Implement if you need to support special action when user
     // double-clicks on the parent wxComboControl.
-    virtual void OnDoubleClick();
+    virtual void OnComboDoubleClick();
 
     // Return final size of popup. Called on every popup, just prior to OnShow.
     // minWidth = preferred minimum width for window
@@ -762,7 +762,7 @@ public:
     }
 
 protected:
-    wxPGCustomComboControl*     m_combo;
+    wxPGComboControl*     m_combo;
     wxUint32                    m_iFlags;
 };
 
@@ -806,7 +806,7 @@ enum
 //                    is the height of the given item.
 //   flags: see above
 /*
-typedef void (wxEvtHandler::* wxComboPaintCallback)( wxPGCustomComboControl* pCb,
+typedef void (wxEvtHandler::* wxComboPaintCallback)( wxPGComboControl* pCb,
                                                      int item,
                                                      wxDC& dc,
                                                      wxRect& rect,
@@ -835,7 +835,7 @@ class wxPGVListBoxComboPopup : public wxVListBox, public wxPGComboPopup
 public:
 
     // ctor and dtor
-    wxPGVListBoxComboPopup(wxPGCustomComboControl* combo/*, wxComboPaintCallback callback*/);
+    wxPGVListBoxComboPopup(wxPGComboControl* combo/*, wxComboPaintCallback callback*/);
     virtual ~wxPGVListBoxComboPopup();
 
     // required virtuals
@@ -849,9 +849,9 @@ public:
     virtual wxSize GetAdjustedSize( int minWidth, int prefHeight, int maxHeight );
     virtual void PaintComboControl( wxDC& dc, const wxRect& rect );
     virtual void OnComboKeyEvent( wxKeyEvent& event );
-    virtual void OnDoubleClick();
+    virtual void OnComboDoubleClick();
     //virtual bool CycleValue( bool forward );
-    //virtual bool OnDoubleClick();
+    //virtual bool OnComboDoubleClick();
     virtual bool LazyCreate();
 
     // Item management
@@ -878,7 +878,7 @@ public:
 
 protected:
 
-    // Called by OnDoubleClick and OnComboKeyEvent
+    // Called by OnComboDoubleClick and OnComboKeyEvent
     bool HandleKey( int keycode, bool saturate );
 
     // sends combobox select event from the parent combo control
@@ -931,14 +931,14 @@ private:
 //
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_PGODC wxPGOwnerDrawnComboBox : public wxPGCustomComboControl, public wxItemContainer
+class WXDLLEXPORT_PGODC wxPGOwnerDrawnComboBox : public wxPGComboControl, public wxItemContainer
 {
-    friend class wxComboPopupWindow;
-    friend class wxPGCustomComboControlBase;
+    friend class wxPGComboPopupWindow;
+    friend class wxPGComboControlBase;
 public:
 
     // ctors and such
-    wxPGOwnerDrawnComboBox() : wxPGCustomComboControl() { Init(); }
+    wxPGOwnerDrawnComboBox() : wxPGComboControl() { Init(); }
 
     wxPGOwnerDrawnComboBox(wxWindow *parent,
                wxWindowID id,
@@ -951,7 +951,7 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxComboBoxNameStr)
-        : wxPGCustomComboControl()
+        : wxPGComboControl()
     {
         Init();
 
@@ -1027,7 +1027,7 @@ protected:
     virtual wxClientData* DoGetItemClientObject(wxODCIndex n) const;
 
     // overload m_popupInterface member so we can access specific popup interface easier
-    wxPGVListBoxComboPopup*   m_popupInterface;
+    wxPGVListBoxComboPopup*     m_popupInterface;
 
 private:
     void Init();

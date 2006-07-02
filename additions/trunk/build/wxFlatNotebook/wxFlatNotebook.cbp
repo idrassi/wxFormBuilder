@@ -8,7 +8,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="..\..\lib\gcc_lib\libwxmsw26d_flatnotebook.a" />
+				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)d_flatnotebook.a" />
 				<Option working_dir="" />
 				<Option object_output=".objsd" />
 				<Option type="2" />
@@ -29,7 +29,7 @@
 				</Environment>
 			</Target>
 			<Target title="Debug (Unicode)">
-				<Option output="..\..\lib\gcc_lib\libwxmsw26ud_flatnotebook.a" />
+				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)ud_flatnotebook.a" />
 				<Option working_dir="" />
 				<Option object_output=".objsud" />
 				<Option type="2" />
@@ -51,7 +51,7 @@
 				</Environment>
 			</Target>
 			<Target title="Debug Mono Dll">
-				<Option output="..\..\lib\gcc_dll\wxmsw26md_flatnotebook_gcc.dll" />
+				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)md_flatnotebook_gcc.dll" />
 				<Option object_output=".dllobjsd" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -74,7 +74,7 @@
 				</Environment>
 			</Target>
 			<Target title="Debug Mono Dll (Unicode)">
-				<Option output="..\..\lib\gcc_dll\wxmsw26umd_flatnotebook_gcc.dll" />
+				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)umd_flatnotebook_gcc.dll" />
 				<Option object_output=".dllobjsud" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -98,7 +98,7 @@
 				</Environment>
 			</Target>
 			<Target title="Release">
-				<Option output="..\..\lib\gcc_lib\libwxmsw26_flatnotebook.a" />
+				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)_flatnotebook.a" />
 				<Option working_dir="" />
 				<Option type="2" />
 				<Option compiler="gcc" />
@@ -118,7 +118,7 @@
 				</Environment>
 			</Target>
 			<Target title="Release (Unicode)">
-				<Option output="..\..\lib\gcc_lib\libwxmsw26u_flatnotebook.a" />
+				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)u_flatnotebook.a" />
 				<Option working_dir="" />
 				<Option object_output=".objsu" />
 				<Option type="2" />
@@ -140,7 +140,7 @@
 				</Environment>
 			</Target>
 			<Target title="Release Mono Dll">
-				<Option output="..\..\lib\gcc_dll\wxmsw26m_flatnotebook_gcc.dll" />
+				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)m_flatnotebook_gcc.dll" />
 				<Option object_output=".dllobjs" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -163,7 +163,7 @@
 				</Environment>
 			</Target>
 			<Target title="Release Mono Dll (Unicode)">
-				<Option output="..\..\lib\gcc_dll\wxmsw26um_flatnotebook_gcc.dll" />
+				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)um_flatnotebook_gcc.dll" />
 				<Option object_output=".dllobjsu" />
 				<Option type="3" />
 				<Option compiler="gcc" />
