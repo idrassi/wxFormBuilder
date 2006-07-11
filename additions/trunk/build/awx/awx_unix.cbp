@@ -7,9 +7,10 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Shared Library">
-				<Option output="/usr/lib/libwx_gtk2u_awx-2.6.so" />
+				<Option output="../../lib/libwx_gtk2u_awx-2.6.so" />
 				<Option type="3" />
 				<Option compiler="gcc" />
+				<Option includeInTargetAll="1" />
 				<Option createStaticLib="1" />
 				<Compiler>
 					<Add option="-DWXMAKINGDLL_PROPGRID" />

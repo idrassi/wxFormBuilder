@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Shared Library">
-				<Option output="/usr/lib/libwx_gtk2u_propgrid-2.6.so" />
+				<Option output="../../lib/libwx_gtk2u_propgrid-2.6.so" />
 				<Option type="3" />
 				<Option compiler="gcc" />
 				<Option includeInTargetAll="1" />
