@@ -64,13 +64,13 @@
 // -----------------------------------------------------------------------
 
 #if defined(__WXMSW__)
-# define wxPG_CAN_DRAW_CURSOR           1
+    #define wxPG_CAN_DRAW_CURSOR           1
 #elif defined(__WXGTK__)
-# define wxPG_CAN_DRAW_CURSOR           0
+    #define wxPG_CAN_DRAW_CURSOR           0
 #elif defined(__WXMAC__)
-# define wxPG_CAN_DRAW_CURSOR           0
+    #define wxPG_CAN_DRAW_CURSOR           0
 #else
-# define wxPG_CAN_DRAW_CURSOR           0
+    #define wxPG_CAN_DRAW_CURSOR           0
 #endif
 
 // -----------------------------------------------------------------------
@@ -168,8 +168,9 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS(wxFontProperty,wxBaseParentProperty,
                                wxFont,const wxFont&,TextCtrlAndButton)
 
 
-wxFontPropertyClass::wxFontPropertyClass ( const wxString& label, const wxString& name,
-    const wxFont& value ) : wxPGPropertyWithChildren(label,name)
+wxFontPropertyClass::wxFontPropertyClass( const wxString& label, const wxString& name,
+                                          const wxFont& value )
+    : wxPGPropertyWithChildren(label,name)
 {
     wxPG_INIT_REQUIRED_TYPE(wxFont)
     DoSetValue(value);
@@ -196,17 +197,6 @@ wxFontPropertyClass::wxFontPropertyClass ( const wxString& label, const wxString
     wxString emptyString(wxEmptyString);
 
     AddChild( wxIntProperty( _("Point Size"),emptyString,m_value_wxFont.GetPointSize() ) );
-
-    /*wxPGChoices chFamily;
-    if ( gs_fp_pc_family )
-    {
-        chFamily(gs_fp_pc_family);
-    }
-    else
-    {
-        chFamily.Add();
-        gs_fp_pc_family =
-    }*/
 
     AddChild( wxEnumProperty(_("Family"), emptyString,
               gs_fp_es_family_labels,gs_fp_es_family_values,
@@ -238,7 +228,7 @@ wxFontPropertyClass::wxFontPropertyClass ( const wxString& label, const wxString
 
 wxFontPropertyClass::~wxFontPropertyClass () { }
 
-void wxFontPropertyClass::DoSetValue ( wxPGVariant value )
+void wxFontPropertyClass::DoSetValue( wxPGVariant value )
 {
     const wxFont* font = wxPGVariantToWxObjectPtr(value,wxFont);
 
@@ -250,18 +240,18 @@ void wxFontPropertyClass::DoSetValue ( wxPGVariant value )
     RefreshChildren();
 }
 
-wxPGVariant wxFontPropertyClass::DoGetValue () const
+wxPGVariant wxFontPropertyClass::DoGetValue() const
 {
     return wxPGVariant((const wxObject*)&m_value_wxFont);
 }
 
-wxString wxFontPropertyClass::GetValueAsString ( int arg_flags ) const
+wxString wxFontPropertyClass::GetValueAsString( int argFlags ) const
 {
-    return wxPGPropertyWithChildren::GetValueAsString(arg_flags);
+    return wxPGPropertyWithChildren::GetValueAsString(argFlags);
 }
 
-bool wxFontPropertyClass::OnEvent ( wxPropertyGrid* propgrid, wxWindow* primary,
-    wxEvent& event )
+bool wxFontPropertyClass::OnEvent( wxPropertyGrid* propgrid, wxWindow* primary,
+                                   wxEvent& event )
 {
     if ( event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED )
     {
@@ -299,9 +289,9 @@ void wxFontPropertyClass::RefreshChildren()
     Item(5)->DoSetValue ( m_value_wxFont.GetUnderlined() );
 }
 
-void wxFontPropertyClass::ChildChanged ( wxPGProperty* p )
+void wxFontPropertyClass::ChildChanged( wxPGProperty* p )
 {
-    wxASSERT ( this == p->GetParent() );
+    wxASSERT( this == p->GetParent() );
 
     int ind = p->GetIndexInParent();
 
@@ -319,7 +309,7 @@ void wxFontPropertyClass::ChildChanged ( wxPGProperty* p )
     }
     else if ( ind == 2 )
     {
-        m_value_wxFont.SetFaceName ( p->GetValueAsString(wxPG_FULL_VALUE) );
+        m_value_wxFont.SetFaceName( p->GetValueAsString(wxPG_FULL_VALUE) );
     }
     else if ( ind == 3 )
     {
@@ -328,7 +318,7 @@ void wxFontPropertyClass::ChildChanged ( wxPGProperty* p )
              st != wxFONTSTYLE_SLANT &&
              st != wxFONTSTYLE_ITALIC )
              st = wxFONTWEIGHT_NORMAL;
-        m_value_wxFont.SetStyle ( st );
+        m_value_wxFont.SetStyle( st );
     }
     else if ( ind == 4 )
     {
@@ -337,11 +327,11 @@ void wxFontPropertyClass::ChildChanged ( wxPGProperty* p )
              wt != wxFONTWEIGHT_LIGHT &&
              wt != wxFONTWEIGHT_BOLD )
              wt = wxFONTWEIGHT_NORMAL;
-        m_value_wxFont.SetWeight ( wt );
+        m_value_wxFont.SetWeight( wt );
     }
     else if ( ind == 5 )
     {
-        m_value_wxFont.SetUnderlined ( p->DoGetValue().GetBool()?true:false );
+        m_value_wxFont.SetUnderlined( p->DoGetValue().GetBool()?true:false );
     }
 }
 
@@ -464,7 +454,7 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS(wxSystemColourProperty,wxEnumProperty,
                                wxColourPropertyValue,const wxColourPropertyValue&,Choice)
 
 
-void wxSystemColourPropertyClass::Init ( int type, const wxColour& colour )
+void wxSystemColourPropertyClass::Init( int type, const wxColour& colour )
 {
 
     m_value.m_type = type;
@@ -925,7 +915,7 @@ static long gs_cp_es_syscursors_values[] = {
 
 WX_PG_IMPLEMENT_DERIVED_PROPERTY_CLASS(wxCursorProperty,wxEnumProperty,int)
 
-wxCursorPropertyClass::wxCursorPropertyClass ( const wxString& label, const wxString& name,
+wxCursorPropertyClass::wxCursorPropertyClass( const wxString& label, const wxString& name,
     int value )
     : wxEnumPropertyClass( label,
                            name,
@@ -937,7 +927,7 @@ wxCursorPropertyClass::wxCursorPropertyClass ( const wxString& label, const wxSt
     //wxEnumPropertyClass::DoSetValue ( (void*)&value, NULL );
 }
 
-wxCursorPropertyClass::~wxCursorPropertyClass ()
+wxCursorPropertyClass::~wxCursorPropertyClass()
 {
 }
 
@@ -954,7 +944,7 @@ wxSize wxCursorPropertyClass::GetImageSize() const
 
 // Needed for Cygwin
 #ifdef __WXMSW__
-#include <winuser.h>
+    #include <winuser.h>
 #endif
 
 void wxCursorPropertyClass::OnCustomPaint( wxDC& dc,
@@ -1013,7 +1003,7 @@ void wxCursorPropertyClass::OnCustomPaint( wxDC&, const wxRect&, wxPGPaintData& 
 
 #if wxUSE_IMAGE
 
-const wxString& wxPGGetDefaultImageWildcard ()
+const wxString& wxPGGetDefaultImageWildcard()
 {
     WX_PG_GLOBALS_LOCKER()
 
@@ -1038,12 +1028,12 @@ const wxString& wxPGGetDefaultImageWildcard ()
             wxString ext_lo = handler->GetExtension();
             wxString ext_up = ext_lo.Upper();
 
-            str.append ( ext_up );
-            str.append ( wxT(" files (*.") );
-            str.append ( ext_up );
-            str.append ( wxT(")|*.") );
-            str.append ( ext_lo );
-            str.append ( wxT("|") );
+            str.append( ext_up );
+            str.append( wxT(" files (*.") );
+            str.append( ext_up );
+            str.append( wxT(")|*.") );
+            str.append( ext_lo );
+            str.append( wxT("|") );
         }
 
         str.append ( wxT("All files (*.*)|*.*") );
@@ -1054,10 +1044,11 @@ const wxString& wxPGGetDefaultImageWildcard ()
     return wxPGGlobalVars->m_pDefaultImageWildcard;
 }
 
-WX_PG_IMPLEMENT_DERIVED_PROPERTY_CLASS(wxImageFileProperty,wxFileProperty,
+WX_PG_IMPLEMENT_DERIVED_PROPERTY_CLASS(wxImageFileProperty,
+                                       wxFileProperty,
                                        const wxString&)
 
-wxImageFilePropertyClass::wxImageFilePropertyClass ( const wxString& label, const wxString& name,
+wxImageFilePropertyClass::wxImageFilePropertyClass( const wxString& label, const wxString& name,
     const wxString& value )
     : wxFilePropertyClass(label,name,value)
 {
@@ -1068,7 +1059,7 @@ wxImageFilePropertyClass::wxImageFilePropertyClass ( const wxString& label, cons
     m_pBitmap = (wxBitmap*) NULL;
 }
 
-wxImageFilePropertyClass::~wxImageFilePropertyClass ()
+wxImageFilePropertyClass::~wxImageFilePropertyClass()
 {
     if ( m_pBitmap )
         delete m_pBitmap;
@@ -1076,7 +1067,7 @@ wxImageFilePropertyClass::~wxImageFilePropertyClass ()
         delete m_pImage;
 }
 
-void wxImageFilePropertyClass::DoSetValue ( wxPGVariant value )
+void wxImageFilePropertyClass::DoSetValue( wxPGVariant value )
 {
     wxFilePropertyClass::DoSetValue(value);
 
@@ -1105,8 +1096,9 @@ wxSize wxImageFilePropertyClass::GetImageSize() const
     return wxSize(-1,-1);
 }
 
-void wxImageFilePropertyClass::OnCustomPaint ( wxDC& dc,
-    const wxRect& rect, wxPGPaintData& )
+void wxImageFilePropertyClass::OnCustomPaint( wxDC& dc,
+                                              const wxRect& rect,
+                                              wxPGPaintData& )
 {
     if ( m_pBitmap || (m_pImage && m_pImage->Ok() ) )
     {
@@ -1182,11 +1174,11 @@ wxMultiChoicePropertyClass::wxMultiChoicePropertyClass(const wxString& label,
 {
 }
 
-wxMultiChoicePropertyClass::~wxMultiChoicePropertyClass ()
+wxMultiChoicePropertyClass::~wxMultiChoicePropertyClass()
 {
 }
 
-void wxMultiChoicePropertyClass::DoSetValue ( wxPGVariant value )
+void wxMultiChoicePropertyClass::DoSetValue( wxPGVariant value )
 {
     wxArrayInt* pObj = (wxArrayInt*)wxPGVariantToVoidPtr(value);
     if ( pObj )
@@ -1196,17 +1188,17 @@ void wxMultiChoicePropertyClass::DoSetValue ( wxPGVariant value )
     }
 }
 
-wxPGVariant wxMultiChoicePropertyClass::DoGetValue () const
+wxPGVariant wxMultiChoicePropertyClass::DoGetValue() const
 {
     return wxPGVariant((void*)&m_value_wxArrayInt);
 }
 
-wxString wxMultiChoicePropertyClass::GetValueAsString ( int ) const
+wxString wxMultiChoicePropertyClass::GetValueAsString( int ) const
 {
     return m_display;
 }
 
-void wxMultiChoicePropertyClass::GenerateValueAsString ()
+void wxMultiChoicePropertyClass::GenerateValueAsString()
 {
 
     // Allow zero-length strings list
@@ -1236,12 +1228,10 @@ void wxMultiChoicePropertyClass::GenerateValueAsString ()
     }
 }
 
-bool wxMultiChoicePropertyClass::OnEvent ( wxPropertyGrid* propgrid, wxWindow* primary,
-    wxEvent& event )
+bool wxMultiChoicePropertyClass::OnEvent( wxPropertyGrid* propgrid,
+                                          wxWindow* primary,
+                                          wxEvent& event )
 {
-    //if ( wxPGTextCtrlPropertyClass::OnEvent ( propgrid, primary, event ) )
-    //    return true;
-
     if ( event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED )
     {
         // Update the value
@@ -1258,7 +1248,7 @@ bool wxMultiChoicePropertyClass::OnEvent ( wxPropertyGrid* propgrid, wxWindow* p
         dlg.Move ( propgrid->GetGoodEditorDialogPosition (this,dlg.GetSize()) );
         dlg.SetSelections(m_value_wxArrayInt);
 
-        if ( dlg.ShowModal() == wxID_OK /*&& dlg.IsModified()*/ )
+        if ( dlg.ShowModal() == wxID_OK )
         {
             wxArrayInt arrint = dlg.GetSelections();
             DoSetValue ( (void*)&arrint );
@@ -1270,7 +1260,7 @@ bool wxMultiChoicePropertyClass::OnEvent ( wxPropertyGrid* propgrid, wxWindow* p
     return false;
 }
 
-int wxMultiChoicePropertyClass::GetChoiceInfo ( wxPGChoiceInfo* choiceinfo )
+int wxMultiChoicePropertyClass::GetChoiceInfo( wxPGChoiceInfo* choiceinfo )
 {
     if ( choiceinfo )
     {
@@ -1282,7 +1272,7 @@ int wxMultiChoicePropertyClass::GetChoiceInfo ( wxPGChoiceInfo* choiceinfo )
     return -1;
 }
 
-bool wxMultiChoicePropertyClass::SetValueFromString ( const wxString& text, int )
+bool wxMultiChoicePropertyClass::SetValueFromString( const wxString& text, int )
 {
     m_value_wxArrayInt.Empty();
     wxArrayString& strings = m_choices.GetLabels();
@@ -1304,7 +1294,7 @@ bool wxMultiChoicePropertyClass::SetValueFromString ( const wxString& text, int 
 // wxPropertyContainerMethods
 // -----------------------------------------------------------------------
 
-void wxPropertyContainerMethods::InitAllTypeHandlers ()
+void wxPropertyContainerMethods::InitAllTypeHandlers()
 {
     wxPG_INIT_REQUIRED_TYPE(wxColour)
     wxPG_INIT_REQUIRED_TYPE(wxFont)

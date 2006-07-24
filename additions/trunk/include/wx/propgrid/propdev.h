@@ -379,14 +379,14 @@ class wxPGValueType##VALUETYPE##Class : public wxPGValueType \
 { \
 public: \
     virtual const wxChar* GetTypeName() const { return TYPESTRING; } \
-    virtual wxPGVariant GetDefaultValue () const { return wxPGVariant(m_default); } \
-    virtual wxVariant GenerateVariant ( wxPGVariant value, const wxString& name ) const \
-    { return wxVariant ( value.GETTER(), name ); } \
-    virtual wxPGProperty* GenerateProperty ( const wxString& label, const wxString& name ) const \
+    virtual wxPGVariant GetDefaultValue() const { return wxPGVariant(m_default); } \
+    virtual wxVariant GenerateVariant( wxPGVariant value, const wxString& name ) const \
+    { return wxVariant( value.GETTER(), name ); } \
+    virtual wxPGProperty* GenerateProperty( const wxString& label, const wxString& name ) const \
     { \
         return wxPG_CONSTFUNC(DEFPROPERTY)(label,name); \
     } \
-    virtual void SetValueFromVariant ( wxPGProperty* property, wxVariant& value ) const \
+    virtual void SetValueFromVariant( wxPGProperty* property, wxVariant& value ) const \
     { \
         wxASSERT_MSG( wxStrcmp(GetTypeName(),value.GetType().c_str()) == 0, \
             wxT("SetValueFromVariant: wxVariant type mismatch.") ); \
@@ -446,13 +446,13 @@ class wxPGValueType##VALUETYPE##Class : public wxPGValueType \
 { \
 public: \
     virtual const wxChar* GetTypeName() const { return CLASSINFO(VALUETYPE)->GetClassName(); } \
-    virtual wxVariant GenerateVariant ( wxPGVariant value, const wxString& name ) const \
-    { return wxVariant ( new wxVariantData_##VALUETYPE( (*(VALUETYPE*)value.GetRawPtr()) ), name ); } \
-    virtual wxPGProperty* GenerateProperty ( const wxString& label, const wxString& name ) const \
+    virtual wxVariant GenerateVariant( wxPGVariant value, const wxString& name ) const \
+    { return wxVariant( new wxVariantData_##VALUETYPE( (*(VALUETYPE*)value.GetRawPtr()) ), name ); } \
+    virtual wxPGProperty* GenerateProperty( const wxString& label, const wxString& name ) const \
     { \
         return wxPG_CONSTFUNC(DEFPROPERTY)(label,name); \
     } \
-    virtual void SetValueFromVariant ( wxPGProperty* property, wxVariant& value ) const \
+    virtual void SetValueFromVariant( wxPGProperty* property, wxVariant& value ) const \
     { \
         const VALUETYPE* real_value; \
         wxASSERT_MSG( wxStrcmp(GetTypeName(),value.GetType().c_str()) == 0, \
@@ -515,11 +515,11 @@ public: \
 
 #define WX_PG_IMPLEMENT_VALUE_TYPE_VOIDP_SIMPLE(VALUETYPE,DEFPROPERTY,DEFVAL) \
 WX_PG_IMPLEMENT_VALUE_TYPE_VOIDP_BASE(VALUETYPE,DEFPROPERTY,DEFVAL,wxVariantData_##VALUETYPE) \
-    virtual wxVariant GenerateVariant ( wxPGVariant value, const wxString& name ) const \
+    virtual wxVariant GenerateVariant( wxPGVariant value, const wxString& name ) const \
     { \
         void* ptr = (void*)value.GetRawPtr(); \
-        wxASSERT ( ptr ); \
-        return wxVariant ( ptr, name ); \
+        wxASSERT( ptr ); \
+        return wxVariant( ptr, name ); \
     } \
 }; \
 WX_PG_IMPLEMENT_VALUE_TYPE_CREATOR(VALUETYPE)
@@ -529,11 +529,11 @@ WX_PG_IMPLEMENT_VALUE_TYPE_CREATOR(VALUETYPE)
 // WX_PG_DECLARE_VALUE_TYPE with this instead of _VOIDP version.
 #define WX_PG_IMPLEMENT_VALUE_TYPE_VOIDP_CVD(VALUETYPE,DEFPROPERTY,DEFVAL,VDCLASS) \
 WX_PG_IMPLEMENT_VALUE_TYPE_VOIDP_BASE(VALUETYPE,DEFPROPERTY,DEFVAL,VDCLASS) \
-    virtual wxVariant GenerateVariant ( wxPGVariant value, const wxString& name ) const \
+    virtual wxVariant GenerateVariant( wxPGVariant value, const wxString& name ) const \
     { \
         void* ptr = (void*)value.GetRawPtr(); \
-        wxASSERT ( ptr ); \
-        return wxVariant ( new VDCLASS(*((VALUETYPE*)ptr)), name ); \
+        wxASSERT( ptr ); \
+        return wxVariant( new VDCLASS(*((VALUETYPE*)ptr)), name ); \
     } \
 }; \
 WX_PG_IMPLEMENT_VALUE_TYPE_CREATOR(VALUETYPE)
@@ -602,7 +602,7 @@ private:
 #define WX_PG_DECLARE_BASIC_TYPE_METHODS() \
     virtual void DoSetValue ( wxPGVariant value ); \
     virtual wxPGVariant DoGetValue () const; \
-    virtual wxString GetValueAsString ( int arg_flags = 0 ) const; \
+    virtual wxString GetValueAsString ( int argFlags = 0 ) const; \
     virtual bool SetValueFromString ( const wxString& text, int flags = 0 );
 
 // class WXDLLIMPEXP_PG
@@ -626,26 +626,26 @@ wxPG_BEGIN_PROPERTY_CLASS_BODY2(wxPG_PROPCLASS(NAME),UPCLASS,T,T,T_AS_ARG,class 
 };
 
 #define WX_PG_DECLARE_CHOICE_METHODS() \
-    virtual bool SetValueFromInt ( long value, int flags = 0 ); \
-    virtual int GetChoiceInfo ( wxPGChoiceInfo* choiceinfo );
+    virtual bool SetValueFromInt( long value, int flags = 0 ); \
+    virtual int GetChoiceInfo( wxPGChoiceInfo* choiceinfo );
 
 #define WX_PG_DECLARE_EVENT_METHODS() \
-    virtual bool OnEvent ( wxPropertyGrid* propgrid, wxWindow* primary, wxEvent& event );
+    virtual bool OnEvent( wxPropertyGrid* propgrid, wxWindow* primary, wxEvent& event );
 
 #define WX_PG_DECLARE_PARENTAL_METHODS() \
-    virtual void ChildChanged ( wxPGProperty* p ); \
-    virtual void RefreshChildren ();
+    virtual void ChildChanged( wxPGProperty* p ); \
+    virtual void RefreshChildren();
 
 #define WX_PG_DECLARE_CUSTOM_PAINT_METHODS() \
     virtual wxSize GetImageSize() const; \
-    virtual void OnCustomPaint ( wxDC& dc, const wxRect& rect, wxPGPaintData& paintdata );
+    virtual void OnCustomPaint( wxDC& dc, const wxRect& rect, wxPGPaintData& paintdata );
 
 #define WX_PG_DECLARE_ATTRIBUTE_METHODS() \
-    virtual void SetAttribute ( int id, wxVariant& value );
+    virtual void SetAttribute( int id, wxVariant& value );
 
 #if wxUSE_VALIDATORS
     #define WX_PG_DECLARE_VALIDATOR_METHODS() \
-        virtual wxValidator* DoGetValidator () const;
+        virtual wxValidator* DoGetValidator() const;
 #else
     #define WX_PG_DECLARE_VALIDATOR_METHODS()
 #endif
@@ -661,18 +661,18 @@ wxPG_BEGIN_PROPERTY_CLASS_BODY2(wxPG_PROPCLASS(NAME),UPCLASS,T,T,T_AS_ARG,class 
 // Implements sans constructor function. Also, first arg is class name, not property name.
 #define WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(PROPNAME,T,EDITOR) \
 wxPG_GETCLASSNAME_IMPLEMENTATION(PROPNAME) \
-const wxPGValueType* PROPNAME##Class::GetValueType () const \
+const wxPGValueType* PROPNAME##Class::GetValueType() const \
 { \
     return wxPGValueType_##T; \
 } \
-const wxPGEditor* PROPNAME##Class::DoGetEditorClass () const \
+const wxPGEditor* PROPNAME##Class::DoGetEditorClass() const \
 { \
     return wxPGEditor_##EDITOR; \
 }
 
 
 #define WX_PG_IMPLEMENT_CLASSINFO(NAME,UPCLASS) \
-static wxPGProperty* NAME##Class2 (const wxString& label, const wxString& name) \
+static wxPGProperty* NAME##Class2(const wxString& label, const wxString& name) \
 { \
     return wxPG_CONSTFUNC(NAME)(label,name); \
 } \
@@ -720,7 +720,7 @@ class NAME##Class : public wxLongStringPropertyClass \
 public: \
     NAME##Class( const wxString& name, const wxString& label, const wxString& value ); \
     virtual ~NAME##Class(); \
-    virtual bool OnButtonClick ( wxPropertyGrid* propgrid, wxString& value ); \
+    virtual bool OnButtonClick( wxPropertyGrid* propgrid, wxString& value ); \
     WX_PG_DECLARE_VALIDATOR_METHODS() \
 }; \
 WX_PG_IMPLEMENT_DERIVED_PROPERTY_CLASS(NAME,wxLongStringProperty,const wxString&) \
@@ -758,7 +758,7 @@ public: \
 }; \
 WX_PG_IMPLEMENT_DERIVED_TYPE(long_##NAME,long,DEFVAL) \
 WX_PG_IMPLEMENT_PROPERTY_CLASS(NAME,wxFlagsProperty,long_##NAME,long,TextCtrl) \
-CLASSNAME::CLASSNAME ( const wxString& label, const wxString& name, long value ) \
+CLASSNAME::CLASSNAME( const wxString& label, const wxString& name, long value ) \
     : wxFlagsPropertyClass(label,name,LABELS,VALUES,value!=-1?value:DEFVAL) \
 { \
     wxPG_INIT_REQUIRED_TYPE2(long_##NAME) \
@@ -973,9 +973,9 @@ public:
 
     virtual void DoSetValue ( wxPGVariant value );
     virtual wxPGVariant DoGetValue () const;
-    virtual wxString GetValueAsString ( int arg_flags ) const;
-    virtual bool SetValueFromString ( const wxString& text, int arg_flags );
-    virtual bool SetValueFromInt ( long value, int arg_flags );
+    virtual wxString GetValueAsString ( int argFlags ) const;
+    virtual bool SetValueFromString ( const wxString& text, int argFlags );
+    virtual bool SetValueFromInt ( long value, int argFlags );
 
     //
     // Additional virtuals
@@ -1050,7 +1050,7 @@ public:
 
     virtual void DoSetValue ( wxPGVariant value );
     virtual wxPGVariant DoGetValue () const;
-    virtual wxString GetValueAsString ( int arg_flags ) const;
+    virtual wxString GetValueAsString ( int argFlags ) const;
     virtual bool SetValueFromString ( const wxString& text, int flags );
     virtual void ChildChanged ( wxPGProperty* p );
     virtual void RefreshChildren();
@@ -1098,7 +1098,7 @@ public:
 
     virtual void DoSetValue( wxPGVariant value );
     virtual wxPGVariant DoGetValue() const;
-    virtual wxString GetValueAsString( int arg_flags ) const;
+    virtual wxString GetValueAsString( int argFlags ) const;
     virtual bool SetValueFromString( const wxString& text, int flags );
     virtual bool OnEvent( wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event );
 
@@ -1135,20 +1135,20 @@ class WXDLLIMPEXP_PG wxLongStringPropertyClass : public wxBasePropertyClass
     WX_PG_DECLARE_PROPERTY_CLASS()
 public:
 
-    wxLongStringPropertyClass ( const wxString& label, const wxString& name = wxPG_LABEL, const wxString& value = wxEmptyString );
-    virtual ~wxLongStringPropertyClass ();
+    wxLongStringPropertyClass( const wxString& label, const wxString& name = wxPG_LABEL, const wxString& value = wxEmptyString );
+    virtual ~wxLongStringPropertyClass();
 
-    virtual void DoSetValue ( wxPGVariant value );
-    virtual wxPGVariant DoGetValue () const;
-    virtual wxString GetValueAsString ( int arg_flags = 0 ) const;
-    virtual bool SetValueFromString ( const wxString& text, int flags );
+    virtual void DoSetValue( wxPGVariant value );
+    virtual wxPGVariant DoGetValue() const;
+    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual bool SetValueFromString( const wxString& text, int flags );
 
     WX_PG_DECLARE_EVENT_METHODS()
 
     //  Shows string editor dialog. Value to be edited should be read from value, and
     //  if dialog is not cancelled, it should be stored back and true should be returned
     //  if that was the case.
-    virtual bool OnButtonClick ( wxPropertyGrid* propgrid, wxString& value );
+    virtual bool OnButtonClick( wxPropertyGrid* propgrid, wxString& value );
 
 protected:
     wxString    m_value;
@@ -1169,22 +1169,25 @@ class WXDLLIMPEXP_PG wxArrayStringPropertyClass : public wxPGProperty
     WX_PG_DECLARE_PROPERTY_CLASS()
 public:
 
-    wxArrayStringPropertyClass ( const wxString& label, const wxString& name,
-        const wxArrayString& value );
-    virtual ~wxArrayStringPropertyClass ();
+    wxArrayStringPropertyClass( const wxString& label,
+                                const wxString& name,
+                                const wxArrayString& value );
+    virtual ~wxArrayStringPropertyClass();
 
     WX_PG_DECLARE_BASIC_TYPE_METHODS()
     WX_PG_DECLARE_EVENT_METHODS()
+
     virtual void GenerateValueAsString();
 
     //  Shows string editor dialog. Value to be edited should be read from value, and
     //  if dialog is not cancelled, it should be stored back and true should be returned
     //  if that was the case.
-    virtual bool OnCustomStringEdit ( wxWindow* parent, wxString& value );
+    virtual bool OnCustomStringEdit( wxWindow* parent, wxString& value );
 
     // Helper.
-    bool OnButtonClick ( wxPropertyGrid* propgrid, wxWindow* primary,
-        const wxChar* cbt );
+    virtual bool OnButtonClick( wxPropertyGrid* propgrid,
+                                wxWindow* primary,
+                                const wxChar* cbt );
 
 protected:
     wxArrayString   m_value;
@@ -1196,8 +1199,8 @@ class wxPG_PROPCLASS(PROPNAME) : public wxPG_PROPCLASS(wxArrayStringProperty) \
 { \
     WX_PG_DECLARE_PROPERTY_CLASS() \
 public: \
-    wxPG_PROPCLASS(PROPNAME) ( const wxString& label, const wxString& name, const wxArrayString& value ); \
-    ~wxPG_PROPCLASS(PROPNAME) (); \
+    wxPG_PROPCLASS(PROPNAME)( const wxString& label, const wxString& name, const wxArrayString& value ); \
+    ~wxPG_PROPCLASS(PROPNAME)(); \
     virtual void GenerateValueAsString(); \
     virtual bool SetValueFromString( const wxString& text, int ); \
     virtual bool OnEvent( wxPropertyGrid* propgrid, wxWindow* primary, wxEvent& event ); \
@@ -1232,7 +1235,7 @@ bool wxPG_PROPCLASS(PROPNAME)::SetValueFromString( const wxString& text, int ) \
     GenerateValueAsString(); \
     return true; \
 } \
-bool wxPG_PROPCLASS(PROPNAME)::OnEvent ( wxPropertyGrid* propgrid, wxWindow* primary, wxEvent& event ) \
+bool wxPG_PROPCLASS(PROPNAME)::OnEvent( wxPropertyGrid* propgrid, wxWindow* primary, wxEvent& event ) \
 { \
     if ( event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED ) \
         return OnButtonClick(propgrid,primary,(const wxChar*) CUSTBUTTXT); \
@@ -1361,7 +1364,7 @@ public:
     virtual void DoSetValue ( wxPGVariant value );
     virtual wxPGVariant DoGetValue () const;
     virtual void ChildChanged ( wxPGProperty* p );
-    virtual wxString GetValueAsString ( int arg_flags = 0 ) const;
+    virtual wxString GetValueAsString ( int argFlags = 0 ) const;
 
 protected:
     wxString    m_string;
@@ -1399,7 +1402,7 @@ public:
     virtual void DoSetValue ( wxPGVariant value );
     virtual wxPGVariant DoGetValue () const;
     virtual bool SetValueFromString ( const wxString& text, int flags );
-    virtual wxString GetValueAsString ( int arg_flags ) const;
+    virtual wxString GetValueAsString ( int argFlags ) const;
 
 #ifdef wxPG_COMPATIBILITY_1_0_0
     virtual bool OnEvent ( wxPropertyGrid* propgrid, wxWindow* primary, wxEvent& event );

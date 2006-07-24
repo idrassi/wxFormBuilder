@@ -169,23 +169,6 @@ extern WXDLLIMPEXP_PG wxPGProperty* wxMultiChoiceProperty(const wxString& label,
 
 #endif
 
-/*
-extern WXDLLIMPEXP_PG wxPGProperty* wxMultiChoiceProperty(const wxString& label,
-                                                          const wxString& name = wxPG_LABEL,
-                                                          const wxArrayString& choices = wxArrayString(),
-                                                          const wxArrayInt& value = wxPG_EMPTY_ARRAYINT);
-
-#ifndef SWIG
-extern WXDLLIMPEXP_PG wxPGProperty* wxMultiChoiceProperty(const wxString& label,
-                                                          const wxString& name = wxPG_LABEL,
-                                                          const wxPGChoices& choices = wxPGChoices());
-
-//extern WXDLLIMPEXP_PG wxPGProperty* wxMultiChoiceProperty(const wxString& label,
-//                                                          const wxString& name = wxPG_LABEL,
-//                                                          const wxArrayInt& value = wxArrayInt());
-#endif
-*/
-
 // -----------------------------------------------------------------------
 
 //
@@ -206,7 +189,7 @@ public:
     virtual ~wxFontPropertyClass ();
 
     WX_PG_DECLARE_PARENTAL_TYPE_METHODS()
-    virtual wxString GetValueAsString ( int arg_flags = 0 ) const;
+    virtual wxString GetValueAsString ( int argFlags = 0 ) const;
 
     WX_PG_DECLARE_EVENT_METHODS()
     WX_PG_DECLARE_PARENTAL_METHODS()

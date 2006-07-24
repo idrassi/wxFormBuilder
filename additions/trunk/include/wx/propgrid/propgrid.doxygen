@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------------
 PROJECT_NAME           = wxPropertyGrid
 PROJECT_NUMBER         = 1
-OUTPUT_DIRECTORY       = e:\lib\wxwidgets-2.7.0\mycontrib\docs
+OUTPUT_DIRECTORY       = e:\lib\wxwidgets-2.7.0\mycontrib_stable\docs
 OUTPUT_LANGUAGE        = English
 USE_WINDOWS_ENCODING   = YES
 BRIEF_MEMBER_DESC      = NO
@@ -64,7 +64,7 @@ WARN_LOGFILE           = doxygen.log
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = e:/lib/wxWidgets-2.7.0/mycontrib/include/wx/propgrid/
+INPUT                  = e:/lib/wxWidgets-2.7.0/mycontrib_stable/include/wx/propgrid/
 FILE_PATTERNS          = 
 RECURSIVE              = NO
 EXCLUDE                = 
