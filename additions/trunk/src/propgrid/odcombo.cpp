@@ -765,9 +765,6 @@ void wxPGVListBoxComboPopup::OnMouseMove(wxMouseEvent& event)
 
 void wxPGVListBoxComboPopup::OnLeftClick(wxMouseEvent& WXUNUSED(event))
 {
-    //m_value = wxVListBox::GetSelection();
-    //Dismiss();
-    //SendComboBoxEvent();
     DismissWithEvent();
 }
 
@@ -776,9 +773,6 @@ void wxPGVListBoxComboPopup::OnKey(wxKeyEvent& event)
     // Select item if ENTER is pressed
     if ( event.GetKeyCode() == WXK_RETURN || event.GetKeyCode() == WXK_NUMPAD_ENTER )
     {
-        //m_value = wxVListBox::GetSelection();
-        //Dismiss();
-        //SendComboBoxEvent();
         DismissWithEvent();
     }
     // Hide popup if ESC is pressed

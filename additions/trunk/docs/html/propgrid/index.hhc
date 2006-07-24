@@ -12,6 +12,7 @@
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxParentPropertyClass"><param name="Local" value="classwxParentPropertyClass.htm"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGChoices"><param name="Local" value="classwxPGChoices.htm"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGEditor"><param name="Local" value="classwxPGEditor.htm"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGId"><param name="Local" value="classwxPGId.htm"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGPaintData"><param name="Local" value="structwxPGPaintData.htm"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGProperty"><param name="Local" value="classwxPGProperty.htm"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGPropertyClassInfo"><param name="Local" value="structwxPGPropertyClassInfo.htm"><param name="ImageNumber" value="11"></OBJECT>
@@ -50,7 +51,7 @@
     </UL>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGGenericComboControl"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGGlobalVarsClass"><param name="ImageNumber" value="11"></OBJECT>
-  <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGId"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGId"><param name="Local" value="classwxPGId.htm"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGOwnerDrawnComboBox"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGPaintData"><param name="Local" value="structwxPGPaintData.htm"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="wxPGProperty"><param name="ImageNumber" value="1"></OBJECT>

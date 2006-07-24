@@ -47,6 +47,7 @@
     \ref customizing\n
     \ref custprop\n
     \ref usage2\n
+    \ref subclassing\n
     \ref misc\n
     \ref proplist\n
     \ref userhelp\n
@@ -956,6 +957,25 @@
     appending and insertion is supported, however.
 
 
+    \section subclassing Subclassing wxPropertyGrid and wxPropertyGridManager (New!)
+
+    Few things to note:
+
+    - Only a small percentage of member functions are virtual. If you need more,
+      just let me know.
+
+    - Data manipulation is done in wxPropertyGridState class. So, instead of
+      overriding wxPropertyGrid::Insert, you'll probably want to override wxPropertyGridState::DoInsert.
+
+    - Override wxPropertyGrid::CreateState to instantiate your derivative wxPropertyGridState.
+      For wxPropertyGridManager, you'll need to subclass wxPropertyGridPage instead (since it
+      is derived from wxPropertyGridState), and hand over instances in wxPropertyGridManager::AddPage
+      calls.
+
+    - You can use a derivate wxPropertyGrid with manager by overriding wxPropertyGridManager::CreatePropertyGrid
+      member function.
+
+
     \section misc Miscellaneous Topics (Updated!)
 
     \subsection namescope Property Name Scope
@@ -1162,7 +1182,7 @@
     - wxDirsProperty ( edits a wxArrayString consisting of directory strings)
     - wxArrayDoubleProperty ( edits wxArrayDouble )
 
-    \section userhelp Using wxPropertyGrid
+    \section userhelp Using wxPropertyGrid (Updated!)
 
     This is a short summary of how a wxPropertyGrid is used (not how it is programmed),
     or, rather, how it <b>should</b> behave in practice.
@@ -1175,13 +1195,15 @@
       - Double-clicking labels of a property with children expands/collapses it.
 
     - Keyboard usage is as follows:\n
-      When editor control is not focused:\n
+      - alt + down (or right) - displays editor dialog (if any) for a property. Note
+        that this shortcut can be changed using wxPropertyGrid::SetButtonShortcut.\n
+      Only when editor control is not focused:\n
       - cursor up - moves to previous visible property\n
       - cursor down - moves to next visible property\n
       - cursor left - if collapsible, collapses, otherwise moves to previous property\n
       - cursor right - if expandable, expands, otherwise moves to next property\n
       - tab (if enabled) - focuses keyboard to the editor control of selected property\n
-      When editor control is focused:\n
+      Only when editor control is focused:\n
       - return/enter - confirms changes made to a wxTextCtrl based editor\n
       - tab - moves to next visible property (or, if in last one, moves out of grid)\n
       - shift-tab - moves to previous visible property (or, if in first one, moves out of grid)\n
@@ -1191,6 +1213,8 @@
     - In long strings tabs are represented by "\t" and line break by "\n".
 
     \section bugs Known Bugs
+    NOTE! This section is severely out of date. TODO section in propgrid.cpp has a lot
+          more of these.
     Any insight on these is more than welcome.
     - wxGTK: Pressing ESC to unfocus an editor control will screw the focusing
       (either focuses back to the editor or moves focus to limbo; works perfectly
@@ -1217,8 +1241,9 @@
     \section issues Issues
     These are not bugs per se, but miscellaneous cross-platform issues that have been
     resolved in a less-than-satisfactory manner.
-    - wxGTK: When selecting wxCursorProperty in sample, there is
+    - wxGTK: When selecting wxCursorProperty in sample, there may be
       warning: Invalid UTF8 string passed to pango_layout_set_text().
+      This is probably specific to older versions of GTK.
     - Win2K: Pressing Alt+non-registered key combo resulted in app hanging when
       wxTAB_TRAVERSAL was used directly. Current solution is not to use it, but
       to use wxWANTS_CHARS alone. Strangely enough, this works on wxMSW (but
@@ -1275,7 +1300,7 @@
       #endif
       \endcode
 
-    \section crossplatform Crossplatform Notes (not wxPropertyGrid specific)
+    \section crossplatform Crossplatform Notes (not necessarily wxPropertyGrid specific)
 
     - GTK1: When showing a dialog you may encounter invisible font!
       Solution: Set parent's font using SetOwnFont instead of SetFont.
@@ -1291,25 +1316,181 @@
       Even using Append that gets wxArrayString argument may not be good, since it
       may just append every string one at a time.
 
-    \section newprops Creating New Properties
 
-    Each property class represents a specialized value storage for a value type.
-    It also nominates an editor to itself, and implements some helper
-    methods to complement the used value type and editor.
+    \section newprops Creating New Properties (Updated!)
 
-    Easiest way to create a new property is to use one of the supplied
-    macro pairs (see the section below).
+    Easiest solution for creating an arbitrary property is to subclass an existing,
+    inheritable property that has the desired value type and editor. Property class
+    to derive from is always property name + Class, for instance wxStringPropertyClass in
+    case of wxStringProperty. You need to include header file wx/propgrid/propdev.h,
+    specify a mandatory constructor, and override some virtual member functions (see
+    wxPGProperty and wxPGPropertyWithChildren).
+
+    For instance:
+
+    \code
+
+    #include <wx/propgrid/propdev.h>
+
+    // wxLongStringProperty has wxString as value type and TextCtrlAndButton as editor.
+    class MyStringPropertyClass : public wxLongStringPropertyClass
+    {
+    public:
+
+        // Normal property constructor.
+        MyStringPropertyClass(const wxString& name,
+                              const wxString& label = wxPG_LABEL,
+                              const wxString& value = wxEmptyString)
+            : wxLongStringPropertyClass(name,label,value)
+        {
+        }
+
+        // Do something special when button is clicked.
+        virtual bool OnButtonClick(wxPropertyGrid* propGrid,
+                                   wxWindow* primaryCtrl)
+        {
+            // Update value in case last minute changes were made.
+            PrepareValueForDialogEditing(propGrid);
+
+            // TODO: Create dialog (m_value has current string, if needed)
+
+            int res = dlg.ShowModal();
+            if ( res == wxID_OK && dlg.IsModified() )
+            {
+                DoSetValue(dlg.GetString());
+                UpdateControl(primaryCtrl);
+                return true;
+            }
+
+            return false;
+        }
+
+    protected:
+    };
+
+    \endcode
+
+    You can then create a property instance with new keyword (as factory function
+    is absent since macros are not used), for instance:
+
+    \code
+
+        pg->Append( new MyStringPropertyClass(name,label,value) );
+
+    \endcode
+
+    If you want to change editor used, use code like below (continues our sample above).
+
+    Note that built-in editors include: TextCtrl, Choice, ComboBox, TextCtrlAndButton,
+    ChoiceAndButton, and CheckBox.
+
+    \code
+
+        // In class body:
+        virtual const wxPGEditor* DoGetEditorClass() const
+        {
+            return wxPG_EDITOR(TextCtrl);
+        }
+
+    \endcode
+
+    If you want to change value type used, use code like below.
+
+    However, first a word on value types: They are essentially wxPGValueType instances holding
+    reimplemented member functions for handling specific type of data. Use wxPG_VALUETYPE(ValueType)
+    to get pointer, altought this should usually not be necessary outside GetValueType. Lightweight
+    wxPGVariant is used to convey value to (DoSetValue) and from (DoGetValue) property. For common
+    and small types such as long and bool, the entire value is stored in wxPGVariant. For large
+    types (even double!), only a pointer is stored. This is sufficient since <b>property instance
+    is responsible for storing its value</b>.
+
+    \code
+
+        // In class body:
+    public:
+
+        // Minimal constructor must set the new value.
+        MyPropertyClass(const wxString& name,
+                        const wxString& label = wxPG_LABEL,
+                        WantedValueType value = DefaultValue)
+            : wxInheritedPropertyClass(name,label,OtherDefaultValue)
+        {
+            m_value2 = value;
+        }
+
+        virtual const wxPGValueType* GetValueType() const
+        {
+            return wxPG_VALUETYPE(WantedValueType);
+        }
+
+        virtual void DoSetValue(wxPGVariant value)
+        {
+            // TODO: Retrieve value from wxPGVariant. For simple types,
+            //       you can use:
+            //
+            //       WantedValueType val = value.GetFoo(); // Like GetString, or GetLong, similar to wxVariant
+            //
+            //       For complex types, use:
+            //
+            //       WantedValueType* pVal = (WantedValueType*) wxPGVariantToVoidPtr(value);
+            //
+            //         - OR -
+            //
+            //       WantedValueType* pVal = wxPGVariantToWxObjectPtr(value,WantedValueType);
+            //       wxASSERT(ptr);  // Since its NULL if type-checking failed
+            //
+
+            // TODO: Store value to m_value2;
+        }
+
+        virtual wxPGVariant DoGetValue() const
+        {
+            // TODO: Return value as wxPGVariant.
+            //
+            // For simple types, return the entire value. For example:
+            //
+            //      return wxPGVariant(m_value2);
+            //
+            // For complex types, return pointer. For example:
+            //
+            //      return wxPGVariant((void*)&m_value2);
+        }
+
+    protected:
+        WantedValueType     m_value2;
+
+    \endcode
+
+    Note that built-in value types include: wxString, long, bool, double, void,
+    wxArrayString. advprops.h also has: wxFont, wxColour, wxArrayInt. See below
+    for more information about implementing your own value types.
+
+    If you want to add support for the internal RTTI scheme, use code like this:
+
+    \code
+
+        // In private portion of class body:
+        WX_PG_DECLARE_CLASSINFO()
+
+        // In source file:
+        WX_PG_IMPLEMENT_CLASSINFO(MyStringProperty,wxLongStringProperty)
+        wxPG_GETCLASSNAME_IMPLEMENTATION(MyStringProperty)
+
+    \endcode
+
 
     \remarks
-    - Code that implements a property generally requires inclusion of
-      wx/propgrid/propdev.h.
     - For practical examples of arbitrary properties, please take a look
       at the sample properties in contrib/samples/propgrid/sampleprops.cpp.
-
     - Read wxPGProperty and wxPGPropertyWithChildren class documentation to
-      find out what each overriddable method should do.
+      find out what each virtual member function should do.
+    - Value for property is usually stored in a member named m_value.
+    - Documentation below may be helpful (altough you'd probably do better
+      by looking at the sample properties first).
 
     \subsection methoda Macro Pairs
+
+    These are quick methods for creating customized properties.
 
     \subsubsection custstringprop String Property with Button
 
