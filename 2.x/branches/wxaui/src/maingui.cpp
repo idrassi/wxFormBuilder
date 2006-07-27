@@ -42,6 +42,7 @@
 #include <wx/sysopt.h>
 
 #include "rad/global.h"
+#include <memory>
 
 
 class MyApp : public wxApp
@@ -72,26 +73,22 @@ bool MyApp::OnInit()
   // Guardamos la ruta del ejecutable
   GlobalData()->SetApplicationPath(path);
 
-  wxSystemOptions::SetOption(_T("msw.remap"), 0);
-  wxSystemOptions::SetOption(_T("msw.staticbox.optimized-paint"), 0);
+  wxSystemOptions::SetOption(wxT("msw.remap"), 0);
+  wxSystemOptions::SetOption(wxT("msw.staticbox.optimized-paint"), 0);
 
 #ifndef _DEBUG
   wxBitmap bitmap;
-  wxSplashScreen* splash;
+  std::auto_ptr< wxSplashScreen > splash;
   if (bitmap.LoadFile(path + wxFILE_SEP_PATH + wxT("resources") + wxFILE_SEP_PATH + wxT("splash.png"), wxBITMAP_TYPE_PNG))
   {
-      splash = new wxSplashScreen(bitmap, wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
+	splash = std::auto_ptr< wxSplashScreen >( new wxSplashScreen(bitmap, wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
           3000, NULL, -1, wxDefaultPosition, wxDefaultSize,
-          wxSIMPLE_BORDER|wxSTAY_ON_TOP);
+          wxSIMPLE_BORDER|wxSTAY_ON_TOP) );
   }
 #endif
 
   wxApp::SetVendorName( wxT(" wxFormBuilder") );
   wxApp::SetAppName( wxT(" wxFormBuilder") );
-
-  #ifndef __WXMSW__
-  //wxSleep(2);
-  #endif
 
   wxYield();
 
@@ -102,7 +99,7 @@ bool MyApp::OnInit()
 
 
 
-  DataObservable *data = new ApplicationData(string(path.mb_str()));
+  DataObservable *data = new ApplicationData( path );
 
   MainFrame *frame = new MainFrame(data, NULL);
   frame->Show(TRUE);
@@ -128,10 +125,6 @@ bool MyApp::OnInit()
 
 
   data->NewProject();
-#ifndef _DEBUG
-  delete splash;
-#endif
-
   return TRUE;
 }
 

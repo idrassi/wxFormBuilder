@@ -53,7 +53,7 @@ void wxFbPalette::PopulateToolbar(PObjectPackage pkg, wxToolBar *toolbar)
   unsigned int j = 0;
   while (j < pkg->GetObjectCount())
   {
-    wxString widget( _WXSTR( pkg->GetObjectInfo(j)->GetClassName() ) );
+    wxString widget( pkg->GetObjectInfo(j)->GetClassName() );
 
     wxBitmap icon = pkg->GetObjectInfo(j)->GetIconFile();
     toolbar->AddTool(nextId++, widget, icon, widget);
@@ -70,7 +70,7 @@ void wxFbPalette::Create()
 
   unsigned int pkg_count = GetData()->GetPackageCount();
 
-  Debug::Print("[Palette] Pages %d",pkg_count);
+  Debug::Print( wxT("[Palette] Pages %d"),pkg_count);
 
   // Populate icon vector
   for (unsigned int j = 0; j < pkg_count;j++)
@@ -85,7 +85,7 @@ void wxFbPalette::Create()
   for (unsigned int i = 0; i < pkg_count;i++)
   {
     PObjectPackage pkg = GetData()->GetPackage(i);
-    string pkg_name = pkg->GetPackageName();
+    wxString pkg_name = pkg->GetPackageName();
 
     wxPanel *panel = new wxPanel(m_notebook,-1);
 	panel->SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE) );
@@ -122,7 +122,7 @@ void wxFbPalette::Create()
     sizer->Fit(panel);
     sizer->SetSizeHints(panel);
 
-    m_notebook->AddPage(panel, _WXSTR(pkg_name), false, i);
+    m_notebook->AddPage(panel, pkg_name, false, i);
 
   }
   Title *title = new Title( this, wxT("Component Palette") );
@@ -156,7 +156,7 @@ void wxFbPalette::OnSpinDown(wxSpinEvent& e)
   m_posVector[page]--;
   wxToolBar *toolbar = m_tv[page];
   PObjectPackage pkg = GetData()->GetPackage(page);
-  wxString widget( _WXSTR( pkg->GetObjectInfo( m_posVector[page] )->GetClassName() ) );
+  wxString widget( pkg->GetObjectInfo( m_posVector[page] )->GetClassName() );
   wxBitmap icon = pkg->GetObjectInfo(m_posVector[page])->GetIconFile();
   toolbar->InsertTool(0, nextId++, icon, wxNullBitmap, false, NULL, widget, widget);
   toolbar->Realize();

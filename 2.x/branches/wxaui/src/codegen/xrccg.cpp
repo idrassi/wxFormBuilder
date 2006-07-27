@@ -63,7 +63,7 @@ bool XrcCodeGenerator::GenerateCode(shared_ptr<ObjectBase> project)
   XrcFilter xrc;
   TiXmlDocument *doc = xrc.GetXrcDocument(project);
 
-  string tmpFileName = _STDSTR(wxFileName::CreateTempFileName(_T("wxfb")));
+  string tmpFileName = _STDSTR(wxFileName::CreateTempFileName(wxT("wxfb")));
   doc->SaveFile(tmpFileName);
   delete doc;
 
@@ -85,41 +85,26 @@ bool XrcCodeGenerator::GenerateCode(shared_ptr<ObjectBase> project)
 {
   m_cw->Clear();
 
-  TiXmlDocument *doc = new TiXmlDocument();
-
+  TiXmlDocument doc;
   TiXmlDeclaration *decl = new TiXmlDeclaration("1.0","UTF-8","yes");
-  doc->LinkEndChild(decl);
+  doc.LinkEndChild(decl);
 
   TiXmlElement *element = new TiXmlElement("resource");
   element->SetAttribute("xmlns", "http://www.wxwindows.org/wxxrc");
   element->SetAttribute("version", "2.3.0.1");
 
-  for (unsigned int i=0; i<project->GetChildCount(); i++)
+  for ( unsigned int i = 0; i < project->GetChildCount(); i++ )
   {
     TiXmlElement *child = GetElement(project->GetChild(i));
     if (child)
       element->LinkEndChild(child);
   }
-  /*
-  TiXmlElement *child = GetElement(project->GetChild(0));
-  if (child)
-    element->LinkEndChild(child);*/
 
-  doc->LinkEndChild(element);
+  doc.LinkEndChild(element);
 
-  string tmpFileName = _STDSTR(wxFileName::CreateTempFileName(_T("wxfb")));
-  doc->SaveFile(tmpFileName);
-  delete doc;
+	std::string xrcFile = doc.GetAsString();
 
-  {
-      wxString line;
-      wxFileInputStream input(_WXSTR(tmpFileName));
-      wxTextInputStream text(input);
-
-      while (!input.Eof())
-          m_cw->WriteLn(_STDSTR(text.ReadLine()));
-  }
-  ::wxRemoveFile(_WXSTR(tmpFileName));
+	m_cw->Write( _WXSTR( xrcFile ) );
 
   return true;
 
@@ -137,7 +122,7 @@ TiXmlElement* XrcCodeGenerator::GetElement(shared_ptr<ObjectBase> obj)
 
   if (element)
   {
-  	if (element->Attribute("class") == string("__dummyitem__"))
+  	if (element->Attribute("class") == std::string("__dummyitem__"))
     {
     	delete element;
     	element = NULL;

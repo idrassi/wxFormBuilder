@@ -11,12 +11,13 @@
 				<Option object_output=".objsd" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option host_application="\usr\src\wxfb2\bin\wxformbuilder" />
+				<Option host_application="..\..\..\bin\wxformbuilder" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-O0" />
 					<Add option="-D_DEBUG" />
 					<Add option="-D__WXDEBUG" />
+					<Add directory="$(#WX.lib)\gcc_dll\mswd" />
 				</Compiler>
 				<Linker>
 					<Add library="tinyxmld" />
