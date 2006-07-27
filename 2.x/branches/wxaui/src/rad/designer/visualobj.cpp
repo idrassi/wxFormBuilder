@@ -30,6 +30,12 @@
 #include "utils/debug.h"
 #include "rad/genericpanel.h"
 
+#include <wx/wxFlatNotebook/wxFlatNotebook.h>
+#include <wx/notebook.h>
+#include <wx/listbook.h>
+#include <wx/choicebk.h>
+#include <wx/wxscintilla.h>
+
 using namespace TypeConv;
 
 PVisualObject VisualObject::CreateVisualObject
@@ -38,7 +44,7 @@ PVisualObject VisualObject::CreateVisualObject
 	PVisualObject vobj;
 
 	shared_ptr<ObjectInfo> obj_info = obj->GetObjectInfo();
-	string type = obj->GetObjectTypeName();
+	wxString type = obj->GetObjectTypeName();
 
 	// TO-DO: arreglar esto!
 	//
@@ -74,7 +80,7 @@ PVisualObject VisualObject::CreateVisualObject
 	else
 	{
 		vobj = PVisualObject(new VisualObject(obj));
-		wxLogError( wxT("Component for %s not found!"), _WXSTR(obj->GetClassName()).c_str() );
+		wxLogError( wxT("Component for %s not found!"),obj->GetClassName().c_str() );
 	}
 
 	return vobj;
@@ -111,10 +117,10 @@ VisualSizer::VisualSizer(shared_ptr<ObjectBase> obj,wxWindow *parent)
 		SetSizer(new wxBoxSizer(wxVERTICAL));
 	}
 
-	shared_ptr<Property> pminsize  = obj->GetProperty("minimum_size");
+	shared_ptr<Property> pminsize  = obj->GetProperty( wxT("minimum_size") );
 	if (pminsize)
 	{
-		wxSize minsize = StringToSize(_WXSTR(pminsize->GetValue()));
+		wxSize minsize = StringToSize(pminsize->GetValue());
 		m_sizer->SetMinSize( minsize );
 		m_sizer->Layout();
 	}
@@ -155,16 +161,16 @@ void VisualWindow::SetupWindow()
 	shared_ptr<ObjectBase> obj = GetObject();
 
 	// All of the properties of the wxWindow object are applied in this function
-	shared_ptr<Property> ppos   = obj->GetProperty("pos");
-	shared_ptr<Property> psize  = obj->GetProperty("size");
-	shared_ptr<Property> pminsize  = obj->GetProperty("minimum_size");
-	shared_ptr<Property> pfont  = obj->GetProperty("font");
-	shared_ptr<Property> pfg_colour  = obj->GetProperty("fg");
-	shared_ptr<Property> pbg_colour  = obj->GetProperty("bg");
-	shared_ptr<Property> penabled = obj->GetProperty("enabled");
-	shared_ptr<Property> phidden  = obj->GetProperty("hidden");
-	shared_ptr<Property> ptooltip = obj->GetProperty("tooltip");
-	shared_ptr<Property> pextra_style = obj->GetProperty("window_extra_style");
+	shared_ptr<Property> ppos   = obj->GetProperty( wxT("pos") );
+	shared_ptr<Property> psize  = obj->GetProperty( wxT("size") );
+	shared_ptr<Property> pminsize  = obj->GetProperty( wxT("minimum_size") );
+	shared_ptr<Property> pfont  = obj->GetProperty( wxT("font") );
+	shared_ptr<Property> pfg_colour  = obj->GetProperty( wxT("fg") );
+	shared_ptr<Property> pbg_colour  = obj->GetProperty( wxT("bg") );
+	shared_ptr<Property> penabled = obj->GetProperty( wxT("enabled") );
+	shared_ptr<Property> phidden  = obj->GetProperty( wxT("hidden") );
+	shared_ptr<Property> ptooltip = obj->GetProperty( wxT("tooltip") );
+	shared_ptr<Property> pextra_style = obj->GetProperty( wxT("window_extra_style") );
 
 	wxPoint pos;
 	wxSize size;
@@ -172,43 +178,45 @@ void VisualWindow::SetupWindow()
 	wxFont font;
 	wxColour fg_colour;
 	wxColour bg_colour;
-	long extra_style;
+	long extra_style = 0;
 
 	if (ppos)
-		pos = StringToPoint(_WXSTR(ppos->GetValue()));
+		pos = StringToPoint(ppos->GetValue());
 
 	if (psize)
-		size = StringToSize(_WXSTR(psize->GetValue()));
+		size = StringToSize(psize->GetValue());
 
 	if (pminsize)
-		minsize = StringToSize(_WXSTR(pminsize->GetValue()));
+		minsize = StringToSize(pminsize->GetValue());
 
 	if (pfont)
-		font = StringToFont(_WXSTR(pfont->GetValue()));
+		font = StringToFont(pfont->GetValue());
 
 	if (pfg_colour)
-		fg_colour = StringToColour(_WXSTR(pfg_colour->GetValue()));
+		fg_colour = StringToColour(pfg_colour->GetValue());
 
 	if (pbg_colour)
-		bg_colour = StringToColour(_WXSTR(pbg_colour->GetValue()));
+		bg_colour = StringToColour(pbg_colour->GetValue());
 
 	if (pextra_style)
-		extra_style = StringToInt( _WXSTR(pextra_style->GetValue()));
+		extra_style = StringToInt( pextra_style->GetValue());
 
 	if (GetWindow())
 	{
 		GetWindow()->SetSize(pos.x,pos.y,size.GetWidth(), size.GetHeight());
 
-		if (pminsize && pminsize->GetValue() != "")
+		if (pminsize && !pminsize->GetValue().empty() )
+		{
 			GetWindow()->SetMinSize(minsize);
+		}
 
-		if (pfont && pfont->GetValue() != "")
+		if (pfont && !pfont->GetValue().empty() )
 			GetWindow()->SetFont(font);
 
-		if (pfg_colour && pfg_colour->GetValue() != "")
+		if (pfg_colour && !pfg_colour->GetValue().empty() )
 			GetWindow()->SetForegroundColour(fg_colour);
 
-		if (pbg_colour && pbg_colour->GetValue() != "")
+		if (pbg_colour && !pbg_colour->GetValue().empty() )
 			GetWindow()->SetBackgroundColour(bg_colour);
 
 		if (penabled)
@@ -235,6 +243,7 @@ BEGIN_EVENT_TABLE( VObjEvtHandler,wxEvtHandler )
 	EVT_FLATNOTEBOOK_PAGE_CHANGED( -1, VObjEvtHandler::OnFlatNotebookPageChanged )
 	EVT_LISTBOOK_PAGE_CHANGED( -1, VObjEvtHandler::OnListbookPageChanged )
 	EVT_CHOICEBOOK_PAGE_CHANGED( -1, VObjEvtHandler::OnChoicebookPageChanged )
+	EVT_SCI_MARGINCLICK ( -1, VObjEvtHandler::OnMarginClick )
 END_EVENT_TABLE()
 
 VObjEvtHandler::VObjEvtHandler(wxWindow *win, shared_ptr<ObjectBase> obj, DataObservable *data)
@@ -252,12 +261,12 @@ void VObjEvtHandler::OnLeftClick(wxMouseEvent &event)
 	{
 		if (m_data->GetSelectedObject() != obj)
 			m_data->SelectObject(obj);
-		else
-			event.Skip();
+		//else
+		//	event.Skip();
 	}
 
 
-	//event.Skip();
+	event.Skip();
 	m_window->ClientToScreen(&event.m_x, &event.m_y);
 	m_window->GetParent()->ScreenToClient(&event.m_x, &event.m_y);
 	::wxPostEvent(m_window->GetParent(), event);
@@ -303,7 +312,7 @@ void VObjEvtHandler::OnSetCursor(wxSetCursorEvent &event)
 void VObjEvtHandler::OnNotebookPageChanged(wxNotebookEvent &event)
 {
 	shared_ptr<ObjectBase> obj = m_data->GetSelectedObject();
-	if (obj->GetObjectTypeName() == "notebook")
+	if (obj->GetObjectTypeName() == wxT("notebook") )
 	{
 		OnBookPageChanged( obj, event.GetSelection() );
 	}
@@ -312,7 +321,7 @@ void VObjEvtHandler::OnNotebookPageChanged(wxNotebookEvent &event)
 void VObjEvtHandler::OnFlatNotebookPageChanged(wxFlatNotebookEvent &event)
 {
 	shared_ptr<ObjectBase> obj = m_data->GetSelectedObject();
-	if (obj->GetObjectTypeName() == "flatnotebook")
+	if (obj->GetObjectTypeName() == wxT("flatnotebook") )
 	{
 		OnBookPageChanged( obj, event.GetSelection() );
 	}
@@ -321,7 +330,7 @@ void VObjEvtHandler::OnFlatNotebookPageChanged(wxFlatNotebookEvent &event)
 void VObjEvtHandler::OnListbookPageChanged(wxListbookEvent &event)
 {
 	shared_ptr<ObjectBase> obj = m_data->GetSelectedObject();
-	if (obj->GetObjectTypeName() == "listbook")
+	if (obj->GetObjectTypeName() == wxT("listbook") )
 	{
 		OnBookPageChanged( obj, event.GetSelection() );
 	}
@@ -331,7 +340,7 @@ void VObjEvtHandler::OnListbookPageChanged(wxListbookEvent &event)
 void VObjEvtHandler::OnChoicebookPageChanged( wxChoicebookEvent& event )
 {
 	shared_ptr<ObjectBase> obj = m_data->GetSelectedObject();
-	if (obj->GetObjectTypeName() == "chiocebook")
+	if (obj->GetObjectTypeName() == wxT("chiocebook") )
 	{
 		OnBookPageChanged( obj, event.GetSelection() );
 	}
@@ -345,17 +354,35 @@ void VObjEvtHandler::OnBookPageChanged( shared_ptr<ObjectBase> obj, int selPage 
 		for (unsigned int i=0; i<obj->GetChildCount(); i++)
 		{
 			shared_ptr<ObjectBase> child = obj->GetChild(i);
-			shared_ptr<Property> propSelect = child->GetProperty("select");
+			shared_ptr<Property> propSelect = child->GetProperty(wxT("select"));
 			if (propSelect)
 			{
 				// we can't use DataObservable::ModifyProperty because
 				// it will regenerate de gui, so these modifications won't be
 				// undoable
 				if ((int)i == selPage && !propSelect->GetValueAsInteger())
-					propSelect->SetValue(string("1"));
+					propSelect->SetValue( wxT("1") );
 				else if ((int)i != selPage && propSelect->GetValueAsInteger())
-					propSelect->SetValue(string("0"));
+					propSelect->SetValue( wxT("0") );
 			}
 		}
 	}
+}
+
+void VObjEvtHandler::OnMarginClick ( wxScintillaEvent& event )
+{
+	wxScintilla* scintilla = wxDynamicCast( m_window, wxScintilla );
+	if ( scintilla != NULL )
+	{
+		if ( event.GetMargin() == 1 )
+		{
+			int lineClick = scintilla->LineFromPosition( event.GetPosition() );
+			int levelClick = scintilla->GetFoldLevel( lineClick );
+			if ( ( levelClick & wxSCI_FOLDLEVELHEADERFLAG ) > 0 )
+			{
+				scintilla->ToggleFold( lineClick );
+			}
+		}
+	}
+	event.Skip();
 }

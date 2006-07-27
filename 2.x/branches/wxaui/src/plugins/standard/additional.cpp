@@ -26,6 +26,7 @@
 #include "plugins/component.h"
 #include "plugins/plugin.h"
 #include "utils/xrcconv.h"
+#include "icons/unknown.xpm"
 
 #include <wx/calctrl.h>
 #include <wx/html/htmlwin.h>
@@ -314,10 +315,38 @@ class ScrollBarComponent : public ComponentBase
 public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
-		return new wxScrollBar((wxWindow *)parent,-1,
+		wxScrollBar *sb = new wxScrollBar((wxWindow *)parent,-1,
 			obj->GetPropertyAsPoint(_("pos")),
 			obj->GetPropertyAsSize(_("size")),
 			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+
+        sb->SetScrollbar(obj->GetPropertyAsInteger(_T("value")),
+            obj->GetPropertyAsInteger(_T("thumbsize")),
+            obj->GetPropertyAsInteger(_T("range")),
+            obj->GetPropertyAsInteger(_T("pagesize")));
+        return sb;
+	}
+
+	TiXmlElement* ExportToXrc(IObject *obj)
+	{
+		ObjectToXrcFilter xrc(obj, _("wxScrollBar"), obj->GetPropertyAsString(_("name")));
+		xrc.AddWindowProperties();
+		xrc.AddProperty(_("value"), _("value"), XRC_TYPE_INTEGER);
+		xrc.AddProperty(_("thumbsize"), _("thumbsize"), XRC_TYPE_INTEGER);
+		xrc.AddProperty(_("range"), _("range"), XRC_TYPE_INTEGER);
+		xrc.AddProperty(_("pagesize"), _("pagesize"), XRC_TYPE_INTEGER);
+		return xrc.GetXrcObject();
+	}
+
+	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	{
+		XrcToXfbFilter filter(xrcObj, _("wxScrollBar"));
+		filter.AddWindowProperties();
+		filter.AddProperty(_("value"), _("value"), XRC_TYPE_INTEGER);
+		filter.AddProperty(_("thumbsize"), _("thumbsize"), XRC_TYPE_INTEGER);
+		filter.AddProperty(_("range"), _("range"), XRC_TYPE_INTEGER);
+		filter.AddProperty(_("pagesize"), _("pagesize"), XRC_TYPE_INTEGER);
+		return filter.GetXfbObject();
 	}
 };
 
@@ -410,10 +439,10 @@ class SplitterWindowComponent : public ComponentBase
 		xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
 		xrc.AddProperty(_("sashpos"),_("sashpos"),XRC_TYPE_INTEGER);
 		//xrc.AddProperty(_("minsize"),_("minsize"),...
-		if (obj->GetPropertyAsString(_("splitmode")) == _T("wxSPLIT_VERTICAL"))
-			xrc.AddPropertyValue(_("orientation"),_T("vertical"));
+		if (obj->GetPropertyAsString(_("splitmode")) == wxT("wxSPLIT_VERTICAL"))
+			xrc.AddPropertyValue(_("orientation"),wxT("vertical"));
 		else
-			xrc.AddPropertyValue(_("orientation"),_T("horizontal"));
+			xrc.AddPropertyValue(_("orientation"),wxT("horizontal"));
 
 		return xrc.GetXrcObject();
 	}
@@ -433,9 +462,9 @@ class SplitterWindowComponent : public ComponentBase
 			{
 				string value = xmlValue->Value();
 				if (value == "vertical")
-					filter.AddPropertyValue(_T("splitmode"),_T("wxSPLIT_VERTICAL"));
+					filter.AddPropertyValue(wxT("splitmode"),wxT("wxSPLIT_VERTICAL"));
 				else
-					filter.AddPropertyValue(_T("splitmode"),_T("wxSPLIT_HORIZONTAL"));
+					filter.AddPropertyValue(wxT("splitmode"),wxT("wxSPLIT_HORIZONTAL"));
 			}
 		}
 
@@ -457,7 +486,7 @@ public:
 	TiXmlElement* ExportToXrc(IObject *obj)
 	{
 		// A __dummyitem__ will be ignored...
-		ObjectToXrcFilter xrc(obj, _("__dummyitem__"),_T(""));
+		ObjectToXrcFilter xrc(obj, _("__dummyitem__"),wxT(""));
 		return xrc.GetXrcObject();
 	}
 };
@@ -483,7 +512,7 @@ public:
 	{
 		ObjectToXrcFilter xrc(obj, _("wxCheckList"), obj->GetPropertyAsString(_("name")));
 		xrc.AddWindowProperties();
-		xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+		//xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
 		xrc.AddProperty(_("choices"), _("choices"), XRC_TYPE_STRINGLIST);
 		return xrc.GetXrcObject();
 	}
@@ -492,7 +521,7 @@ public:
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxCheckList"));
 		filter.AddWindowProperties();
-		filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
+		//filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
 		filter.AddProperty(_("choices"), _("choices"), XRC_TYPE_STRINGLIST);
 		return filter.GetXfbObject();
 	}
@@ -502,18 +531,32 @@ class ScrolledWindowComponent : public ComponentBase
 {
 public:
 
-  wxObject* Create(IObject *obj, wxObject *parent)
-  {
-    wxScrolledWindow *sw = new wxScrolledWindow((wxWindow *)parent, -1,
-      obj->GetPropertyAsPoint(_("pos")),
-      obj->GetPropertyAsSize(_("size")),
-      obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+    wxObject* Create(IObject *obj, wxObject *parent)
+    {
+        wxScrolledWindow *sw = new wxScrolledWindow((wxWindow *)parent, -1,
+            obj->GetPropertyAsPoint(_("pos")),
+            obj->GetPropertyAsSize(_("size")),
+            obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
 
-    sw->SetScrollRate(
-      obj->GetPropertyAsInteger(_("scroll_rate_x")),
-      obj->GetPropertyAsInteger(_("scroll_rate_y")));
-    return sw;
-  }
+        sw->SetScrollRate(
+            obj->GetPropertyAsInteger(_("scroll_rate_x")),
+            obj->GetPropertyAsInteger(_("scroll_rate_y")));
+        return sw;
+    }
+
+    TiXmlElement* ExportToXrc(IObject *obj)
+    {
+        ObjectToXrcFilter xrc(obj, _("wxScrolledWindow"), obj->GetPropertyAsString(_("name")));
+        xrc.AddWindowProperties();
+        return xrc.GetXrcObject();
+    }
+
+    TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+    {
+        XrcToXfbFilter filter(xrcObj, _("wxScrolledWindow"));
+        filter.AddWindowProperties();
+        return filter.GetXfbObject();
+    }
 };
 
 
@@ -527,9 +570,14 @@ public:
 			obj->GetPropertyAsSize(_("size")),
 			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
 
-		wxSize imageSize = obj->GetPropertyAsSize(_("bitmapsize"));
-		wxImageList* images = new wxImageList( imageSize.GetWidth(), imageSize.GetHeight() );
-		book->AssignImageList( images );
+		if ( !obj->GetPropertyAsString( _("bitmapsize") ).empty() )
+		{
+			wxSize imageSize = obj->GetPropertyAsSize(_("bitmapsize"));
+			wxImageList* images = new wxImageList( imageSize.GetWidth(), imageSize.GetHeight() );
+			wxImage image = wxBitmap( unknown_xpm ).ConvertToImage();
+			images->Add( image.Scale( imageSize.GetWidth(), imageSize.GetHeight() ) );
+			book->AssignImageList( images );
+		}
 
 		return book;
 	}
@@ -573,12 +621,12 @@ public:
 		{
 			if ( !obj->GetPropertyAsString( _("bitmap") ).empty() )
 			{
-				int width;
-				int height;
-				wxImageList* imageList = nb->GetImageList();
-				imageList->GetSize( 0, width, height );
+				wxSize imageSize = parentObj->GetPropertyAsSize(_("bitmapsize"));
+				int width = imageSize.GetWidth();
+				int height = imageSize.GetHeight();
 				if ( width > 0 && height > 0 )
 				{
+					wxImageList* imageList = nb->GetImageList();
 					wxImage image = obj->GetPropertyAsBitmap( _("bitmap") ).ConvertToImage();
 					imageList->Add( image.Scale( width, height ) );
 					nb->SetPageImage( nb->GetPageCount() - 1, imageList->GetImageCount() - 1 );
@@ -620,9 +668,14 @@ public:
 			obj->GetPropertyAsSize(_("size")),
 			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
 
-		wxSize imageSize = obj->GetPropertyAsSize(_("bitmapsize"));
-		wxImageList* images = new wxImageList( imageSize.GetWidth(), imageSize.GetHeight() );
-		book->AssignImageList( images );
+		if ( !obj->GetPropertyAsString( _("bitmapsize") ).empty() )
+		{
+			wxSize imageSize = obj->GetPropertyAsSize(_("bitmapsize"));
+			wxImageList* images = new wxImageList( imageSize.GetWidth(), imageSize.GetHeight() );
+			wxImage image = wxBitmap( unknown_xpm ).ConvertToImage();
+			images->Add( image.Scale( imageSize.GetWidth(), imageSize.GetHeight() ) );
+			book->AssignImageList( images );
+		}
 
 		return book;
 	}
@@ -686,19 +739,18 @@ public:
 		{
 			if ( !obj->GetPropertyAsString( _("bitmap") ).empty() )
 			{
-				int width;
-				int height;
-				wxImageList* imageList = lb->GetImageList();
-				imageList->GetSize( 0, width, height );
+				wxSize imageSize = parentObj->GetPropertyAsSize(_("bitmapsize"));
+				int width = imageSize.GetWidth();
+				int height = imageSize.GetHeight();
 				if ( width > 0 && height > 0 )
 				{
+					wxImageList* imageList = lb->GetImageList();
 					wxImage image = obj->GetPropertyAsBitmap( _("bitmap") ).ConvertToImage();
 					imageList->Add( image.Scale( width, height ) );
 					lb->SetPageImage( lb->GetPageCount() - 1, imageList->GetImageCount() - 1 );
 				}
 			}
 		}
-
 		if (obj->GetPropertyAsString(_("select"))==wxT("0") && selection >= 0)
 			lb->SetSelection(selection);
 		else

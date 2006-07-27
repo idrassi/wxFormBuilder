@@ -28,11 +28,8 @@
 
 #include "wx/wx.h"
 #include "model/objectbase.h"
-#include <wx/notebook.h>
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
-#include <wx/listbook.h>
-#include <wx/choicebk.h>
 #include "rad/appobserver.h"
+
 
 class VisualObject;
 class VisualWindow;
@@ -118,6 +115,12 @@ class VisualWindow : public VisualObject
 
 };
 
+class wxNotebookEvent;
+class wxFlatNotebookEvent;
+class wxListbookEvent;
+class wxChoicebookEvent;
+class wxScintillaEvent;
+
 /**
  * Procesa los eventos asociados a un objeto.
  * En principio vamos a querer seleccionar el objeto
@@ -147,6 +150,9 @@ class VObjEvtHandler : public wxEvtHandler
    void OnFlatNotebookPageChanged(wxFlatNotebookEvent &event);
    void OnChoicebookPageChanged(wxChoicebookEvent &event);
    void OnBookPageChanged( shared_ptr<ObjectBase> obj, int selPage );
+
+   // Enable folding for wxScintilla
+   void OnMarginClick ( wxScintillaEvent& event );
 };
 
 
