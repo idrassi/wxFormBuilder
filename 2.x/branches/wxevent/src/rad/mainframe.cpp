@@ -34,6 +34,7 @@
 #include "rad/about.h"
 
 #include <wx/filename.h>
+#include "maingui.h"
 
 #define ID_ABOUT         100
 #define ID_QUIT          101
@@ -242,6 +243,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
 
 	m_visualEdit = new VisualEditor(m_notebook);
 	data->AddDataObserver(m_visualEdit);
+	wxGetApp().AddHandler( m_visualEdit->GetEventHandler() );
 
 	m_notebook->AddPage( m_visualEdit, wxT("Designer"), false, 0 );
 
