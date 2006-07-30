@@ -76,6 +76,8 @@ class GridPanel : public ResizablePanel //wxSashWindow //wxPanel
 //   void OnMouseMove(wxMouseEvent &event);
 };
 
+class wxfbEvent;
+
 class VisualEditor : public wxScrolledWindow, public DataObserver
 {
  private:
@@ -112,6 +114,9 @@ class VisualEditor : public wxScrolledWindow, public DataObserver
   void ObjectRemoved(shared_ptr<ObjectBase> obj);
   void PropertyModified(shared_ptr<Property> prop);
   void ProjectRefresh();
+
+  // Events
+  void OnObjectCreated( wxfbEvent& event );
 
 };
 

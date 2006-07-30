@@ -43,19 +43,29 @@
 
 #include "rad/global.h"
 #include <memory>
+#include "rad/wxfbevent.h"
+#include "maingui.h"
 
 
-class MyApp : public wxApp
+
+
+BEGIN_EVENT_TABLE( MyApp, wxApp )
+	EVT_FB_OBJECT_CREATED( MyApp::NotifyEvent )
+END_EVENT_TABLE()
+
+void MyApp::AddHandler( wxEvtHandler* handler )
 {
-private:
-  wxLog * m_old_log;
-  wxLogWindow * m_log;
+	m_handlers.push_back( handler );
+}
 
-public:
-
-  virtual bool OnInit();
-};
-
+void MyApp::NotifyEvent( wxfbEvent& event )
+{
+	std::vector< wxEvtHandler* >::iterator handler;
+	for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )
+	{
+		(*handler)->ProcessEvent( event );
+	}
+}
 
 IMPLEMENT_APP(MyApp)
 
