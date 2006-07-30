@@ -32,6 +32,8 @@
 #include "menubar.h"
 #include "wx/statline.h"
 #include "rad/designer/resizablepanel.h"
+#include "rad/wxfbevent.h"
+
 
 #ifdef __WX24__
 #define wxFULL_REPAINT_ON_RESIZE 0
@@ -44,10 +46,11 @@
 #endif
 
 BEGIN_EVENT_TABLE(VisualEditor,wxScrolledWindow)
-//EVT_SASH_DRAGGED(-1, VisualEditor::OnResizeBackPanel)
-//EVT_COMMAND(-1, wxEVT_PANEL_RESIZED, VisualEditor::OnResizeBackPanel)
-EVT_PANEL_RESIZED(-1, VisualEditor::OnResizeBackPanel)
-EVT_PAINT(VisualEditor::OnPaintPanel)
+	//EVT_SASH_DRAGGED(-1, VisualEditor::OnResizeBackPanel)
+	//EVT_COMMAND(-1, wxEVT_PANEL_RESIZED, VisualEditor::OnResizeBackPanel)
+	EVT_PANEL_RESIZED(-1, VisualEditor::OnResizeBackPanel)
+	EVT_PAINT(VisualEditor::OnPaintPanel)
+	EVT_FB_OBJECT_CREATED( VisualEditor::OnObjectCreated )
 END_EVENT_TABLE()
 
 VisualEditor::VisualEditor(wxWindow *parent)
@@ -544,7 +547,6 @@ event.Skip();
 }*/
 
 //////////////////////////////////////////////////////////////////////////////
-
 void VisualEditor::ProjectLoaded()
 {
 	Create();
@@ -684,6 +686,11 @@ void VisualEditor::ObjectSelected(shared_ptr<ObjectBase> obj)
 }
 
 void VisualEditor::ObjectCreated(shared_ptr<ObjectBase> obj)
+{
+	//Create();
+}
+
+void VisualEditor::OnObjectCreated( wxfbEvent& event )
 {
 	Create();
 }
