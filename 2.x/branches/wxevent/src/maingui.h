@@ -11,7 +11,6 @@ private:
   wxLog * m_old_log;
   wxLogWindow * m_log;
   std::vector< wxEvtHandler* > m_handlers;
-  DECLARE_EVENT_TABLE()
 
 public:
 

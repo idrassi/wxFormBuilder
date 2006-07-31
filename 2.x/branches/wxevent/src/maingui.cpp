@@ -46,13 +46,6 @@
 #include "rad/wxfbevent.h"
 #include "maingui.h"
 
-
-
-
-BEGIN_EVENT_TABLE( MyApp, wxApp )
-	EVT_FB_OBJECT_CREATED( MyApp::NotifyEvent )
-END_EVENT_TABLE()
-
 void MyApp::AddHandler( wxEvtHandler* handler )
 {
 	m_handlers.push_back( handler );
