@@ -30,6 +30,7 @@
 #include "rad/global.h"
 #include "bitmaps.h"
 #include "rad/wxfbevent.h"
+#include "maingui.h"
 
 #include <ticpp.h>
 #include <set>
@@ -558,7 +559,7 @@ void ApplicationData::CreateObject(wxString name)
 
 	DataObservable::NotifyObjectCreated(obj);
 	wxfbEvent event( wxEVT_FB_OBJECT_CREATED );
-    wxTheApp->ProcessEvent( event );
+    wxGetApp().NotifyEvent( event );
 
 	// Seleccionamos el objeto, si este es un item entonces se selecciona
 	// el objeto contenido. ¿Tiene sentido tener un item debajo de un item?
