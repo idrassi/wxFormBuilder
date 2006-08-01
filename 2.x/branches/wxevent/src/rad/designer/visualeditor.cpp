@@ -32,7 +32,6 @@
 #include "menubar.h"
 #include "wx/statline.h"
 #include "rad/designer/resizablepanel.h"
-#include "rad/wxfbevent.h"
 
 
 #ifdef __WX24__
@@ -50,7 +49,15 @@ BEGIN_EVENT_TABLE(VisualEditor,wxScrolledWindow)
 	//EVT_COMMAND(-1, wxEVT_PANEL_RESIZED, VisualEditor::OnResizeBackPanel)
 	EVT_PANEL_RESIZED(-1, VisualEditor::OnResizeBackPanel)
 	EVT_PAINT(VisualEditor::OnPaintPanel)
+
+	EVT_FB_PROJECT_LOADED( VisualEditor::OnProjectLoaded )
+	EVT_FB_PROJECT_SAVED( VisualEditor::OnProjectSaved )
+	EVT_FB_OBJECT_SELECTED( VisualEditor::OnObjectSelected )
 	EVT_FB_OBJECT_CREATED( VisualEditor::OnObjectCreated )
+	EVT_FB_OBJECT_REMOVED( VisualEditor::OnObjectRemoved )
+	EVT_FB_PROPERTY_MODIFIED( VisualEditor::OnPropertyModified )
+	EVT_FB_PROJECT_REFRESH( VisualEditor::OnProjectRefresh )
+
 END_EVENT_TABLE()
 
 VisualEditor::VisualEditor(wxWindow *parent)
@@ -549,12 +556,10 @@ event.Skip();
 //////////////////////////////////////////////////////////////////////////////
 void VisualEditor::ProjectLoaded()
 {
-	Create();
 }
 
 void VisualEditor::ProjectRefresh()
 {
-	Create();
 }
 
 void VisualEditor::ProjectSaved()
@@ -563,7 +568,37 @@ void VisualEditor::ProjectSaved()
 
 void VisualEditor::ObjectSelected(shared_ptr<ObjectBase> obj)
 {
-	// sólo es necesario regenerar la vista si el objeto
+}
+
+void VisualEditor::ObjectCreated(shared_ptr<ObjectBase> obj)
+{
+}
+
+void VisualEditor::ObjectRemoved(shared_ptr<ObjectBase> obj)
+{
+}
+
+void VisualEditor::PropertyModified(shared_ptr<Property> prop)
+{
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+void VisualEditor::OnProjectLoaded ( wxFBEvent &event )
+{
+  Create();
+}
+
+void VisualEditor::OnProjectSaved  ( wxFBEvent &event )
+{
+  Create();
+}
+
+void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
+{
+  PObjectBase obj = event.GetFBObject();
+
+  // sólo es necesario regenerar la vista si el objeto
 	// seleccionado pertenece a otro form
 	if (GetData()->GetSelectedForm() != m_form)
 		Create();
@@ -685,29 +720,26 @@ void VisualEditor::ObjectSelected(shared_ptr<ObjectBase> obj)
 	}
 }
 
-void VisualEditor::ObjectCreated(shared_ptr<ObjectBase> obj)
+void VisualEditor::OnObjectCreated ( wxFBObjectEvent &event )
 {
-	//Create();
+  Create();
 }
 
-void VisualEditor::OnObjectCreated( wxfbEvent& event )
+void VisualEditor::OnObjectRemoved ( wxFBObjectEvent &event )
 {
-	Create();
+  Create();
 }
 
-void VisualEditor::ObjectRemoved(shared_ptr<ObjectBase> obj)
+void VisualEditor::OnPropertyModified ( wxFBPropertyEvent &event )
 {
-	Create();
-}
-
-void VisualEditor::PropertyModified(shared_ptr<Property> prop)
-{
-	shared_ptr<ObjectBase> aux = m_back->GetSelectedObject();
+  PObjectBase aux = m_back->GetSelectedObject();
 	Create();
 	ObjectSelected(aux);
 	UpdateVirtualSize();
 }
 
-
-
+void VisualEditor::OnProjectRefresh ( wxFBEvent &event)
+{
+  Create();
+}
 

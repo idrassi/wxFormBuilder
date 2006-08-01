@@ -24,6 +24,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "appobserver.h"
+#include "wxfbevent.h"
+#include "maingui.h"
 
 // !!! Hay un bug !!!!
 // Cuando se cierra la aplicación y durante el cierre se llamada a alguna
@@ -43,97 +45,120 @@ void DataObservable::RemoveDataObserver(DataObserver *o)
 
   while (it != m_observers.end() && *it != o)
     it++;
-    
+
   if (it != m_observers.end())
     m_observers.erase(it);
 }
 
 void DataObservable::NotifyProjectLoaded()
 {
-  if (!m_lock)
+  wxFBEvent event( wxEVT_FB_PROJECT_LOADED );
+  wxGetApp().NotifyEvent( event );
+
+/*  if (!m_lock)
   {
     m_lock = true;
     ObserverVector::iterator it;
     for (it = m_observers.begin(); it != m_observers.end(); it++)
       (*it)->ProjectLoaded();
     m_lock = false;
-  }
+  }*/
 }
 
 void DataObservable::NotifyProjectSaved()
 {
-  if (!m_lock)
+  wxFBEvent event( wxEVT_FB_PROJECT_SAVED );
+  wxGetApp().NotifyEvent( event );
+
+  /*if (!m_lock)
   {
     m_lock = true;
     ObserverVector::iterator it;
     for (it = m_observers.begin(); it != m_observers.end(); it++)
       (*it)->ProjectSaved();
     m_lock = false;
-  }      
+  } */
 }
 
 void DataObservable::NotifyObjectSelected(shared_ptr<ObjectBase> obj)
 {
-  if (!m_lock)
+  wxFBObjectEvent event( wxEVT_FB_OBJECT_SELECTED, obj);
+  wxGetApp().NotifyEvent( event );
+
+  /*if (!m_lock)
   {
     m_lock = true;
     ObserverVector::iterator it;
     for (it = m_observers.begin(); it != m_observers.end(); it++)
       (*it)->ObjectSelected(obj);
     m_lock = false;
-  }
+  }*/
 }
 
 void DataObservable::NotifyObjectCreated(shared_ptr<ObjectBase> obj)
 {
-  if (!m_lock)
+  wxFBObjectEvent event( wxEVT_FB_OBJECT_CREATED, obj);
+  wxGetApp().NotifyEvent( event );
+  /*if (!m_lock)
   {
     m_lock = true;
     ObserverVector::iterator it;
     for (it = m_observers.begin(); it != m_observers.end(); it++)
       (*it)->ObjectCreated(obj);
     m_lock = false;
-  }
+  }*/
 }
 
 void DataObservable::NotifyObjectRemoved(shared_ptr<ObjectBase> obj)
 {
-  if (!m_lock)
+  wxFBObjectEvent event( wxEVT_FB_OBJECT_REMOVED, obj);
+  wxGetApp().NotifyEvent( event );
+
+  /*if (!m_lock)
   {
     m_lock = true;
     ObserverVector::iterator it;
     for (it = m_observers.begin(); it != m_observers.end(); it++)
       (*it)->ObjectRemoved(obj);
     m_lock = false;
-  }      
+  } */
 }
 
 void DataObservable::NotifyPropertyModified(shared_ptr<Property> prop)
 {
-  if (!m_lock)
+  wxFBPropertyEvent event( wxEVT_FB_PROPERTY_MODIFIED, prop);
+  wxGetApp().NotifyEvent( event );
+
+  /*if (!m_lock)
   {
     m_lock = true;
     ObserverVector::iterator it;
     for (it = m_observers.begin(); it != m_observers.end(); it++)
       (*it)->PropertyModified(prop);
     m_lock = false;
-  }
+  }*/
 }
 
 void DataObservable::NotifyCodeGeneration( bool panelOnly )
 {
-  if (!m_lock)
+  wxFBEvent event( wxEVT_FB_CODE_GENERATION );
+  wxGetApp().NotifyEvent( event );
+
+  /*if (!m_lock)
   {
     m_lock = true;
     ObserverVector::iterator it;
     for (it = m_observers.begin(); it != m_observers.end(); it++)
       (*it)->CodeGeneration( panelOnly );
     m_lock = false;
-  }
+  }*/
 }
 
 void DataObservable::NotifyProjectRefresh()
 {
+  wxFBEvent event( wxEVT_FB_PROJECT_REFRESH );
+  wxGetApp().NotifyEvent( event );
+  /*
   if (!m_lock)
   {
     m_lock = true;
@@ -141,5 +166,5 @@ void DataObservable::NotifyProjectRefresh()
     for (it = m_observers.begin(); it != m_observers.end(); it++)
       (*it)->ProjectRefresh();
     m_lock = false;
-  }
+  }*/
 }

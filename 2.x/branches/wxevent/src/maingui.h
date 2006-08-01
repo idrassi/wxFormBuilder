@@ -15,7 +15,7 @@ private:
 public:
 
   virtual bool OnInit();
-  void NotifyEvent( wxfbEvent& event );
+  void NotifyEvent( wxFBEvent& event );
   void AddHandler( wxEvtHandler* handler );
 };
 

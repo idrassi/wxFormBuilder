@@ -34,6 +34,15 @@
 BEGIN_EVENT_TABLE( ObjectTree, wxPanel )
 	EVT_TREE_SEL_CHANGED( -1, ObjectTree::OnSelChanged )
 	EVT_TREE_ITEM_RIGHT_CLICK( -1, ObjectTree::OnRightClick )
+
+  EVT_FB_PROJECT_LOADED( ObjectTree::OnProjectLoaded )
+	EVT_FB_PROJECT_SAVED( ObjectTree::OnProjectSaved )
+	EVT_FB_OBJECT_SELECTED( ObjectTree::OnObjectSelected )
+	EVT_FB_OBJECT_CREATED( ObjectTree::OnObjectCreated )
+	EVT_FB_OBJECT_REMOVED( ObjectTree::OnObjectRemoved )
+	EVT_FB_PROPERTY_MODIFIED( ObjectTree::OnPropertyModified )
+	EVT_FB_PROJECT_REFRESH( ObjectTree::OnProjectRefresh )
+
 END_EVENT_TABLE()
 
 ObjectTree::ObjectTree( wxWindow *parent, int id )
@@ -113,12 +122,10 @@ void ObjectTree::OnRightClick(wxTreeEvent &event)
 
 void ObjectTree::ProjectLoaded()
 {
-	RebuildTree();
 }
 
 void ObjectTree::ProjectRefresh()
 {
-	RebuildTree();
 }
 
 void ObjectTree::ProjectSaved()
@@ -127,44 +134,18 @@ void ObjectTree::ProjectSaved()
 
 void ObjectTree::ObjectSelected(shared_ptr<ObjectBase> obj)
 {
-	// buscamos el item asociado al objeto lo marcamos
-	// como seleccionado
-	ObjectItemMap::iterator it = m_map.find(obj);
-	if (it != m_map.end()) //&& m_tcObjects->GetSelection() != it->second)
-	{
-		m_tcObjects->SelectItem(it->second);
-		m_tcObjects->SetFocus();
-	}
-	else
-	{
-#ifdef __WXFB_DEBUG__
-		wxLogError(wxT("Algo pasa porque no se encuentra el item asociado al objeto"));
-#endif
-	}
 }
 
 void ObjectTree::ObjectCreated(shared_ptr<ObjectBase> obj)
 {
-	// seguro que se puede optimizar
-	RebuildTree();
 }
 
 void ObjectTree::ObjectRemoved(shared_ptr<ObjectBase> obj)
 {
-	// seguro que se puede optimizar
-	RebuildTree();
 }
 
 void ObjectTree::PropertyModified(shared_ptr<Property> prop)
 {
-	if (prop->GetName() == wxT("name") )
-	{
-		ObjectItemMap::iterator it = m_map.find(prop->GetObject());
-		if (it != m_map.end())
-		{
-			UpdateItem(it->second,it->first);
-		}
-	};
 }
 
 void ObjectTree::AddChildren(shared_ptr<ObjectBase> obj, wxTreeItemId &parent, bool is_root)
@@ -325,6 +306,66 @@ void ObjectTree::RestoreItemStatus(shared_ptr<ObjectBase> obj)
 	unsigned int i,count = obj->GetChildCount();
 	for (i = 0; i<count ; i++)
 		RestoreItemStatus(obj->GetChild(i));
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// wxFormBuilder Event Handlers
+/////////////////////////////////////////////////////////////////////////////
+void ObjectTree::OnProjectLoaded ( wxFBEvent &event )
+{
+	RebuildTree();
+}
+
+void ObjectTree::OnProjectSaved  ( wxFBEvent &event )
+{
+}
+
+void ObjectTree::OnObjectSelected( wxFBObjectEvent &event )
+{
+  PObjectBase obj = event.GetFBObject();
+	// buscamos el item asociado al objeto lo marcamos
+	// como seleccionado
+	ObjectItemMap::iterator it = m_map.find(obj);
+	if (it != m_map.end()) //&& m_tcObjects->GetSelection() != it->second)
+	{
+		m_tcObjects->SelectItem(it->second);
+		m_tcObjects->SetFocus();
+	}
+	else
+	{
+#ifdef __WXFB_DEBUG__
+		wxLogError(wxT("Algo pasa porque no se encuentra el item asociado al objeto"));
+#endif
+	}
+}
+
+void ObjectTree::OnObjectCreated ( wxFBObjectEvent &event )
+{
+	RebuildTree();
+}
+
+void ObjectTree::OnObjectRemoved ( wxFBObjectEvent &event )
+{
+	RebuildTree();
+}
+
+void ObjectTree::OnPropertyModified ( wxFBPropertyEvent &event )
+{
+  PProperty prop = event.GetFBProperty();
+
+	if (prop->GetName() == wxT("name") )
+	{
+		ObjectItemMap::iterator it = m_map.find(prop->GetObject());
+		if (it != m_map.end())
+		{
+			UpdateItem(it->second,it->first);
+		}
+	};
+}
+
+void ObjectTree::OnProjectRefresh ( wxFBEvent &event)
+{
+  RebuildTree();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

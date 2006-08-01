@@ -25,21 +25,37 @@
 
 #include "wxfbevent.h"
 
+DEFINE_EVENT_TYPE( wxEVT_FB_PROJECT_LOADED )
+DEFINE_EVENT_TYPE( wxEVT_FB_PROJECT_SAVED )
+DEFINE_EVENT_TYPE( wxEVT_FB_OBJECT_SELECTED )
 DEFINE_EVENT_TYPE( wxEVT_FB_OBJECT_CREATED )
+DEFINE_EVENT_TYPE( wxEVT_FB_OBJECT_REMOVED )
+DEFINE_EVENT_TYPE( wxEVT_FB_PROPERTY_MODIFIED )
+DEFINE_EVENT_TYPE( wxEVT_FB_PROJECT_REFRESH )
+DEFINE_EVENT_TYPE( wxEVT_FB_CODE_GENERATION )
 
-wxfbEvent::wxfbEvent( wxEventType commandType ) : wxEvent( 0, commandType )
+wxFBEvent::wxFBEvent( wxEventType commandType ) : wxEvent( 0, commandType )
 {
 	//ctor
 }
 
 // required for sending with wxPostEvent()
-wxEvent* wxfbEvent::Clone() const
+wxEvent* wxFBEvent::Clone() const
 {
-	return new wxfbEvent( *this );
+	return new wxFBEvent( *this );
 }
 
-wxfbEvent::~wxfbEvent()
+wxFBEvent::~wxFBEvent()
 {
 	//dtor
 }
 
+wxFBPropertyEvent::wxFBPropertyEvent(wxEventType commandType, PProperty property)
+ : wxFBEvent(commandType), m_property(property)
+{
+}
+
+wxFBObjectEvent::wxFBObjectEvent(wxEventType commandType, PObjectBase object)
+ : wxFBEvent(commandType), m_object(object)
+{
+}

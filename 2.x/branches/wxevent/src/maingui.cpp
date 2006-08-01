@@ -51,13 +51,23 @@ void MyApp::AddHandler( wxEvtHandler* handler )
 	m_handlers.push_back( handler );
 }
 
-void MyApp::NotifyEvent( wxfbEvent& event )
+void MyApp::NotifyEvent( wxFBEvent& event )
 {
-	std::vector< wxEvtHandler* >::iterator handler;
-	for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )
-	{
-		(*handler)->ProcessEvent( event );
-	}
+  static int count = 0;
+
+  if (count++ == 0)
+  {
+	  std::vector< wxEvtHandler* >::iterator handler;
+	  for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )
+	    //(*handler)->AddPendingEvent( event );
+	    (*handler)->ProcessEvent( event );
+
+	  count--;
+  }
+  else
+  {
+    wxLogMessage(wxT("Ignored event:"));
+  }
 }
 
 IMPLEMENT_APP(MyApp)

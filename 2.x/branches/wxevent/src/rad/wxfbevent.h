@@ -31,16 +31,11 @@
 #include "model/objectbase.h"
 #include "model/database.h"
 
-DECLARE_EVENT_TYPE( wxEVT_FB_OBJECT_CREATED, -1 )
-
-class wxfbEvent : public wxEvent
+class wxFBEvent : public wxEvent
 {
 	public:
-		wxfbEvent( wxEventType commandType = wxEVT_NULL );
-		virtual ~wxfbEvent();
-
-		shared_ptr< ObjectBase > m_object;
-		shared_ptr< Property > m_property;
+		wxFBEvent( wxEventType commandType = wxEVT_NULL );
+		virtual ~wxFBEvent();
 
 		// required for sending with wxPostEvent()
 		wxEvent* Clone() const;
@@ -49,11 +44,72 @@ class wxfbEvent : public wxEvent
 	private:
 };
 
-typedef void (wxEvtHandler::*wxfbEventFunction)(wxfbEvent&);
+class wxFBPropertyEvent : public wxFBEvent
+{
+public:
+  wxFBPropertyEvent(wxEventType commandType, PProperty property);
+  PProperty GetFBProperty() { return m_property; }
+private:
+  PProperty m_property;
+};
+
+class wxFBObjectEvent : public wxFBEvent
+{
+public:
+  wxFBObjectEvent(wxEventType commandType, PObjectBase object);
+  PObjectBase GetFBObject() { return m_object; }
+
+private:
+  PObjectBase m_object;
+};
+
+
+typedef void (wxEvtHandler::*wxFBEventFunction)        (wxFBEvent&);
+typedef void (wxEvtHandler::*wxFBPropertyEventFunction)(wxFBPropertyEvent&);
+typedef void (wxEvtHandler::*wxFBObjectEventFunction)  (wxFBObjectEvent&);
+
+#define wxFBEventHandler(fn) \
+  (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxFBEventFunction, &fn)
+
+#define wxFBPropertyEventHandler(fn) \
+  (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxFBPropertyEventFunction, &fn)
+
+#define wxFBObjectEventHandler(fn) \
+  (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxFBObjectEventFunction, &fn)
+
+BEGIN_DECLARE_EVENT_TYPES()
+  DECLARE_LOCAL_EVENT_TYPE( wxEVT_FB_PROJECT_LOADED,    -1 )
+  DECLARE_LOCAL_EVENT_TYPE( wxEVT_FB_PROJECT_SAVED,     -1 )
+  DECLARE_LOCAL_EVENT_TYPE( wxEVT_FB_OBJECT_SELECTED,   -1 )
+  DECLARE_LOCAL_EVENT_TYPE( wxEVT_FB_OBJECT_CREATED,    -1 )
+  DECLARE_LOCAL_EVENT_TYPE( wxEVT_FB_OBJECT_REMOVED,    -1 )
+  DECLARE_LOCAL_EVENT_TYPE( wxEVT_FB_PROPERTY_MODIFIED, -1 )
+  DECLARE_LOCAL_EVENT_TYPE( wxEVT_FB_PROJECT_REFRESH,   -1 )
+  DECLARE_LOCAL_EVENT_TYPE( wxEVT_FB_CODE_GENERATION,   -1 )
+END_DECLARE_EVENT_TYPES()
+
+#define EVT_FB_PROJECT_LOADED(fn) \
+  wx__DECLARE_EVT0(wxEVT_FB_PROJECT_LOADED,wxFBEventHandler(fn))
+
+#define EVT_FB_PROJECT_SAVED(fn) \
+  wx__DECLARE_EVT0(wxEVT_FB_PROJECT_SAVED,wxFBEventHandler(fn))
+
+#define EVT_FB_OBJECT_SELECTED(fn) \
+  wx__DECLARE_EVT0(wxEVT_FB_OBJECT_SELECTED,wxFBObjectEventHandler(fn))
 
 #define EVT_FB_OBJECT_CREATED(fn) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_FB_OBJECT_CREATED, -1, -1, \
-    (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxNotifyEventFunction) \
-    wxStaticCastEvent( wxfbEventFunction, & fn ), (wxObject *) NULL ),
+  wx__DECLARE_EVT0(wxEVT_FB_OBJECT_CREATED,wxFBObjectEventHandler(fn))
+
+#define EVT_FB_OBJECT_REMOVED(fn) \
+  wx__DECLARE_EVT0(wxEVT_FB_OBJECT_REMOVED,wxFBObjectEventHandler(fn))
+
+#define EVT_FB_PROPERTY_MODIFIED(fn) \
+  wx__DECLARE_EVT0(wxEVT_FB_PROPERTY_MODIFIED,wxFBPropertyEventHandler(fn))
+
+#define EVT_FB_PROJECT_REFRESH(fn) \
+  wx__DECLARE_EVT0(wxEVT_FB_PROJECT_REFRESH,wxFBEventHandler(fn))
+
+#define EVT_FB_CODE_GENERATION(fn) \
+    wx__DECLARE_EVT0(wxEVT_FB_CODE_GENERATION,wxFBEventHandler(fn))
 
 #endif // __WXFBEVENT__

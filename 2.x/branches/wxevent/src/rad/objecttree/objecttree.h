@@ -33,6 +33,7 @@
 #include "rad/customkeys.h"
 
 #include <wx/treectrl.h>
+#include "rad/wxfbevent.h"
 
 class ObjectTree : public wxPanel, public DataObserver
 {
@@ -77,6 +78,14 @@ public:
   void ObjectRemoved(shared_ptr<ObjectBase> obj);
   void PropertyModified(shared_ptr<Property> prop);
   void ProjectRefresh();
+
+  void OnProjectLoaded ( wxFBEvent &event );
+  void OnProjectSaved  ( wxFBEvent &event );
+  void OnObjectSelected( wxFBObjectEvent &event );
+  void OnObjectCreated ( wxFBObjectEvent &event );
+  void OnObjectRemoved ( wxFBObjectEvent &event );
+  void OnPropertyModified ( wxFBPropertyEvent &event );
+  void OnProjectRefresh ( wxFBEvent &event);
 
   void AddCustomKeysHandler(CustomKeysEvtHandler *h) { m_tcObjects->PushEventHandler(h); };
 };
