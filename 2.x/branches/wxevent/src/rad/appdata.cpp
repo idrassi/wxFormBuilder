@@ -506,6 +506,11 @@ shared_ptr< ObjectBase >  ApplicationData::SearchSizerInto(shared_ptr<ObjectBase
 
 void ApplicationData::SelectObject(shared_ptr<ObjectBase> obj)
 {
+	if ( obj == m_selObj )
+	{
+		return;
+	}
+
 	Debug::Print( wxT("Object Selected!") );
 	m_selObj = obj;
 	/*

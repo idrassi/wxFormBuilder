@@ -29,13 +29,15 @@
 #include <wx/event.h>
 
 #include "model/objectbase.h"
-#include "model/database.h"
+//#include "model/database.h"
 
 class wxFBEvent : public wxEvent
 {
 	public:
 		wxFBEvent( wxEventType commandType = wxEVT_NULL );
 		virtual ~wxFBEvent();
+
+		wxString GetEventName();
 
 		// required for sending with wxPostEvent()
 		wxEvent* Clone() const;

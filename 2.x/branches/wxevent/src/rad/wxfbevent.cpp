@@ -45,6 +45,26 @@ wxEvent* wxFBEvent::Clone() const
 	return new wxFBEvent( *this );
 }
 
+#define CASE( EVENT )									\
+	if ( EVENT == m_eventType )							\
+	{													\
+		return wxT( #EVENT );							\
+	}
+
+wxString wxFBEvent::GetEventName()
+{
+	CASE( wxEVT_FB_PROJECT_LOADED )
+	CASE( wxEVT_FB_PROJECT_SAVED )
+	CASE( wxEVT_FB_OBJECT_SELECTED )
+	CASE( wxEVT_FB_OBJECT_CREATED )
+	CASE( wxEVT_FB_OBJECT_REMOVED )
+	CASE( wxEVT_FB_PROPERTY_MODIFIED )
+	CASE( wxEVT_FB_PROJECT_REFRESH )
+	CASE( wxEVT_FB_CODE_GENERATION )
+
+	return wxT( "Unknown Type" );
+}
+
 wxFBEvent::~wxFBEvent()
 {
 	//dtor
