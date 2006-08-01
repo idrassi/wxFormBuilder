@@ -244,6 +244,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
 	m_visualEdit = new VisualEditor(m_notebook);
 	data->AddDataObserver(m_visualEdit);
 	wxGetApp().AddHandler( m_visualEdit->GetEventHandler() );
+	wxGetApp().AddHandler( m_objTree->GetEventHandler() );
 
 	m_notebook->AddPage( m_visualEdit, wxT("Designer"), false, 0 );
 

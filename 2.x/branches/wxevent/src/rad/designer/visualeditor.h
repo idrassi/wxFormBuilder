@@ -32,7 +32,7 @@
 #include "model/objectbase.h"
 #include "rad/designer/visualobj.h"
 #include "rad/designer/resizablepanel.h"
-
+#include "rad/wxfbevent.h"
 #include <wx/sashwin.h>
 
 /**
@@ -116,7 +116,14 @@ class VisualEditor : public wxScrolledWindow, public DataObserver
   void ProjectRefresh();
 
   // Events
-  void OnObjectCreated( wxfbEvent& event );
+  void OnProjectLoaded ( wxFBEvent &event );
+  void OnProjectSaved  ( wxFBEvent &event );
+  void OnObjectSelected( wxFBObjectEvent &event );
+  void OnObjectCreated ( wxFBObjectEvent &event );
+  void OnObjectRemoved ( wxFBObjectEvent &event );
+  void OnPropertyModified ( wxFBPropertyEvent &event );
+  void OnProjectRefresh ( wxFBEvent &event);
+
 
 };
 
