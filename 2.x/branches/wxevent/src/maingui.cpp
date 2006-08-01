@@ -55,8 +55,9 @@ void MyApp::NotifyEvent( wxFBEvent& event )
 {
   static int count = 0;
 
-  if (count++ == 0)
+  if (count == 0)
   {
+	  count++;
 	  std::vector< wxEvtHandler* >::iterator handler;
 	  for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )
 	    //(*handler)->AddPendingEvent( event );
@@ -66,7 +67,7 @@ void MyApp::NotifyEvent( wxFBEvent& event )
   }
   else
   {
-    wxLogMessage(wxT("Ignored event:"));
+    wxLogMessage( wxT("Ignored event: %s"), event.GetEventName().c_str() );
   }
 }
 
