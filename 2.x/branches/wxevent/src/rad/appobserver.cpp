@@ -74,6 +74,18 @@ void DataObservable::NotifyEvent( wxFBEvent& event )
   	eventQueue.insert( event );
     wxLogMessage( wxT("Queued event: %s"), event.GetEventName().c_str() );
   }
+
+  // Copy queue
+  std::set< wxFBEvent > queueInProcess = eventQueue;
+  eventQueue.clear();
+
+  // Process queue
+  std::set< wxFBEvent >::iterator queuedEvent;
+  for ( queuedEvent = queueInProcess.begin(); queuedEvent != queueInProcess.end(); ++queuedEvent )
+  {
+  	wxFBEvent temp = *queuedEvent;
+	NotifyEvent( temp );
+  }
 }
 
 void DataObservable::NotifyProjectLoaded()
