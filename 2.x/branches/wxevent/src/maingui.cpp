@@ -43,36 +43,9 @@
 
 #include "rad/global.h"
 #include <memory>
-#include "rad/wxfbevent.h"
 #include "maingui.h"
 
-void MyApp::AddHandler( wxEvtHandler* handler )
-{
-	m_handlers.push_back( handler );
-}
-
-void MyApp::NotifyEvent( wxFBEvent& event )
-{
-  static int count = 0;
-
-  if (count == 0)
-  {
-	  count++;
-	  std::vector< wxEvtHandler* >::iterator handler;
-	  for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )
-	    //(*handler)->AddPendingEvent( event );
-	    (*handler)->ProcessEvent( event );
-
-	  count--;
-  }
-  else
-  {
-    wxLogMessage( wxT("Ignored event: %s"), event.GetEventName().c_str() );
-  }
-}
-
 IMPLEMENT_APP(MyApp)
-
 
 bool MyApp::OnInit()
 {

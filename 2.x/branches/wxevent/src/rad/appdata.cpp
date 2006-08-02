@@ -30,7 +30,6 @@
 #include "rad/global.h"
 #include "bitmaps.h"
 #include "rad/wxfbevent.h"
-#include "maingui.h"
 
 #include <ticpp.h>
 #include <set>

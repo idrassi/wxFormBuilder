@@ -32,6 +32,7 @@
 #include <vector>
 
 class DataObserver;
+class wxFBEvent;
 //class ItemPopupMenu;
 
 /**
@@ -41,9 +42,13 @@ class DataObservable
 {
  private:
    typedef vector<DataObserver *> ObserverVector;
+   typedef vector< wxEvtHandler* > HandlerVector;
    ObserverVector m_observers;
+   HandlerVector m_handlers;
    bool m_lock;
    //friend class ItemPopupMenu;
+
+   void NotifyEvent( wxFBEvent& event );
 
  protected:
    // Notifican a cada observador el evento correspondiente
@@ -57,6 +62,7 @@ class DataObservable
    void NotifyCodeGeneration( bool panelOnly = false );
 
  public:
+
   DataObservable() { m_lock = false; }
   virtual ~DataObservable() {};
 
@@ -66,6 +72,8 @@ class DataObservable
   // objeto.
   void AddDataObserver(DataObserver *o);
   void RemoveDataObserver(DataObserver *o);
+
+  void AddHandler( wxEvtHandler* handler );
 
   // Realizan cambios en el modelo de datos.
   virtual bool LoadProject(const wxString &filename) = 0;
