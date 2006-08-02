@@ -34,13 +34,17 @@
 class wxFBEvent : public wxEvent
 {
 	public:
-		wxFBEvent( wxEventType commandType = wxEVT_NULL );
+		wxFBEvent( wxEventType commandType = wxEVT_NULL, int priority = 0 );
 		virtual ~wxFBEvent();
 
 		wxString GetEventName();
 
 		// required for sending with wxPostEvent()
 		wxEvent* Clone() const;
+
+		const int m_priority;
+
+		bool operator < ( const wxFBEvent& right ) const;
 
 	protected:
 	private:

@@ -34,7 +34,10 @@ DEFINE_EVENT_TYPE( wxEVT_FB_PROPERTY_MODIFIED )
 DEFINE_EVENT_TYPE( wxEVT_FB_PROJECT_REFRESH )
 DEFINE_EVENT_TYPE( wxEVT_FB_CODE_GENERATION )
 
-wxFBEvent::wxFBEvent( wxEventType commandType ) : wxEvent( 0, commandType )
+wxFBEvent::wxFBEvent( wxEventType commandType, int priority )
+:
+wxEvent( 0, commandType ),
+m_priority( priority )
 {
 	//ctor
 }
@@ -63,6 +66,11 @@ wxString wxFBEvent::GetEventName()
 	CASE( wxEVT_FB_CODE_GENERATION )
 
 	return wxT( "Unknown Type" );
+}
+
+bool wxFBEvent::operator < ( const wxFBEvent& right ) const
+{
+	return this->m_priority < right.m_priority;
 }
 
 wxFBEvent::~wxFBEvent()
