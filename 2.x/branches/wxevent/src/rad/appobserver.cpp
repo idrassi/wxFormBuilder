@@ -26,6 +26,8 @@
 #include "appobserver.h"
 #include "wxfbevent.h"
 
+#include <set>
+
 // !!! Hay un bug !!!!
 // Cuando se cierra la aplicación y durante el cierre se llamada a alguna
 // función que vaya a realizar una notificación, es posible que algún
@@ -56,20 +58,21 @@ void DataObservable::RemoveDataObserver(DataObserver *o)
 void DataObservable::NotifyEvent( wxFBEvent& event )
 {
   static int count = 0;
+  static std::set< wxFBEvent > eventQueue;
 
   if (count == 0)
   {
 	  count++;
 	  std::vector< wxEvtHandler* >::iterator handler;
 	  for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )
-	    //(*handler)->AddPendingEvent( event );
 	    (*handler)->ProcessEvent( event );
 
 	  count--;
   }
   else
   {
-    wxLogMessage( wxT("Ignored event: %s"), event.GetEventName().c_str() );
+  	eventQueue.insert( event );
+    wxLogMessage( wxT("Queued event: %s"), event.GetEventName().c_str() );
   }
 }
 
@@ -179,7 +182,7 @@ void DataObservable::NotifyCodeGeneration( bool panelOnly )
 
 void DataObservable::NotifyProjectRefresh()
 {
-  wxFBEvent event( wxEVT_FB_PROJECT_REFRESH );
+  wxFBEvent event( wxEVT_FB_PROJECT_REFRESH, -1 );
   NotifyEvent( event );
   /*
   if (!m_lock)
