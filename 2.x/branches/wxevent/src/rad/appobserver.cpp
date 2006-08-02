@@ -25,13 +25,16 @@
 
 #include "appobserver.h"
 #include "wxfbevent.h"
-#include "maingui.h"
 
 // !!! Hay un bug !!!!
 // Cuando se cierra la aplicación y durante el cierre se llamada a alguna
 // función que vaya a realizar una notificación, es posible que algún
 // observador ya se haya eliminado generando un acceso no válido
 
+void DataObservable::AddHandler( wxEvtHandler* handler )
+{
+	m_handlers.push_back( handler );
+}
 
 void DataObservable::AddDataObserver(DataObserver *o)
 {
@@ -50,10 +53,30 @@ void DataObservable::RemoveDataObserver(DataObserver *o)
     m_observers.erase(it);
 }
 
+void DataObservable::NotifyEvent( wxFBEvent& event )
+{
+  static int count = 0;
+
+  if (count == 0)
+  {
+	  count++;
+	  std::vector< wxEvtHandler* >::iterator handler;
+	  for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )
+	    //(*handler)->AddPendingEvent( event );
+	    (*handler)->ProcessEvent( event );
+
+	  count--;
+  }
+  else
+  {
+    wxLogMessage( wxT("Ignored event: %s"), event.GetEventName().c_str() );
+  }
+}
+
 void DataObservable::NotifyProjectLoaded()
 {
   wxFBEvent event( wxEVT_FB_PROJECT_LOADED );
-  wxGetApp().NotifyEvent( event );
+  NotifyEvent( event );
 
 /*  if (!m_lock)
   {
@@ -68,7 +91,7 @@ void DataObservable::NotifyProjectLoaded()
 void DataObservable::NotifyProjectSaved()
 {
   wxFBEvent event( wxEVT_FB_PROJECT_SAVED );
-  wxGetApp().NotifyEvent( event );
+  NotifyEvent( event );
 
   /*if (!m_lock)
   {
@@ -83,7 +106,7 @@ void DataObservable::NotifyProjectSaved()
 void DataObservable::NotifyObjectSelected(shared_ptr<ObjectBase> obj)
 {
   wxFBObjectEvent event( wxEVT_FB_OBJECT_SELECTED, obj);
-  wxGetApp().NotifyEvent( event );
+  NotifyEvent( event );
 
   /*if (!m_lock)
   {
@@ -98,7 +121,7 @@ void DataObservable::NotifyObjectSelected(shared_ptr<ObjectBase> obj)
 void DataObservable::NotifyObjectCreated(shared_ptr<ObjectBase> obj)
 {
   wxFBObjectEvent event( wxEVT_FB_OBJECT_CREATED, obj);
-  wxGetApp().NotifyEvent( event );
+  NotifyEvent( event );
   /*if (!m_lock)
   {
     m_lock = true;
@@ -112,7 +135,7 @@ void DataObservable::NotifyObjectCreated(shared_ptr<ObjectBase> obj)
 void DataObservable::NotifyObjectRemoved(shared_ptr<ObjectBase> obj)
 {
   wxFBObjectEvent event( wxEVT_FB_OBJECT_REMOVED, obj);
-  wxGetApp().NotifyEvent( event );
+  NotifyEvent( event );
 
   /*if (!m_lock)
   {
@@ -127,7 +150,7 @@ void DataObservable::NotifyObjectRemoved(shared_ptr<ObjectBase> obj)
 void DataObservable::NotifyPropertyModified(shared_ptr<Property> prop)
 {
   wxFBPropertyEvent event( wxEVT_FB_PROPERTY_MODIFIED, prop);
-  wxGetApp().NotifyEvent( event );
+  NotifyEvent( event );
 
   /*if (!m_lock)
   {
@@ -142,7 +165,7 @@ void DataObservable::NotifyPropertyModified(shared_ptr<Property> prop)
 void DataObservable::NotifyCodeGeneration( bool panelOnly )
 {
   wxFBEvent event( wxEVT_FB_CODE_GENERATION );
-  wxGetApp().NotifyEvent( event );
+  NotifyEvent( event );
 
   /*if (!m_lock)
   {
@@ -157,7 +180,7 @@ void DataObservable::NotifyCodeGeneration( bool panelOnly )
 void DataObservable::NotifyProjectRefresh()
 {
   wxFBEvent event( wxEVT_FB_PROJECT_REFRESH );
-  wxGetApp().NotifyEvent( event );
+  NotifyEvent( event );
   /*
   if (!m_lock)
   {
