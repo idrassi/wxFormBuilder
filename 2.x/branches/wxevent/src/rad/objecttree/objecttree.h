@@ -28,7 +28,6 @@
 
 #include "rad/appobserver.h"
 #include "model/objectbase.h"
-//#include <hash_map>
 #include <map>
 #include "rad/customkeys.h"
 
@@ -71,13 +70,13 @@ public:
   void OnSelChanged(wxTreeEvent &event);
   void OnRightClick(wxTreeEvent &event);
 
-  void ProjectLoaded();
-  void ProjectSaved();
-  void ObjectSelected(shared_ptr<ObjectBase> obj);
-  void ObjectCreated(shared_ptr<ObjectBase> obj);
-  void ObjectRemoved(shared_ptr<ObjectBase> obj);
-  void PropertyModified(shared_ptr<Property> prop);
-  void ProjectRefresh();
+  void ProjectLoaded(){}
+  void ProjectSaved(){}
+  void ObjectSelected(shared_ptr<ObjectBase> obj){}
+  void ObjectCreated(shared_ptr<ObjectBase> obj){}
+  void ObjectRemoved(shared_ptr<ObjectBase> obj){}
+  void PropertyModified(shared_ptr<Property> prop){}
+  void ProjectRefresh(){}
 
   void OnProjectLoaded ( wxFBEvent &event );
   void OnProjectSaved  ( wxFBEvent &event );
