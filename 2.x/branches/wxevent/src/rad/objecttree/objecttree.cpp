@@ -35,7 +35,7 @@ BEGIN_EVENT_TABLE( ObjectTree, wxPanel )
 	EVT_TREE_SEL_CHANGED( -1, ObjectTree::OnSelChanged )
 	EVT_TREE_ITEM_RIGHT_CLICK( -1, ObjectTree::OnRightClick )
 
-  EVT_FB_PROJECT_LOADED( ObjectTree::OnProjectLoaded )
+	EVT_FB_PROJECT_LOADED( ObjectTree::OnProjectLoaded )
 	EVT_FB_PROJECT_SAVED( ObjectTree::OnProjectSaved )
 	EVT_FB_OBJECT_SELECTED( ObjectTree::OnObjectSelected )
 	EVT_FB_OBJECT_CREATED( ObjectTree::OnObjectCreated )
@@ -118,34 +118,6 @@ void ObjectTree::OnRightClick(wxTreeEvent &event)
 		menu->UpdateUI(menu);
 		PopupMenu(menu,pos.x, pos.y);
 	}
-}
-
-void ObjectTree::ProjectLoaded()
-{
-}
-
-void ObjectTree::ProjectRefresh()
-{
-}
-
-void ObjectTree::ProjectSaved()
-{
-}
-
-void ObjectTree::ObjectSelected(shared_ptr<ObjectBase> obj)
-{
-}
-
-void ObjectTree::ObjectCreated(shared_ptr<ObjectBase> obj)
-{
-}
-
-void ObjectTree::ObjectRemoved(shared_ptr<ObjectBase> obj)
-{
-}
-
-void ObjectTree::PropertyModified(shared_ptr<Property> prop)
-{
 }
 
 void ObjectTree::AddChildren(shared_ptr<ObjectBase> obj, wxTreeItemId &parent, bool is_root)

@@ -30,7 +30,8 @@
 #include "wx/tokenzr.h"
 #include "rad/global.h"
 #include "rad/bitmaps.h"
-#include <sstream>
+#include "rad/wxfbevent.h"
+//#include <sstream>
 #include <memory>
 
 // -----------------------------------------------------------------------
@@ -279,6 +280,11 @@ DEFINE_EVENT_TYPE( wxEVT_NEW_BITMAP_PROPERTY )
 BEGIN_EVENT_TABLE(ObjectInspector, wxPanel)
 	EVT_PG_CHANGED(-1, ObjectInspector::OnPropertyGridChange)
 	EVT_COMMAND( -1, wxEVT_NEW_BITMAP_PROPERTY, ObjectInspector::OnNewBitmapProperty )
+
+	EVT_FB_OBJECT_SELECTED( ObjectInspector::OnObjectSelected )
+	EVT_FB_PROJECT_REFRESH( ObjectInspector::OnProjectRefresh )
+	EVT_FB_PROPERTY_MODIFIED( ObjectInspector::OnPropertyModified )
+
 END_EVENT_TABLE()
 
 ObjectInspector::ObjectInspector(wxWindow *parent, int id)
@@ -704,35 +710,19 @@ void ObjectInspector::OnNewBitmapProperty( wxCommandEvent& event )
 	data->m_grid->Thaw();
 }
 ///////////////////////////////////////////////////////////////////////////////
-
-void ObjectInspector::ProjectLoaded()
-{
-}
-
-void ObjectInspector::ProjectSaved()
-{
-}
-
-void ObjectInspector::ObjectSelected(shared_ptr<ObjectBase> obj)
+void ObjectInspector::OnObjectSelected( wxFBObjectEvent& event )
 {
 	Create();
 }
 
-void ObjectInspector::ObjectCreated(shared_ptr<ObjectBase> obj)
-{
-}
-
-void ObjectInspector::ObjectRemoved(shared_ptr<ObjectBase> obj)
-{
-}
-
-void ObjectInspector::ProjectRefresh()
+void ObjectInspector::OnProjectRefresh( wxFBEvent& event )
 {
 	Create(true);
 }
 
-void ObjectInspector::PropertyModified(shared_ptr<Property> prop)
+void ObjectInspector::OnPropertyModified( wxFBPropertyEvent& event )
 {
+	shared_ptr<Property> prop = event.GetFBProperty();
 	wxPGId pgid = m_pg->GetPropertyByLabel(prop->GetName());
 	if (!pgid.IsOk()) return; // Puede que no se esté mostrando ahora esa página
 	wxPGProperty *pgProp = pgid.GetPropertyPtr();

@@ -58,7 +58,7 @@ void DataObservable::RemoveDataObserver(DataObserver *o)
 void DataObservable::NotifyEvent( wxFBEvent& event )
 {
   static int count = 0;
-  static std::set< wxFBEvent > eventQueue;
+  static std::set< wxFBEvent* > eventQueue;
 
   if (count == 0)
   {
@@ -71,20 +71,20 @@ void DataObservable::NotifyEvent( wxFBEvent& event )
   }
   else
   {
-  	eventQueue.insert( event );
+  	eventQueue.insert( &event );
     wxLogMessage( wxT("Queued event: %s"), event.GetEventName().c_str() );
   }
 
   // Copy queue
-  std::set< wxFBEvent > queueInProcess = eventQueue;
+  std::set< wxFBEvent* > queueInProcess = eventQueue;
   eventQueue.clear();
 
   // Process queue
-  std::set< wxFBEvent >::iterator queuedEvent;
+  std::set< wxFBEvent* >::iterator queuedEvent;
   for ( queuedEvent = queueInProcess.begin(); queuedEvent != queueInProcess.end(); ++queuedEvent )
   {
-  	wxFBEvent temp = *queuedEvent;
-	NotifyEvent( temp );
+  	wxFBEvent* temp = *queuedEvent;
+	NotifyEvent( *temp );
   }
 }
 
