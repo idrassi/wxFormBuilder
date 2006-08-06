@@ -190,8 +190,8 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
 	Title *tree_title = new Title(tree_panel,wxT("Object Tree"));
 
 	m_objTree = new ObjectTree(tree_panel,-1);
-	data->AddDataObserver(m_objTree);
-	m_objTree->SetData(data);
+	m_objTree->SetData( data );
+	data->AddHandler( m_objTree->GetEventHandler() );
 	m_objTree->Create();
 
 	wxBoxSizer *tree_sizer = new wxBoxSizer(wxVERTICAL);
@@ -208,7 +208,8 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
 	Title *obj_insp_title = new Title(obj_inspPanel,wxT("Object Properties"));
 
 	m_objInsp = new ObjectInspector(obj_inspPanel,-1);
-	data->AddDataObserver(m_objInsp);
+	m_objInsp->SetData( data );
+	data->AddHandler( m_objInsp->GetEventHandler() );
 
 	obj_insp_sizer->Add(obj_insp_title,0,wxEXPAND,0);
 

@@ -27,7 +27,7 @@
 #define __OBJ_INSPECT__
 
 #include "wx/wx.h"
-#include "wx/grid.h"
+//#include "wx/grid.h"
 #include "utils/notebookchooser.h"
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/propdev.h>
@@ -56,6 +56,10 @@ WX_PG_DECLARE_PROPERTY( wxBitmapWithResourceProperty, const wxString&, wxEmptySt
 
 DECLARE_LOCAL_EVENT_TYPE( wxEVT_NEW_BITMAP_PROPERTY, -1 )
 
+class wxFBPropertyEvent;
+class wxFBObjectEvent;
+class wxFBEvent;
+
 class ObjectInspector : public wxPanel, public DataObserver
 {
  private:
@@ -79,13 +83,17 @@ class ObjectInspector : public wxPanel, public DataObserver
  public:
   ObjectInspector(wxWindow *parent, int id);
 
-  void ProjectLoaded();
-  void ProjectSaved();
-  void ObjectSelected(shared_ptr<ObjectBase> obj);
-  void ObjectCreated(shared_ptr<ObjectBase> obj);
-  void ObjectRemoved(shared_ptr<ObjectBase> obj);
-  void ProjectRefresh();
-  void PropertyModified(shared_ptr<Property> prop);
+  void ProjectLoaded(){}
+  void ProjectSaved(){}
+  void ObjectSelected(shared_ptr<ObjectBase> obj){}
+  void ObjectCreated(shared_ptr<ObjectBase> obj){}
+  void ObjectRemoved(shared_ptr<ObjectBase> obj){}
+  void ProjectRefresh(){}
+  void PropertyModified(shared_ptr<Property> prop){}
+
+  void OnObjectSelected( wxFBObjectEvent& event );
+  void OnProjectRefresh( wxFBEvent& event );
+  void OnPropertyModified( wxFBPropertyEvent& event );
 
   DECLARE_EVENT_TABLE()
 };

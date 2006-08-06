@@ -29,7 +29,6 @@
 #include <wx/event.h>
 
 #include "model/objectbase.h"
-//#include "model/database.h"
 
 class wxFBEvent : public wxEvent
 {
