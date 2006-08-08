@@ -227,6 +227,19 @@
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 		</Unit>
+		<Unit filename="..\..\include\wx\wxFlatNotebook\wxFlatNotebookXPMs.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Debug Mono Dll" />
+			<Option target="Debug Mono Dll (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
+			<Option target="Release Mono Dll" />
+			<Option target="Release Mono Dll (Unicode)" />
+		</Unit>
 		<Unit filename="..\..\src\wxFlatNotebook\wxFlatNotebook.cpp">
 			<Option compilerVar="CPP" />
 			<Option target="Debug Mono Dll" />
