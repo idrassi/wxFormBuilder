@@ -24,10 +24,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "appdata.h"
+#include "model/objectbase.h"
 #include "utils/typeconv.h"
 #include "utils/debug.h"
 #include "codegen/codegen.h"
-#include "rad/global.h"
 #include "bitmaps.h"
 #include "rad/wxfbevent.h"
 
@@ -343,6 +343,9 @@ void ApplicationData::Destroy()
 
 
 ApplicationData::ApplicationData(const wxString &rootdir)
+:
+m_fbpVerMajor( 1 ),
+m_fbpVerMinor( 3 )
 {
 	m_rootDir = rootdir;
 	AppBitmaps::LoadBitmaps( m_rootDir + wxT("/xml/icons.xml"), m_rootDir + wxT("/resources/icons/") );
@@ -802,7 +805,7 @@ void ApplicationData::SaveProject(const wxString &filename)
 	m_modFlag = false;
 	doc->SaveFile(filename.mb_str( wxConvUTF8 ));
 	m_projectFile = filename;
-	GlobalData()->SetProjectPath(::wxPathOnly(filename));
+	SetProjectPath(::wxPathOnly(filename));
 	delete doc;
 
 	NotifyProjectSaved();
@@ -850,21 +853,21 @@ bool ApplicationData::LoadProject(const wxString &file)
 		bool older = false;
 		bool newer = false;
 
-		if ( fbpVerMajor < GlobalData()->m_fbpVerMajor )
+		if ( fbpVerMajor < m_fbpVerMajor )
 		{
 			older = true;
 		}
-		else if ( fbpVerMajor > GlobalData()->m_fbpVerMajor )
+		else if ( fbpVerMajor > m_fbpVerMajor )
 		{
 			newer = true;
 		}
 		else
 		{
-			if ( fbpVerMinor < GlobalData()->m_fbpVerMinor )
+			if ( fbpVerMinor < m_fbpVerMinor )
 			{
 				older = true;
 			}
-			else if ( fbpVerMinor > GlobalData()->m_fbpVerMinor )
+			else if ( fbpVerMinor > m_fbpVerMinor )
 			{
 				newer = true;
 			}
@@ -920,7 +923,7 @@ bool ApplicationData::LoadProject(const wxString &file)
 			m_modFlag = false;
 			m_cmdProc.Reset();
 			m_projectFile = file;
-			GlobalData()->SetProjectPath(::wxPathOnly(file));
+			SetProjectPath(::wxPathOnly(file));
 			NotifyProjectLoaded();
 			NotifyProjectRefresh();
 		}
@@ -999,8 +1002,8 @@ bool ApplicationData::ConvertProject( const wxString& path, int fileMajor, int f
 			ticpp::Element* newRoot = new ticpp::Element( "wxFormBuilder_Project" );
 
 			ticpp::Element* fileVersion = new ticpp::Element( "FileVersion" );
-			fileVersion->SetAttribute( "major", GlobalData()->m_fbpVerMajor );
-			fileVersion->SetAttribute( "minor", GlobalData()->m_fbpVerMinor );
+			fileVersion->SetAttribute( "major", m_fbpVerMajor );
+			fileVersion->SetAttribute( "minor", m_fbpVerMinor );
 
 			newRoot->LinkEndChild( fileVersion );
 
@@ -1212,7 +1215,7 @@ void ApplicationData::NewProject()
 	m_modFlag = false;
 	m_cmdProc.Reset();
 	m_projectFile = wxT("");
-	GlobalData()->SetProjectPath(wxT(""));
+	SetProjectPath(wxT(""));
 	NotifyProjectRefresh();
 }
 

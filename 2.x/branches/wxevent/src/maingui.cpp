@@ -41,7 +41,6 @@
 #include <wx/image.h>
 #include <wx/sysopt.h>
 
-#include "rad/global.h"
 #include <memory>
 #include "maingui.h"
 
@@ -49,8 +48,9 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
-  GlobalDataInit();
   wxInitAllImageHandlers();
+
+  AppDataInit();
 
   // Obtenemos la ruta del ejecutable
   wxString exeFile(argv[0]);
@@ -58,7 +58,7 @@ bool MyApp::OnInit()
   wxString path = appFileName.GetPath();
 
   // Guardamos la ruta del ejecutable
-  GlobalData()->SetApplicationPath(path);
+  AppData()->SetApplicationPath(path);
 
   wxSystemOptions::SetOption(wxT("msw.remap"), 0);
   wxSystemOptions::SetOption(wxT("msw.staticbox.optimized-paint"), 0);
@@ -115,4 +115,4 @@ bool MyApp::OnInit()
   return TRUE;
 }
 
-// OnQuit?? -> GlobalDataDestroy()
+// OnQuit?? -> AppDataDestroy()

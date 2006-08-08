@@ -28,7 +28,6 @@
 #include "utils/debug.h"
 #include "utils/typeconv.h"
 #include "wx/tokenzr.h"
-#include "rad/global.h"
 #include "rad/bitmaps.h"
 #include "rad/wxfbevent.h"
 #include <rad/appdata.h>
@@ -675,7 +674,7 @@ void ObjectInspector::OnPropertyGridChange( wxPropertyGridEvent& event )
 				size_t semicolon_index = path.find_first_of( wxT(";") );
 				if ( semicolon_index != path.npos )
 				{
-					path = TypeConv::MakeRelativePath( path.substr( 0, semicolon_index ), GlobalData()->GetProjectPath() ) + path.substr( semicolon_index  );
+					path = TypeConv::MakeRelativePath( path.substr( 0, semicolon_index ), AppData()->GetProjectPath() ) + path.substr( semicolon_index  );
 				}
 
 				// Create event to spawn update of the bitmap property

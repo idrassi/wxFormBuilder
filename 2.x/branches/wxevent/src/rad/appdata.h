@@ -36,6 +36,8 @@ namespace ticpp
 	class Element;
 }
 
+class Property;
+
 class wxFBEvent;
 
 #define AppData()         (ApplicationData::Get())
@@ -62,6 +64,8 @@ class ApplicationData// : public DataObservable
   // Procesador de comandos Undo/Redo
   CommandProcessor m_cmdProc;
   wxString m_projectFile;
+  wxString m_projectPath;
+  wxString m_exePath;
 
 
   typedef vector< wxEvtHandler* > HandlerVector;
@@ -241,6 +245,15 @@ public:
   shared_ptr<ObjectBase> GetClipboardObject()                { return m_clipboard; }
 
   wxString GetProjectFileName() { return m_projectFile; }
+
+  const int m_fbpVerMajor;
+  const int m_fbpVerMinor;
+
+  const wxString &GetProjectPath() { return m_projectPath; };
+  void SetProjectPath(const wxString &path) { m_projectPath = path; };
+
+  const wxString &GetApplicationPath() { return m_exePath; };
+  void SetApplicationPath(const wxString &path) { m_exePath = path; };
 };
 
 
