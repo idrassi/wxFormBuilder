@@ -33,6 +33,7 @@
 #include "rad/wxfbevent.h"
 //#include <sstream>
 #include <memory>
+#include <rad/appdata.h>
 
 // -----------------------------------------------------------------------
 // wxSizeProperty
@@ -310,7 +311,7 @@ ObjectInspector::ObjectInspector(wxWindow *parent, int id)
 
 void ObjectInspector::Create(bool force)
 {
-	shared_ptr<ObjectBase> sel_obj = GetData()->GetSelectedObject();
+	shared_ptr<ObjectBase> sel_obj = AppData()->GetSelectedObject();
 	if (sel_obj && (sel_obj != m_currentSel || force))
 	{
 		Freeze();
@@ -603,7 +604,7 @@ void ObjectInspector::OnPropertyGridChange( wxPropertyGridEvent& event )
 			case PT_OPTION:
 			case PT_FLOAT:
 			{
-				GetData()->ModifyProperty( prop, event.GetPropertyValueAsString() );
+				AppData()->ModifyProperty( prop, event.GetPropertyValueAsString() );
 				break;
 			}
 			case PT_WXSTRING:
@@ -611,12 +612,12 @@ void ObjectInspector::OnPropertyGridChange( wxPropertyGridEvent& event )
 			{
 				// las cadenas de texto del inspector son formateadas
 				wxString value = TypeConv::TextToString( event.GetPropertyValueAsString() );
-				GetData()->ModifyProperty( prop, value );
+				AppData()->ModifyProperty( prop, value );
 				break;
 			}
 			case PT_BOOL:
 			{
-				GetData()->ModifyProperty( prop, event.GetPropertyValueAsBool() ? wxT("1") : wxT("0") );
+				AppData()->ModifyProperty( prop, event.GetPropertyValueAsBool() ? wxT("1") : wxT("0") );
 				break;
 			}
 			case PT_BITLIST:
@@ -624,7 +625,7 @@ void ObjectInspector::OnPropertyGridChange( wxPropertyGridEvent& event )
 				wxString aux = event.GetPropertyValueAsString();
 				aux.Replace( wxT(" "), wxT("") );
 				aux.Replace( wxT(","), wxT("|") );
-				GetData()->ModifyProperty( prop, aux );
+				AppData()->ModifyProperty( prop, aux );
 				break;
 			}
 			case PT_WXPOINT: case PT_WXSIZE:
@@ -632,13 +633,13 @@ void ObjectInspector::OnPropertyGridChange( wxPropertyGridEvent& event )
 				wxString aux = event.GetPropertyValueAsString();
 				aux.Replace( wxT(" "), wxT("") );
 				aux.Replace( wxT(";"), wxT(",") );
-				GetData()->ModifyProperty( prop, aux );
+				AppData()->ModifyProperty( prop, aux );
 				break;
 			}
 			case PT_WXFONT:
 			{
 				wxFont* font = wxPGVariantToWxObjectPtr( event.GetPropertyPtr()->DoGetValue(), wxFont );
-				GetData()->ModifyProperty( prop, TypeConv::FontToString( *font ) );
+				AppData()->ModifyProperty( prop, TypeConv::FontToString( *font ) );
 				break;
 			}
 			case PT_WXCOLOUR:
@@ -646,18 +647,18 @@ void ObjectInspector::OnPropertyGridChange( wxPropertyGridEvent& event )
 				wxColourPropertyValue* colour = wxDynamicCast( event.GetPropertyValueAsWxObjectPtr(), wxColourPropertyValue );
 				if ( colour->m_type == wxPG_COLOUR_CUSTOM )
 				{
-					GetData()->ModifyProperty( prop, TypeConv::ColourToString( colour->m_colour ) );
+					AppData()->ModifyProperty( prop, TypeConv::ColourToString( colour->m_colour ) );
 				}
 				else
 				{
-					GetData()->ModifyProperty( prop, TypeConv::SystemColourToString( colour->m_type ) );
+					AppData()->ModifyProperty( prop, TypeConv::SystemColourToString( colour->m_type ) );
 				}
 				break;
 			}
 			case PT_STRINGLIST:
 			{
 				const wxArrayString &arraystr = event.GetPropertyValueAsArrayString();
-				GetData()->ModifyProperty(prop, TypeConv::ArrayStringToString(arraystr));
+				AppData()->ModifyProperty(prop, TypeConv::ArrayStringToString(arraystr));
 				break;
 			}
 			case PT_BITMAP:
@@ -688,13 +689,13 @@ void ObjectInspector::OnPropertyGridChange( wxPropertyGridEvent& event )
 				GetEventHandler()->AddPendingEvent( bitmapEvent );
 
 				// Respond to property modification
-				GetData()->ModifyProperty( prop, path );
+				AppData()->ModifyProperty( prop, path );
 				break;
 			}
 
 
 			default:
-				GetData()->ModifyProperty( prop, event.GetPropertyValueAsString() );
+				AppData()->ModifyProperty( prop, event.GetPropertyValueAsString() );
 		}
 	}
 }

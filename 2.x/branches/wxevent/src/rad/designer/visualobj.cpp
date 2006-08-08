@@ -36,6 +36,8 @@
 #include <wx/choicebk.h>
 #include <wx/wxscintilla.h>
 
+#include <rad/appdata.h>
+
 using namespace TypeConv;
 
 PVisualObject VisualObject::CreateVisualObject
@@ -246,11 +248,10 @@ BEGIN_EVENT_TABLE( VObjEvtHandler,wxEvtHandler )
 	EVT_SCI_MARGINCLICK ( -1, VObjEvtHandler::OnMarginClick )
 END_EVENT_TABLE()
 
-VObjEvtHandler::VObjEvtHandler(wxWindow *win, shared_ptr<ObjectBase> obj, DataObservable *data)
+VObjEvtHandler::VObjEvtHandler(wxWindow *win, shared_ptr<ObjectBase> obj)
 {
 	m_window = win;
 	m_object = obj;
-	m_data = data;
 };
 
 void VObjEvtHandler::OnLeftClick(wxMouseEvent &event)
@@ -259,8 +260,8 @@ void VObjEvtHandler::OnLeftClick(wxMouseEvent &event)
 
 	if (obj)
 	{
-		if (m_data->GetSelectedObject() != obj)
-			m_data->SelectObject(obj);
+		if (AppData()->GetSelectedObject() != obj)
+			AppData()->SelectObject(obj);
 		//else
 		//	event.Skip();
 	}
@@ -311,7 +312,7 @@ void VObjEvtHandler::OnSetCursor(wxSetCursorEvent &event)
 
 void VObjEvtHandler::OnNotebookPageChanged(wxNotebookEvent &event)
 {
-	shared_ptr<ObjectBase> obj = m_data->GetSelectedObject();
+	shared_ptr<ObjectBase> obj = AppData()->GetSelectedObject();
 	if (obj->GetObjectTypeName() == wxT("notebook") )
 	{
 		OnBookPageChanged( obj, event.GetSelection() );
@@ -320,7 +321,7 @@ void VObjEvtHandler::OnNotebookPageChanged(wxNotebookEvent &event)
 }
 void VObjEvtHandler::OnFlatNotebookPageChanged(wxFlatNotebookEvent &event)
 {
-	shared_ptr<ObjectBase> obj = m_data->GetSelectedObject();
+	shared_ptr<ObjectBase> obj = AppData()->GetSelectedObject();
 	if (obj->GetObjectTypeName() == wxT("flatnotebook") )
 	{
 		OnBookPageChanged( obj, event.GetSelection() );
@@ -329,7 +330,7 @@ void VObjEvtHandler::OnFlatNotebookPageChanged(wxFlatNotebookEvent &event)
 }
 void VObjEvtHandler::OnListbookPageChanged(wxListbookEvent &event)
 {
-	shared_ptr<ObjectBase> obj = m_data->GetSelectedObject();
+	shared_ptr<ObjectBase> obj = AppData()->GetSelectedObject();
 	if (obj->GetObjectTypeName() == wxT("listbook") )
 	{
 		OnBookPageChanged( obj, event.GetSelection() );
@@ -339,7 +340,7 @@ void VObjEvtHandler::OnListbookPageChanged(wxListbookEvent &event)
 
 void VObjEvtHandler::OnChoicebookPageChanged( wxChoicebookEvent& event )
 {
-	shared_ptr<ObjectBase> obj = m_data->GetSelectedObject();
+	shared_ptr<ObjectBase> obj = AppData()->GetSelectedObject();
 	if (obj->GetObjectTypeName() == wxT("chiocebook") )
 	{
 		OnBookPageChanged( obj, event.GetSelection() );

@@ -28,7 +28,6 @@
 
 
 #include "wx/wx.h"
-#include "rad/appobserver.h"
 #include "model/objectbase.h"
 #include "rad/designer/visualobj.h"
 #include "rad/designer/resizablepanel.h"
@@ -79,7 +78,7 @@ class wxFBEvent;
 class wxFBPropertyEvent;
 class wxFBObjectEvent;
 
-class VisualEditor : public wxScrolledWindow, public DataObserver
+class VisualEditor : public wxScrolledWindow
 {
  private:
   typedef map<shared_ptr<ObjectBase>,PVisualObject> VisualObjectMap;

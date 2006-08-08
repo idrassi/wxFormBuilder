@@ -86,9 +86,9 @@ bool MyApp::OnInit()
 
 
 
-  DataObservable *data = new ApplicationData( path );
+  AppDataInit( path );
 
-  MainFrame *frame = new MainFrame(data, NULL);
+  MainFrame *frame = new MainFrame(NULL);
   frame->Show(TRUE);
   SetTopWindow(frame);
 
@@ -103,7 +103,7 @@ bool MyApp::OnInit()
     if (::wxFileExists(arg))
     {
       // No va bien (en mainframe aparece untitled)
-      if (data->LoadProject(arg))
+      if (AppData()->LoadProject(arg))
         frame->InsertRecentProject(arg);
 
       return TRUE;
@@ -111,7 +111,7 @@ bool MyApp::OnInit()
   }
 
 
-  data->NewProject();
+  AppData()->NewProject();
   return TRUE;
 }
 

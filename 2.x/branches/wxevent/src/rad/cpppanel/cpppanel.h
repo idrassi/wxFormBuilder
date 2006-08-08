@@ -31,7 +31,6 @@
 
 #include "codegen/codegen.h"
 #include "codegen/cppcg.h"
-#include "rad/appobserver.h"
 #include "wx/file.h"
 #include "utils/notebookchooser.h"
 
@@ -86,7 +85,7 @@ class CodeEditor : public wxPanel
 
 class wxFBEvent;
 
-class CppPanel : public wxPanel, public DataObserver
+class CppPanel : public wxPanel
 {
  private:
   CodeEditor *m_cppPanel;

@@ -26,7 +26,6 @@
 #ifndef __OBJECT_TREE__
 #define __OBJECT_TREE__
 
-#include "rad/appobserver.h"
 #include "model/objectbase.h"
 #include <map>
 #include "rad/customkeys.h"
@@ -37,7 +36,7 @@ class wxFBEvent;
 class wxFBPropertyEvent;
 class wxFBObjectEvent;
 
-class ObjectTree : public wxPanel, public DataObserver
+class ObjectTree : public wxPanel
 {
 private:
    typedef map<shared_ptr<ObjectBase>, wxTreeItemId> ObjectItemMap;
@@ -107,14 +106,13 @@ class ObjectTreeItemData : public wxTreeItemData
 class ItemPopupMenu : public wxMenu
 {
  private:
-  DataObservable *m_data;
   shared_ptr<ObjectBase> m_object;
 
   DECLARE_EVENT_TABLE()
 
  public:
   void OnUpdateEvent(wxUpdateUIEvent& e);
-  ItemPopupMenu(DataObservable *data, shared_ptr<ObjectBase> obj);
+  ItemPopupMenu(shared_ptr<ObjectBase> obj);
   void OnMenuEvent (wxCommandEvent & event);
 };
 

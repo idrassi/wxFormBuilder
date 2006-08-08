@@ -31,6 +31,7 @@
 #include "rad/menueditor.h"
 #include "utils/typeconv.h"
 #include "rad/wxfbevent.h"
+#include <rad/appdata.h>
 
 BEGIN_EVENT_TABLE( ObjectTree, wxPanel )
 	EVT_TREE_SEL_CHANGED( -1, ObjectTree::OnSelChanged )
@@ -63,7 +64,7 @@ void ObjectTree::RebuildTree()
 {
 	m_tcObjects->Freeze();
 
-	shared_ptr<ObjectBase> project = GetData()->GetProjectData();
+	shared_ptr<ObjectBase> project = AppData()->GetProjectData();
 
 	// guardamos el valor del atributo "IsExpanded"
 	// para regenerar correctamente el árbol
@@ -102,7 +103,7 @@ void ObjectTree::OnSelChanged(wxTreeEvent &event)
 	{
 		shared_ptr<ObjectBase> obj(((ObjectTreeItemData *)item_data)->GetObject());
 		assert(obj);
-		GetData()->SelectObject(obj);
+		AppData()->SelectObject(obj);
 	}
 }
 
@@ -114,7 +115,7 @@ void ObjectTree::OnRightClick(wxTreeEvent &event)
 	{
 		shared_ptr<ObjectBase> obj(((ObjectTreeItemData *)item_data)->GetObject());
 		assert(obj);
-		wxMenu * menu = new ItemPopupMenu(GetData(),obj);
+		wxMenu * menu = new ItemPopupMenu(obj);
 		wxPoint pos = event.GetPoint();
 		menu->UpdateUI(menu);
 		PopupMenu(menu,pos.x, pos.y);
@@ -227,10 +228,10 @@ void ObjectTree::Create()
 		m_iconIdx.insert(IconIndexMap::value_type( wxT("_default_"),index++));
 	}
 
-	unsigned int pkg_count = GetData()->GetPackageCount();
+	unsigned int pkg_count = AppData()->GetPackageCount();
 	for (unsigned int i = 0; i< pkg_count;i++)
 	{
-		PObjectPackage pkg = GetData()->GetPackage(i);
+		PObjectPackage pkg = AppData()->GetPackage(i);
 
 		unsigned int j;
 		for (j=0;j<pkg->GetObjectCount();j++)
@@ -365,8 +366,8 @@ EVT_MENU(-1, ItemPopupMenu::OnMenuEvent)
 EVT_UPDATE_UI(-1, ItemPopupMenu::OnUpdateEvent)
 END_EVENT_TABLE()
 
-ItemPopupMenu::ItemPopupMenu(DataObservable *data, shared_ptr<ObjectBase> obj)
-: wxMenu(), m_data(data), m_object(obj)
+ItemPopupMenu::ItemPopupMenu(shared_ptr<ObjectBase> obj)
+: wxMenu(), m_object(obj)
 {
 	Append(MENU_CUT,        wxT("Cut\tCtrl+X"));
 	Append(MENU_COPY,       wxT("Copy\tCtrl+C"));
@@ -391,32 +392,32 @@ void ItemPopupMenu::OnMenuEvent (wxCommandEvent & event)
 	switch (id)
 	{
 	case MENU_CUT:
-		m_data->CutObject(m_object);
+		AppData()->CutObject(m_object);
 		break;
 	case MENU_PASTE:
-		m_data->PasteObject(m_object);
+		AppData()->PasteObject(m_object);
 		break;
 	case MENU_DELETE:
-		m_data->RemoveObject(m_object);
+		AppData()->RemoveObject(m_object);
 		break;
 	case MENU_MOVE_UP:
-		m_data->MovePosition(m_object,false);
+		AppData()->MovePosition(m_object,false);
 		break;
 	case MENU_MOVE_DOWN:
-		m_data->MovePosition(m_object,true);
+		AppData()->MovePosition(m_object,true);
 		break;
 	case MENU_MOVE_RIGHT:
-		m_data->MoveHierarchy(m_object,false);
+		AppData()->MoveHierarchy(m_object,false);
 		break;
 	case MENU_MOVE_LEFT:
-		m_data->MoveHierarchy(m_object,true);
+		AppData()->MoveHierarchy(m_object,true);
 		break;
 	case MENU_MOVE_NEW_BOXSIZER:
-		m_data->CreateBoxSizerWithObject(m_object);
+		AppData()->CreateBoxSizerWithObject(m_object);
 		break;
 	case MENU_EDIT_MENUS:
 		{
-			shared_ptr<ObjectBase> obj = m_data->GetSelectedObject();
+			shared_ptr<ObjectBase> obj = AppData()->GetSelectedObject();
 			if (obj && (obj->GetClassName() == wxT("wxMenuBar") || obj->GetClassName() == wxT("Frame") ) )
 			{
 				MenuEditor me(NULL);
@@ -437,7 +438,7 @@ void ItemPopupMenu::OnMenuEvent (wxCommandEvent & event)
 				{
 					if (obj->GetClassName() == wxT("wxMenuBar"))
 					{
-						shared_ptr<ObjectBase> menubar = me.GetMenubar(m_data->GetObjectDatabase());
+						shared_ptr<ObjectBase> menubar = me.GetMenubar(AppData()->GetObjectDatabase());
 						while (obj->GetChildCount() > 0)
 						{
 							shared_ptr<ObjectBase> child = obj->GetChild(0);
@@ -447,11 +448,11 @@ void ItemPopupMenu::OnMenuEvent (wxCommandEvent & event)
 						for (unsigned int i = 0; i < menubar->GetChildCount(); i++)
 						{
 							shared_ptr<ObjectBase> child = menubar->GetChild(i);
-							m_data->InsertObject(child,obj);
+							AppData()->InsertObject(child,obj);
 						}
 					}
 					else
-						m_data->InsertObject(me.GetMenubar(m_data->GetObjectDatabase()),m_data->GetSelectedForm());
+						AppData()->InsertObject(me.GetMenubar(AppData()->GetObjectDatabase()),AppData()->GetSelectedForm());
 				}
 			}
 		}
@@ -471,10 +472,10 @@ void ItemPopupMenu::OnUpdateEvent(wxUpdateUIEvent& e)
 		break;
 	case MENU_CUT:
 	case MENU_COPY:
-		e.Enable(m_data->CanCopyObject());
+		e.Enable(AppData()->CanCopyObject());
 		break;
 	case MENU_PASTE:
-		e.Enable(m_data->CanPasteObject());
+		e.Enable(AppData()->CanPasteObject());
 		break;
 
 	case MENU_MOVE_UP:

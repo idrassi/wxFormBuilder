@@ -32,8 +32,7 @@
 #include <wx/propgrid/propdev.h>
 #include <wx/propgrid/advprops.h>
 #include <wx/propgrid/manager.h>
-
-#include "rad/appobserver.h"
+#include <model/objectbase.h>
 
 // -----------------------------------------------------------------------
 
@@ -59,10 +58,10 @@ class wxFBPropertyEvent;
 class wxFBObjectEvent;
 class wxFBEvent;
 
-class ObjectInspector : public wxPanel, public DataObserver
+class ObjectInspector : public wxPanel
 {
  private:
-  typedef map< wxPGProperty*, shared_ptr< Property > > ObjInspectorMap;
+  typedef std::map< wxPGProperty*, shared_ptr< Property > > ObjInspectorMap;
   ObjInspectorMap m_propmap;
 
   shared_ptr<ObjectBase> m_currentSel;

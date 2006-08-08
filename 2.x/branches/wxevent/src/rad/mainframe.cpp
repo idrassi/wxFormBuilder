@@ -42,6 +42,8 @@
 
 #include <wx/filename.h>
 
+#include <rad/appdata.h>
+
 #define ID_ABOUT         100
 #define ID_QUIT          101
 #define ID_SAVE_PRJ      102
@@ -127,7 +129,7 @@ BEGIN_EVENT_TABLE(MainFrame,wxFrame)
 
 END_EVENT_TABLE()
 
-MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
+MainFrame::MainFrame(wxWindow *parent, int id)
 : wxFrame(parent,id,wxT("wxFormBuilder v.0.1"),wxDefaultPosition,wxSize(1000,800))
 {
 
@@ -207,8 +209,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
 	Title *tree_title = new Title(tree_panel,wxT("Object Tree"));
 
 	m_objTree = new ObjectTree(tree_panel,-1);
-	m_objTree->SetData( data );
-	data->AddHandler( m_objTree->GetEventHandler() );
+	AppData()->AddHandler( m_objTree->GetEventHandler() );
 	m_objTree->Create();
 
 	wxBoxSizer *tree_sizer = new wxBoxSizer(wxVERTICAL);
@@ -225,8 +226,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
 	Title *obj_insp_title = new Title(obj_inspPanel,wxT("Object Properties"));
 
 	m_objInsp = new ObjectInspector(obj_inspPanel,-1);
-	m_objInsp->SetData( data );
-	data->AddHandler( m_objInsp->GetEventHandler() );
+	AppData()->AddHandler( m_objInsp->GetEventHandler() );
 
 	obj_insp_sizer->Add(obj_insp_title,0,wxEXPAND,0);
 
@@ -246,7 +246,6 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
 	// la paleta de componentes, no es un observador propiamente dicho, ya
 	// que no responde ante los eventos de la aplicación
 	m_palette = new wxFbPalette(right,-1);
-	m_palette->SetData(data);
 	m_palette->Create();
 	m_palette->SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE) );
 
@@ -259,22 +258,20 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
 	m_notebook->SetImageList( &m_icons );
 
 	m_visualEdit = new VisualEditor(m_notebook);
-	data->AddHandler( m_visualEdit->GetEventHandler() );
-	m_visualEdit->SetData( data );
+	AppData()->AddHandler( m_visualEdit->GetEventHandler() );
 
-	data->AddHandler( m_objTree->GetEventHandler() );
-	m_objTree->SetData( data );
+	AppData()->AddHandler( m_objTree->GetEventHandler() );
 
 	m_notebook->AddPage( m_visualEdit, wxT("Designer"), false, 0 );
 
 	m_cpp = new CppPanel(m_notebook,-1);
-	data->AddHandler( m_cpp->GetEventHandler() );
-	m_cpp->SetData( data );
+	AppData()->AddHandler( m_cpp->GetEventHandler() );
+
 	m_notebook->AddPage( m_cpp, wxT("C++"), false, 1 );
 
 	m_xrc = new XrcPanel(m_notebook,-1);
-	data->AddHandler( m_xrc->GetEventHandler() );
-	m_xrc->SetData( data );
+	AppData()->AddHandler( m_xrc->GetEventHandler() );
+
 	m_notebook->AddPage(m_xrc, wxT("XRC"), false, 2 );
 
 	Title *ed_title = new Title(right,wxT("Editor"));
@@ -336,8 +333,7 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
 	// añadimos el manejador de las teclas rápidas de la aplicación
 	// realmente este es el sitio donde hacerlo ?????
 	//m_objTree->AddCustomKeysHandler(new CustomKeysEvtHandler(data));
-	data->AddHandler( this->GetEventHandler() );
-	this->SetData( data );
+	AppData()->AddHandler( this->GetEventHandler() );
 };
 
 
@@ -352,11 +348,13 @@ MainFrame::~MainFrame()
 	// Eliminamos los observadores, ya que si quedara algún evento por procesar
 	// se produciría un error de acceso no válido debido a que los observadores
 	// ya estarían destruidos
-	m_objTree->GetData()->RemoveHandler( m_objTree->GetEventHandler() );
-	m_objInsp->GetData()->RemoveHandler( m_objInsp->GetEventHandler() );
-	m_visualEdit->GetData()->RemoveHandler( m_visualEdit->GetEventHandler() );
-	m_cpp->GetData()->RemoveHandler( m_cpp->GetEventHandler() );
-	m_xrc->GetData()->RemoveHandler( m_xrc->GetEventHandler() );
+
+	///@todo Every observer should register and deregister in AppData
+	AppData()->RemoveHandler( m_objTree->GetEventHandler() );
+	AppData()->RemoveHandler( m_objInsp->GetEventHandler() );
+	AppData()->RemoveHandler( m_visualEdit->GetEventHandler() );
+	AppData()->RemoveHandler( m_cpp->GetEventHandler() );
+	AppData()->RemoveHandler( m_xrc->GetEventHandler() );
 }
 
 void MainFrame::RestorePosition(const wxString &name)
@@ -420,12 +418,12 @@ void MainFrame::SavePosition(const wxString &name)
 
 void MainFrame::OnSaveProject(wxCommandEvent &event)
 {
-	wxString filename = GetData()->GetProjectFileName();
+	wxString filename = AppData()->GetProjectFileName();
 	if (filename == wxT(""))
 		OnSaveAsProject(event);
 	else
 	{
-		GetData()->SaveProject(filename);
+		AppData()->SaveProject(filename);
 		InsertRecentProject(filename);
 	}
 }
@@ -440,7 +438,7 @@ void MainFrame::OnSaveAsProject(wxCommandEvent &event)
 	{
 		m_currentDir = dialog->GetDirectory();
 		wxString filename = dialog->GetPath();
-		GetData()->SaveProject(filename); // FIXME: debe devolver bool.
+		AppData()->SaveProject(filename); // FIXME: debe devolver bool.
 		InsertRecentProject(filename);
 	};
 
@@ -459,7 +457,7 @@ void MainFrame::OnOpenProject(wxCommandEvent &event)
 	{
 		m_currentDir = dialog->GetDirectory();
 		wxString filename = dialog->GetPath();
-		if (GetData()->LoadProject(filename))
+		if (AppData()->LoadProject(filename))
 			InsertRecentProject(filename);
 	};
 
@@ -475,7 +473,7 @@ void MainFrame::OnOpenRecent(wxCommandEvent &event)
 	assert (i >= 0 && i < 4);
 
 	wxFileName filename( m_recentProjects[i] );
-	if (GetData()->LoadProject(filename.GetFullPath()))
+	if (AppData()->LoadProject(filename.GetFullPath()))
 	{
 		m_currentDir = filename.GetPath();
 		InsertRecentProject(filename.GetFullPath());
@@ -494,11 +492,11 @@ void MainFrame::OnImportXrc(wxCommandEvent &event)
 		if (doc.LoadFile())
 		{
 			XrcLoader xrc;
-			xrc.SetObjectDatabase(GetData()->GetObjectDatabase());
+			xrc.SetObjectDatabase(AppData()->GetObjectDatabase());
 			shared_ptr<ObjectBase> project = xrc.GetProject(&doc);
 			if (project)
 			{
-				GetData()->MergeProject(project);
+				AppData()->MergeProject(project);
 			}
 			else
 				wxLogMessage(wxT("Error al importar XRC"));
@@ -516,12 +514,12 @@ void MainFrame::OnNewProject(wxCommandEvent &event)
 	if (!SaveWarning())
 		return;
 
-	GetData()->NewProject();
+	AppData()->NewProject();
 }
 
 void MainFrame::OnGenerateCode(wxCommandEvent &event)
 {
-	GetData()->GenerateCode();
+	AppData()->GenerateCode();
 }
 
 void MainFrame::OnAbout(wxCommandEvent &event)
@@ -611,17 +609,17 @@ void MainFrame::OnProjectRefresh( wxFBEvent& event )
 
 void MainFrame::OnUndo(wxCommandEvent &event)
 {
-	GetData()->Undo();
+	AppData()->Undo();
 }
 void MainFrame::OnRedo(wxCommandEvent &event)
 {
-	GetData()->Redo();
+	AppData()->Redo();
 }
 
 void MainFrame::UpdateLayoutTools()
 {
 	int option, border, flag;
-	if (GetData()->GetLayoutSettings(GetData()->GetSelectedObject(),&flag,&option,&border))
+	if (AppData()->GetLayoutSettings(AppData()->GetSelectedObject(),&flag,&option,&border))
 	{
 		// Activamos todas las herramientas de layout
 		GetToolBar()->EnableTool(ID_EXPAND,true);
@@ -679,10 +677,10 @@ void MainFrame::UpdateFrame()
 	wxString time(wxT(__TIME__));
 	wxString title(wxT("wxFormBuilder (Build on ") + date +wxT(" - ")+ time + wxT(") - "));
 
-	if (GetData()->IsModified())
+	if (AppData()->IsModified())
 		title = title + wxChar('*');
 
-	wxString filename = GetData()->GetProjectFileName();
+	wxString filename = AppData()->GetProjectFileName();
 
 	title = title + ( filename.IsEmpty() ?
 		wxT("[untitled]") :
@@ -693,16 +691,16 @@ void MainFrame::UpdateFrame()
 	// Actualizamos los menus
 	wxMenu *menuEdit = GetMenuBar()->GetMenu(GetMenuBar()->FindMenu(wxT("Edit")));
 
-	menuEdit->Enable(ID_REDO,GetData()->CanRedo());
-	menuEdit->Enable(ID_UNDO,GetData()->CanUndo());
+	menuEdit->Enable(ID_REDO,AppData()->CanRedo());
+	menuEdit->Enable(ID_UNDO,AppData()->CanUndo());
 
 	// Actualizamos la barra de herramientas
-	GetToolBar()->EnableTool(ID_REDO,GetData()->CanRedo());
-	GetToolBar()->EnableTool(ID_UNDO,GetData()->CanUndo());
-	GetToolBar()->EnableTool(ID_COPY,GetData()->CanCopyObject());
-	GetToolBar()->EnableTool(ID_CUT,GetData()->CanCopyObject());
-	GetToolBar()->EnableTool(ID_DELETE,GetData()->CanCopyObject());
-	GetToolBar()->EnableTool(ID_PASTE,GetData()->CanPasteObject());
+	GetToolBar()->EnableTool(ID_REDO,AppData()->CanRedo());
+	GetToolBar()->EnableTool(ID_UNDO,AppData()->CanUndo());
+	GetToolBar()->EnableTool(ID_COPY,AppData()->CanCopyObject());
+	GetToolBar()->EnableTool(ID_CUT,AppData()->CanCopyObject());
+	GetToolBar()->EnableTool(ID_DELETE,AppData()->CanCopyObject());
+	GetToolBar()->EnableTool(ID_PASTE,AppData()->CanPasteObject());
 
 	UpdateLayoutTools();
 
@@ -754,56 +752,56 @@ void MainFrame::InsertRecentProject(const wxString &file)
 
 void MainFrame::OnCopy(wxCommandEvent &event)
 {
-	GetData()->CopyObject(GetData()->GetSelectedObject());
+	AppData()->CopyObject(AppData()->GetSelectedObject());
 	UpdateFrame();
 }
 
 void MainFrame::OnCut (wxCommandEvent &event)
 {
-	GetData()->CutObject(GetData()->GetSelectedObject());
+	AppData()->CutObject(AppData()->GetSelectedObject());
 	UpdateFrame();
 }
 
 void MainFrame::OnDelete (wxCommandEvent &event)
 {
-	GetData()->RemoveObject(GetData()->GetSelectedObject());
+	AppData()->RemoveObject(AppData()->GetSelectedObject());
 	UpdateFrame();
 }
 
 void MainFrame::OnPaste (wxCommandEvent &event)
 {
-	GetData()->PasteObject(GetData()->GetSelectedObject());
+	AppData()->PasteObject(AppData()->GetSelectedObject());
 	UpdateFrame();
 }
 
 void MainFrame::OnToggleExpand (wxCommandEvent &event)
 {
-	GetData()->ToggleExpandLayout(GetData()->GetSelectedObject());
+	AppData()->ToggleExpandLayout(AppData()->GetSelectedObject());
 }
 
 void MainFrame::OnToggleStretch (wxCommandEvent &event)
 {
-	GetData()->ToggleStretchLayout(GetData()->GetSelectedObject());
+	AppData()->ToggleStretchLayout(AppData()->GetSelectedObject());
 }
 
 void MainFrame::OnMoveUp (wxCommandEvent &event)
 {
-	GetData()->MovePosition(GetData()->GetSelectedObject(),false,1);
+	AppData()->MovePosition(AppData()->GetSelectedObject(),false,1);
 }
 
 void MainFrame::OnMoveDown (wxCommandEvent &event)
 {
-	GetData()->MovePosition(GetData()->GetSelectedObject(),true,1);
+	AppData()->MovePosition(AppData()->GetSelectedObject(),true,1);
 }
 
 void MainFrame::OnMoveLeft (wxCommandEvent &event)
 {
-  GetData()->MoveHierarchy(GetData()->GetSelectedObject(),true);
+  AppData()->MoveHierarchy(AppData()->GetSelectedObject(),true);
 }
 
 void MainFrame::OnMoveRight (wxCommandEvent &event)
 {
-  GetData()->MoveHierarchy(GetData()->GetSelectedObject(),false);
+  AppData()->MoveHierarchy(AppData()->GetSelectedObject(),false);
 }
 
 void MainFrame::OnChangeAlignment (wxCommandEvent &event)
@@ -829,7 +827,7 @@ void MainFrame::OnChangeAlignment (wxCommandEvent &event)
 		break;
 	}
 
-	GetData()->ChangeAlignment(GetData()->GetSelectedObject(),align,vertical);
+	AppData()->ChangeAlignment(AppData()->GetSelectedObject(),align,vertical);
 	UpdateLayoutTools();
 }
 
@@ -853,7 +851,7 @@ void MainFrame::OnChangeBorder(wxCommandEvent& e)
 		break;
 	}
 
-	GetData()->ToggleBorderFlag(GetData()->GetSelectedObject(), border);
+	AppData()->ToggleBorderFlag(AppData()->GetSelectedObject(), border);
 	UpdateLayoutTools();
 }
 
@@ -861,7 +859,7 @@ bool MainFrame::SaveWarning()
 {
 	int result = wxYES;
 
-	if (GetData()->IsModified())
+	if (AppData()->IsModified())
 	{
 		result = ::wxMessageBox(wxT("Current project file has been modified...\n")
 			wxT("Do you want to save the changes?"),
@@ -881,6 +879,6 @@ bool MainFrame::SaveWarning()
 
 void MainFrame::OnFlatNotebookPageChanged( wxNotebookChooserEvent& event )
 {
-	GetData()->GenerateCode( true );
+	AppData()->GenerateCode( true );
 }
 

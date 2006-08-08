@@ -33,7 +33,7 @@
 #include "wx/statline.h"
 #include "rad/designer/resizablepanel.h"
 #include "rad/wxfbevent.h"
-
+#include <rad/appdata.h>
 
 #ifdef __WX24__
 #define wxFULL_REPAINT_ON_RESIZE 0
@@ -84,7 +84,7 @@ VisualEditor::VisualEditor(wxWindow *parent)
 void VisualEditor::Setup()
 {
 #ifdef __WXFB_EXPERIMENTAL__
-	EditorHandler *handler = new EditorHandler(GetData());
+	EditorHandler *handler = new EditorHandler(AppData());
 	handler->SetWindow(m_back);
 	m_back->PushEventHandler(handler);
 #endif //__WXFB_EXPERIMENTAL__
@@ -117,7 +117,7 @@ void VisualEditor::OnResizeBackPanel (wxCommandEvent &event) //(wxSashEvent &eve
 	m_back->SetSize(rect.width,rect.height);
 	m_back->Layout();*/
 
-	shared_ptr<ObjectBase> form (GetData()->GetSelectedForm());
+	shared_ptr<ObjectBase> form (AppData()->GetSelectedForm());
 
 	if (form)
 	{
@@ -125,7 +125,7 @@ void VisualEditor::OnResizeBackPanel (wxCommandEvent &event) //(wxSashEvent &eve
 		if (prop)
 		{
 			wxString value(TypeConv::PointToString(wxPoint(m_back->GetSize().x, m_back->GetSize().y)));
-			GetData()->ModifyProperty(prop, value);
+			AppData()->ModifyProperty(prop, value);
 		}
 	}
 
@@ -142,7 +142,7 @@ void VisualEditor::Create()
 	wxWindow *statusbar = NULL;
 	wxWindow *toolbar = NULL;
 
-	m_form = GetData()->GetSelectedForm();
+	m_form = AppData()->GetSelectedForm();
 
 	if (IsShown()) Freeze(); // congelamos para evitar el flickering
 
@@ -312,7 +312,7 @@ PVisualObject VisualEditor::Generate(shared_ptr<ObjectBase> obj, wxWindow *wxpar
 	if (obj_view.Window())// && !comp->KeepEvtHandler())
 	{
 		obj_view.Window()->PushEventHandler(
-			new VObjEvtHandler(obj_view.Window(),obj,GetData()));
+			new VObjEvtHandler(obj_view.Window(),obj));
 	}
 
 	// nuevo padre para las ventanas que se encuentren por debajo
@@ -572,7 +572,7 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 
   // sólo es necesario regenerar la vista si el objeto
 	// seleccionado pertenece a otro form
-	if (GetData()->GetSelectedForm() != m_form)
+	if (AppData()->GetSelectedForm() != m_form)
 		Create();
 
 	// Asignamos el widget y el sizer para mostrar el recuadro

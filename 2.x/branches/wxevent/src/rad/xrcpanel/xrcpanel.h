@@ -29,12 +29,11 @@
 #include "wx/wx.h"
 #include "codegen/codegen.h"
 #include "rad/cpppanel/cpppanel.h"
-#include "rad/appobserver.h"
 #include "wx/file.h"
 
 class wxFBEvent;
 
-class XrcPanel : public wxPanel, public DataObserver
+class XrcPanel : public wxPanel
 {
  private:
   CodeEditor *m_xrcPanel;
