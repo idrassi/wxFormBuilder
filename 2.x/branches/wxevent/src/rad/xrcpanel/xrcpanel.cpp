@@ -28,7 +28,6 @@
 #include "codegen/xrccg.h"
 #include "utils/typeconv.h"
 #include <wx/filename.h>
-#include "rad/global.h"
 #include "rad/wxfbevent.h"
 #include <rad/appdata.h>
 
@@ -153,7 +152,7 @@ void XrcPanel::OnCodeGeneration( wxFBEvent& event )
 		path = wxFileName( pathEntry );
 		if ( !path.IsAbsolute() )
 		{
-			wxString projectPath = GlobalData()->GetProjectPath();
+			wxString projectPath = AppData()->GetProjectPath();
 			if ( projectPath.empty() && !panelOnly )
 			{
 				wxLogWarning(wxT("You must save the project when using a relative path for output files") );

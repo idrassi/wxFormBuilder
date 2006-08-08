@@ -26,7 +26,6 @@
 #include "cpppanel.h"
 #include "rad/bitmaps.h"
 #include "utils/typeconv.h"
-#include "rad/global.h"
 
 #include <wx/filename.h>
 
@@ -173,7 +172,7 @@ void CppPanel::OnCodeGeneration( wxFBEvent& event )
 		path = wxFileName( pathEntry );
 		if ( !path.IsAbsolute() )
 		{
-			wxString projectPath = GlobalData()->GetProjectPath();
+			wxString projectPath = AppData()->GetProjectPath();
 			if ( projectPath.empty() && !panelOnly )
 			{
 				wxLogWarning(wxT("You must save the project when using a relative path for output files") );
