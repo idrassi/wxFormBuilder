@@ -41,6 +41,7 @@ END_EVENT_TABLE()
 CppPanel::CppPanel(wxWindow *parent, int id)
 : wxPanel (parent,id)
 {
+	AppData()->AddHandler( this->GetEventHandler() );
 	wxBoxSizer *top_sizer = new wxBoxSizer(wxVERTICAL);
 
 	wxNotebookChooser* notebook = new ChooseNotebook( this, -1 );
@@ -68,7 +69,12 @@ CppPanel::CppPanel(wxWindow *parent, int id)
 
 	m_hCW = PTCCodeWriter(new TCCodeWriter(m_hPanel->GetTextCtrl()));
 	m_cppCW = PTCCodeWriter(new TCCodeWriter(m_cppPanel->GetTextCtrl()));
-};
+}
+
+CppPanel::~CppPanel()
+{
+	AppData()->RemoveHandler( this->GetEventHandler() );
+}
 
 void CppPanel::InitStyledTextCtrl(wxScintilla *stc)
 {

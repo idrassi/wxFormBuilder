@@ -67,6 +67,7 @@ private:
 
 public:
   ObjectTree(wxWindow *parent, int id);
+  ~ObjectTree();
   void Create();
 
   void OnSelChanged(wxTreeEvent &event);

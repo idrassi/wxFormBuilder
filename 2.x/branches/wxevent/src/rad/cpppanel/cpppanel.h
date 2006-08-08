@@ -98,6 +98,7 @@ class CppPanel : public wxPanel
 
  public:
   CppPanel(wxWindow *parent, int id);
+  ~CppPanel();
 
   void OnCodeGeneration( wxFBEvent& event );
 

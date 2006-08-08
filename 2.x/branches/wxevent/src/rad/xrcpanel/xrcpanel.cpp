@@ -40,6 +40,7 @@ END_EVENT_TABLE()
 XrcPanel::XrcPanel(wxWindow *parent, int id)
   : wxPanel (parent,id)
 {
+  AppData()->AddHandler( this->GetEventHandler() );
   wxBoxSizer *top_sizer = new wxBoxSizer(wxVERTICAL);
 
   m_xrcPanel = new CodeEditor(this,-1);
@@ -54,6 +55,11 @@ XrcPanel::XrcPanel(wxWindow *parent, int id)
   top_sizer->Layout();
 
   m_cw = PTCCodeWriter(new TCCodeWriter(m_xrcPanel->GetTextCtrl()));
+}
+
+XrcPanel::~XrcPanel()
+{
+	AppData()->RemoveHandler( this->GetEventHandler() );
 }
 
 void XrcPanel::InitStyledTextCtrl(wxScintilla *stc)

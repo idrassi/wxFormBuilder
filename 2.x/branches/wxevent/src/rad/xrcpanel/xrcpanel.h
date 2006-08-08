@@ -43,6 +43,7 @@ class XrcPanel : public wxPanel
 
  public:
   XrcPanel(wxWindow *parent, int id);
+  ~XrcPanel();
 
   void OnCodeGeneration( wxFBEvent& event );
 
