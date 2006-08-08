@@ -64,6 +64,7 @@ END_EVENT_TABLE()
 VisualEditor::VisualEditor(wxWindow *parent)
 : wxScrolledWindow(parent,-1,wxDefaultPosition,wxDefaultSize,wxSUNKEN_BORDER)
 {
+	AppData()->AddHandler( this->GetEventHandler() );
 
 	// Parece ser que han modificado el comportamiento en wxMSW 2.5.x ya que al
 	// poner un color de background, este es aplicado a los hijos también.
@@ -79,6 +80,11 @@ VisualEditor::VisualEditor(wxWindow *parent)
 	m_back->SetSashVisible(wxSASH_RIGHT,true);
 	m_back->SetSashBorder(wxSASH_RIGHT,true);*/
 	//  m_back->PushEventHandler(new EditorHandler(GetData()));
+}
+
+VisualEditor::~VisualEditor()
+{
+	AppData()->RemoveHandler( this->GetEventHandler() );
 }
 
 void VisualEditor::Setup()
@@ -359,6 +365,168 @@ PVisualObject VisualEditor::Generate(shared_ptr<ObjectBase> obj, wxWindow *wxpar
 	return vobj;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+
+void VisualEditor::OnProjectLoaded ( wxFBEvent &event )
+{
+  Create();
+}
+
+void VisualEditor::OnProjectSaved  ( wxFBEvent &event )
+{
+  Create();
+}
+
+void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
+{
+  PObjectBase obj = event.GetFBObject();
+
+  // sólo es necesario regenerar la vista si el objeto
+	// seleccionado pertenece a otro form
+	if (AppData()->GetSelectedForm() != m_form)
+		Create();
+
+	// Asignamos el widget y el sizer para mostrar el recuadro
+
+	PVisualObject visualObj;
+	shared_ptr<ObjectBase> objAuxCt, objAuxNb, objAux;
+	VisualObjectMap::iterator it = m_map.find(obj);
+
+	if (it != m_map.end())
+	{
+		wxWindow *selPanel = NULL;
+		visualObj = it->second;
+
+		// 1. Buscar el panel activo, sobre este es donde se dibujarán los recuadros
+		//    en el evento OnPaint.
+		// buscamos hacia arriba el objeto más cercano cuyo componente sea
+		// de tipo WINDOW.
+
+		//objAuxCt = obj->FindNearAncestor("container");
+		//objAuxNb = obj->FindNearAncestor("notebook");
+		//if (!objAuxCt)
+		//  objAux = objAuxNb;
+		//else if (!objAuxNb)
+		//  objAux = objAuxCt;
+		//else
+		//  objAux = objAuxNb->Deep() > objAuxCt->Deep() ? objAuxNb : objAuxCt;
+
+		objAux = obj->GetParent();
+		while (objAux)
+		{
+			IComponent *compAux = objAux->GetObjectInfo()->GetComponent();
+			if (!compAux)
+			{
+				objAux.reset();
+				break;
+			}
+
+			if (compAux->GetComponentType() == COMPONENT_TYPE_WINDOW)
+				break;
+
+			objAux = objAux->GetParent();
+		}
+
+		if (objAux)  // Un padre de tipo T_WIDGET es siempre un contenedor
+		{
+			it = m_map.find(objAux);
+			selPanel = shared_dynamic_cast<VisualWindow>(it->second)->GetWindow();
+		}
+		else
+			selPanel = m_back;
+
+		// 2. Buscar el item
+		wxObject *item = NULL;
+		wxSizer *sizer = NULL;
+		wxString typeName = obj->GetObjectTypeName();
+
+		int componentType = COMPONENT_TYPE_ABSTRACT;
+		IComponent *comp = obj->GetObjectInfo()->GetComponent();
+		if (comp)
+			componentType = comp->GetComponentType();
+
+		//if ( typeName == "widget" || typeName == "container" ||
+		//     typeName == "notebook" || typeName == "statusbar")
+		if (componentType == COMPONENT_TYPE_WINDOW)
+			item = shared_dynamic_cast<VisualWindow>(visualObj)->GetWindow();
+
+		//else if (typeName == "sizer")
+		else if (componentType == COMPONENT_TYPE_SIZER)
+			item = shared_dynamic_cast<VisualSizer>(visualObj)->GetSizer();
+
+		// 3. Buscar el sizer.
+		// lo que se hace a continuación es buscar el objeto más próximo que sea
+		// un componente WINDOW o un componente SIZER y en el caso de ser un
+		// sizer lo guardamos.
+
+		//objAux = obj->FindNearAncestor("sizer");
+		//objAuxCt = obj->FindNearAncestor("container");
+		//if (objAux && (!objAuxCt || objAux->Deep() > objAuxCt->Deep()))
+		//{
+		//  it = m_map.find(objAux);
+		//  sizer = shared_dynamic_cast<VisualSizer>(it->second)->GetSizer();
+		//}
+
+		objAux = obj->GetParent();
+		while (objAux)
+		{
+			IComponent *compAux = objAux->GetObjectInfo()->GetComponent();
+			if (!compAux)
+				break;
+
+			if (compAux->GetComponentType() == COMPONENT_TYPE_SIZER)
+			{
+				it = m_map.find(objAux);
+				sizer = shared_dynamic_cast<VisualSizer>(it->second)->GetSizer();
+				break;
+			}
+			else if (compAux->GetComponentType() == COMPONENT_TYPE_WINDOW)
+				break;
+
+			objAux = objAux->GetParent();
+		}
+
+
+		m_back->SetSelectedSizer(sizer);
+		m_back->SetSelectedItem(item);
+		m_back->SetSelectedObject(obj);
+		m_back->SetSelectedPanel(selPanel);
+		m_back->Refresh();
+	}
+	else
+	{
+		m_back->SetSelectedSizer(NULL);
+		m_back->SetSelectedItem(NULL);
+		m_back->SetSelectedObject(shared_ptr<ObjectBase>());
+		m_back->SetSelectedPanel(NULL);
+		m_back->Refresh();
+	}
+}
+
+void VisualEditor::OnObjectCreated ( wxFBObjectEvent &event )
+{
+  Create();
+}
+
+void VisualEditor::OnObjectRemoved ( wxFBObjectEvent &event )
+{
+  Create();
+}
+
+void VisualEditor::OnPropertyModified ( wxFBPropertyEvent &event )
+{
+    PObjectBase aux = m_back->GetSelectedObject();
+	Create();
+	wxFBObjectEvent objEvent( wxEVT_FB_OBJECT_SELECTED, aux );
+	this->ProcessEvent( objEvent );
+	UpdateVirtualSize();
+}
+
+void VisualEditor::OnProjectRefresh ( wxFBEvent &event)
+{
+  Create();
+}
+
 BEGIN_EVENT_TABLE(GridPanel, ResizablePanel) //wxSashWindow)
 EVT_PAINT(GridPanel::OnPaint)
 //  EVT_MOTION(GridPanel::OnMouseMove)
@@ -553,166 +721,3 @@ void GridPanel::OnMouseMove(wxMouseEvent &event)
 wxLogMessage(wxT("Moving.."));
 event.Skip();
 }*/
-
-/////////////////////////////////////////////////////////////////////////////
-
-void VisualEditor::OnProjectLoaded ( wxFBEvent &event )
-{
-  Create();
-}
-
-void VisualEditor::OnProjectSaved  ( wxFBEvent &event )
-{
-  Create();
-}
-
-void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
-{
-  PObjectBase obj = event.GetFBObject();
-
-  // sólo es necesario regenerar la vista si el objeto
-	// seleccionado pertenece a otro form
-	if (AppData()->GetSelectedForm() != m_form)
-		Create();
-
-	// Asignamos el widget y el sizer para mostrar el recuadro
-
-	PVisualObject visualObj;
-	shared_ptr<ObjectBase> objAuxCt, objAuxNb, objAux;
-	VisualObjectMap::iterator it = m_map.find(obj);
-
-	if (it != m_map.end())
-	{
-		wxWindow *selPanel = NULL;
-		visualObj = it->second;
-
-		// 1. Buscar el panel activo, sobre este es donde se dibujarán los recuadros
-		//    en el evento OnPaint.
-		// buscamos hacia arriba el objeto más cercano cuyo componente sea
-		// de tipo WINDOW.
-
-		//objAuxCt = obj->FindNearAncestor("container");
-		//objAuxNb = obj->FindNearAncestor("notebook");
-		//if (!objAuxCt)
-		//  objAux = objAuxNb;
-		//else if (!objAuxNb)
-		//  objAux = objAuxCt;
-		//else
-		//  objAux = objAuxNb->Deep() > objAuxCt->Deep() ? objAuxNb : objAuxCt;
-
-		objAux = obj->GetParent();
-		while (objAux)
-		{
-			IComponent *compAux = objAux->GetObjectInfo()->GetComponent();
-			if (!compAux)
-			{
-				objAux.reset();
-				break;
-			}
-
-			if (compAux->GetComponentType() == COMPONENT_TYPE_WINDOW)
-				break;
-
-			objAux = objAux->GetParent();
-		}
-
-		if (objAux)  // Un padre de tipo T_WIDGET es siempre un contenedor
-		{
-			it = m_map.find(objAux);
-			selPanel = shared_dynamic_cast<VisualWindow>(it->second)->GetWindow();
-		}
-		else
-			selPanel = m_back;
-
-		// 2. Buscar el item
-		wxObject *item = NULL;
-		wxSizer *sizer = NULL;
-		wxString typeName = obj->GetObjectTypeName();
-
-		int componentType = COMPONENT_TYPE_ABSTRACT;
-		IComponent *comp = obj->GetObjectInfo()->GetComponent();
-		if (comp)
-			componentType = comp->GetComponentType();
-
-		//if ( typeName == "widget" || typeName == "container" ||
-		//     typeName == "notebook" || typeName == "statusbar")
-		if (componentType == COMPONENT_TYPE_WINDOW)
-			item = shared_dynamic_cast<VisualWindow>(visualObj)->GetWindow();
-
-		//else if (typeName == "sizer")
-		else if (componentType == COMPONENT_TYPE_SIZER)
-			item = shared_dynamic_cast<VisualSizer>(visualObj)->GetSizer();
-
-		// 3. Buscar el sizer.
-		// lo que se hace a continuación es buscar el objeto más próximo que sea
-		// un componente WINDOW o un componente SIZER y en el caso de ser un
-		// sizer lo guardamos.
-
-		//objAux = obj->FindNearAncestor("sizer");
-		//objAuxCt = obj->FindNearAncestor("container");
-		//if (objAux && (!objAuxCt || objAux->Deep() > objAuxCt->Deep()))
-		//{
-		//  it = m_map.find(objAux);
-		//  sizer = shared_dynamic_cast<VisualSizer>(it->second)->GetSizer();
-		//}
-
-		objAux = obj->GetParent();
-		while (objAux)
-		{
-			IComponent *compAux = objAux->GetObjectInfo()->GetComponent();
-			if (!compAux)
-				break;
-
-			if (compAux->GetComponentType() == COMPONENT_TYPE_SIZER)
-			{
-				it = m_map.find(objAux);
-				sizer = shared_dynamic_cast<VisualSizer>(it->second)->GetSizer();
-				break;
-			}
-			else if (compAux->GetComponentType() == COMPONENT_TYPE_WINDOW)
-				break;
-
-			objAux = objAux->GetParent();
-		}
-
-
-		m_back->SetSelectedSizer(sizer);
-		m_back->SetSelectedItem(item);
-		m_back->SetSelectedObject(obj);
-		m_back->SetSelectedPanel(selPanel);
-		m_back->Refresh();
-	}
-	else
-	{
-		m_back->SetSelectedSizer(NULL);
-		m_back->SetSelectedItem(NULL);
-		m_back->SetSelectedObject(shared_ptr<ObjectBase>());
-		m_back->SetSelectedPanel(NULL);
-		m_back->Refresh();
-	}
-}
-
-void VisualEditor::OnObjectCreated ( wxFBObjectEvent &event )
-{
-  Create();
-}
-
-void VisualEditor::OnObjectRemoved ( wxFBObjectEvent &event )
-{
-  Create();
-}
-
-void VisualEditor::OnPropertyModified ( wxFBPropertyEvent &event )
-{
-    PObjectBase aux = m_back->GetSelectedObject();
-	Create();
-	wxFBObjectEvent objEvent( wxEVT_FB_OBJECT_SELECTED, aux );
-	this->ProcessEvent( objEvent );
-	UpdateVirtualSize();
-}
-
-void VisualEditor::OnProjectRefresh ( wxFBEvent &event)
-{
-  Create();
-}
-

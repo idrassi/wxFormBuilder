@@ -31,8 +31,6 @@
 #include "rad/global.h"
 #include "rad/bitmaps.h"
 #include "rad/wxfbevent.h"
-//#include <sstream>
-#include <memory>
 #include <rad/appdata.h>
 
 // -----------------------------------------------------------------------
@@ -291,6 +289,7 @@ END_EVENT_TABLE()
 ObjectInspector::ObjectInspector(wxWindow *parent, int id)
 : wxPanel(parent,id)
 {
+	AppData()->AddHandler( this->GetEventHandler() );
 	m_currentSel = shared_ptr<ObjectBase>();
 	wxBoxSizer* topSizer = new wxBoxSizer(wxVERTICAL);
 	m_pg = new wxPropertyGridManager(this, -1, wxDefaultPosition, wxDefaultSize,
@@ -307,6 +306,11 @@ ObjectInspector::ObjectInspector(wxWindow *parent, int id)
 	//m_pg->SetExtraStyle( wxPG_EX_MODE_BUTTONS );
 	topSizer->Add(m_pg, 1, wxALL | wxEXPAND, 0);
 	SetSizer(topSizer);
+}
+
+ObjectInspector::~ObjectInspector()
+{
+	AppData()->RemoveHandler( this->GetEventHandler() );
 }
 
 void ObjectInspector::Create(bool force)

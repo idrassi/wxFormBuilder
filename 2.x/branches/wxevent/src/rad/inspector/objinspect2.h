@@ -80,6 +80,7 @@ class ObjectInspector : public wxPanel
 
  public:
   ObjectInspector(wxWindow *parent, int id);
+  ~ObjectInspector();
 
   void OnObjectSelected( wxFBObjectEvent& event );
   void OnProjectRefresh( wxFBEvent& event );

@@ -50,6 +50,7 @@ END_EVENT_TABLE()
 ObjectTree::ObjectTree( wxWindow *parent, int id )
 : wxPanel( parent, id )
 {
+	AppData()->AddHandler( this->GetEventHandler() );
 	m_tcObjects = new wxTreeCtrl(this, -1, wxDefaultPosition, wxDefaultSize, wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT|wxTR_DEFAULT_STYLE|wxSIMPLE_BORDER);
 
 	wxBoxSizer* sizer_1 = new wxBoxSizer(wxVERTICAL);
@@ -58,6 +59,11 @@ ObjectTree::ObjectTree( wxWindow *parent, int id )
     SetSizer(sizer_1);
     sizer_1->Fit(this);
     sizer_1->SetSizeHints(this);
+}
+
+ObjectTree::~ObjectTree()
+{
+	AppData()->RemoveHandler( this->GetEventHandler() );
 }
 
 void ObjectTree::RebuildTree()

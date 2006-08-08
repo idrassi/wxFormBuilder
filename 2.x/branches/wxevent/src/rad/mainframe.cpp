@@ -209,7 +209,6 @@ MainFrame::MainFrame(wxWindow *parent, int id)
 	Title *tree_title = new Title(tree_panel,wxT("Object Tree"));
 
 	m_objTree = new ObjectTree(tree_panel,-1);
-	AppData()->AddHandler( m_objTree->GetEventHandler() );
 	m_objTree->Create();
 
 	wxBoxSizer *tree_sizer = new wxBoxSizer(wxVERTICAL);
@@ -226,7 +225,6 @@ MainFrame::MainFrame(wxWindow *parent, int id)
 	Title *obj_insp_title = new Title(obj_inspPanel,wxT("Object Properties"));
 
 	m_objInsp = new ObjectInspector(obj_inspPanel,-1);
-	AppData()->AddHandler( m_objInsp->GetEventHandler() );
 
 	obj_insp_sizer->Add(obj_insp_title,0,wxEXPAND,0);
 
@@ -258,20 +256,13 @@ MainFrame::MainFrame(wxWindow *parent, int id)
 	m_notebook->SetImageList( &m_icons );
 
 	m_visualEdit = new VisualEditor(m_notebook);
-	AppData()->AddHandler( m_visualEdit->GetEventHandler() );
-
-	AppData()->AddHandler( m_objTree->GetEventHandler() );
 
 	m_notebook->AddPage( m_visualEdit, wxT("Designer"), false, 0 );
 
 	m_cpp = new CppPanel(m_notebook,-1);
-	AppData()->AddHandler( m_cpp->GetEventHandler() );
-
 	m_notebook->AddPage( m_cpp, wxT("C++"), false, 1 );
 
 	m_xrc = new XrcPanel(m_notebook,-1);
-	AppData()->AddHandler( m_xrc->GetEventHandler() );
-
 	m_notebook->AddPage(m_xrc, wxT("XRC"), false, 2 );
 
 	Title *ed_title = new Title(right,wxT("Editor"));
@@ -349,12 +340,7 @@ MainFrame::~MainFrame()
 	// se produciría un error de acceso no válido debido a que los observadores
 	// ya estarían destruidos
 
-	///@todo Every observer should register and deregister in AppData
-	AppData()->RemoveHandler( m_objTree->GetEventHandler() );
-	AppData()->RemoveHandler( m_objInsp->GetEventHandler() );
-	AppData()->RemoveHandler( m_visualEdit->GetEventHandler() );
-	AppData()->RemoveHandler( m_cpp->GetEventHandler() );
-	AppData()->RemoveHandler( m_xrc->GetEventHandler() );
+	AppData()->RemoveHandler( this->GetEventHandler() );
 }
 
 void MainFrame::RestorePosition(const wxString &name)

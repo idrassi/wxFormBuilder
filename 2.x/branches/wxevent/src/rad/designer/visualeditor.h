@@ -99,6 +99,7 @@ class VisualEditor : public wxScrolledWindow
 
  public:
   VisualEditor(wxWindow *parent);
+  ~VisualEditor();
   void OnResizeBackPanel (wxCommandEvent &event); //(wxSashEvent &event)
   void OnPaintPanel (wxPaintEvent &event);
   void DeleteVisualObject(PVisualObject obj);
