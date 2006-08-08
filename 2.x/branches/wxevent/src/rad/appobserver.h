@@ -125,7 +125,7 @@ class DataObservable
 /**
  * Interfaz para manejar los eventos de notificación del modelo de datos
  */
-class DataObserver
+/*class DataObserver
 {
  private:
   DataObservable *m_data;
@@ -138,7 +138,7 @@ class DataObserver
   // Establece el objeto observable
   void SetData(DataObservable *data) { m_data = data; };
   DataObservable *GetData() { return m_data; }
-
+*/
   /*virtual void ProjectLoaded() {}
   virtual void ProjectSaved() {}
   virtual void ObjectSelected(shared_ptr<ObjectBase> obj) {}
@@ -147,7 +147,7 @@ class DataObserver
   virtual void PropertyModified(shared_ptr<Property> prop) {}
   virtual void ProjectRefresh() {}
   virtual void CodeGeneration( bool panelOnly = false ) {}*/
-};
+//};
 
 
 #endif //__APP_OBSERVER__

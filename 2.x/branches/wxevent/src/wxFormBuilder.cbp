@@ -320,22 +320,6 @@
 			<Option target="Release (Unicode)" />
 			<Option target="Debug (Unicode)" />
 		</Unit>
-		<Unit filename="rad\appobserver.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Debug" />
-			<Option target="Release" />
-			<Option target="Release (Unicode)" />
-			<Option target="Debug (Unicode)" />
-		</Unit>
-		<Unit filename="rad\appobserver.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-			<Option target="Release (Unicode)" />
-			<Option target="Debug (Unicode)" />
-		</Unit>
 		<Unit filename="rad\bitmaps.cpp">
 			<Option compilerVar="CPP" />
 			<Option target="Debug" />

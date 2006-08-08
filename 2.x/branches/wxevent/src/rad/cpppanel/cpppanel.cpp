@@ -32,6 +32,7 @@
 
 #include "rad/bitmaps.h"
 #include "rad/wxfbevent.h"
+#include <rad/appdata.h>
 
 BEGIN_EVENT_TABLE ( CppPanel,  wxPanel )
 	EVT_FB_CODE_GENERATION( CppPanel::OnCodeGeneration )
@@ -116,7 +117,7 @@ void CppPanel::OnCodeGeneration( wxFBEvent& event )
 	// Using the previously unused Id field in the event to carry a boolean
 	bool panelOnly = ( event.GetId() != 0 );
 
-	shared_ptr<ObjectBase> project = GetData()->GetProjectData();
+	shared_ptr<ObjectBase> project = AppData()->GetProjectData();
 
 	wxString file, pathEntry;
 	wxFileName path;

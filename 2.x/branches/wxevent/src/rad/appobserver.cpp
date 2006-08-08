@@ -50,24 +50,6 @@ void DataObservable::RemoveHandler( wxEvtHandler* handler )
 	}
 }
 
-/*
-void DataObservable::AddDataObserver(DataObserver *o)
-{
-  m_observers.push_back(o);
-  o->SetData(this);
-}
-
-void DataObservable::RemoveDataObserver(DataObserver *o)
-{
-  ObserverVector::iterator it = m_observers.begin();
-
-  while (it != m_observers.end() && *it != o)
-    it++;
-
-  if (it != m_observers.end())
-    m_observers.erase(it);
-}
-*/
 void DataObservable::NotifyEvent( wxFBEvent& event )
 {
   static int count = 0;
@@ -97,7 +79,7 @@ void DataObservable::NotifyEvent( wxFBEvent& event )
   for ( queuedEvent = queueInProcess.begin(); queuedEvent != queueInProcess.end(); ++queuedEvent )
   {
   	wxFBEvent* temp = *queuedEvent;
-	NotifyEvent( *temp );
+	  NotifyEvent( *temp );
   }
 }
 
@@ -105,89 +87,36 @@ void DataObservable::NotifyProjectLoaded()
 {
   wxFBEvent event( wxEVT_FB_PROJECT_LOADED );
   NotifyEvent( event );
-
-/*  if (!m_lock)
-  {
-    m_lock = true;
-    ObserverVector::iterator it;
-    for (it = m_observers.begin(); it != m_observers.end(); it++)
-      (*it)->ProjectLoaded();
-    m_lock = false;
-  }*/
 }
 
 void DataObservable::NotifyProjectSaved()
 {
   wxFBEvent event( wxEVT_FB_PROJECT_SAVED );
   NotifyEvent( event );
-
-  /*if (!m_lock)
-  {
-    m_lock = true;
-    ObserverVector::iterator it;
-    for (it = m_observers.begin(); it != m_observers.end(); it++)
-      (*it)->ProjectSaved();
-    m_lock = false;
-  } */
 }
 
 void DataObservable::NotifyObjectSelected(shared_ptr<ObjectBase> obj)
 {
   wxFBObjectEvent event( wxEVT_FB_OBJECT_SELECTED, obj);
   NotifyEvent( event );
-
-  /*if (!m_lock)
-  {
-    m_lock = true;
-    ObserverVector::iterator it;
-    for (it = m_observers.begin(); it != m_observers.end(); it++)
-      (*it)->ObjectSelected(obj);
-    m_lock = false;
-  }*/
 }
 
 void DataObservable::NotifyObjectCreated(shared_ptr<ObjectBase> obj)
 {
   wxFBObjectEvent event( wxEVT_FB_OBJECT_CREATED, obj);
   NotifyEvent( event );
-  /*if (!m_lock)
-  {
-    m_lock = true;
-    ObserverVector::iterator it;
-    for (it = m_observers.begin(); it != m_observers.end(); it++)
-      (*it)->ObjectCreated(obj);
-    m_lock = false;
-  }*/
 }
 
 void DataObservable::NotifyObjectRemoved(shared_ptr<ObjectBase> obj)
 {
   wxFBObjectEvent event( wxEVT_FB_OBJECT_REMOVED, obj);
   NotifyEvent( event );
-
-  /*if (!m_lock)
-  {
-    m_lock = true;
-    ObserverVector::iterator it;
-    for (it = m_observers.begin(); it != m_observers.end(); it++)
-      (*it)->ObjectRemoved(obj);
-    m_lock = false;
-  } */
 }
 
 void DataObservable::NotifyPropertyModified(shared_ptr<Property> prop)
 {
   wxFBPropertyEvent event( wxEVT_FB_PROPERTY_MODIFIED, prop);
   NotifyEvent( event );
-
-  /*if (!m_lock)
-  {
-    m_lock = true;
-    ObserverVector::iterator it;
-    for (it = m_observers.begin(); it != m_observers.end(); it++)
-      (*it)->PropertyModified(prop);
-    m_lock = false;
-  }*/
 }
 
 void DataObservable::NotifyCodeGeneration( bool panelOnly )
@@ -198,28 +127,10 @@ void DataObservable::NotifyCodeGeneration( bool panelOnly )
   event.SetId( ( panelOnly ? 1 : 0 ) );
 
   NotifyEvent( event );
-
-  /*if (!m_lock)
-  {
-    m_lock = true;
-    ObserverVector::iterator it;
-    for (it = m_observers.begin(); it != m_observers.end(); it++)
-      (*it)->CodeGeneration( panelOnly );
-    m_lock = false;
-  }*/
 }
 
 void DataObservable::NotifyProjectRefresh()
 {
   wxFBEvent event( wxEVT_FB_PROJECT_REFRESH, -1 );
   NotifyEvent( event );
-  /*
-  if (!m_lock)
-  {
-    m_lock = true;
-    ObserverVector::iterator it;
-    for (it = m_observers.begin(); it != m_observers.end(); it++)
-      (*it)->ProjectRefresh();
-    m_lock = false;
-  }*/
 }

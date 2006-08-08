@@ -30,6 +30,8 @@
 #include <wx/filename.h>
 #include "rad/global.h"
 #include "rad/wxfbevent.h"
+#include <rad/appdata.h>
+
 
 BEGIN_EVENT_TABLE( XrcPanel,  wxPanel )
 	EVT_FB_CODE_GENERATION( XrcPanel::OnCodeGeneration )
@@ -88,7 +90,7 @@ void XrcPanel::OnCodeGeneration( wxFBEvent& event )
   // Using the previously unused Id field in the event to carry a boolean
   bool panelOnly = ( event.GetId() != 0 );
 
-  shared_ptr<ObjectBase> project = GetData()->GetProjectData();
+  shared_ptr<ObjectBase> project = AppData()->GetProjectData();
 
   shared_ptr<Property> pCodeGen = project->GetProperty( wxT("code_generation") );
   if (pCodeGen)

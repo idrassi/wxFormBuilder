@@ -27,8 +27,6 @@
 #define __MAIN_FRAME__
 
 #include "wx/wx.h"
-
-#include "rad/appobserver.h"
 #include "utils/notebookchooser.h"
 
 class wxFBEvent;
@@ -42,7 +40,7 @@ class ObjectInspector;
 class wxFbPalette;
 class VisualEditor;
 
-class MainFrame : public wxFrame, public DataObserver
+class MainFrame : public wxFrame
 {
  private:
   #ifdef __WXFB_DEBUG__
@@ -74,7 +72,7 @@ class MainFrame : public wxFrame, public DataObserver
 
   DECLARE_EVENT_TABLE()
  public:
-  MainFrame(DataObservable *data,wxWindow *parent, int id = -1);
+  MainFrame(wxWindow *parent, int id = -1);
   ~MainFrame();
   void RestorePosition(const wxString &name);
   void SavePosition(const wxString &name);
