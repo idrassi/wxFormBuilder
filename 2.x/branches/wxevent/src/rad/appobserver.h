@@ -70,10 +70,12 @@ class DataObservable
   // es que, generalmente, las implementaciones de DataObserver serán objetos
   // de la GUI, por tanto es el propio framework quien gestiona la vida del
   // objeto.
+/*
   void AddDataObserver(DataObserver *o);
   void RemoveDataObserver(DataObserver *o);
-
+*/
   void AddHandler( wxEvtHandler* handler );
+  void RemoveHandler( wxEvtHandler* handler );
 
   // Realizan cambios en el modelo de datos.
   virtual bool LoadProject(const wxString &filename) = 0;
@@ -137,14 +139,14 @@ class DataObserver
   void SetData(DataObservable *data) { m_data = data; };
   DataObservable *GetData() { return m_data; }
 
-  virtual void ProjectLoaded() {}
+  /*virtual void ProjectLoaded() {}
   virtual void ProjectSaved() {}
   virtual void ObjectSelected(shared_ptr<ObjectBase> obj) {}
   virtual void ObjectCreated(shared_ptr<ObjectBase> obj) {}
   virtual void ObjectRemoved(shared_ptr<ObjectBase> obj) {}
   virtual void PropertyModified(shared_ptr<Property> prop) {}
   virtual void ProjectRefresh() {}
-  virtual void CodeGeneration( bool panelOnly = false ) {}
+  virtual void CodeGeneration( bool panelOnly = false ) {}*/
 };
 
 

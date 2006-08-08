@@ -29,6 +29,11 @@
 #include "utils/typeconv.h"
 #include <wx/filename.h>
 #include "rad/global.h"
+#include "rad/wxfbevent.h"
+
+BEGIN_EVENT_TABLE( XrcPanel,  wxPanel )
+	EVT_FB_CODE_GENERATION( XrcPanel::OnCodeGeneration )
+END_EVENT_TABLE()
 
 XrcPanel::XrcPanel(wxWindow *parent, int id)
   : wxPanel (parent,id)
@@ -77,8 +82,12 @@ void XrcPanel::InitStyledTextCtrl(wxScintilla *stc)
   stc->SetCaretWidth(2);
 }
 
-void XrcPanel::CodeGeneration( bool panelOnly )
+void XrcPanel::OnCodeGeneration( wxFBEvent& event )
 {
+
+  // Using the previously unused Id field in the event to carry a boolean
+  bool panelOnly = ( event.GetId() != 0 );
+
   shared_ptr<ObjectBase> project = GetData()->GetProjectData();
 
   shared_ptr<Property> pCodeGen = project->GetProperty( wxT("code_generation") );

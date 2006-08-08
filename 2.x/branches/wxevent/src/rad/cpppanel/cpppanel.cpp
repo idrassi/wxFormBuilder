@@ -31,9 +31,10 @@
 #include <wx/filename.h>
 
 #include "rad/bitmaps.h"
+#include "rad/wxfbevent.h"
 
-BEGIN_EVENT_TABLE (CodeEditor,  wxPanel )
-	EVT_SCI_MARGINCLICK ( -1, CodeEditor::OnMarginClick )
+BEGIN_EVENT_TABLE ( CppPanel,  wxPanel )
+	EVT_FB_CODE_GENERATION( CppPanel::OnCodeGeneration )
 END_EVENT_TABLE()
 
 CppPanel::CppPanel(wxWindow *parent, int id)
@@ -110,8 +111,11 @@ void CppPanel::InitStyledTextCtrl(wxScintilla *stc)
 	stc->SetCaretWidth(2);
 }
 
-void CppPanel::CodeGeneration( bool panelOnly )
+void CppPanel::OnCodeGeneration( wxFBEvent& event )
 {
+	// Using the previously unused Id field in the event to carry a boolean
+	bool panelOnly = ( event.GetId() != 0 );
+
 	shared_ptr<ObjectBase> project = GetData()->GetProjectData();
 
 	wxString file, pathEntry;
@@ -230,6 +234,10 @@ void CppPanel::CodeGeneration( bool panelOnly )
 			wxLogWarning(wxT("Invalid Path: %s\nYou must set the \"path\" property of the project to a valid path for output files"), path.GetPath().c_str() );
 	}
 }
+
+BEGIN_EVENT_TABLE (CodeEditor,  wxPanel )
+	EVT_SCI_MARGINCLICK( -1, CodeEditor::OnMarginClick )
+END_EVENT_TABLE()
 
 CodeEditor::CodeEditor(wxWindow *parent, int id)
 : wxPanel(parent,id)

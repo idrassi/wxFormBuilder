@@ -32,6 +32,7 @@
 #include "menubar.h"
 #include "wx/statline.h"
 #include "rad/designer/resizablepanel.h"
+#include "rad/wxfbevent.h"
 
 
 #ifdef __WX24__
@@ -553,35 +554,6 @@ wxLogMessage(wxT("Moving.."));
 event.Skip();
 }*/
 
-//////////////////////////////////////////////////////////////////////////////
-void VisualEditor::ProjectLoaded()
-{
-}
-
-void VisualEditor::ProjectRefresh()
-{
-}
-
-void VisualEditor::ProjectSaved()
-{
-}
-
-void VisualEditor::ObjectSelected(shared_ptr<ObjectBase> obj)
-{
-}
-
-void VisualEditor::ObjectCreated(shared_ptr<ObjectBase> obj)
-{
-}
-
-void VisualEditor::ObjectRemoved(shared_ptr<ObjectBase> obj)
-{
-}
-
-void VisualEditor::PropertyModified(shared_ptr<Property> prop)
-{
-}
-
 /////////////////////////////////////////////////////////////////////////////
 
 void VisualEditor::OnProjectLoaded ( wxFBEvent &event )
@@ -732,9 +704,10 @@ void VisualEditor::OnObjectRemoved ( wxFBObjectEvent &event )
 
 void VisualEditor::OnPropertyModified ( wxFBPropertyEvent &event )
 {
-  PObjectBase aux = m_back->GetSelectedObject();
+    PObjectBase aux = m_back->GetSelectedObject();
 	Create();
-	ObjectSelected(aux);
+	wxFBObjectEvent objEvent( wxEVT_FB_OBJECT_SELECTED, aux );
+	this->ProcessEvent( objEvent );
 	UpdateVirtualSize();
 }
 
