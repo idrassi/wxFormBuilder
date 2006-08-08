@@ -32,17 +32,22 @@
 #include "rad/appobserver.h"
 #include "wx/file.h"
 
+class wxFBEvent;
+
 class XrcPanel : public wxPanel, public DataObserver
 {
  private:
   CodeEditor *m_xrcPanel;
   PTCCodeWriter m_cw;
-  
+
   void InitStyledTextCtrl(wxScintilla *stc);
+
  public:
-  XrcPanel(wxWindow *parent, int id);   
-  
-  void CodeGeneration( bool projectOnly = false );
+  XrcPanel(wxWindow *parent, int id);
+
+  void OnCodeGeneration( wxFBEvent& event );
+
+  DECLARE_EVENT_TABLE()
 };
 
 

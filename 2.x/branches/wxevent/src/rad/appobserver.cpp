@@ -38,6 +38,19 @@ void DataObservable::AddHandler( wxEvtHandler* handler )
 	m_handlers.push_back( handler );
 }
 
+void DataObservable::RemoveHandler( wxEvtHandler* handler )
+{
+	for ( HandlerVector::iterator it = m_handlers.begin(); it != m_handlers.end(); ++it )
+	{
+		if ( *it == handler )
+		{
+			m_handlers.erase( it );
+			break;
+		}
+	}
+}
+
+/*
 void DataObservable::AddDataObserver(DataObserver *o)
 {
   m_observers.push_back(o);
@@ -54,7 +67,7 @@ void DataObservable::RemoveDataObserver(DataObserver *o)
   if (it != m_observers.end())
     m_observers.erase(it);
 }
-
+*/
 void DataObservable::NotifyEvent( wxFBEvent& event )
 {
   static int count = 0;
@@ -180,6 +193,10 @@ void DataObservable::NotifyPropertyModified(shared_ptr<Property> prop)
 void DataObservable::NotifyCodeGeneration( bool panelOnly )
 {
   wxFBEvent event( wxEVT_FB_CODE_GENERATION );
+
+  // Using the previously unused Id field in the event to carry a boolean
+  event.SetId( ( panelOnly ? 1 : 0 ) );
+
   NotifyEvent( event );
 
   /*if (!m_lock)

@@ -84,6 +84,7 @@ class CodeEditor : public wxPanel
   wxScintilla *GetTextCtrl() { return m_code; }
 };
 
+class wxFBEvent;
 
 class CppPanel : public wxPanel, public DataObserver
 {
@@ -95,10 +96,13 @@ class CppPanel : public wxPanel, public DataObserver
   wxNotebookChooserImageList m_icons;
 
   void InitStyledTextCtrl(wxScintilla *stc);
+
  public:
   CppPanel(wxWindow *parent, int id);
 
-  void CodeGeneration(  bool panelOnly = false );
+  void OnCodeGeneration( wxFBEvent& event );
+
+  DECLARE_EVENT_TABLE()
 };
 
 

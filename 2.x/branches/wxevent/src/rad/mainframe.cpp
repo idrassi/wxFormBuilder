@@ -29,9 +29,16 @@
 #include "utils/typeconv.h"
 #include "rad/title.h"
 #include "rad/bitmaps.h"
+#include "rad/cpppanel/cpppanel.h"
+#include "rad/xrcpanel/xrcpanel.h"
+#include "inspector/objinspect2.h"
+#include "objecttree/objecttree.h"
+#include "palette.h"
+#include "rad/designer/visualeditor.h"
 
 #include "model/xrcfilter.h"
 #include "rad/about.h"
+#include "rad/wxfbevent.h"
 
 #include <wx/filename.h>
 
@@ -75,39 +82,49 @@
 #define ID_MOVE_RIGHT     135
 
 BEGIN_EVENT_TABLE(MainFrame,wxFrame)
-EVT_MENU(ID_NEW_PRJ,MainFrame::OnNewProject)
-EVT_MENU(ID_SAVE_PRJ,MainFrame::OnSaveProject)
-EVT_MENU(ID_SAVE_AS_PRJ,MainFrame::OnSaveAsProject)
-EVT_MENU(ID_OPEN_PRJ,MainFrame::OnOpenProject)
-EVT_MENU(ID_ABOUT,MainFrame::OnAbout)
-EVT_MENU(ID_QUIT,MainFrame::OnExit)
-EVT_MENU(ID_IMPORT_XRC,MainFrame::OnImportXrc)
-EVT_MENU(ID_GENERATE_CODE,MainFrame::OnGenerateCode)
-EVT_MENU(ID_UNDO,MainFrame::OnUndo)
-EVT_MENU(ID_REDO,MainFrame::OnRedo)
-EVT_MENU(ID_DELETE,MainFrame::OnDelete)
-EVT_MENU(ID_CUT,MainFrame::OnCut)
-EVT_MENU(ID_COPY,MainFrame::OnCopy)
-EVT_MENU(ID_PASTE,MainFrame::OnPaste)
-EVT_MENU(ID_EXPAND,MainFrame::OnToggleExpand)
-EVT_MENU(ID_STRETCH,MainFrame::OnToggleStretch)
-EVT_MENU(ID_MOVE_UP,MainFrame::OnMoveUp)
-EVT_MENU(ID_MOVE_DOWN,MainFrame::OnMoveDown)
-EVT_MENU(ID_MOVE_LEFT,MainFrame::OnMoveLeft)
-EVT_MENU(ID_MOVE_RIGHT,MainFrame::OnMoveRight)
-EVT_MENU(ID_RECENT_0,MainFrame::OnOpenRecent)
-EVT_MENU(ID_RECENT_1,MainFrame::OnOpenRecent)
-EVT_MENU(ID_RECENT_2,MainFrame::OnOpenRecent)
-EVT_MENU(ID_RECENT_3,MainFrame::OnOpenRecent)
-EVT_MENU(ID_ALIGN_RIGHT,MainFrame::OnChangeAlignment)
-EVT_MENU(ID_ALIGN_LEFT,MainFrame::OnChangeAlignment)
-EVT_MENU(ID_ALIGN_CENTER_H,MainFrame::OnChangeAlignment)
-EVT_MENU(ID_ALIGN_TOP,MainFrame::OnChangeAlignment)
-EVT_MENU(ID_ALIGN_BOTTOM,MainFrame::OnChangeAlignment)
-EVT_MENU(ID_ALIGN_CENTER_V,MainFrame::OnChangeAlignment)
-EVT_MENU_RANGE(ID_BORDER_LEFT, ID_BORDER_BOTTOM, MainFrame::OnChangeBorder)
-EVT_CLOSE(MainFrame::OnClose)
-EVT_NOTEBOOKCHOOSER_PAGE_CHANGED( ID_EDITOR_FNB, MainFrame::OnFlatNotebookPageChanged )
+	EVT_MENU(ID_NEW_PRJ,MainFrame::OnNewProject)
+	EVT_MENU(ID_SAVE_PRJ,MainFrame::OnSaveProject)
+	EVT_MENU(ID_SAVE_AS_PRJ,MainFrame::OnSaveAsProject)
+	EVT_MENU(ID_OPEN_PRJ,MainFrame::OnOpenProject)
+	EVT_MENU(ID_ABOUT,MainFrame::OnAbout)
+	EVT_MENU(ID_QUIT,MainFrame::OnExit)
+	EVT_MENU(ID_IMPORT_XRC,MainFrame::OnImportXrc)
+	EVT_MENU(ID_GENERATE_CODE,MainFrame::OnGenerateCode)
+	EVT_MENU(ID_UNDO,MainFrame::OnUndo)
+	EVT_MENU(ID_REDO,MainFrame::OnRedo)
+	EVT_MENU(ID_DELETE,MainFrame::OnDelete)
+	EVT_MENU(ID_CUT,MainFrame::OnCut)
+	EVT_MENU(ID_COPY,MainFrame::OnCopy)
+	EVT_MENU(ID_PASTE,MainFrame::OnPaste)
+	EVT_MENU(ID_EXPAND,MainFrame::OnToggleExpand)
+	EVT_MENU(ID_STRETCH,MainFrame::OnToggleStretch)
+	EVT_MENU(ID_MOVE_UP,MainFrame::OnMoveUp)
+	EVT_MENU(ID_MOVE_DOWN,MainFrame::OnMoveDown)
+	EVT_MENU(ID_MOVE_LEFT,MainFrame::OnMoveLeft)
+	EVT_MENU(ID_MOVE_RIGHT,MainFrame::OnMoveRight)
+	EVT_MENU(ID_RECENT_0,MainFrame::OnOpenRecent)
+	EVT_MENU(ID_RECENT_1,MainFrame::OnOpenRecent)
+	EVT_MENU(ID_RECENT_2,MainFrame::OnOpenRecent)
+	EVT_MENU(ID_RECENT_3,MainFrame::OnOpenRecent)
+	EVT_MENU(ID_ALIGN_RIGHT,MainFrame::OnChangeAlignment)
+	EVT_MENU(ID_ALIGN_LEFT,MainFrame::OnChangeAlignment)
+	EVT_MENU(ID_ALIGN_CENTER_H,MainFrame::OnChangeAlignment)
+	EVT_MENU(ID_ALIGN_TOP,MainFrame::OnChangeAlignment)
+	EVT_MENU(ID_ALIGN_BOTTOM,MainFrame::OnChangeAlignment)
+	EVT_MENU(ID_ALIGN_CENTER_V,MainFrame::OnChangeAlignment)
+	EVT_MENU_RANGE(ID_BORDER_LEFT, ID_BORDER_BOTTOM, MainFrame::OnChangeBorder)
+	EVT_CLOSE(MainFrame::OnClose)
+	EVT_NOTEBOOKCHOOSER_PAGE_CHANGED( ID_EDITOR_FNB, MainFrame::OnFlatNotebookPageChanged )
+
+	EVT_FB_CODE_GENERATION( MainFrame::OnCodeGeneration )
+	EVT_FB_OBJECT_CREATED( MainFrame::OnObjectCreated )
+	EVT_FB_OBJECT_REMOVED( MainFrame::OnObjectRemoved )
+	EVT_FB_OBJECT_SELECTED( MainFrame::OnObjectSelected )
+	EVT_FB_PROJECT_LOADED( MainFrame::OnProjectLoaded )
+	EVT_FB_PROJECT_REFRESH( MainFrame::OnProjectRefresh )
+	EVT_FB_PROJECT_SAVED( MainFrame::OnProjectSaved )
+	EVT_FB_PROPERTY_MODIFIED( MainFrame::OnPropertyModified )
+
 END_EVENT_TABLE()
 
 MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
@@ -242,18 +259,22 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
 	m_notebook->SetImageList( &m_icons );
 
 	m_visualEdit = new VisualEditor(m_notebook);
-	data->AddDataObserver(m_visualEdit);
 	data->AddHandler( m_visualEdit->GetEventHandler() );
+	m_visualEdit->SetData( data );
+
 	data->AddHandler( m_objTree->GetEventHandler() );
+	m_objTree->SetData( data );
 
 	m_notebook->AddPage( m_visualEdit, wxT("Designer"), false, 0 );
 
 	m_cpp = new CppPanel(m_notebook,-1);
-	data->AddDataObserver(m_cpp);
+	data->AddHandler( m_cpp->GetEventHandler() );
+	m_cpp->SetData( data );
 	m_notebook->AddPage( m_cpp, wxT("C++"), false, 1 );
 
 	m_xrc = new XrcPanel(m_notebook,-1);
-	data->AddDataObserver(m_xrc);
+	data->AddHandler( m_xrc->GetEventHandler() );
+	m_xrc->SetData( data );
 	m_notebook->AddPage(m_xrc, wxT("XRC"), false, 2 );
 
 	Title *ed_title = new Title(right,wxT("Editor"));
@@ -315,7 +336,8 @@ MainFrame::MainFrame(DataObservable *data,wxWindow *parent, int id)
 	// añadimos el manejador de las teclas rápidas de la aplicación
 	// realmente este es el sitio donde hacerlo ?????
 	//m_objTree->AddCustomKeysHandler(new CustomKeysEvtHandler(data));
-	data->AddDataObserver(this);
+	data->AddHandler( this->GetEventHandler() );
+	this->SetData( data );
 };
 
 
@@ -330,9 +352,11 @@ MainFrame::~MainFrame()
 	// Eliminamos los observadores, ya que si quedara algún evento por procesar
 	// se produciría un error de acceso no válido debido a que los observadores
 	// ya estarían destruidos
-	m_objTree->GetData()->RemoveDataObserver(m_objTree);
-	m_objInsp->GetData()->RemoveDataObserver(m_objInsp);
-	m_visualEdit->GetData()->RemoveDataObserver(m_visualEdit);
+	m_objTree->GetData()->RemoveHandler( m_objTree->GetEventHandler() );
+	m_objInsp->GetData()->RemoveHandler( m_objInsp->GetEventHandler() );
+	m_visualEdit->GetData()->RemoveHandler( m_visualEdit->GetEventHandler() );
+	m_cpp->GetData()->RemoveHandler( m_cpp->GetEventHandler() );
+	m_xrc->GetData()->RemoveHandler( m_xrc->GetEventHandler() );
 }
 
 void MainFrame::RestorePosition(const wxString &name)
@@ -524,18 +548,20 @@ void MainFrame::OnClose(wxCloseEvent &event)
 	event.Skip();
 }
 
-void MainFrame::ProjectLoaded()
+void MainFrame::OnProjectLoaded( wxFBEvent& event )
 {
 	GetStatusBar()->SetStatusText(wxT("Project Loaded!"));
 	UpdateFrame();
 }
-void MainFrame::ProjectSaved()
+void MainFrame::OnProjectSaved( wxFBEvent& event )
 {
 	GetStatusBar()->SetStatusText(wxT("Project Saved!"));
 	UpdateFrame();
 }
-void MainFrame::ObjectSelected(shared_ptr<ObjectBase> obj)
+void MainFrame::OnObjectSelected( wxFBObjectEvent& event )
 {
+	shared_ptr<ObjectBase> obj = event.GetFBObject();
+
 	wxString name;
 	shared_ptr<Property> prop(obj->GetProperty(wxT("name")));
 
@@ -549,30 +575,38 @@ void MainFrame::ObjectSelected(shared_ptr<ObjectBase> obj)
 	UpdateFrame();
 }
 
-void MainFrame::ObjectCreated(shared_ptr<ObjectBase> obj)
+void MainFrame::OnObjectCreated( wxFBObjectEvent& event )
 {
 	GetStatusBar()->SetStatusText(wxT("Object Created!"));
 	UpdateFrame();
 }
 
-void MainFrame::ObjectRemoved(shared_ptr<ObjectBase> obj)
+void MainFrame::OnObjectRemoved( wxFBObjectEvent& event )
 {
 	GetStatusBar()->SetStatusText(wxT("Object Removed!"));
 	UpdateFrame();
 }
 
-void MainFrame::PropertyModified(shared_ptr<Property> prop)
+void MainFrame::OnPropertyModified( wxFBPropertyEvent& event )
 {
 	GetStatusBar()->SetStatusText(wxT("Property Modified!"));
 	UpdateFrame();
 }
 
-void MainFrame::CodeGeneration( bool projectOnly )
+void MainFrame::OnCodeGeneration( wxFBEvent& event )
 {
-	if ( projectOnly )
+	// Using the previously unused Id field in the event to carry a boolean
+	bool panelOnly = ( event.GetId() != 0 );
+
+	if ( panelOnly )
 	{
 		GetStatusBar()->SetStatusText(wxT("Code Generated!"));
 	}
+}
+
+void MainFrame::OnProjectRefresh( wxFBEvent& event )
+{
+	UpdateFrame();
 }
 
 void MainFrame::OnUndo(wxCommandEvent &event)
@@ -582,11 +616,6 @@ void MainFrame::OnUndo(wxCommandEvent &event)
 void MainFrame::OnRedo(wxCommandEvent &event)
 {
 	GetData()->Redo();
-}
-
-void MainFrame::ProjectRefresh()
-{
-	UpdateFrame();
 }
 
 void MainFrame::UpdateLayoutTools()
@@ -849,6 +878,7 @@ bool MainFrame::SaveWarning()
 
 	return (result != wxCANCEL);
 }
+
 void MainFrame::OnFlatNotebookPageChanged( wxNotebookChooserEvent& event )
 {
 	GetData()->GenerateCode( true );

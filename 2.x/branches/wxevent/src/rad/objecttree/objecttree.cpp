@@ -30,6 +30,7 @@
 #include <wx/image.h>
 #include "rad/menueditor.h"
 #include "utils/typeconv.h"
+#include "rad/wxfbevent.h"
 
 BEGIN_EVENT_TABLE( ObjectTree, wxPanel )
 	EVT_TREE_SEL_CHANGED( -1, ObjectTree::OnSelChanged )

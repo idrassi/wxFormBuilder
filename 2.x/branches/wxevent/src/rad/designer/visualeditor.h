@@ -32,7 +32,6 @@
 #include "model/objectbase.h"
 #include "rad/designer/visualobj.h"
 #include "rad/designer/resizablepanel.h"
-#include "rad/wxfbevent.h"
 #include <wx/sashwin.h>
 
 /**
@@ -76,7 +75,9 @@ class GridPanel : public ResizablePanel //wxSashWindow //wxPanel
 //   void OnMouseMove(wxMouseEvent &event);
 };
 
-class wxfbEvent;
+class wxFBEvent;
+class wxFBPropertyEvent;
+class wxFBObjectEvent;
 
 class VisualEditor : public wxScrolledWindow, public DataObserver
 {
@@ -106,15 +107,6 @@ class VisualEditor : public wxScrolledWindow, public DataObserver
   void Setup();
   void UpdateVirtualSize();
 
-  ///////////////
-  void ProjectLoaded();
-  void ProjectSaved();
-  void ObjectSelected(shared_ptr<ObjectBase> obj);
-  void ObjectCreated(shared_ptr<ObjectBase> obj);
-  void ObjectRemoved(shared_ptr<ObjectBase> obj);
-  void PropertyModified(shared_ptr<Property> prop);
-  void ProjectRefresh();
-
   // Events
   void OnProjectLoaded ( wxFBEvent &event );
   void OnProjectSaved  ( wxFBEvent &event );
@@ -123,8 +115,6 @@ class VisualEditor : public wxScrolledWindow, public DataObserver
   void OnObjectRemoved ( wxFBObjectEvent &event );
   void OnPropertyModified ( wxFBPropertyEvent &event );
   void OnProjectRefresh ( wxFBEvent &event);
-
-
 };
 
 

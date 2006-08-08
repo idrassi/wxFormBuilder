@@ -32,7 +32,10 @@
 #include "rad/customkeys.h"
 
 #include <wx/treectrl.h>
-#include "rad/wxfbevent.h"
+
+class wxFBEvent;
+class wxFBPropertyEvent;
+class wxFBObjectEvent;
 
 class ObjectTree : public wxPanel, public DataObserver
 {
@@ -69,14 +72,6 @@ public:
 
   void OnSelChanged(wxTreeEvent &event);
   void OnRightClick(wxTreeEvent &event);
-
-  void ProjectLoaded(){}
-  void ProjectSaved(){}
-  void ObjectSelected(shared_ptr<ObjectBase> obj){}
-  void ObjectCreated(shared_ptr<ObjectBase> obj){}
-  void ObjectRemoved(shared_ptr<ObjectBase> obj){}
-  void PropertyModified(shared_ptr<Property> prop){}
-  void ProjectRefresh(){}
 
   void OnProjectLoaded ( wxFBEvent &event );
   void OnProjectSaved  ( wxFBEvent &event );

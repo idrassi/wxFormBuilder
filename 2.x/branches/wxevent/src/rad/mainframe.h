@@ -27,15 +27,20 @@
 #define __MAIN_FRAME__
 
 #include "wx/wx.h"
-#include "palette.h"
-#include "inspector/objinspect2.h"
-#include "objecttree/objecttree.h"
-#include "rad/designer/visualeditor.h"
-#include "rad/cpppanel/cpppanel.h"
-#include "rad/xrcpanel/xrcpanel.h"
+
 #include "rad/appobserver.h"
-#include <vector>
 #include "utils/notebookchooser.h"
+
+class wxFBEvent;
+class wxFBObjectEvent;
+class wxFBPropertyEvent;
+
+class CppPanel;
+class XrcPanel;
+class ObjectTree;
+class ObjectInspector;
+class wxFbPalette;
+class VisualEditor;
 
 class MainFrame : public wxFrame, public DataObserver
 {
@@ -98,14 +103,14 @@ class MainFrame : public wxFrame, public DataObserver
   void OnChangeBorder(wxCommandEvent& e);
   void OnFlatNotebookPageChanged( wxNotebookChooserEvent& event );
 
-  void ProjectLoaded();
-  void ProjectSaved();
-  void ObjectSelected(shared_ptr<ObjectBase> obj);
-  void ObjectCreated(shared_ptr<ObjectBase> obj);
-  void ObjectRemoved(shared_ptr<ObjectBase> obj);
-  void PropertyModified(shared_ptr<Property> prop);
-  void CodeGeneration( bool projectOnly = false );
-  void ProjectRefresh();
+  void OnProjectLoaded( wxFBEvent& event );
+  void OnProjectSaved( wxFBEvent& event );
+  void OnObjectSelected( wxFBObjectEvent& event );
+  void OnObjectCreated( wxFBObjectEvent& event );
+  void OnObjectRemoved( wxFBObjectEvent& event );
+  void OnPropertyModified( wxFBPropertyEvent& event );
+  void OnCodeGeneration( wxFBEvent& event );
+  void OnProjectRefresh( wxFBEvent& event );
 
   void InsertRecentProject(const wxString &file);
 };
