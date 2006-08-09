@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<!-- $Id: wxflatnotebook.bkl,v 1.0 2006/05/16 $ -->
+
+<makefile>
+
+    <include file="../../../build/bakefiles/common_contrib.bkl"/>
+
+    <set var="FLATNOTEBOOK_SRC">
+        wxFlatNotebook.cpp
+    </set>
+
+    <headers template="wx_contrib_headers">
+        <files>
+            wx/wxFlatNotebook/wxFNBDropTarget.h
+            wx/wxFlatNotebook/wxFlatNotebook.h
+        </files>
+    </headers>
+
+    <dll id="flatnotebookdll" template="wx_contrib_dll" cond="SHARED=='1'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_FNB</define>
+        <sources>$(FLATNOTEBOOK_SRC)</sources>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </dll>
+    
+    <lib id="flatnotebooklib" template="wx_contrib_lib" cond="SHARED=='0'">
+        <sources>$(FLATNOTEBOOK_SRC)</sources>
+    </lib>
+    
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">flatnotebook=flatnotebooklib+flatnotebookdll</set>
+
+</makefile>

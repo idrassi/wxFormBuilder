@@ -1,0 +1,88 @@
+<?xml version="1.0" ?>
+
+<!-- RCS-ID: $Id: empty.bkl.template,v 1.6 2005/08/03 10:18:08 frm Exp $ -->
+
+<makefile>
+
+	<!-- Some defaults for the variables used by wxCode bakefiles -->
+	<set var="WXCODE_BAKEFILEDIR">../../../build/bakefiles</set>
+	<include file="$(WXCODE_BAKEFILEDIR)/defaults.bkl"/>
+	
+	<!-- Settings for this component -->
+	<!-- =========================== -->
+
+     <option name="LIBPOSTFIX">
+         <default-value></default-value>
+     </option>
+
+	<set var="WX_SHARED">0</set>
+
+	<set var="COMP_NAME">awx</set>
+	<set var="COMP_SRC">
+	     button.cpp led.cpp obdlg.cpp outbar.cpp toolbar.cpp
+	</set>
+	<set var="COMP_HDR">
+	     wx/awx/button.h
+	     wx/awx/led.h
+	     wx/awx/obdlg.h
+	     wx/awx/outbar.h
+	     wx/awx/toolbar.h
+	</set>
+	
+	<set var="COMP_SAMPLE_DIR">../samples</set>
+	<set var="COMP_SAMPLE_SRC">
+	     main.cpp
+		menu.cpp
+		prefs.cpp
+		prefs_wdr.cpp
+	</set>
+	<set var="COMP_SAMPLE_HDR">
+	     main.h
+		menu.h
+		prefs.h
+		prefs_wdr.h
+	</set>
+
+	<!-- The wxCode bakefile to include after the definition of -->
+	<!-- the COMP_XXXX variables... -->
+	<include file="$(WXCODE_BAKEFILEDIR)/wxcode.bkl"/>
+
+	<!-- The real target: wxcode.bkl does not declare a real    -->
+	<!-- target but a template called "complib". In this way    -->
+	<!-- modifications are allowed to the basic template. -->
+	<lib id="awx_lib" template="complib" cond="WX_SHARED=='0'">
+		<threading>multi</threading>
+		<runtime-libs>static</runtime-libs>
+	     <libname>awx$(WXLIBPOSTFIX)$(LIBPOSTFIX)-0.1</libname>
+	</lib>
+	<dll id="awx_dll" template="compdll" cond="WX_SHARED=='1'">
+
+		<!-- remove the libraries which are not required by your project -->
+		<wx-lib>core</wx-lib>
+		<wx-lib>base</wx-lib>
+	</dll>
+	
+	<!-- this makes the MSVC6 project files much nicer... -->
+	<set var="MSVC6PRJ_MERGED_TARGETS">awx=awx_lib+awx_dll</set>
+
+	<!-- Samples for this component -->
+	<!-- ========================== -->
+
+	<!-- The sample of the component: as for the LIB target,    -->
+	<!-- this exe derives from a template contained in          -->
+	<!-- wxcode.bkl which can be modified here -->
+	<exe id="awxtest" template="compsample">
+		<library>awx_lib</library>
+		<threading>multi</threading>
+		<runtime-libs>static</runtime-libs>
+		<!-- remove the libraries which are not required by your project -->
+		<wx-lib>core</wx-lib>
+		<wx-lib>base</wx-lib>
+	</exe>
+    	
+</makefile>
+
+<!--
+    using bakefile:
+    bakefile -fFORMAT -I$WXWIN/build/bakefiles/wxpresets awx.bkl
+-->
