@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="4" />
+	<Project>
+		<Option title="awx (Unix)" />
+		<Option pch_mode="0" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Shared Library">
+				<Option output="../../lib/libwx_gtk2u_awx-2.6.so" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option includeInTargetAll="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-DWXMAKINGDLL_PROPGRID" />
+					<Add option="-DWXUSINGDLL" />
+					<Add option="-DMONOLITHIC" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="`wx-config --cflags`" />
+			<Add directory="../../include" />
+		</Compiler>
+		<Linker>
+			<Add option="`wx-config --libs`" />
+		</Linker>
+		<Unit filename="../../include/wx/awx/awx.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../include/wx/awx/button.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../include/wx/awx/led.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../include/wx/awx/obdlg.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../include/wx/awx/outbar.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../include/wx/awx/toolbar.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../src/awx/button.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../src/awx/led.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../src/awx/leds.xpm">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../src/awx/obdlg.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../src/awx/outbar.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../src/awx/toolbar.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Unit filename="../../src/awx/xp_theme.xpm">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library" />
+		</Unit>
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>
