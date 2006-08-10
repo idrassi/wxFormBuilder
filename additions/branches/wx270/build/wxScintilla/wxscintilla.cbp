@@ -104,80 +104,6 @@
 					<Variable name="WX_SUFFIX" value="u" />
 				</Environment>
 			</Target>
-			<Target title="Debug Using Dll">
-				<Option output="..\..\lib\gcc_libdll\libwxmsw$(WX_VER)d_scintilla.a" />
-				<Option working_dir="" />
-				<Option object_output=".libdllobjsd" />
-				<Option type="2" />
-				<Option compiler="gcc" />
-				<Option includeInTargetAll="1" />
-				<Option projectLinkerOptionsRelation="2" />
-				<Compiler>
-					<Add option="-g" />
-					<Add option="-O0" />
-					<Add option="-D_DEBUG" />
-					<Add option="-D__WXDEBUG" />
-					<Add option="-DLIB_USINGDLL" />
-					<Add option="-DWXUSINGDLL" />
-				</Compiler>
-			</Target>
-			<Target title="Debug Using Dll (Unicode)">
-				<Option output="..\..\lib\gcc_libdll\libwxmsw$(WX_VER)ud_scintilla.a" />
-				<Option working_dir="" />
-				<Option object_output=".libdllobjsud" />
-				<Option type="2" />
-				<Option compiler="gcc" />
-				<Option includeInTargetAll="1" />
-				<Option projectLinkerOptionsRelation="2" />
-				<Compiler>
-					<Add option="-g" />
-					<Add option="-O0" />
-					<Add option="-D_DEBUG" />
-					<Add option="-D__WXDEBUG" />
-					<Add option="-DLIB_USINGDLL" />
-					<Add option="-DWXUSINGDLL" />
-					<Add option="-DwxUSE_UNICODE" />
-				</Compiler>
-			</Target>
-			<Target title="Release Using Dll">
-				<Option output="..\..\lib\gcc_libdll\libwxmsw$(WX_VER)_scintilla.a" />
-				<Option working_dir="" />
-				<Option object_output=".libdllobjs" />
-				<Option type="2" />
-				<Option compiler="gcc" />
-				<Option includeInTargetAll="1" />
-				<Option projectLinkerOptionsRelation="2" />
-				<Compiler>
-					<Add option="-Os" />
-					<Add option="-O3" />
-					<Add option="-DNDEBUG" />
-					<Add option="-DLIB_USINGDLL" />
-					<Add option="-DWXUSINGDLL" />
-				</Compiler>
-				<Linker>
-					<Add option="-s" />
-				</Linker>
-			</Target>
-			<Target title="Release Using Dll (Unicode)">
-				<Option output="..\..\lib\gcc_libdll\libwxmsw$(WX_VER)u_scintilla.a" />
-				<Option working_dir="" />
-				<Option object_output=".libdllobjsu" />
-				<Option type="2" />
-				<Option compiler="gcc" />
-				<Option includeInTargetAll="1" />
-				<Option projectLinkerOptionsRelation="2" />
-				<Compiler>
-					<Add option="-Os" />
-					<Add option="-O3" />
-					<Add option="-DNDEBUG" />
-					<Add option="-DLIB_USINGDLL" />
-					<Add option="-DWXUSINGDLL" />
-					<Add option="-DwxUSE_UNICODE" />
-				</Compiler>
-				<Linker>
-					<Add option="-s" />
-				</Linker>
-			</Target>
 			<Target title="Debug">
 				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)d_scintilla.a" />
 				<Option working_dir="" />
@@ -245,7 +171,7 @@
 			</Target>
 			<Environment>
 				<Variable name="WX_SUFFIX" value="" />
-				<Variable name="WX_VER" value="26" />
+				<Variable name="WX_VER" value="27" />
 			</Environment>
 		</Build>
 		<Compiler>
@@ -274,10 +200,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -289,10 +211,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -306,10 +224,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -321,10 +235,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -338,10 +248,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -355,10 +261,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -372,10 +274,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -389,10 +287,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -406,10 +300,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -423,10 +313,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -440,10 +326,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -457,10 +339,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -474,10 +352,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -491,10 +365,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -506,10 +376,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -523,10 +389,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -538,10 +400,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -555,10 +413,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -570,10 +424,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -587,10 +437,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -602,10 +448,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -619,10 +461,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -634,10 +472,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -651,10 +485,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -666,10 +496,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -683,10 +509,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -698,10 +520,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -715,10 +533,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -730,10 +544,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -747,10 +557,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -762,10 +568,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -779,10 +581,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -794,10 +592,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -811,10 +605,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -826,10 +616,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -843,10 +629,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -858,10 +640,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -873,10 +651,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -888,10 +662,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -903,10 +673,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -918,10 +684,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -933,10 +695,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -948,10 +706,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -963,10 +717,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -978,10 +728,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -993,10 +739,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1008,10 +750,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1023,10 +761,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1038,10 +772,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1053,10 +783,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1068,10 +794,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1083,10 +805,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1098,10 +816,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1113,10 +827,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1128,10 +838,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1143,10 +849,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1158,10 +860,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1173,10 +871,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1188,10 +882,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1203,10 +893,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1218,10 +904,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1233,10 +915,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1248,10 +926,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1263,10 +937,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1278,10 +948,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1293,10 +959,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1308,10 +970,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1323,10 +981,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1338,10 +992,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1353,10 +1003,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1368,10 +1014,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1383,10 +1025,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1398,10 +1036,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1413,10 +1047,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1428,10 +1058,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1443,10 +1069,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1458,10 +1080,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1473,10 +1091,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1488,10 +1102,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1503,10 +1113,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1518,10 +1124,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1533,10 +1135,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1548,10 +1146,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1563,10 +1157,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1578,10 +1168,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1593,10 +1179,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1608,10 +1190,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1623,10 +1201,17 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
+			<Option target="Debug" />
+			<Option target="Debug (Unicode)" />
+			<Option target="Release" />
+			<Option target="Release (Unicode)" />
+		</Unit>
+		<Unit filename="..\..\src\wxScintilla\scintilla\src\LexSpice.cxx">
+			<Option compilerVar="CPP" />
+			<Option target="Debug Mono Dll" />
+			<Option target="Debug Mono Dll (Unicode)" />
+			<Option target="Release Mono Dll" />
+			<Option target="Release Mono Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1638,10 +1223,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1653,10 +1234,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1668,10 +1245,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1683,10 +1256,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1698,10 +1267,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1713,10 +1278,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1728,10 +1289,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1743,10 +1300,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1760,10 +1313,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1775,10 +1324,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1790,10 +1335,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1807,10 +1348,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1824,10 +1361,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1839,10 +1372,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1856,10 +1385,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1871,10 +1396,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1888,10 +1409,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1903,10 +1420,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1920,10 +1433,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1935,10 +1444,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1952,10 +1457,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1967,10 +1468,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1984,10 +1481,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -1999,10 +1492,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -2014,10 +1503,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -2031,10 +1516,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />
@@ -2046,10 +1527,6 @@
 			<Option target="Release Mono Dll" />
 			<Option target="Debug Mono Dll (Unicode)" />
 			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug Using Dll" />
-			<Option target="Debug Using Dll (Unicode)" />
-			<Option target="Release Using Dll" />
-			<Option target="Release Using Dll (Unicode)" />
 			<Option target="Debug" />
 			<Option target="Debug (Unicode)" />
 			<Option target="Release" />

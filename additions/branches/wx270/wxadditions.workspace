@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_file>
 	<Workspace title="wxAdditions">
-		<Project filename="build\awx\awx.cbp" active="1" />
+		<Project filename="build\awx\awx.cbp" />
 		<Project filename="build\wxFlatNotebook\wxFlatNotebook.cbp" />
 		<Project filename="build\plot\plot.cbp" />
-		<Project filename="build\propgrid\propgrid.cbp" />
+		<Project filename="build\propgrid\propgrid.cbp" active="1" />
 		<Project filename="build\wxScintilla\wxscintilla.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

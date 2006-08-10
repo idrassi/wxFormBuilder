@@ -1,22 +1,25 @@
 <?xml version="1.0" ?>
-<!-- $Id: wxflatnotebook.bkl,v 1.0 2006/05/16 $ -->
+<!-- $Id: wxflatnotebook.bkl,v 1.1 2006/05/16 $ -->
 
 <makefile>
 
-    <include file="../../../build/bakefiles/common_contrib.bkl"/>
+    <include file="../bakefiles/additions.bkl"/>
+	<!-- Fix this! -->
+	<!-- Find a way to tell compiler to "force include" a header to fix this hack. -->
+	<set var="WX_DISABLE_PRECOMP_HEADERS">1</set>
 
     <set var="FLATNOTEBOOK_SRC">
-        wxFlatNotebook.cpp
+        $(WXADDTOPDIR)/src/wxFlatNotebook/wxFlatNotebook.cpp
     </set>
 
-    <headers template="wx_contrib_headers">
+    <headers template="wx_additions_headers">
         <files>
-            wx/wxFlatNotebook/wxFNBDropTarget.h
-            wx/wxFlatNotebook/wxFlatNotebook.h
+            $(WXADDTOPDIR)/include/wx/wxFlatNotebook/wxFNBDropTarget.h
+            $(WXADDTOPDIR)/include/wx/wxFlatNotebook/wxFlatNotebook.h
         </files>
     </headers>
 
-    <dll id="flatnotebookdll" template="wx_contrib_dll" cond="SHARED=='1'">
+    <dll id="flatnotebookdll" template="wx_additions_dll" cond="SHARED=='1'">
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_FNB</define>
         <sources>$(FLATNOTEBOOK_SRC)</sources>
@@ -24,7 +27,7 @@
         <wx-lib>base</wx-lib>
     </dll>
     
-    <lib id="flatnotebooklib" template="wx_contrib_lib" cond="SHARED=='0'">
+    <lib id="flatnotebooklib" template="wx_additions_lib" cond="SHARED=='0'">
         <sources>$(FLATNOTEBOOK_SRC)</sources>
     </lib>
     

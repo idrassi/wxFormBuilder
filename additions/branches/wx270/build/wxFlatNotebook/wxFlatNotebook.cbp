@@ -188,7 +188,7 @@
 			</Target>
 			<Environment>
 				<Variable name="WX_SUFFIX" value="" />
-				<Variable name="WX_VER" value="26" />
+				<Variable name="WX_VER" value="27" />
 			</Environment>
 		</Build>
 		<Compiler>
