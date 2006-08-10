@@ -1,31 +1,34 @@
 <?xml version="1.0" ?>
-<!-- $Id: -->
+<!-- $Id: wxpropgrid.bkl,v 1.1 2006/05/16 $ -->
 
 <makefile>
 
-    <include file="../../../build/bakefiles/common_contrib.bkl"/>
+    <include file="../bakefiles/additions.bkl"/>
+	<!-- Fix this! -->
+	<!-- Find a way to tell compiler to "force include" a header to fix this hack. -->
+	<set var="WX_DISABLE_PRECOMP_HEADERS">1</set>
 
     <set var="PROPGRID_SRC">
-        propgrid.cpp
-        props.cpp
-        advprops.cpp
-        manager.cpp
-        odcombo.cpp
-        extras.cpp
+        $(WXADDTOPDIR)/src/propgrid/propgrid.cpp
+        $(WXADDTOPDIR)/src/propgrid/props.cpp
+        $(WXADDTOPDIR)/src/propgrid/advprops.cpp
+        $(WXADDTOPDIR)/src/propgrid/manager.cpp
+        $(WXADDTOPDIR)/src/propgrid/odcombo.cpp
+        $(WXADDTOPDIR)/src/propgrid/extras.cpp
     </set>
 
-    <headers template="wx_contrib_headers">
+    <headers template="wx_additions_headers">
         <files>
-            wx/propgrid/propgrid.h
-            wx/propgrid/advprops.h
-            wx/propgrid/manager.h
-            wx/propgrid/propdev.h
-            wx/propgrid/odcombo.h
-            wx/propgrid/extras.h
+            $(WXADDTOPDIR)/include/wx/propgrid/propgrid.h
+            $(WXADDTOPDIR)/include/wx/propgrid/advprops.h
+            $(WXADDTOPDIR)/include/wx/propgrid/manager.h
+            $(WXADDTOPDIR)/include/wx/propgrid/propdev.h
+            $(WXADDTOPDIR)/include/wx/propgrid/odcombo.h
+            $(WXADDTOPDIR)/include/wx/propgrid/extras.h
         </files>
     </headers>
 
-    <dll id="propgriddll" template="wx_contrib_dll" cond="SHARED=='1'">
+    <dll id="propgriddll" template="wx_additions_dll" cond="SHARED=='1'">
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_PROPGRID</define>
         <sources>$(PROPGRID_SRC)</sources>
@@ -33,7 +36,7 @@
         <wx-lib>base</wx-lib>
     </dll>
 
-    <lib id="propgridlib" template="wx_contrib_lib" cond="SHARED=='0'">
+    <lib id="propgridlib" template="wx_additions_lib" cond="SHARED=='0'">
         <sources>$(PROPGRID_SRC)</sources>
     </lib>
 

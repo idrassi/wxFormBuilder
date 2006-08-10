@@ -10,7 +10,7 @@
 // Author:      Robin Dunn
 //
 // Created:     13-Jan-2000
-// RCS-ID:      $Id: wxscintilla.cpp,v 1.32 2006/03/14 19:13:43 wyo Exp $
+// RCS-ID:      $Id: wxscintilla.cpp,v 1.34 2006/06/24 07:37:29 wyo Exp $
 // Copyright:   (c) 2004 wxCode
 // Licence:     wxWindows
 /////////////////////////////////////////////////////////////////////////////
@@ -529,6 +529,11 @@ void wxScintilla::MarkerAddSet (int line, int markerSet) {
     SendMsg (SCI_MARKERADDSET, line, markerSet);
 }
 
+// Set the alpha used for a marker that is drawn in the text area, not the margin.
+void wxScintilla::MarkerSetAlpha (int markerNumber, int alpha) {
+    SendMsg (SCI_MARKERSETALPHA, markerNumber, alpha);
+}
+
 // Set a margin to be either numeric or symbolic.
 void wxScintilla::SetMarginType (int margin, int marginType) {
     SendMsg (SCI_SETMARGINTYPEN, margin, marginType);
@@ -627,6 +632,16 @@ void wxScintilla::StyleSetCase (int style, int caseMode) {
 // Set a style to be a hotspot or not.
 void wxScintilla::StyleSetHotSpot (int style, bool hotspot) {
     SendMsg (SCI_STYLESETHOTSPOT, style, hotspot);
+}
+
+// Get the alpha of the selection.
+int wxScintilla::GetSelAlpha () {
+    return SendMsg (SCI_GETSELALPHA, 0, 0);
+}
+
+// Set the alpha of the selection.
+void wxScintilla::SetSelAlpha (int alpha) {
+    SendMsg (SCI_SETSELALPHA, alpha, 0);
 }
 
 // Set the foreground colour of the selection and whether to use this setting.
@@ -3139,12 +3154,7 @@ void wxScintilla::NotifyChange() {
 
 static void SetEventText (wxScintillaEvent& evt, const char* text, size_t length) {
     if(!text) return;
-    // The unicode conversion MUST have a null byte to terminate the
-    // string so move it into a buffer first and give it one.
-    wxMemoryBuffer buf(length+1);
-    buf.AppendData ((void*)text, length);
-    buf.AppendByte (0);
-    evt.SetText (sci2wx(buf));
+    evt.SetText(sci2wx(text, length));
 }
 
 void wxScintilla::NotifyParent (SCNotification* _scn) {

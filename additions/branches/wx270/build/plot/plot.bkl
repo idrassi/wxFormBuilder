@@ -1,28 +1,18 @@
 <?xml version="1.0" ?>
-<!-- $Id: plot.bkl,v 1.3 2003/08/25 21:00:56 VS Exp $ -->
+<!-- $Id: plot.bkl,v 1.4 2003/08/25 21:00:56 VS Exp $ -->
 
 <makefile>
 
-    <include file="../../../build/bakefiles/common_contrib.bkl"/>
+    <include file="../bakefiles/additions.bkl"/>
+	<!-- Fix this! -->
+	<!-- Find a way to tell compiler to "force include" a header to fix this hack. -->
+	<set var="WX_DISABLE_PRECOMP_HEADERS">1</set>
 
     <set var="PLOT_SRC">
-        plot.cpp
+        $(WXADDTOPDIR)/src/plot/plot.cpp
     </set>
 
-    <headers template="wx_contrib_headers">
-        <files>
-            wx/plot/plot.h
-            wx/plot/plot_dwn.bmp
-            wx/plot/plot_enl.bmp
-            wx/plot/plot_shr.bmp
-            wx/plot/plot_up.bmp
-            wx/plot/plot_zin.bmp
-            wx/plot/plot_zot.bmp
-            wx/plot/wxplot.rc
-        </files>
-    </headers>
-
-    <dll id="plotdll" template="wx_contrib_dll" cond="SHARED=='1'">
+    <dll id="plotdll" template="wx_additions_dll" cond="SHARED=='1'">
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_PLOT</define>
         <sources>$(PLOT_SRC)</sources>
@@ -30,7 +20,7 @@
         <wx-lib>base</wx-lib>
     </dll>
     
-    <lib id="plotlib" template="wx_contrib_lib" cond="SHARED=='0'">
+    <lib id="plotlib" template="wx_additions_lib" cond="SHARED=='0'">
         <sources>$(PLOT_SRC)</sources>
     </lib>
     
