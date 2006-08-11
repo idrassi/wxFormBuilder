@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- $Id: wxpropgrid.bkl,v 1.1 2006/05/16 $ -->
+<!-- $Id: default_project.bkl,v 1.0 2006/08/11 RPM Enterprises $ -->
 
 <makefile>
 
@@ -11,15 +11,10 @@
 	<!-- 		Add one per line or seperated by a space.             -->
 	<!-- 		Make sure to keep the sources variable the same.      -->
 	<!-- ************************************************************ -->
-    <set var="PROPGRID_SRC">
-        $(ADDITIONS_SRC_DIR)/propgrid/propgrid.cpp
-        $(ADDITIONS_SRC_DIR)/propgrid/props.cpp
-        $(ADDITIONS_SRC_DIR)/propgrid/advprops.cpp
-        $(ADDITIONS_SRC_DIR)/propgrid/manager.cpp
-        $(ADDITIONS_SRC_DIR)/propgrid/odcombo.cpp
-        $(ADDITIONS_SRC_DIR)/propgrid/extras.cpp
+    <set var="DEFAULT_SRC" template="wx_additions_sources">
+		$(ADDITIONS_SRC_DIR)/default/default.cpp
     </set>
-
+	
 	<!-- ************************************************************ -->
 	<!-- Add your projects headers here.                              -->
 	<!-- Notes:	Add the files between the <files></files> tags.       -->
@@ -27,12 +22,7 @@
 	<!-- ************************************************************ -->
     <headers template="wx_additions_headers">
         <files>
-            wx/propgrid/propgrid.h
-            wx/propgrid/advprops.h
-            wx/propgrid/manager.h
-            wx/propgrid/propdev.h
-            wx/propgrid/odcombo.h
-            wx/propgrid/extras.h
+            wx/default/default.h
         </files>
     </headers>
 
@@ -42,27 +32,27 @@
 	<!-- 		'define' needed to export your functions in the dll.  -->
 	<!-- 		Make sure to keep the sources variable the same.      -->
 	<!-- ************************************************************ -->
-    <dll id="propgriddll" template="wx_additions_dll" cond="SHARED=='1'">
-        <define>WXMAKINGDLL_PROPGRID</define>
-        <sources>$(PROPGRID_SRC)</sources>
+    <dll id="defaultdll" template="wx_additions_dll" cond="SHARED=='1'">
+        <define>WXMAKINGDLL_DEFAULT</define>
+		<sources>$(DEFAULT_SRC)</sources>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
     </dll>
-
-	<!-- ************************************************************ -->
+	
+    <!-- ************************************************************ -->
 	<!-- Add your dll project settings here.                          -->
 	<!-- Notes:	Usually you only need to change the 'id'.             -->
 	<!-- 		Make sure to keep the sources variable the same.      -->
 	<!-- ************************************************************ -->
-    <lib id="propgridlib" template="wx_additions_lib" cond="SHARED=='0'">
-        <sources>$(PROPGRID_SRC)</sources>
+    <lib id="defaultlib" template="wx_additions_lib" cond="SHARED=='0'">
+		<sources>$(DEFAULT_SRC)</sources>
     </lib>
-	
+    
 	<!-- ************************************************************ -->
 	<!-- This keeps the vc6 project output clean.                     -->
 	<!-- Notes:	Usually you only need to change the 'id's to match    -->
 	<!-- 		your projects name.                                   -->
 	<!-- ************************************************************ -->
-    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">propgrid=propgridlib+propgriddll</set>
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">default=defaultlib+defaultdll</set>
 
 </makefile>

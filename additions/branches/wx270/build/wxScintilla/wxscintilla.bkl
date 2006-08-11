@@ -5,119 +5,110 @@
 
     <include file="../bakefiles/additions.bkl"/>
 	
-	<!-- Fix this! -->
-	<!-- Find a way to tell compiler to "force include" a header to fix this hack. -->
-	<set var="WX_DISABLE_PRECOMP_HEADERS">1</set>
-	
     <set var="WXSCINTILLA_SRC">
-        $(WXADDTOPDIR)/src/wxScintilla/PlatWX.cpp
-        $(WXADDTOPDIR)/src/wxScintilla/ScintillaWX.cpp
-        $(WXADDTOPDIR)/src/wxScintilla/wxscintilla.cpp
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/AutoComplete.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/CallTip.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/CellBuffer.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/CharClassify.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/ContractionState.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/Document.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/DocumentAccessor.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/Editor.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/ExternalLexer.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/Indicator.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/KeyMap.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/KeyWords.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexAda.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexAPDL.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexAsm.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexAsn1.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexAU3.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexAVE.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexBaan.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexBash.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexBasic.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexBullant.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexCaml.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexCLW.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexConf.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexCPP.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexCrontab.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexCsound.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexCSS.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexEiffel.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexErlang.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexEScript.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexFlagship.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexForth.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexFortran.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexGui4Cli.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexHaskell.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexHTML.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexInno.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexKix.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexLisp.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexLout.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexLua.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexMatlab.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexMetapost.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexMMIXAL.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexMPT.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexMSSQL.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexNsis.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexOpal.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexOthers.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexPascal.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexPB.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexPerl.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexPOV.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexPS.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexPython.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexRebol.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexRuby.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexScriptol.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexSmalltalk.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexSpecman.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexSpice.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexSQL.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexTADS3.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexTCL.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexTeX.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexVB.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexVerilog.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexVHDL.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LexYAML.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/LineMarker.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/PropSet.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/RESearch.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/ScintillaBase.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/Style.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/StyleContext.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/UniConversion.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/ViewStyle.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/WindowAccessor.cxx
-		$(WXADDTOPDIR)/src/wxScintilla/scintilla/src/XPM.cxx
+        $(ADDITIONS_SRC_DIR)/wxScintilla/PlatWX.cpp
+        $(ADDITIONS_SRC_DIR)/wxScintilla/ScintillaWX.cpp
+        $(ADDITIONS_SRC_DIR)/wxScintilla/wxscintilla.cpp
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/AutoComplete.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/CallTip.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/CellBuffer.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/CharClassify.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/ContractionState.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/Document.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/DocumentAccessor.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/Editor.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/ExternalLexer.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/Indicator.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/KeyMap.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/KeyWords.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexAda.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexAPDL.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexAsm.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexAsn1.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexAU3.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexAVE.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexBaan.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexBash.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexBasic.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexBullant.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexCaml.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexCLW.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexConf.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexCPP.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexCrontab.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexCsound.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexCSS.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexEiffel.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexErlang.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexEScript.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexFlagship.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexForth.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexFortran.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexGui4Cli.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexHaskell.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexHTML.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexInno.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexKix.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexLisp.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexLout.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexLua.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexMatlab.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexMetapost.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexMMIXAL.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexMPT.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexMSSQL.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexNsis.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexOpal.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexOthers.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexPascal.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexPB.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexPerl.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexPOV.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexPS.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexPython.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexRebol.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexRuby.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexScriptol.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexSmalltalk.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexSpecman.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexSpice.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexSQL.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexTADS3.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexTCL.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexTeX.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexVB.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexVerilog.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexVHDL.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexYAML.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LineMarker.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/PropSet.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/RESearch.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/ScintillaBase.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/Style.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/StyleContext.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/UniConversion.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/ViewStyle.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/WindowAccessor.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/XPM.cxx
     </set>
 
     <dll id="scintilladll" template="wx_additions_dll" cond="SHARED=='1'">
-        <define>__WXMSW__</define>
-		<define>__WX__</define>
 		<define>SCI_LEXER</define>
 		<define>LINK_LEXERS</define>
-		<define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_SCI</define>
         <sources>$(WXSCINTILLA_SRC)</sources>
-        <include>$(WXADDTOPDIR)/src/wxScintilla/scintilla/include</include>
-		<include>$(WXADDTOPDIR)/src/wxScintilla/scintilla/src</include>
+        <include>$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/include</include>
+		<include>$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src</include>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
     </dll>
     
     <lib id="scintillalib" template="wx_additions_lib" cond="SHARED=='0'">
-		<define>__WXMSW__</define>
-		<define>__WX__</define>
 		<define>SCI_LEXER</define>
 		<define>LINK_LEXERS</define>
         <sources>$(WXSCINTILLA_SRC)</sources>
-        <include>$(WXADDTOPDIR)/src/wxScintilla/scintilla/include</include>
-		<include>$(WXADDTOPDIR)/src/wxScintilla/scintilla/src</include>
+        <include>$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/include</include>
+		<include>$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src</include>
     </lib>
     
     <set var="MSVC6PRJ_MERGED_TARGETS" append="1">scintilla=scintillalib+scintilladll</set>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_file>
 	<Workspace title="wxAdditions (Unix)">
-		<Project filename="build/awx/awx_unix.cbp" />
-		<Project filename="build/propgrid/propgrid_unix.cbp" active="1" />
-		<Project filename="build/wxFlatNotebook/wxFlatNotebook_unix.cbp" />
-		<Project filename="build/wxScintilla/wxscintilla_unix.cbp" />
+		<Project filename="awx/awx_unix.cbp" />
+		<Project filename="propgrid/propgrid_unix.cbp" active="1" />
+		<Project filename="wxFlatNotebook/wxFlatNotebook_unix.cbp" />
+		<Project filename="wxScintilla/wxscintilla_unix.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>
