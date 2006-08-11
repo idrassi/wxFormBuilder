@@ -1,36 +1,59 @@
 <?xml version="1.0" ?>
-<!-- $Id: wxflatnotebook.bkl,v 1.1 2006/05/16 $ -->
+<!-- $Id: wxflatnotebook.bkl,v 1.1 2006/05/16 RPM Enterprises $ -->
 
 <makefile>
 
     <include file="../bakefiles/additions.bkl"/>
-	<!-- Fix this! -->
-	<!-- Find a way to tell compiler to "force include" a header to fix this hack. -->
-	<set var="WX_DISABLE_PRECOMP_HEADERS">1</set>
 
+	<!-- ************************************************************ -->
+	<!-- Add your projects source files here.                         -->
+	<!-- Notes:	Change the 'var' to a meaningful name.                -->
+	<!-- 		Add one per line or seperated by a space.             -->
+	<!-- 		Make sure to keep the sources variable the same.      -->
+	<!-- ************************************************************ -->
     <set var="FLATNOTEBOOK_SRC">
-        $(WXADDTOPDIR)/src/wxFlatNotebook/wxFlatNotebook.cpp
+		$(ADDITIONS_SRC_DIR)/wxFlatNotebook/wxFlatNotebook.cpp
     </set>
 
+	<!-- ************************************************************ -->
+	<!-- Add your projects headers here.                              -->
+	<!-- Notes:	Add the files between the <files></files> tags.       -->
+	<!-- 		Add one per line or seperated by a space.             -->
+	<!-- ************************************************************ -->
     <headers template="wx_additions_headers">
         <files>
-            $(WXADDTOPDIR)/include/wx/wxFlatNotebook/wxFNBDropTarget.h
-            $(WXADDTOPDIR)/include/wx/wxFlatNotebook/wxFlatNotebook.h
+            wx/wxFlatNotebook/wxFNBDropTarget.h
+            wx/wxFlatNotebook/wxFlatNotebook.h
         </files>
     </headers>
 
+	<!-- ************************************************************ -->
+	<!-- Add your dll project settings here.                          -->
+	<!-- Notes:	Usually you only need to change the 'id' and the      -->
+	<!-- 		'define' needed to export your functions in the dll.  -->
+	<!-- 		Make sure to keep the sources variable the same.      -->
+	<!-- ************************************************************ -->
     <dll id="flatnotebookdll" template="wx_additions_dll" cond="SHARED=='1'">
-        <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_FNB</define>
-        <sources>$(FLATNOTEBOOK_SRC)</sources>
+		<sources>$(FLATNOTEBOOK_SRC)</sources>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
     </dll>
-    
+	
+    <!-- ************************************************************ -->
+	<!-- Add your dll project settings here.                          -->
+	<!-- Notes:	Usually you only need to change the 'id'.             -->
+	<!-- 		Make sure to keep the sources variable the same.      -->
+	<!-- ************************************************************ -->
     <lib id="flatnotebooklib" template="wx_additions_lib" cond="SHARED=='0'">
-        <sources>$(FLATNOTEBOOK_SRC)</sources>
+		<sources>$(FLATNOTEBOOK_SRC)</sources>
     </lib>
     
+	<!-- ************************************************************ -->
+	<!-- This keeps the vc6 project output clean.                     -->
+	<!-- Notes:	Usually you only need to change the 'id's to match    -->
+	<!-- 		your projects name.                                   -->
+	<!-- ************************************************************ -->
     <set var="MSVC6PRJ_MERGED_TARGETS" append="1">flatnotebook=flatnotebooklib+flatnotebookdll</set>
 
 </makefile>

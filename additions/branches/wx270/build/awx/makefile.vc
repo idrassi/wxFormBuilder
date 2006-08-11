@@ -126,9 +126,9 @@ AWXDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_9)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I.\include /W4 /I.\..\..\\include \
-	/DWXUSINGDLL /DWXMAKINGDLL_AWX $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I.\include /W4 /DWXUSINGDLL \
+	/I.\..\..\include /DWXMAKINGDLL_AWX $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	$(CPPFLAGS) $(CXXFLAGS)
 AWXDLL_OBJECTS =  \
 	$(OBJS)\awxdll_version.res \
 	$(OBJS)\awxdll_button.obj \
@@ -142,7 +142,7 @@ AWXLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_21)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I.\include /W4 /I.\..\..\\include \
+	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I.\include /W4 /I.\..\..\include \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 AWXLIB_OBJECTS =  \
 	$(OBJS)\awxlib_button.obj \
@@ -445,33 +445,33 @@ clean:
 $(OBJS)\awxdll_version.res: .\..\..\..\src\msw\version.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) /i $(SETUPHDIR) /i .\include /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXMONOFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_awx_vc$(VENDORTAG) $**
 
-$(OBJS)\awxdll_button.obj: .\.\..\..\\src\awx\button.cpp
+$(OBJS)\awxdll_button.obj: .\.\..\..\src\awx\button.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(AWXDLL_CXXFLAGS) $**
 
-$(OBJS)\awxdll_led.obj: .\.\..\..\\src\awx\led.cpp
+$(OBJS)\awxdll_led.obj: .\.\..\..\src\awx\led.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(AWXDLL_CXXFLAGS) $**
 
-$(OBJS)\awxdll_obdlg.obj: .\.\..\..\\src\awx\obdlg.cpp
+$(OBJS)\awxdll_obdlg.obj: .\.\..\..\src\awx\obdlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(AWXDLL_CXXFLAGS) $**
 
-$(OBJS)\awxdll_outbar.obj: .\.\..\..\\src\awx\outbar.cpp
+$(OBJS)\awxdll_outbar.obj: .\.\..\..\src\awx\outbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(AWXDLL_CXXFLAGS) $**
 
-$(OBJS)\awxdll_toolbar.obj: .\.\..\..\\src\awx\toolbar.cpp
+$(OBJS)\awxdll_toolbar.obj: .\.\..\..\src\awx\toolbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(AWXDLL_CXXFLAGS) $**
 
-$(OBJS)\awxlib_button.obj: .\.\..\..\\src\awx\button.cpp
+$(OBJS)\awxlib_button.obj: .\.\..\..\src\awx\button.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(AWXLIB_CXXFLAGS) $**
 
-$(OBJS)\awxlib_led.obj: .\.\..\..\\src\awx\led.cpp
+$(OBJS)\awxlib_led.obj: .\.\..\..\src\awx\led.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(AWXLIB_CXXFLAGS) $**
 
-$(OBJS)\awxlib_obdlg.obj: .\.\..\..\\src\awx\obdlg.cpp
+$(OBJS)\awxlib_obdlg.obj: .\.\..\..\src\awx\obdlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(AWXLIB_CXXFLAGS) $**
 
-$(OBJS)\awxlib_outbar.obj: .\.\..\..\\src\awx\outbar.cpp
+$(OBJS)\awxlib_outbar.obj: .\.\..\..\src\awx\outbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(AWXLIB_CXXFLAGS) $**
 
-$(OBJS)\awxlib_toolbar.obj: .\.\..\..\\src\awx\toolbar.cpp
+$(OBJS)\awxlib_toolbar.obj: .\.\..\..\src\awx\toolbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(AWXLIB_CXXFLAGS) $**
 
