@@ -127,7 +127,7 @@ SCINTILLADLL_CXXFLAGS = /M$(__RUNTIME_LIBS_9)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I.\include /W4 /DWXUSINGDLL \
-	/I.\..\..\include /DSCI_LEXER /DLINK_LEXERS /DWXMAKINGDLL_SCI \
+	/I.\..\..\include /DSCI_LEXER /DLINK_LEXERS /D__WX__ /DWXMAKINGDLL_SCI \
 	/I.\..\..\src\wxScintilla\scintilla\include \
 	/I.\..\..\src\wxScintilla\scintilla\src $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
 	$(CPPFLAGS) $(CXXFLAGS)
@@ -224,7 +224,8 @@ SCINTILLALIB_CXXFLAGS = /M$(__RUNTIME_LIBS_21)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I.\include /W4 /I.\..\..\include \
-	/DSCI_LEXER /DLINK_LEXERS /I.\..\..\src\wxScintilla\scintilla\include \
+	/DSCI_LEXER /DLINK_LEXERS /D__WX__ \
+	/I.\..\..\src\wxScintilla\scintilla\include \
 	/I.\..\..\src\wxScintilla\scintilla\src $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
 	$(CPPFLAGS) $(CXXFLAGS)
 SCINTILLALIB_OBJECTS =  \
