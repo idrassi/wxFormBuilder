@@ -17,6 +17,10 @@
         autoconf,msvc6prj,msevc4prj,mingw,msvc
     </del-formats>
 	
+	<del-formats files="bakefiles/additions.bkl">
+        autoconf,msvc6prj,msevc4prj,mingw,msvc
+    </del-formats>
+	
 	<!-- Personal customizations (not in SVN): -->
     <include file="Bakefiles.local.bkgen" ignore_missing="1"/>
 

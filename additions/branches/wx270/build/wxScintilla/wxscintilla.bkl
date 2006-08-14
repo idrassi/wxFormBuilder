@@ -95,6 +95,7 @@
     <dll id="scintilladll" template="wx_additions_dll" cond="SHARED=='1'">
 		<define>SCI_LEXER</define>
 		<define>LINK_LEXERS</define>
+		<define>__WX__</define>
         <define>WXMAKINGDLL_SCI</define>
         <sources>$(WXSCINTILLA_SRC)</sources>
         <include>$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/include</include>
@@ -106,6 +107,7 @@
     <lib id="scintillalib" template="wx_additions_lib" cond="SHARED=='0'">
 		<define>SCI_LEXER</define>
 		<define>LINK_LEXERS</define>
+		<define>__WX__</define>
         <sources>$(WXSCINTILLA_SRC)</sources>
         <include>$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/include</include>
 		<include>$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src</include>
