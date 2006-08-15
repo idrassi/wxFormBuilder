@@ -1,27 +1,32 @@
 @echo off
 ::**************************************************************************
 :: File:           wxBuild_default.bat
-:: Version:        1.00
+:: Version:        1.01
 :: Name:           RJP Computing 
 :: Date:           08/14/2006
-:: Description:    Build wxWidgets things with the MinGW/Visual C++ ToolKit.
+:: Description:    Build wxWidgets things with the MinGW/Visual C++.
 ::                 
+::                 v1.01 - Added Compiler setup for VC7.1 and VC8.0.
 ::**************************************************************************
-set WXBUILD_VERSION=1.00
+set WXBUILD_VERSION=1.01
 :: MinGW Gcc install lacation. This must match you systems configuration.
 set GCCDIR=C:\MinGW
 
-IF (%1) == () goto ERROR
+if (%1) == () goto ERROR
 :: -- Check if user wants help --
 if (%1) == (/?)  goto SHOW_USAGE
 if (%1) == (-?)  goto SHOW_USAGE
 if (%1) == HELP  goto SHOW_USAGE
 if (%1) == help  goto SHOW_USAGE
-IF (%2) == () goto ERROR
+if (%2) == ()    goto ERROR
 
 :: -- Check which compiler was selected. --
-if %1 == VCTK  goto SETUP_VC71_TOOLKIT_BUILD_ENVIRONMENT
-if %1 == vctk  goto SETUP_VC71_TOOLKIT_BUILD_ENVIRONMENT
+if %1 == VCTK   goto SETUP_VC71_TOOLKIT_BUILD_ENVIRONMENT
+if %1 == vctk   goto SETUP_VC71_TOOLKIT_BUILD_ENVIRONMENT
+if %1 == VC71   goto SETUP_VC71_BUILD_ENVIRONMENT
+if %1 == vc71   goto SETUP_VC71_BUILD_ENVIRONMENT
+if %1 == VC80   goto SETUP_VC80_BUILD_ENVIRONMENT
+if %1 == vc80   goto SETUP_VC80_BUILD_ENVIRONMENT
 if %1 == MINGW  goto SETUP_GCC_BUILD_ENVIRONMENT
 if %1 == mingw  goto SETUP_GCC_BUILD_ENVIRONMENT
 goto COMPILER_ERROR
@@ -37,6 +42,27 @@ set DOTNETSDK=C:\Program Files\Microsoft Visual Studio .NET 2003\vc7
 set PATH=%MSVC%\bin;%MSSDK%\bin;%MSSDK%\bin\win64;%DOTNETSDK%\bin;%PATH%
 set INCLUDE=%MSVC%\include;%MSSDK%\include;%DOTNETSDK%\include;%WXWIN%\include;%INCLUDE%
 set LIB=%MSVC%\lib;%MSSDK%\lib;%DOTNETSDK%\lib;%LIB%
+:: -- Setup the make executable and the actual makefile name --
+set MAKE=nmake
+set MAKEFILE=makefile.vc
+goto START
+
+:SETUP_VC71_BUILD_ENVIRONMENT
+:: Add the full VC 2003 .net includes.
+echo Setting environment for Visual C++ 7.1...
+echo.
+call "C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\Tools\vsvars32.bat"
+:: -- Setup the make executable and the actual makefile name --
+set MAKE=nmake
+set MAKEFILE=makefile.vc
+goto START
+
+
+:SETUP_VC80_BUILD_ENVIRONMENT
+:: Add the full VC 2005 includes.
+echo Setting environment for Visual C++ 8.0...
+echo.
+call "C:\Program Files\Microsoft Visual Studio 8\Common7\Tools\vsvars32.bat"
 :: -- Setup the make executable and the actual makefile name --
 set MAKE=nmake
 set MAKEFILE=makefile.vc
@@ -278,7 +304,7 @@ echo.
 echo wxBuild_default v%WXBUILD_VERSION%
 echo     Build wxWidgets things with the MinGW/Visual C++ ToolKit.
 echo.
-echo Usage: "wxBuild_default.bat <Compiler{MINGW|VCTK}> <BuildTarget{LIB|DLL|ALL|CLEAN|NULL}> [Specific Option (See Below)]"
+echo Usage: "wxBuild_default.bat <Compiler{MINGW|VCTK|VC71|VC80}> <BuildTarget{LIB|DLL|ALL|CLEAN|NULL}> [Specific Option (See Below)]"
 goto SHOW_OPTIONS
 
 :SHOW_OPTIONS
@@ -286,6 +312,8 @@ echo.
 echo      Compiler Options:
 echo           MINGW = MinGW Gcc compiler
 echo           VCTK  = Visual C++ 7.1 Toolkit
+echo           VC71  = Visual C++ 7.1
+echo           VC80  = Visual C++ 8.0
 echo.
 echo      BuildTarget Options:
 echo           LIB   = Builds all the static library targets.
