@@ -1041,7 +1041,7 @@ protected:
     /** Creates property grid for the manager. Override to use subclassed
         wxPropertyGrid.
     */
-    wxPropertyGrid* wxPropertyGridManager::CreatePropertyGrid() const;
+    wxPropertyGrid* CreatePropertyGrid() const;
 
 public:
 
