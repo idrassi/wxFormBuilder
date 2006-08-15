@@ -2216,7 +2216,7 @@ public:
     /** Adds single item. */
     void AddAsSorted ( const wxString& label, int value = wxPG_INVALID_VALUE );
 
-    inline void wxPGChoices::EnsureData()
+    inline void EnsureData()
     {
         if ( m_data == wxPGChoicesEmptyData )
             m_data = new wxPGChoicesData();
@@ -5552,7 +5552,7 @@ protected:
         in wxPropertyGridManager, there is no point overriding this - instead,
         set custom wxPropertyGridPage classes.
     */
-    virtual wxPropertyGridState* wxPropertyGrid::CreateState() const;
+    virtual wxPropertyGridState* CreateState() const;
 
 #ifndef DOXYGEN
 
