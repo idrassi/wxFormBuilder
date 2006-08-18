@@ -18,6 +18,7 @@
 					<Add option="-O0" />
 					<Add option="-D_DEBUG" />
 					<Add option="-D__WXDEBUG" />
+					<Add directory="$(#wx.lib)\gcc_dll\mswd" />
 				</Compiler>
 				<Linker>
 					<Add library="tinyxmld" />
