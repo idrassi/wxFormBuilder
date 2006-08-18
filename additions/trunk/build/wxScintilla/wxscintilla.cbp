@@ -21,6 +21,7 @@
 					<Add option="-D__WXDEBUG" />
 					<Add option="-DWXMAKINGDLL_SCI" />
 					<Add option="-DWXUSINGDLL" />
+					<Add directory="$(#WX.lib)\gcc_dll\mswd" />
 				</Compiler>
 				<Linker>
 					<Add library="wxmsw$(WX_VER)$(WX_SUFFIX)" />
@@ -119,6 +120,7 @@
 					<Add option="-D__WXDEBUG" />
 					<Add option="-DLIB_USINGDLL" />
 					<Add option="-DWXUSINGDLL" />
+					<Add directory="$(#WX.lib)\gcc_dll\mswd" />
 				</Compiler>
 			</Target>
 			<Target title="Debug Using Dll (Unicode)">
@@ -191,6 +193,7 @@
 					<Add option="-O0" />
 					<Add option="-D_DEBUG" />
 					<Add option="-D__WXDEBUG" />
+					<Add directory="$(#WX.lib)\gcc_lib\mswd" />
 				</Compiler>
 			</Target>
 			<Target title="Debug (Unicode)">
