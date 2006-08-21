@@ -7,8 +7,9 @@
 :: Description:    Build wxWidgets things with the MinGW/Visual C++.
 ::                 
 ::                 v1.01 - Added Compiler setup for VC7.1 and VC8.0.
+::                 v1.02 - Added INCLUDE variable to VC7.1 and VC8.0 setups.
 ::**************************************************************************
-set WXBUILD_VERSION=1.01
+set WXBUILD_VERSION=1.02
 :: MinGW Gcc install lacation. This must match you systems configuration.
 set GCCDIR=C:\MinGW
 
@@ -52,6 +53,7 @@ goto START
 echo Setting environment for Visual C++ 7.1...
 echo.
 call "C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\Tools\vsvars32.bat"
+set INCLUDE=%WXWIN%\include;%INCLUDE%
 :: -- Setup the make executable and the actual makefile name --
 set MAKE=nmake
 set MAKEFILE=makefile.vc
@@ -63,6 +65,7 @@ goto START
 echo Setting environment for Visual C++ 8.0...
 echo.
 call "C:\Program Files\Microsoft Visual Studio 8\Common7\Tools\vsvars32.bat"
+set INCLUDE=%WXWIN%\include;%INCLUDE%
 :: -- Setup the make executable and the actual makefile name --
 set MAKE=nmake
 set MAKEFILE=makefile.vc
