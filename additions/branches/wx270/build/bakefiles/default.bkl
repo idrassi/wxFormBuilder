@@ -40,7 +40,7 @@
     </dll>
 	
     <!-- ************************************************************ -->
-	<!-- Add your lib project settings here.                          -->
+	<!-- Add your dll project settings here.                          -->
 	<!-- Notes:	Usually you only need to change the 'id'.             -->
 	<!-- 		Make sure to keep the sources variable the same.      -->
 	<!-- ************************************************************ -->
