@@ -2,13 +2,13 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="5" />
 	<Project>
-		<Option title="wxPlot" />
+		<Option title="<!--REPLACE THIS WITH PROJECT NAME-->" />
 		<Option pch_mode="0" />
 		<Option default_target="" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug Mono Dll">
-				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)md_plot_gcc.dll" />
+				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)md_<!--REPLACE THIS WITH LOWERCASE NAME-->_gcc.dll" />
 				<Option object_output=".dllobjsd" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -19,8 +19,9 @@
 					<Add option="-O0" />
 					<Add option="-D_DEBUG" />
 					<Add option="-D__WXDEBUG__" />
-					<Add option="-DWXMAKINGDLL_PLOT" />
+					<Add option="-DWXMAKINGDLL_<!--REPLACE THIS WITH UPPERCASE NAME-->" />
 					<Add option="-DWXUSINGDLL" />
+					<Add directory="$(#WX.lib)\gcc_dll\mswd" />
 				</Compiler>
 				<Linker>
 					<Add library="wxmsw$(WX_VER)$(WX_SUFFIX)" />
@@ -31,7 +32,7 @@
 				</Environment>
 			</Target>
 			<Target title="Debug Mono Dll (Unicode)">
-				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)umd_plot_gcc.dll" />
+				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)umd_<!--REPLACE THIS WITH LOWERCASE NAME-->_gcc.dll" />
 				<Option object_output=".dllobjsud" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -42,7 +43,7 @@
 					<Add option="-O0" />
 					<Add option="-D_DEBUG" />
 					<Add option="-D__WXDEBUG__" />
-					<Add option="-DWXMAKINGDLL_PLOT" />
+					<Add option="-DWXMAKINGDLL_<!--REPLACE THIS WITH UPPERCASE NAME-->" />
 					<Add option="-DWXUSINGDLL" />
 					<Add option="-DwxUSE_UNICODE" />
 				</Compiler>
@@ -55,7 +56,7 @@
 				</Environment>
 			</Target>
 			<Target title="Release Mono Dll">
-				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)m_plot_gcc.dll" />
+				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)m_<!--REPLACE THIS WITH LOWERCASE NAME-->_gcc.dll" />
 				<Option object_output=".dllobjs" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -65,7 +66,7 @@
 					<Add option="-Os" />
 					<Add option="-O3" />
 					<Add option="-DNDEBUG" />
-					<Add option="-DWXMAKINGDLL_PLOT" />
+					<Add option="-DWXMAKINGDLL_<!--REPLACE THIS WITH UPPERCASE NAME-->" />
 					<Add option="-DWXUSINGDLL" />
 				</Compiler>
 				<Linker>
@@ -78,7 +79,7 @@
 				</Environment>
 			</Target>
 			<Target title="Release Mono Dll (Unicode)">
-				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)um_plot_gcc.dll" />
+				<Option output="..\..\lib\gcc_dll\wxmsw$(WX_VER)um_<!--REPLACE THIS WITH LOWERCASE NAME-->_gcc.dll" />
 				<Option object_output=".dllobjsu" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -88,7 +89,7 @@
 					<Add option="-Os" />
 					<Add option="-O3" />
 					<Add option="-DNDEBUG" />
-					<Add option="-DWXMAKINGDLL_PLOT" />
+					<Add option="-DWXMAKINGDLL_<!--REPLACE THIS WITH UPPERCASE NAME-->" />
 					<Add option="-DWXUSINGDLL" />
 					<Add option="-DwxUSE_UNICODE" />
 				</Compiler>
@@ -102,7 +103,7 @@
 				</Environment>
 			</Target>
 			<Target title="Debug">
-				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)d_plot.a" />
+				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)d_<!--REPLACE THIS WITH LOWERCASE NAME-->.a" />
 				<Option working_dir="" />
 				<Option object_output=".objsd" />
 				<Option type="2" />
@@ -119,7 +120,7 @@
 				</Linker>
 			</Target>
 			<Target title="Debug (Unicode)">
-				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)ud_plot.a" />
+				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)ud_<!--REPLACE THIS WITH LOWERCASE NAME-->.a" />
 				<Option working_dir="" />
 				<Option object_output=".objsud" />
 				<Option type="2" />
@@ -137,7 +138,7 @@
 				</Linker>
 			</Target>
 			<Target title="Release">
-				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)_plot.a" />
+				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)_<!--REPLACE THIS WITH LOWERCASE NAME-->.a" />
 				<Option working_dir="" />
 				<Option type="2" />
 				<Option compiler="gcc" />
@@ -153,7 +154,7 @@
 				</Linker>
 			</Target>
 			<Target title="Release (Unicode)">
-				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)u_plot.a" />
+				<Option output="..\..\lib\gcc_lib\libwxmsw$(WX_VER)u_<!--REPLACE THIS WITH LOWERCASE NAME-->.a" />
 				<Option working_dir="" />
 				<Option object_output=".objsu" />
 				<Option type="2" />
@@ -188,30 +189,6 @@
 			<Add directory="$(#WX.include)" />
 			<Add directory="..\..\include" />
 		</Compiler>
-		<Unit filename="..\..\include\wx\plot\plot.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug Mono Dll" />
-			<Option target="Debug Mono Dll (Unicode)" />
-			<Option target="Release Mono Dll" />
-			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug" />
-			<Option target="Debug (Unicode)" />
-			<Option target="Release" />
-			<Option target="Release (Unicode)" />
-		</Unit>
-		<Unit filename="..\..\src\plot\plot.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Debug Mono Dll" />
-			<Option target="Debug Mono Dll (Unicode)" />
-			<Option target="Release Mono Dll" />
-			<Option target="Release Mono Dll (Unicode)" />
-			<Option target="Debug" />
-			<Option target="Debug (Unicode)" />
-			<Option target="Release" />
-			<Option target="Release (Unicode)" />
-		</Unit>
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

@@ -19,7 +19,7 @@
 					<Add option="-g" />
 					<Add option="-O0" />
 					<Add option="-D_DEBUG" />
-					<Add option="-D__WXDEBUG" />
+					<Add option="-D__WXDEBUG__" />
 					<Add directory="$(#WX.lib)\gcc_dll\mswd" />
 				</Compiler>
 				<Linker>
@@ -40,7 +40,7 @@
 					<Add option="-g" />
 					<Add option="-O0" />
 					<Add option="-D_DEBUG" />
-					<Add option="-D__WXDEBUG" />
+					<Add option="-D__WXDEBUG__" />
 					<Add option="-DwxUSE_UNICODE" />
 				</Compiler>
 				<Linker>
@@ -55,12 +55,12 @@
 				<Option object_output=".dllobjsd" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option createStaticLib="1" />
+				<Option createStaticLib="0" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-O0" />
 					<Add option="-D_DEBUG" />
-					<Add option="-D__WXDEBUG" />
+					<Add option="-D__WXDEBUG__" />
 					<Add option="-DWXMAKINGDLL_FNB" />
 					<Add option="-DWXUSINGDLL" />
 					<Add directory="$(#WX.lib)\gcc_dll\mswd" />
@@ -78,12 +78,12 @@
 				<Option object_output=".dllobjsud" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option createStaticLib="1" />
+				<Option createStaticLib="0" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-O0" />
 					<Add option="-D_DEBUG" />
-					<Add option="-D__WXDEBUG" />
+					<Add option="-D__WXDEBUG__" />
 					<Add option="-DWXMAKINGDLL_FNB" />
 					<Add option="-DWXUSINGDLL" />
 					<Add option="-DwxUSE_UNICODE" />
@@ -141,7 +141,7 @@
 				<Option object_output=".dllobjs" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option createStaticLib="1" />
+				<Option createStaticLib="0" />
 				<Compiler>
 					<Add option="-Os" />
 					<Add option="-O3" />
@@ -163,7 +163,7 @@
 				<Option object_output=".dllobjsu" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option createStaticLib="1" />
+				<Option createStaticLib="0" />
 				<Compiler>
 					<Add option="-Os" />
 					<Add option="-O3" />
