@@ -43,4 +43,22 @@ cd wxScintilla
 call wxBuild_default VCTK ALL
 cd ..
 
+echo Building things with VC7.1
+echo.
+cd things
+call wxBuild_default VCTK ALL
+cd ..
+
+echo Building plotctrl with VC8.0
+echo.
+cd plotctrl
+call wxBuild_plotctrl VC80 LIB
+cd ..
+
+echo Building plotctrl with VC7.1
+echo.
+cd plotctrl
+call wxBuild_plotctrl VCTK ALL
+cd ..
+
 echo Done building wxAdditions.

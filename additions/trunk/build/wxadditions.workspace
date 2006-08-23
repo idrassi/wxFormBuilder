@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_file>
 	<Workspace title="wxAdditions">
-		<Project filename="awx\awx.cbp" />
+		<Project filename="awx\awx.cbp" active="1" />
 		<Project filename="wxFlatNotebook\wxFlatNotebook.cbp" />
 		<Project filename="plot\plot.cbp" />
-		<Project filename="propgrid\propgrid.cbp" active="1" />
+		<Project filename="propgrid\propgrid.cbp" />
 		<Project filename="wxScintilla\wxscintilla.cbp" />
+		<Project filename="things\wxthings.cbp" />
+		<Project filename="plotctrl\wxplotctrl.cbp">
+			<Depends filename="things\wxthings.cbp" />
+		</Project>
 	</Workspace>
 </CodeBlocks_workspace_file>

@@ -1,0 +1,78 @@
+<?xml version="1.0" ?>
+<!-- $Id: wxthings.bkl,v 1.0 2006/08/14 RPM Enterprises $ -->
+
+<makefile>
+
+    <include file="../bakefiles/additions.bkl"/>
+
+	<!-- ************************************************************ -->
+	<!-- Add your projects source files here.                         -->
+	<!-- Notes:	Change the 'var' to a meaningful name.                -->
+	<!-- 		Add one per line or seperated by a space.             -->
+	<!-- 		Make sure to keep the sources variable the same.      -->
+	<!-- ************************************************************ -->
+    <set var="DEFAULT_SRC" template="wx_additions_sources">
+		$(ADDITIONS_SRC_DIR)/things/block.cpp
+        $(ADDITIONS_SRC_DIR)/things/bmpcombo.cpp
+        $(ADDITIONS_SRC_DIR)/things/dropdown.cpp
+        $(ADDITIONS_SRC_DIR)/things/genergdi.cpp
+        $(ADDITIONS_SRC_DIR)/things/geometry.cpp
+        $(ADDITIONS_SRC_DIR)/things/menubtn.cpp
+        $(ADDITIONS_SRC_DIR)/things/optvalue.cpp
+        $(ADDITIONS_SRC_DIR)/things/range.cpp
+        $(ADDITIONS_SRC_DIR)/things/spinctld.cpp
+        $(ADDITIONS_SRC_DIR)/things/toggle.cpp
+    </set>
+	
+	<!-- ************************************************************ -->
+	<!-- Add your projects headers here.                              -->
+	<!-- Notes:	Add the files between the <files></files> tags.       -->
+	<!-- 		Add one per line or seperated by a space.             -->
+	<!-- ************************************************************ -->
+    <headers template="wx_additions_headers">
+        <files>
+            wx/things/block.h
+			wx/things/bmpcombo.h
+			wx/things/dropdown.h
+			wx/things/genergdi.h
+			wx/things/geometry.h
+			wx/things/medsort.h
+			wx/things/menubtn.h
+			wx/things/optvalue.h
+			wx/things/range.h
+			wx/things/spinctld.h
+			wx/things/thingdef.h
+			wx/things/toggle.h
+        </files>
+    </headers>
+
+	<!-- ************************************************************ -->
+	<!-- Add your dll project settings here.                          -->
+	<!-- Notes:	Usually you only need to change the 'id' and the      -->
+	<!-- 		'define' needed to export your functions in the dll.  -->
+	<!-- 		Make sure to keep the sources variable the same.      -->
+	<!-- ************************************************************ -->
+    <dll id="thingsdll" template="wx_additions_dll" cond="SHARED=='1'">
+        <define>WXMAKINGDLL_THINGS</define>
+		<sources>$(DEFAULT_SRC)</sources>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </dll>
+	
+    <!-- ************************************************************ -->
+	<!-- Add your dll project settings here.                          -->
+	<!-- Notes:	Usually you only need to change the 'id'.             -->
+	<!-- 		Make sure to keep the sources variable the same.      -->
+	<!-- ************************************************************ -->
+    <lib id="thingslib" template="wx_additions_lib" cond="SHARED=='0'">
+		<sources>$(DEFAULT_SRC)</sources>
+    </lib>
+    
+	<!-- ************************************************************ -->
+	<!-- This keeps the vc6 project output clean.                     -->
+	<!-- Notes:	Usually you only need to change the 'id's to match    -->
+	<!-- 		your projects name.                                   -->
+	<!-- ************************************************************ -->
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">things=thingslib+thingsdll</set>
+
+</makefile>
