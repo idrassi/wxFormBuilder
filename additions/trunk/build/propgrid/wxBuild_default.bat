@@ -6,10 +6,11 @@
 :: Date:           08/14/2006
 :: Description:    Build wxWidgets things with the MinGW/Visual C++.
 ::                 
-::                 v1.01 - Added Compiler setup for VC7.1 and VC8.0.
-::                 v1.02 - Added INCLUDE variable to VC7.1 and VC8.0 setups.
+::                 	v1.01 - Added Compiler setup for VC7.1 and VC8.0.
+::                 	v1.02 - Added INCLUDE variable to VC7.1 and VC8.0 setups.
+:: 					v1.03 - Added FLAGS. Use to set extra command line options.
 ::**************************************************************************
-set WXBUILD_VERSION=1.02
+set WXBUILD_VERSION=1.03
 :: MinGW Gcc install lacation. This must match you systems configuration.
 set GCCDIR=C:\MinGW
 
@@ -46,6 +47,7 @@ set LIB=%MSVC%\lib;%MSSDK%\lib;%DOTNETSDK%\lib;%LIB%
 :: -- Setup the make executable and the actual makefile name --
 set MAKE=nmake
 set MAKEFILE=makefile.vc
+set FLAGS=
 goto START
 
 :SETUP_VC71_BUILD_ENVIRONMENT
@@ -57,6 +59,7 @@ set INCLUDE=%WXWIN%\include;%INCLUDE%
 :: -- Setup the make executable and the actual makefile name --
 set MAKE=nmake
 set MAKEFILE=makefile.vc
+set FLAGS=
 goto START
 
 
@@ -69,6 +72,7 @@ set INCLUDE=%WXWIN%\include;%INCLUDE%
 :: -- Setup the make executable and the actual makefile name --
 set MAKE=nmake
 set MAKEFILE=makefile.vc
+set FLAGS=CXXFLAGS=/Zc:wchar_t-
 goto START
 
 :SETUP_GCC_BUILD_ENVIRONMENT
@@ -83,6 +87,7 @@ echo.
 :: -- Setup the make executable and the actual makefile name --
 set MAKE=mingw32-make.exe
 set MAKEFILE=makefile.gcc
+set FLAGS=
 goto START
 
 :START
@@ -127,7 +132,7 @@ goto LIB_DEBUG
 :LIB_DEBUG
 echo Compiling lib debug...
 :: Calling the compilers  make
-%MAKE% -f %MAKEFILE% BUILD=debug SHARED=0 OFFICIAL_BUILD=1 RUNTIME_LIBS=static
+%MAKE% -f %MAKEFILE% BUILD=debug SHARED=0 OFFICIAL_BUILD=1 RUNTIME_LIBS=static %FLAGS%
 
 echo.
 :: Check for specific mode.
@@ -138,7 +143,7 @@ goto LIB_RELEASE
 :LIB_RELEASE
 echo Compiling lib release...
 :: Calling the compilers  make
-%MAKE% -f %MAKEFILE% BUILD=release SHARED=0 OFFICIAL_BUILD=1 RUNTIME_LIBS=static
+%MAKE% -f %MAKEFILE% BUILD=release SHARED=0 OFFICIAL_BUILD=1 RUNTIME_LIBS=static %FLAGS%
 
 echo.
 :: Check for specific mode.
@@ -154,7 +159,7 @@ goto LIB_DEBUG_UNICODE
 :LIB_DEBUG_UNICODE
 echo Compiling lib debug Unicode...
 :: Calling the compilers  make
-%MAKE% -f %MAKEFILE%  BUILD=debug UNICODE=1 OFFICIAL_BUILD=1 RUNTIME_LIBS=static
+%MAKE% -f %MAKEFILE%  BUILD=debug UNICODE=1 OFFICIAL_BUILD=1 RUNTIME_LIBS=static %FLAGS%
 
 echo.
 :: Check for specific mode.
@@ -165,7 +170,7 @@ goto LIB_RELEASE_UNICODE
 :LIB_RELEASE_UNICODE
 echo Compiling lib release Unicode...
 :: Calling the compilers  make
-%MAKE% -f %MAKEFILE%  BUILD=release UNICODE=1 OFFICIAL_BUILD=1 RUNTIME_LIBS=static
+%MAKE% -f %MAKEFILE%  BUILD=release UNICODE=1 OFFICIAL_BUILD=1 RUNTIME_LIBS=static %FLAGS%
 
 echo.
 :: Check for build all
@@ -184,7 +189,7 @@ goto DLL_DEBUG
 :DLL_DEBUG
 echo Compiling dll debug...
 :: Calling the compilers  make
-%MAKE% -f %MAKEFILE%  BUILD=debug SHARED=1 OFFICIAL_BUILD=1
+%MAKE% -f %MAKEFILE%  BUILD=debug SHARED=1 OFFICIAL_BUILD=1 %FLAGS%
 
 echo.
 :: Check for specific mode.
@@ -195,7 +200,7 @@ goto DLL_RELEASE
 :DLL_RELEASE
 echo Compiling dll release...
 :: Calling the compilers  make
-%MAKE% -f %MAKEFILE%  BUILD=release SHARED=1 OFFICIAL_BUILD=1
+%MAKE% -f %MAKEFILE%  BUILD=release SHARED=1 OFFICIAL_BUILD=1 %FLAGS%
 
 echo.
 :: Check for specific mode.
@@ -211,7 +216,7 @@ goto DLL_DEBUG_UNICODE
 :DLL_DEBUG_UNICODE
 echo Compiling dll debug Unicode...
 :: Calling the compilers  make
-%MAKE% -f %MAKEFILE%  BUILD=debug SHARED=1 UNICODE=1 OFFICIAL_BUILD=1
+%MAKE% -f %MAKEFILE%  BUILD=debug SHARED=1 UNICODE=1 OFFICIAL_BUILD=1 %FLAGS%
 
 echo.
 :: Check for specific mode.
@@ -222,7 +227,7 @@ goto DLL_RELEASE_UNICODE
 :DLL_RELEASE_UNICODE
 echo Compiling dll release Unicode...
 :: Calling the compilers  make
-%MAKE% -f %MAKEFILE%  BUILD=release SHARED=1 UNICODE=1 OFFICIAL_BUILD=1
+%MAKE% -f %MAKEFILE%  BUILD=release SHARED=1 UNICODE=1 OFFICIAL_BUILD=1 %FLAGS%
 
 echo.
 :: Check for specific mode.
@@ -238,7 +243,7 @@ goto DLL_DEBUG_MONO
 :DLL_DEBUG_MONO
 echo Compiling dll debug monolithic...
 :: Calling the compilers  make
-%MAKE% -f %MAKEFILE%  BUILD=debug MONOLITHIC=1 SHARED=1 OFFICIAL_BUILD=1
+%MAKE% -f %MAKEFILE%  BUILD=debug MONOLITHIC=1 SHARED=1 OFFICIAL_BUILD=1 %FLAGS%
 
 echo.
 :: Check for specific mode.
@@ -249,7 +254,7 @@ goto DLL_RELEASE_MONO
 :DLL_RELEASE_MONO
 echo Compiling dll release monolithic...
 :: Calling the compilers  make
-%MAKE% -f %MAKEFILE%  BUILD=release MONOLITHIC=1 SHARED=1 OFFICIAL_BUILD=1
+%MAKE% -f %MAKEFILE%  BUILD=release MONOLITHIC=1 SHARED=1 OFFICIAL_BUILD=1 %FLAGS%
 
 echo.
 :: Check for specific mode.
@@ -265,7 +270,7 @@ goto DLL_DEBUG_MONO_UNICODE
 :DLL_DEBUG_MONO_UNICODE
 echo Compiling dll debug Unicode monolithic...
 :: Calling the compilers  make
-%MAKE% -f %MAKEFILE%  BUILD=debug MONOLITHIC=1 SHARED=1 UNICODE=1 OFFICIAL_BUILD=1
+%MAKE% -f %MAKEFILE%  BUILD=debug MONOLITHIC=1 SHARED=1 UNICODE=1 OFFICIAL_BUILD=1 %FLAGS%
 
 echo.
 :: Check for specific mode.
@@ -276,7 +281,7 @@ goto DLL_RELEASE_MONO_UNICODE
 :DLL_RELEASE_MONO_UNICODE
 echo Compiling dll release Unicode monolithic...
 :: Calling the compilers  make
-%MAKE% -f %MAKEFILE%  BUILD=release MONOLITHIC=1 SHARED=1 UNICODE=1 OFFICIAL_BUILD=1
+%MAKE% -f %MAKEFILE%  BUILD=release MONOLITHIC=1 SHARED=1 UNICODE=1 OFFICIAL_BUILD=1 %FLAGS%
 
 echo.
 :: Check for specific mode.
@@ -347,3 +352,4 @@ set WXBUILD_VERSION=
 set GccDir=
 set MAKE=
 set MAKEFILE=
+set FLAGS=
