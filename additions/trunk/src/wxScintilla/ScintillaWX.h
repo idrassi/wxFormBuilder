@@ -9,7 +9,7 @@
 // Author:      Robin Dunn
 //
 // Created:     13-Jan-2000
-// RCS-ID:      $Id: ScintillaWX.h,v 1.8 2006/03/14 19:13:57 wyo Exp $
+// RCS-ID:      $Id: ScintillaWX.h,v 1.9 2006/06/06 19:16:25 wyo Exp $
 // Copyright:   (c) 2000 by Total Control Software
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
@@ -57,9 +57,7 @@
 
 //----------------------------------------------------------------------
 
-#ifdef LIB_USINGDLL
-	#define WXDLLIMPEXP_SCI
-#elif defined ( WXMAKINGDLL_SCI )
+#ifdef WXMAKINGDLL_SCI
     #define WXDLLIMPEXP_SCI WXEXPORT
 #elif defined(WXUSINGDLL)
     #define WXDLLIMPEXP_SCI WXIMPORT
@@ -182,6 +180,7 @@ private:
 #if wxUSE_DRAG_AND_DROP
     wxSCIDropTarget*    dropTarget;
     wxDragResult        dragResult;
+    bool                dragRectangle;
     wxTimer*            startDragTimer;
 #endif
 
