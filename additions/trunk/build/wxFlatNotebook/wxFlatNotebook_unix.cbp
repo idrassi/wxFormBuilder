@@ -8,7 +8,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Shared Library Release">
-				<Option output="../../lib/lib`wx-config --debug=yes --basename`_flatnotebook-`wx-config --release`.so" />
+				<Option output="../../lib/lib`wx-config --debug=no --basename`_flatnotebook-`wx-config --release`.so" />
 				<Option type="3" />
 				<Option compiler="gcc" />
 				<Option createDefFile="1" />
@@ -23,7 +23,7 @@
 				</Environment>
 			</Target>
 			<Target title="Shared Library Debug">
-				<Option output="../../lib/lib`wx-config --basename`_flatnotebook-`wx-config --release`.so" />
+				<Option output="../../lib/lib`wx-config --debug=yes --basename`_flatnotebook-`wx-config --release`.so" />
 				<Option object_output=".objsd" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -47,7 +47,6 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="`wx-config --debug=$(DEBUG) --cflags`" />
-			<Add option="-D__WXGTK__" />
 			<Add directory="../../include" />
 		</Compiler>
 		<Linker>
