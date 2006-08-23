@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
-	<FileVersion major="1" minor="4" />
+	<FileVersion major="1" minor="5" />
 	<Project>
 		<Option title="wxFlatNotebook" />
 		<Option makefile="makefile" />
 		<Option pch_mode="0" />
+		<Option default_target="" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
@@ -13,7 +14,6 @@
 				<Option object_output=".objsd" />
 				<Option type="2" />
 				<Option compiler="gcc" />
-				<Option includeInTargetAll="1" />
 				<Option createDefFile="1" />
 				<Compiler>
 					<Add option="-g" />
@@ -35,7 +35,6 @@
 				<Option object_output=".objsud" />
 				<Option type="2" />
 				<Option compiler="gcc" />
-				<Option includeInTargetAll="1" />
 				<Option createDefFile="1" />
 				<Compiler>
 					<Add option="-g" />
@@ -56,7 +55,6 @@
 				<Option object_output=".dllobjsd" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option includeInTargetAll="1" />
 				<Option createStaticLib="1" />
 				<Compiler>
 					<Add option="-g" />
@@ -80,7 +78,6 @@
 				<Option object_output=".dllobjsud" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option includeInTargetAll="1" />
 				<Option createStaticLib="1" />
 				<Compiler>
 					<Add option="-g" />
@@ -104,7 +101,6 @@
 				<Option working_dir="" />
 				<Option type="2" />
 				<Option compiler="gcc" />
-				<Option includeInTargetAll="1" />
 				<Option createDefFile="1" />
 				<Compiler>
 					<Add option="-Os" />
@@ -125,7 +121,6 @@
 				<Option object_output=".objsu" />
 				<Option type="2" />
 				<Option compiler="gcc" />
-				<Option includeInTargetAll="1" />
 				<Option createDefFile="1" />
 				<Compiler>
 					<Add option="-Os" />
@@ -146,7 +141,6 @@
 				<Option object_output=".dllobjs" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option includeInTargetAll="1" />
 				<Option createStaticLib="1" />
 				<Compiler>
 					<Add option="-Os" />
@@ -169,7 +163,6 @@
 				<Option object_output=".dllobjsu" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option includeInTargetAll="1" />
 				<Option createStaticLib="1" />
 				<Compiler>
 					<Add option="-Os" />
@@ -190,9 +183,12 @@
 			</Target>
 			<Environment>
 				<Variable name="WX_SUFFIX" value="" />
-				<Variable name="WX_VER" value="26" />
+				<Variable name="WX_VER" value="27" />
 			</Environment>
 		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="Debug;Debug (Unicode);Debug Mono Dll;Debug Mono Dll (Unicode);Release;Release (Unicode);Release Mono Dll;Release Mono Dll (Unicode);" />
+		</VirtualTargets>
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-DWIN32" />
