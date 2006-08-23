@@ -1,27 +1,50 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
-	<FileVersion major="1" minor="4" />
+	<FileVersion major="1" minor="5" />
 	<Project>
 		<Option title="wxScintilla (Unix)" />
 		<Option pch_mode="0" />
+		<Option default_target="" />
 		<Option compiler="gcc" />
 		<Build>
-			<Target title="Shared Library">
-				<Option output="../../lib/libwx_gtk2u_scintilla-2.6.so" />
-				<Option object_output=".objslib" />
+			<Target title="Shared Library Release">
+				<Option output="../../lib/lib`wx-config --basename`_scintilla-`wx-config --release`.so" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option includeInTargetAll="1" />
 				<Option createStaticLib="1" />
 				<Compiler>
 					<Add option="-DWXMAKINGDLL_SCI" />
 					<Add option="-DWXUSINGDLL" />
 					<Add option="-DMONOLITHIC" />
 				</Compiler>
+				<Environment>
+					<Variable name="DEBUG" value="no" />
+				</Environment>
+			</Target>
+			<Target title="Shared Library Debug">
+				<Option output="../../lib/lib`wx-config --debug=yes --basename`_scintilla-`wx-config --release`.so" />
+				<Option object_output=".objsd" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DWXMAKINGDLL_SCI" />
+					<Add option="-DWXUSINGDLL" />
+					<Add option="-DMONOLITHIC" />
+					<Add option="-D_DEBUG" />
+				</Compiler>
+				<Environment>
+					<Variable name="DEBUG" value="yes" />
+				</Environment>
 			</Target>
 		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="Shared Library Release;Shared Library Debug;" />
+		</VirtualTargets>
 		<Compiler>
-			<Add option="`wx-config --cflags`" />
+			<Add option="-Wall" />
+			<Add option="`wx-config --debug=$(DEBUG) --cflags`" />
 			<Add option="-DLINK_LEXERS" />
 			<Add option="-DSCI_LEXER" />
 			<Add option="-DGTK" />
@@ -31,531 +54,646 @@
 			<Add directory="../../src/wxScintilla/scintilla/src" />
 		</Compiler>
 		<Linker>
-			<Add option="`wx-config --libs`" />
+			<Add option="`wx-config --debug=$(DEBUG) --libs`" />
 		</Linker>
 		<Unit filename="../../include/wx/wxscintilla.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/PlatWX.cpp">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/PlatWX.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/ScintillaWX.cpp">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/ScintillaWX.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/include/Accessor.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/include/KeyWords.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/include/Platform.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/include/PropSet.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/include/SString.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/include/SciLexer.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/include/Scintilla.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/include/ScintillaWidget.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/include/WindowAccessor.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/AutoComplete.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/AutoComplete.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/CallTip.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/CallTip.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/CellBuffer.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/CellBuffer.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/CharClassify.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/CharClassify.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/ContractionState.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/ContractionState.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/Document.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/Document.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/DocumentAccessor.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/DocumentAccessor.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/Editor.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/Editor.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/ExternalLexer.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/ExternalLexer.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/Indicator.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/Indicator.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/KeyMap.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/KeyMap.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/KeyWords.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexAPDL.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexAU3.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexAVE.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexAda.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexAsm.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexAsn1.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexBaan.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexBash.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexBasic.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexBullant.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexCLW.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexCPP.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexCSS.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexCaml.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexConf.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexCrontab.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexCsound.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexEScript.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexEiffel.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexErlang.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexFlagship.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexForth.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexFortran.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexGui4Cli.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexHTML.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexHaskell.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexInno.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexKix.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexLisp.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexLout.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexLua.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexMMIXAL.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexMPT.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexMSSQL.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexMatlab.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexMetapost.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexNsis.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexOpal.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexOthers.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexPB.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexPOV.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexPS.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexPascal.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexPerl.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexPython.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexRebol.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexRuby.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexSQL.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexScriptol.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexSmalltalk.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexSpecman.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexTADS3.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexTCL.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexTeX.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexVB.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexVHDL.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexVerilog.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexYAML.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LineMarker.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LineMarker.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/PropSet.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/RESearch.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/RESearch.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/SVector.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/ScintillaBase.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/ScintillaBase.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/Style.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/Style.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/StyleContext.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/StyleContext.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/UniConversion.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/UniConversion.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/ViewStyle.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/ViewStyle.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/WindowAccessor.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/XPM.cxx">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/XPM.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/wxscintilla.cpp">
 			<Option compilerVar="CPP" />
-			<Option target="Shared Library" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
 		</Unit>
 		<Extensions />
 	</Project>
