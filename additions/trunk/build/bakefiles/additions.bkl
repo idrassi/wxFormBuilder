@@ -23,6 +23,9 @@
 	<set var="ADDITIONS_HDR_DIR" overwrite="0">$(WXADDTOPDIR)include</set>
 	<set var="ADDITIONS_SRC_DIR" overwrite="0">$(WXADDTOPDIR)src</set>
 	
+	<!-- Used to set the right directory for resource compiling in MinGW. -->
+	<set var="TOP_SRCDIR">$(WXTOPDIR)</set>
+	
 	<!-- Fix this! -->
 	<!-- Find a way to tell compiler to "force include" a header to fix this hack. -->
 	<set var="WX_DISABLE_PRECOMP_HEADERS">1</set>.

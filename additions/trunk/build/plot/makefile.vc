@@ -126,7 +126,7 @@ PLOTDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_9)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I.\include /W4 /DWXUSINGDLL \
+	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I..\..\..\include /W4 /DWXUSINGDLL \
 	/I.\..\..\include /DWXMAKINGDLL_PLOT $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
 	$(CPPFLAGS) $(CXXFLAGS)
 PLOTDLL_OBJECTS =  \
@@ -138,7 +138,7 @@ PLOTLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_21)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I.\include /W4 /I.\..\..\include \
+	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I..\..\..\include /W4 /I.\..\..\include \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 PLOTLIB_OBJECTS =  \
 	$(OBJS)\plotlib_plot.obj
@@ -435,7 +435,7 @@ clean:
 !endif
 
 $(OBJS)\plotdll_version.res: .\..\..\..\src\msw\version.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) /i $(SETUPHDIR) /i .\include /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXMONOFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_plot_vc$(VENDORTAG) $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) /i $(SETUPHDIR) /i ..\..\..\include /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXMONOFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_plot_vc$(VENDORTAG) $**
 
 $(OBJS)\plotdll_plot.obj: .\.\..\..\src\plot\plot.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(PLOTDLL_CXXFLAGS) $**
