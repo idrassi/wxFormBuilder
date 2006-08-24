@@ -105,8 +105,8 @@ SCINTILLADLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	-I$(SETUPHDIR) -I.\include -W -Wall -DWXUSINGDLL -I.\..\..\include -DSCI_LEXER \
-	-DLINK_LEXERS -D__WX__ -DWXMAKINGDLL_SCI \
+	-I$(SETUPHDIR) -I..\..\..\include -W -Wall -DWXUSINGDLL -I.\..\..\include \
+	-DSCI_LEXER -DLINK_LEXERS -D__WX__ -DWXMAKINGDLL_SCI \
 	-I.\..\..\src\wxScintilla\scintilla\include \
 	-I.\..\..\src\wxScintilla\scintilla\src $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
@@ -200,7 +200,7 @@ SCINTILLALIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	-I$(SETUPHDIR) -I.\include -W -Wall -I.\..\..\include -DSCI_LEXER \
+	-I$(SETUPHDIR) -I..\..\..\include -W -Wall -I.\..\..\include -DSCI_LEXER \
 	-DLINK_LEXERS -D__WX__ -I.\..\..\src\wxScintilla\scintilla\include \
 	-I.\..\..\src\wxScintilla\scintilla\src $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
@@ -493,7 +493,7 @@ ifeq ($(SHARED),0)
 endif
 
 $(OBJS)\scintilladll_version_rc.o: ./../../../src/msw/version.rc
-	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./include --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXMONOFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_scintilla_gcc$(VENDORTAG)
+	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ../../../include --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXMONOFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_scintilla_gcc$(VENDORTAG)
 
 $(OBJS)\scintilladll_PlatWX.o: ././../../src/wxScintilla/PlatWX.cpp
 	$(CXX) -c -o $@ $(SCINTILLADLL_CXXFLAGS) $(CPPDEPS) $<
