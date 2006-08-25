@@ -1,7 +1,7 @@
 @echo off
 ::**************************************************************************
 :: File:           build_wxadditions.bat
-:: Version:        1.02
+:: Version:        1.03
 :: Name:           RJP Computing 
 :: Date:           08/11/2006
 :: Description:    Use this to build all the projects for wxAdditions.
@@ -94,9 +94,9 @@ echo.
 call wxBuild_plotctrl MINGW ALL
 cd ..
 
-echo Clean up link libraries for MinGW Gcc.
-cd ..\lib\gcc_dll
-del /Q /F /S *.a
-cd ..\build
+::echo Clean up link libraries for MinGW Gcc.
+::cd ..\lib\gcc_dll
+::del /Q /F /S *.a
+::cd ..\build
 
 echo Done building wxAdditions.
