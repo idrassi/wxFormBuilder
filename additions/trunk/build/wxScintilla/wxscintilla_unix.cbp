@@ -6,12 +6,12 @@
 		<Option pch_mode="0" />
 		<Option default_target="" />
 		<Option compiler="gcc" />
+		<Option virtualFolders="" />
 		<Build>
 			<Target title="Shared Library Release">
 				<Option output="../../lib/lib`wx-config --basename`_scintilla-`wx-config --release`.so" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option createStaticLib="0" />
 				<Compiler>
 					<Add option="-DWXMAKINGDLL_SCI" />
 					<Add option="-DWXUSINGDLL" />
@@ -26,7 +26,6 @@
 				<Option object_output=".objsd" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option createStaticLib="0" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-DWXMAKINGDLL_SCI" />
@@ -538,6 +537,11 @@
 			<Option target="Shared Library Debug" />
 		</Unit>
 		<Unit filename="../../src/wxScintilla/scintilla/src/LexSpecman.cxx">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../src/wxScintilla/scintilla/src/LexSpice.cxx">
 			<Option compilerVar="CPP" />
 			<Option target="Shared Library Release" />
 			<Option target="Shared Library Debug" />
