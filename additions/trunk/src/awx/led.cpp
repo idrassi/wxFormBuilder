@@ -82,6 +82,9 @@ void awxLed::SetColour(awxLedColour colour)
 {
     if(m_icons[awxLED_ON]) delete m_icons[awxLED_ON];
     switch(colour) {
+	case awxLED_LUCID:
+		m_icons[awxLED_ON] = new wxIcon((const char **)led_off_xpm);
+		break;
     case awxLED_GREEN:
 	   m_icons[awxLED_ON] = new wxIcon((const char **)led_green_xpm);
 	   break;

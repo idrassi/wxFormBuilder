@@ -82,8 +82,8 @@ public:
 	unsigned int GetTimerInterval();
     void SetColour(awxLedColour colour);
     void SetState(awxLedState state);
-	void SetOn( awxLedColour colour, awxLedState state );
-	void SetOff( awxLedColour colour, awxLedState state );
+	void SetOn( awxLedColour colour, awxLedState state = awxLED_ON );
+	void SetOff( awxLedColour colour, awxLedState state = awxLED_ON );
 	void TurnOn( bool on = true );
 	void TurnOff();
 	void Toggle();
