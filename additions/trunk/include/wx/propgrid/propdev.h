@@ -204,7 +204,7 @@ const wxChar* CLASSNAME::GetName() const \
 wxPGEditor* wxPGEditor_##EDITOR = (wxPGEditor*) NULL; \
 wxPGEditor* wxPGConstruct##EDITOR##EditorClass() \
 { \
-    wxASSERT ( !wxPGEditor_##EDITOR ); \
+    wxASSERT( !wxPGEditor_##EDITOR ); \
     return new CLASSNAME(); \
 }
 
@@ -388,7 +388,7 @@ public: \
     } \
     virtual void SetValueFromVariant( wxPGProperty* property, wxVariant& value ) const \
     { \
-        wxASSERT_MSG( wxStrcmp(GetTypeName(),value.GetType().c_str()) == 0, \
+        wxPG_CHECK_RET_DBG( wxStrcmp(GetTypeName(),value.GetType().c_str()) == 0, \
             wxT("SetValueFromVariant: wxVariant type mismatch.") ); \
         property->DoSetValue(value.GETTER()); \
     } \
@@ -415,7 +415,7 @@ VDCLASS::VDCLASS(const VALUETYPE& value) \
 } \
 void VDCLASS::Copy(wxVariantData& data) \
 { \
-    wxASSERT_MSG( data.GetType() == GetType(), wxT(#VDCLASS) wxT("::Copy: Can't copy to this type of data") ); \
+    wxPG_CHECK_RET_DBG( data.GetType() == GetType(), wxT(#VDCLASS) wxT("::Copy: Can't copy to this type of data") ); \
     VDCLASS& otherData = (VDCLASS&) data; \
     otherData.m_value = m_value; \
 } \
@@ -425,7 +425,7 @@ wxString VDCLASS::GetType() const \
 } \
 bool VDCLASS::Eq(wxVariantData& data) const \
 { \
-    wxASSERT_MSG( data.GetType() == GetType(), wxT(#VDCLASS) wxT("::Eq: argument mismatch") ); \
+    wxPG_CHECK_MSG_DBG( data.GetType() == GetType(), false, wxT(#VDCLASS) wxT("::Eq: argument mismatch") ); \
     VDCLASS& otherData = (VDCLASS&) data; \
     return otherData.m_value == m_value; \
 } \
@@ -455,7 +455,7 @@ public: \
     virtual void SetValueFromVariant( wxPGProperty* property, wxVariant& value ) const \
     { \
         const VALUETYPE* real_value; \
-        wxASSERT_MSG( wxStrcmp(GetTypeName(),value.GetType().c_str()) == 0, \
+        wxPG_CHECK_RET_DBG( wxStrcmp(GetTypeName(),value.GetType().c_str()) == 0, \
             wxT("GetPtrFromVariant: wxVariant type mismatch.") ); \
         wxVariantData_##VALUETYPE* vd = (wxVariantData_##VALUETYPE*)value.GetData(); \
         if ( vd->IsKindOf(CLASSINFO(wxVariantData_##VALUETYPE)) ) \
@@ -495,17 +495,17 @@ protected: \
 public: \
     virtual const wxChar* GetTypeName() const { return wxT(#VALUETYPE); } \
     virtual const wxChar* GetCustomTypeName() const { return wxT(#VALUETYPE); } \
-    virtual wxPGVariant GetDefaultValue () const { return wxPGVariant((void*)&m_default); } \
-    virtual wxPGProperty* GenerateProperty ( const wxString& label, const wxString& name ) const \
+    virtual wxPGVariant GetDefaultValue() const { return wxPGVariant((void*)&m_default); } \
+    virtual wxPGProperty* GenerateProperty( const wxString& label, const wxString& name ) const \
     { \
         return wxPG_CONSTFUNC(DEFPROPERTY)(label,name); \
     } \
-    virtual void SetValueFromVariant ( wxPGProperty* property, wxVariant& value ) const \
+    virtual void SetValueFromVariant( wxPGProperty* property, wxVariant& value ) const \
     { \
-        wxASSERT_MSG( wxStrcmp(GetTypeName(),value.GetType().c_str()) == 0, \
+        wxPG_CHECK_RET_DBG( wxStrcmp(GetTypeName(),value.GetType().c_str()) == 0, \
             wxT("SetValueFromVariant: wxVariant type mismatch.") ); \
         VDCLASS* vd = (VDCLASS*)value.GetData(); \
-        wxASSERT_MSG( vd->IsKindOf(CLASSINFO(VDCLASS)), \
+        wxPG_CHECK_RET_DBG( vd->IsKindOf(CLASSINFO(VDCLASS)), \
             wxT("SetValueFromVariant: wxVariantData mismatch.")); \
         property->DoSetValue((void*)&vd->GetValue() ); \
     } \
@@ -519,6 +519,7 @@ WX_PG_IMPLEMENT_VALUE_TYPE_VOIDP_BASE(VALUETYPE,DEFPROPERTY,DEFVAL,wxVariantData
     { \
         void* ptr = (void*)value.GetRawPtr(); \
         wxASSERT( ptr ); \
+        if ( !ptr ) return wxVariant(); \
         return wxVariant( ptr, name ); \
     } \
 }; \
@@ -533,6 +534,7 @@ WX_PG_IMPLEMENT_VALUE_TYPE_VOIDP_BASE(VALUETYPE,DEFPROPERTY,DEFVAL,VDCLASS) \
     { \
         void* ptr = (void*)value.GetRawPtr(); \
         wxASSERT( ptr ); \
+        if ( !ptr ) return wxVariant(); \
         return wxVariant( new VDCLASS(*((VALUETYPE*)ptr)), name ); \
     } \
 }; \
@@ -573,7 +575,7 @@ wxPGValueType##VALUETYPE##Class::wxPGValueType##VALUETYPE##Class() \
 { \
     m_default = DEFVAL; \
     m_parentClass = wxPGValueType_##PARENTVT; \
-    wxASSERT ( m_parentClass != (wxPGValueType*) NULL); \
+    wxASSERT( m_parentClass != (wxPGValueType*) NULL); \
 } \
 wxPGValueType##VALUETYPE##Class::~wxPGValueType##VALUETYPE##Class() { }
 
@@ -824,7 +826,7 @@ long CLASSNAME::GetColour ( int index ) \
     const wxArrayInt& values = GetValues(); \
     if ( !values.GetCount() ) \
     { \
-        wxASSERT ( index < (int)m_choices.GetCount() ); \
+        wxASSERT( index < (int)m_choices.GetCount() ); \
         return COLOURS[index]; \
     } \
     return COLOURS[values[index]]; \
@@ -860,7 +862,7 @@ CLASSNAME::CLASSNAME( const wxString& label, const wxString& name, const wxColou
 CLASSNAME::~CLASSNAME () { } \
 void CLASSNAME::DoSetValue ( wxPGVariant value ) \
 { \
-    wxASSERT ( value.GetRawPtr() ); \
+    wxASSERT( value.GetRawPtr() ); \
     wxColour* pval = wxPGVariantToWxObjectPtr(value,wxColour); \
     m_value.m_type = wxPG_COLOUR_CUSTOM; \
     if ( m_flags & wxPG_PROP_TRANSLATE_CUSTOM ) \
@@ -891,7 +893,7 @@ long CLASSNAME::GetColour ( int index ) \
     const wxArrayInt& values = GetValues(); \
     if ( !values.GetCount() ) \
     { \
-        wxASSERT ( index < (int)GetItemCount() ); \
+        wxASSERT( index < (int)GetItemCount() ); \
         return COLOURS[index]; \
     } \
     return COLOURS[values[index]]; \

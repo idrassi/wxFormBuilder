@@ -13,11 +13,11 @@
 <a href="classwxPropertyGridPopulator-members.htm">List of all members.</a><table border=0 cellpadding=0 cellspacing=0>
 <tr><td></td></tr>
 <tr><td colspan=2><br><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridPopulator.htm#wxPropertyGridPopulatora0">AddChoices</a> (wxPGChoicesId choicesId, const wxArrayString &amp;choiceLabels, const wxArrayInt &amp;choiceValues=wxPG_EMPTY_ARRAYINT)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridPopulator.htm#wxPropertyGridPopulatora0">AddChoices</a> (wxPGChoicesId choicesId, const wxArrayString &amp;choiceLabels, const wxArrayInt &amp;choiceValues=(*((wxArrayInt *) NULL)))</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGId.htm">wxPGId</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridPopulator.htm#wxPropertyGridPopulatora1">AppendByClass</a> (const wxString &amp;classname, const wxString &amp;label, const wxString &amp;name=wxPG_LABEL, const wxString &amp;value=wxEmptyString, const wxString &amp;attributes=wxEmptyString, wxPGChoicesId choicesId=(wxPGChoicesId) 0, const wxArrayString &amp;choiceLabels=wxPG_EMPTY_ARRAYSTRING, const wxArrayInt &amp;choiceValues=wxPG_EMPTY_ARRAYINT)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGId.htm">wxPGId</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridPopulator.htm#wxPropertyGridPopulatora1">AppendByClass</a> (const wxString &amp;classname, const wxString &amp;label, const wxString &amp;name=(*((wxString *) NULL)), const wxString &amp;value=wxEmptyString, const wxString &amp;attributes=wxEmptyString, wxPGChoicesId choicesId=(wxPGChoicesId) 0, const wxArrayString &amp;choiceLabels=(*((wxArrayString *) NULL)), const wxArrayInt &amp;choiceValues=(*((wxArrayInt *) NULL)))</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGId.htm">wxPGId</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridPopulator.htm#wxPropertyGridPopulatora2">AppendByType</a> (const wxString &amp;valuetype, const wxString &amp;label, const wxString &amp;name=wxPG_LABEL, const wxString &amp;value=wxEmptyString, const wxString &amp;attributes=wxEmptyString, wxPGChoicesId choicesId=(wxPGChoicesId) 0, const wxArrayString &amp;choiceLabels=wxPG_EMPTY_ARRAYSTRING, const wxArrayInt &amp;choiceValues=wxPG_EMPTY_ARRAYINT)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGId.htm">wxPGId</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridPopulator.htm#wxPropertyGridPopulatora2">AppendByType</a> (const wxString &amp;valuetype, const wxString &amp;label, const wxString &amp;name=(*((wxString *) NULL)), const wxString &amp;value=wxEmptyString, const wxString &amp;attributes=wxEmptyString, wxPGChoicesId choicesId=(wxPGChoicesId) 0, const wxArrayString &amp;choiceLabels=(*((wxArrayString *) NULL)), const wxArrayInt &amp;choiceValues=(*((wxArrayInt *) NULL)))</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridPopulator.htm#wxPropertyGridPopulatora3">BeginChildren</a> ()</td></tr>
 
@@ -29,7 +29,7 @@
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridPopulator.htm#wxPropertyGridPopulatora7">SetGrid</a> (<a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> *pg)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridPopulator.htm#wxPropertyGridPopulatora8">wxPropertyGridPopulator</a> (<a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> *pg=(<a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> *) NULL, <a class="el" href="classwxPGId.htm">wxPGId</a> popRoot=wxNullProperty)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridPopulator.htm#wxPropertyGridPopulatora8">wxPropertyGridPopulator</a> (<a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> *pg=(<a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> *) NULL, <a class="el" href="classwxPGId.htm">wxPGId</a> popRoot=<a class="el" href="classwxPGId.htm">wxPGId</a>(NULL))</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridPopulator.htm#wxPropertyGridPopulatora9">~wxPropertyGridPopulator</a> ()</td></tr>
 
@@ -71,7 +71,7 @@ Allows populating <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a
           <td class="md" nowrap align="right"></td>
           <td></td>
           <td class="md" nowrap><a class="el" href="classwxPGId.htm">wxPGId</a>&nbsp;</td>
-          <td class="mdname" nowrap> <em>popRoot</em> = wxNullProperty</td>
+          <td class="mdname" nowrap> <em>popRoot</em> = <a class="el" href="classwxPGId.htm">wxPGId</a>(NULL)</td>
         </tr>
         <tr>
           <td></td>
@@ -154,7 +154,7 @@ Destructor.
           <td class="md" nowrap align="right"></td>
           <td></td>
           <td class="md" nowrap>const wxArrayInt &amp;&nbsp;</td>
-          <td class="mdname" nowrap> <em>choiceValues</em> = wxPG_EMPTY_ARRAYINT</td>
+          <td class="mdname" nowrap> <em>choiceValues</em> = (*((wxArrayInt *) NULL))</td>
         </tr>
         <tr>
           <td></td>
@@ -201,7 +201,7 @@ Adds a new set of choices with given id, labels and optional values.
           <td class="md" nowrap align="right"></td>
           <td></td>
           <td class="md" nowrap>const wxString &amp;&nbsp;</td>
-          <td class="mdname" nowrap> <em>name</em> = wxPG_LABEL, </td>
+          <td class="mdname" nowrap> <em>name</em> = (*((wxString *) NULL)), </td>
         </tr>
         <tr>
           <td class="md" nowrap align="right"></td>
@@ -225,13 +225,13 @@ Adds a new set of choices with given id, labels and optional values.
           <td class="md" nowrap align="right"></td>
           <td></td>
           <td class="md" nowrap>const wxArrayString &amp;&nbsp;</td>
-          <td class="mdname" nowrap> <em>choiceLabels</em> = wxPG_EMPTY_ARRAYSTRING, </td>
+          <td class="mdname" nowrap> <em>choiceLabels</em> = (*((wxArrayString *) NULL)), </td>
         </tr>
         <tr>
           <td class="md" nowrap align="right"></td>
           <td></td>
           <td class="md" nowrap>const wxArrayInt &amp;&nbsp;</td>
-          <td class="mdname" nowrap> <em>choiceValues</em> = wxPG_EMPTY_ARRAYINT</td>
+          <td class="mdname" nowrap> <em>choiceValues</em> = (*((wxArrayInt *) NULL))</td>
         </tr>
         <tr>
           <td></td>
@@ -289,7 +289,7 @@ Appends a property under current parent.
           <td class="md" nowrap align="right"></td>
           <td></td>
           <td class="md" nowrap>const wxString &amp;&nbsp;</td>
-          <td class="mdname" nowrap> <em>name</em> = wxPG_LABEL, </td>
+          <td class="mdname" nowrap> <em>name</em> = (*((wxString *) NULL)), </td>
         </tr>
         <tr>
           <td class="md" nowrap align="right"></td>
@@ -313,13 +313,13 @@ Appends a property under current parent.
           <td class="md" nowrap align="right"></td>
           <td></td>
           <td class="md" nowrap>const wxArrayString &amp;&nbsp;</td>
-          <td class="mdname" nowrap> <em>choiceLabels</em> = wxPG_EMPTY_ARRAYSTRING, </td>
+          <td class="mdname" nowrap> <em>choiceLabels</em> = (*((wxArrayString *) NULL)), </td>
         </tr>
         <tr>
           <td class="md" nowrap align="right"></td>
           <td></td>
           <td class="md" nowrap>const wxArrayInt &amp;&nbsp;</td>
-          <td class="mdname" nowrap> <em>choiceValues</em> = wxPG_EMPTY_ARRAYINT</td>
+          <td class="mdname" nowrap> <em>choiceValues</em> = (*((wxArrayInt *) NULL))</td>
         </tr>
         <tr>
           <td></td>
@@ -621,7 +621,7 @@ Used property grid.
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
 <li>propgrid.h</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Sun Jul 9 22:40:47 2006 for wxPropertyGrid by
+<hr size="1"><address style="align: right;"><small>Generated on Sat Aug 12 20:44:33 2006 for wxPropertyGrid by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.6 </small></address>

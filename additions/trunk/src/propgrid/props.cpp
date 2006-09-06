@@ -494,9 +494,10 @@ const wxPGEditor* wxBoolPropertyClass::DoGetEditorClass() const
 wxBoolPropertyClass::wxBoolPropertyClass( const wxString& label, const wxString& name, bool value ) :
     wxPGProperty(label,name)
 {
-    int useval = 0;
-    if ( value ) useval = 1;
-    DoSetValue(useval);
+    int useVal;
+    if ( value ) useVal = 1;
+    else useVal = 0;
+    DoSetValue(useVal);
 
     m_flags |= wxPG_PROP_USE_DCC;
 }
@@ -505,9 +506,10 @@ wxBoolPropertyClass::~wxBoolPropertyClass() { }
 
 void wxBoolPropertyClass::DoSetValue( wxPGVariant value )
 {
-    m_value = 0;
     if ( wxPGVariantToLong(value) != 0 )
         m_value = 1;
+    else
+        m_value = 0;
 }
 
 wxPGVariant wxBoolPropertyClass::DoGetValue() const

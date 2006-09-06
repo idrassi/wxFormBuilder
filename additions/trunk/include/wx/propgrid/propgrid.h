@@ -21,10 +21,13 @@
 #include <wx/hashmap.h>
 #include <wx/variant.h>
 #include <wx/tooltip.h>
+#include <wx/datetime.h>
 
 
-#if defined(SWIG_TYPE_TABLE) || defined(SWIG)
-    #define __WXPYTHON__
+#if defined(SWIG) || defined(SWIG_TYPE_TABLE)
+    #ifndef __WXPYTHON__
+        #define __WXPYTHON__
+    #endif
 #endif
 
 
@@ -41,9 +44,44 @@
 #ifdef DOXYGEN
     #include "pg_dox_mainpage.h"
     #include "propdev.h"
-    #define wxUSE_VALIDATORS
 #endif
 
+
+//
+// Need to define some things for DOXYGEN
+#ifdef DOXYGEN
+    #define wxUSE_VALIDATORS        1
+    #define wxUSE_DATETIME          1
+    #define wxUSE_TOOLTIPS          1
+    #define wxUSE_SPINCTRL          1
+    #define wxUSE_DATEPICKCTRL      1
+#endif
+
+
+//
+// Check some wxUSE_FOOs
+#ifndef wxUSE_VALIDATORS
+    #error "wxUSE_VALIDATORS not defined"
+#endif
+
+#ifndef wxUSE_DATETIME
+    #error "wxUSE_DATETIME not defined"
+#endif
+
+#ifndef wxUSE_DATEPICKCTRL
+    #error "wxUSE_DATEPICKCTRL not defined"
+#endif
+
+
+// Uncomment next line to allow wxAdv linkage (required for DatePickerCtrl editor)
+//    #define wxPG_ALLOW_WXADV
+
+#if defined(__WXPYTHON__)
+    #undef wxPG_ALLOW_WXADV
+    #define wxPG_ALLOW_WXADV
+#elif defined(wxPG_NO_WXADV)
+    #error "wxPG_NO_WXADV is no longer used"
+#endif
 
 //
 // wxPropertyGrid version macro
@@ -58,7 +96,7 @@
 //     In fact, it will more likely be updated once a week or so
 //     (less often when releases are made more sparsely).
 //
-#define wxPG_VERSION        1200
+#define wxPG_VERSION        1210
 
 
 // -----------------------------------------------------------------------
@@ -151,11 +189,6 @@
     #define wxPG_SMALL_SCREEN       0
 #endif
 
-
-#else
-
-#define wxUSE_VALIDATORS    1
-
 #endif // #ifndef SWIG
 
 // Undefine wxPG_ICON_WIDTH to use supplied xpm bitmaps instead
@@ -167,6 +200,7 @@
     #undef wxPG_SUPPORT_TOOLTIPS
     #define wxPG_SUPPORT_TOOLTIPS       0
 #endif
+
 
 // Set 1 to include basic properties ( ~48k in 0.9.9.2 )
 #define wxPG_INCLUDE_BASICPROPS         1
@@ -257,8 +291,22 @@ class WXDLLEXPORT wxPGCustomComboControl;
 #define SetPropertyValueSize        SetPropertyValue
 #define SetPropertyValueArrint      SetPropertyValue
 #define SetPropertyValueArrstr      SetPropertyValue
+#define SetPropertyValueDatetime    SetPropertyValue
 
 #endif
+
+// wxPG_CHECK_FOO_DBG - on Release and wxPython builds, show wxLogWarning instead
+// (so that the program flow is not interrupted, but the message can still be seen).
+#if !defined(__WXDEBUG__) || defined(__WXPYTHON__)
+    #define wxPG_CHECK_RET_DBG(A,B) \
+        if ( !(A) ) { wxLogWarning(B); return; }
+    #define wxPG_CHECK_MSG_DBG(A,B,C) \
+        if ( !(A) ) { wxLogWarning(C); return B; }
+#else
+    #define wxPG_CHECK_RET_DBG(A,B)     wxCHECK_RET(A,B)
+    #define wxPG_CHECK_MSG_DBG(A,B,C)   wxCHECK_MSG(A,B,C)
+#endif
+
 
 // -----------------------------------------------------------------------
 
@@ -331,7 +379,7 @@ extern WXDLLIMPEXP_PG const wxChar *wxPropertyGridNameStr;
 
 
 // Used to indicate wxPGChoices::Add etc that the value shall not be added
-#define wxPG_INVALID_VALUE      2147483647
+#define wxPG_INVALID_VALUE      INT_MAX
 
 
 /** Convert Red, Green and Blue to a single 32-bit value.
@@ -464,7 +512,7 @@ typedef void (*wxPGPaintCallback)(wxPGProperty* property,
     in grid. Travelling forwards from last property will navigate to the
     next control, and backwards from first will navigate to the previous one.
 */
-#define wxTAB_TRAVERSAL         0x00080000
+    #define wxTAB_TRAVERSAL         0x00080000
 
 #endif
 
@@ -481,12 +529,17 @@ typedef void (*wxPGPaintCallback)(wxPGProperty* property,
 */
 #define wxPG_COMPACTOR              0x00004000
 
-/** Speeds up switching to wxPG_HIDE_CATEGORIES mode. Initially, if wxPG_HIDE_CATEGORIES
+/**
+    NOTE: wxPG_EX_xxx are extra window styles and must be set using SetExtraStyle()
+    member function.
+
+    Speeds up switching to wxPG_HIDE_CATEGORIES mode. Initially, if wxPG_HIDE_CATEGORIES
     is not defined, the non-categorized data storage is not activated, and switching
     the mode first time becomes somewhat slower. wxPG_EX_INIT_NOCAT activates the
     non-categorized data storage right away. IMPORTANT NOTE: If you do plan not
     switching to non-categoric mode, or if you don't plan to use categories at
     all, then using this style will result in waste of resources.
+
 */
 #define wxPG_EX_INIT_NOCAT          0x00001000
 
@@ -500,7 +553,7 @@ typedef void (*wxPGPaintCallback)(wxPGProperty* property,
 #define wxPG_EX_MODE_BUTTONS        0x00008000
 
 /** Show property help strings as tool tips instead as text on the status bar.
-    This requires wxPG_TOOLTIPS window style.
+    You can set the help strings using SetPropertyHelpString member function.
 */
 #define wxPG_EX_HELP_AS_TOOLTIPS    0x00010000
 
@@ -750,11 +803,20 @@ WXDLLIMPEXP_PG void wxPGGetFailed ( const wxPGProperty* p, const wxChar* typestr
 */
 #define wxPG_DIR_DIALOG_MESSAGE             75
 
+/** Sets displayed date format for wxDateProperty.
+*/
+#define wxPG_DATE_FORMAT                    76
+
+/** Sets wxDatePickerCtrl window style used with wxDateProperty. Default
+    is wxDP_DEFAULT | wxDP_SHOWCENTURY.
+*/
+#define wxPG_DATE_PICKER_STYLE              77
+
 
 #ifdef wxPG_COMPATIBILITY_1_0_0
 
 /** wxCustomProperty specific, wxPGEditor*. Set editor control. Editor pointer is stored
-    in variable named wxPGEditor_EDITORNAME. So built-in editors are at
+    in variable named wxPGEditor_EDITORNAME. So the basic built-in editors are at
     wxPGEditor_TextCtrl, wxPGEditor_Choice, wxPGEditor_ComboBox, wxPGEditor_CheckBox,
     wxPGEditor_TextCtrlAndButton, and wxPGEditor_ChoiceAndButton.
 */
@@ -1055,6 +1117,13 @@ public:
     {
         m_v.m_ptr = v_ptr;
     }
+#if wxUSE_DATETIME
+    /** Constructor for wxDateTime ptr. */
+    wxPGVariant( const wxDateTime& dt )
+    {
+        m_v.m_ptr = (void*) &dt;
+    }
+#endif
 
     /** Returns value as long integer. */
     inline long GetLong() const
@@ -1099,17 +1168,25 @@ public:
     }
 
     /** Returns value as void*. */
-    inline void* GetVoidPtr () const
+    inline void* GetVoidPtr() const
     {
         return m_v.m_ptr;
     }
+#if wxUSE_DATETIME
+    /** Returns value as const wxDateTime&. */
+    inline const wxDateTime& GetDateTime() const
+    {
+        return *((const wxDateTime*)m_v.m_ptr);
+    }
+#endif
+
 #endif // #ifndef SWIG
 
     /** Returns value as long integer without type checking. */
-    inline long GetRawLong () const { return m_v.m_long; }
+    inline long GetRawLong() const { return m_v.m_long; }
 
     /** Returns value as void* without type checking. */
-    inline void* GetRawPtr () const { return m_v.m_ptr; }
+    inline void* GetRawPtr() const { return m_v.m_ptr; }
 
 #undef wxPG_ASSERT_VARIANT_GET
 
@@ -1731,7 +1808,7 @@ public:
 #endif
 
     /** Sets editor for a property. */
-    inline void SetEditor( const wxString& editor_name );
+    inline void SetEditor( const wxString& editorName );
 
     /** Set wxBitmap in front of the value. This bitmap will be ignored if
         property class has implemented OnCustomPaint.
@@ -1745,10 +1822,10 @@ public:
 
     inline void SetFlag( unsigned char flag ) { m_flags |= flag; }
 
-    inline void SetHelpString( const wxString& help_string )
+    inline void SetHelpString( const wxString& helpString )
     {
         EnsureDataExt();
-        m_dataExt->m_helpString = help_string;
+        m_dataExt->m_helpString = helpString;
     }
 
     inline void SetLabel( const wxString& label ) { m_label = label; }
@@ -1886,14 +1963,14 @@ extern WXDLLIMPEXP_PG wxPGPropertyClassInfo wxBasePropertyClassInfo;
 
 inline bool operator==(const wxPGId& id, const wxString& b)
 {
-    wxASSERT (wxPGIdIsOk(id));
+    wxASSERT(wxPGIdIsOk(id));
     const wxString& a = wxPGIdToPtr(id)->GetName();
     return (a.Len() == b.Len()) && (a.Cmp(b) == 0);
 }
 
 inline bool operator==(const wxPGId& id, const wxChar* b)
 {
-    wxASSERT (wxPGIdIsOk(id));
+    wxASSERT(wxPGIdIsOk(id));
     return wxPGIdToPtr(id)->GetName().Cmp(b) == 0;
 }
 
@@ -2202,21 +2279,21 @@ public:
     /** Adds to current. If did not have own copies, creates them now. If was empty,
         identical to set except that creates copies.
     */
-    void Add ( const wxChar** labels, const long* values = NULL );
+    void Add( const wxChar** labels, const long* values = NULL );
 
     /** Version that works with wxArrayString. */
-    void Add ( const wxArrayString& arr, const long* values = NULL );
+    void Add( const wxArrayString& arr, const long* values = NULL );
 
     /** Version that works with wxArrayString and wxArrayInt. */
-    void Add ( const wxArrayString& arr, const wxArrayInt& arrint );
+    void Add( const wxArrayString& arr, const wxArrayInt& arrint );
 
     /** Adds single item. */
-    void Add ( const wxChar* label, int value = wxPG_INVALID_VALUE );
+    void Add( const wxChar* label, int value = wxPG_INVALID_VALUE );
 
     /** Adds single item. */
-    void AddAsSorted ( const wxString& label, int value = wxPG_INVALID_VALUE );
+    void AddAsSorted( const wxString& label, int value = wxPG_INVALID_VALUE );
 
-    inline void EnsureData()
+    inline void wxPGChoices::EnsureData()
     {
         if ( m_data == wxPGChoicesEmptyData )
             m_data = new wxPGChoicesData();
@@ -2261,7 +2338,7 @@ public:
 
 #ifndef SWIG
     /** Does not create copies for itself. */
-    void Set ( const wxChar** labels, const long* values = NULL )
+    void Set( const wxChar** labels, const long* values = NULL )
     {
         Free();
         Add(labels,values);
@@ -2357,6 +2434,7 @@ protected:
     void Free();
 #endif
 };
+
 
 // -----------------------------------------------------------------------
 // Property declaration.
@@ -2709,27 +2787,29 @@ public:
     /** Sets value (wxPoint&) of a property. */
     inline void SetPropertyValuePoint( wxPGProperty* p, const wxPoint& value )
     {
-        wxASSERT ( p );
-        //wxASSERT ( wxStrcmp(p->GetValueType()->GetCustomTypeName(),) == 0 );
-        //SetPropertyValue ( p, wxPG_VALUETYPE(void), (void*)&value );
+        wxASSERT(p);
         SetPropertyValue( p, wxT("wxPoint"), (void*)&value );
     }
     /** Sets value (wxSize&) of a property. */
     inline void SetPropertyValueSize( wxPGProperty* p, const wxSize& value )
     {
-        wxASSERT ( p );
-        //wxASSERT ( wxStrcmp(p->GetValueType()->GetCustomTypeName(),wxT("wxSize")) == 0 );
-        //SetPropertyValue ( p, wxPG_VALUETYPE(void), (void*)&value );
+        wxASSERT(p);
         SetPropertyValue( p, wxT("wxSize"), (void*)&value );
     }
     /** Sets value (wxArrayInt&) of a property. */
     inline void SetPropertyValueArrint( wxPGProperty* p, const wxArrayInt& value )
     {
-        wxASSERT ( p );
-        //wxASSERT ( wxStrcmp(p->GetValueType()->GetCustomTypeName(),wxT("wxArrayInt")) == 0 );
-        //SetPropertyValue ( p, wxPG_VALUETYPE(void), (void*)&value );
+        wxASSERT(p);
         SetPropertyValue( p, wxT("wxArrayInt"), (void*)&value );
     }
+#if wxUSE_DATETIME
+    /** Sets value (wxDateTime&) of a property. */
+    inline void SetPropertyValueDatetime( wxPGProperty* p, const wxDateTime& value )
+    {
+        wxASSERT(p);
+        SetPropertyValue( p, wxT("datetime"), (void*)&value );
+    }
+#endif
 
     void SetPropertyValues( const wxList& list, wxPGId default_category );
 
@@ -2803,6 +2883,40 @@ inline bool wxPGProperty::SetChoices( const wxArrayString& labels,
 
 // -----------------------------------------------------------------------
 
+/*
+
+    wxASSERT_MSG( wxPGIdIsOk(id), \
+                  wxT("invalid property id") ); \
+
+*/
+
+
+// Helper macro that does necessary preparations when calling
+// some wxPGProperty's member function.
+#define wxPG_PROP_ID_CALL_PROLOG() \
+    wxPGProperty *p = wxPGIdToPtr(id); \
+    wxCHECK_RET( p, wxT("invalid property id") );
+
+#define wxPG_PROP_NAME_CALL_PROLOG() \
+    wxPGProperty *p = wxPGIdToPtr(GetPropertyByNameI(name)); \
+    if ( !p ) return;
+
+#define wxPG_PROP_ID_CALL_PROLOG_RETVAL(RVAL) \
+    wxPGProperty *p = wxPGIdToPtr(id); \
+    wxCHECK_MSG( p, RVAL, wxT("invalid property id") );
+
+#define wxPG_PROP_NAME_CALL_PROLOG_RETVAL(RVAL) \
+    wxPGProperty *p = wxPGIdToPtr(GetPropertyByNameI(name)); \
+    if ( !p ) return RVAL;
+
+// GetPropertyName version used internally. Use GetPropertyName for slight speed advantage,
+// or GetPropertyNameA for nice assertion (essential for wxPython bindings).
+#define GetPropertyByNameI          GetPropertyByNameA
+
+// FOR BACKWARDS COMPATIBILITY
+#define GetPropertyByNameWithAssert GetPropertyByNameA
+
+
 /** \class wxPropertyContainerMethods
     \ingroup classes
     \brief In order to have most same base methods, both wxPropertyGrid and
@@ -2827,7 +2941,8 @@ public:
     void AddPropertyChoice( wxPGId id, const wxString& label, int value = wxPG_INVALID_VALUE );
     inline void AddPropertyChoice( wxPGPropNameStr name, const wxString& label, int value = wxPG_INVALID_VALUE )
     {
-        AddPropertyChoice(GetPropertyByName(name),label,value);
+        wxPG_PROP_NAME_CALL_PROLOG()
+        AddPropertyChoice(wxPGIdGen(p),label,value);
     }
 
     /** Inserts choice to a property that can accept one.
@@ -2837,7 +2952,8 @@ public:
     void InsertPropertyChoice( wxPGId id, const wxString& label, int index, int value = wxPG_INVALID_VALUE );
     inline void InsertPropertyChoice( wxPGPropNameStr name, const wxString& label, int index, int value = wxPG_INVALID_VALUE )
     {
-        InsertPropertyChoice(GetPropertyByName(name),label,index,value);
+        wxPG_PROP_NAME_CALL_PROLOG()
+        InsertPropertyChoice(wxPGIdGen(p),label,index,value);
     }
 
     /** Deletes choice from a property.
@@ -2847,7 +2963,8 @@ public:
     void DeletePropertyChoice( wxPGId id, int index );
     inline void DeletePropertyChoice( wxPGPropNameStr name, int index )
     {
-        DeletePropertyChoice(GetPropertyByName(name),index);
+        wxPG_PROP_NAME_CALL_PROLOG()
+        DeletePropertyChoice(wxPGIdGen(p),index);
     }
 
     /** Constructs a property. Class used is given as the first
@@ -2872,35 +2989,42 @@ public:
                                               const wxString &name);
 
     /** Deletes a property by id. If category is deleted, all children are automatically deleted as well. */
-    void Delete ( wxPGId id );
+    void Delete( wxPGId id );
 
     /** Deletes a property by name. */
     inline void Delete( wxPGPropNameStr name )
     {
-        Delete( GetPropertyByName(name) );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        Delete( wxPGIdGen(p) );
     }
 
     /** Returns id of first child of given property.
         \remarks
         Does not return sub-properties!
     */
-    inline wxPGId GetFirstChild ( wxPGId parent )
+    inline wxPGId GetFirstChild( wxPGId id )
     {
-        wxASSERT ( wxPGIdIsOk(parent) );
-        wxPGPropertyWithChildren& p = (wxPGPropertyWithChildren&) *wxPGIdToPtr(parent);
-        if ( p.GetParentingType()==0 || p.GetParentingType()==-1 || !p.GetCount() ) return wxNullProperty;
-        return wxPGIdGen(p.Item(0));
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(wxNullProperty)
+        wxPGPropertyWithChildren* pwc = (wxPGPropertyWithChildren*) p;
+        if ( pwc->GetParentingType()==0 || pwc->GetParentingType()==-1 || !pwc->GetCount() )
+            return wxNullProperty;
+        return wxPGIdGen(pwc->Item(0));
     }
-    inline wxPGId GetFirstChild ( wxPGPropNameStr name ) { return GetFirstChild( GetPropertyByName(name) ); }
+    inline wxPGId GetFirstChild( wxPGPropNameStr name )
+    {
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxNullProperty)
+        return GetFirstChild( wxPGIdGen(p) );
+    }
 
     /** Returns next item under the same parent. */
-    inline wxPGId GetNextSibling ( wxPGId id )
+    inline wxPGId GetNextSibling( wxPGId id )
     {
         return wxPropertyGridState::GetNextSibling(id);
     }
-    inline wxPGId GetNextSibling ( wxPGPropNameStr name )
+    inline wxPGId GetNextSibling( wxPGPropNameStr name )
     {
-        return wxPropertyGridState::GetNextSibling(GetPropertyByName(name));
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxNullProperty)
+        return wxPropertyGridState::GetNextSibling(wxPGIdGen(p));
     }
 
     /** Returns comma-delimited string with property's attributes (both
@@ -2911,13 +3035,14 @@ public:
         to any other attributes). For example, to avoid adding Modified
         attribute use ~(wxPG_PROP_MODIFIED).
         \remarks
-        Atleast in 1.0.0rc this does not return complete list of attributes
+        Atleast in 1.2.x and earlier this does not return complete list of attributes
         (for example, no floating point precision) and some attributes have
         generic names (such as "Special1" instead of "UseCheckbox" etc)
     */
-    inline static wxString GetPropertyAttributes( wxPGId id, unsigned int flagmask = 0xFFFF )
+    inline wxString GetPropertyAttributes( wxPGId id, unsigned int flagmask = 0xFFFF ) const
     {
-        return wxPGIdToPtr(id)->GetAttributes(flagmask);
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(m_emptyString)
+        return p->GetAttributes(flagmask);
     }
 
     /** Sets attributes from a string generated by GetPropertyAttributes.
@@ -2926,7 +3051,14 @@ public:
     */
     inline static void SetPropertyAttributes( wxPGId id, const wxString& attributes )
     {
-        wxPGIdToPtr(id)->SetAttributes(attributes);
+        wxPG_PROP_ID_CALL_PROLOG()
+        p->SetAttributes(attributes);
+    }
+
+    inline void SetPropertyAttributes( wxPGPropNameStr name, const wxString& attributes ) const
+    {
+        wxPG_PROP_NAME_CALL_PROLOG()
+        p->SetAttributes(attributes);
     }
 
     /** Returns id of property with given name (case-sensitive). If there is no
@@ -2940,7 +3072,7 @@ public:
     wxPGId GetPropertyByName( wxPGPropNameStr name ) const;
 
     /** Returns id of a sub-property 'subname' of property 'name'. Same as
-        calling GetPropertyByName(wxT("name.subname")), albeit slightly faster.
+        calling GetPropertyByNameI(wxT("name.subname")), albeit slightly faster.
     */
     wxPGId GetPropertyByName( wxPGPropNameStr name, wxPGPropNameStr subname ) const;
 
@@ -2949,55 +3081,54 @@ public:
         to an invalid set of choices that will return false on IsOk call.
     */
     wxPGChoices& GetPropertyChoices( wxPGId id );
-    inline wxPGChoices& GetPropertyChoices( wxPGPropNameStr name )
+    wxPGChoices& GetPropertyChoices( wxPGPropNameStr name );
+
+    /** Gets name of property's constructor function. */
+    inline const wxChar* GetPropertyClassName( wxPGId id ) const
     {
-        return GetPropertyChoices(GetPropertyByName(name));
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(NULL)
+        return p->GetClassName();
     }
 
     /** Gets name of property's constructor function. */
-    inline const wxChar* GetPropertyClassName ( wxPGId id ) const
+    inline const wxChar* GetPropertyClassName( wxPGPropNameStr name ) const
     {
-        return wxPGIdToPtr(id)->GetClassName();
-    }
-
-    /** Gets name of property's constructor function. */
-    inline const wxChar* GetPropertyClassName ( wxPGPropNameStr name ) const
-    {
-        return wxPGIdToPtr(GetPropertyByNameWithAssert(name))->GetClassName();
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(NULL)
+        return p->GetClassName();
     }
 
 #if wxPG_USE_CLIENT_DATA
     /** Returns client data (void*) of a property. */
-    inline void* GetPropertyClientData ( wxPGId id ) const
+    inline void* GetPropertyClientData( wxPGId id ) const
     {
-        wxASSERT ( wxPGIdIsOk(id) );
-        return wxPGIdToPtr(id)->GetClientData();
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(NULL)
+        return p->GetClientData();
     }
     /** Returns client data (void*) of a property. */
-    inline void* GetPropertyClientData ( wxPGPropNameStr name ) const
+    inline void* GetPropertyClientData( wxPGPropNameStr name ) const
     {
-        return GetPropertyClientData(GetPropertyByName(name));
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(NULL)
+        return p->GetClientData();
     }
 #endif
 
     /** Returns property's editor. */
     inline const wxPGEditor* GetPropertyEditor( wxPGId id ) const
     {
-        wxPGProperty* p = wxPGIdToPtr(id);
-        wxASSERT(p);
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(NULL)
         return p->GetEditorClass();
     }
 
     inline const wxPGEditor* GetPropertyEditor( wxPGPropNameStr name ) const
     {
-        return GetPropertyEditor(GetPropertyByName(name));
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(NULL)
+        return p->GetEditorClass();
     }
 
     /** Returns property's custom value image (NULL of none). */
     inline wxBitmap* GetPropertyImage( wxPGId id ) const
     {
-        wxPGProperty* p = wxPGIdToPtr(id);
-        wxASSERT(p);
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(NULL)
         if ( p->GetDataExt() )
             return p->GetDataExt()->m_valueBitmap;
         return (wxBitmap*) NULL;
@@ -3005,57 +3136,62 @@ public:
 
     inline wxBitmap* GetPropertyImage( wxPGPropNameStr name ) const
     {
-        return GetPropertyImage(GetPropertyByName(name));
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(NULL)
+        return GetPropertyImage(wxPGIdGen(p));
     }
 
     /** Returns property's position under its parent. */
     inline unsigned int GetPropertyIndex( wxPGId id )
     {
-        wxASSERT ( wxPGIdIsOk(id) );
-        return wxPGIdToPtr(id)->GetIndexInParent();
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(INT_MAX)
+        return p->GetIndexInParent();
     }
 
     /** Returns property's position under its parent. */
     inline unsigned int GetPropertyIndex( wxPGPropNameStr name )
     {
-        return GetPropertyIndex( GetPropertyByName(name) );
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(INT_MAX)
+        return p->GetIndexInParent();
     }
 
     /** Returns label of a property. */
     inline const wxString& GetPropertyLabel( wxPGId id )
     {
-        wxASSERT ( wxPGIdIsOk(id) );
-        return wxPGIdToPtr(id)->GetLabel();
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(m_emptyString)
+        return p->GetLabel();
     }
     inline const wxString& GetPropertyLabel( wxPGPropNameStr name )
     {
-        return GetPropertyLabel ( GetPropertyByName(name) );
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(m_emptyString)
+        return p->GetLabel();
     }
 
-    /** Returns name of a property. */
+    /** Returns name of a property. Note that obviously there is no name-version
+        of this member function. */
     inline const wxString& GetPropertyName( wxPGId id )
     {
-        wxASSERT ( wxPGIdIsOk(id) );
-        return wxPGIdToPtr(id)->GetName();
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(m_emptyString)
+        return p->GetName();
     }
 
     /** Returns parent item of a property. */
     inline wxPGId GetPropertyParent( wxPGId id )
     {
-        wxASSERT ( wxPGIdIsOk(id) );
-        return wxPGIdGen(wxPGIdToPtr(id)->GetParent());
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(wxNullProperty)
+        return p->GetParent();
     }
 
     /** Returns parent item of a property. */
     inline wxPGId GetPropertyParent( wxPGPropNameStr name )
     {
-        return GetPropertyParent( GetPropertyByName(name) );
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxNullProperty)
+        return p->GetParent();
     }
 
     /** Returns priority of a property (wxPG_HIGH or wxPG_LOW). */
     inline int GetPropertyPriority( wxPGId id )
     {
-        wxPGProperty* p = wxPGIdToPtr(id);
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(wxPG_HIGH)
         if ( p && p->IsFlagSet(wxPG_PROP_HIDEABLE) )
             return wxPG_LOW;
         return wxPG_HIGH;
@@ -3064,7 +3200,8 @@ public:
     /** Returns priority of a property (wxPG_HIGH or wxPG_LOW). */
     inline int GetPropertyPriority( wxPGPropNameStr name )
     {
-        return GetPropertyPriority(GetPropertyByNameWithAssert(name));
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxPG_HIGH)
+        return GetPropertyPriority(wxPGIdGen(p));
     }
 
     /** Returns pointer to a property.
@@ -3081,14 +3218,15 @@ public:
     /** Returns help string associated with a property. */
     inline wxString GetPropertyHelpString( wxPGId id ) const
     {
-        wxASSERT( wxPGIdIsOk(id) );
-        return wxPGIdToPtr(id)->GetHelpString();
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(m_emptyString)
+        return p->GetHelpString();
     }
 
     /** Returns help string associated with a property. */
     inline wxString GetPropertyHelpString( wxPGPropNameStr name ) const
     {
-        return GetPropertyHelpString(GetPropertyByNameWithAssert(name));
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(m_emptyString)
+        return p->GetHelpString();
     }
 
     /** Returns short name for property's class. For example,
@@ -3103,12 +3241,13 @@ public:
     */
     inline wxValidator* GetPropertyValidator( wxPGId id )
     {
-        wxASSERT( wxPGIdIsOk(id) );
-        return wxPGIdToPtr(id)->GetValidator();
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(NULL)
+        return p->GetValidator();
     }
     inline wxValidator* GetPropertyValidator( wxPGPropNameStr name )
     {
-        return GetPropertyValidator(GetPropertyByName(name));
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(NULL)
+        return p->GetValidator();
     }
 #endif
 
@@ -3118,8 +3257,8 @@ public:
     */
     inline wxVariant GetPropertyValue( wxPGId id )
     {
-        wxASSERT ( wxPGIdIsOk(id) );
-        return wxPGIdToPtr(id)->GetValueAsVariant();
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(wxVariant())
+        return p->GetValueAsVariant();
     }
 
     /** Returns value as wxVariant. To get wxObject pointer from it,
@@ -3127,9 +3266,8 @@ public:
     */
     inline wxVariant GetPropertyValue( wxPGPropNameStr name )
     {
-        wxPGId id = GetPropertyByName(name);
-        wxASSERT ( wxPGIdIsOk(id) );
-        return wxPGIdToPtr(id)->GetValueAsVariant();
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxVariant())
+        return p->GetValueAsVariant();
     }
 #endif
 
@@ -3146,8 +3284,7 @@ public:
 
     wxPG_PYTHON_STATIC inline const wxPoint& GetPropertyValueAsPoint( wxPGId id ) wxPG_GETVALUE_CONST
     {
-        wxPGProperty* p = wxPGIdToPtr(id);
-        wxASSERT ( p );
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(*((const wxPoint*)NULL))
 
         if ( wxStrcmp(p->GetValueType()->GetCustomTypeName(),wxT("wxPoint")) != 0 )
         {
@@ -3159,8 +3296,7 @@ public:
 
     wxPG_PYTHON_STATIC inline const wxSize& GetPropertyValueAsSize( wxPGId id ) wxPG_GETVALUE_CONST
     {
-        wxPGProperty* p = wxPGIdToPtr(id);
-        wxASSERT ( p );
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(*((const wxSize*)NULL))
 
         if ( wxStrcmp(p->GetValueType()->GetCustomTypeName(),wxT("wxSize")) != 0 )
         {
@@ -3170,10 +3306,9 @@ public:
         return *((const wxSize*)wxPGVariantToVoidPtr(p->DoGetValue()));
     }
 
-    wxPG_PYTHON_STATIC inline const wxArrayInt& GetPropertyValueAsArrayInt ( wxPGId id ) wxPG_GETVALUE_CONST
+    wxPG_PYTHON_STATIC inline const wxArrayInt& GetPropertyValueAsArrayInt( wxPGId id ) wxPG_GETVALUE_CONST
     {
-        wxPGProperty* p = wxPGIdToPtr(id);
-        wxASSERT ( p );
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(wxPG_EMPTY_ARRAYINT)
 
         if ( wxStrcmp(p->GetValueType()->GetCustomTypeName(),wxT("wxArrayInt")) != 0 )
         {
@@ -3183,47 +3318,67 @@ public:
         return *((const wxArrayInt*)wxPGVariantToVoidPtr(p->DoGetValue()));
     }
 
+#if wxUSE_DATETIME
+    wxPG_PYTHON_STATIC inline wxDateTime GetPropertyValueAsDateTime( wxPGId id ) wxPG_GETVALUE_CONST
+    {
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(wxDateTime())
+
+        if ( wxStrcmp(p->GetValueType()->GetCustomTypeName(),wxT("datetime")) != 0 )
+        {
+            wxPGGetFailed(p,wxT("datetime"));
+            return wxDateTime();
+        }
+        return p->DoGetValue().GetDateTime();
+    }
+#endif
+
     inline wxString GetPropertyValueAsString( wxPGPropNameStr name ) const
     {
-        return GetPropertyValueAsString( GetPropertyByName(name) );
+        return GetPropertyValueAsString( GetPropertyByNameI(name) );
     }
     inline long GetPropertyValueAsLong( wxPGPropNameStr name ) const
     {
-        return GetPropertyValueAsLong( GetPropertyByName(name) );
+        return GetPropertyValueAsLong( GetPropertyByNameI(name) );
     }
 #ifndef SWIG
     inline int GetPropertyValueAsInt( wxPGPropNameStr name ) const
     {
-        return GetPropertyValueAsInt( GetPropertyByName(name) );
+        return GetPropertyValueAsInt( GetPropertyByNameI(name) );
     }
 #endif
     inline bool GetPropertyValueAsBool( wxPGPropNameStr name ) const
     {
-        return GetPropertyValueAsBool( GetPropertyByName(name) );
+        return GetPropertyValueAsBool( GetPropertyByNameI(name) );
     }
     inline double GetPropertyValueAsDouble( wxPGPropNameStr name ) const
     {
-        return GetPropertyValueAsDouble( GetPropertyByName(name) );
+        return GetPropertyValueAsDouble( GetPropertyByNameI(name) );
     }
     inline const wxArrayString& GetPropertyValueAsArrayString ( wxPGPropNameStr name ) const
     {
-        return GetPropertyValueAsArrayString ( GetPropertyByName(name) );
+        return GetPropertyValueAsArrayString( GetPropertyByNameI(name) );
     }
     inline const wxObject* GetPropertyValueAsWxObjectPtr ( wxPGPropNameStr name ) const
     {
-        return GetPropertyValueAsWxObjectPtr ( GetPropertyByName(name) );
+        return GetPropertyValueAsWxObjectPtr( GetPropertyByNameI(name) );
     }
-    inline const wxPoint& GetPropertyValueAsPoint ( wxPGPropNameStr name ) const
+    inline const wxPoint& GetPropertyValueAsPoint( wxPGPropNameStr name ) const
     {
-        return GetPropertyValueAsPoint ( GetPropertyByName(name) );
+        return GetPropertyValueAsPoint( GetPropertyByNameI(name) );
     }
-    inline const wxSize& GetPropertyValueAsSize ( wxPGPropNameStr name ) const
+    inline const wxSize& GetPropertyValueAsSize( wxPGPropNameStr name ) const
     {
-        return GetPropertyValueAsSize ( GetPropertyByName(name) );
+        return GetPropertyValueAsSize( GetPropertyByNameI(name) );
     }
-    inline const wxArrayInt& GetPropertyValueAsArrayInt ( wxPGPropNameStr name ) const
+#if wxUSE_DATETIME
+    inline wxDateTime GetPropertyValueAsDateTime( wxPGPropNameStr name ) const
     {
-        return GetPropertyValueAsArrayInt ( GetPropertyByName(name) );
+        return GetPropertyValueAsDateTime( GetPropertyByNameI(name) );
+    }
+#endif
+    inline const wxArrayInt& GetPropertyValueAsArrayInt( wxPGPropNameStr name ) const
+    {
+        return GetPropertyValueAsArrayInt( GetPropertyByNameI(name) );
     }
 
     /** Returns a wxPGValueType class instance that describes
@@ -3231,31 +3386,27 @@ public:
     */
     const wxPGValueType* GetPropertyValueType( wxPGId id )
     {
-        wxASSERT( wxPGIdIsOk(id) );
-        return wxPGIdToPtr(id)->GetValueType();
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(wxPG_VALUETYPE(none))
+        return p->GetValueType();
     }
     const wxPGValueType* GetPropertyValueType( wxPGPropNameStr name )
     {
-        return wxPGIdToPtr( GetPropertyByNameWithAssert(name) )->GetValueType();
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxPG_VALUETYPE(none))
+        return p->GetValueType();
     }
 
     /** Returns property value type name.
     */
     inline wxString GetPVTN( wxPGId id )
     {
-        wxPGProperty* p = wxPGIdToPtr(id);
-        //wxASSERT_MSG( p, wxT("NULL property") );
-        if ( !p ) return wxEmptyString;
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(m_emptyString)
         const wxPGValueType* vt = p->GetValueType();
         return vt->GetCustomTypeName();
     }
 
     inline wxString GetPVTN( wxPGPropNameStr name )
     {
-        wxPGId id = GetPropertyByName(name);
-        wxPGProperty* p = wxPGIdToPtr(id);
-        //wxASSERT_MSG( p, wxT("NULL property") );
-        if ( !p ) return wxEmptyString;
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(m_emptyString)
         const wxPGValueType* vt = p->GetValueType();
         return vt->GetCustomTypeName();
     }
@@ -3264,19 +3415,14 @@ public:
     */
     inline size_t GetPVTI( wxPGId id )
     {
-        wxPGProperty* p = wxPGIdToPtr(id);
-        //wxASSERT_MSG( p, wxT("NULL property") );
-        if ( !p ) return 0;
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(0)
         const wxPGValueType* vt = p->GetValueType();
         return size_t(vt);
     }
 
     inline size_t GetPVTI( wxPGPropNameStr name )
     {
-        wxPGId id = GetPropertyByName(name);
-        wxPGProperty* p = wxPGIdToPtr(id);
-        //wxASSERT_MSG( p, wxT("NULL property") );
-        if ( !p ) return 0;
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(0)
         const wxPGValueType* vt = p->GetValueType();
         return size_t(vt);
     }
@@ -3300,12 +3446,23 @@ public:
 
     inline bool HideProperty( wxPGPropNameStr name )
     {
-        return HideProperty(GetPropertyByName(name));
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return HideProperty(wxPGIdGen(p));
     }
 
 #if wxPG_INCLUDE_ADVPROPS
-    /** Initializes *all* property types. Causes references to all property
-        classes in the library, so calling this may cause significant increase
+    /** Initializes additional property editors (SpinCtrl etc.). Causes references
+        to most object files in the library, so calling this may cause significant increase
+        in executable size when linking with static library.
+    */
+    static void RegisterAdditionalEditors();
+#else
+    static inline void RegisterAdditionalEditors() { }
+#endif
+
+#if wxPG_INCLUDE_ADVPROPS
+    /** Initializes *all* property types. Causes references to most object
+        files in the library, so calling this may cause significant increase
         in executable size when linking with static library.
     */
     static void InitAllTypeHandlers();
@@ -3316,33 +3473,43 @@ public:
     /** Returns true if property is enabled. */
     inline bool IsPropertyEnabled( wxPGId id ) const
     {
-        return (!(wxPGIdToPtr(id)->GetFlags() & wxPG_PROP_DISABLED))?true:false;
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(false)
+        return (!(p->GetFlags() & wxPG_PROP_DISABLED))?true:false;
     }
 
     /** Returns true if property is enabled. */
-    inline bool IsPropertyEnabled( wxPGPropNameStr name ) { return IsPropertyEnabled(GetPropertyByName(name)); }
+    inline bool IsPropertyEnabled( wxPGPropNameStr name )
+    {
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return (!(p->GetFlags() & wxPG_PROP_DISABLED))?true:false;
+    }
 
     /** Returns true if property is shown (ie. hideproperty with true not called for it). */
     inline bool IsPropertyShown( wxPGId id ) const
     {
-        return (!(wxPGIdToPtr(id)->GetFlags() & wxPG_PROP_HIDEABLE))?true:false;
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(false)
+        return (!(p->GetFlags() & wxPG_PROP_HIDEABLE))?true:false;
     }
 
     /** Returns true if property is shown (ie. hideproperty with true not called for it). */
-    inline bool IsPropertyShown( wxPGPropNameStr name ) { return IsPropertyShown(GetPropertyByName(name)); }
+    inline bool IsPropertyShown( wxPGPropNameStr name )
+    {
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return (!(p->GetFlags() & wxPG_PROP_HIDEABLE))?true:false;
+    }
 
     /** Returns true if property's value type has name typestr. */
     inline bool IsPropertyValueType( wxPGId id, const wxChar* typestr )
     {
-        wxASSERT ( wxPGIdIsOk(id) );
-        return (wxStrcmp(wxPGIdToPtr(id)->GetValueType()->GetTypeName(),typestr) == 0);
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(false)
+        return (wxStrcmp(p->GetValueType()->GetTypeName(),typestr) == 0);
     }
 
     /** Returns true if property's value type is valuetype */
     inline bool IsPropertyValueType( wxPGId id, const wxPGValueType* valuetype )
     {
-        wxASSERT ( wxPGIdIsOk(id) );
-        return ( wxPGIdToPtr(id)->GetValueType() == valuetype );
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(false)
+        return ( p->GetValueType() == valuetype );
     }
 
     /** Returns true if property's value type has same name as a class. */
@@ -3354,26 +3521,33 @@ public:
     /** Returns true if property's value type has name typestr. */
     inline bool IsPropertyValueType( wxPGPropNameStr name, const wxChar* typestr )
     {
-        return IsPropertyValueType(GetPropertyByName(name),typestr);
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return (wxStrcmp(p->GetValueType()->GetTypeName(),typestr) == 0);
     }
 
     /** Returns true if property's value type is valuetype */
     inline bool IsPropertyValueType( wxPGPropNameStr name, const wxPGValueType* valuetype )
     {
-        return IsPropertyValueType(GetPropertyByName(name),valuetype);
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return ( p->GetValueType() == valuetype );
     }
 
     /** Returns true if property's value type has same name as a class. */
     inline bool IsPropertyValueType( wxPGPropNameStr name, const wxClassInfo* classinfo )
     {
-        return IsPropertyValueType(GetPropertyByName(name),classinfo);
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return IsPropertyValueType(wxPGIdGen(p),classinfo->GetClassName());
     }
 
     /** Returns true if given property is expanded. Naturally, always returns false
         for properties that cannot be expanded.
     */
     static bool IsPropertyExpanded( wxPGId id );
-    inline bool IsPropertyExpanded( wxPGPropNameStr name ) { return IsPropertyExpanded(GetPropertyByName(name)); }
+    inline bool IsPropertyExpanded( wxPGPropNameStr name )
+    {
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return IsPropertyExpanded(wxPGIdGen(p));
+    }
 
     /** Returns true if property is of certain type.
         \param info
@@ -3382,59 +3556,79 @@ public:
     */
     static inline bool IsPropertyKindOf( wxPGId id, wxPGPropertyClassInfo& info )
     {
-        return wxPGIdToPtr(id)->IsKindOf(info);
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(false)
+        return p->IsKindOf(info);
     }
     inline bool IsPropertyKindOf( wxPGPropNameStr name, wxPGPropertyClassInfo& info )
     {
-        return wxPGIdToPtr(GetPropertyByName(name))->IsKindOf(info);
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return p->IsKindOf(info);
     }
 
     /** Returns true if property has been modified after value set or modify flag
         clear by software.
+
+        NOTE: Try to use IsPropertyModified instead.
     */
-    inline bool IsModified ( wxPGId id ) const
+    inline bool IsModified( wxPGId id ) const
     {
-        wxPGProperty* p = wxPGIdToPtr ( id );
-        if ( !p ) return false;
-        return ( (p->GetFlags() & wxPG_PROP_MODIFIED) ? true : false );
+        return IsPropertyModified(id);
     }
 
-    inline bool IsModified ( wxPGPropNameStr name ) { return IsModified(GetPropertyByName(name)); }
+    inline bool IsModified( wxPGPropNameStr name )
+    {
+        return IsPropertyModified(name);
+    }
 
     /** Returns true if property is a category. */
-    inline bool IsPropertyCategory ( wxPGId id ) const
+    inline bool IsPropertyCategory( wxPGId id ) const
     {
-        return (wxPGIdToPtr(id)->GetParentingType()>0)?true:false;
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(false)
+        return (p->GetParentingType()>0)?true:false;
     }
-    inline bool IsPropertyCategory ( wxPGPropNameStr name ) { return IsPropertyCategory(GetPropertyByName(name)); }
+
+    inline bool IsPropertyCategory( wxPGPropNameStr name )
+    {
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return (p->GetParentingType()>0)?true:false;
+    }
 
     /** Returns true if property has been modified after value set or modify flag
         clear by software.
     */
-    inline bool IsPropertyModified ( wxPGId id ) const
+    inline bool IsPropertyModified( wxPGId id ) const
     {
-        wxPGProperty* p = wxPGIdToPtr(id);
-        if ( !p ) return false;
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(false)
         return ( (p->GetFlags() & wxPG_PROP_MODIFIED) ? true : false );
     }
-    inline bool IsPropertyModified ( wxPGPropNameStr name ) { return IsPropertyModified(GetPropertyByName(name)); }
+    inline bool IsPropertyModified( wxPGPropNameStr name )
+    {
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return ( (p->GetFlags() & wxPG_PROP_MODIFIED) ? true : false );
+    }
 
     /** Returns true if property value is set to unspecified.
     */
 #ifdef wxPG_COMPATIBILITY_1_0_0
-    inline bool IsPropertyValueUnspecified ( wxPGId id ) const
+    inline bool IsPropertyValueUnspecified( wxPGId id ) const
 #else
-    inline bool IsPropertyUnspecified ( wxPGId id ) const
+    inline bool IsPropertyUnspecified( wxPGId id ) const
 #endif
     {
-        wxPGProperty* p = wxPGIdToPtr(id);
-        if ( !p ) return false;
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(false)
         return ( (p->GetFlags() & wxPG_PROP_UNSPECIFIED) ? true : false );
     }
 #ifdef wxPG_COMPATIBILITY_1_0_0
-    inline bool IsPropertyValueUnspecified ( wxPGPropNameStr name ) { return IsPropertyValueUnspecified(GetPropertyByName(name)); }
+    inline bool IsPropertyValueUnspecified( wxPGPropNameStr name )
+    {
+        return IsPropertyValueUnspecified(GetPropertyByNameI(name));
+    }
 #else
-    inline bool IsPropertyUnspecified ( wxPGPropNameStr name ) { return IsPropertyUnspecified(GetPropertyByName(name)); }
+    inline bool IsPropertyUnspecified( wxPGPropNameStr name )
+    {
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return IsPropertyUnspecified(wxPGIdGen(p));
+    }
 #endif
 
     /** Basic property classes are registered by the default, but this
@@ -3445,7 +3639,7 @@ public:
     /** Registers property class info with specific name. Preferably use
         wxPGRegisterPropertyClass(PROPERTYNAME) macro.
     */
-    static bool RegisterPropertyClass ( const wxChar* name, wxPGPropertyClassInfo* classinfo );
+    static bool RegisterPropertyClass( const wxChar* name, wxPGPropertyClassInfo* classinfo );
 
     /** Replaces property with id with newly created property. For example,
         this code replaces existing property named "Flags" with one that
@@ -3458,6 +3652,8 @@ public:
     */
     inline wxPGId ReplaceProperty( wxPGId id, wxPGProperty* property )
     {
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(wxNullProperty)
+
         wxPGProperty* replaced = wxPGIdToPtr(id);
         wxASSERT( replaced && property );
         wxASSERT( replaced->GetParentingType() == 0 || replaced->GetParentingType() == -1 );
@@ -3475,21 +3671,21 @@ public:
     }
     inline wxPGId ReplaceProperty( wxPGPropNameStr name, wxPGProperty* property )
     {
-        return ReplaceProperty(GetPropertyByName(name),property);
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxNullProperty)
+        return ReplaceProperty(wxPGIdGen(p),property);
     }
 
     /** Lets user to set the strings listed in the choice dropdown of a wxBoolProperty.
         Defaults are "True" and "False", so changing them to, say, "Yes" and "No" may
         be useful in some less technical applications.
     */
-    static void SetBoolChoices ( const wxChar* true_choice, const wxChar* false_choice );
+    static void SetBoolChoices( const wxChar* true_choice, const wxChar* false_choice );
 
     /** Set choices of a property to specified set of labels and values.
     */
     static inline void SetPropertyChoices(wxPGId id, wxPGChoices& choices)
     {
-        wxPGProperty* p = wxPGIdToPtr(id);
-        wxASSERT( p );
+        wxPG_PROP_ID_CALL_PROLOG()
         p->SetChoices(choices);
     }
 
@@ -3498,7 +3694,8 @@ public:
     */
     inline void SetPropertyChoices(wxPGPropNameStr name, wxPGChoices& choices)
     {
-        SetPropertyChoices(GetPropertyByName(name),choices);
+        wxPG_PROP_NAME_CALL_PROLOG()
+        p->SetChoices(choices);
     }
 
     /** If property's set of choices is shared, then calling this method converts
@@ -3506,14 +3703,13 @@ public:
     */
     inline void SetPropertyChoicesExclusive( wxPGId id )
     {
-        wxASSERT( wxPGIdIsOk(id) );
-        wxPGIdToPtr(id)->SetChoicesExclusive();
+        wxPG_PROP_ID_CALL_PROLOG()
+        p->SetChoicesExclusive();
     }
     inline void SetPropertyChoicesExclusive( wxPGPropNameStr name )
     {
-        wxPGId id = GetPropertyByName(name);
-        wxASSERT( wxPGIdIsOk(id) );
-        wxPGIdToPtr(id)->SetChoicesExclusive();
+        wxPG_PROP_NAME_CALL_PROLOG()
+        p->SetChoicesExclusive();
     }
 
     /** Sets an attribute of a property. Ids and relevants values are totally
@@ -3531,39 +3727,45 @@ public:
     {
         DoSetPropertyAttribute(id,attrid,value,argFlags);
     }
-    inline void SetPropertyAttribute ( wxPGPropNameStr name, int attrid, wxVariant value, long argFlags = 0  )
+    inline void SetPropertyAttribute( wxPGPropNameStr name, int attrid, wxVariant value, long argFlags = 0  )
     {
-        DoSetPropertyAttribute(GetPropertyByName(name),attrid,value,argFlags);
+        wxPG_PROP_NAME_CALL_PROLOG()
+        DoSetPropertyAttribute(wxPGIdGen(p),attrid,value,argFlags);
     }
 
 #ifndef SWIG
     /** Sets editor control of a property. As editor argument, use
-        wxPG_EDITOR(EditorName), where built-in editor names are TextCtrl, Choice,
-        ComboBox, CheckBox, TextCtrlAndButton, and ChoiceAndButton.
+        wxPG_EDITOR(EditorName), where basic built-in editor names are TextCtrl, Choice,
+        ComboBox, CheckBox, TextCtrlAndButton, and ChoiceAndButton. Additional editors
+        include SpinCtrl and DatePickerCtrl, which also require wxPropertyGrid::RegisterAdditionalEditors()
+        call prior using.
     */
     inline void SetPropertyEditor( wxPGId id, const wxPGEditor* editor )
     {
-        wxPGProperty* p = wxPGIdToPtr(id);
-        wxASSERT(p);
+        wxPG_PROP_ID_CALL_PROLOG()
+        wxCHECK_RET( editor, wxT("unknown/NULL editor") );
         p->SetEditor(editor);
         RefreshProperty(p);
     }
     inline void SetPropertyEditor( wxPGPropNameStr name, const wxPGEditor* editor )
     {
-        SetPropertyEditor(GetPropertyByName(name),editor);
+        wxPG_PROP_NAME_CALL_PROLOG()
+        wxCHECK_RET( editor, wxT("unknown/NULL editor") );
+        p->SetEditor(editor);
+        RefreshProperty(p);
     }
 #endif // #ifndef SWIG
 
     /** Sets editor control of a property. As editor argument, use
         editor name string, such as wxT("TextCtrl") or wxT("Choice").
     */
-    inline void SetPropertyEditor( wxPGId id, const wxString& editor_name )
+    inline void SetPropertyEditor( wxPGId id, const wxString& editorName )
     {
-        SetPropertyEditor(id,GetEditorByName(editor_name));
+        SetPropertyEditor(id,GetEditorByName(editorName));
     }
-    inline void SetPropertyEditor( wxPGPropNameStr name, const wxString& editor_name )
+    inline void SetPropertyEditor( wxPGPropNameStr name, const wxString& editorName )
     {
-        SetPropertyEditor(GetPropertyByName(name),editor_name);
+        SetPropertyEditor(name,GetEditorByName(editorName));
     }
 
 #if wxPG_USE_CLIENT_DATA
@@ -3573,31 +3775,36 @@ public:
     */
     inline void SetPropertyClientData( wxPGId id, void* clientData )
     {
-        wxASSERT ( wxPGIdIsOk(id) );
-        wxPGIdToPtr(id)->SetClientData(clientData);
+        wxPG_PROP_ID_CALL_PROLOG()
+        p->SetClientData(clientData);
     }
     /** Sets client data (void*) of a property.
         \remarks
         This untyped client data has to be deleted manually.
     */
-    inline void SetPropertyClientData ( wxPGPropNameStr name, void* clientData )
+    inline void SetPropertyClientData( wxPGPropNameStr name, void* clientData )
     {
-        SetPropertyClientData(GetPropertyByName(name),clientData);
+        wxPG_PROP_NAME_CALL_PROLOG()
+        p->SetClientData(clientData);
     }
 #endif
 
-    /** Associates the help string with property (text will shown either in
-        manager's "description" text box or in the status bar.
+    /** Associates the help string with property.
+        \remarks
+        By default, text is shown either in the manager's "description"
+        text box or in the status bar. If extra window style wxPG_EX_HELP_AS_TOOLTIPS
+        is used, then the text will appear as a tooltip.
     */
-    inline void SetPropertyHelpString( wxPGId id, const wxString& help_string )
+    inline void SetPropertyHelpString( wxPGId id, const wxString& helpString )
     {
-        wxASSERT ( wxPGIdIsOk(id) );
-        wxPGIdToPtr(id)->SetHelpString(help_string);
+        wxPG_PROP_ID_CALL_PROLOG()
+        p->SetHelpString(helpString);
     }
 
-    inline void SetPropertyHelpString( wxPGPropNameStr name, const wxString& help_string )
+    inline void SetPropertyHelpString( wxPGPropNameStr name, const wxString& helpString )
     {
-        SetPropertyHelpString(GetPropertyByName(name),help_string);
+        wxPG_PROP_NAME_CALL_PROLOG()
+        p->SetHelpString(helpString);
     }
 
     /** Set wxBitmap in front of the value.
@@ -3607,15 +3814,16 @@ public:
     */
     inline void SetPropertyImage( wxPGId id, wxBitmap& bmp )
     {
-        wxPGProperty* p = wxPGIdToPtr(id);
-        wxASSERT(p);
+        wxPG_PROP_ID_CALL_PROLOG()
         p->SetValueImage(bmp);
         RefreshProperty(p);
     }
 
     inline void SetPropertyImage( wxPGPropNameStr name, wxBitmap& bmp )
     {
-        SetPropertyImage(GetPropertyByName(name),bmp);
+        wxPG_PROP_NAME_CALL_PROLOG()
+        p->SetValueImage(bmp);
+        RefreshProperty(p);
     }
 
     /** Sets max length of property's text.
@@ -3626,7 +3834,8 @@ public:
     */
     inline bool SetPropertyMaxLength( wxPGPropNameStr name, int maxLen )
     {
-        return SetPropertyMaxLength(GetPropertyByName(name),maxLen);
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return SetPropertyMaxLength(wxPGIdGen(p),maxLen);
     }
 
     /** Property is to be hidden/shown when hider button is toggled or
@@ -3639,7 +3848,8 @@ public:
     */
     inline bool SetPropertyPriority( wxPGPropNameStr name, int priority )
     {
-        return SetPropertyPriority(GetPropertyByName(name),priority);
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return SetPropertyPriority(wxPGIdGen(p),priority);
     }
 
 #if wxUSE_VALIDATORS
@@ -3653,12 +3863,13 @@ public:
     */
     inline void SetPropertyValidator( wxPGId id, const wxValidator& validator )
     {
-        wxASSERT( wxPGIdIsOk(id) );
-        wxPGIdToPtr(id)->SetValidator(validator);
+        wxPG_PROP_ID_CALL_PROLOG()
+        p->SetValidator(validator);
     }
     inline void SetPropertyValidator( wxPGPropNameStr name, const wxValidator& validator )
     {
-        SetPropertyValidator(GetPropertyByName(name),validator);
+        wxPG_PROP_NAME_CALL_PROLOG()
+        p->SetValidator(validator);
     }
 #endif
 
@@ -3676,7 +3887,8 @@ public:
     */
     inline void TogglePropertyPriority( wxPGPropNameStr name )
     {
-        TogglePropertyPriority(GetPropertyByName(name));
+        wxPG_PROP_NAME_CALL_PROLOG()
+        TogglePropertyPriority(wxPGIdGen(p));
     }
 
 #ifdef SWIG
@@ -3750,6 +3962,8 @@ public:
                     getter = cls.GetPropertyValueAsArrayString
                 elif vtn == 'wxArrayInt':
                     getter = cls.GetPropertyValueAsArrayInt
+                elif vtn == 'datetime':
+                    getter = cls.GetPropertyValueAsDateTime
                 elif vtn == 'wxPoint':
                     getter = cls.GetPropertyValueAsPoint
                 elif vtn == 'wxSize':
@@ -3775,7 +3989,7 @@ public:
             if not isinstance(p,basestring):
                 self._SetPropertyValueArrstr(p,v)
             else:
-                self._SetPropertyValueArrstr(self.GetPropertyByName(p),v)
+                self._SetPropertyValueArrstr(self.GetPropertyByNameI(p),v)
 
 
         def SetPropertyValueArrint2(self,p,v):
@@ -3786,7 +4000,7 @@ public:
             if not isinstance(p,basestring):
                 self._SetPropertyValueArrint(p,v)
             else:
-                self._SetPropertyValueArrint(self.GetPropertyByName(p),v)
+                self._SetPropertyValueArrint(self.GetPropertyByNameI(p),v)
 
 
         def SetPropertyValue(self,p,v):
@@ -3817,6 +4031,8 @@ public:
                         setter = cls.SetPropertyValueArrstr2
                     elif vtn == 'wxArrayInt':
                         setter = cls.setPropertyValueArrint2
+                    elif vtn == 'datetime':
+                        setter = cls.setPropertyValueDatetime
                     elif vtn == 'wxPoint':
                         setter = cls.SetPropertyValuePoint
                     elif vtn == 'wxSize':
@@ -4013,9 +4229,15 @@ public:
 
 #ifndef SWIG
 
-    static wxPGEditor* GetEditorByName( const wxString& editor_name );
+    static wxPGEditor* GetEditorByName( const wxString& editorName );
+
+    // GetPropertyByNameI With nice assertion error message.
+    wxPGId GetPropertyByNameA( wxPGPropNameStr name ) const;
 
 protected:
+
+    // Deriving classes must set this (it must be only or current page).
+    wxPropertyGridState*         m_pState;
 
     // Default call's m_pState's BaseGetPropertyByName
     virtual wxPGId DoGetPropertyByName( wxPGPropNameStr name ) const;
@@ -4025,20 +4247,11 @@ protected:
     // Intermediate version needed due to wxVariant copying inefficiency
     static void DoSetPropertyAttribute( wxPGId id, int attrid, wxVariant& value, long argFlags );
 
-    inline wxPGId GetPropertyByNameWithAssert( wxPGPropNameStr name ) const
-    {
-        wxPGId id = GetPropertyByName(name);
-        wxASSERT_MSG(wxPGIdIsOk(id),wxT("no property found for name"));
-        return id;
-    }
-
-    // Deriving classes must set this (it must be only or current page).
-    wxPropertyGridState*         m_pState;
+    // Empty string object to return from member functions returning const wxString&.
+    wxString                    m_emptyString;
 
 #endif // #ifndef SWIG
-
 };
-
 
 // -----------------------------------------------------------------------
 
@@ -4171,23 +4384,7 @@ public:
 	    wxPropertyGrid
 	*/
 
-/*
 #ifdef SWIG
-    %pythonAppend OnChange2 {
-        self._setOORInfo(self)
-        self.DoDefaultTypeMappings()
-        self.edited_objects = {}
-        self.DoDefaultValueTypeMappings()
-    }
-    %pythonAppend OnChange2() ""
-#endif
-    void OnChange2();
-*/
-
-#ifdef SWIG
-    //%pythonAppend wxPropertyGrid   "self._setOORInfo(self)"
-    //%pythonAppend wxPropertyGrid   "self.DoDefaultTypeMappings()"
-    //%pythonAppend wxPropertyGrid   "self.edited_objects = {}  # Keys are parent ids, values are Python objects"
     %pythonAppend wxPropertyGrid {
         self._setOORInfo(self)
         self.DoDefaultTypeMappings()
@@ -4273,18 +4470,19 @@ public:
 
     inline wxPGId AppendIn( wxPGPropNameStr name, wxPGProperty* property )
     {
-        return Insert(GetPropertyByName(name),-1,property);
+        return Insert(GetPropertyByNameI(name),-1,property);
     }
 
     inline wxPGId AppendIn( wxPGId id, const wxString& label, const wxString& propname, wxVariant& value )
     {
-        return m_pState->AppendIn( (wxPGPropertyWithChildren*)wxPGIdToPtr(id), label, propname, value );
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(wxNullProperty)
+        return m_pState->AppendIn( (wxPGPropertyWithChildren*)p, label, propname, value );
     }
 
     inline wxPGId AppendIn( wxPGPropNameStr name, const wxString& label, const wxString& propname, wxVariant& value )
     {
-        return m_pState->AppendIn( (wxPGPropertyWithChildren*)wxPGIdToPtr(GetPropertyByName(name)),
-            label, propname, value );
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxNullProperty)
+        return m_pState->AppendIn( (wxPGPropertyWithChildren*)p, label, propname, value );
     }
 
     /** This static function enables or disables automatic use of wxGetTranslation for
@@ -4344,7 +4542,8 @@ public:
     /** Resets value of a property to its default. */
     inline bool ClearPropertyValue( wxPGPropNameStr name )
     {
-        return ClearPropertyValue( GetPropertyByName(name) );
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return ClearPropertyValue( wxPGIdGen(p) );
     }
 
     /** Deselect current selection, if any. Returns true if success
@@ -4361,14 +4560,18 @@ public:
     /** Collapses given category or property with children.
         Returns true if actually collapses.
     */
-    inline bool Collapse( wxPGId id ) { return _Collapse(wxPGIdToPtr(id)); }
+    inline bool Collapse( wxPGId id )
+    {
+        return _Collapse(wxPGIdToPtr(id));
+    }
 
     /** Collapses given category or property with children.
         Returns true if actually collapses.
     */
     inline bool Collapse( wxPGPropNameStr name )
     {
-        return _Collapse( wxPGIdToPtr ( GetPropertyByName(name) ) );
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return _Collapse(p);
     }
 
     /** Collapses all items that can be collapsed.
@@ -4396,24 +4599,13 @@ public:
     bool EnableCategories( bool enable );
 
     /** Enables or disables property, depending on whether enable is true or false. */
-    /*inline bool Enable ( wxPGId id, bool enable = true )
-    {
-        return EnableProperty ( id, enable );
-    }*/
-
-    /** Enables or disables property, depending on whether enable is true or false. */
-    /*inline bool Enable ( wxPGPropNameStr name, bool enable = true )
-    {
-        return EnableProperty ( name, enable );
-    }*/
-
-    /** Enables or disables property, depending on whether enable is true or false. */
     bool EnableProperty( wxPGId id, bool enable = true );
 
     /** Enables or disables property, depending on whether enable is true or false. */
     inline bool EnableProperty( wxPGPropNameStr name, bool enable = true )
     {
-        return EnableProperty( GetPropertyByName(name), enable );
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return EnableProperty( wxPGIdGen(p), enable );
     }
 
     /** Scrolls and/or expands items to ensure that the given item is visible.
@@ -4426,20 +4618,25 @@ public:
     */
     inline bool EnsureVisible( wxPGPropNameStr name )
     {
-        return EnsureVisible( GetPropertyByName(name) );
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return EnsureVisible( wxPGIdGen(p) );
     }
 
     /** Expands given category or property with children.
         Returns true if actually expands.
     */
-    inline bool Expand( wxPGId id ) { return _Expand(wxPGIdToPtr(id)); }
+    inline bool Expand( wxPGId id )
+    {
+        return _Expand(wxPGIdToPtr(id));
+    }
 
     /** Expands given category or property with children.
         Returns true if actually expands.
     */
     inline bool Expand( wxPGPropNameStr name )
     {
-        return _Expand( wxPGIdToPtr ( GetPropertyByName(name) ) );
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return _Expand(p);
     }
 
     /** Expands all items that can be expanded.
@@ -4483,15 +4680,22 @@ public:
         return GetChildrenCount( wxPGIdGen(m_pState->m_properties) );
     }
 
-    /** Returns number of children for the property. */
+    /** Returns number of children for the property.
+
+        NB: Cannot be in container methods class due to name hiding.
+    */
     inline size_t GetChildrenCount( wxPGId id ) const
     {
-        wxASSERT( wxPGIdIsOk(id) );
-        return wxPGIdToPtr(id)->GetChildCount();
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(0)
+        return p->GetChildCount();
     }
 
     /** Returns number of children for the property. */
-    inline size_t GetChildrenCount( wxPGPropNameStr name ) { return GetChildrenCount( GetPropertyByName(name) ); }
+    inline size_t GetChildrenCount( wxPGPropNameStr name )
+    {
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(0)
+        return p->GetChildCount();
+    }
 
     /** Returns id of first item, whether it is a category or property. */
     inline wxPGId GetFirst() const
@@ -4561,14 +4765,19 @@ public:
         \remarks
         Returns even sub-properties.
     */
-    inline wxPGId GetLastChild( wxPGId parent )
+    inline wxPGId GetLastChild( wxPGId id )
     {
-        wxASSERT ( wxPGIdIsOk(parent) );
-        wxPGPropertyWithChildren& p = (wxPGPropertyWithChildren&) *wxPGIdToPtr(parent);
-        if ( !p.GetParentingType() || !p.GetCount() ) return wxPGIdGen(NULL);
-        return wxPGIdGen(p.Last());
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(wxNullProperty)
+
+        wxPGPropertyWithChildren* pwc = (wxPGPropertyWithChildren*) p;
+        if ( !pwc->GetParentingType() || !pwc->GetCount() ) return wxNullProperty;
+        return wxPGIdGen(pwc->Last());
     }
-    inline wxPGId GetLastChild( wxPGPropNameStr name ) { return GetLastChild ( GetPropertyByName(name) ); }
+    inline wxPGId GetLastChild( wxPGPropNameStr name )
+    {
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxNullProperty)
+        return GetLastChild( wxPGIdGen(p) );
+    }
 
     /** Returns id of last visible item. Does <b>not</b> ignore categories sub-properties.
     */
@@ -4619,20 +4828,21 @@ public:
     /** Returns id of previous item under the same parent. */
     inline wxPGId GetPrevSibling( wxPGId id )
     {
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(wxNullProperty)
         return wxPropertyGridState::GetPrevSibling(id);
     }
     inline wxPGId GetPrevSibling( wxPGPropNameStr name )
     {
-        return wxPropertyGridState::GetPrevSibling(GetPropertyByName(name));
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxNullProperty)
+        return wxPropertyGridState::GetPrevSibling(wxPGIdGen(p));
     }
 
     /** Returns id of previous visible property.
     */
-    inline wxPGId GetPrevVisible( wxPGId property )
+    inline wxPGId GetPrevVisible( wxPGId id )
     {
-        wxASSERT ( wxPGIdIsOk(property) );
-        return wxPGIdGen ( GetNeighbourItem( wxPGIdToPtr(property),
-            true, -1 ) );
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(wxNullProperty)
+        return wxPGIdGen( GetNeighbourItem( wxPGIdToPtr(id), true, -1 ) );
     }
 
     /** Returns id of property's nearest parent category. If no category
@@ -4644,14 +4854,16 @@ public:
     }
     inline wxPGId GetPropertyCategory( wxPGPropNameStr name ) const
     {
-        return GetPropertyCategory( GetPropertyByName(name) );
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxNullProperty)
+        return _GetPropertyCategory(p);
     }
 
     /** Returns cell background colour of a property. */
     wxColour GetPropertyColour( wxPGId id ) const;
     inline wxColour GetPropertyColour( wxPGPropNameStr name ) const
     {
-        return GetPropertyColour(GetPropertyByName(name));
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxColour())
+        return GetPropertyColour(wxPGIdGen(p));
     }
 
     /** Returns id of property with given label (case-sensitive). If there is no
@@ -4758,13 +4970,14 @@ public:
     inline wxPGId Insert( wxPGId priorthis, wxPGProperty* newproperty )
     {
         wxPGId res = _Insert( wxPGIdToPtr( priorthis ), newproperty );
-        DrawItems ( newproperty, (wxPGProperty*) NULL );
+        DrawItems( newproperty, (wxPGProperty*) NULL );
         return res;
     }
     /** @link wxPropertyGrid::Insert Insert @endlink */
     inline wxPGId Insert( wxPGPropNameStr name, wxPGProperty* newproperty )
     {
-        wxPGId res = _Insert( wxPGIdToPtr ( GetPropertyByName(name) ), newproperty );
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxNullProperty)
+        wxPGId res = _Insert( (wxPGPropertyWithChildren*)p, newproperty );
         DrawItems( newproperty, (wxPGProperty*) NULL );
         return res;
     }
@@ -4780,7 +4993,8 @@ public:
     /** @link wxPropertyGrid::Insert Insert @endlink */
     inline wxPGId Insert( wxPGPropNameStr name, int index, wxPGProperty* newproperty )
     {
-        wxPGId res = _Insert( (wxPGPropertyWithChildren*)wxPGIdToPtr ( GetPropertyByName(name) ), index, newproperty );
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxNullProperty)
+        wxPGId res = _Insert( (wxPGPropertyWithChildren*)p, index, newproperty );
         DrawItems( newproperty, (wxPGProperty*) NULL );
         return res;
     }
@@ -4825,11 +5039,16 @@ public:
     /** Returns true if given property is selected. */
     inline bool IsPropertySelected( wxPGId id ) const
     {
-        return ( m_selected == wxPGIdToPtr( id ) ) ? true : false;
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(false)
+        return ( m_selected == p ) ? true : false;
     }
 
     /** Returns true if given property is selected. */
-    inline bool IsPropertySelected( wxPGPropNameStr name ) { return IsPropertySelected(GetPropertyByName(name)); }
+    inline bool IsPropertySelected( wxPGPropNameStr name )
+    {
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return ( m_selected == p ) ? true : false;
+    }
 
     /** Disables (limit = true) or enables (limit = false) wxTextCtrl editor of a property,
         if it is not the sole mean to edit the value.
@@ -4841,7 +5060,8 @@ public:
     */
     inline void LimitPropertyEditing( wxPGPropNameStr name, bool limit = true )
     {
-        LimitPropertyEditing(GetPropertyByName(name),limit);
+        wxPG_PROP_NAME_CALL_PROLOG()
+        LimitPropertyEditing(wxPGIdGen(p),limit);
     }
 
     /** Moves splitter as left as possible, while still allowing all
@@ -4858,14 +5078,14 @@ public:
         the same name already existed, then the first one will be used,
         and its pointer is returned instead.
     */
-    static wxPGValueType* RegisterValueType( wxPGValueType* valueclass, bool no_def_check = false );
+    static wxPGValueType* RegisterValueType( wxPGValueType* valueclass, bool noDefCheck = false );
 
     /** Registers a new editor class.
         \retval
         Pointer to the editor class instance that should be used.
     */
     static wxPGEditor* RegisterEditorClass( wxPGEditor* valueclass, const wxString& name,
-                                            bool no_def_check = false );
+                                            bool noDefCheck = false );
 
     /** Resets all colours to the original system values.
     */
@@ -4882,7 +5102,8 @@ public:
     */
     inline void SetCurrentCategory( wxPGId id )
     {
-        wxPropertyCategoryClass* pc = (wxPropertyCategoryClass*)wxPGIdToPtr(id);
+        wxPG_PROP_ID_CALL_PROLOG()
+        wxPropertyCategoryClass* pc = (wxPropertyCategoryClass*)p;
 #ifdef __WXDEBUG__
         if ( pc ) wxASSERT( pc->GetParentingType() > 0 );
 #endif
@@ -4893,7 +5114,8 @@ public:
     */
     inline void SetCurrentCategory( wxPGPropNameStr name = wxEmptyString )
     {
-        SetCurrentCategory(GetPropertyByName(name));
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetCurrentCategory(wxPGIdGen(p));
     }
 
     /** Sets property attribute for all applicapple properties.
@@ -4908,7 +5130,8 @@ public:
     void SetPropertyColour( wxPGId id, const wxColour& col );
     inline void SetPropertyColour( wxPGPropNameStr name, const wxColour& col )
     {
-        SetPropertyColour( GetPropertyByName(name), col );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetPropertyColour( wxPGIdGen(p), col );
     }
 
     /** Sets background colour of property and all its children to the default. */
@@ -4918,7 +5141,8 @@ public:
     }
     inline void SetPropertyColourToDefault( wxPGPropNameStr name )
     {
-        SetColourIndex( wxPGIdToPtr(GetPropertyByName(name)), 0 );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetColourIndex( p, 0 );
     }
 
     /** Sets category caption background colour. */
@@ -4971,13 +5195,14 @@ public:
     }
     inline bool SelectProperty( wxPGPropNameStr name, bool focus = false )
     {
-        return DoSelectProperty(wxPGIdToPtr(GetPropertyByName(name)),focus?wxPG_SEL_FOCUS:0);
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return DoSelectProperty(p,focus?wxPG_SEL_FOCUS:0);
     }
 
     /** Mostly useful for page switching.
     */
 #ifndef SWIG
-    void SwitchState ( wxPropertyGridState* pNewState );
+    void SwitchState( wxPropertyGridState* pNewState );
 #endif
 
     /** Sets label of a property.
@@ -4985,20 +5210,20 @@ public:
         This is the only way to set property's name. There is not
         wxPGProperty::SetLabel() method.
     */
-    inline void SetPropertyLabel ( wxPGId id, const wxString& newproplabel )
+    inline void SetPropertyLabel( wxPGId id, const wxString& newproplabel )
     {
-        wxPGProperty* p = &GetPropertyById( id );
-        if ( p ) _SetPropertyLabel ( p, newproplabel );
+        wxPG_PROP_ID_CALL_PROLOG()
+        _SetPropertyLabel( p, newproplabel );
     }
     /** Sets label of a property.
         \remarks
         This is the only way to set property's label. There is no
         wxPGProperty::SetLabel() method.
     */
-    inline void SetPropertyLabel ( wxPGPropNameStr name, const wxString& newproplabel )
+    inline void SetPropertyLabel( wxPGPropNameStr name, const wxString& newproplabel )
     {
-        wxPGProperty* p = wxPGIdToPtr ( GetPropertyByName(name) );
-        if ( p ) _SetPropertyLabel ( p, newproplabel );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        _SetPropertyLabel( p, newproplabel );
     }
 
     /** Sets name of a property.
@@ -5010,9 +5235,9 @@ public:
         This is the only way to set property's name. There is not
         wxPGProperty::SetName() method.
     */
-    inline void SetPropertyName ( wxPGId id, const wxString& newname )
+    inline void SetPropertyName( wxPGId id, const wxString& newname )
     {
-        DoSetPropertyName ( wxPGIdToPtr(id), newname );
+        DoSetPropertyName( wxPGIdToPtr(id), newname );
     }
     /** Sets name of a property.
         \param name
@@ -5023,41 +5248,34 @@ public:
         This is the only way to set property's name. There is not
         wxPGProperty::SetName() method.
     */
-    inline void SetPropertyName ( wxPGPropNameStr name, const wxString& newname )
+    inline void SetPropertyName( wxPGPropNameStr name, const wxString& newname )
     {
-        DoSetPropertyName ( wxPGIdToPtr ( GetPropertyByName(name) ), newname );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        DoSetPropertyName( p, newname );
     }
 
     /** Sets value (long integer) of a property.
-        \remarks
-        Actual name of this method is <b>SetPropertyValue</b>. It may be shown incorrectly
-        due to limitations in Doxygen C preprocessor.*/
+    */
     inline void SetPropertyValueLong( wxPGId id, long value )
     {
         SetPropertyValue( id, wxPG_VALUETYPE(long), wxPGVariantFromLong(value) );
     }
 #ifndef __WXPYTHON__
     /** Sets value (integer) of a property.
-        \remarks
-        Actual name of this method is <b>SetPropertyValue</b>. It may be shown incorrectly
-        due to limitations in Doxygen C preprocessor.*/
+    */
     inline void SetPropertyValue( wxPGId id, int value )
     {
         SetPropertyValue( id, wxPG_VALUETYPE(long), wxPGVariantFromLong((long)value) );
     }
 #endif
     /** Sets value (floating point) of a property.
-        \remarks
-        Actual name of this method is <b>SetPropertyValue</b>. It may be shown incorrectly
-        due to limitations in Doxygen C preprocessor. */
+    */
     inline void SetPropertyValueDouble( wxPGId id, double value )
     {
         SetPropertyValue( id, wxPG_VALUETYPE(double), wxPGVariantFromDouble(value) );
     }
     /** Sets value (bool) of a property.
-        \remarks
-        Actual name of this method is <b>SetPropertyValue</b>. It may be shown incorrectly
-        due to limitations in Doxygen C preprocessor. */
+    */
     inline void SetPropertyValueBool( wxPGId id, bool value )
     {
         SetPropertyValue( id, wxPG_VALUETYPE(bool), wxPGVariantFromLong(value?1:0) );
@@ -5072,24 +5290,20 @@ public:
     void SetPropertyValueString( wxPGId id, const wxString& value );
 
 #ifndef __WXPYTHON__
-    inline void SetPropertyValue ( wxPGId id, const wxChar* value )
+    inline void SetPropertyValue( wxPGId id, const wxChar* value )
     {
         SetPropertyValue(id,wxString(value));
     }
 #endif
 
     /** Sets value (wxArrayString) of a property.
-        \remarks
-        Actual name of this method is <b>SetPropertyValue</b>. It may be shown incorrectly
-        due to limitations in Doxygen C preprocessor. */
+    */
     inline void SetPropertyValueArrstr( wxPGId id, const wxArrayString& value )
     {
         SetPropertyValue( id, wxPG_VALUETYPE(wxArrayString), wxPGVariantFromArrayString(value) );
     }
     /** Sets value (wxObject*) of a property.
-        \remarks
-        Actual name of this method is <b>SetPropertyValue</b>. It may be shown incorrectly
-        due to limitations in Doxygen C preprocessor. */
+    */
     void SetPropertyValueWxObjectPtr( wxPGId id, wxObject* value );
 #ifndef __WXPYTHON__
     /** Sets value (void*) of a property. */
@@ -5107,9 +5321,7 @@ public:
 #endif
 
     /** Sets value (wxPoint&) of a property.
-        \remarks
-        Actual name of this method is <b>SetPropertyValue</b>. It may be shown incorrectly
-        due to limitations in Doxygen C preprocessor. */
+    */
     inline void SetPropertyValuePoint( wxPGId id, const wxPoint& value )
     {
         SetPropertyValue( id, wxT("wxPoint"), (void*)&value );
@@ -5117,9 +5329,7 @@ public:
         //SetPropertyValue ( id, wxPG_VALUETYPE(void), (void*)&value );
     }
     /** Sets value (wxSize&) of a property.
-        \remarks
-        Actual name of this method is <b>SetPropertyValue</b>. It may be shown incorrectly
-        due to limitations in Doxygen C preprocessor. */
+    */
     inline void SetPropertyValueSize( wxPGId id, const wxSize& value )
     {
         SetPropertyValue( id, wxT("wxSize"), (void*)&value );
@@ -5127,54 +5337,56 @@ public:
         //SetPropertyValue ( id, wxPG_VALUETYPE(void), (void*)&value );
     }
     /** Sets value (wxArrayInt&) of a property.
-        \remarks
-        Actual name of this method is <b>SetPropertyValue</b>. It may be shown incorrectly
-        due to limitations in Doxygen C preprocessor. */
+    */
     inline void SetPropertyValueArrint( wxPGId id, const wxArrayInt& value )
     {
-        //wxASSERT( wxStrcmp(wxPGIdToPtr(id)->GetValueType()->GetCustomTypeName(),wxT("wxArrayInt")) == 0 );
-        //SetPropertyValue( id, wxPG_VALUETYPE(void), (void*)&value );
         SetPropertyValue( id, wxT("wxArrayInt"), (void*)&value );
     }
+    /** Sets value (wxDateTime&) of a property.
+    */
+#if wxUSE_DATETIME
+    inline void SetPropertyValueDatetime( wxPGId id, const wxDateTime& value )
+    {
+        SetPropertyValue( id, wxT("datetime"), (void*)&value );
+    }
+#endif
 
     /** Sets value (long integer) of a property.
-        \remarks
-        Actual name of this method is <b>SetPropertyValue</b>. It may be shown incorrectly
-        due to limitations in Doxygen C preprocessor. */
+    */
     inline void SetPropertyValueLong( wxPGPropNameStr name, long value )
     {
-        SetPropertyValue( GetPropertyByNameWithAssert(name), wxPG_VALUETYPE(long), wxPGVariantFromLong(value) );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetPropertyValue( wxPGIdGen(p), wxPG_VALUETYPE(long), wxPGVariantFromLong(value) );
     }
 #ifndef __WXPYTHON__
     /** Sets value (integer) of a property. */
     inline void SetPropertyValue( wxPGPropNameStr name, int value )
     {
-        SetPropertyValue( GetPropertyByNameWithAssert(name), wxPG_VALUETYPE(long), wxPGVariantFromLong(value) );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetPropertyValue( wxPGIdGen(p), wxPG_VALUETYPE(long), wxPGVariantFromLong(value) );
     }
 #endif
     /** Sets value (floating point) of a property.
-        \remarks
-        Actual name of this method is <b>SetPropertyValue</b>. It may be shown incorrectly
-        due to limitations in Doxygen C preprocessor. */
+    */
     inline void SetPropertyValueDouble( wxPGPropNameStr name, double value )
     {
-        SetPropertyValue( GetPropertyByNameWithAssert(name), wxPG_VALUETYPE(double), wxPGVariantFromDouble(value) );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetPropertyValue( wxPGIdGen(p), wxPG_VALUETYPE(double), wxPGVariantFromDouble(value) );
     }
     /** Sets value (bool) of a property.
-        \remarks
-        Actual name of this method is <b>SetPropertyValue</b>. It may be shown incorrectly
-        due to limitations in Doxygen C preprocessor. */
+    */
     inline void SetPropertyValueBool( wxPGPropNameStr name, bool value )
     {
-        wxPGId id = GetPropertyByNameWithAssert(name);
-        SetPropertyValue( id, wxPG_VALUETYPE(bool), wxPGVariantFromLong(value?1:0) );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetPropertyValue( wxPGIdGen(p), wxPG_VALUETYPE(bool), wxPGVariantFromLong(value?1:0) );
     }
     /** Sets value (wxString) of a property. For properties which value type is
         not string, calls wxPGProperty::SetValueFromString to translate the value.
     */
     inline void SetPropertyValueString( wxPGPropNameStr name, const wxString& value )
     {
-        SetPropertyValueString( GetPropertyByNameWithAssert(name), value );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetPropertyValueString( wxPGIdGen(p), value );
     }
 
 #ifndef __WXPYTHON__
@@ -5183,23 +5395,24 @@ public:
     */
     inline void SetPropertyValue( wxPGPropNameStr name, const wxChar* value )
     {
-        SetPropertyValue( GetPropertyByNameWithAssert(name), wxString(value) );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetPropertyValue( wxPGIdGen(p), wxString(value) );
     }
 
     /** Sets value (void*) of a property. */
     inline void SetPropertyValue( wxPGPropNameStr name, void* value )
     {
-        SetPropertyValue( GetPropertyByNameWithAssert(name), wxPG_VALUETYPE(void), value );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetPropertyValue( wxPGIdGen(p), wxPG_VALUETYPE(void), value );
     }
 #endif
 
     /** Sets value (wxObject*) of a property.
-        \remarks
-        Actual name of this method is <b>SetPropertyValue</b>. It may be shown incorrectly
-        due to limitations in Doxygen C preprocessor. */
+    */
     inline void SetPropertyValueWxObjectPtr( wxPGPropNameStr name, wxObject* value )
     {
-        SetPropertyValueWxObjectPtr( GetPropertyByNameWithAssert(name), value );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetPropertyValueWxObjectPtr( wxPGIdGen(p), value );
     }
 
 #ifndef __WXPYTHON__
@@ -5211,35 +5424,45 @@ public:
     /** Sets value (wxVariant&) of a property. */
     void SetPropertyValue( wxPGPropNameStr name, wxVariant& value )
     {
-        SetPropertyValue( GetPropertyByNameWithAssert(name), value );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetPropertyValue( wxPGIdGen(p), value );
     }
 
     /** Sets value (wxArrayString) of a property. */
     inline void SetPropertyValueArrstr( wxPGPropNameStr name, const wxArrayString& value )
     {
-        SetPropertyValue( GetPropertyByNameWithAssert(name), wxPG_VALUETYPE(wxArrayString), wxPGVariantFromArrayString(value) );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetPropertyValue( wxPGIdGen(p), wxPG_VALUETYPE(wxArrayString), wxPGVariantFromArrayString(value) );
     }
     /** Sets value (wxArrayInt&) of a property. */
     inline void SetPropertyValueArrint( wxPGPropNameStr name, const wxArrayInt& value )
     {
-        SetPropertyValueArrint( GetPropertyByNameWithAssert(name), value );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetPropertyValueArrint( wxPGIdGen(p), value );
+    }
+#endif
+    /** Sets value (wxDateTime&) of a property.
+    */
+#if wxUSE_DATETIME
+    inline void SetPropertyValueDatetime( wxPGPropNameStr name, const wxDateTime& value )
+    {
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetPropertyValueDatetime( wxPGIdGen(p), value );
     }
 #endif
     /** Sets value (wxPoint&) of a property.
-        \remarks
-        Actual name of this method is <b>SetPropertyValue</b>. It may be shown incorrectly
-        due to limitations in Doxygen C preprocessor. */
+    */
     inline void SetPropertyValuePoint( wxPGPropNameStr name, const wxPoint& value )
     {
-        SetPropertyValuePoint( GetPropertyByNameWithAssert(name), value );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetPropertyValuePoint( wxPGIdGen(p), value );
     }
     /** Sets value (wxSize&) of a property.
-        \remarks
-        Actual name of this method is <b>SetPropertyValue</b>. It may be shown incorrectly
-        due to limitations in Doxygen C preprocessor. */
+    */
     inline void SetPropertyValueSize( wxPGPropNameStr name, const wxSize& value )
     {
-        SetPropertyValueSize( GetPropertyByNameWithAssert(name), value );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetPropertyValueSize( wxPGIdGen(p), value );
     }
 
     /** Sets property's value to unspecified. If it has children (it may be category),
@@ -5248,7 +5471,8 @@ public:
     void SetPropertyUnspecified( wxPGId id );
     inline void SetPropertyUnspecified ( wxPGPropNameStr name )
     {
-        SetPropertyUnspecified( GetPropertyByNameWithAssert(name) );
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetPropertyUnspecified( wxPGIdGen(p) );
     }
 
 #ifndef SWIG
@@ -5265,13 +5489,13 @@ public:
     {
         SetPropertyValues(list.GetList(),default_category);
     }
-    inline void SetPropertyValues ( const wxList& list, const wxString& default_category = wxEmptyString )
+    inline void SetPropertyValues( const wxList& list, const wxString& default_category = wxEmptyString )
     {
-        SetPropertyValues (list,GetPropertyByName(default_category));
+        SetPropertyValues(list,GetPropertyByNameI(default_category));
     }
-    inline void SetPropertyValues ( const wxVariant& list, const wxString& default_category = wxEmptyString )
+    inline void SetPropertyValues( const wxVariant& list, const wxString& default_category = wxEmptyString )
     {
-        SetPropertyValues (list.GetList(),GetPropertyByName(default_category));
+        SetPropertyValues(list.GetList(),GetPropertyByNameI(default_category));
     }
 #endif
 
@@ -5281,10 +5505,10 @@ public:
         On wxMSW, wxComboBox, when used as property editor widget, will spill
         out with anything less than 3.
     */
-    inline void SetVerticalSpacing ( int vspacing )
+    inline void SetVerticalSpacing( int vspacing )
     {
         m_vspacing = (unsigned char)vspacing;
-        CalculateFontAndBitmapStuff ( vspacing );
+        CalculateFontAndBitmapStuff( vspacing );
         if ( !m_pState->m_itemsAdded ) Refresh();
     }
 
@@ -5294,26 +5518,26 @@ public:
     /** Shows an brief error message that is related to a property. */
     inline void ShowPropertyError( wxPGId id, const wxString& msg )
     {
-        wxASSERT ( wxPGIdIsOk(id) );
-        wxPGIdToPtr(id)->ShowError(msg);
+        wxPG_PROP_ID_CALL_PROLOG()
+        p->ShowError(msg);
     }
     inline void ShowPropertyError( wxPGPropNameStr name, const wxString& msg )
     {
-        ShowPropertyError (GetPropertyByName(name), msg);
+        ShowPropertyError (GetPropertyByNameI(name), msg);
     }
 
     /** Sorts all items at all levels (except sub-properties). */
-    void Sort ();
+    void Sort();
 
     /** Sorts children of a category.
     */
-    void Sort ( wxPGId id );
+    void Sort( wxPGId id );
 
     /** Sorts children of a category.
     */
-    inline void Sort ( wxPGPropNameStr name )
+    inline void Sort( wxPGPropNameStr name )
     {
-        Sort ( GetPropertyByName(name) );
+        Sort( GetPropertyByNameI(name) );
     }
 
     /** Overridden function.
@@ -5524,15 +5748,16 @@ public:
     void CalculateYs( wxPGPropertyWithChildren* startparent, int startindex );
 
     //
-    // Overridden functions - no documentation required.
+    // Overridden functions.
     //
+    virtual bool Destroy();
 
     virtual wxSize DoGetBestSize() const;
 
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL );
 
-    virtual bool SetFont ( const wxFont& font );
+    virtual bool SetFont( const wxFont& font );
 
 #if wxPG_SUPPORT_TOOLTIPS
     void SetToolTip( const wxString& tipString );
@@ -5552,7 +5777,7 @@ protected:
         in wxPropertyGridManager, there is no point overriding this - instead,
         set custom wxPropertyGridPage classes.
     */
-    virtual wxPropertyGridState* CreateState() const;
+    virtual wxPropertyGridState* wxPropertyGrid::CreateState() const;
 
 #ifndef DOXYGEN
 
@@ -5696,7 +5921,12 @@ protected:
     */
     wxPGProperty*       m_selected;
 
-    wxPGProperty*       m_propHover;    // pointer to property that has mouse on itself
+    wxPGProperty*       m_propHover;  // pointer to property that has mouse on itself
+
+    wxWindow*           m_eventObject;  // EventObject for wxPropertyGridEvents
+
+    wxWindow*           m_curFocused;  // What (global) window is currently focused
+                                       // (needed to resolve event handling mess).
 
     int                 m_splitterx; // x position for the vertical line dividing name and value
 
@@ -5747,7 +5977,9 @@ protected:
 
     void OnMouseEntry( wxMouseEvent &event );
 
+    void OnIdle( wxIdleEvent &event );
     void OnFocusEvent( wxFocusEvent &event );
+    void OnChildFocusEvent( wxChildFocusEvent& event );
 
     bool OnMouseCommon( wxMouseEvent &event, int* px, int *py );
     bool OnMouseChildCommon( wxMouseEvent &event, int* px, int *py );
@@ -5827,6 +6059,9 @@ protected:
         return m_pState->DoInsert(parent,index,newproperty);
     }
 
+    // Called by focus event handlers. newFocused is the window that becomes focused.
+    void HandleFocusChange( wxWindow* newFocused );
+
     /** Reloads all non-customized colours from system settings. */
     void RegainColours();
 
@@ -5836,7 +6071,7 @@ protected:
 
     inline wxPGProperty* DoGetItemAtY_Full( int y )
     {
-        wxASSERT ( y >= 0 );
+        wxASSERT( y >= 0 );
 
         if ( (unsigned int)y >= m_bottomy )
             return NULL;
@@ -5929,10 +6164,10 @@ inline bool wxPropertyGridState::IsDisplayed() const
 }
 #endif
 
-inline void wxPGProperty::SetEditor( const wxString& editor_name )
+inline void wxPGProperty::SetEditor( const wxString& editorName )
 {
     EnsureDataExt();
-    m_dataExt->m_customEditor = wxPropertyContainerMethods::GetEditorByName(editor_name);
+    m_dataExt->m_customEditor = wxPropertyContainerMethods::GetEditorByName(editorName);
 }
 
 inline bool wxPGProperty::Hide( bool hide )
@@ -6175,6 +6410,8 @@ typedef void (wxEvtHandler::*wxPropertyGridEventFunction)(wxPropertyGridEvent&);
 #define EVT_PG_PAGE_CHANGED(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_PAGE_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxPropertyGridEventFunction, & fn ), (wxObject *) NULL ),
 #define EVT_PG_ITEM_COLLAPSED(id, fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_COLLAPSED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxPropertyGridEventFunction, & fn ), (wxObject *) NULL ),
 #define EVT_PG_ITEM_EXPANDED(id, fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_EXPANDED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxPropertyGridEventFunction, & fn ), (wxObject *) NULL ),
+
+#define wxPropertyGridEventHandler(A) ((wxObjectEventFunction)(wxEventFunction)(wxPropertyGridEventFunction)&A)
 
 #endif
 

@@ -1067,7 +1067,8 @@ void wxPGComboBoxExtraInputHandler::OnKey(wxKeyEvent& event)
 {
     int keycode = event.GetKeyCode();
 
-    if ( keycode == WXK_TAB )
+    if ( keycode == WXK_TAB &&
+         !m_combo->IsPopupShown() )
     {
         wxNavigationKeyEvent evt;
         evt.SetFlags(wxNavigationKeyEvent::FromTab|
@@ -1376,10 +1377,17 @@ void wxPGComboControlBase::OnThemeChange()
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 }
 
+bool wxPGComboControlBase::Destroy()
+{
+    return wxControl::Destroy();
+}
+
 wxPGComboControlBase::~wxPGComboControlBase()
 {
     if ( HasCapture() )
         ReleaseMouse();
+
+    HidePopup();
 
     delete gs_doubleBuffer;
     gs_doubleBuffer = (wxBitmap*) NULL;
@@ -1393,8 +1401,6 @@ wxPGComboControlBase::~wxPGComboControlBase()
         m_popup->RemoveEventHandler(m_popupExtraHandler);
 
     delete m_popupExtraHandler;
-
-    HidePopup();
 
     delete m_popupInterface;
     delete m_winPopup;
@@ -2022,12 +2028,18 @@ bool wxPGComboControlBase::HandleButtonMouseEvent( wxMouseEvent& event,
 
 // Conversion to double-clicks and some basic filtering
 // returns true if event was consumed or filtered
-//bool wxPGComboControlBase::PreprocessMouseEvent( wxMouseEvent& event, bool isOnButtonArea )
 bool wxPGComboControlBase::PreprocessMouseEvent( wxMouseEvent& event,
-                                                       int flags )
+                                                 int flags )
 {
     wxLongLong t = ::wxGetLocalTimeMillis();
     int evtType = event.GetEventType();
+
+    if ( m_isPopupShown &&
+         ( evtType == wxEVT_LEFT_DOWN || evtType == wxEVT_RIGHT_DOWN ) )
+    {
+        HidePopup();
+        return true;
+    }
 
     //
     // Generate our own double-clicks
