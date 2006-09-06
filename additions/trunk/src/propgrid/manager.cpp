@@ -466,6 +466,8 @@ void wxPropertyGridManager::Init2( int style )
                         (m_windowStyle&wxPG_MAN_PASS_FLAGS_MASK)
                             |wxPG_MAN_PROPGRID_FORCED_FLAGS);
 
+    m_pPropGrid->m_eventObject = this;
+
     m_pPropGrid->SetId(useId);
 
     m_pPropGrid->m_iFlags |= wxPG_FL_IN_MANAGER;
@@ -476,23 +478,25 @@ void wxPropertyGridManager::Init2( int style )
 
     m_nextTbInd = baseId+ID_ADVTBITEMSBASE_OFFSET + 2;
 
+
+#ifndef __WXPYTHON__
     // Connect to property grid onselect event.
-    Connect(useId,
+    // NB: Even if wxID_ANY is used, this doesn't connect properly in wxPython
+    //     (see wxPropertyGridManager::ProcessEvent).
+    Connect(m_pPropGrid->GetId()/*wxID_ANY*/,
             wxEVT_PG_SELECTED,
-            (wxObjectEventFunction) (wxEventFunction) (wxPropertyGridEventFunction)
-            &wxPropertyGridManager::OnPropertyGridSelect );
+            wxPropertyGridEventHandler(wxPropertyGridManager::OnPropertyGridSelect) );
+#endif
 
     // Connect to compactor button event.
     Connect(baseId+ID_ADVBUTTON_OFFSET,
             wxEVT_COMMAND_BUTTON_CLICKED,
-            (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
-            &wxPropertyGridManager::OnCompactorClick );
+            wxCommandEventHandler(wxPropertyGridManager::OnCompactorClick) );
 
     // Connect to toolbar button events.
     Connect(baseId+ID_ADVTBITEMSBASE_OFFSET,baseId+ID_ADVTBITEMSBASE_OFFSET+50,
             wxEVT_COMMAND_TOOL_CLICKED,
-            (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
-            &wxPropertyGridManager::OnToolbarClick );
+            wxCommandEventHandler(wxPropertyGridManager::OnToolbarClick) );
 
     // Optional initial controls.
     m_width = -12345;
@@ -977,6 +981,14 @@ bool wxPropertyGridManager::ProcessEvent( wxEvent& event )
 {
     int evtType = event.GetEventType();
 
+#ifdef __WXPYTHON__
+    // NB: For some reason, under wxPython, Connect in Init doesn't work properly,
+    //     so we'll need to call OnPropertyGridSelect manually. Multiple call's
+    //     don't really matter.
+    if ( evtType == wxEVT_PG_SELECTED )
+        OnPropertyGridSelect((wxPropertyGridEvent&)event);
+#endif
+
     // Property grid events get special attention
     if ( evtType >= wxPG_BASE_EVT_TYPE &&
          evtType < (wxPG_MAX_EVT_TYPE) &&
@@ -994,7 +1006,7 @@ bool wxPropertyGridManager::ProcessEvent( wxEvent& event )
                 event.StopPropagation();
         }
     }
-
+    
     return wxPanel::ProcessEvent(event);
 }
 
@@ -1398,9 +1410,9 @@ wxPGId wxPropertyGridManager::GetPropertyByLabel( const wxString& label,
 
 bool wxPropertyGridManager::EnsureVisible( wxPGId id )
 {
-    wxASSERT( wxPGIdIsOk(id) );
+    wxPG_PROP_ID_CALL_PROLOG_RETVAL(false)
 
-    wxPropertyGridState* parentState = wxPGIdToPtr(id)->GetParentState();
+    wxPropertyGridState* parentState = p->GetParentState();
 
     // Select correct page.
     if ( m_pPropGrid->m_pState != parentState )
@@ -1417,11 +1429,11 @@ bool wxPropertyGridManager::EnsureVisible( wxPGId id )
 wxPG_IPAM_DECL RETVAL wxPropertyGridManager::NAME( wxPGId id ) \
 { \
     wxPGProperty* p = wxPGIdToPtr(id); \
-    wxASSERT_MSG(p,wxT("NULL property")); \
+    wxASSERT_MSG(p,wxT("invalid property id")); \
     if ( p ) \
     { \
         wxPropertyGridState* pState = p->GetParentState(); \
-        wxASSERT ( pState != (wxPropertyGridState*) NULL ); \
+        wxASSERT( pState != (wxPropertyGridState*) NULL ); \
         if ( pState == m_pPropGrid->m_pState ) return m_pPropGrid->NAME(id); \
         return pState->NAME(p); \
     } \
@@ -1429,18 +1441,20 @@ wxPG_IPAM_DECL RETVAL wxPropertyGridManager::NAME( wxPGId id ) \
 } \
 wxPG_IPAM_DECL RETVAL wxPropertyGridManager::NAME( wxPGPropNameStr name ) \
 { \
-    return NAME(GetPropertyByName(name)); \
+    wxPGId id = GetPropertyByNameI(name); \
+    if ( !wxPGIdIsOk(id) ) return ((RETVAL)0); \
+    return NAME(id); \
 }
 
 #define wxPG_IMPLEMENT_PGMAN_METHOD_WRET1(NAME,RETVAL,AT1) \
 wxPG_IPAM_DECL RETVAL wxPropertyGridManager::NAME( wxPGId id, AT1 _av1_ ) \
 { \
     wxPGProperty* p = wxPGIdToPtr(id); \
-    wxASSERT_MSG(p,wxT("NULL property")); \
+    wxASSERT_MSG(p,wxT("invalid property id")); \
     if ( p ) \
     { \
         wxPropertyGridState* pState = p->GetParentState(); \
-        wxASSERT ( pState != (wxPropertyGridState*) NULL ); \
+        wxASSERT( pState != (wxPropertyGridState*) NULL ); \
         if ( pState == m_pPropGrid->m_pState ) return m_pPropGrid->NAME(id,_av1_); \
         return pState->NAME(p,_av1_); \
     } \
@@ -1448,18 +1462,20 @@ wxPG_IPAM_DECL RETVAL wxPropertyGridManager::NAME( wxPGId id, AT1 _av1_ ) \
 } \
 wxPG_IPAM_DECL RETVAL wxPropertyGridManager::NAME( wxPGPropNameStr name, AT1 _av1_ ) \
 { \
-    return NAME(GetPropertyByName(name),_av1_); \
+    wxPGId id = GetPropertyByNameI(name); \
+    if ( !wxPGIdIsOk(id) ) return ((RETVAL)0); \
+    return NAME(id,_av1_); \
 }
 
 #define wxPG_IMPLEMENT_PGMAN_METHOD_WRET2(NAME,RETVAL,AT1,AT2) \
 wxPG_IPAM_DECL RETVAL wxPropertyGridManager::NAME( wxPGId id, AT1 _av1_, AT2 _av2_ ) \
 { \
     wxPGProperty* p = wxPGIdToPtr(id); \
-    wxASSERT_MSG(p,wxT("NULL property")); \
+    wxASSERT_MSG(p,wxT("invalid property id")); \
     if ( p ) \
     { \
         wxPropertyGridState* pState = p->GetParentState(); \
-        wxASSERT ( pState != (wxPropertyGridState*) NULL ); \
+        wxASSERT( pState != (wxPropertyGridState*) NULL ); \
         if ( pState == m_pPropGrid->m_pState ) return m_pPropGrid->NAME(id,_av1_,_av2_); \
         return pState->NAME(p,_av1_,_av2_); \
     } \
@@ -1467,25 +1483,29 @@ wxPG_IPAM_DECL RETVAL wxPropertyGridManager::NAME( wxPGId id, AT1 _av1_, AT2 _av
 } \
 wxPG_IPAM_DECL RETVAL wxPropertyGridManager::NAME( wxPGPropNameStr name, AT1 _av1_, AT2 _av2_ ) \
 { \
-    return NAME(GetPropertyByName(name),_av1_,_av2_); \
+    wxPGId id = GetPropertyByNameI(name); \
+    if ( !wxPGIdIsOk(id) ) return ((RETVAL)0); \
+    return NAME(id,_av1_,_av2_); \
 }
 
 #define wxPG_IMPLEMENT_PGMAN_METHOD_NORET0(NAME) \
 wxPG_IPAM_DECL void wxPropertyGridManager::NAME( wxPGId id ) \
 { \
     wxPGProperty* p = wxPGIdToPtr(id); \
-    wxASSERT_MSG(p,wxT("NULL property")); \
+    wxASSERT_MSG(p,wxT("invalid property id")); \
     if ( p ) \
     { \
         wxPropertyGridState* pState = p->GetParentState(); \
-        wxASSERT ( pState != (wxPropertyGridState*) NULL ); \
+        wxASSERT( pState != (wxPropertyGridState*) NULL ); \
         if ( pState == m_pPropGrid->m_pState ) m_pPropGrid->NAME(id); \
         else pState->NAME(p); \
     } \
 } \
 wxPG_IPAM_DECL void wxPropertyGridManager::NAME( wxPGPropNameStr name ) \
 { \
-    NAME(GetPropertyByName(name)); \
+    wxPGId id = GetPropertyByNameI(name); \
+    if ( !wxPGIdIsOk(id) ) return; \
+    NAME(id); \
 }
 
 
@@ -1523,9 +1543,11 @@ wxPG_IMPLEMENT_PGMAN_METHOD_NORET0(SetPropertyUnspecified)
 
 void wxPropertyGridManager::ClearModifiedStatus( wxPGId id )
 {
-    wxPropertyGridState* pState = wxPGIdToPtr(id)->GetParentState();
+    wxPG_PROP_ID_CALL_PROLOG()
+
+    wxPropertyGridState* pState = p->GetParentState();
     wxASSERT ( pState != (wxPropertyGridState*) NULL );
-    pState->ClearModifiedStatus(wxPGIdToPtr(id));
+    pState->ClearModifiedStatus(p);
 }
 
 // -----------------------------------------------------------------------

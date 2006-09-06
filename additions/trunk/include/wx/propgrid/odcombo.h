@@ -149,6 +149,8 @@ public:
 
     virtual ~wxPGComboControlBase();
 
+    virtual bool Destroy();
+
     // show/hide popup window
     virtual void ShowPopup();
     virtual void HidePopup();

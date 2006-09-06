@@ -130,7 +130,7 @@ private:
 #define wxPG_IMPLEMENT_PGMAN_METHOD_NORET1_P1_BODY(NAME,AT1) \
 { \
     wxPGProperty* p = wxPGIdToPtr(id); \
-    wxASSERT_MSG(p,wxT("NULL property")); \
+    wxASSERT_MSG(p,wxT("invalid property id")); \
     if ( p ) \
     { \
         wxPropertyGridState* pState = p->GetParentState(); \
@@ -156,7 +156,9 @@ wxPG_IMPLEMENT_PGMAN_METHOD_NORET1_P1_BODY(NAME,AT1)
 wxPG_IMPLEMENT_PGMAN_METHOD_NORET1_P1(NAME,AT1) \
 wxPG_IPAM_DECL void wxPropertyGridManager::NAME( wxPGPropNameStr name, AT1 _av1_ ) \
 { \
-    NAME(GetPropertyByName(name),_av1_); \
+    wxPGId id = GetPropertyByNameI(name); \
+    if ( !wxPGIdIsOk(id) ) return; \
+    NAME(id,_av1_); \
 }
 
 
@@ -164,7 +166,7 @@ wxPG_IPAM_DECL void wxPropertyGridManager::NAME( wxPGPropNameStr name, AT1 _av1_
 wxPG_IMPLEMENT_PGMAN_METHOD_NORET1_P1_INBODY(NAME,AT1) \
 wxPG_IPAM_DECL void NAME( wxPGPropNameStr name, AT1 _av1_ ) \
 { \
-    NAME(GetPropertyByName(name),_av1_); \
+    NAME(GetPropertyByNameI(name),_av1_); \
 }
 
 
@@ -290,59 +292,59 @@ public:
     /** See wxPropertyGrid::Append. */
     inline wxPGId AppendCategory( const wxString& label, const wxString& name = wxPG_LABEL )
     {
-        wxASSERT( m_targetState );
+        wxCHECK( m_targetState, wxNullProperty );
         return m_targetState->Append( new wxPropertyCategoryClass(label,name) );
     }
 
     /** See wxPropertyGrid::Append. */
     inline wxPGId Append( wxPGProperty* property )
     {
-        wxASSERT( m_targetState );
-        wxASSERT_MSG( m_selPage >= 0, wxT("You need to add a page before adding properties") );
+        wxCHECK( m_targetState, wxNullProperty );
+        wxCHECK_MSG( m_selPage >= 0, wxNullProperty, wxT("You need to add a page before adding properties") );
         return m_targetState->Append(property);
     }
 
     inline wxPGId Append( const wxString& label, const wxString& name, const wxString& value = wxEmptyString )
     {
-        wxASSERT ( m_targetState );
-        wxASSERT_MSG( m_selPage >= 0, wxT("You need to add a page before adding properties") );
+        wxCHECK( m_targetState, wxNullProperty );
+        wxCHECK_MSG( m_selPage >= 0, wxNullProperty, wxT("You need to add a page before adding properties") );
         return m_targetState->Append( wxStringProperty(label,name,value) );
     }
 
     inline wxPGId Append( const wxString& label, const wxString& name, int value )
     {
-        wxASSERT ( m_targetState );
-        wxASSERT_MSG( m_selPage >= 0, wxT("You need to add a page before adding properties") );
+        wxCHECK( m_targetState, wxNullProperty );
+        wxCHECK_MSG( m_selPage >= 0, wxNullProperty, wxT("You need to add a page before adding properties") );
         return m_targetState->Append( wxIntProperty(label,name,value) );
     }
 
     inline wxPGId Append( const wxString& label, const wxString& name, double value )
     {
-        wxASSERT ( m_targetState );
-        wxASSERT_MSG( m_selPage >= 0, wxT("You need to add a page before adding properties") );
+        wxCHECK( m_targetState, wxNullProperty );
+        wxCHECK_MSG( m_selPage >= 0, wxNullProperty, wxT("You need to add a page before adding properties") );
         return m_targetState->Append( wxFloatProperty(label,name,value) );
     }
 
     inline wxPGId Append( const wxString& label, const wxString& name, bool value )
     {
-        wxASSERT ( m_targetState );
-        wxASSERT_MSG( m_selPage >= 0, wxT("You need to add a page before adding properties") );
+        wxCHECK( m_targetState, wxNullProperty );
+        wxCHECK_MSG( m_selPage >= 0, wxNullProperty, wxT("You need to add a page before adding properties") );
         return m_targetState->Append( wxBoolProperty(label,name,value) );
     }
 
     /** See wxPropertyGrid::AppendIn. */
     inline wxPGId AppendIn( wxPGId id, wxPGProperty* property )
     {
-        wxASSERT ( m_targetState );
-        wxASSERT_MSG( m_selPage >= 0, wxT("You need to add a page before adding properties") );
+        wxCHECK( m_targetState, wxNullProperty );
+        wxCHECK_MSG( m_selPage >= 0, wxNullProperty, wxT("You need to add a page before adding properties") );
         return m_targetState->DoInsert((wxPGPropertyWithChildren*)(wxPGProperty*)id,-1,property);
     }
 
     /** See wxPropertyGrid::AppendIn. */
     inline wxPGId AppendIn( wxPGPropNameStr name, wxPGProperty* property )
     {
-        wxASSERT ( m_targetState );
-        wxASSERT_MSG( m_selPage >= 0, wxT("You need to add a page before adding properties") );
+        wxCHECK( m_targetState, wxNullProperty );
+        wxCHECK_MSG( m_selPage >= 0, wxNullProperty, wxT("You need to add a page before adding properties") );
         return m_targetState->DoInsert((wxPGPropertyWithChildren*)(wxPGProperty*)m_targetState->BaseGetPropertyByName(name),-1,property);
     }
 
@@ -436,7 +438,7 @@ public:
     */
     inline bool EnsureVisible( wxPGPropNameStr name )
     {
-        return EnsureVisible(GetPropertyByName(name));
+        return EnsureVisible(GetPropertyByNameI(name));
     }
 
     /** Expands given item. Returns true if it was expandable and previously collapsed. */
@@ -459,17 +461,24 @@ public:
     }
 
     /** Returns number of children of the root property of given page. */
-    size_t GetChildrenCount( int page_index );
+    size_t GetChildrenCount( int pageIndex );
 
-    /** Returns number of children for the property. */
+    /** Returns number of children for the property.
+
+        NB: Cannot be in container methods class due to name hiding.
+    */
     inline size_t GetChildrenCount( wxPGId id ) const
     {
-        wxASSERT( wxPGIdIsOk(id) );
-        return ((wxPGProperty*)id)->GetChildCount();
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(0)
+        return p->GetChildCount();
     }
 
     /** Returns number of children for the property. */
-    inline size_t GetChildrenCount( wxPGPropNameStr name ) { return GetChildrenCount( GetPropertyByName(name) ); }
+    inline size_t GetChildrenCount( wxPGPropNameStr name )
+    {
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(0)
+        return p->GetChildCount();
+    }
 
     /** Returns id of first item (in target page), whether it is a category or a property. */
     inline wxPGId GetFirst() const
@@ -503,19 +512,23 @@ public:
         \remarks
         Returns even sub-properties.
     */
-    inline wxPGId GetLastChild( wxPGId parent )
+    inline wxPGId GetLastChild( wxPGId id )
     {
-        wxASSERT ( wxPGIdIsOk(parent) );
-        wxPGPropertyWithChildren& p = (wxPGPropertyWithChildren&) *wxPGIdToPtr(parent);
-        if ( !p.GetParentingType() || !p.GetCount() ) return wxNullProperty;
-        return wxPGIdGen(p.Last());
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(wxNullProperty)
+        wxPGPropertyWithChildren* pwc = (wxPGPropertyWithChildren*) p;
+        if ( !pwc->GetParentingType() || !pwc->GetCount() ) return wxNullProperty;
+        return wxPGIdGen(pwc->Last());
     }
-    inline wxPGId GetLastChild( wxPGPropNameStr name ) { return GetLastChild ( GetPropertyByName(name) ); }
+    inline wxPGId GetLastChild( wxPGPropNameStr name )
+    {
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxNullProperty)
+        return GetLastChild( wxPGIdGen(p) );
+    }
 
     /** Returns id of next category after a given property (which does not have to be category). */
     inline wxPGId GetNextCategory( wxPGId id ) const
     {
-        wxASSERT ( m_targetState );
+        wxCHECK( m_targetState, wxNullProperty );
         return m_targetState->GetNextCategory(id);
     }
 
@@ -524,7 +537,7 @@ public:
     */
     inline wxPGId GetNextProperty( wxPGId id ) const
     {
-        wxASSERT ( m_targetState );
+        wxCHECK( m_targetState, wxNullProperty );
         return m_targetState->GetNextProperty(id);
     }
 
@@ -567,7 +580,8 @@ public:
     }
     inline wxPGId GetPrevSibling( wxPGPropNameStr name )
     {
-        return wxPropertyGridState::GetPrevSibling(GetPropertyByName(name));
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxNullProperty)
+        return wxPropertyGridState::GetPrevSibling(wxPGIdGen(p));
     }
 
     /** Returns id of property with given label (case-sensitive). If there is no
@@ -587,7 +601,7 @@ public:
     }
     wxPGId GetPropertyCategory( wxPGPropNameStr name ) const
     {
-        return m_pPropGrid->GetPropertyCategory(GetPropertyByName(name));
+        return m_pPropGrid->GetPropertyCategory(name);
     }
 
     /** Returns cell background colour of a property. */
@@ -597,7 +611,7 @@ public:
     }
     inline wxColour GetPropertyColour( wxPGPropNameStr name ) const
     {
-        return m_pPropGrid->GetPropertyColour(GetPropertyByName(name));
+        return m_pPropGrid->GetPropertyColour(name);
     }
 
     /** Returns a wxVariant list containing wxVariant versions of all
@@ -649,7 +663,7 @@ public:
     /** See wxPropertyGrid::Insert. */
     inline wxPGId Insert( wxPGId id, int index, wxPGProperty* property )
     {
-        wxASSERT ( m_targetState );
+        wxCHECK( m_targetState, wxNullProperty );
         wxPGId res_id = m_targetState->DoInsert((wxPGPropertyWithChildren*)wxPGIdToPtr(id),index,property);
         if ( m_targetState == m_pPropGrid->m_pState )
             m_pPropGrid->DrawItems ( property, (wxPGProperty*) NULL );
@@ -659,10 +673,11 @@ public:
     /** See wxPropertyGrid::Insert. */
     inline wxPGId Insert( wxPGPropNameStr name, int index, wxPGProperty* property )
     {
-        wxASSERT ( m_targetState );
-        wxPGId res_id = m_targetState->DoInsert((wxPGPropertyWithChildren*)wxPGIdToPtr(m_targetState->BaseGetPropertyByName(name)),index,property);
+        wxCHECK( m_targetState, wxNullProperty );
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxNullProperty)
+        wxPGId res_id = m_targetState->DoInsert((wxPGPropertyWithChildren*)p,index,property);
         if ( m_targetState == m_pPropGrid->m_pState )
-            m_pPropGrid->DrawItems ( property, (wxPGProperty*) NULL );
+            m_pPropGrid->DrawItems( property, (wxPGProperty*) NULL );
         return res_id;
     }
 
@@ -693,12 +708,21 @@ public:
     /** Returns true if any property on given page has been modified by the user. */
     bool IsPageModified( size_t index ) const;
 
-    /** Returns true if property is a category. */
+    /** Returns true if property is a category.
+        NB: SHOULD BE IN METHODS CLASS.
+    */
+/*
     inline bool IsPropertyCategory( wxPGId id ) const
     {
-        return (wxPGIdToPtr(id)->GetParentingType()>0)?true:false;
+        wxPG_PROP_ID_CALL_PROLOG_RETVAL(false)
+        return (p->GetParentingType()>0)?true:false;
     }
-    inline bool IsPropertyCategory( wxPGPropNameStr name ) { return IsPropertyCategory(GetPropertyByName(name)); }
+    inline bool IsPropertyCategory( wxPGPropNameStr name )
+    {
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
+        return (p->GetParentingType()>0)?true:false;
+    }
+*/
 
     /** Disables item's textctrl if other way of editing is available. */
     void LimitPropertyEditing( wxPGId id, bool limit = true );
@@ -733,7 +757,7 @@ public:
     }
     inline bool SelectProperty( wxPGPropNameStr name, bool focus = false )
     {
-        wxPGProperty* p = wxPGIdToPtr(GetPropertyByName(name));
+        wxPG_PROP_NAME_CALL_PROLOG_RETVAL(false)
         return p->GetParentState()->DoSelectProperty(p,focus);
     }
 
@@ -747,7 +771,7 @@ public:
     {
         wxPropertyCategoryClass* pc = (wxPropertyCategoryClass*)wxPGIdToPtr(id);
 #ifdef __WXDEBUG__
-        if ( pc ) wxASSERT ( pc->GetParentingType() > 0 );
+        if ( pc ) wxASSERT( pc->GetParentingType() > 0 );
 #endif
         m_targetState->m_currentCategory = pc;
     }
@@ -756,7 +780,8 @@ public:
     */
     inline void SetCurrentCategory( wxPGPropNameStr name )
     {
-        SetCurrentCategory(GetPropertyByName(name));
+        wxPG_PROP_NAME_CALL_PROLOG()
+        SetCurrentCategory(wxPGIdGen(p));
     }
 
     /** Sets y coordinate of the description box splitter. */
@@ -781,7 +806,7 @@ public:
         Be sure to use this method after all properties have been
         added to the grid.
     */
-    void SetPropertyAttributeAll ( int attrid, wxVariant value );
+    void SetPropertyAttributeAll( int attrid, wxVariant value );
 
     /** Sets label of a property.
     */
@@ -791,30 +816,24 @@ public:
     /** Sets background colour of property and all its children.  Background brush
         cache is optimized for often set colours to be set last.
     */
-    inline void SetPropertyColour ( wxPGId id, const wxColour& col )
+    inline void SetPropertyColour( wxPGId id, const wxColour& col )
     {
-        m_pPropGrid->SetPropertyColour ( id, col );
+        m_pPropGrid->SetPropertyColour( id, col );
     }
-    inline void SetPropertyColour ( wxPGPropNameStr name, const wxColour& col )
+    inline void SetPropertyColour( wxPGPropNameStr name, const wxColour& col )
     {
-        m_pPropGrid->SetPropertyColour ( GetPropertyByName(name), col );
+        m_pPropGrid->SetPropertyColour( name, col );
     }
 
     /** Sets background colour of property and all its children to the default. */
-    inline void SetPropertyColourToDefault ( wxPGId id )
+    inline void SetPropertyColourToDefault( wxPGId id )
     {
-        m_pPropGrid->SetColourIndex ( wxPGIdToPtr(id), 0 );
+        m_pPropGrid->SetPropertyColourToDefault(id);
     }
     inline void SetPropertyColourToDefault ( wxPGPropNameStr name )
     {
-        m_pPropGrid->SetColourIndex ( wxPGIdToPtr(GetPropertyByName(name)), 0 );
+        m_pPropGrid->SetPropertyColourToDefault(name);
     }
-
-    /** Property is be hidden/shown when hider button is toggled or
-        when wxPropertyGridManager::Compact is called.
-    */
-    //void SetPropertyPriority ( wxPGId id, int priority );
-    //void SetPropertyPriority ( wxPGPropNameStr name, int priority );
 
     /** Sets property value.
         \remarks
@@ -850,25 +869,28 @@ public:
 #else
     wxPG_IMPLEMENT_PGMAN_METHOD_NORET1_P1_INBODY(SetPropertyValueArrint,const wxArrayInt&)
 #endif
+#if wxUSE_DATETIME
+    wxPG_IMPLEMENT_PGMAN_METHOD_NORET1_INBODY(SetPropertyValueDatetime,wxDateTime)
+#endif
     wxPG_IMPLEMENT_PGMAN_METHOD_NORET1_INBODY(SetPropertyValuePoint,const wxPoint&)
     wxPG_IMPLEMENT_PGMAN_METHOD_NORET1_INBODY(SetPropertyValueSize,const wxSize&)
 
 #ifndef __WXPYTHON__
-    inline void SetPropertyValue ( wxPGId id, wxObject& value )
+    inline void SetPropertyValue( wxPGId id, wxObject& value )
     {
         SetPropertyValue(id,&value);
     }
 
-    inline void SetPropertyValue ( wxPGPropNameStr name, wxObject& value )
+    inline void SetPropertyValue( wxPGPropNameStr name, wxObject& value )
     {
         SetPropertyValue(name,&value);
     }
 
-    inline void SetPropertyValue ( wxPGId id, const wxChar* value )
+    inline void SetPropertyValue( wxPGId id, const wxChar* value )
     {
         SetPropertyValue(id,wxString(value));
     }
-    inline void SetPropertyValue ( wxPGPropNameStr name, const wxChar* value )
+    inline void SetPropertyValue( wxPGPropNameStr name, const wxChar* value )
     {
         SetPropertyValue(name,wxString(value));
     }
@@ -877,22 +899,22 @@ public:
         name is missing from the grid, new property is created under given default
         category (or root if omitted). Works on target page.
     */
-    void SetPropertyValues ( const wxList& list, wxPGId default_category )
+    void SetPropertyValues( const wxList& list, wxPGId defaultCategory )
     {
-        m_targetState->SetPropertyValues(list,default_category);
+        m_targetState->SetPropertyValues(list,defaultCategory);
     }
 
-    inline void SetPropertyValues ( const wxVariant& list, wxPGId default_category )
+    inline void SetPropertyValues( const wxVariant& list, wxPGId defaultCategory )
     {
-        SetPropertyValues (list.GetList(),default_category);
+        SetPropertyValues(list.GetList(),defaultCategory);
     }
-    inline void SetPropertyValues ( const wxList& list, const wxString& default_category = wxEmptyString )
+    inline void SetPropertyValues( const wxList& list, const wxString& defaultCategory = wxEmptyString )
     {
-        SetPropertyValues (list,GetPropertyByName(default_category));
+        SetPropertyValues(list,GetPropertyByName(defaultCategory));
     }
-    inline void SetPropertyValues ( const wxVariant& list, const wxString& default_category = wxEmptyString )
+    inline void SetPropertyValues( const wxVariant& list, const wxString& defaultCategory = wxEmptyString )
     {
-        SetPropertyValues (list.GetList(),GetPropertyByName(default_category));
+        SetPropertyValues(list.GetList(),GetPropertyByName(defaultCategory));
     }
 #endif
 
@@ -900,11 +922,11 @@ public:
         then the same thing is done to them.
     */
 #ifdef wxPG_COMPATIBILITY_1_0_0
-    void SetPropertyValueUnspecified ( wxPGId id );
-    void SetPropertyValueUnspecified ( wxPGPropNameStr name );
+    void SetPropertyValueUnspecified( wxPGId id );
+    void SetPropertyValueUnspecified( wxPGPropNameStr name );
 #else
-    void SetPropertyUnspecified ( wxPGId id );
-    void SetPropertyUnspecified ( wxPGPropNameStr name );
+    void SetPropertyUnspecified( wxPGId id );
+    void SetPropertyUnspecified( wxPGPropNameStr name );
 #endif
 
     /** Moves splitter as left as possible, while still allowing all
@@ -923,7 +945,7 @@ public:
     }
 
     /** Synonyme for SelectPage(name). */
-    inline void SetStringSelection ( const wxChar* name )
+    inline void SetStringSelection( const wxChar* name )
     {
         SelectPage( GetPageByName(name) );
     }
@@ -960,7 +982,7 @@ public:
     */
     inline void Sort( wxPGPropNameStr name )
     {
-        m_pPropGrid->Sort( GetPropertyByName(name) );
+        m_pPropGrid->Sort( GetPropertyByNameI(name) );
     }
 
     /** Deselect current selection, if any (from current page).
@@ -1041,7 +1063,7 @@ protected:
     /** Creates property grid for the manager. Override to use subclassed
         wxPropertyGrid.
     */
-    wxPropertyGrid* CreatePropertyGrid() const;
+    wxPropertyGrid* wxPropertyGridManager::CreatePropertyGrid() const;
 
 public:
 
@@ -1065,17 +1087,17 @@ public:
     //
     // Event handlers
     //
-    void OnMouseMove ( wxMouseEvent &event );
-    void OnMouseClick ( wxMouseEvent &event );
-    void OnMouseUp ( wxMouseEvent &event );
-    void OnMouseEntry ( wxMouseEvent &event );
+    void OnMouseMove( wxMouseEvent &event );
+    void OnMouseClick( wxMouseEvent &event );
+    void OnMouseUp( wxMouseEvent &event );
+    void OnMouseEntry( wxMouseEvent &event );
 
-    void OnPaint ( wxPaintEvent &event );
+    void OnPaint( wxPaintEvent &event );
 
-    void OnToolbarClick ( wxCommandEvent &event );
-    void OnResize ( wxSizeEvent& event );
-    void OnCompactorClick ( wxCommandEvent& event );
-    void OnPropertyGridSelect ( wxPropertyGridEvent& event );
+    void OnToolbarClick( wxCommandEvent &event );
+    void OnResize( wxSizeEvent& event );
+    void OnCompactorClick( wxCommandEvent& event );
+    void OnPropertyGridSelect( wxPropertyGridEvent& event );
 
 protected:
 

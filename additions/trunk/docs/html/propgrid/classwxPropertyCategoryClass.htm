@@ -23,7 +23,7 @@
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa1">AddChild2</a> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *prop, int index=-1, bool correct_mode=true)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa2">AppendChoice</a> (const wxString &amp;label, int value=wxPG_INVALID_VALUE)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa2">AppendChoice</a> (const wxString &amp;label, int value=INT_MAX)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa3" doxytag="wxPropertyCategoryClass::CalculateTextExtent" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>CalculateTextExtent</b> (wxWindow *wnd, wxFont &amp;font)</td></tr>
@@ -37,198 +37,200 @@ void&nbsp;</td><td class="memItemRight" valign=bottom><b>ClearFlag</b> (unsigned
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa7">DeleteChoice</a> (int index)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>virtual const <a class="el" href="classwxPGEditor.htm">wxPGEditor</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa8">DoGetEditorClass</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual const <a class="el" href="classwxPGEditor.htm">wxPGEditor</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyCategoryClass.htm#wxPropertyCategoryClassa8">DoGetEditorClass</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>virtual wxPGVariant&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa9">DoGetValue</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual wxValidator *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa9">DoGetValidator</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa10" doxytag="wxPropertyCategoryClass::DoSetName" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual wxPGVariant&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa10">DoGetValue</a> () const </td></tr>
+
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa11" doxytag="wxPropertyCategoryClass::DoSetName" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>DoSetName</b> (const wxString &amp;str)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>virtual void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa11">DoSetValue</a> (wxPGVariant value)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa12">DoSetValue</a> (wxPGVariant value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa12">Empty</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa13">Empty</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa13">EnsureDataExt</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa14">EnsureDataExt</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa14" doxytag="wxPropertyCategoryClass::FixIndexesOfChildren" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa15" doxytag="wxPropertyCategoryClass::FixIndexesOfChildren" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>FixIndexesOfChildren</b> (size_t starthere=0)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa15" doxytag="wxPropertyCategoryClass::GetArrIndex" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa16" doxytag="wxPropertyCategoryClass::GetArrIndex" ></a>
 unsigned int&nbsp;</td><td class="memItemRight" valign=bottom><b>GetArrIndex</b> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxString&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa16">GetAttributes</a> (unsigned int flagmask=0xFFFF)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxString&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa17">GetAttributes</a> (unsigned int flagmask=0xFFFF)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>size_t&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa17">GetChildCount</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>size_t&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa18">GetChildCount</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>virtual int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa18">GetChoiceInfo</a> (wxPGChoiceInfo *choiceinfo)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa19">GetChoiceInfo</a> (wxPGChoiceInfo *choiceinfo)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>virtual const <a class="el" href="structwxPGPropertyClassInfo.htm">wxPGPropertyClassInfo</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa19">GetClassInfo</a> () const=0</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual const <a class="el" href="structwxPGPropertyClassInfo.htm">wxPGPropertyClassInfo</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyCategoryClass.htm#wxPropertyCategoryClassa20">GetClassInfo</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>virtual const wxChar *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa20">GetClassName</a> () const=0</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual const wxChar *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyCategoryClass.htm#wxPropertyCategoryClassa21">GetClassName</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa21" doxytag="wxPropertyCategoryClass::GetClientData" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa22" doxytag="wxPropertyCategoryClass::GetClientData" ></a>
 void *&nbsp;</td><td class="memItemRight" valign=bottom><b>GetClientData</b> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>size_t&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa22">GetCount</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>size_t&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa23">GetCount</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGPropertyDataExt.htm">wxPGPropertyDataExt</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa23">GetDataExt</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGPropertyDataExt.htm">wxPGPropertyDataExt</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa24">GetDataExt</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa24" doxytag="wxPropertyCategoryClass::GetDepth" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa25" doxytag="wxPropertyCategoryClass::GetDepth" ></a>
 unsigned int&nbsp;</td><td class="memItemRight" valign=bottom><b>GetDepth</b> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa25" doxytag="wxPropertyCategoryClass::GetDisplayedString" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa26" doxytag="wxPropertyCategoryClass::GetDisplayedString" ></a>
 wxString&nbsp;</td><td class="memItemRight" valign=bottom><b>GetDisplayedString</b> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa26" doxytag="wxPropertyCategoryClass::GetEditorClass" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa27" doxytag="wxPropertyCategoryClass::GetEditorClass" ></a>
 const <a class="el" href="classwxPGEditor.htm">wxPGEditor</a> *&nbsp;</td><td class="memItemRight" valign=bottom><b>GetEditorClass</b> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa27" doxytag="wxPropertyCategoryClass::GetFlags" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa28" doxytag="wxPropertyCategoryClass::GetFlags" ></a>
 unsigned int&nbsp;</td><td class="memItemRight" valign=bottom><b>GetFlags</b> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa28">GetGrid</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa29">GetGrid</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa29" doxytag="wxPropertyCategoryClass::GetHelpString" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa30" doxytag="wxPropertyCategoryClass::GetHelpString" ></a>
 wxString&nbsp;</td><td class="memItemRight" valign=bottom><b>GetHelpString</b> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGId.htm">wxPGId</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa30">GetId</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGId.htm">wxPGId</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa31">GetId</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>virtual wxSize&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa31">GetImageSize</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual wxSize&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa32">GetImageSize</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>unsigned int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa32">GetIndexInParent</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>unsigned int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa33">GetIndexInParent</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa33" doxytag="wxPropertyCategoryClass::GetItemAtY" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa34" doxytag="wxPropertyCategoryClass::GetItemAtY" ></a>
 <a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td><td class="memItemRight" valign=bottom><b>GetItemAtY</b> (unsigned int y, unsigned int lh)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>const wxString &amp;&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa34">GetLabel</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>const wxString &amp;&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa35">GetLabel</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa35">GetMainParent</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa36">GetMainParent</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa36" doxytag="wxPropertyCategoryClass::GetMaxLength" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa37" doxytag="wxPropertyCategoryClass::GetMaxLength" ></a>
 int&nbsp;</td><td class="memItemRight" valign=bottom><b>GetMaxLength</b> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>const wxString &amp;&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa37">GetName</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>const wxString &amp;&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa38">GetName</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGPropertyWithChildren.htm">wxPGPropertyWithChildren</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa38">GetParent</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGPropertyWithChildren.htm">wxPGPropertyWithChildren</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa39">GetParent</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>signed char&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa39">GetParentingType</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>signed char&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa40">GetParentingType</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPropertyGridState.htm">wxPropertyGridState</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa40">GetParentState</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPropertyGridState.htm">wxPropertyGridState</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa41">GetParentState</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa41">GetPropertyByName</a> (const wxString &amp;name) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa42">GetPropertyByName</a> (const wxString &amp;name) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa42" doxytag="wxPropertyCategoryClass::GetTextExtent" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa43" doxytag="wxPropertyCategoryClass::GetTextExtent" ></a>
 int&nbsp;</td><td class="memItemRight" valign=bottom><b>GetTextExtent</b> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>const wxChar *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa43">GetType</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>const wxChar *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa44">GetType</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxValidator *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa44">GetValidator</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxValidator *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa45">GetValidator</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>virtual wxString&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyCategoryClass.htm#wxPropertyCategoryClassa45">GetValueAsString</a> (int argFlags) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual wxString&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyCategoryClass.htm#wxPropertyCategoryClassa46">GetValueAsString</a> (int argFlags) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>wxVariant&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa46">GetValueAsVariant</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>wxVariant&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa47">GetValueAsVariant</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa47" doxytag="wxPropertyCategoryClass::GetValueImage" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa48" doxytag="wxPropertyCategoryClass::GetValueImage" ></a>
 wxBitmap *&nbsp;</td><td class="memItemRight" valign=bottom><b>GetValueImage</b> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>virtual const <a class="el" href="classwxPGValueType.htm">wxPGValueType</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa48">GetValueType</a> () const=0</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual const <a class="el" href="classwxPGValueType.htm">wxPGValueType</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyCategoryClass.htm#wxPropertyCategoryClassa49">GetValueType</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa49">GetY</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa50">GetY</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa50">Hide</a> (bool hide)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa51">Hide</a> (bool hide)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa51">Index</a> (const <a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa52">Index</a> (const <a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa52">InsertChoice</a> (const wxString &amp;label, int index, int value=wxPG_INVALID_VALUE)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa53">InsertChoice</a> (const wxString &amp;label, int index, int value=INT_MAX)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa53" doxytag="wxPropertyCategoryClass::IsExpanded" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa54" doxytag="wxPropertyCategoryClass::IsExpanded" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>IsExpanded</b> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa54" doxytag="wxPropertyCategoryClass::IsFlagSet" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa55" doxytag="wxPropertyCategoryClass::IsFlagSet" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>IsFlagSet</b> (unsigned char flag) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa55" doxytag="wxPropertyCategoryClass::IsKindOf" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa56" doxytag="wxPropertyCategoryClass::IsKindOf" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>IsKindOf</b> (<a class="el" href="structwxPGPropertyClassInfo.htm">wxPGPropertyClassInfo</a> &amp;info)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa56">IsOk</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa57">IsOk</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa57" doxytag="wxPropertyCategoryClass::IsSomeParent" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa58" doxytag="wxPropertyCategoryClass::IsSomeParent" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>IsSomeParent</b> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *candidate_parent) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa58">IsSubProperty</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa59">IsSubProperty</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa59">Item</a> (size_t i) const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa60">Item</a> (size_t i) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa60">Last</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa61">Last</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>virtual void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa61">OnCustomPaint</a> (wxDC &amp;dc, const wxRect &amp;rect, <a class="el" href="structwxPGPaintData.htm">wxPGPaintData</a> &amp;paintdata)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa62">OnCustomPaint</a> (wxDC &amp;dc, const wxRect &amp;rect, <a class="el" href="structwxPGPaintData.htm">wxPGPaintData</a> &amp;paintdata)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>virtual bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa62">OnEvent</a> (<a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> *propgrid, wxWindow *wnd_primary, wxEvent &amp;event)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa63">OnEvent</a> (<a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> *propgrid, wxWindow *wnd_primary, wxEvent &amp;event)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa63" doxytag="wxPropertyCategoryClass::PrepareSubProperties" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa64" doxytag="wxPropertyCategoryClass::PrepareSubProperties" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>PrepareSubProperties</b> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa64">PrepareValueForDialogEditing</a> (<a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> *propgrid)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa65">PrepareValueForDialogEditing</a> (<a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> *propgrid)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa65">RecreateEditor</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa66">RecreateEditor</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>virtual void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa66">RefreshChildren</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa67">RefreshChildren</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa67" doxytag="wxPropertyCategoryClass::SetAttrib" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa68" doxytag="wxPropertyCategoryClass::SetAttrib" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetAttrib</b> (int id, wxVariant value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>virtual void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa68">SetAttribute</a> (int id, wxVariant &amp;value)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa69">SetAttribute</a> (int id, wxVariant &amp;value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa69">SetAttributes</a> (const wxString &amp;attributes)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa70">SetAttributes</a> (const wxString &amp;attributes)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa70">SetChoices</a> (const wxArrayString &amp;labels, const wxArrayInt &amp;values=wxPG_EMPTY_ARRAYINT)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa71">SetChoices</a> (const wxArrayString &amp;labels, const wxArrayInt &amp;values=(*((wxArrayInt *) NULL)))</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa71">SetChoices</a> (<a class="el" href="classwxPGChoices.htm">wxPGChoices</a> &amp;choices)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa72">SetChoices</a> (<a class="el" href="classwxPGChoices.htm">wxPGChoices</a> &amp;choices)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa72">SetChoicesExclusive</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa73">SetChoicesExclusive</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa73">SetClientData</a> (void *clientData)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa74">SetClientData</a> (void *clientData)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa74">SetEditor</a> (const wxString &amp;editor_name)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa75">SetEditor</a> (const wxString &amp;editorName)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa75">SetEditor</a> (const <a class="el" href="classwxPGEditor.htm">wxPGEditor</a> *editor)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa76">SetEditor</a> (const <a class="el" href="classwxPGEditor.htm">wxPGEditor</a> *editor)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa76" doxytag="wxPropertyCategoryClass::SetFlag" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa77" doxytag="wxPropertyCategoryClass::SetFlag" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetFlag</b> (unsigned char flag)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa77" doxytag="wxPropertyCategoryClass::SetHelpString" ></a>
-void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetHelpString</b> (const wxString &amp;help_string)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa78" doxytag="wxPropertyCategoryClass::SetHelpString" ></a>
+void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetHelpString</b> (const wxString &amp;helpString)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa78" doxytag="wxPropertyCategoryClass::SetLabel" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa79" doxytag="wxPropertyCategoryClass::SetLabel" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetLabel</b> (const wxString &amp;label)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa79">SetMaxLength</a> (int maxLen)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa80">SetMaxLength</a> (int maxLen)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa80" doxytag="wxPropertyCategoryClass::SetParentState" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa81" doxytag="wxPropertyCategoryClass::SetParentState" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SetParentState</b> (<a class="el" href="classwxPropertyGridState.htm">wxPropertyGridState</a> *pstate)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa81">SetValidator</a> (const wxValidator &amp;validator)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa82">SetValidator</a> (const wxValidator &amp;validator)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>virtual bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa82">SetValueFromInt</a> (long value, int flags=0)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa83">SetValueFromInt</a> (long value, int flags=0)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>virtual bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa83">SetValueFromString</a> (const wxString &amp;text, int flags)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGPropertyWithChildren.htm#wxPropertyCategoryClassa84">SetValueFromString</a> (const wxString &amp;text, int flags)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa84">SetValueImage</a> (wxBitmap &amp;bmp)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa85">SetValueImage</a> (wxBitmap &amp;bmp)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa85" doxytag="wxPropertyCategoryClass::ShowError" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa86" doxytag="wxPropertyCategoryClass::ShowError" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>ShowError</b> (const wxString &amp;msg)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa86" doxytag="wxPropertyCategoryClass::StdValidationProcedure" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa87" doxytag="wxPropertyCategoryClass::StdValidationProcedure" ></a>
 bool&nbsp;</td><td class="memItemRight" valign=bottom><b>StdValidationProcedure</b> (wxPGVariant value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa87" doxytag="wxPropertyCategoryClass::SubPropsChanged" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa88" doxytag="wxPropertyCategoryClass::SubPropsChanged" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>SubPropsChanged</b> (int oldSelInd=-1)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa88" doxytag="wxPropertyCategoryClass::UpdateControl" ></a>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassa89" doxytag="wxPropertyCategoryClass::UpdateControl" ></a>
 void&nbsp;</td><td class="memItemRight" valign=bottom><b>UpdateControl</b> (wxWindow *primary)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyCategoryClass.htm#wxPropertyCategoryClassa89">wxPropertyCategoryClass</a> (const wxString &amp;label, const wxString &amp;name=wxPG_LABEL)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyCategoryClass.htm#wxPropertyCategoryClassa90">wxPropertyCategoryClass</a> (const wxString &amp;label, const wxString &amp;name=(*((wxString *) NULL)))</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyCategoryClass.htm#wxPropertyCategoryClassa90">wxPropertyCategoryClass</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyCategoryClass.htm#wxPropertyCategoryClassa91">wxPropertyCategoryClass</a> ()</td></tr>
 
 <tr><td colspan=2><br><h2>Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyCategoryClassb0" doxytag="wxPropertyCategoryClass::Init" ></a>
@@ -294,7 +296,7 @@ int&nbsp;</td><td class="memItemRight" valign=bottom><b>m_y</b></td></tr>
 Category property. 
 <p>
 <hr><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" name="wxPropertyCategoryClassa90" doxytag="wxPropertyCategoryClass::wxPropertyCategoryClass" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa91" doxytag="wxPropertyCategoryClass::wxPropertyCategoryClass" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -324,7 +326,7 @@ Special constructor only used in special cases.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa89" doxytag="wxPropertyCategoryClass::wxPropertyCategoryClass" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa90" doxytag="wxPropertyCategoryClass::wxPropertyCategoryClass" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -339,7 +341,7 @@ Special constructor only used in special cases.
           <td class="md" nowrap align="right"></td>
           <td></td>
           <td class="md" nowrap>const wxString &amp;&nbsp;</td>
-          <td class="mdname" nowrap> <em>name</em> = wxPG_LABEL</td>
+          <td class="mdname" nowrap> <em>name</em> = (*((wxString *) NULL))</td>
         </tr>
         <tr>
           <td></td>
@@ -463,7 +465,7 @@ This is used by Insert etc.
           <td class="md" nowrap align="right"></td>
           <td></td>
           <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap> <em>value</em> = wxPG_INVALID_VALUE</td>
+          <td class="mdname" nowrap> <em>value</em> = INT_MAX</td>
         </tr>
         <tr>
           <td></td>
@@ -588,7 +590,39 @@ Removes entry from property's <a class="el" href="classwxPGChoices.htm">wxPGChoi
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> virtual const <a class="el" href="classwxPGEditor.htm">wxPGEditor</a>* wxPGProperty::DoGetEditorClass </td>
+          <td class="md" nowrap valign="top"> virtual const <a class="el" href="classwxPGEditor.htm">wxPGEditor</a>* wxPropertyCategoryClass::DoGetEditorClass </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap> const<code> [virtual]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Returns pointer to an instance of editor class. 
+<p>
+
+<p>
+Reimplemented from <a class="el" href="classwxPGProperty.htm#wxPGPropertyWithChildrena7">wxPGProperty</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="wxPropertyCategoryClassa9" doxytag="wxPropertyCategoryClass::DoGetValidator" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> virtual wxValidator* wxPGProperty::DoGetValidator </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
@@ -607,12 +641,26 @@ Removes entry from property's <a class="el" href="classwxPGChoices.htm">wxPGChoi
     <td>
 
 <p>
-Returns pointer to an instance of editor class. 
+Returns pointer to the wxValidator that should be used with the editor of this property (NULL for no validator). 
 <p>
+Setting validator explicitly via SetPropertyValidator will override this.<p>
+In most situations, code like this should work well (macros are used to maintain one actual validator instance, so on the second call the function exits within the first macro):<p>
+<pre class="fragment"><div>        wxValidator* wxMyPropertyClass::DoGetValidator ()<span class="keyword"> const</span>
+<span class="keyword">        </span>{
+            WX_PG_DOGETVALIDATOR_ENTRY()
+
+            wxMyValidator* validator = <span class="keyword">new</span> wxMyValidator(...);
+
+            ... prepare validator...
+
+            WX_PG_DOGETVALIDATOR_EXIT(validator)
+        }
+</div></pre><p>
+<dl compact><dt><b>Remarks:</b></dt><dd>You can get common filename validator by returning wxFilePropertyClass::GetClassValidator(). wxDirProperty, for example, uses it. </dd></dl>
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa9" doxytag="wxPropertyCategoryClass::DoGetValue" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa10" doxytag="wxPropertyCategoryClass::DoGetValue" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -641,10 +689,10 @@ Returns properly constructed wxPGVariant.
 <p>
 
 <p>
-Reimplemented in <a class="el" href="classwxParentPropertyClass.htm#wxParentPropertyClassa8">wxParentPropertyClass</a>, and <a class="el" href="classwxCustomPropertyClass.htm#wxCustomPropertyClassa8">wxCustomPropertyClass</a>.    </td>
+Reimplemented in <a class="el" href="classwxParentPropertyClass.htm#wxParentPropertyClassa9">wxParentPropertyClass</a>, and <a class="el" href="classwxCustomPropertyClass.htm#wxCustomPropertyClassa9">wxCustomPropertyClass</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa11" doxytag="wxPropertyCategoryClass::DoSetValue" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa12" doxytag="wxPropertyCategoryClass::DoSetValue" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -703,10 +751,10 @@ Sets property's internal value.
 </div></pre></dd></dl>
 
 <p>
-Reimplemented in <a class="el" href="classwxParentPropertyClass.htm#wxParentPropertyClassa10">wxParentPropertyClass</a>, and <a class="el" href="classwxCustomPropertyClass.htm#wxCustomPropertyClassa10">wxCustomPropertyClass</a>.    </td>
+Reimplemented in <a class="el" href="classwxParentPropertyClass.htm#wxParentPropertyClassa11">wxParentPropertyClass</a>, and <a class="el" href="classwxCustomPropertyClass.htm#wxCustomPropertyClassa11">wxCustomPropertyClass</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa12" doxytag="wxPropertyCategoryClass::Empty" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa13" doxytag="wxPropertyCategoryClass::Empty" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -736,7 +784,7 @@ Deletes all sub-properties.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa13" doxytag="wxPropertyCategoryClass::EnsureDataExt" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa14" doxytag="wxPropertyCategoryClass::EnsureDataExt" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -766,7 +814,7 @@ If property did not have data extension, one is created now (returns true in tha
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa16" doxytag="wxPropertyCategoryClass::GetAttributes" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa17" doxytag="wxPropertyCategoryClass::GetAttributes" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -797,7 +845,7 @@ Returns comma-delimited string of property attributes.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa17" doxytag="wxPropertyCategoryClass::GetChildCount" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa18" doxytag="wxPropertyCategoryClass::GetChildCount" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -827,7 +875,7 @@ Returns number of children (always 0 for normal properties).
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa18" doxytag="wxPropertyCategoryClass::GetChoiceInfo" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa19" doxytag="wxPropertyCategoryClass::GetChoiceInfo" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -860,20 +908,20 @@ May also return, through pointer arguments, strings that should be inserted to t
 </dd></dl>
 
 <p>
-Reimplemented in <a class="el" href="classwxCustomPropertyClass.htm#wxCustomPropertyClassa17">wxCustomPropertyClass</a>.    </td>
+Reimplemented in <a class="el" href="classwxCustomPropertyClass.htm#wxCustomPropertyClassa18">wxCustomPropertyClass</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa19" doxytag="wxPropertyCategoryClass::GetClassInfo" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa20" doxytag="wxPropertyCategoryClass::GetClassInfo" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> virtual const <a class="el" href="structwxPGPropertyClassInfo.htm">wxPGPropertyClassInfo</a>* wxPGProperty::GetClassInfo </td>
+          <td class="md" nowrap valign="top"> virtual const <a class="el" href="structwxPGPropertyClassInfo.htm">wxPGPropertyClassInfo</a>* wxPropertyCategoryClass::GetClassInfo </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap> const<code> [pure virtual, inherited]</code></td>
+          <td class="md" nowrap> const<code> [virtual]</code></td>
         </tr>
 
       </table>
@@ -890,20 +938,22 @@ Reimplemented in <a class="el" href="classwxCustomPropertyClass.htm#wxCustomProp
 <p>
 Returns classinfo of the property class. 
 <p>
-    </td>
+
+<p>
+Implements <a class="el" href="classwxPGProperty.htm#wxPGPropertyWithChildrena19">wxPGProperty</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa20" doxytag="wxPropertyCategoryClass::GetClassName" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa21" doxytag="wxPropertyCategoryClass::GetClassName" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> virtual const wxChar* wxPGProperty::GetClassName </td>
+          <td class="md" nowrap valign="top"> virtual const wxChar* wxPropertyCategoryClass::GetClassName </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap> const<code> [pure virtual, inherited]</code></td>
+          <td class="md" nowrap> const<code> [virtual]</code></td>
         </tr>
 
       </table>
@@ -920,10 +970,12 @@ Returns classinfo of the property class.
 <p>
 Returns classname (for example, "wxStringProperty" for wxStringProperty) of a property class. 
 <p>
-    </td>
+
+<p>
+Implements <a class="el" href="classwxPGProperty.htm#wxPGPropertyWithChildrena20">wxPGProperty</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa22" doxytag="wxPropertyCategoryClass::GetCount" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa23" doxytag="wxPropertyCategoryClass::GetCount" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -953,7 +1005,7 @@ Returns number of sub-properties.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa23" doxytag="wxPropertyCategoryClass::GetDataExt" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa24" doxytag="wxPropertyCategoryClass::GetDataExt" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -983,7 +1035,7 @@ Returns property's data extension (NULL if none).
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa28" doxytag="wxPropertyCategoryClass::GetGrid" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa29" doxytag="wxPropertyCategoryClass::GetGrid" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1013,7 +1065,7 @@ Returns property grid where property lies.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa30" doxytag="wxPropertyCategoryClass::GetId" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa31" doxytag="wxPropertyCategoryClass::GetId" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1043,7 +1095,7 @@ Returns property id.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa31" doxytag="wxPropertyCategoryClass::GetImageSize" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa32" doxytag="wxPropertyCategoryClass::GetImageSize" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1071,12 +1123,14 @@ Returns property id.
 Returns size of the custom painted image in front of property. 
 <p>
 This method must be overridden to return non-default value if OnCustomPaint is to be called. <dl compact><dt><b>Remarks:</b></dt><dd><ul>
-<li>If flexible image size is desired, return <a class="el" href="group__miscellaneous.htm#ga9">wxPG_FLEXIBLE_SIZE(wid,hei)</a>. OnCustomPaint is then called to measure items as well (see for <a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa61">wxPGProperty::OnCustomPaint</a> for measure call specs).</li><li>If entire property, including text, is to be custom painted, then <a class="el" href="group__miscellaneous.htm#ga11">wxPG_FULL_CUSTOM_PAINT_SIZE(hei)</a> or <a class="el" href="group__miscellaneous.htm#ga12">wxPG_FULL_CUSTOM_PAINT_FLEXIBLE_SIZE(hei)</a> is to be returned.</li><li>Default behaviour is to return wxSize(0,0), which means no image.</li><li>Default image width or height is indicated with dimension -1. </li></ul>
+<li>If flexible image size is desired, return <a class="el" href="group__miscellaneous.htm#ga9">wxPG_FLEXIBLE_SIZE(wid,hei)</a>. OnCustomPaint is then called to measure items as well (see for <a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa62">wxPGProperty::OnCustomPaint</a> for measure call specs).</li><li>If entire property, including text, is to be custom painted, then <a class="el" href="group__miscellaneous.htm#ga11">wxPG_FULL_CUSTOM_PAINT_SIZE(hei)</a> or <a class="el" href="group__miscellaneous.htm#ga12">wxPG_FULL_CUSTOM_PAINT_FLEXIBLE_SIZE(hei)</a> is to be returned.</li><li>Default behaviour is to return wxSize(0,0), which means no image.</li><li>Default image width or height is indicated with dimension -1. </li></ul>
 </dd></dl>
-    </td>
+
+<p>
+Reimplemented in <a class="el" href="classwxCustomPropertyClass.htm#wxCustomPropertyClassa31">wxCustomPropertyClass</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa32" doxytag="wxPropertyCategoryClass::GetIndexInParent" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa33" doxytag="wxPropertyCategoryClass::GetIndexInParent" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1106,7 +1160,7 @@ Returns position in parent's array.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa34" doxytag="wxPropertyCategoryClass::GetLabel" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa35" doxytag="wxPropertyCategoryClass::GetLabel" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1136,7 +1190,7 @@ Returns property's label.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa35" doxytag="wxPropertyCategoryClass::GetMainParent" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa36" doxytag="wxPropertyCategoryClass::GetMainParent" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1167,7 +1221,7 @@ Useful when you have nested wxCustomProperties/wxParentProperties. <dl compact><
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa37" doxytag="wxPropertyCategoryClass::GetName" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa38" doxytag="wxPropertyCategoryClass::GetName" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1197,7 +1251,7 @@ Returns property's name (alternate way to access property).
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa38" doxytag="wxPropertyCategoryClass::GetParent" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa39" doxytag="wxPropertyCategoryClass::GetParent" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1227,7 +1281,7 @@ Return parent of property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa39" doxytag="wxPropertyCategoryClass::GetParentingType" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa40" doxytag="wxPropertyCategoryClass::GetParentingType" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1258,7 +1312,7 @@ Returns 0 for normal items.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa40" doxytag="wxPropertyCategoryClass::GetParentState" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa41" doxytag="wxPropertyCategoryClass::GetParentState" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1287,10 +1341,10 @@ Returns <a class="el" href="classwxPropertyGridState.htm">wxPropertyGridState</a
 <p>
 
 <p>
-Reimplemented from <a class="el" href="classwxPGProperty.htm#wxPGPropertya32">wxPGProperty</a>.    </td>
+Reimplemented from <a class="el" href="classwxPGProperty.htm#wxPGPropertya33">wxPGProperty</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa41" doxytag="wxPropertyCategoryClass::GetPropertyByName" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa42" doxytag="wxPropertyCategoryClass::GetPropertyByName" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1321,7 +1375,7 @@ Returns (direct) child property with given name (or NULL if not found).
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa43" doxytag="wxPropertyCategoryClass::GetType" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa44" doxytag="wxPropertyCategoryClass::GetType" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1351,7 +1405,7 @@ Returns type name of property that is compatible with CreatePropertyByType.
 and wxVariant::GetType.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa44" doxytag="wxPropertyCategoryClass::GetValidator" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa45" doxytag="wxPropertyCategoryClass::GetValidator" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1381,7 +1435,7 @@ Gets assignable version of property's validator.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa45" doxytag="wxPropertyCategoryClass::GetValueAsString" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa46" doxytag="wxPropertyCategoryClass::GetValueAsString" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1411,10 +1465,10 @@ Must be overridden with function that doesn't do anything.
 <p>
 
 <p>
-Reimplemented from <a class="el" href="classwxPGPropertyWithChildren.htm#wxPGRootPropertyClassa43">wxPGPropertyWithChildren</a>.    </td>
+Reimplemented from <a class="el" href="classwxPGPropertyWithChildren.htm#wxPGRootPropertyClassa44">wxPGPropertyWithChildren</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa46" doxytag="wxPropertyCategoryClass::GetValueAsVariant" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa47" doxytag="wxPropertyCategoryClass::GetValueAsVariant" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1444,17 +1498,17 @@ Returns value as wxVariant.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa48" doxytag="wxPropertyCategoryClass::GetValueType" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa49" doxytag="wxPropertyCategoryClass::GetValueType" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> virtual const <a class="el" href="classwxPGValueType.htm">wxPGValueType</a>* wxPGProperty::GetValueType </td>
+          <td class="md" nowrap valign="top"> virtual const <a class="el" href="classwxPGValueType.htm">wxPGValueType</a>* wxPropertyCategoryClass::GetValueType </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap> const<code> [pure virtual, inherited]</code></td>
+          <td class="md" nowrap> const<code> [virtual]</code></td>
         </tr>
 
       </table>
@@ -1471,10 +1525,12 @@ Returns value as wxVariant.
 <p>
 Returns pointer to the object that has methods related to the value type of this property. 
 <p>
-Keep atleast this method abstract so the class is kept abstract.     </td>
+Keep atleast this method abstract so the class is kept abstract. 
+<p>
+Implements <a class="el" href="classwxPGProperty.htm#wxPGPropertyWithChildrena47">wxPGProperty</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa49" doxytag="wxPropertyCategoryClass::GetY" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa50" doxytag="wxPropertyCategoryClass::GetY" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1504,7 +1560,7 @@ Gets pre-calculated top y coordinate of property graphics.
 This cannot be relied on all times (<a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> knows when :) ), and value is -1 if property is not visible.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa50" doxytag="wxPropertyCategoryClass::Hide" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa51" doxytag="wxPropertyCategoryClass::Hide" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1540,7 +1596,7 @@ Hides or reveals the property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa51" doxytag="wxPropertyCategoryClass::Index" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa52" doxytag="wxPropertyCategoryClass::Index" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1571,7 +1627,7 @@ Returns index of given sub-property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa52" doxytag="wxPropertyCategoryClass::InsertChoice" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa53" doxytag="wxPropertyCategoryClass::InsertChoice" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1592,7 +1648,7 @@ Returns index of given sub-property.
           <td class="md" nowrap align="right"></td>
           <td></td>
           <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap> <em>value</em> = wxPG_INVALID_VALUE</td>
+          <td class="mdname" nowrap> <em>value</em> = INT_MAX</td>
         </tr>
         <tr>
           <td></td>
@@ -1617,7 +1673,7 @@ Adds entry to property's <a class="el" href="classwxPGChoices.htm">wxPGChoices</
 Returns index of item added.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa56" doxytag="wxPropertyCategoryClass::IsOk" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa57" doxytag="wxPropertyCategoryClass::IsOk" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1647,7 +1703,7 @@ Returns true if property is valid and <a class="el" href="classwxPropertyGrid.ht
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa58" doxytag="wxPropertyCategoryClass::IsSubProperty" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa59" doxytag="wxPropertyCategoryClass::IsSubProperty" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1677,7 +1733,7 @@ Returns true if this is a sub-property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa59" doxytag="wxPropertyCategoryClass::Item" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa60" doxytag="wxPropertyCategoryClass::Item" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1708,7 +1764,7 @@ Returns sub-property at index i.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa60" doxytag="wxPropertyCategoryClass::Last" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa61" doxytag="wxPropertyCategoryClass::Last" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1738,7 +1794,7 @@ Returns last sub-property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa61" doxytag="wxPropertyCategoryClass::OnCustomPaint" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa62" doxytag="wxPropertyCategoryClass::OnCustomPaint" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1779,10 +1835,10 @@ Returns last sub-property.
     <td>
 
 <p>
-Override to paint an image in front of the property value text or drop-down list item (but only if <a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa31">wxPGProperty::GetImageSize</a> is overridden as well). 
+Override to paint an image in front of the property value text or drop-down list item (but only if <a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa32">wxPGProperty::GetImageSize</a> is overridden as well). 
 <p>
-If property's <a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa31">GetImageSize()</a> returns size that has height != 0 but less than row height ( &lt; 0 has special meanings), <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> calls this method to draw a custom image in a limited area in front of the editor control or value text/graphics, and if control has drop-down list, then the image is drawn there as well (even in the case <a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa31">GetImageSize()</a> returned higher height than row height).<p>
-NOTE: Following applies when <a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa31">GetImageSize()</a> returns a "flexible" height ( using <a class="el" href="group__miscellaneous.htm#ga9">wxPG_FLEXIBLE_SIZE(W,H)</a> macro), which implies variable height items: If rect.x is &lt; 0, then this is a measure item call, which means that dc is invalid and only thing that should be done is to set paintdata.m_drawnHeight to the height of the image of item at index paintdata.m_choiceItem. This call may be done even as often as once every drop-down popup show.<p>
+If property's <a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa32">GetImageSize()</a> returns size that has height != 0 but less than row height ( &lt; 0 has special meanings), <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> calls this method to draw a custom image in a limited area in front of the editor control or value text/graphics, and if control has drop-down list, then the image is drawn there as well (even in the case <a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa32">GetImageSize()</a> returned higher height than row height).<p>
+NOTE: Following applies when <a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa32">GetImageSize()</a> returns a "flexible" height ( using <a class="el" href="group__miscellaneous.htm#ga9">wxPG_FLEXIBLE_SIZE(W,H)</a> macro), which implies variable height items: If rect.x is &lt; 0, then this is a measure item call, which means that dc is invalid and only thing that should be done is to set paintdata.m_drawnHeight to the height of the image of item at index paintdata.m_choiceItem. This call may be done even as often as once every drop-down popup show.<p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign=top><em>dc</em>&nbsp;</td><td>wxDC to paint on. </td></tr>
@@ -1793,11 +1849,13 @@ NOTE: Following applies when <a class="el" href="classwxPGProperty.htm#wxPropert
 <dl compact><dt><b>Remarks:</b></dt><dd><ul>
 <li>You can actually exceed rect width, but if you do so then paintdata.m_drawnWidth must be set to the full width drawn in pixels.</li><li>Due to technical reasons, rect's height will be default even if custom height was reported during measure call.</li><li>Changing font and text colour affects the text drawn next to the painted image (which is done immediately after the OnCustomPaint call finishes).</li><li>Brush is guaranteed to be default background colour. It has been already used to clear the background of area being painted. It can be modified.</li><li>Pen is guaranteed to be 1-wide 'black' (or whatever is the proper colour) pen for drawing framing rectangle. It can be changed as well. </li></ul>
 </dd></dl>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="classwxPGProperty.htm#wxPGPropertya35"></a> </dd></dl>
-    </td>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="classwxPGProperty.htm#wxPGPropertya36"></a> </dd></dl>
+
+<p>
+Reimplemented in <a class="el" href="classwxCustomPropertyClass.htm#wxCustomPropertyClassa60">wxCustomPropertyClass</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa62" doxytag="wxPropertyCategoryClass::OnEvent" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa63" doxytag="wxPropertyCategoryClass::OnEvent" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1853,7 +1911,7 @@ Note that editor class usually processes most events. Some, such as button press
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa64" doxytag="wxPropertyCategoryClass::PrepareValueForDialogEditing" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa65" doxytag="wxPropertyCategoryClass::PrepareValueForDialogEditing" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1883,8 +1941,8 @@ Updates property value in case there were last minute changes.
 <p>
 If value was unspecified, it will be set to default. Use only for properties that have TextCtrl-based editor. <dl compact><dt><b>Remarks:</b></dt><dd>If you have code similar to <pre class="fragment"><div>            <span class="comment">// Update the value in case of last minute changes</span>
             <span class="keywordflow">if</span> ( primary &amp;&amp; propgrid-&gt;IsEditorsValueModified() )
-                 GetEditorClass()-&gt;<a class="code" href="classwxPGEditor.htm#wxPGTextCtrlEditora1">CopyValueFromControl</a>( <span class="keyword">this</span>, primary );
-</div></pre>in <a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa62">wxPGProperty::OnEvent</a> wxEVT_COMMAND_BUTTON_CLICKED handler, then replace it with call to this method. </dd></dl>
+                 GetEditorClass()-&gt;<a class="code" href="classwxPGEditor.htm#wxPGEditora1">CopyValueFromControl</a>( <span class="keyword">this</span>, primary );
+</div></pre>in <a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa63">wxPGProperty::OnEvent</a> wxEVT_COMMAND_BUTTON_CLICKED handler, then replace it with call to this method. </dd></dl>
 <dl compact><dt><b>Return values:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign=top><em>True</em>&nbsp;</td><td>if value changed. </td></tr>
@@ -1893,7 +1951,7 @@ If value was unspecified, it will be set to default. Use only for properties tha
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa65" doxytag="wxPropertyCategoryClass::RecreateEditor" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa66" doxytag="wxPropertyCategoryClass::RecreateEditor" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1923,7 +1981,7 @@ If property's editor is created this forces its recreation.
 Useful in SetAttribute etc. Returns true if actually did anything.     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa66" doxytag="wxPropertyCategoryClass::RefreshChildren" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa67" doxytag="wxPropertyCategoryClass::RefreshChildren" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1953,7 +2011,7 @@ Refresh values of child properties.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa68" doxytag="wxPropertyCategoryClass::SetAttribute" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa69" doxytag="wxPropertyCategoryClass::SetAttribute" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1998,10 +2056,10 @@ This is quite property class specific, and there are no common attributes. Note 
 </dl>
 
 <p>
-Reimplemented in <a class="el" href="classwxCustomPropertyClass.htm#wxCustomPropertyClassa66">wxCustomPropertyClass</a>.    </td>
+Reimplemented in <a class="el" href="classwxCustomPropertyClass.htm#wxCustomPropertyClassa67">wxCustomPropertyClass</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa69" doxytag="wxPropertyCategoryClass::SetAttributes" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa70" doxytag="wxPropertyCategoryClass::SetAttributes" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2032,7 +2090,7 @@ Sets attributes from a comma-delimited string.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa70" doxytag="wxPropertyCategoryClass::SetChoices" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa71" doxytag="wxPropertyCategoryClass::SetChoices" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2047,7 +2105,7 @@ Sets attributes from a comma-delimited string.
           <td class="md" nowrap align="right"></td>
           <td></td>
           <td class="md" nowrap>const wxArrayInt &amp;&nbsp;</td>
-          <td class="mdname" nowrap> <em>values</em> = wxPG_EMPTY_ARRAYINT</td>
+          <td class="mdname" nowrap> <em>values</em> = (*((wxArrayInt *) NULL))</td>
         </tr>
         <tr>
           <td></td>
@@ -2072,7 +2130,7 @@ Sets new set of choices for property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa71" doxytag="wxPropertyCategoryClass::SetChoices" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa72" doxytag="wxPropertyCategoryClass::SetChoices" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2103,7 +2161,7 @@ Sets new set of choices for property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa72" doxytag="wxPropertyCategoryClass::SetChoicesExclusive" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa73" doxytag="wxPropertyCategoryClass::SetChoicesExclusive" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2133,7 +2191,7 @@ If property has choices and they are not yet exclusive, new such copy of them wi
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa73" doxytag="wxPropertyCategoryClass::SetClientData" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa74" doxytag="wxPropertyCategoryClass::SetClientData" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2165,7 +2223,7 @@ Sets client data (void*) of a property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa74" doxytag="wxPropertyCategoryClass::SetEditor" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa75" doxytag="wxPropertyCategoryClass::SetEditor" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2174,7 +2232,7 @@ Sets client data (void*) of a property.
           <td class="md" nowrap valign="top"> void wxPGProperty::SetEditor </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">const wxString &amp;&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap> <em>editor_name</em>          </td>
+          <td class="mdname1" valign="top" nowrap> <em>editorName</em>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
           <td class="md" nowrap><code> [inline, inherited]</code></td>
         </tr>
@@ -2196,7 +2254,7 @@ Sets editor for a property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa75" doxytag="wxPropertyCategoryClass::SetEditor" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa76" doxytag="wxPropertyCategoryClass::SetEditor" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2227,7 +2285,7 @@ Sets editor for a property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa79" doxytag="wxPropertyCategoryClass::SetMaxLength" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa80" doxytag="wxPropertyCategoryClass::SetMaxLength" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2258,7 +2316,7 @@ Set max length of text editor.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa81" doxytag="wxPropertyCategoryClass::SetValidator" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa82" doxytag="wxPropertyCategoryClass::SetValidator" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2289,7 +2347,7 @@ Sets wxValidator for a property.
     </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa82" doxytag="wxPropertyCategoryClass::SetValueFromInt" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa83" doxytag="wxPropertyCategoryClass::SetValueFromInt" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2324,7 +2382,7 @@ Sets wxValidator for a property.
     <td>
 
 <p>
-Converts integer to a value, and if succesfull, calls <a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa11">DoSetValue()</a> on it. 
+Converts integer to a value, and if succesfull, calls <a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa12">DoSetValue()</a> on it. 
 <p>
 Default behaviour is to do nothing. <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -2339,10 +2397,10 @@ Default behaviour is to do nothing. <dl compact><dt><b>Parameters:</b></dt><dd>
 </dl>
 
 <p>
-Reimplemented in <a class="el" href="classwxCustomPropertyClass.htm#wxCustomPropertyClassa80">wxCustomPropertyClass</a>.    </td>
+Reimplemented in <a class="el" href="classwxCustomPropertyClass.htm#wxCustomPropertyClassa81">wxCustomPropertyClass</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa83" doxytag="wxPropertyCategoryClass::SetValueFromString" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa84" doxytag="wxPropertyCategoryClass::SetValueFromString" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2381,12 +2439,12 @@ This overridden version converts comma or semicolon separated tokens into child 
 <p>
 
 <p>
-Reimplemented from <a class="el" href="classwxPGProperty.htm#wxPGPropertya66">wxPGProperty</a>.
+Reimplemented from <a class="el" href="classwxPGProperty.htm#wxPGPropertya67">wxPGProperty</a>.
 <p>
-Reimplemented in <a class="el" href="classwxCustomPropertyClass.htm#wxCustomPropertyClassa81">wxCustomPropertyClass</a>.    </td>
+Reimplemented in <a class="el" href="classwxCustomPropertyClass.htm#wxCustomPropertyClassa82">wxCustomPropertyClass</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="wxPropertyCategoryClassa84" doxytag="wxPropertyCategoryClass::SetValueImage" ></a><p>
+<a class="anchor" name="wxPropertyCategoryClassa85" doxytag="wxPropertyCategoryClass::SetValueImage" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2419,7 +2477,7 @@ This bitmap will be ignored if property class has implemented OnCustomPaint.    
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
 <li>propgrid.h</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Sun Jul 9 22:40:44 2006 for wxPropertyGrid by
+<hr size="1"><address style="align: right;"><small>Generated on Sat Aug 12 20:44:32 2006 for wxPropertyGrid by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.6 </small></address>

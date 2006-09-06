@@ -73,6 +73,12 @@
     #define wxPG_CAN_DRAW_CURSOR           0
 #endif
 
+
+#if !defined(wxPG_ALLOW_WXADV)
+    #undef wxUSE_DATEPICKCTRL
+    #define wxUSE_DATEPICKCTRL 0
+#endif
+
 // -----------------------------------------------------------------------
 // Value type related
 // -----------------------------------------------------------------------
@@ -112,8 +118,310 @@ bool operator == (const wxArrayInt& array1, const wxArrayInt& array2)
     return true;
 }
 
-WX_PG_IMPLEMENT_VALUE_TYPE_VOIDP(wxArrayInt,wxMultiChoiceProperty,
+WX_PG_IMPLEMENT_VALUE_TYPE_VOIDP(wxArrayInt,
+                                 wxMultiChoiceProperty,
                                  wxArrayInt())
+
+#if wxUSE_DATETIME
+
+// This macro can be used for values that have built-in support in wxVariant.
+WX_PG_IMPLEMENT_VALUE_TYPE(wxDateTime,wxDateProperty,wxT("datetime"),GetDateTime,wxDateTime())
+
+#endif
+
+// -----------------------------------------------------------------------
+// wxSpinCtrl-based property editor
+// -----------------------------------------------------------------------
+
+#if wxUSE_SPINCTRL
+
+//
+// Implement an editor control that allows using wxSpinCtrl to
+// edit value of wxIntProperty (and similar).
+//
+// Note that new editor classes needs to be registered before use.
+// This can be accomplished using wxPGRegisterEditorClass macro, which
+// is used for SpinCtrl in wxPropertyContainerMethods::RegisterAdditionalEditors
+// (see below). Registeration can also be performed in a constructor of a
+// property that is likely to require the editor in question.
+//
+// KNOWN ISSUES
+// * Settings value to unspecified doesn't work properly: When such value
+//   is edited manually (ie. not by spinbutton), it is not stored. This is
+//   because we can't interprete textctrl update events here because they
+//   occur even when value is set by program. For wxTextCtrl this is handled
+//   by checking the string length (GetLocation() method), but there is
+//   no suitable API for wxSpinCtrl.
+//
+// * Limited editing mode doesn't really work because wxSpinCtrl can't
+//   be set to read-only.
+//
+
+
+#include <wx/spinctrl.h>
+
+
+// NOTE: Regardless that this class inherits from a working editor, it has
+//   all necessary methods to work independently. wxTextCtrl stuff is only
+//   used for event handling here.
+class wxPGSpinCtrlEditor : public wxPGTextCtrlEditor
+{
+    WX_PG_DECLARE_EDITOR_CLASS()
+public:
+    virtual ~wxPGSpinCtrlEditor();
+
+    // See below for short explanations of what these are suppposed to do.
+    virtual wxWindow* CreateControls( wxPropertyGrid* propgrid, wxPGProperty* property,
+        const wxPoint& pos, const wxSize& sz, wxWindow** psecondary ) const;
+    virtual void UpdateControl( wxPGProperty* property, wxWindow* wnd ) const;
+    virtual bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
+        wxWindow* wnd, wxEvent& event ) const;
+    virtual bool CopyValueFromControl( wxPGProperty* property, wxWindow* wnd ) const;
+    virtual void SetValueToUnspecified( wxWindow* wnd ) const;
+    virtual void SetControlStringValue( wxWindow* wnd, const wxString& txt ) const;
+    virtual void OnFocus( wxPGProperty* property, wxWindow* wnd ) const;
+};
+
+
+// This macro also defined global wxPGEditor_SpinCtrl for storing
+// the singleton class instance.
+WX_PG_IMPLEMENT_EDITOR_CLASS(SpinCtrl,wxPGSpinCtrlEditor,wxPGEditor)
+
+
+// Trivial destructor.
+wxPGSpinCtrlEditor::~wxPGSpinCtrlEditor()
+{
+}
+
+
+// Create controls and initialize event handling.
+wxWindow* wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxPGProperty* property,
+                                              const wxPoint& pos, const wxSize& sz, wxWindow** ) const
+{
+
+    // Get initial value (may be none if value is 'unspecified')
+    wxString text;
+    if ( !(property->GetFlags() & wxPG_PROP_UNSPECIFIED) )
+        text = property->GetValueAsString(0);
+
+    // Determine minimum and maximum
+    int min = INT_MIN;
+    int max = INT_MAX;
+
+    // If it can't translate value to int, this will fail at run-time.
+    int value = propgrid->GetPropertyValueAsInt(property);
+
+    // Use two stage creation to allow cleaner display on wxMSW
+    wxSpinCtrl* ctrl = new wxSpinCtrl();
+#ifdef __WXMSW__
+    ctrl->Hide();
+#endif
+    ctrl->Create(propgrid,wxPG_SUBID1,
+                 text,pos,sz,
+                 wxNO_BORDER|wxSP_ARROW_KEYS,
+                 // In limited editing mode, use read-only textctrl
+                 // (if possible - but its not so this is merely
+                 // an example code)
+                 //|((property->GetFlags() & wxPG_PROP_NOEDITOR)?wxTE_READONLY:0)
+                 min,max,value);
+
+    // Connect all required events to grid's OnCustomEditorEvent
+    // (all relevenat wxTextCtrl, wxComboBox and wxButton events are
+    // already connected)
+    propgrid->Connect( wxPG_SUBID1, wxEVT_COMMAND_SPINCTRL_UPDATED,
+                       (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
+                       &wxPropertyGrid::OnCustomEditorEvent );
+
+    // This centers the control in a platform dependent manner
+    propgrid->FixPosForTextCtrl( ctrl );
+
+#ifdef __WXMSW__
+    ctrl->Show();
+#endif
+
+    return ctrl;
+}
+
+// Copies value from property to control
+void wxPGSpinCtrlEditor::UpdateControl( wxPGProperty* property, wxWindow* wnd ) const
+{
+    wxSpinCtrl* ctrl = (wxSpinCtrl*) wnd;
+    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxSpinCtrl)) );
+
+    // We assume that property's data type is 'int' (or something similar),
+    // thus allowing us to get raw, unchecked value via DoGetValue.
+    ctrl->SetValue( property->DoGetValue().GetLong() );
+}
+
+// Control's events are redirected here
+bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
+                                  wxWindow* wnd, wxEvent& event ) const
+{
+    if ( event.GetEventType() == wxEVT_COMMAND_SPINCTRL_UPDATED )
+    {
+        return true;
+    }
+
+    return wxPGTextCtrlEditor::OnEvent(propgrid,property,wnd,event);
+}
+
+// Copies value from control to property
+bool wxPGSpinCtrlEditor::CopyValueFromControl( wxPGProperty* property, wxWindow* wnd ) const
+{
+    wxSpinCtrl* ctrl = (wxSpinCtrl*) wnd;
+    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxSpinCtrl)) );
+
+    return property->SetValueFromInt(ctrl->GetValue(),wxPG_FULL_VALUE);
+}
+
+// Makes control look like it has unspecified value
+void wxPGSpinCtrlEditor::SetValueToUnspecified( wxWindow* wnd ) const
+{
+    wxSpinCtrl* ctrl = (wxSpinCtrl*) wnd;
+    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxSpinCtrl)) );
+
+    ctrl->SetValue(wxEmptyString);
+}
+
+// Used when control's value is wanted to set from string source
+// (obviously, not all controls can implement this properly,
+//  but wxSpinCtrl can)
+void wxPGSpinCtrlEditor::SetControlStringValue( wxWindow* wnd, const wxString& txt ) const
+{
+    wxSpinCtrl* ctrl = (wxSpinCtrl*) wnd;
+    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxSpinCtrl)) );
+
+    ctrl->SetValue(txt);
+}
+
+void wxPGSpinCtrlEditor::OnFocus( wxPGProperty*, wxWindow* wnd ) const
+{
+    wxSpinCtrl* ctrl = (wxSpinCtrl*) wnd;
+    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxSpinCtrl)) );
+
+    ctrl->SetSelection(-1,-1);
+}
+
+#endif // wxUSE_SPINCTRL
+
+
+// -----------------------------------------------------------------------
+// wxDatePickerCtrl-based property editor
+// -----------------------------------------------------------------------
+
+#if wxUSE_DATEPICKCTRL
+
+
+#include <wx/datectrl.h>
+#include <wx/dateevt.h>
+
+class wxPGDatePickerCtrlEditor : public wxPGEditor
+{
+    WX_PG_DECLARE_EDITOR_CLASS()
+public:
+    virtual ~wxPGDatePickerCtrlEditor();
+
+    virtual wxWindow* CreateControls( wxPropertyGrid* propgrid, wxPGProperty* property,
+        const wxPoint& pos, const wxSize& sz, wxWindow** psecondary ) const;
+    virtual void UpdateControl( wxPGProperty* property, wxWindow* wnd ) const;
+    virtual bool wxPGDatePickerCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
+        wxWindow* wnd, wxEvent& event ) const;
+    virtual bool CopyValueFromControl( wxPGProperty* property, wxWindow* wnd ) const;
+    virtual void SetValueToUnspecified( wxWindow* wnd ) const;
+};
+
+
+WX_PG_IMPLEMENT_EDITOR_CLASS(DatePickerCtrl,wxPGDatePickerCtrlEditor,wxPGEditor)
+
+
+wxPGDatePickerCtrlEditor::~wxPGDatePickerCtrlEditor()
+{
+}
+
+wxWindow* wxPGDatePickerCtrlEditor::CreateControls( wxPropertyGrid* propgrid,
+                                                    wxPGProperty* property,
+                                                    const wxPoint& pos,
+                                                    const wxSize& sz,
+                                                    wxWindow** ) const
+{
+    wxASSERT_MSG( property->IsKindOf(WX_PG_CLASSINFO(wxDateProperty)),
+                  wxT("DatePickerCtrl editor can only be used with wxDateProperty or derivative.") );
+
+    wxDatePropertyClass* prop = (wxDatePropertyClass*) property;
+
+    // Use two stage creation to allow cleaner display on wxMSW
+    wxDatePickerCtrl* ctrl = new wxDatePickerCtrl();
+#ifdef __WXMSW__
+    ctrl->Hide();
+    wxSize useSz = wxDefaultSize;
+    useSz.x = sz.x;
+#else
+    wxSize useSz = sz;
+#endif
+    ctrl->Create(propgrid,
+                 wxPG_SUBID1,
+                 prop->GetDateValue(),
+                 pos,
+                 useSz,
+                 prop->GetDatePickerStyle() | wxNO_BORDER);
+
+    // Connect all required events to grid's OnCustomEditorEvent
+    // (all relevenat wxTextCtrl, wxComboBox and wxButton events are
+    // already connected)
+    propgrid->Connect( wxPG_SUBID1, wxEVT_DATE_CHANGED,
+                       (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
+                       &wxPropertyGrid::OnCustomEditorEvent );
+
+#ifdef __WXMSW__
+    ctrl->Show();
+#endif
+
+    return ctrl;
+}
+
+// Copies value from property to control
+void wxPGDatePickerCtrlEditor::UpdateControl( wxPGProperty* property, wxWindow* wnd ) const
+{
+    wxDatePickerCtrl* ctrl = (wxDatePickerCtrl*) wnd;
+    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxDatePickerCtrl)) );
+
+    // We assume that property's data type is 'int' (or something similar),
+    // thus allowing us to get raw, unchecked value via DoGetValue.
+    ctrl->SetValue( *((const wxDateTime*)property->DoGetValue().GetVoidPtr()) );
+}
+
+// Control's events are redirected here
+bool wxPGDatePickerCtrlEditor::OnEvent( wxPropertyGrid* WXUNUSED(propgrid),
+                                        wxPGProperty* WXUNUSED(property),
+                                        wxWindow* WXUNUSED(wnd),
+                                        wxEvent& event ) const
+{
+    if ( event.GetEventType() == wxEVT_DATE_CHANGED )
+        return true;
+
+    return false;
+}
+
+bool wxPGDatePickerCtrlEditor::CopyValueFromControl( wxPGProperty* property, wxWindow* wnd ) const
+{
+    wxDatePickerCtrl* ctrl = (wxDatePickerCtrl*) wnd;
+    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxDatePickerCtrl)) );
+
+    wxDatePropertyClass* prop = (wxDatePropertyClass*) property;
+    prop->SetDateValue( ctrl->GetValue() );
+
+    return true;
+}
+
+void wxPGDatePickerCtrlEditor::SetValueToUnspecified( wxWindow* WXUNUSED(wnd) ) const
+{
+    // TODO?
+    //wxDateProperty* prop = (wxDateProperty*) property;
+    //ctrl->SetValue(?);
+}
+
+#endif // wxUSE_DATEPICKCTRL
+
 
 // -----------------------------------------------------------------------
 // wxFontProperty
@@ -1290,6 +1598,161 @@ bool wxMultiChoicePropertyClass::SetValueFromString( const wxString& text, int )
 
 #endif // wxUSE_CHOICEDLG
 
+
+// -----------------------------------------------------------------------
+// wxDateProperty
+// -----------------------------------------------------------------------
+
+#if wxUSE_DATETIME
+
+
+#if wxUSE_DATEPICKCTRL
+    #define dtCtrl      DatePickerCtrl
+#else
+    #define dtCtrl      TextCtrl
+#endif
+
+WX_PG_IMPLEMENT_PROPERTY_CLASS(wxDateProperty,
+                               wxBaseProperty,
+                               wxDateTime,
+                               const wxDateTime&,
+                               dtCtrl)
+
+
+wxString wxDatePropertyClass::ms_defaultDateFormat;
+
+
+wxDatePropertyClass::wxDatePropertyClass( const wxString& label,
+                                                  const wxString& name,
+                                                  const wxDateTime& value )
+    : wxPGProperty(label,name)
+{
+    wxPGRegisterDefaultValueType(wxDateTime)
+
+#if wxUSE_DATEPICKCTRL
+    wxPGRegisterEditorClass(DatePickerCtrl);
+
+    m_dpStyle = wxDP_DEFAULT | wxDP_SHOWCENTURY;
+#else
+    m_dpStyle = 0;
+#endif
+
+    DoSetValue( (void*)&value );
+}
+
+wxDatePropertyClass::~wxDatePropertyClass()
+{
+}
+
+void wxDatePropertyClass::DoSetValue( wxPGVariant value )
+{
+    wxDateTime* pObj = (wxDateTime*)wxPGVariantToVoidPtr(value);
+    m_valueDateTime = *pObj;
+}
+
+wxPGVariant wxDatePropertyClass::DoGetValue() const
+{
+    return wxPGVariant((void*)&m_valueDateTime);
+}
+
+bool wxDatePropertyClass::SetValueFromString( const wxString& text,
+                                                  int WXUNUSED(argFlags) )
+{
+    const wxChar* c = m_valueDateTime.ParseFormat(text.c_str(),wxDefaultDateTimeFormat);
+
+    return c ? true : false;
+}
+
+wxString wxDatePropertyClass::GetValueAsString( int argFlags ) const
+{
+    const wxChar* format = (const wxChar*) NULL;
+
+    if ( !m_valueDateTime.IsValid() )
+        return wxT("Invalid");
+
+    if ( !ms_defaultDateFormat.length() )
+    {
+#if wxUSE_DATEPICKCTRL
+        bool showCentury = m_dpStyle & wxDP_SHOWCENTURY ? true : false;
+#else
+        bool showCentury = true;
+#endif
+        ms_defaultDateFormat = DetermineDefaultDateFormat( showCentury );
+    }
+
+    if ( m_format.length() &&
+         !(argFlags & wxPG_FULL_VALUE) )
+            format = m_format.c_str();
+
+    // Determine default from locale
+    // NB: This is really simple stuff, but can't figure anything
+    //     better without proper support in wxLocale
+    if ( !format )
+        format = ms_defaultDateFormat.c_str();
+
+    return m_valueDateTime.Format(format);
+}
+
+wxString wxDatePropertyClass::DetermineDefaultDateFormat( bool showCentury )
+{
+    // This code is basicly copied from datectlg.cpp's SetFormat
+    //
+    wxString format;
+
+    wxDateTime dt;
+    dt.ParseFormat(wxT("2003-10-13"), wxT("%Y-%m-%d"));
+    wxString str(dt.Format(wxT("%x")));
+
+    const wxChar *p = str.c_str();
+    while ( *p )
+    {
+        int n=wxAtoi(p);
+        if (n == dt.GetDay())
+        {
+            format.Append(wxT("%d"));
+            p += 2;
+        }
+        else if (n == (int)dt.GetMonth()+1)
+        {
+            format.Append(wxT("%m"));
+            p += 2;
+        }
+        else if (n == dt.GetYear())
+        {
+            format.Append(wxT("%Y"));
+            p += 4;
+        }
+        else if (n == (dt.GetYear() % 100))
+        {
+            if (showCentury)
+                format.Append(wxT("%Y"));
+            else
+                format.Append(wxT("%y"));
+            p += 2;
+        }
+        else
+            format.Append(*p++);
+    }
+
+    return format;
+}
+
+void wxDatePropertyClass::SetAttribute( int id, wxVariant& value )
+{
+    if ( id == wxPG_DATE_FORMAT )
+    {
+        m_format = value.GetString();
+    }
+    else if ( id == wxPG_DATE_PICKER_STYLE )
+    {
+        m_dpStyle = value.GetLong();
+        ms_defaultDateFormat.clear();  // This may need recalculation
+    }
+}
+
+#endif  // wxUSE_DATETIME
+
+
 // -----------------------------------------------------------------------
 // wxPropertyContainerMethods
 // -----------------------------------------------------------------------
@@ -1300,6 +1763,21 @@ void wxPropertyContainerMethods::InitAllTypeHandlers()
     wxPG_INIT_REQUIRED_TYPE(wxFont)
     wxPG_INIT_REQUIRED_TYPE(wxArrayInt)
     wxPG_INIT_REQUIRED_TYPE(wxColourPropertyValue)
+#if wxUSE_DATETIME
+    wxPGRegisterDefaultValueType(wxDateTime)
+#endif
+}
+
+// -----------------------------------------------------------------------
+
+void wxPropertyContainerMethods::RegisterAdditionalEditors()
+{
+#if wxUSE_SPINCTRL
+    wxPGRegisterEditorClass(SpinCtrl);
+#endif
+#if wxUSE_DATEPICKCTRL
+    wxPGRegisterEditorClass(DatePickerCtrl);
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1312,6 +1790,9 @@ void wxPropertyContainerMethods::RegisterAdvancedPropertyClasses()
     wxPGRegisterPropertyClass(wxFontProperty);
     wxPGRegisterPropertyClass(wxSystemColourProperty);
     wxPGRegisterPropertyClass(wxCursorProperty);
+#if wxUSE_DATETIME
+    wxPGRegisterPropertyClass(wxDateProperty);
+#endif
 }
 
 // -----------------------------------------------------------------------

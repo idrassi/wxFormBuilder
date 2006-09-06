@@ -32,7 +32,7 @@
 #define&nbsp;</td><td class="memItemRight" valign=bottom><b>wxPG_FULL_CUSTOM_PAINT_WIDTH</b>&nbsp;&nbsp;&nbsp;-99999</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="ga7" doxytag="miscellaneous::wxPG_INVALID_VALUE" ></a>
-#define&nbsp;</td><td class="memItemRight" valign=bottom><b>wxPG_INVALID_VALUE</b>&nbsp;&nbsp;&nbsp;2147483647</td></tr>
+#define&nbsp;</td><td class="memItemRight" valign=bottom><b>wxPG_INVALID_VALUE</b>&nbsp;&nbsp;&nbsp;INT_MAX</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__miscellaneous.htm#ga2">wxPG_LABEL</a>&nbsp;&nbsp;&nbsp;(*((wxString*)NULL))</td></tr>
 
@@ -73,9 +73,9 @@ This section describes some miscellanous values, types and macros.
     <td>
 
 <p>
-Use this with <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee10">wxPropertyGrid::IsPropertyKindOf</a>. 
+Use this with <a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee22">wxPropertyGrid::IsPropertyKindOf</a>. 
 <p>
-For example, as in <pre class="fragment"><div>        pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee10">IsPropertyKindOf</a>(<a class="code" href="group__miscellaneous.htm#ga13">WX_PG_CLASSINFO</a>(wxStringProperty))
+For example, as in <pre class="fragment"><div>        pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee22">IsPropertyKindOf</a>(<a class="code" href="group__miscellaneous.htm#ga13">WX_PG_CLASSINFO</a>(wxStringProperty))
 </div></pre>    </td>
   </tr>
 </table>
@@ -250,7 +250,7 @@ Used to tell <a class="el" href="classwxPGProperty.htm">wxPGProperty</a> to use 
 <p>
 This callback function is used by atleast wxCustomProperty to facilitiate drawing items in drop down list. 
 <p>
-Works very much like <a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa61">wxPGProperty::OnCustomPaint</a>.     </td>
+Works very much like <a class="el" href="classwxPGProperty.htm#wxPropertyCategoryClassa62">wxPGProperty::OnCustomPaint</a>.     </td>
   </tr>
 </table>
 <a class="anchor" name="ga0" doxytag="propgrid.h::wxPropertyGridCallback" ></a><p>
@@ -290,7 +290,7 @@ This callback function is used by atleast wxCustomProperty to facilitiate easy c
     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Sun Jul 9 22:40:47 2006 for wxPropertyGrid by
+<hr size="1"><address style="align: right;"><small>Generated on Sat Aug 12 20:44:33 2006 for wxPropertyGrid by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.6 </small></address>
