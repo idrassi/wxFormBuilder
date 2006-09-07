@@ -9434,9 +9434,7 @@ void wxPropertyGrid::OnChildKeyDown( wxKeyEvent &event )
 
     // Must update changes if special key was used
     // (because it may trigger closing of this app)
-    if ( event.AltDown() ||
-         event.ControlDown() ||
-         event.MetaDown() )
+    if ( event.HasModifiers() )
     {
         CommitChangesFromEditor();
     }
