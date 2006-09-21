@@ -16,7 +16,7 @@
 
 #include "Platform.h"
 #include "PlatWX.h"
-#include "wx/wxscintilla.h"
+#include "wx/wxScintilla/wxscintilla.h"
 
 
 Point Point::FromLong(long lpoint) {
