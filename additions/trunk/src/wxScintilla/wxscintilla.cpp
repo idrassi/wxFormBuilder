@@ -18,7 +18,7 @@
 #include <ctype.h>
 
 #include "ScintillaWX.h"
-#include "wx/wxscintilla.h"
+#include "wx/wxScintilla/wxscintilla.h"
 
 #include <wx/wx.h>
 #include <wx/tokenzr.h>

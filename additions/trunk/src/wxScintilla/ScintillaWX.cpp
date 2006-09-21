@@ -17,7 +17,7 @@
 #include "ScintillaWX.h"
 //?#include "ExternalLexer.h"
 #include "PlatWX.h"
-#include "wx/wxscintilla.h"
+#include "wx/wxScintilla/wxscintilla.h"
 #include <wx/textbuf.h>
 #ifdef __WXMSW__
 #include <wx/msw/private.h> // GetHwndOf()
