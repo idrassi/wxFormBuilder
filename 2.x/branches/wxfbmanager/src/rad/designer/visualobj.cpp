@@ -46,17 +46,6 @@ PVisualObject VisualObject::CreateVisualObject
 	PVisualObject vobj;
 
 	shared_ptr<ObjectInfo> obj_info = obj->GetObjectInfo();
-	wxString type = obj->GetObjectTypeName();
-
-	// TO-DO: arreglar esto!
-	//
-	// El tipo de objeto se deberá indicar en el plugin
-	// quizá sea conveniente dividir la macro COMPONENT("name",component)
-	// estas tres:
-	//   WINDOW_COMPONENT
-	//   SIZER_COMPONENT
-	//   ABSTRACT_COMPONENT
-	// y que se pueda consultar el tipo.
 
 	IComponent *comp = obj->GetObjectInfo()->GetComponent();
 
@@ -99,17 +88,6 @@ VisualSizer::VisualSizer(shared_ptr<ObjectBase> obj,wxWindow *parent)
 	IComponent *comp = obj->GetObjectInfo()->GetComponent();
 	if (comp)
 	{
-
-		/*  wxObject* yo = parent;
-		IObject *objer =  obj.get();
-		wxStaticBox* box = new wxStaticBox( (wxWindow*)yo, -1,
-		objer->GetPropertyAsString(wxT("label")));
-
-		wxStaticBoxSizer* sizer = new wxStaticBoxSizer(box,
-		objer->GetPropertyAsInteger(wxT("orient")));
-
-		SetSizer( sizer );*/
-
 		SetSizer((wxSizer *)(comp->Create(obj.get(),parent)));
 	}
 	else

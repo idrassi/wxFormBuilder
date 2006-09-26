@@ -84,6 +84,9 @@ class VisualEditor : public wxScrolledWindow
   typedef map<shared_ptr<ObjectBase>,PVisualObject> VisualObjectMap;
   VisualObjectMap m_map;
 
+  typedef map< wxObject*, shared_ptr< ObjectBase > > wxObjectMap;
+  wxObjectMap m_wxobjects;
+
   GridPanel *m_back;
 
   shared_ptr<ObjectBase> m_form;  // puntero al último form creado
@@ -91,10 +94,9 @@ class VisualEditor : public wxScrolledWindow
   DECLARE_EVENT_TABLE()
 
  protected:
-  //PVisualObject Generate(shared_ptr<ObjectBase> obj, wxWindow *parent, wxSizer *sizer,
-  //                       ObjectType parentType);
-  PVisualObject Generate(shared_ptr<ObjectBase> obj, wxWindow *parent, wxSizer *sizer,
-                         PVisualObject vobj_parent);
+  wxObject* Generate( shared_ptr< ObjectBase > obj, wxWindow* parent, wxObject* parentObject );
+  void SetupWindow( shared_ptr< ObjectBase > obj, wxWindow* window );
+  void SetupSizer( shared_ptr< ObjectBase > obj, wxSizer* sizer );
   void Create();
 
  public:

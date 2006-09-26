@@ -34,6 +34,7 @@
 #include "rad/designer/resizablepanel.h"
 #include "rad/wxfbevent.h"
 #include <rad/appdata.h>
+#include "utils/wxfbexception.h"
 
 #ifdef __WX24__
 #define wxFULL_REPAINT_ON_RESIZE 0
@@ -225,7 +226,8 @@ void VisualEditor::Create()
 				menubar = child; // guardamos el objeto del menú para crearlo después
 			else
 				// generamos recursivamente todo el arbol de objetos
-				Generate(child,m_back,NULL,PVisualObject());
+				//Generate(child,m_back,NULL,PVisualObject());
+				Generate( child, m_back, m_back );
 
 
 			// si se creó una barra de estado, guardamos el widget para configurar
@@ -287,27 +289,56 @@ void VisualEditor::Create()
 *                  a crear un sizer y resulta que el padre es un widget
 *                  hemos de establecer este como su sizer.
 */
-PVisualObject VisualEditor::Generate(shared_ptr<ObjectBase> obj, wxWindow *wxparent,
-									 wxSizer *sizer, PVisualObject vparent)//ObjectType parentType)
+wxObject* VisualEditor::Generate( shared_ptr< ObjectBase > obj, wxWindow* wxparent, wxObject* parentObject )
 {
-	// en primer lugar creamos la instancia del objeto-wx que nos ocupa
-	PVisualObject vobj(VisualObject::CreateVisualObject(obj,wxparent));
+	// Get Component
+	shared_ptr< ObjectInfo > obj_info = obj->GetObjectInfo();
 
-	if (!vobj)
-		return vobj; // no se debe dar nunca
+	IComponent* comp = obj_info->GetComponent();
 
-	IComponent *comp = obj->GetObjectInfo()->GetComponent();
 	if ( NULL == comp )
 	{
-		wxLogFatalError( wxT("Component for %s not found!"), obj->GetObjectInfo()->GetClassName().c_str() );
+		THROW_WXFBEX( wxString::Format( wxT("Component for %s not found!"), obj->GetClassName().c_str() ) );
 	}
 
-	// registramos el objeto para poder obtener la referencia a VisualObject a
-	// partir de un ObjectBase
-	m_map.insert(VisualObjectMap::value_type(obj,vobj));
+	// Create Object
+	wxObject* createdObject = comp->Create( obj.get(), wxparent );
+	wxWindow* createdWindow = NULL;
+	wxSizer*  createdSizer  = NULL;
+	switch ( comp->GetComponentType() )
+	{
+		case COMPONENT_TYPE_WINDOW:
+			createdWindow = wxDynamicCast( createdObject, wxWindow );
+			if ( NULL == createdWindow )
+			{
+				THROW_WXFBEX( wxString::Format( wxT("Component for %s was registered as a window component, but this is not a wxWindow!"), obj->GetClassName().c_str() ) );
+			}
+			SetupWindow( obj, createdWindow );
+			break;
 
-	VisualObjectAdapter obj_view(vobj); // Adaptador IObjectView para obj
+		case COMPONENT_TYPE_SIZER:
+			createdSizer = wxDynamicCast( createdObject, wxSizer );
+			if ( NULL == createdSizer )
+			{
+				THROW_WXFBEX( wxString::Format( wxT("Component for %s was registered as a sizer component, but this is not a wxSizer!"), obj->GetClassName().c_str() ) );
+			}
+			SetupSizer( obj, createdSizer );
+			break;
 
+		default:
+			break;
+	}
+
+	/// registramos el objeto para poder obtener la referencia a VisualObject a
+	/// partir de un ObjectBase
+	///m_map.insert(VisualObjectMap::value_type(obj,vobj));
+
+	// Associate the wxObject* with the shared_ptr< ObjectBase >
+	m_wxobjects.insert( wxObjectMap::value_type( createdObject, obj ) );
+
+	///VisualObjectAdapter obj_view(vobj); // Adaptador IObjectView para obj
+
+	/**
 	// Si el objeto es un widget, le añadimos el menejador de eventos para
 	// poder seleccionarlo desde el designer y que se dibujen los recuadros...
 	// FIXME: eliminar dependencias con ObjectType
@@ -320,49 +351,146 @@ PVisualObject VisualEditor::Generate(shared_ptr<ObjectBase> obj, wxWindow *wxpar
 		obj_view.Window()->PushEventHandler(
 			new VObjEvtHandler(obj_view.Window(),obj));
 	}
+	*/
 
-	// nuevo padre para las ventanas que se encuentren por debajo
-	wxWindow *new_wxparent = (obj_view.Window() ? obj_view.Window() : wxparent);
+	// new wxparent for the window's children
+	wxWindow* new_wxparent = ( createdWindow ? createdWindow : wxparent );
 
 	// Generamos recursivamente todos los hijos conservando la refenrencia
 	// del primero, ya que será pasado como parámetros en la función del
 	// plugin OnCreated.
-
+	/**
 	PVisualObject first_child;
 
 	if (obj->GetChildCount()>0)
 		first_child = Generate(obj->GetChild(0),new_wxparent,NULL,vobj);
-
-	for (unsigned int i=1; i<obj->GetChildCount() ; i++)
+	*/
+	for ( unsigned int i = 0; i < obj->GetChildCount(); i++ )
 	{
-		PVisualObject child = Generate(obj->GetChild(i),new_wxparent,NULL,vobj);
-		VisualObjectAdapter adapter(child);
+		wxObject* child = Generate( obj->GetChild( i ), new_wxparent, createdObject );
+		/**VisualObjectAdapter adapter(child);
 		if (adapter.Window() && new_wxparent->IsKindOf(CLASSINFO(wxToolBar)))
 			((wxToolBar*)new_wxparent)->AddControl((wxControl*) adapter.Window());
+		*/
 	}
 
-	// Procesamos el evento OnCreated
-	VisualObjectAdapter parent_view(vparent);
-	VisualObjectAdapter first_child_view(first_child);
+	/// Procesamos el evento OnCreated
+	///VisualObjectAdapter parent_view(vparent);
+	///VisualObjectAdapter first_child_view(first_child);
 
-	comp->OnCreated(&obj_view,new_wxparent,&parent_view, &first_child_view);
+	///comp->OnCreated(&obj_view,new_wxparent,&parent_view, &first_child_view);
 
 	// Por último, debemos asignar el sizer al widget, en los siguientes casos:
 	// 1. El objeto creado sea un sizer y el objeto padre sea una ventana.
 	// 2. No objeto padre (wxparent == m_back).
 
-	if ((obj_view.Sizer() && parent_view.Window()) || (!vparent && obj_view.Sizer()))
+	if ( createdSizer != NULL )
 	{
-		wxparent->SetSizer(obj_view.Sizer());
+		if ( wxparent == parentObject )
+		{
+			wxparent->SetSizer( createdSizer );
 
-		if (vparent)
-			obj_view.Sizer()->SetSizeHints(wxparent);
+			if ( wxparent == m_back )
+			{
+				createdSizer->SetSizeHints( wxparent );
+			}
 
-		wxparent->SetAutoLayout(true);
-		wxparent->Layout();
+			wxparent->SetAutoLayout( true );
+			wxparent->Layout();
+		}
 	}
 
-	return vobj;
+	return createdObject;
+}
+
+void VisualEditor::SetupSizer( shared_ptr< ObjectBase > obj, wxSizer* sizer )
+{
+	shared_ptr<Property> pminsize  = obj->GetProperty( wxT("minimum_size") );
+	if (pminsize)
+	{
+		wxSize minsize = TypeConv::StringToSize( pminsize->GetValue() );
+		sizer->SetMinSize( minsize );
+		sizer->Layout();
+	}
+}
+
+void VisualEditor::SetupWindow( shared_ptr< ObjectBase > obj, wxWindow* window )
+{
+	// All of the properties of the wxWindow object are applied in this function
+
+	// Position
+	wxPoint pos;
+	shared_ptr< Property > ppos = obj->GetProperty( wxT("pos") );
+	if ( ppos )
+	{
+		pos = TypeConv::StringToPoint( ppos->GetValue() );
+	}
+
+	// Size
+	wxSize size;
+	shared_ptr< Property > psize = obj->GetProperty( wxT("size") );
+	if ( psize )
+	{
+		size = TypeConv::StringToSize(psize->GetValue());
+	}
+
+	window->SetSize( pos.x, pos.y, size.GetWidth(), size.GetHeight() );
+
+	// Minimum size
+	shared_ptr< Property > pminsize = obj->GetProperty( wxT("minimum_size") );
+	if ( pminsize && !pminsize->GetValue().empty() )
+	{
+		window->SetMinSize( TypeConv::StringToSize( pminsize->GetValue() ) );
+	}
+
+	// Font
+	shared_ptr< Property > pfont = obj->GetProperty( wxT("font") );
+	if ( pfont && !pfont->GetValue().empty() )
+	{
+		window->SetFont( TypeConv::StringToFont( pfont->GetValue() ) );
+	}
+
+	// Foreground
+	shared_ptr< Property > pfg_colour = obj->GetProperty( wxT("fg") );
+	if ( pfg_colour && !pfg_colour->GetValue().empty() )
+	{
+		window->SetForegroundColour( TypeConv::StringToColour( pfg_colour->GetValue() ) );
+	}
+
+	// Background
+	shared_ptr< Property > pbg_colour = obj->GetProperty( wxT("bg") );
+	if ( pbg_colour && !pbg_colour->GetValue().empty() )
+	{
+		window->SetBackgroundColour( TypeConv::StringToColour( pbg_colour->GetValue() ) );
+	}
+
+	// Extra Style
+	shared_ptr< Property > pextra_style = obj->GetProperty( wxT("window_extra_style") );
+	if ( pextra_style )
+	{
+		window->SetExtraStyle( TypeConv::StringToInt( pextra_style->GetValue() ) );
+	}
+
+	// Enabled
+	shared_ptr< Property > penabled = obj->GetProperty( wxT("enabled") );
+	if ( penabled )
+	{
+		window->Enable( ( penabled->GetValueAsInteger() !=0 ) );
+	}
+
+	// Hidden
+	shared_ptr< Property > phidden = obj->GetProperty( wxT("hidden") );
+	if ( phidden )
+	{
+		window->Show( !phidden->GetValueAsInteger() );
+	}
+
+	// Tooltip
+	shared_ptr< Property > ptooltip = obj->GetProperty( wxT("tooltip") );
+	if ( ptooltip )
+	{
+		window->SetToolTip( ptooltip->GetValueAsString() );
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////
