@@ -87,6 +87,9 @@ class VisualEditor : public wxScrolledWindow
   typedef map< wxObject*, shared_ptr< ObjectBase > > wxObjectMap;
   wxObjectMap m_wxobjects;
 
+  typedef map< shared_ptr< ObjectBase >, wxObject* > ObjectBaseMap;
+  ObjectBaseMap m_baseobjects;
+
   GridPanel *m_back;
 
   shared_ptr<ObjectBase> m_form;  // puntero al último form creado
@@ -108,6 +111,9 @@ class VisualEditor : public wxScrolledWindow
 
   void Setup();
   void UpdateVirtualSize();
+
+  shared_ptr< ObjectBase > GetObjectBase( wxObject* wxobject );
+  wxObject* GetWxObject( shared_ptr< ObjectBase > baseobject );
 
   // Events
   void OnProjectLoaded ( wxFBEvent &event );

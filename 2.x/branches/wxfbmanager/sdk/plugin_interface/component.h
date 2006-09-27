@@ -141,6 +141,8 @@ class IComponent
                          IObjectView *parent,
                          IObjectView *first_child) = 0;
 
+  virtual void OnCreated( wxObject* wxobject, wxObject* wxparent ){};
+
   /**
    * Dada una instancia del objeto obtenemos un nodo XRC.
    */
@@ -157,49 +159,55 @@ class IComponent
   virtual ~IComponent(){}
 };
 
+class IManager
+{
+public:
+	virtual size_t GetChildCount( wxObject* wxobject ) = 0;
+	virtual wxObject* GetChild( wxObject* wxobject, size_t childIndex ) = 0;
+	virtual wxObject* GetParent( wxObject* wxobject ) = 0;
+	virtual IObject* GetIObject( wxObject* wxobject ) = 0;
+	virtual ~IManager(){}
+};
+
 #ifdef BUILD_DLL
 	#define DLL_FUNC extern "C" WXEXPORT
 #else
 	#define DLL_FUNC extern "C"
 #endif
 
-// función que nos devolverá la librería para ser usada dentro de la aplicación
-DLL_FUNC IComponentLibrary * GetComponentLibrary();
+// Function that the application calls to get the library
+DLL_FUNC IComponentLibrary* GetComponentLibrary( IManager* manager );
 
-#define BEGIN_LIBRARY()  \
+#define BEGIN_LIBRARY()  															\
 \
-extern "C" WXEXPORT IComponentLibrary * GetComponentLibrary()  \
-{ \
-  IComponentLibrary * lib = new ComponentLibrary();
+extern "C" WXEXPORT IComponentLibrary* GetComponentLibrary( IManager* manager ) 	\
+{ 																					\
+  IComponentLibrary* lib = new ComponentLibrary();
 
-/*
-#define COMPONENT(name,class)  \
-  lib->RegisterComponent(wxT(name),new class());
-*/
+#define END_LIBRARY()  \
+	return lib; }
 
-#define MACRO(name) \
-  lib->RegisterMacro(wxT(#name),name);
+#define MACRO( name ) \
+  lib->RegisterMacro( wxT(#name), name );
 
-#define SYNONYMOUS(syn,name) \
-  lib->RegisterMacroSynonymous(wxT(#syn),wxT(#name));
+#define SYNONYMOUS( syn, name ) \
+  lib->RegisterMacroSynonymous( wxT(#syn), wxT(#name) );
 
-#define END_LIBRARY()   return lib; }
-
-#define WINDOW_COMPONENT(name,class) \
-  _REGISTER_COMPONENT(name,class,COMPONENT_TYPE_WINDOW)
-
-#define SIZER_COMPONENT(name,class) \
-  _REGISTER_COMPONENT(name,class,COMPONENT_TYPE_SIZER)
-
-#define ABSTRACT_COMPONENT(name,class) \
-  _REGISTER_COMPONENT(name,class,COMPONENT_TYPE_ABSTRACT)
-
-#define _REGISTER_COMPONENT(name,class,type)  \
-  {                                     \
-    ComponentBase *c = new class();     \
-    c->__SetComponentType(type);        \
-    lib->RegisterComponent(wxT(name),c); \
+#define _REGISTER_COMPONENT( name, class, type )\
+  {                                     		\
+    ComponentBase* c = new class();     		\
+    c->__SetComponentType( type );        		\
+    c->__SetManager( manager );					\
+    lib->RegisterComponent( wxT(name), c ); 	\
   }
 
+#define WINDOW_COMPONENT( name, class ) \
+  _REGISTER_COMPONENT( name, class, COMPONENT_TYPE_WINDOW )
+
+#define SIZER_COMPONENT( name,class ) \
+  _REGISTER_COMPONENT( name, class, COMPONENT_TYPE_SIZER )
+
+#define ABSTRACT_COMPONENT( name, class ) \
+  _REGISTER_COMPONENT( name, class, COMPONENT_TYPE_ABSTRACT )
 
 #endif //__COMPONENT_H__
