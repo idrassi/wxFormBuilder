@@ -106,22 +106,46 @@ public:
 class SizerItemComponent : public ComponentBase
 {
 public:
-	void OnCreated(IObjectView *objview, wxWindow *wxparent, IObjectView *parent,
-		IObjectView *first_child)
+	void OnCreated( wxObject* wxobject, wxObject* wxparent )
 	{
-		IObject *obj = objview->Object();
-		wxSizer *sizer = parent->Sizer();
-
-		if (first_child->Window())
+		// Get parent sizer
+		wxObject* parent = GetManager()->GetParent( wxobject );
+		wxSizer* sizer = NULL;
+		if ( parent != NULL )
 		{
-			sizer->Add(first_child->Window(),
+			sizer = wxDynamicCast( parent, wxSizer );
+		}
+
+		if ( NULL == sizer )
+		{
+			wxLogError( wxT("The parent of a SizerItem is not a wxSizer - this should not be possible!") );
+			return;
+		}
+
+		// Get child window
+		wxObject* child = GetManager()->GetChild( wxobject, 0 );
+		if ( NULL == child )
+		{
+			wxLogError( wxT("The SizerItem component has no child - this should not be possible!") );
+			return;
+		}
+
+		// Get IObject for property access (for now)
+		IObject* obj = GetManager()->GetIObject( wxobject );
+
+		wxWindow* windowChild = wxDynamicCast( child, wxWindow );
+		wxWindow* sizerChild = wxDynamicCast( child, wxWindow );
+
+		if ( windowChild != NULL )
+		{
+			sizer->Add( windowChild,
 				obj->GetPropertyAsInteger(_("proportion")),
 				obj->GetPropertyAsInteger(_("flag")),
 				obj->GetPropertyAsInteger(_("border")));
 		}
-		else if (first_child->Sizer())
+		else if ( sizerChild != NULL )
 		{
-			sizer->Add(first_child->Sizer(),
+			sizer->Add( sizerChild,
 				obj->GetPropertyAsInteger(_("proportion")),
 				obj->GetPropertyAsInteger(_("flag")),
 				obj->GetPropertyAsInteger(_("border")));

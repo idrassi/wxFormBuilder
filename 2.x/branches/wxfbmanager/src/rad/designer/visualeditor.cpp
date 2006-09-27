@@ -139,6 +139,32 @@ void VisualEditor::OnResizeBackPanel (wxCommandEvent &event) //(wxSashEvent &eve
 	//event.Skip();
 }
 
+shared_ptr< ObjectBase > VisualEditor::GetObjectBase( wxObject* wxobject )
+{
+	wxObjectMap::iterator obj = m_wxobjects.find( wxobject );
+	if ( obj != m_wxobjects.end() )
+	{
+		return obj->second;
+	}
+	else
+	{
+		return shared_ptr< ObjectBase >( (ObjectBase*)NULL );
+	}
+}
+
+wxObject* VisualEditor::GetWxObject( shared_ptr< ObjectBase > baseobject )
+{
+	ObjectBaseMap::iterator obj = m_baseobjects.find( baseobject );
+	if ( obj != m_baseobjects.end() )
+	{
+		return obj->second;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
 /**
 * Crea la vista preliminar borrando la previa.
 */
@@ -162,6 +188,9 @@ void VisualEditor::Create()
 
 	// limpiamos el registro de objetos del editor
 	m_map.clear();
+	m_wxobjects.clear();
+	m_baseobjects.clear();
+
 
 	if (m_form)
 	{
@@ -335,6 +364,7 @@ wxObject* VisualEditor::Generate( shared_ptr< ObjectBase > obj, wxWindow* wxpare
 
 	// Associate the wxObject* with the shared_ptr< ObjectBase >
 	m_wxobjects.insert( wxObjectMap::value_type( createdObject, obj ) );
+	m_baseobjects.insert( ObjectBaseMap::value_type( obj, createdObject ) );
 
 	///VisualObjectAdapter obj_view(vobj); // Adaptador IObjectView para obj
 
@@ -379,6 +409,8 @@ wxObject* VisualEditor::Generate( shared_ptr< ObjectBase > obj, wxWindow* wxpare
 	///VisualObjectAdapter first_child_view(first_child);
 
 	///comp->OnCreated(&obj_view,new_wxparent,&parent_view, &first_child_view);
+
+	comp->OnCreated( createdObject, new_wxparent );
 
 	// Por último, debemos asignar el sizer al widget, en los siguientes casos:
 	// 1. El objeto creado sea un sizer y el objeto padre sea una ventana.
