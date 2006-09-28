@@ -141,7 +141,7 @@ class IComponent
                          IObjectView *parent,
                          IObjectView *first_child) = 0;
 
-  virtual void OnCreated( wxObject* wxobject, wxObject* wxparent ){};
+  virtual void OnCreated( wxObject* wxobject, wxWindow* wxparent ){};
 
   /**
    * Dada una instancia del objeto obtenemos un nodo XRC.
