@@ -883,7 +883,7 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, shared_ptr< wxFBM
 	m_libs.push_back( library );
 
 	// Find the GetComponentLibrary function - all plugins must implement this
-	typedef IComponentLibrary* (*PFGetComponentLibrary)( wxFBManager* manager );
+	typedef IComponentLibrary* (*PFGetComponentLibrary)( IManager* manager );
 	PFGetComponentLibrary GetComponentLibrary =	(PFGetComponentLibrary)library->GetSymbol( wxT("GetComponentLibrary") );
 
 	if ( !GetComponentLibrary )
@@ -894,7 +894,7 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, shared_ptr< wxFBM
 	Debug::Print( wxT("[Database::ImportComponentLibrary] Importing %s library"), path.c_str() );
 
 	// Get the component library
-	IComponentLibrary* comp_lib = GetComponentLibrary( manager.get() );
+	IComponentLibrary* comp_lib = GetComponentLibrary( (IManager*)manager.get() );
 
 	// Import all of the components
 	for ( unsigned int i = 0; i < comp_lib->GetComponentCount(); i++ )

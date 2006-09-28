@@ -800,12 +800,13 @@ public:
 		return tb;
 	}
 
-	void OnCreated(IObjectView *objview, wxWindow *wxparent, IObjectView *parent,
-		IObjectView *first_child)
+	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
 	{
-		wxToolBar *tb = (wxToolBar*) objview->Window();
-		wxASSERT(tb->IsKindOf(CLASSINFO(wxToolBar)));
-		tb->Realize();
+		wxToolBar* tb = wxDynamicCast( wxobject, wxToolBar );
+		if ( NULL != tb )
+		{
+			tb->Realize();
+		}
 	}
 
 	TiXmlElement* ExportToXrc(IObject *obj)

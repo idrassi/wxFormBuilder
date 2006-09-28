@@ -263,16 +263,16 @@ void VisualEditor::Create()
 			// el "frame"
 			if (child->GetClassName() == wxT("wxStatusBar") )
 			{
-				VisualObjectMap::iterator it = m_map.find(child);
-				statusbar = shared_dynamic_cast<VisualWindow>(it->second)->GetWindow();
+				ObjectBaseMap::iterator it = m_map.find(child);
+				statusbar = wxDynamicCast( it->second, wxStatusBar );
 			}
 
 			// si se creó una barra de herramientas, guardamos el widget para configurar
 			// el "frame"
 			if (child->GetClassName() == wxT("wxToolBar") )
 			{
-				VisualObjectMap::iterator it = m_map.find(child);
-				toolbar = shared_dynamic_cast<VisualWindow>(it->second)->GetWindow();
+				ObjectBaseMap::iterator it = m_baseobjects.find( child );
+				toolbar = wxDynamicCast( it->second, wxToolBar );
 			}
 		}
 
@@ -397,7 +397,7 @@ wxObject* VisualEditor::Generate( shared_ptr< ObjectBase > obj, wxWindow* wxpare
 	*/
 	for ( unsigned int i = 0; i < obj->GetChildCount(); i++ )
 	{
-		wxObject* child = Generate( obj->GetChild( i ), new_wxparent, createdObject );
+		Generate( obj->GetChild( i ), new_wxparent, createdObject );
 		/**VisualObjectAdapter adapter(child);
 		if (adapter.Window() && new_wxparent->IsKindOf(CLASSINFO(wxToolBar)))
 			((wxToolBar*)new_wxparent)->AddControl((wxControl*) adapter.Window());
@@ -422,12 +422,12 @@ wxObject* VisualEditor::Generate( shared_ptr< ObjectBase > obj, wxWindow* wxpare
 		{
 			wxparent->SetSizer( createdSizer );
 
-			if ( wxparent == m_back )
+			/*if ( wxparent == m_back )
 			{
 				createdSizer->SetSizeHints( wxparent );
-			}
+			}*/
 
-			wxparent->SetAutoLayout( true );
+			//wxparent->SetAutoLayout( true );
 			wxparent->Layout();
 		}
 	}
