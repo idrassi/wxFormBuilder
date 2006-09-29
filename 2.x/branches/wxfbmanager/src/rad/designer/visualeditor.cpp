@@ -170,65 +170,63 @@ wxObject* VisualEditor::GetWxObject( shared_ptr< ObjectBase > baseobject )
 */
 void VisualEditor::Create()
 {
-	bool need_fit = false;
-	shared_ptr<ObjectBase> menubar;
-	wxWindow *statusbar = NULL;
-	wxWindow *toolbar = NULL;
+	if ( IsShown() )
+	{
+		Freeze(); // Prevent flickering
+	}
 
-	m_form = AppData()->GetSelectedForm();
-
-	if (IsShown()) Freeze(); // congelamos para evitar el flickering
-
-	// borramos la información previa del editor
+	// Clear selections, delete objects
 	m_back->SetSelectedItem(NULL);
 	m_back->SetSelectedSizer(NULL);
 	m_back->SetSelectedObject(shared_ptr<ObjectBase>());
 	m_back->DestroyChildren();
-	m_back->SetSizer(NULL); // *!*
+	m_back->SetSizer( NULL ); // *!*
 
-	// limpiamos el registro de objetos del editor
-	m_map.clear();
+	// Clear all associations between ObjectBase and wxObjects
 	m_wxobjects.clear();
 	m_baseobjects.clear();
 
-
-	if (m_form)
+	m_form = AppData()->GetSelectedForm();
+	if ( m_form )
 	{
 
-		// --- [1] Configuramos el tamaño del form ---------------------------
-		shared_ptr<Property> pminsize(m_form->GetProperty( wxT("minimum_size") ) );
-		if(pminsize)
+		// --- [1] Configure the size of the form ---------------------------
+		bool need_fit = false;
+
+		shared_ptr<Property> pminsize( m_form->GetProperty( wxT("minimum_size") ) );
+		if( pminsize)
 		{
-			wxSize minsize(TypeConv::StringToSize(pminsize->GetValue()));
+			wxSize minsize( TypeConv::StringToSize( pminsize->GetValue() ) );
 			m_back->SetMinSize( minsize );
 		}
-		shared_ptr<Property> psize(m_form->GetProperty( wxT("size")));
-		if (psize)
+
+		shared_ptr<Property> psize( m_form->GetProperty( wxT("size") ) );
+		if ( psize )
 		{
-			wxSize wsize(TypeConv::StringToSize(psize->GetValue()));
+			wxSize wsize( TypeConv::StringToSize( psize->GetValue() ) );
+
 			wxSize minsize = m_back->GetMinSize();
 			int height = wsize.GetHeight();
 			height = ( height >= minsize.GetHeight() ) ? height : minsize.GetHeight();
 
 			int width = wsize.GetWidth();
 			width = ( width >= minsize.GetWidth() ) ? width : minsize.GetWidth();
+
 			m_back->SetSize( width, height );
 
 			if ( -1 == height || -1 == width )
 			{
-				// si el tamaño es el predeterminado, haremos un Fit() al final para
-				// que se ajuste según los componentes
+				// If the size is the default, call Fit() to fit to the components
 				need_fit = true;
 			}
 		}
 		else
 		{
-			//m_back->SetSize(350,200);
-			m_back->SetSize(wxDefaultSize);
+			m_back->SetSize( wxDefaultSize );
 			need_fit = true;
 		}
 
-		// --- [2] Emulamos el color del form -------------------------------
+		// --- [2] Set the color of the form -------------------------------
 		shared_ptr<Property> background( m_form->GetProperty( wxT("bg") ) );
 		if ( background && !background->GetValue().empty() )
 		{
@@ -236,39 +234,53 @@ void VisualEditor::Create()
 		}
 		else
 		{
-			if (m_form->GetClassName() == wxT("Frame") )
+			if ( m_form->GetClassName() == wxT("Frame") )
 			{
-				m_back->SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
+				m_back->SetOwnBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_APPWORKSPACE ) );
 			}
 			else
 			{
-				m_back->SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+				m_back->SetOwnBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 			}
 		}
 
-		// --- [3] Creamos los componentes del form -------------------------
-		for (unsigned int i=0; i < m_form->GetChildCount(); i++)
+		// --- [3] Create the components of the form -------------------------
+
+		// Used to save frame objects for later display
+		shared_ptr<ObjectBase> menubar;
+		wxWindow* statusbar = NULL;
+		wxWindow* toolbar = NULL;
+
+		for ( unsigned int i = 0; i < m_form->GetChildCount(); i++ )
 		{
-			shared_ptr<ObjectBase> child = m_form->GetChild(i);
+			shared_ptr<ObjectBase> child = m_form->GetChild( i );
 
 			if (child->GetObjectTypeName() == wxT("menubar") )
-				menubar = child; // guardamos el objeto del menú para crearlo después
-			else
-				// generamos recursivamente todo el arbol de objetos
-				//Generate(child,m_back,NULL,PVisualObject());
-				Generate( child, m_back, m_back );
-
-
-			// si se creó una barra de estado, guardamos el widget para configurar
-			// el "frame"
-			if (child->GetClassName() == wxT("wxStatusBar") )
 			{
-				ObjectBaseMap::iterator it = m_map.find(child);
+				// Create the menubar later
+				menubar = child;
+			}
+			else
+			{
+				// Recursively generate the ObjectTree
+				try
+				{
+					Generate( child, m_back, m_back );
+				}
+				catch ( wxFBException& ex )
+				{
+					wxLogError ( ex.what() );
+				}
+			}
+
+			// Attach the status bar (if any) to the frame
+			if ( child->GetClassName() == wxT("wxStatusBar") )
+			{
+				ObjectBaseMap::iterator it = m_baseobjects.find(child);
 				statusbar = wxDynamicCast( it->second, wxStatusBar );
 			}
 
-			// si se creó una barra de herramientas, guardamos el widget para configurar
-			// el "frame"
+			// Attach the toolbar (if any) to the frame
 			if (child->GetClassName() == wxT("wxToolBar") )
 			{
 				ObjectBaseMap::iterator it = m_baseobjects.find( child );
@@ -279,10 +291,14 @@ void VisualEditor::Create()
 		m_back->Layout();
 
 		if ( need_fit && m_back->GetSizer() )
-			m_back->GetSizer()->Fit(m_back);
+		{
+			m_back->GetSizer()->Fit( m_back );
+		}
 
-		if (menubar || statusbar || toolbar)
-			m_back->SetFrameWidgets(menubar, toolbar, statusbar);
+		if ( menubar || statusbar || toolbar )
+		{
+			m_back->SetFrameWidgets( menubar, toolbar, statusbar );
+		}
 
 		shared_ptr<Property> enabled( m_form->GetProperty( wxT("enabled") ) );
 		if ( enabled )
@@ -298,31 +314,31 @@ void VisualEditor::Create()
 	}
 	else
 	{
-		// no hay form que mostrar
+		// There is no form to display
 		m_back->SetSize(10,10);
-		m_back->SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+		m_back->SetOwnBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	}
 
-	if (IsShown()) Thaw();
+	if ( IsShown() )
+	{
+		Thaw();
+	}
+
 	UpdateVirtualSize();
 }
 
 
 /**
-* ALGORITMO PARA GENERAR LA VISTA PRELIMINAR
+* Generates wxObjects from ObjectBase
 *
-* @param obj ObjectBase a generar.
-* @param parent wxWindow padre, necesario para instanciar un widget.
-* @param sizer sizer más próximo, para poder incluir el objeto creado.
-* @param is_widget indica si el objeto padre es un widget o no. Si vamos
-*                  a crear un sizer y resulta que el padre es un widget
-*                  hemos de establecer este como su sizer.
+* @param obj ObjectBase to generate.
+* @param parent wxWindow parent, necessary to instantiate a widget.
+* @param parentObject ObjectBase parent - not always the same as the wxparent (e.g. an abstract component).
 */
 wxObject* VisualEditor::Generate( shared_ptr< ObjectBase > obj, wxWindow* wxparent, wxObject* parentObject )
 {
 	// Get Component
 	shared_ptr< ObjectInfo > obj_info = obj->GetObjectInfo();
-
 	IComponent* comp = obj_info->GetComponent();
 
 	if ( NULL == comp )
@@ -357,10 +373,6 @@ wxObject* VisualEditor::Generate( shared_ptr< ObjectBase > obj, wxWindow* wxpare
 		default:
 			break;
 	}
-
-	/// registramos el objeto para poder obtener la referencia a VisualObject a
-	/// partir de un ObjectBase
-	///m_map.insert(VisualObjectMap::value_type(obj,vobj));
 
 	// Associate the wxObject* with the shared_ptr< ObjectBase >
 	m_wxobjects.insert( wxObjectMap::value_type( createdObject, obj ) );
@@ -539,141 +551,122 @@ void VisualEditor::OnProjectSaved  ( wxFBEvent &event )
 
 void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 {
-  PObjectBase obj = event.GetFBObject();
-
-  // sólo es necesario regenerar la vista si el objeto
-	// seleccionado pertenece a otro form
-	if (AppData()->GetSelectedForm() != m_form)
-		Create();
-
-	// Asignamos el widget y el sizer para mostrar el recuadro
-
-	PVisualObject visualObj;
-	shared_ptr<ObjectBase> objAuxCt, objAuxNb, objAux;
-	VisualObjectMap::iterator it = m_map.find(obj);
-
-	if (it != m_map.end())
+	// It is only necessary to Create() if the selected object is on a different form
+	if ( AppData()->GetSelectedForm() != m_form )
 	{
-		wxWindow *selPanel = NULL;
-		visualObj = it->second;
+		Create();
+	}
 
-		// 1. Buscar el panel activo, sobre este es donde se dibujarán los recuadros
-		//    en el evento OnPaint.
-		// buscamos hacia arriba el objeto más cercano cuyo componente sea
-		// de tipo WINDOW.
+	// Get the ObjectBase from the event
+	shared_ptr< ObjectBase > obj = event.GetFBObject();
+	if ( !obj )
+	{
+		// Strange...
+		return;
+	}
 
-		//objAuxCt = obj->FindNearAncestor("container");
-		//objAuxNb = obj->FindNearAncestor("notebook");
-		//if (!objAuxCt)
-		//  objAux = objAuxNb;
-		//else if (!objAuxNb)
-		//  objAux = objAuxCt;
-		//else
-		//  objAux = objAuxNb->Deep() > objAuxCt->Deep() ? objAuxNb : objAuxCt;
+	// Make sure this is a visible object
+	ObjectBaseMap::iterator it = m_baseobjects.find( obj );
+	if ( m_baseobjects.end() == it )
+	{
+		// No wxObject associated with this ObjectBase
+		m_back->SetSelectedSizer( NULL );
+		m_back->SetSelectedItem( NULL );
+		m_back->SetSelectedObject( shared_ptr<ObjectBase>() );
+		m_back->SetSelectedPanel( NULL );
+		m_back->Refresh();
+		return;
+	}
 
-		objAux = obj->GetParent();
-		while (objAux)
+	// Save wxobject
+	wxObject* item = it->second;
+
+	// Look for the active panel - this is where the boxes will be drawn during OnPaint
+	// This is the closest parent of type COMPONENT_TYPE_WINDOW
+	shared_ptr< ObjectBase > nextParent = obj->GetParent();
+	while ( nextParent )
+	{
+		IComponent* parentComp = nextParent->GetObjectInfo()->GetComponent();
+		if ( !parentComp )
 		{
-			IComponent *compAux = objAux->GetObjectInfo()->GetComponent();
-			if (!compAux)
-			{
-				objAux.reset();
-				break;
-			}
-
-			if (compAux->GetComponentType() == COMPONENT_TYPE_WINDOW)
-				break;
-
-			objAux = objAux->GetParent();
+			nextParent.reset();
+			break;
 		}
 
-		if (objAux)  // Un padre de tipo T_WIDGET es siempre un contenedor
+		if ( parentComp->GetComponentType() == COMPONENT_TYPE_WINDOW )
 		{
-			it = m_map.find(objAux);
-			selPanel = shared_dynamic_cast<VisualWindow>(it->second)->GetWindow();
+			break;
+		}
+
+		nextParent = nextParent->GetParent();
+	}
+
+	// Get the panel to draw on
+	wxWindow* selPanel = NULL;
+	if ( nextParent )
+	{
+		it = m_baseobjects.find( nextParent );
+		if ( m_baseobjects.end() == it )
+		{
+			selPanel = m_back;
 		}
 		else
-			selPanel = m_back;
-
-		// 2. Buscar el item
-		wxObject *item = NULL;
-		wxSizer *sizer = NULL;
-		wxString typeName = obj->GetObjectTypeName();
-
-		int componentType = COMPONENT_TYPE_ABSTRACT;
-		IComponent *comp = obj->GetObjectInfo()->GetComponent();
-		if (comp)
-			componentType = comp->GetComponentType();
-
-		//if ( typeName == "widget" || typeName == "container" ||
-		//     typeName == "notebook" || typeName == "statusbar")
-		if (componentType == COMPONENT_TYPE_WINDOW)
-			item = shared_dynamic_cast<VisualWindow>(visualObj)->GetWindow();
-
-		//else if (typeName == "sizer")
-		else if (componentType == COMPONENT_TYPE_SIZER)
-			item = shared_dynamic_cast<VisualSizer>(visualObj)->GetSizer();
-
-		// 3. Buscar el sizer.
-		// lo que se hace a continuación es buscar el objeto más próximo que sea
-		// un componente WINDOW o un componente SIZER y en el caso de ser un
-		// sizer lo guardamos.
-
-		//objAux = obj->FindNearAncestor("sizer");
-		//objAuxCt = obj->FindNearAncestor("container");
-		//if (objAux && (!objAuxCt || objAux->Deep() > objAuxCt->Deep()))
-		//{
-		//  it = m_map.find(objAux);
-		//  sizer = shared_dynamic_cast<VisualSizer>(it->second)->GetSizer();
-		//}
-
-		objAux = obj->GetParent();
-		while (objAux)
 		{
-			IComponent *compAux = objAux->GetObjectInfo()->GetComponent();
-			if (!compAux)
-				break;
-
-			if (compAux->GetComponentType() == COMPONENT_TYPE_SIZER)
-			{
-				it = m_map.find(objAux);
-				sizer = shared_dynamic_cast<VisualSizer>(it->second)->GetSizer();
-				break;
-			}
-			else if (compAux->GetComponentType() == COMPONENT_TYPE_WINDOW)
-				break;
-
-			objAux = objAux->GetParent();
+			selPanel = wxDynamicCast( it->second, wxWindow );
 		}
-
-
-		m_back->SetSelectedSizer(sizer);
-		m_back->SetSelectedItem(item);
-		m_back->SetSelectedObject(obj);
-		m_back->SetSelectedPanel(selPanel);
-		m_back->Refresh();
 	}
 	else
 	{
-		m_back->SetSelectedSizer(NULL);
-		m_back->SetSelectedItem(NULL);
-		m_back->SetSelectedObject(shared_ptr<ObjectBase>());
-		m_back->SetSelectedPanel(NULL);
-		m_back->Refresh();
+		selPanel = m_back;
 	}
+
+	// Find the first COMPONENT_TYPE_WINDOW or COMPONENT_TYPE_SIZER
+	// If it is a sizer, save it
+	wxSizer* sizer = NULL;
+	shared_ptr< ObjectBase > nextObj = obj->GetParent();
+	while ( nextObj )
+	{
+		IComponent* nextComp = nextObj->GetObjectInfo()->GetComponent();
+		if ( !nextComp )
+		{
+			break;
+		}
+
+		if ( nextComp->GetComponentType() == COMPONENT_TYPE_SIZER )
+		{
+			it = m_baseobjects.find( nextObj );
+			if ( it != m_baseobjects.end() )
+			{
+				sizer = wxDynamicCast( it->second, wxSizer );
+			}
+			break;
+		}
+		else if ( nextComp->GetComponentType() == COMPONENT_TYPE_WINDOW )
+		{
+			break;
+		}
+
+		nextObj = nextObj->GetParent();
+	}
+
+	m_back->SetSelectedSizer( sizer );
+	m_back->SetSelectedItem( item );
+	m_back->SetSelectedObject( obj );
+	m_back->SetSelectedPanel( selPanel );
+	m_back->Refresh();
 }
 
-void VisualEditor::OnObjectCreated ( wxFBObjectEvent &event )
+void VisualEditor::OnObjectCreated( wxFBObjectEvent &event )
 {
-  Create();
+	Create();
 }
 
-void VisualEditor::OnObjectRemoved ( wxFBObjectEvent &event )
+void VisualEditor::OnObjectRemoved( wxFBObjectEvent &event )
 {
-  Create();
+	Create();
 }
 
-void VisualEditor::OnPropertyModified ( wxFBPropertyEvent &event )
+void VisualEditor::OnPropertyModified( wxFBPropertyEvent &event )
 {
     PObjectBase aux = m_back->GetSelectedObject();
 	Create();
@@ -684,7 +677,7 @@ void VisualEditor::OnPropertyModified ( wxFBPropertyEvent &event )
 
 void VisualEditor::OnProjectRefresh ( wxFBEvent &event)
 {
-  Create();
+	Create();
 }
 
 BEGIN_EVENT_TABLE(GridPanel, ResizablePanel) //wxSashWindow)

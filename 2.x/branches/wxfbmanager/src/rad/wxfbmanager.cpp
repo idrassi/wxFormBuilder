@@ -1,6 +1,6 @@
 #include "wxfbmanager.h"
-#include "designer\visualeditor.h"
-#include "model\objectbase.h"
+#include "designer/visualeditor.h"
+#include "model/objectbase.h"
 
 wxFBManager::wxFBManager()
 :
