@@ -81,9 +81,6 @@ class wxFBObjectEvent;
 class VisualEditor : public wxScrolledWindow
 {
  private:
-  typedef map<shared_ptr<ObjectBase>,PVisualObject> VisualObjectMap;
-  VisualObjectMap m_map;
-
   typedef map< wxObject*, shared_ptr< ObjectBase > > wxObjectMap;
   wxObjectMap m_wxobjects;
 

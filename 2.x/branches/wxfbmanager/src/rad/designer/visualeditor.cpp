@@ -551,6 +551,7 @@ void VisualEditor::OnProjectSaved  ( wxFBEvent &event )
 
 void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 {
+	wxLogDebug( _("yo") );
 	// It is only necessary to Create() if the selected object is on a different form
 	if ( AppData()->GetSelectedForm() != m_form )
 	{
@@ -562,6 +563,7 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 	if ( !obj )
 	{
 		// Strange...
+		wxLogDebug( _("The event object is NULL - why?") );
 		return;
 	}
 
@@ -569,7 +571,7 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 	ObjectBaseMap::iterator it = m_baseobjects.find( obj );
 	if ( m_baseobjects.end() == it )
 	{
-		// No wxObject associated with this ObjectBase
+		wxLogDebug( _("No wxObject associated with this ObjectBase") );
 		m_back->SetSelectedSizer( NULL );
 		m_back->SetSelectedItem( NULL );
 		m_back->SetSelectedObject( shared_ptr<ObjectBase>() );
@@ -581,6 +583,18 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 	// Save wxobject
 	wxObject* item = it->second;
 
+	int componentType = COMPONENT_TYPE_ABSTRACT;
+	IComponent *comp = obj->GetObjectInfo()->GetComponent();
+	if ( comp )
+	{
+		componentType = comp->GetComponentType();
+	}
+
+	if ( componentType != COMPONENT_TYPE_WINDOW && componentType != COMPONENT_TYPE_SIZER )
+	{
+		item = NULL;
+	}
+
 	// Look for the active panel - this is where the boxes will be drawn during OnPaint
 	// This is the closest parent of type COMPONENT_TYPE_WINDOW
 	shared_ptr< ObjectBase > nextParent = obj->GetParent();
@@ -589,12 +603,14 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 		IComponent* parentComp = nextParent->GetObjectInfo()->GetComponent();
 		if ( !parentComp )
 		{
+			wxLogDebug( _("!parentComp") );
 			nextParent.reset();
 			break;
 		}
 
 		if ( parentComp->GetComponentType() == COMPONENT_TYPE_WINDOW )
 		{
+			wxLogDebug( _("nextParent = COMPONENT_TYPE_WINDOW") );
 			break;
 		}
 
@@ -609,14 +625,17 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 		if ( m_baseobjects.end() == it )
 		{
 			selPanel = m_back;
+			wxLogDebug( _("nextParent is not visual") );
 		}
 		else
 		{
 			selPanel = wxDynamicCast( it->second, wxWindow );
+			wxLogDebug( _("selPanel should be good %i"), (int)selPanel );
 		}
 	}
 	else
 	{
+		wxLogDebug( _("nextParent was empty") );
 		selPanel = m_back;
 	}
 
@@ -629,6 +648,7 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 		IComponent* nextComp = nextObj->GetObjectInfo()->GetComponent();
 		if ( !nextComp )
 		{
+			wxLogDebug( _("nextComp is null") );
 			break;
 		}
 
@@ -638,11 +658,13 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 			if ( it != m_baseobjects.end() )
 			{
 				sizer = wxDynamicCast( it->second, wxSizer );
+				wxLogDebug( _("sizer should be good %i"), sizer );
 			}
 			break;
 		}
 		else if ( nextComp->GetComponentType() == COMPONENT_TYPE_WINDOW )
 		{
+			wxLogDebug( _("nextComp is COMPONENT_TYPE_WINDOW") );
 			break;
 		}
 
@@ -650,9 +672,13 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 	}
 
 	m_back->SetSelectedSizer( sizer );
+	wxLogDebug( _("selected sizer %i"), sizer );
 	m_back->SetSelectedItem( item );
+	wxLogDebug( _("selected item %i"), item );
 	m_back->SetSelectedObject( obj );
+	wxLogDebug( _("selected obj %i"), obj.get() );
 	m_back->SetSelectedPanel( selPanel );
+	wxLogDebug( _("selected panel %i"), selPanel );
 	m_back->Refresh();
 }
 
@@ -726,9 +752,10 @@ void GridPanel::HighlightSelection(wxDC& dc)
 {
 	wxSize size;
 	shared_ptr<ObjectBase> object = m_selObj.lock();
-
+	wxLogDebug( _("highlight") );
 	if (m_selSizer)
 	{
+		wxLogDebug( _("selsizer %i"), m_selSizer );
 		wxPoint point = m_selSizer->GetPosition();
 		size = m_selSizer->GetSize();
 		wxPen bluePen(*wxBLUE, 1, wxSOLID);
@@ -736,10 +763,14 @@ void GridPanel::HighlightSelection(wxDC& dc)
 		dc.SetBrush(*wxTRANSPARENT_BRUSH);
 		shared_ptr<ObjectBase> sizerParent = object->FindNearAncestor( wxT("sizer") );
 		if (sizerParent && sizerParent->GetParent())
+		{
+			wxLogDebug( _("sizerParent and sizerParent->GetParent") );
 			DrawRectangle(dc, point, size, sizerParent);
+		}
 	}
 	if (m_selItem)
 	{
+		wxLogDebug( _("selitem %i"), m_selItem );
 		wxPoint point;
 		bool shown;
 
@@ -752,24 +783,27 @@ void GridPanel::HighlightSelection(wxDC& dc)
 
 		if (m_selItem->IsKindOf(CLASSINFO(wxWindow)))
 		{
+			wxLogDebug( _("wxwindow %i"), m_selItem );
 			point = ((wxWindow*)m_selItem)->GetPosition();
 			size = ((wxWindow*)m_selItem)->GetSize();
 			shown = ((wxWindow*)m_selItem)->IsShown();
 		}
 		else if (m_selItem->IsKindOf(CLASSINFO(wxSizer)))
 		{
+			wxLogDebug( _("wxsizer %i"), m_selItem );
 			point = ((wxSizer*)m_selItem)->GetPosition();
 			size = ((wxSizer*)m_selItem)->GetSize();
 			shown = true;
 		}
 		else
 		{
-			Debug::Print( wxT("Unknown class: %s"), m_selItem->GetClassInfo()->GetClassName());
+			wxLogDebug( wxT("Unknown class: %s"), m_selItem->GetClassInfo()->GetClassName());
 			return;
 		}
 
 		if (shown)
 		{
+			wxLogDebug( _("shown") );
 			wxPen redPen(*wxRED, 1, wxSOLID);
 			dc.SetPen(redPen);
 			dc.SetBrush(*wxTRANSPARENT_BRUSH);
@@ -885,8 +919,10 @@ void GridPanel::OnPaint(wxPaintEvent &event)
 		for (int j=0;j<size.GetHeight();j += m_y)
 			dc.DrawPoint(i-1,j-1);
 
-	if (m_actPanel != this) return;
-	HighlightSelection(dc);
+	if ( m_actPanel == this )
+	{
+		HighlightSelection( dc );
+	}
 }
 /*
 void GridPanel::OnMouseMove(wxMouseEvent &event)
