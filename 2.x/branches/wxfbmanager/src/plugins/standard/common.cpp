@@ -837,15 +837,22 @@ public:
 class ToolComponent : public ComponentBase
 {
 public:
-	wxObject* Create(IObject *obj, wxObject *parent)
+
+	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
 	{
-		wxToolBar *tb = (wxToolBar*) parent;
-		tb->AddTool(wxID_HIGHEST + 200,
+		wxToolBar* tb = wxDynamicCast( wxparent, wxToolBar );
+		if ( NULL == tb )
+		{
+			wxLogError( _("The parent of a ToolComponent is not a wxToolBar - this should not be possible!") );
+			return;
+		}
+
+		IObject* obj = GetManager()->GetIObject( wxobject );
+
+		tb->AddTool( wxID_HIGHEST + 200,
 			obj->GetPropertyAsString(_("label")),
 			obj->GetPropertyAsBitmap(_("bitmap")),
 			obj->GetPropertyAsString(_("help")));
-
-		return NULL;
 	}
 
 	TiXmlElement* ExportToXrc(IObject *obj)
@@ -853,7 +860,7 @@ public:
 		ObjectToXrcFilter xrc(obj, _("tool"), obj->GetPropertyAsString(_("name")));
 		xrc.AddWindowProperties();
 		xrc.AddProperty(_("label"), _("label"), XRC_TYPE_TEXT);
-    xrc.AddProperty(_("bitmap"), _("bitmap"), XRC_TYPE_BITMAP);
+		xrc.AddProperty(_("bitmap"), _("bitmap"), XRC_TYPE_BITMAP);
 		return xrc.GetXrcObject();
 	}
 
@@ -862,7 +869,7 @@ public:
 		XrcToXfbFilter filter(xrcObj, _("tool"));
 		filter.AddWindowProperties();
 		filter.AddProperty(_("label"), _("label"), XRC_TYPE_TEXT);
-    filter.AddProperty(_("bitmap"), _("bitmap"), XRC_TYPE_BITMAP);
+		filter.AddProperty(_("bitmap"), _("bitmap"), XRC_TYPE_BITMAP);
 		return filter.GetXfbObject();
 	}
 };
@@ -1007,7 +1014,6 @@ WINDOW_COMPONENT("wxListBox", ListBoxComponent)
 WINDOW_COMPONENT("wxRadioBox", RadioBoxComponent)
 WINDOW_COMPONENT("wxCheckBox", CheckBoxComponent)
 WINDOW_COMPONENT("wxStaticBitmap", StaticBitmapComponent)
-//WINDOW_COMPONENT("wxXpmStaticBitmap", XpmStaticBitmapComponent)
 WINDOW_COMPONENT("wxStaticLine", StaticLineComponent)
 WINDOW_COMPONENT("wxMenuBar", MenuBarComponent)
 WINDOW_COMPONENT("wxMenu", MenuComponent)
@@ -1017,7 +1023,7 @@ WINDOW_COMPONENT("separator", SeparatorComponent)
 WINDOW_COMPONENT("wxListCtrl", ListCtrlComponent)
 WINDOW_COMPONENT("wxStatusBar", StatusBarComponent)
 WINDOW_COMPONENT("wxToolBar", ToolBarComponent)
-WINDOW_COMPONENT("tool", ToolComponent)
+ABSTRACT_COMPONENT("tool", ToolComponent)
 WINDOW_COMPONENT("wxChoice", ChoiceComponent)
 WINDOW_COMPONENT("wxSlider", SliderComponent)
 WINDOW_COMPONENT("wxGauge", GaugeComponent)
