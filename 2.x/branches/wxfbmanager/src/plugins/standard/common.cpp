@@ -803,10 +803,36 @@ public:
 	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
 	{
 		wxToolBar* tb = wxDynamicCast( wxobject, wxToolBar );
-		if ( NULL != tb )
+		if ( NULL == tb )
 		{
-			tb->Realize();
+			// very very strange
+			return;
 		}
+
+		size_t count = GetManager()->GetChildCount( wxobject );
+		for ( size_t i = 0; i < count; ++i )
+		{
+			wxObject* child = GetManager()->GetChild( wxobject, i );
+			IObject* childObj = GetManager()->GetIObject( child );
+			if ( wxT("tool") == childObj->GetClassName() )
+			{
+				tb->AddTool( 	wxID_HIGHEST + 200,
+								childObj->GetPropertyAsString( _("label") ),
+								childObj->GetPropertyAsBitmap( _("bitmap") ),
+								childObj->GetPropertyAsString( _("help") )
+							);
+			}
+			else
+			{
+				wxControl* control = wxDynamicCast( child, wxControl );
+				if ( NULL != control )
+				{
+					tb->AddControl( control );
+				}
+			}
+		}
+		tb->Realize();
+
 	}
 
 	TiXmlElement* ExportToXrc(IObject *obj)
@@ -837,23 +863,6 @@ public:
 class ToolComponent : public ComponentBase
 {
 public:
-
-	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
-	{
-		wxToolBar* tb = wxDynamicCast( wxparent, wxToolBar );
-		if ( NULL == tb )
-		{
-			wxLogError( _("The parent of a ToolComponent is not a wxToolBar - this should not be possible!") );
-			return;
-		}
-
-		IObject* obj = GetManager()->GetIObject( wxobject );
-
-		tb->AddTool( wxID_HIGHEST + 200,
-			obj->GetPropertyAsString(_("label")),
-			obj->GetPropertyAsBitmap(_("bitmap")),
-			obj->GetPropertyAsString(_("help")));
-	}
 
 	TiXmlElement* ExportToXrc(IObject *obj)
 	{
