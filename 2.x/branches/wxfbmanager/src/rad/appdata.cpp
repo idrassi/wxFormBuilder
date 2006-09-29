@@ -1654,7 +1654,7 @@ void ApplicationData::NotifyEvent( wxFBEvent& event )
   }
 
   // Copy queue
-  std::set< wxFBEvent* > queueInProcess = eventQueue;
+ /* std::set< wxFBEvent* > queueInProcess = eventQueue;
   eventQueue.clear();
 
   // Process queue
@@ -1663,7 +1663,7 @@ void ApplicationData::NotifyEvent( wxFBEvent& event )
   {
   	wxFBEvent* temp = *queuedEvent;
 	  NotifyEvent( *temp );
-  }
+  }*/
 }
 
 void ApplicationData::NotifyProjectLoaded()

@@ -75,6 +75,7 @@ class IObject
   virtual wxArrayInt GetPropertyAsArrayInt(const wxString& pname) = 0;
   virtual wxArrayString GetPropertyAsArrayString(const wxString& pname) = 0;
   virtual double GetPropertyAsFloat(const wxString& pname) = 0;
+  virtual wxString GetClassName() = 0;
   virtual ~IObject(){}
 };
 
@@ -166,6 +167,7 @@ public:
 	virtual wxObject* GetChild( wxObject* wxobject, size_t childIndex ) = 0;
 	virtual wxObject* GetParent( wxObject* wxobject ) = 0;
 	virtual IObject* GetIObject( wxObject* wxobject ) = 0;
+	virtual void ModifyProperty( wxObject* wxobject, wxString property, wxString value, bool allowUndo = true ) = 0;
 	virtual ~IManager(){}
 };
 

@@ -34,10 +34,9 @@
 #include <wx/sashwin.h>
 
 /**
- * Redefine el manjedor OnPaint para dibujar una rejilla.
+ * Draws a grid in the Paint event handler
  */
-
-class GridPanel : public ResizablePanel //wxSashWindow //wxPanel
+class GridPanel : public ResizablePanel
 {
  private:
    int m_x;
@@ -71,7 +70,6 @@ class GridPanel : public ResizablePanel //wxSashWindow //wxPanel
    void SetFrameWidgets(shared_ptr<ObjectBase> menubar, wxWindow *toolbar, wxWindow* statusbar);
    void HighlightSelection(wxDC& dc);
    void OnPaint(wxPaintEvent &event);
-//   void OnMouseMove(wxMouseEvent &event);
 };
 
 class wxFBEvent;
@@ -89,12 +87,12 @@ class VisualEditor : public wxScrolledWindow
 
   GridPanel *m_back;
 
-  shared_ptr<ObjectBase> m_form;  // puntero al último form creado
+  shared_ptr<ObjectBase> m_form;  // Pointer to last form created
 
   DECLARE_EVENT_TABLE()
 
  protected:
-  wxObject* Generate( shared_ptr< ObjectBase > obj, wxWindow* parent, wxObject* parentObject );
+  void Generate( shared_ptr< ObjectBase > obj, wxWindow* parent, wxObject* parentObject );
   void SetupWindow( shared_ptr< ObjectBase > obj, wxWindow* window );
   void SetupSizer( shared_ptr< ObjectBase > obj, wxSizer* sizer );
   void Create();
@@ -102,7 +100,7 @@ class VisualEditor : public wxScrolledWindow
  public:
   VisualEditor(wxWindow *parent);
   ~VisualEditor();
-  void OnResizeBackPanel (wxCommandEvent &event); //(wxSashEvent &event)
+  void OnResizeBackPanel (wxCommandEvent &event);
   void OnPaintPanel (wxPaintEvent &event);
   void DeleteVisualObject(PVisualObject obj);
 

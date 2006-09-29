@@ -4,8 +4,8 @@
 		<Project filename="wxFormBuilder.cbp" active="1">
 			<Depends filename="plugins\standard\layout.cbp" />
 			<Depends filename="plugins\standard\additional.cbp" />
-			<Depends filename="plugins\standard\standard.cbp" />
 			<Depends filename="..\sdk\tinyxml\tinyxmlSTL.cbp" />
+			<Depends filename="plugins\standard\standard.cbp" />
 		</Project>
 		<Project filename="plugins\standard\layout.cbp">
 			<Depends filename="..\sdk\tinyxml\tinyxmlSTL.cbp" />
