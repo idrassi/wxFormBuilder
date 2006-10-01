@@ -145,6 +145,12 @@ class IComponent
   virtual void OnCreated( wxObject* wxobject, wxWindow* wxparent ){};
 
   /**
+   * Allows components to respond when selected in object tree.
+   * For example, when a wxNotebook's page is selected, it can switch to that page
+   */
+  virtual void OnSelected( wxObject* wxobject ){};
+
+  /**
    * Dada una instancia del objeto obtenemos un nodo XRC.
    */
   virtual TiXmlElement* ExportToXrc(IObject *obj) = 0;

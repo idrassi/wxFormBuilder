@@ -66,24 +66,31 @@ protected:
 	void OnNotebookPageChanged( wxNotebookEvent& event );
 	void OnBookPageChanged( int selPage )
 	{
+		wxLogDebug( wxT("selPage %i"), selPage );
 		if ( selPage < 0 )
 		{
 			return;
 		}
 
 		size_t count = m_manager->GetChildCount( m_window );
+		wxLogDebug( wxT("count %i"), count );
 		for ( size_t i = 0; i < count; i++ )
 		{
+			wxLogDebug( wxT("i %i"), i );
 			wxObject* wxChild = m_manager->GetChild( m_window, i );
+			wxLogDebug( wxT("wxChild %i"), wxChild );
 			IObject*  iChild = m_manager->GetIObject( wxChild );
+			wxLogDebug( wxT("iChild %i"), iChild );
 			if ( iChild )
 			{
 				if ( (int)i == selPage && !iChild->GetPropertyAsInteger( wxT("select") ) )
 				{
+					wxLogDebug( wxT("1") );
 					m_manager->ModifyProperty( wxChild, wxT("select"), wxT("1"), false );
 				}
 				else if ((int)i != selPage && iChild->GetPropertyAsInteger( _("select") ) )
 				{
+					wxLogDebug( wxT("o") );
 					m_manager->ModifyProperty( wxChild, wxT("select"), wxT("0"), false );
 				}
 			}
@@ -627,6 +634,7 @@ class NotebookComponent : public ComponentBase
 public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
+		wxLogDebug( wxT("Notebook") );
 		wxNotebook* book = new wxNotebook((wxWindow *)parent,-1,
 			obj->GetPropertyAsPoint(_("pos")),
 			obj->GetPropertyAsSize(_("size")),
@@ -665,6 +673,7 @@ public:
 
 void ComponentEvtHandler::OnNotebookPageChanged( wxNotebookEvent& event )
 {
+	wxLogDebug( wxT("OnBookPageChanged %i"), event.GetSelection() );
 	OnBookPageChanged( event.GetSelection() );
 	event.Skip();
 }
@@ -674,6 +683,7 @@ class NotebookPageComponent : public ComponentBase
 public:
 	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
 	{
+		wxLogDebug( wxT("NotebookPage") );
 		// Easy read-only property access
 		IObject* obj = GetManager()->GetIObject( wxobject );
 
@@ -730,6 +740,28 @@ public:
 
 		// Restore event handling
 		nb->PushEventHandler( visObjEvtHandler );
+	}
+
+	void OnSelected( wxObject* wxobject )
+	{
+		// Get actual page - first child
+		wxObject* page = GetManager()->GetChild( wxobject, 0 );
+		if ( NULL == page )
+		{
+			return;
+		}
+
+		wxNotebook* book = wxDynamicCast( GetManager()->GetParent( wxobject ), wxNotebook );
+		if ( book )
+		{
+			for ( size_t i = 0; i < book->GetPageCount(); ++i )
+			{
+				if ( book->GetPage( i ) == page )
+				{
+					book->SetSelection( i );
+				}
+			}
+		}
 	}
 
 	TiXmlElement* ExportToXrc(IObject *obj)

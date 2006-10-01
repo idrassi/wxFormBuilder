@@ -141,6 +141,12 @@ void VisualEditor::OnResizeBackPanel (wxCommandEvent &event) //(wxSashEvent &eve
 
 shared_ptr< ObjectBase > VisualEditor::GetObjectBase( wxObject* wxobject )
 {
+	if ( NULL == wxobject )
+	{
+		wxLogError( _("wxObject was NULL!") );
+		return shared_ptr< ObjectBase >();
+	}
+
 	wxObjectMap::iterator obj = m_wxobjects.find( wxobject );
 	if ( obj != m_wxobjects.end() )
 	{
@@ -148,12 +154,19 @@ shared_ptr< ObjectBase > VisualEditor::GetObjectBase( wxObject* wxobject )
 	}
 	else
 	{
-		return shared_ptr< ObjectBase >( (ObjectBase*)NULL );
+		wxLogError( _("No corresponding ObjectBase for wxObject. Name: %s"), wxobject->GetClassInfo()->GetClassName() );
+		return shared_ptr< ObjectBase >();
 	}
 }
 
 wxObject* VisualEditor::GetWxObject( shared_ptr< ObjectBase > baseobject )
 {
+	if ( !baseobject )
+	{
+		wxLogError( _("baseobject was NULL!") );
+		return NULL;
+	}
+
 	ObjectBaseMap::iterator obj = m_baseobjects.find( baseobject );
 	if ( obj != m_baseobjects.end() )
 	{
@@ -161,6 +174,7 @@ wxObject* VisualEditor::GetWxObject( shared_ptr< ObjectBase > baseobject )
 	}
 	else
 	{
+		wxLogError( _("No corresponding wxObject for ObjectBase. Name: %s"), baseobject->GetClassName().c_str() );
 		return NULL;
 	}
 }
@@ -542,6 +556,35 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 	if ( comp )
 	{
 		componentType = comp->GetComponentType();
+	}
+
+	// Fire selection event in plugin - if parent is Abstract, fire for parent
+	bool fireParent = false;
+	shared_ptr< ObjectBase > parent = obj->GetParent();
+	if ( parent )
+	{
+		wxLogDebug( wxT("%s"), parent->GetClassName().c_str() );
+		IComponent* parentComp = parent->GetObjectInfo()->GetComponent();
+		if ( parentComp )
+		{
+			wxLogDebug( wxT("%i"), parentComp->GetComponentType() );
+			if ( COMPONENT_TYPE_ABSTRACT == parentComp->GetComponentType() )
+			{
+				ObjectBaseMap::iterator parentIt = m_baseobjects.find( parent );
+				if ( parentIt != m_baseobjects.end() )
+				{
+					wxLogDebug(wxT("Fire parent %s"),parent->GetClassName().c_str());
+					parentComp->OnSelected( parentIt->second );
+					fireParent = true;
+				}
+			}
+		}
+	}
+
+	if ( !fireParent )
+	{
+		wxLogDebug(wxT("Fire %s"),obj->GetClassName().c_str());
+		comp->OnSelected( item );
 	}
 
 	if ( componentType != COMPONENT_TYPE_WINDOW && componentType != COMPONENT_TYPE_SIZER )
