@@ -159,10 +159,37 @@ public:
 	Get the count of the children of this object.
 	*/
 	virtual size_t GetChildCount( wxObject* wxobject ) = 0;
+
+	/**
+	Get a child of the object.
+	@param childIndex Index of the child to get.
+	*/
 	virtual wxObject* GetChild( wxObject* wxobject, size_t childIndex ) = 0;
+
+	/**
+	Get the parent of the object.
+	*/
 	virtual wxObject* GetParent( wxObject* wxobject ) = 0;
+
+	/**
+	Get the corresponding object interface pointer for the object.
+	This allows easy read only access to properties.
+	*/
 	virtual IObject* GetIObject( wxObject* wxobject ) = 0;
+
+	/**
+	Modify a property of the object.
+	@param property The name of the property to modify.
+	@param value The new value for the property.
+	@param allowUndo If true, the property change will be placed into the undo stack, if false it will be modified silently.
+	*/
 	virtual void ModifyProperty( wxObject* wxobject, wxString property, wxString value, bool allowUndo = true ) = 0;
+
+	/**
+	Select the object in the object tree
+	*/
+	virtual void SelectObject( wxObject* wxobject ) = 0;
+
 	virtual ~IManager(){}
 };
 

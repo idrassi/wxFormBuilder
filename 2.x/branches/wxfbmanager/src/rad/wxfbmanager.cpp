@@ -122,12 +122,20 @@ void wxFBManager::ModifyProperty( wxObject* wxobject, wxString property, wxStrin
 	}
 }
 
-void AddEventHandler( wxEvtHandler* handler )
+void wxFBManager::SelectObject( wxObject* wxobject )
 {
-	AppData()->AddHandler( handler );
-}
+	CHECK_VISUAL_EDITOR()
 
-void RemoveEventHandler( wxEvtHandler* handler )
-{
-	AppData()->RemoveHandler( handler );
+	// Prevent loop of selection events
+	m_visualEdit->PreventOnSelected( true );
+
+	CHECK_WX_OBJECT()
+
+	shared_ptr< ObjectBase > obj = m_visualEdit->GetObjectBase( wxobject );
+
+	CHECK_OBJECT_BASE()
+
+	AppData()->SelectObject( obj );
+
+	m_visualEdit->PreventOnSelected( false );
 }

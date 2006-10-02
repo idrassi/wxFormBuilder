@@ -22,6 +22,8 @@ public:
 	wxObject* GetWxObject( boost::shared_ptr< ObjectBase > obj );
 
 	void ModifyProperty( wxObject* wxobject, wxString property, wxString value, bool allowUndo = true );
+
+	void SelectObject( wxObject* wxobject );
 };
 
 #endif //WXFBMANAGER

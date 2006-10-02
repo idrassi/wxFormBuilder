@@ -63,7 +63,9 @@ BEGIN_EVENT_TABLE(VisualEditor,wxScrolledWindow)
 END_EVENT_TABLE()
 
 VisualEditor::VisualEditor(wxWindow *parent)
-: wxScrolledWindow(parent,-1,wxDefaultPosition,wxDefaultSize,wxSUNKEN_BORDER)
+:
+wxScrolledWindow(parent,-1,wxDefaultPosition,wxDefaultSize,wxSUNKEN_BORDER),
+m_stopSelectedEvent( false )
 {
 	AppData()->AddHandler( this->GetEventHandler() );
 
@@ -558,7 +560,10 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 		componentType = comp->GetComponentType();
 
 		// Fire selection event in plugin
-		comp->OnSelected( item );
+		if ( !m_stopSelectedEvent )
+		{
+			comp->OnSelected( item );
+		}
 	}
 
 	if ( componentType != COMPONENT_TYPE_WINDOW && componentType != COMPONENT_TYPE_SIZER )
@@ -567,19 +572,22 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 	}
 
 	// Fire selection event in plugin for all parents
-	shared_ptr< ObjectBase > parent = obj->GetParent();
-	while ( parent )
+	if ( !m_stopSelectedEvent )
 	{
-		IComponent* parentComp = parent->GetObjectInfo()->GetComponent();
-		if ( parentComp )
+		shared_ptr< ObjectBase > parent = obj->GetParent();
+		while ( parent )
 		{
-			ObjectBaseMap::iterator parentIt = m_baseobjects.find( parent.get() );
-			if ( parentIt != m_baseobjects.end() )
+			IComponent* parentComp = parent->GetObjectInfo()->GetComponent();
+			if ( parentComp )
 			{
-				parentComp->OnSelected( parentIt->second );
+				ObjectBaseMap::iterator parentIt = m_baseobjects.find( parent.get() );
+				if ( parentIt != m_baseobjects.end() )
+				{
+					parentComp->OnSelected( parentIt->second );
+				}
 			}
+			parent = parent->GetParent();
 		}
-		parent = parent->GetParent();
 	}
 
 	// Look for the active panel - this is where the boxes will be drawn during OnPaint
