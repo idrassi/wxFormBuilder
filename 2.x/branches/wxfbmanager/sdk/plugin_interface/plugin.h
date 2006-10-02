@@ -209,7 +209,7 @@ public:
 
 	wxObject* Create( IObject *obj, wxObject *parent )
 	{
-		return new wxObject; /* Even components which are not visible must be unique in the map */
+		return new wxNoObject; /* Even components which are not visible must be unique in the map */
 	}
 
 	void OnCreated( wxObject* wxobject, wxWindow* wxparent )

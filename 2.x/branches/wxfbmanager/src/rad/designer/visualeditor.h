@@ -99,6 +99,7 @@ class VisualEditor : public wxScrolledWindow
   void SetupWindow( shared_ptr< ObjectBase > obj, wxWindow* window );
   void SetupSizer( shared_ptr< ObjectBase > obj, wxSizer* sizer );
   void Create();
+  void DeleteAbstractObjects();
 
  public:
   VisualEditor(wxWindow *parent);
