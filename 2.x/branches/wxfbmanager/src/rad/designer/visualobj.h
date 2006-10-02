@@ -29,12 +29,8 @@
 #include "wx/wx.h"
 #include "model/objectbase.h"
 
-class wxScintillaEvent;
-
 /**
- * Procesa los eventos asociados a un objeto.
- * En principio vamos a querer seleccionar el objeto
- * al poner el foco
+ * Processes events from visual objects.
  */
 class VObjEvtHandler : public wxEvtHandler
 {
@@ -52,9 +48,6 @@ class VObjEvtHandler : public wxEvtHandler
    void OnLeftClick(wxMouseEvent &event);
    void OnPaint(wxPaintEvent &event);
    void OnSetCursor(wxSetCursorEvent &event);
-
-   // Enable folding for wxScintilla
-   void OnMarginClick ( wxScintillaEvent& event );
 };
 
 

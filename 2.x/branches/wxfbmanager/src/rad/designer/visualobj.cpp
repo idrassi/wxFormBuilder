@@ -30,8 +30,6 @@
 #include "utils/debug.h"
 #include "rad/genericpanel.h"
 
-#include <wx/wxscintilla.h>
-
 #include <rad/appdata.h>
 
 using namespace TypeConv;
@@ -94,23 +92,4 @@ void VObjEvtHandler::OnSetCursor(wxSetCursorEvent &event)
 	m_window->GetParent()->ScreenToClient(&x, &y);
 	wxSetCursorEvent sce(x, y);
 	::wxPostEvent(m_window->GetParent(), sce);
-}
-
-
-void VObjEvtHandler::OnMarginClick ( wxScintillaEvent& event )
-{
-	wxScintilla* scintilla = wxDynamicCast( m_window, wxScintilla );
-	if ( scintilla != NULL )
-	{
-		if ( event.GetMargin() == 1 )
-		{
-			int lineClick = scintilla->LineFromPosition( event.GetPosition() );
-			int levelClick = scintilla->GetFoldLevel( lineClick );
-			if ( ( levelClick & wxSCI_FOLDLEVELHEADERFLAG ) > 0 )
-			{
-				scintilla->ToggleFold( lineClick );
-			}
-		}
-	}
-	event.Skip();
 }
