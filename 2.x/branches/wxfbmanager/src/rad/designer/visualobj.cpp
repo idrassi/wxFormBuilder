@@ -30,10 +30,6 @@
 #include "utils/debug.h"
 #include "rad/genericpanel.h"
 
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
-#include <wx/notebook.h>
-#include <wx/listbook.h>
-#include <wx/choicebk.h>
 #include <wx/wxscintilla.h>
 
 #include <rad/appdata.h>
@@ -100,63 +96,6 @@ void VObjEvtHandler::OnSetCursor(wxSetCursorEvent &event)
 	::wxPostEvent(m_window->GetParent(), sce);
 }
 
-//////////////////////////////////////
-// Object Tree for notebook objects:
-//
-//  notebook
-//      |
-//    notebookpage (item)
-//          |
-//       container
-//////////////////////////////////////
-
-void VObjEvtHandler::OnNotebookPageChanged(wxNotebookEvent &event)
-{
-	//OnBookPageChanged( shared_ptr<ObjectBase>(m_object), event.GetSelection() );
-	//event.Skip();
-}
-void VObjEvtHandler::OnFlatNotebookPageChanged(wxFlatNotebookEvent &event)
-{
-	OnBookPageChanged( shared_ptr<ObjectBase>(m_object), event.GetSelection() );
-	event.Skip();
-}
-void VObjEvtHandler::OnListbookPageChanged(wxListbookEvent &event)
-{
-	OnBookPageChanged( shared_ptr<ObjectBase>(m_object), event.GetSelection() );
-	event.Skip();
-}
-
-void VObjEvtHandler::OnChoicebookPageChanged( wxChoicebookEvent& event )
-{
-	OnBookPageChanged( shared_ptr<ObjectBase>(m_object), event.GetSelection() );
-	event.Skip();
-}
-
-void VObjEvtHandler::OnBookPageChanged( shared_ptr<ObjectBase> obj, int selPage )
-{
-	if (selPage >= 0)
-	{
-		for (unsigned int i=0; i<obj->GetChildCount(); i++)
-		{
-			shared_ptr<ObjectBase> child = obj->GetChild(i);
-			shared_ptr<Property> propSelect = child->GetProperty(wxT("select"));
-			if (propSelect)
-			{
-				// we can't use DataObservable::ModifyProperty because
-				// it will regenerate the gui, so these modifications won't be
-				// undoable
-				if ((int)i == selPage && !propSelect->GetValueAsInteger())
-				{
-					propSelect->SetValue( wxT("1") );
-				}
-				else if ((int)i != selPage && propSelect->GetValueAsInteger())
-				{
-					propSelect->SetValue( wxT("0") );
-				}
-			}
-		}
-	}
-}
 
 void VObjEvtHandler::OnMarginClick ( wxScintillaEvent& event )
 {

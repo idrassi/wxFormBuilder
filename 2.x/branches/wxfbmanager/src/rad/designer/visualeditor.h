@@ -82,7 +82,7 @@ class VisualEditor : public wxScrolledWindow
   typedef map< wxObject*, shared_ptr< ObjectBase > > wxObjectMap;
   wxObjectMap m_wxobjects;
 
-  typedef map< shared_ptr< ObjectBase >, wxObject* > ObjectBaseMap;
+  typedef map< ObjectBase*, wxObject* > ObjectBaseMap;
   ObjectBaseMap m_baseobjects;
 
   GridPanel *m_back;
@@ -102,7 +102,6 @@ class VisualEditor : public wxScrolledWindow
   ~VisualEditor();
   void OnResizeBackPanel (wxCommandEvent &event);
   void OnPaintPanel (wxPaintEvent &event);
-  void DeleteVisualObject(PVisualObject obj);
 
   void Setup();
   void UpdateVirtualSize();

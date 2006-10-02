@@ -79,17 +79,6 @@ class IObject
   virtual ~IObject(){}
 };
 
-// interfaz para manejar la vista de un objeto
-
-class IObjectView
-{
- public:
-  virtual wxWindow* Window() = 0;
-  virtual wxSizer*  Sizer() = 0;
-  virtual IObject*  Object() = 0;
-  virtual ~IObjectView(){}
-};
-
 // Interfaz para almacenar todos los componentes de un plugin
 // es una clase abstracta y será el objeto que exportará la DLL.
 class IComponentLibrary
@@ -117,58 +106,58 @@ class IComponentLibrary
 };
 
 /**
- * Interfaz para componentes
+ * Component Interface
  */
 class IComponent
 {
  public:
   /**
-   * Crea la instancia del objeto-wx, bien sea un wxWindow* o un wxSizer*
+   * Create an instance of the wxObject and return a pointer
    */
-  virtual wxObject* Create(IObject *obj, wxObject *parent) = 0;
+  virtual wxObject* Create( IObject* obj, wxObject* parent ) = 0;
 
   /**
-   * Es llamada una vez creado el objeto y sus respectivos hijos.
-   * Esta función será de utilidad en los objetos "ficticios" tales
-   * como "sizeritem" o "notebookpage", gracias al puntero al primer_hijo
-   * (y único) podremos añadir el objeto al sizer o al notebook.
+   * Allows components to do something after they have been created.
+   * For example, Abstract components like NotebookPage and SizerItem can
+   * add the actual widget to the Notebook or sizer.
    *
-   * @param obj vista del objeto que se ha creado.
-   * @param wxparent widget padre.
-   * @param parent vista del objeto padre
-   * @param first_child vista del primer hijo.
+   * @param wxobject The object which was just created.
+   * @param wxparent The wxWidgets parent - the wxObject that the created object was added to.
    */
-  virtual void OnCreated(IObjectView *obj, wxWindow *wxparent,
-                         IObjectView *parent,
-                         IObjectView *first_child) = 0;
-
-  virtual void OnCreated( wxObject* wxobject, wxWindow* wxparent ){};
+  virtual void OnCreated( wxObject* wxobject, wxWindow* wxparent ) = 0;
 
   /**
    * Allows components to respond when selected in object tree.
    * For example, when a wxNotebook's page is selected, it can switch to that page
    */
-  virtual void OnSelected( wxObject* wxobject ){};
+  virtual void OnSelected( wxObject* wxobject ) = 0;
 
   /**
-   * Dada una instancia del objeto obtenemos un nodo XRC.
+   * Export the object to an XRC node
    */
-  virtual TiXmlElement* ExportToXrc(IObject *obj) = 0;
+  virtual TiXmlElement* ExportToXrc( IObject* obj ) = 0;
 
   /**
-   * Dado un objeto XML en formato XRC devuelve otro objeto XML en formato
-   * wxFormBuilder.
+   * Converts from an XRC element to a wxFormBuilder project file XML element
    */
-  virtual TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj) = 0;
+  virtual TiXmlElement* ImportFromXrc( TiXmlElement* xrcObj ) = 0;
 
 
   virtual int GetComponentType() = 0;
   virtual ~IComponent(){}
 };
 
+/**
+Interface to the "Manager" class in the application.
+Essentially a collection of utility functions that take a wxObject* and do something useful.
+
+*/
 class IManager
 {
 public:
+	/**
+	Get the count of the children of this object.
+	*/
 	virtual size_t GetChildCount( wxObject* wxobject ) = 0;
 	virtual wxObject* GetChild( wxObject* wxobject, size_t childIndex ) = 0;
 	virtual wxObject* GetParent( wxObject* wxobject ) = 0;

@@ -212,7 +212,15 @@ public:
 		return new wxObject; /* Even components which are not visible must be unique in the map */
 	}
 
-	void OnCreated( IObjectView *obj, wxWindow *wxparent, IObjectView *parent, IObjectView *first_child ){}
+	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
+	{
+
+	}
+
+	void OnSelected( wxObject* wxobject )
+	{
+
+	}
 
 	TiXmlElement* ExportToXrc(IObject *obj)
 	{
