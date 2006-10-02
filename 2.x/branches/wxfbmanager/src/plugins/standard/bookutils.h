@@ -104,7 +104,16 @@ namespace BookUtils
 			{
 				if ( book->GetPage( i ) == page )
 				{
+					// Prevent infinite event loop
+					wxEvtHandler* bookEvtHandler = book->PopEventHandler();
+					wxEvtHandler* vobjEvtHandler = book->PopEventHandler();
+
+					// Select Page
 					book->SetSelection( i );
+
+					// Restore event handling
+					book->PushEventHandler( vobjEvtHandler );
+					book->PushEventHandler( bookEvtHandler );
 				}
 			}
 		}

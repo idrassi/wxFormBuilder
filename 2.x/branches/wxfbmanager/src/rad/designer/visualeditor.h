@@ -89,6 +89,9 @@ class VisualEditor : public wxScrolledWindow
 
   shared_ptr<ObjectBase> m_form;  // Pointer to last form created
 
+  // Prevent OnSelected in components
+  bool m_stopSelectedEvent;
+
   DECLARE_EVENT_TABLE()
 
  protected:
@@ -102,6 +105,7 @@ class VisualEditor : public wxScrolledWindow
   ~VisualEditor();
   void OnResizeBackPanel (wxCommandEvent &event);
   void OnPaintPanel (wxPaintEvent &event);
+  void PreventOnSelected( bool prevent = true ){ m_stopSelectedEvent = prevent; }
 
   void Setup();
   void UpdateVirtualSize();

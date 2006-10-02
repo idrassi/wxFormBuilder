@@ -53,11 +53,6 @@ private:
 	wxWindow* m_window;
 	IManager* m_manager;
 
-	IManager* GetManager()
-	{
-		return m_manager;
-	}
-
 public:
 	ComponentEvtHandler( wxWindow* win, IManager* manager )
 	:
@@ -71,29 +66,19 @@ protected:
 	void OnNotebookPageChanged( wxNotebookEvent& event );
 	void OnListbookPageChanged( wxListbookEvent& event );
 	void OnChoicebookPageChanged( wxChoicebookEvent& event );
-	void OnBookPageChanged( int selPage )
+	template < class T >
+		void OnBookPageChanged( int selPage )
 	{
 		if ( selPage < 0 )
 		{
 			return;
 		}
 
-		size_t count = m_manager->GetChildCount( m_window );
-		for ( size_t i = 0; i < count; i++ )
+		// Select the corresponding panel in the object tree
+		T* book = wxDynamicCast( m_window, T );
+		if ( NULL != book )
 		{
-			wxObject* wxChild = m_manager->GetChild( m_window, i );
-			IObject*  iChild = m_manager->GetIObject( wxChild );
-			if ( iChild )
-			{
-				if ( (int)i == selPage && !iChild->GetPropertyAsInteger( _("select") ) )
-				{
-					m_manager->ModifyProperty( wxChild,_("select"), wxT("1"), false );
-				}
-				else if ( (int)i != selPage && iChild->GetPropertyAsInteger( _("select") ) )
-				{
-					m_manager->ModifyProperty( wxChild, _("select"), wxT("0"), false );
-				}
-			}
+			m_manager->SelectObject( book->GetPage( selPage ) );
 		}
 	}
 
@@ -667,7 +652,7 @@ public:
 
 void ComponentEvtHandler::OnNotebookPageChanged( wxNotebookEvent& event )
 {
-	OnBookPageChanged( event.GetSelection() );
+	OnBookPageChanged< wxNotebook >( event.GetSelection() );
 	event.Skip();
 }
 
@@ -756,7 +741,7 @@ public:
 
 void ComponentEvtHandler::OnListbookPageChanged( wxListbookEvent& event )
 {
-	OnBookPageChanged( event.GetSelection() );
+	OnBookPageChanged< wxListbook >( event.GetSelection() );
 	event.Skip();
 }
 
@@ -821,7 +806,7 @@ public:
 
 void ComponentEvtHandler::OnChoicebookPageChanged( wxChoicebookEvent& event )
 {
-	OnBookPageChanged( event.GetSelection() );
+	OnBookPageChanged< wxChoicebook >( event.GetSelection() );
 	event.Skip();
 }
 
