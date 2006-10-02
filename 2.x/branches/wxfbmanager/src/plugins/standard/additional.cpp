@@ -74,6 +74,24 @@ protected:
 			return;
 		}
 
+		size_t count = m_manager->GetChildCount( m_window );
+		for ( size_t i = 0; i < count; i++ )
+		{
+			wxObject* wxChild = m_manager->GetChild( m_window, i );
+			IObject*  iChild = m_manager->GetIObject( wxChild );
+			if ( iChild )
+			{
+				if ( (int)i == selPage && !iChild->GetPropertyAsInteger( _("select") ) )
+				{
+					m_manager->ModifyProperty( wxChild, _("select"), wxT("1"), false );
+				}
+				else if ( (int)i != selPage && iChild->GetPropertyAsInteger( _("select") ) )
+				{
+					m_manager->ModifyProperty( wxChild, _("select"), wxT("0"), false );
+				}
+			}
+		}
+
 		// Select the corresponding panel in the object tree
 		T* book = wxDynamicCast( m_window, T );
 		if ( NULL != book )
@@ -699,6 +717,8 @@ public:
 
 		BookUtils::AddImageList( obj, book );
 
+		book->PushEventHandler( new ComponentEvtHandler( book, GetManager() ) );
+
 		return book;
 	}
 
@@ -713,7 +733,7 @@ public:
 			IObject* obj = GetManager()->GetIObject( wxobject );
 			if ( obj->GetPropertyAsString( _("bitmapsize") ).empty() )
 			{
-				wxListView* tmpListView = lb->GetListView();
+				wxListView* tmpListView = book->GetListView();
 				long flags = tmpListView->GetWindowStyleFlag();
 				flags = (flags & ~wxLC_ICON) | wxLC_SMALL_ICON;
 				tmpListView->SetWindowStyleFlag( flags );
@@ -781,10 +801,14 @@ class ChoicebookComponent : public ComponentBase
 public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
-		return new wxChoicebook((wxWindow *)parent,-1,
+		wxChoicebook* book = new wxChoicebook((wxWindow *)parent,-1,
 			obj->GetPropertyAsPoint(_("pos")),
 			obj->GetPropertyAsSize(_("size")),
 			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+
+		book->PushEventHandler( new ComponentEvtHandler( book, GetManager() ) );
+
+		return book;
 	}
 
 	TiXmlElement* ExportToXrc(IObject *obj)

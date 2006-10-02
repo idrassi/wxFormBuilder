@@ -11,13 +11,13 @@
 	}
 
 #define CHECK_VISUAL_EDITOR( RETURN ) \
-	CHECK_NULL( m_visualEdit, "Visual Editor", RETURN )
+	CHECK_NULL( m_visualEdit, _("Visual Editor"), RETURN )
 
 #define CHECK_WX_OBJECT( RETURN ) \
-	CHECK_NULL( wxobject, "wxObject", RETURN )
+	CHECK_NULL( wxobject, _("wxObject"), RETURN )
 
 #define CHECK_OBJECT_BASE( RETURN ) \
-	CHECK_NULL( obj, "ObjectBase", RETURN )
+	CHECK_NULL( obj, _("ObjectBase"), RETURN )
 
 wxFBManager::wxFBManager()
 :

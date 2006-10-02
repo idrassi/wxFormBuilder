@@ -30,7 +30,18 @@ namespace BookUtils
 		IObject* obj = manager->GetIObject( wxobject );
 
 		T* book = wxDynamicCast( wxparent, T );
-		wxWindow* page = wxDynamicCast( manager->GetChild( wxobject, 0 ), wxWindow );
+
+
+		//This wouldn't compile in MinGW - strange
+		///wxWindow* page = wxDynamicCast( manager->GetChild( wxobject, 0 ), wxWindow );
+
+		// Do this instead
+		wxObject* child = manager->GetChild( wxobject, 0 );
+		wxWindow* page = NULL;
+		if ( child->IsKindOf(CLASSINFO(wxWindow)))
+		{
+			page = (wxWindow*)child;
+		}
 
 		// Error checking
 		if ( !( obj && book && page ) )
@@ -39,7 +50,9 @@ namespace BookUtils
 			return;
 		}
 
-		// Prevent events during construction
+		// Prevent events during construction - two event handlers have been pushed onto the stack
+		// VObjEvtHandler and Component Event handler
+		wxEvtHandler* vobjEvtHandler = book->PopEventHandler();
 		wxEvtHandler* bookEvtHandler = book->PopEventHandler();
 
 		// Save selection
@@ -85,6 +98,7 @@ namespace BookUtils
 
 		// Restore event handling
 		book->PushEventHandler( bookEvtHandler );
+		book->PushEventHandler( vobjEvtHandler );
 	}
 
 	template < class T >
