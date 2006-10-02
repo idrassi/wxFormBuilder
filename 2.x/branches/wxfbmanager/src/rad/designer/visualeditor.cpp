@@ -167,7 +167,7 @@ wxObject* VisualEditor::GetWxObject( shared_ptr< ObjectBase > baseobject )
 		return NULL;
 	}
 
-	ObjectBaseMap::iterator obj = m_baseobjects.find( baseobject );
+	ObjectBaseMap::iterator obj = m_baseobjects.find( baseobject.get() );
 	if ( obj != m_baseobjects.end() )
 	{
 		return obj->second;
@@ -290,14 +290,14 @@ void VisualEditor::Create()
 			// Attach the status bar (if any) to the frame
 			if ( child->GetClassName() == wxT("wxStatusBar") )
 			{
-				ObjectBaseMap::iterator it = m_baseobjects.find(child);
+				ObjectBaseMap::iterator it = m_baseobjects.find( child.get() );
 				statusbar = wxDynamicCast( it->second, wxStatusBar );
 			}
 
 			// Attach the toolbar (if any) to the frame
 			if (child->GetClassName() == wxT("wxToolBar") )
 			{
-				ObjectBaseMap::iterator it = m_baseobjects.find( child );
+				ObjectBaseMap::iterator it = m_baseobjects.find( child.get() );
 				toolbar = wxDynamicCast( it->second, wxToolBar );
 			}
 		}
@@ -393,7 +393,7 @@ void VisualEditor::Generate( shared_ptr< ObjectBase > obj, wxWindow* wxparent, w
 
 	// Associate the wxObject* with the shared_ptr< ObjectBase >
 	m_wxobjects.insert( wxObjectMap::value_type( createdObject, obj ) );
-	m_baseobjects.insert( ObjectBaseMap::value_type( obj, createdObject ) );
+	m_baseobjects.insert( ObjectBaseMap::value_type( obj.get(), createdObject ) );
 
 	// New wxparent for the window's children
 	wxWindow* new_wxparent = ( createdWindow ? createdWindow : wxparent );
@@ -537,7 +537,7 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 	}
 
 	// Make sure this is a visible object
-	ObjectBaseMap::iterator it = m_baseobjects.find( obj );
+	ObjectBaseMap::iterator it = m_baseobjects.find( obj.get() );
 	if ( m_baseobjects.end() == it )
 	{
 		m_back->SetSelectedSizer( NULL );
@@ -556,40 +556,30 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 	if ( comp )
 	{
 		componentType = comp->GetComponentType();
-	}
 
-	// Fire selection event in plugin - if parent is Abstract, fire for parent
-	bool fireParent = false;
-	shared_ptr< ObjectBase > parent = obj->GetParent();
-	if ( parent )
-	{
-		wxLogDebug( wxT("%s"), parent->GetClassName().c_str() );
-		IComponent* parentComp = parent->GetObjectInfo()->GetComponent();
-		if ( parentComp )
-		{
-			wxLogDebug( wxT("%i"), parentComp->GetComponentType() );
-			if ( COMPONENT_TYPE_ABSTRACT == parentComp->GetComponentType() )
-			{
-				ObjectBaseMap::iterator parentIt = m_baseobjects.find( parent );
-				if ( parentIt != m_baseobjects.end() )
-				{
-					wxLogDebug(wxT("Fire parent %s"),parent->GetClassName().c_str());
-					parentComp->OnSelected( parentIt->second );
-					fireParent = true;
-				}
-			}
-		}
-	}
-
-	if ( !fireParent )
-	{
-		wxLogDebug(wxT("Fire %s"),obj->GetClassName().c_str());
+		// Fire selection event in plugin
 		comp->OnSelected( item );
 	}
 
 	if ( componentType != COMPONENT_TYPE_WINDOW && componentType != COMPONENT_TYPE_SIZER )
 	{
 		item = NULL;
+	}
+
+	// Fire selection event in plugin for all parents
+	shared_ptr< ObjectBase > parent = obj->GetParent();
+	while ( parent )
+	{
+		IComponent* parentComp = parent->GetObjectInfo()->GetComponent();
+		if ( parentComp )
+		{
+			ObjectBaseMap::iterator parentIt = m_baseobjects.find( parent.get() );
+			if ( parentIt != m_baseobjects.end() )
+			{
+				parentComp->OnSelected( parentIt->second );
+			}
+		}
+		parent = parent->GetParent();
 	}
 
 	// Look for the active panel - this is where the boxes will be drawn during OnPaint
@@ -616,7 +606,7 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 	wxWindow* selPanel = NULL;
 	if ( nextParent )
 	{
-		it = m_baseobjects.find( nextParent );
+		it = m_baseobjects.find( nextParent.get() );
 		if ( m_baseobjects.end() == it )
 		{
 			selPanel = m_back;
@@ -645,7 +635,7 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 
 		if ( nextComp->GetComponentType() == COMPONENT_TYPE_SIZER )
 		{
-			it = m_baseobjects.find( nextObj );
+			it = m_baseobjects.find( nextObj.get() );
 			if ( it != m_baseobjects.end() )
 			{
 				sizer = wxDynamicCast( it->second, wxSizer );

@@ -26,7 +26,6 @@
 #include <component.h>
 #include <plugin.h>
 #include <xrcconv.h>
-#include "icons/unknown.xpm"
 
 #include <wx/calctrl.h>
 #include <wx/html/htmlwin.h>
@@ -38,11 +37,10 @@
 #include <wx/splitter.h>
 #include <wx/checklst.h>
 #include <wx/datectrl.h>
-#include <wx/listbook.h>
-#include <wx/choicebk.h>
 #include <wx/listctrl.h>
-#include <wx/image.h>
-#include <wx/notebook.h>
+
+// Includes notebook, listbook, choicebook
+#include "bookutils.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -59,39 +57,41 @@ private:
 	{
 		return m_manager;
 	}
+
 public:
-	ComponentEvtHandler( wxWindow* win, IManager* manager ) : m_window( win ), m_manager( manager ) {}
+	ComponentEvtHandler( wxWindow* win, IManager* manager )
+	:
+	m_window( win ),
+	m_manager( manager )
+	{
+
+	}
 
 protected:
 	void OnNotebookPageChanged( wxNotebookEvent& event );
+	void OnListbookPageChanged( wxListbookEvent& event );
+	void OnChoicebookPageChanged( wxChoicebookEvent& event );
 	void OnBookPageChanged( int selPage )
 	{
-		wxLogDebug( wxT("selPage %i"), selPage );
 		if ( selPage < 0 )
 		{
 			return;
 		}
 
 		size_t count = m_manager->GetChildCount( m_window );
-		wxLogDebug( wxT("count %i"), count );
 		for ( size_t i = 0; i < count; i++ )
 		{
-			wxLogDebug( wxT("i %i"), i );
 			wxObject* wxChild = m_manager->GetChild( m_window, i );
-			wxLogDebug( wxT("wxChild %i"), wxChild );
 			IObject*  iChild = m_manager->GetIObject( wxChild );
-			wxLogDebug( wxT("iChild %i"), iChild );
 			if ( iChild )
 			{
-				if ( (int)i == selPage && !iChild->GetPropertyAsInteger( wxT("select") ) )
+				if ( (int)i == selPage && !iChild->GetPropertyAsInteger( _("select") ) )
 				{
-					wxLogDebug( wxT("1") );
-					m_manager->ModifyProperty( wxChild, wxT("select"), wxT("1"), false );
+					m_manager->ModifyProperty( wxChild,_("select"), wxT("1"), false );
 				}
-				else if ((int)i != selPage && iChild->GetPropertyAsInteger( _("select") ) )
+				else if ( (int)i != selPage && iChild->GetPropertyAsInteger( _("select") ) )
 				{
-					wxLogDebug( wxT("o") );
-					m_manager->ModifyProperty( wxChild, wxT("select"), wxT("0"), false );
+					m_manager->ModifyProperty( wxChild, _("select"), wxT("0"), false );
 				}
 			}
 		}
@@ -102,6 +102,8 @@ protected:
 
 BEGIN_EVENT_TABLE( ComponentEvtHandler, wxEvtHandler )
 	EVT_NOTEBOOK_PAGE_CHANGED( -1, ComponentEvtHandler::OnNotebookPageChanged )
+	EVT_LISTBOOK_PAGE_CHANGED( -1, ComponentEvtHandler::OnListbookPageChanged )
+	EVT_CHOICEBOOK_PAGE_CHANGED( -1, ComponentEvtHandler::OnChoicebookPageChanged )
 END_EVENT_TABLE()
 
 
@@ -634,20 +636,12 @@ class NotebookComponent : public ComponentBase
 public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
-		wxLogDebug( wxT("Notebook") );
 		wxNotebook* book = new wxNotebook((wxWindow *)parent,-1,
 			obj->GetPropertyAsPoint(_("pos")),
 			obj->GetPropertyAsSize(_("size")),
 			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
 
-		if ( !obj->GetPropertyAsString( _("bitmapsize") ).empty() )
-		{
-			wxSize imageSize = obj->GetPropertyAsSize(_("bitmapsize"));
-			wxImageList* images = new wxImageList( imageSize.GetWidth(), imageSize.GetHeight() );
-			wxImage image = wxBitmap( unknown_xpm ).ConvertToImage();
-			images->Add( image.Scale( imageSize.GetWidth(), imageSize.GetHeight() ) );
-			book->AssignImageList( images );
-		}
+		BookUtils::AddImageList( obj, book );
 
 		book->PushEventHandler( new ComponentEvtHandler( book, GetManager() ) );
 
@@ -673,7 +667,6 @@ public:
 
 void ComponentEvtHandler::OnNotebookPageChanged( wxNotebookEvent& event )
 {
-	wxLogDebug( wxT("OnBookPageChanged %i"), event.GetSelection() );
 	OnBookPageChanged( event.GetSelection() );
 	event.Skip();
 }
@@ -683,85 +676,12 @@ class NotebookPageComponent : public ComponentBase
 public:
 	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
 	{
-		wxLogDebug( wxT("NotebookPage") );
-		// Easy read-only property access
-		IObject* obj = GetManager()->GetIObject( wxobject );
-
-		wxNotebook* nb = wxDynamicCast( wxparent, wxNotebook );
-		wxWindow* page = wxDynamicCast( GetManager()->GetChild( wxobject, 0 ), wxWindow );
-
-		// Error checking
-		if ( !( obj && nb && page ) )
-		{
-			wxLogError( _("NotebookComponent is missing its wxFormBuilder object(%i), its parent(%i), or its child(%i)"), obj, nb, page );
-			return;
-		}
-
-		// Prevent events during construction
-		wxEvtHandler* visObjEvtHandler = nb->PopEventHandler();
-
-		// Save selection
-		int selection = nb->GetSelection();
-		nb->AddPage( page, obj->GetPropertyAsString( _("label") ) );
-
-		// Apply image to page
-		IObject* parentObj = GetManager()->GetIObject( wxparent );
-		if ( !parentObj )
-		{
-			wxLogError( _("NotebookComponent's parent is missing its wxFormBuilder object") );
-			return;
-		}
-
-		if ( !parentObj->GetPropertyAsString( _("bitmapsize") ).empty() )
-		{
-			if ( !obj->GetPropertyAsString( _("bitmap") ).empty() )
-			{
-				wxSize imageSize = parentObj->GetPropertyAsSize( _("bitmapsize") );
-				int width = imageSize.GetWidth();
-				int height = imageSize.GetHeight();
-				if ( width > 0 && height > 0 )
-				{
-					wxImageList* imageList = nb->GetImageList();
-					wxImage image = obj->GetPropertyAsBitmap( _("bitmap") ).ConvertToImage();
-					imageList->Add( image.Scale( width, height ) );
-					nb->SetPageImage( nb->GetPageCount() - 1, imageList->GetImageCount() - 1 );
-				}
-			}
-		}
-
-		if ( obj->GetPropertyAsString( _("select") ) == wxT("0") && selection >= 0 )
-		{
-			nb->SetSelection(selection);
-		}
-		else
-		{
-			nb->SetSelection( nb->GetPageCount() - 1 );
-		}
-
-		// Restore event handling
-		nb->PushEventHandler( visObjEvtHandler );
+		BookUtils::OnCreated< wxNotebook >( wxobject, wxparent, GetManager(), _("NotebookPageComponent") );
 	}
 
 	void OnSelected( wxObject* wxobject )
 	{
-		// Get actual page - first child
-		wxObject* page = GetManager()->GetChild( wxobject, 0 );
-		if ( NULL == page )
-		{
-			return;
-		}
-
-		wxNotebook* book = wxDynamicCast( GetManager()->GetParent( wxobject ), wxNotebook );
-		if ( book )
-		{
-			for ( size_t i = 0; i < book->GetPageCount(); ++i )
-			{
-				if ( book->GetPage( i ) == page )
-				{
-					book->SetSelection( i );
-				}
-			}
-		}
+		BookUtils::OnSelected< wxNotebook >( wxobject, GetManager() );
 	}
 
 	TiXmlElement* ExportToXrc(IObject *obj)
@@ -792,34 +712,27 @@ public:
 			obj->GetPropertyAsSize(_("size")),
 			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
 
-		if ( !obj->GetPropertyAsString( _("bitmapsize") ).empty() )
-		{
-			wxSize imageSize = obj->GetPropertyAsSize(_("bitmapsize"));
-			wxImageList* images = new wxImageList( imageSize.GetWidth(), imageSize.GetHeight() );
-			wxImage image = wxBitmap( unknown_xpm ).ConvertToImage();
-			images->Add( image.Scale( imageSize.GetWidth(), imageSize.GetHeight() ) );
-			book->AssignImageList( images );
-		}
+		BookUtils::AddImageList( obj, book );
 
 		return book;
 	}
 
 // Small icon style not supported by GTK
 #ifndef  __WXGTK__
-	void OnCreated(IObjectView *objview, wxWindow *wxparent, IObjectView *parent,
-		IObjectView *first_child)
+	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
 	{
-		wxListbook *lb = (wxListbook*) objview->Window();
-		wxASSERT(lb->IsKindOf(CLASSINFO(wxListbook)));
-
-		// Small icon style if bitmapsize is not set
-		IObject* obj = objview->Object();
-		if ( obj->GetPropertyAsString( _("bitmapsize") ).empty() )
+		wxListbook* book = wxDynamicCast( wxparent, wxListbook );
+		if ( book )
 		{
-			wxListView* tmpListView = lb->GetListView();
-			long flags = tmpListView->GetWindowStyleFlag();
-			flags = (flags & ~wxLC_ICON) | wxLC_SMALL_ICON;
-			tmpListView->SetWindowStyleFlag( flags );
+			// Small icon style if bitmapsize is not set
+			IObject* obj = GetManager()->GetIObject( wxobject );
+			if ( obj->GetPropertyAsString( _("bitmapsize") ).empty() )
+			{
+				wxListView* tmpListView = lb->GetListView();
+				long flags = tmpListView->GetWindowStyleFlag();
+				flags = (flags & ~wxLC_ICON) | wxLC_SMALL_ICON;
+				tmpListView->SetWindowStyleFlag( flags );
+			}
 		}
 	}
 #endif
@@ -841,48 +754,23 @@ public:
 	}
 };
 
+void ComponentEvtHandler::OnListbookPageChanged( wxListbookEvent& event )
+{
+	OnBookPageChanged( event.GetSelection() );
+	event.Skip();
+}
+
 class ListbookPageComponent : public ComponentBase
 {
 public:
-	void OnCreated(IObjectView *objview, wxWindow *wxparent, IObjectView *parent,
-		IObjectView *first_child)
+	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
 	{
-		IObject *obj = objview->Object();
-		wxListbook *lb = (wxListbook *)parent->Window();
-		wxWindow *page = first_child->Window();
+		BookUtils::OnCreated< wxListbook >( wxobject, wxparent, GetManager(), _("ListbookPageComponent") );
+	}
 
-		wxEvtHandler* visObjEvtHandler = lb->PopEventHandler();
-
-		// save selection
-		int selection = lb->GetSelection();
-		wxString selectProperty = obj->GetPropertyAsString(_("select"));
-		lb->AddPage( page, obj->GetPropertyAsString( _("label") ) );
-
-		// Apply image to page
-		IObject* parentObj = parent->Object();
-		if ( !parentObj->GetPropertyAsString( _("bitmapsize") ).empty() )
-		{
-			if ( !obj->GetPropertyAsString( _("bitmap") ).empty() )
-			{
-				wxSize imageSize = parentObj->GetPropertyAsSize(_("bitmapsize"));
-				int width = imageSize.GetWidth();
-				int height = imageSize.GetHeight();
-				if ( width > 0 && height > 0 )
-				{
-					wxImageList* imageList = lb->GetImageList();
-					wxImage image = obj->GetPropertyAsBitmap( _("bitmap") ).ConvertToImage();
-					imageList->Add( image.Scale( width, height ) );
-					lb->SetPageImage( lb->GetPageCount() - 1, imageList->GetImageCount() - 1 );
-				}
-			}
-		}
-
-		if (selectProperty==wxT("0") && selection >= 0)
-			lb->SetSelection(selection);
-		else
-			lb->SetSelection(lb->GetPageCount()-1);
-
-		lb->PushEventHandler( visObjEvtHandler );
+	void OnSelected( wxObject* wxobject )
+	{
+		BookUtils::OnSelected< wxListbook >( wxobject, GetManager() );
 	}
 
 	TiXmlElement* ExportToXrc(IObject *obj)
@@ -902,6 +790,7 @@ public:
 		return filter.GetXfbObject();
 	}
 };
+
 class ChoicebookComponent : public ComponentBase
 {
 public:
@@ -930,27 +819,23 @@ public:
 	}
 };
 
+void ComponentEvtHandler::OnChoicebookPageChanged( wxChoicebookEvent& event )
+{
+	OnBookPageChanged( event.GetSelection() );
+	event.Skip();
+}
+
 class ChoicebookPageComponent : public ComponentBase
 {
 public:
-	void OnCreated(IObjectView *objview, wxWindow *wxparent, IObjectView *parent,
-		IObjectView *first_child)
+	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
 	{
-		IObject *obj = objview->Object();
-		wxChoicebook *cb = (wxChoicebook*)parent->Window();
-		wxWindow *page = first_child->Window();
+		BookUtils::OnCreated< wxChoicebook >( wxobject, wxparent, GetManager(), _("ChoicebookPageComponent") );
+	}
 
-		wxEvtHandler* visObjEvtHandler = cb->PopEventHandler();
-
-		int selection = cb->GetSelection();
-		cb->AddPage(page,obj->GetPropertyAsString(_("label")));
-
-		if (obj->GetPropertyAsString(_("select"))==wxT("0") && selection >= 0)
-			cb->SetSelection(selection);
-		else
-			cb->SetSelection(cb->GetPageCount()-1);
-
-		cb->PushEventHandler( visObjEvtHandler );
+	void OnSelected( wxObject* wxobject )
+	{
+		BookUtils::OnSelected< wxChoicebook >( wxobject, GetManager() );
 	}
 
 	TiXmlElement* ExportToXrc(IObject *obj)

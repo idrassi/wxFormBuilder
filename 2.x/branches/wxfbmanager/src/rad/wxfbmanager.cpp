@@ -114,12 +114,10 @@ void wxFBManager::ModifyProperty( wxObject* wxobject, wxString property, wxStrin
 
 	if ( allowUndo )
 	{
-		wxLogDebug( wxT("allowUndo %s"), value.c_str() );
 		AppData()->ModifyProperty( prop, value );
 	}
 	else
 	{
-		wxLogDebug( wxT("not allowUndo %s"), value.c_str() );
 		prop->SetValue( value );
 	}
 }
