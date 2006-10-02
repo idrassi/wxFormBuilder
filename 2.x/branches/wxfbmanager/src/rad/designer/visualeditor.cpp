@@ -78,16 +78,26 @@ m_stopSelectedEvent( false )
 
 	m_back = new GridPanel(this,-1,wxPoint(10,10),wxSize(350,200),VISUAL_EDITOR_BORDER);
 	m_back->SetAutoLayout(true);
-	/*m_back->SetSashVisible(wxSASH_BOTTOM,true);
-	m_back->SetSashBorder(wxSASH_BOTTOM,true);
-	m_back->SetSashVisible(wxSASH_RIGHT,true);
-	m_back->SetSashBorder(wxSASH_RIGHT,true);*/
-	//  m_back->PushEventHandler(new EditorHandler(GetData()));
+}
+
+void VisualEditor::DeleteAbstractObjects()
+{
+	wxObjectMap::iterator wxNoObjectIt;
+	wxNoObject* wxnoobject;
+	for ( wxNoObjectIt = m_wxobjects.begin(); wxNoObjectIt != m_wxobjects.end(); ++wxNoObjectIt )
+	{
+		wxnoobject = dynamic_cast< wxNoObject* >( wxNoObjectIt->first );
+		if ( wxnoobject )
+		{
+			wxnoobject->Destroy();
+		}
+	}
 }
 
 VisualEditor::~VisualEditor()
 {
 	AppData()->RemoveHandler( this->GetEventHandler() );
+	DeleteAbstractObjects();
 }
 
 void VisualEditor::Setup()
@@ -190,6 +200,9 @@ void VisualEditor::Create()
 	{
 		Freeze(); // Prevent flickering
 	}
+
+	// Delete objects which had no parent
+	DeleteAbstractObjects();
 
 	// Clear selections, delete objects
 	m_back->SetSelectedItem(NULL);

@@ -193,6 +193,16 @@ public:
 	virtual ~IManager(){}
 };
 
+// Used to identify wxObject* that must be manually deleted
+class wxNoObject : public wxObject
+{
+public:
+	void Destroy()
+	{
+		delete this;
+	}
+};
+
 #ifdef BUILD_DLL
 	#define DLL_FUNC extern "C" WXEXPORT
 #else
