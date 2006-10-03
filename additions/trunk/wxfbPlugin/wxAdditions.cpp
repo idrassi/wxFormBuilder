@@ -37,7 +37,7 @@
 #include <wx/propgrid/manager.h>
 
 // wxScintilla
-#include <wx/wxscintilla.h>
+#include <wx/wxScintilla/wxscintilla.h>
 
 #include <math.h>
 
