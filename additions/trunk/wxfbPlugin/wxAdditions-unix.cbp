@@ -2,34 +2,45 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="5" />
 	<Project>
-		<Option title="Contributed Components Plugin (Unix)" />
+		<Option title="wxAdditions Plugin (Unix)" />
 		<Option pch_mode="0" />
 		<Option default_target="" />
 		<Option compiler="gcc" />
 		<Option virtualFolders="" />
 		<Build>
 			<Target title="Debug">
-				<Option output="../../../bin/xml/libcontribd.so" />
+				<Option output="wxAdditions\libwxadditionsd.so" prefix_auto="0" extension_auto="0" />
 				<Option object_output=".objsd" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option host_application="../../../bin/wxformbuilderd" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
+				<Linker>
+					<Add library="ticppd" />
+				</Linker>
 				<Environment>
 					<Variable name="DEBUG" value="yes" />
 				</Environment>
 			</Target>
 			<Target title="Release">
-				<Option output="../../../bin/xml/libcontrib.so" />
+				<Option output="wxAdditions\libwxadditions.so" prefix_auto="0" extension_auto="0" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option host_application="../../../bin/wxformbuilder" />
+				<Compiler>
+					<Add option="-O3" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="ticpp" />
+				</Linker>
 				<Environment>
 					<Variable name="DEBUG" value="no" />
 				</Environment>
 			</Target>
+			<Environment>
+				<Variable name="sdk" value="sdk" />
+			</Environment>
 		</Build>
 		<VirtualTargets>
 			<Add alias="All" targets="default;" />
@@ -44,8 +55,8 @@
 			<Add option="-DTIXML_USE_TICPP" />
 			<Add option="-D_UNICODE" />
 			<Add directory="$(#wxadditions.include)" />
-			<Add directory="../../../libs/tinyxml" />
-			<Add directory="../.." />
+			<Add directory="$(sdk)\tinyxml" />
+			<Add directory="$(sdk)\plugin_interface" />
 		</Compiler>
 		<Linker>
 			<Add option="`wx-config --debug=$(DEBUG) --libs`" />
@@ -56,18 +67,17 @@
 			<Add library="`wx-config --debug=$(DEBUG) --basename`_scintilla-`wx-config --release`" />
 			<Add library="`wx-config --debug=$(DEBUG) --basename`_plotctrl-`wx-config --release`" />
 			<Add library="`wx-config --debug=$(DEBUG) --basename`_things-`wx-config --release`" />
-			<Add library="tinyxml" />
-			<Add directory="../../../libs/tinyxml/lib" />
 			<Add directory="$(#wxadditions.lib)" />
+			<Add directory="$(sdk)\lib" />
 		</Linker>
-		<Unit filename="../component.h">
+		<Unit filename="..\component.h">
 			<Option compilerVar="" />
 			<Option compile="0" />
 			<Option link="0" />
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
-		<Unit filename="../plugin.h">
+		<Unit filename="..\plugin.h">
 			<Option compilerVar="" />
 			<Option compile="0" />
 			<Option link="0" />
@@ -79,12 +89,12 @@
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
-		<Unit filename="../../utils/xrcconv.cpp">
+		<Unit filename="..\..\utils\xrcconv.cpp">
 			<Option compilerVar="CPP" />
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
-		<Unit filename="../../utils/xrcconv.h">
+		<Unit filename="..\..\utils\xrcconv.h">
 			<Option compilerVar="" />
 			<Option compile="0" />
 			<Option link="0" />
