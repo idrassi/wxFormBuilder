@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <codegen language="C++">
 
+	<templates class="wxAdditions">
+		<template name="include">
+		  @#ifdef __VISUALC__		#nl
+		  @#include &lt;wx/link_additions.h&gt; #nl
+		  @#endif //__VISUALC__
+		</template>
+	</templates>
+	
 	<templates class="wxPlotCtrl">
 		<template name="declaration">#class* $name;</template>
 		<template name="construction">
