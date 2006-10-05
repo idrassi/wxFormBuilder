@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <package name="wxAdditions" lib="libwxadditions" icon="plot16x16.png" desc="wxWidgets contributed controls">
+	
+	<!-- All wxAdditions inherit this class so that the linker header will be included -->
+	<objectinfo class="wxAdditions" type="interface"/>
 
 	<objectinfo class="wxPlotCtrl" icon="plot.xpm" type="expanded_widget">
+		<inherits class="wxAdditions"/>
 		<inherits class="wxWindow" />
 		<property name="name" type="text">m_plotCtrl</property>
 		<property name="sample_function" 			type="text" help="Enter test functions with x as the independent variable to see them plotted. This property does not change generated code.">sin(x)</property>
@@ -63,6 +67,7 @@
 	</objectinfo>
 
 	<objectinfo class="wxPropertyGrid" icon="propgrid.xpm" type="expanded_widget">
+		<inherits class="wxAdditions"/>
 		<inherits class="wxWindow" />
 		<property name="style" type="bitlist">
 			<option name="wxPG_AUTO_SORT" 				help="This will cause Sort() automatically after an item is added.
@@ -102,6 +107,7 @@
 	</objectinfo>
 
 	<objectinfo class="wxPropertyGridManager" icon="propgridman.xpm" type="expanded_widget">
+		<inherits class="wxAdditions"/>
 		<inherits class="wxWindow" />
 		<property name="style" type="bitlist">
 		    <option name="wxPG_AUTO_SORT" 				help="This will cause Sort() automatically after an item is added.
@@ -147,6 +153,7 @@
 
 
   <objectinfo class="wxFlatNotebook" icon="flatnotebook.xpm" type="flatnotebook">
+	<inherits class="wxAdditions"/>
     <inherits class="wxWindow">
 		<property name="bg">wxSYS_COLOUR_BTNFACE</property>
 	</inherits>
@@ -177,6 +184,7 @@
   </objectinfo>
 
   <objectinfo class="awxLed" icon="awxled.xpm" type="widget">
+	<inherits class="wxAdditions"/>
 	<inherits class="wxWindow" />
 	<property name="name" type="text" >m_awxLed</property>
 	<property name="state" type="option" >
@@ -194,6 +202,7 @@
   </objectinfo>
   
   <objectinfo class="wxScintilla" icon="scintilla.xpm" smallicon="scintilla_small" type="expanded_widget">
+	<inherits class="wxAdditions"/>
 	<inherits class="wxWindow" />
 	<property name="name" type="text" >m_scintilla</property>
 	<property name="folding" type="bool" help="Enable folding.">1</property>
