@@ -9,7 +9,7 @@
 		<Option virtualFolders="" />
 		<Build>
 			<Target title="Debug">
-				<Option output="wxAdditions\libwxadditionsd.so" prefix_auto="0" extension_auto="0" />
+				<Option output="wxAdditions/libwxadditionsd.so" prefix_auto="0" extension_auto="0" />
 				<Option object_output=".objsd" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -24,7 +24,7 @@
 				</Environment>
 			</Target>
 			<Target title="Release">
-				<Option output="wxAdditions\libwxadditions.so" prefix_auto="0" extension_auto="0" />
+				<Option output="wxAdditions/libwxadditions.so" prefix_auto="0" extension_auto="0" />
 				<Option type="3" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -55,12 +55,12 @@
 			<Add option="-DTIXML_USE_TICPP" />
 			<Add option="-D_UNICODE" />
 			<Add directory="$(#wxadditions.include)" />
-			<Add directory="$(sdk)\tinyxml" />
-			<Add directory="$(sdk)\plugin_interface" />
+			<Add directory="$(sdk)/tinyxml" />
+			<Add directory="$(sdk)/plugin_interface" />
 		</Compiler>
 		<Linker>
 			<Add option="`wx-config --debug=$(DEBUG) --libs`" />
-			<Add option="-Wl,-rpath,$``ORIGIN../lib" />
+			<Add option="-Wl,-rpath,$``ORIGIN" />
 			<Add library="`wx-config --debug=$(DEBUG) --basename`_flatnotebook-`wx-config --release`" />
 			<Add library="`wx-config --debug=$(DEBUG) --basename`_propgrid-`wx-config --release`" />
 			<Add library="`wx-config --debug=$(DEBUG) --basename`_awx-`wx-config --release`" />
@@ -68,36 +68,10 @@
 			<Add library="`wx-config --debug=$(DEBUG) --basename`_plotctrl-`wx-config --release`" />
 			<Add library="`wx-config --debug=$(DEBUG) --basename`_things-`wx-config --release`" />
 			<Add directory="$(#wxadditions.lib)" />
-			<Add directory="$(sdk)\lib" />
+			<Add directory="$(sdk)/lib" />
 		</Linker>
-		<Unit filename="..\component.h">
-			<Option compilerVar="" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="..\plugin.h">
-			<Option compilerVar="" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="contrib.cpp">
+		<Unit filename="wxAdditions.cpp">
 			<Option compilerVar="CPP" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="..\..\utils\xrcconv.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="..\..\utils\xrcconv.h">
-			<Option compilerVar="" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
