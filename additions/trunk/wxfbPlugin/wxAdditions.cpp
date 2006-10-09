@@ -102,11 +102,19 @@ protected:
 		}
 	}
 
+	void OnFlatNotebookPageClosing( wxFlatNotebookEvent& event )
+	{
+		wxMessageBox( wxT("wxFlatNotebook pages can normally be closed.\nHowever, it is difficult to design a page that has been closed, so this action has been vetoed."),
+						wxT("Page Close Vetoed!"), wxICON_INFORMATION, NULL );
+		event.Veto();
+	}
+
 	DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE( ComponentEvtHandler, wxEvtHandler )
 	EVT_FLATNOTEBOOK_PAGE_CHANGED( -1, ComponentEvtHandler::OnFlatNotebookPageChanged )
+	EVT_FLATNOTEBOOK_PAGE_CLOSING( -1, ComponentEvtHandler::OnFlatNotebookPageClosing )
 	EVT_SCI_MARGINCLICK( -1, ComponentEvtHandler::OnMarginClick )
 END_EVENT_TABLE()
 
