@@ -59,6 +59,7 @@
 #endif
 
 #pragma comment( lib, GET_WX_LIB_NAME( plot ) )
+#pragma comment( lib, GET_WX_LIB_NAME( flatnotebook ) )
 #pragma comment( lib, GET_WX_LIB_NAME( propgrid ) )
 #pragma comment( lib, GET_WX_LIB_NAME( scintilla ) )
 #pragma comment( lib, GET_WX_LIB_NAME( things ) )
