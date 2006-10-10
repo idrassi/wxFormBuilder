@@ -1,9 +1,6 @@
-if ( OS == "windows") then
-	package.name = "Plugin Interface"
-else
-	package.name = "plugin_interface-unix"
-end
-package.kind = "lib"
+package.name = "wxFlatNotebook"
+
+package.kind = "dll"
 package.language = "c++"
 package.files = { matchfiles( "*.h", "*.cpp" ) }
 
@@ -14,10 +11,17 @@ package.config["Release"].objdir = ".objs"
 package.config["Release (Unicode)"].objdir = ".objsu"
 
 -- Set the targets.
-package.config["Debug"].target = "fbPluginInterfaced"
-package.config["Debug (Unicode)"].target = "fbPluginInterfaceud"
-package.config["Release"].target = "fbPluginInterface"
-package.config["Release (Unicode)"].target = "fbPluginInterfaceu"
+if ( TARGET == "cb-gcc" or TARGET == "gnu" ) then
+	package.config["Debug"].target = "wxmsw270md_scintilla_gcc"
+	package.config["Debug (Unicode)"].target = "wxmsw270umd_scintilla_gcc"
+	package.config["Release"].target = "wxmsw270m_scintilla_gcc"
+	package.config["Release (Unicode)"].target = "wxmsw270um_scintilla_gcc"
+else
+	package.config["Debug"].target = "wxmsw270md_scintilla_vc"
+	package.config["Debug (Unicode)"].target = "wxmsw270umd_scintilla_vc"
+	package.config["Release"].target = "wxmsw270m_scintilla_vc"
+	package.config["Release (Unicode)"].target = "wxmsw270um_scintilla_vc"
+end
 
 -- Set the build options for the Unicode build Targets.
 package.buildflags = { "extra-warnings" }
@@ -26,7 +30,26 @@ package.config["Release"].buildflags = { "no-symbols", "optimize-speed" }
 package.config["Release (Unicode)"].buildflags = { "unicode", "no-symbols", "optimize-speed" }
 
 -- Set include paths
-package.includepaths = { "$(WXWIN)/include", "../tinyxml" }
+package.includepaths = { "../../include", "$(WXWIN)/include", "../tinyxml" }
+
+-- Setup the linker options.
+if ( TARGET == "cb-gcc" or TARGET == "gnu" ) then
+	package.libpaths = { "$(WXWIN)/lib/gcc_dll" }
+else
+	package.libpaths = { "$(WXWIN)/lib/vc_dll" }
+end
+
+-- Setup the output directory options.
+if ( TARGET == "cb-gcc" or TARGET == "gnu" ) then
+	package.bindir = { "../lib/gcc_dll" }
+else
+	package.bindir = { "../lib/vc_dll" }
+end
+
+package.config["Debug"].links = { "wxmsw27d" }
+package.config["Debug (Unicode)"].links = { "wxmsw27ud" }
+package.config["Release"].links = { "wxmsw27" }
+package.config["Release (Unicode)"].links = { "wxmsw27u" }
 
 -- Set defines.
 if ( OS == "windows") then
