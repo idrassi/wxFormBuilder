@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="5" />
+	<Project>
+		<Option title="wxFlatNotebook (Unix)" />
+		<Option pch_mode="0" />
+		<Option default_target="" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Shared Library Release">
+				<Option output="../../lib/lib`wx-config --debug=no --basename`_flatnotebook-`wx-config --release`.so" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="0" />
+				<Compiler>
+					<Add option="-DWXMAKINGDLL_FNB" />
+					<Add option="-DWXUSINGDLL" />
+					<Add option="-DMONOLITHIC" />
+				</Compiler>
+				<Environment>
+					<Variable name="DEBUG" value="no" />
+				</Environment>
+			</Target>
+			<Target title="Shared Library Debug">
+				<Option output="../../lib/lib`wx-config --debug=yes --basename`_flatnotebook-`wx-config --release`.so" />
+				<Option object_output=".objsd" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="0" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DWXMAKINGDLL_FNB" />
+					<Add option="-DWXUSINGDLL" />
+					<Add option="-DMONOLITHIC" />
+					<Add option="-D_DEBUG" />
+				</Compiler>
+				<Environment>
+					<Variable name="DEBUG" value="yes" />
+				</Environment>
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="Shared Library Release;Shared Library Debug;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="`wx-config --debug=$(DEBUG) --cflags`" />
+			<Add directory="../../include" />
+		</Compiler>
+		<Linker>
+			<Add option="`wx-config --debug=$(DEBUG) --libs`" />
+		</Linker>
+		<Unit filename="../../include/wx/wxFlatNotebook/wxFNBDropTarget.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../include/wx/wxFlatNotebook/wxFlatNotebook.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../src/wxFlatNotebook/wxFlatNotebook.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>
