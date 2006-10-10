@@ -161,19 +161,24 @@
     <property name="has_images" type="bool" 			help="Pages have images">0</property>
     <property name="auto_scale_images" type="bool" 		help="Automatically scale page images to 16x16">0</property>
     <property name="style" type="bitlist">
-      <option name="wxFNB_DEFAULT_STYLE"				help="Defined as wxFNB_MOUSE_MIDDLE_CLOSES_TABS" />
-      <option name="wxFNB_VC71" 						help="Use Visual Studio 2003 (VC7.1) Style for tabs"/>
-      <option name="wxFNB_FANCY_TABS" 					help="Use fancy style - square tabs filled with gradient coloring"/>
-      <option name="wxFNB_TABS_BORDER_SIMPLE" 			help="Draw thin border around the page"/>
-      <option name="wxFNB_NO_X_BUTTON" 					help="Do not display the 'X' button"/>
-      <option name="wxFNB_NO_NAV_BUTTONS" 				help="Do not display the Right / Left arrows"/>
-      <option name="wxFNB_MOUSE_MIDDLE_CLOSES_TABS" 	help="Use the mouse middle button for cloing tabs"/>
-      <option name="wxFNB_BOTTOM" 						help="Place tabs at bottom - the default is to place them at top"/>
-	  <option name="wxFNB_NODRAG" 						help="Disable dragging of tabs"/>
-      <option name="wxFNB_ALLOW_FOREIGN_DND" 			help="Allow drag'n'drop between different wxFlatNotebooks"/>
-      <option name="wxFNB_X_ON_TAB" 					help="Place 'X' on a tab"/>
-	  <option name="wxFNB_DCLICK_CLOSES_TABS" 			help="Close tab using double click"/>
-	  wxFNB_DEFAULT_STYLE
+	<option name="wxFNB_DEFAULT_STYLE"					help="Defined as wxFNB_MOUSE_MIDDLE_CLOSES_TABS" />
+	<option name="wxFNB_VC71" 						help="Use Visual Studio 2003 (VC7.1) Style for tabs"/>
+	<option name="wxFNB_FANCY_TABS" 					help="Use fancy style - square tabs filled with gradient coloring"/>
+	<option name="wxFNB_TABS_BORDER_SIMPLE" 			help="Draw thin border around the page"/>
+	<option name="wxFNB_NO_X_BUTTON" 					help="Do not display the 'X' button"/>
+	<option name="wxFNB_NO_NAV_BUTTONS" 				help="Do not display the Right / Left arrows"/>
+	<option name="wxFNB_MOUSE_MIDDLE_CLOSES_TABS" 		help="Use the mouse middle button for cloing tabs"/>
+	<option name="wxFNB_BOTTOM" 						help="Place tabs at bottom - the default is to place them at top"/>
+	<option name="wxFNB_NODRAG" 						help="Disable dragging of tabs"/>
+	<option name="wxFNB_VC8" 							help="Use Visual Studio 2005 (VC8.0) Style for tabs"/>
+	<option name="wxFNB_X_ON_TAB" 						help="Place 'X' on a tab"/>
+	<option name="wxFNB_BACKGROUND_GRADIENT" 			help="Draw tabs with a background gradiant."/>
+	<option name="wxFNB_COLORFUL_TABS" 				help="Draw colorful tabs."/>
+	<option name="wxFNB_DCLICK_CLOSES_TABS" 			help="Close tab using double click"/>
+	<option name="wxFNB_SMART_TABS" 					help="Cycle through tabs with Ctrl+[Shift]+T"/>
+	<option name="wxFNB_DROPDOWN_TABS_LIST" 			help="Show a drop down tab list instead of navigation buttons"/>
+	<option name="wxFNB_ALLOW_FOREIGN_DND" 			help="Allow drag'n'drop between different wxFlatNotebooks"/>
+		wxFNB_DEFAULT_STYLE
     </property>
   </objectinfo>
 
