@@ -102,7 +102,7 @@
 			<Add option="-DWXUSINGDLL" />
 			<Add option="-DTIXML_USE_TICPP" />
 			<Add directory="$(#WX.include)" />
-			<Add directory="$(#wxadditions.include)" />
+			<Add directory="..\include" />
 			<Add directory="..\.." />
 			<Add directory="$(sdk)\tinyxml" />
 			<Add directory="$(sdk)\plugin_interface" />
@@ -116,7 +116,7 @@
 			<Add library="wxmsw$(WX_VER)$(WXADD_SUFFIX)_scintilla_gcc" />
 			<Add library="wxmsw$(WX_VER)$(WXADD_SUFFIX)_flatnotebook_gcc" />
 			<Add directory="$(#WX.lib)\gcc_dll" />
-			<Add directory="$(#wxadditions.lib)\gcc_dll" />
+			<Add directory="..\lib\gcc_dll" />
 			<Add directory="$(sdk)\lib" />
 		</Linker>
 		<Unit filename="wxAdditions.cpp">
