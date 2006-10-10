@@ -12,6 +12,9 @@
 	<!-- 		Make sure to keep the sources variable the same.      -->
 	<!-- ************************************************************ -->
     <set var="FLATNOTEBOOK_SRC">
+		$(ADDITIONS_SRC_DIR)/wxFlatNotebook/fnb_resources.cpp
+		$(ADDITIONS_SRC_DIR)/wxFlatNotebook/popup_dlg.cpp
+		$(ADDITIONS_SRC_DIR)/wxFlatNotebook/renderer.cpp
 		$(ADDITIONS_SRC_DIR)/wxFlatNotebook/wxFlatNotebook.cpp
     </set>
 
@@ -22,7 +25,12 @@
 	<!-- ************************************************************ -->
     <headers template="wx_additions_headers">
         <files>
-            wx/wxFlatNotebook/wxFNBDropTarget.h
+			wx/wxFlatNotebook/popup_dlg.h
+			wx/wxFlatNotebook/renderer.h
+			wx/wxFlatNotebook/singleton.h
+            wx/wxFlatNotebook/smart_ptr.h
+			wx/wxFlatNotebook/wxFlatNotebookXPMs.h
+			wx/wxFlatNotebook/wxFNBDropTarget.h
             wx/wxFlatNotebook/wxFlatNotebook.h
         </files>
     </headers>

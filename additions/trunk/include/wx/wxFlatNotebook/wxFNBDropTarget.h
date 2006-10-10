@@ -1,4 +1,4 @@
-#ifndef _WX_FNB_DROP_TARGET_H
+#ifndef _WX_FNB_DROP_TARGET_H 
 #define _WX_FNB_DROP_TARGET_H
 
 #include <wx/wx.h>

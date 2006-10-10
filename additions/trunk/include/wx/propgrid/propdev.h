@@ -18,6 +18,9 @@
     #error "propdev.h must be included *before* advprops.h"
 #endif
 
+
+class WXDLLIMPEXP_PG wxArrayEditorDialog;
+
 // -----------------------------------------------------------------------
 
 // These are intuitive substitutes for base property classes.
@@ -921,8 +924,10 @@ long CLASSNAME::GetColour ( int index ) \
 
 //
 // Ids for sub-controls
+// NB: It should not matter what these are.
 #define wxPG_SUBID1                     11485
 #define wxPG_SUBID2                     11486
+#define wxPG_SUBID_TEMP1                11487
 
 // -----------------------------------------------------------------------
 
@@ -945,6 +950,35 @@ struct wxPGPaintData
     int             m_drawnHeight;
 
 };
+
+
+// -----------------------------------------------------------------------
+
+/** \class wxPGInDialogValidator
+    \ingroup classes
+    \brief Creates and manages a temporary wxTextCtrl for validation purposes.
+    Uses wxPropertyGrid's current editor, if available.
+*/
+class WXDLLIMPEXP_PG wxPGInDialogValidator
+{
+public:
+    wxPGInDialogValidator()
+    {
+        m_textCtrl = NULL;
+    }
+
+    ~wxPGInDialogValidator()
+    {
+        if ( m_textCtrl )
+            m_textCtrl->Destroy();
+    }
+
+    bool DoValidate( wxPropertyGrid* propGrid, wxValidator* validator, const wxString& value );
+    
+private:
+    wxTextCtrl*         m_textCtrl;
+};
+
 
 
 #ifndef DOXYGEN
@@ -1191,6 +1225,9 @@ public:
                                 wxWindow* primary,
                                 const wxChar* cbt );
 
+    // Creates wxArrayEditorDialog for string editing. Called in OnButtonClick.
+    virtual wxArrayEditorDialog* CreateEditorDialog();
+
 protected:
     wxArrayString   m_value;
     wxString        m_display; // Cache for displayed text.
@@ -1258,6 +1295,48 @@ wxValidator* wxPG_PROPCLASS(PROPNAME)::DoGetValidator () const \
 #endif
 
 
+// -----------------------------------------------------------------------
+// wxPGEditorDialog
+//   TODO: To be enabled for 1.3.
+// -----------------------------------------------------------------------
+
+#if 0
+class wxPGEditorDialog : public wxDialog
+{
+public:
+
+    wxPGEditorDialog() : wxDialog()
+    {
+        m_modified = false;
+    }
+
+    /** Called instead non-virtual Create. Must call wxDialog::Create internally.
+        Note that wxPropertyGrid is always dialog's parent.
+
+        \params
+        custBtText: Allow setting single custom button action. Text is
+          button title. Event must be intercepted in property's OnEvent()
+          member function. Not all dialogs are expected to support this.
+    */
+    virtual bool VCreate( wxPropertyGrid* pg,
+                          wxPGProperty* p,
+                          const wxString& caption,
+                          const wxString& message,
+                          wxVariant value,
+                          const wxChar* custBtText = NULL ) = 0;
+
+    virtual wxVariant GetValue() const = 0;
+
+    // Returns true if value was actually modified
+    inline bool IsModified() const { return m_modified; }
+
+protected:
+
+    bool        m_modified;
+
+private:
+};
+#endif
 
 // -----------------------------------------------------------------------
 // wxArrayEditorDialog
@@ -1277,26 +1356,47 @@ public:
 
     void Init();
 
-    wxArrayEditorDialog(wxWindow *parent,
-                              const wxString& message,
-                              const wxString& caption,
-                              long style = wxAEDIALOG_STYLE,
-                              const wxPoint& pos = wxDefaultPosition,
-                              const wxSize& sz = wxDefaultSize );
+    wxArrayEditorDialog( wxWindow *parent,
+                         const wxString& message,
+                         const wxString& caption,
+                         long style = wxAEDIALOG_STYLE,
+                         const wxPoint& pos = wxDefaultPosition,
+                         const wxSize& sz = wxDefaultSize );
 
-    bool Create(wxWindow *parent,
-                const wxString& message,
-                const wxString& caption,
-                long style = wxAEDIALOG_STYLE,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& sz = wxDefaultSize );
+    bool Create( wxWindow *parent,
+                 const wxString& message,
+                 const wxString& caption,
+                 long style = wxAEDIALOG_STYLE,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& sz = wxDefaultSize );
 
-    /*
-    inline void SetCustomButton ( const wxChar* custBtText, wxArrayStringPropertyClass* pcc )
+    /** Set value modified by dialog.
+    */
+    virtual void SetDialogValue( const wxVariant& WXUNUSED(value) )
     {
-        m_custBtText = custBtText;
-        m_pCallingClass = pcc;
-    }*/
+        wxFAIL_MSG(wxT("re-implement this member function in derived class"));
+    }
+
+    /** Return value modified by dialog.
+    */
+    virtual wxVariant GetDialogValue() const
+    {
+        wxFAIL_MSG(wxT("re-implement this member function in derived class"));
+        return wxVariant();
+    }
+
+    /** Override to return wxValidator to be used with the wxTextCtrl
+        in dialog. Note that the validator is used in the standard 
+        wx way, ie. it immediately prevents user from entering invalid
+        input.
+
+        \remarks
+        Dialog frees the validator.
+    */
+    virtual wxValidator* GetTextCtrlValidator() const
+    {
+        return (wxValidator*) NULL;
+    }
 
     // Returns true if array was actually modified
     bool IsModified() const { return m_modified; }

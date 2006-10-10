@@ -344,8 +344,9 @@ wxWindow* wxPGDatePickerCtrlEditor::CreateControls( wxPropertyGrid* propgrid,
                                                     const wxSize& sz,
                                                     wxWindow** ) const
 {
-    wxASSERT_MSG( property->IsKindOf(WX_PG_CLASSINFO(wxDateProperty)),
-                  wxT("DatePickerCtrl editor can only be used with wxDateProperty or derivative.") );
+    wxCHECK_MSG( property->IsKindOf(WX_PG_CLASSINFO(wxDateProperty)),
+                 NULL,
+                 wxT("DatePickerCtrl editor can only be used with wxDateProperty or derivative.") );
 
     wxDatePropertyClass* prop = (wxDatePropertyClass*) property;
 
@@ -879,7 +880,7 @@ void wxSystemColourPropertyClass::DoSetValue( wxPGVariant value )
     }
 */
 
-    wxASSERT ( m_value.m_colour.Ok() );
+    wxCHECK_RET( m_value.m_colour.Ok(), wxT("colour not ok") );
 
     if ( m_value.m_type < wxPG_COLOUR_WEB_BASE )
     {
@@ -1396,7 +1397,6 @@ void wxImageFilePropertyClass::DoSetValue( wxPGVariant value )
     {
         m_pImage = new wxImage ( m_filename.GetFullPath() );
     }
-
 }
 
 wxSize wxImageFilePropertyClass::GetImageSize() const
@@ -1415,18 +1415,18 @@ void wxImageFilePropertyClass::OnCustomPaint( wxDC& dc,
         // Create the bitmap here because required size is not known in DoSetValue().
         if ( !m_pBitmap )
         {
-            m_pImage->Rescale ( rect.width, rect.height );
-            m_pBitmap = new wxBitmap ( *m_pImage );
+            m_pImage->Rescale( rect.width, rect.height );
+            m_pBitmap = new wxBitmap( *m_pImage );
             delete m_pImage;
             m_pImage = NULL;
         }
 
-        dc.DrawBitmap ( *m_pBitmap, rect.x, rect.y, false );
+        dc.DrawBitmap( *m_pBitmap, rect.x, rect.y, false );
     }
     else
     {
         // No file - just draw a white box
-        dc.SetBrush ( *wxWHITE_BRUSH );
+        dc.SetBrush( *wxWHITE_BRUSH );
         dc.DrawRectangle ( rect );
     }
 }
@@ -1443,12 +1443,10 @@ void wxImageFilePropertyClass::OnCustomPaint( wxDC& dc,
 
 wxPGProperty* wxPG_CONSTFUNC(wxMultiChoiceProperty)(const wxString& label,
                                                     const wxString& name,
-                                                    const wxPGChoices& choices)
+                                                    const wxPGChoices& choices,
+                                                    const wxArrayInt& value)
 {
-    wxArrayString* arr = (wxArrayString*) &choices.GetLabels();
-
-    return new wxPG_PROPCLASS(wxMultiChoiceProperty)(label,name,
-        *arr, choices.GetValues());
+    return new wxPG_PROPCLASS(wxMultiChoiceProperty)(label,name,choices,value);
 }
 
 wxPGProperty* wxPG_CONSTFUNC(wxMultiChoiceProperty)(const wxString& label,
@@ -1461,6 +1459,20 @@ wxPGProperty* wxPG_CONSTFUNC(wxMultiChoiceProperty)(const wxString& label,
 
 WX_PG_IMPLEMENT_PROPERTY_CLASS(wxMultiChoiceProperty,wxBaseProperty,
                                wxArrayInt,const wxArrayInt&,TextCtrlAndButton)
+
+wxMultiChoicePropertyClass::wxMultiChoicePropertyClass(const wxString& label,
+                                                       const wxString& name,
+                                                       const wxPGChoices& choices,
+                                                       const wxArrayInt& value)
+                                                         : wxPGProperty(label,name)
+{
+    wxPG_INIT_REQUIRED_TYPE(wxArrayInt)
+
+    m_choices.Assign(choices);
+
+    DoSetValue( (void*)&value );
+}
+
 
 wxMultiChoicePropertyClass::wxMultiChoicePropertyClass(const wxString& label,
                                                        const wxString& name,
@@ -1494,6 +1506,10 @@ void wxMultiChoicePropertyClass::DoSetValue( wxPGVariant value )
         m_value_wxArrayInt = *pObj;
         GenerateValueAsString();
     }
+    else
+    {
+        m_display = wxEmptyString;
+    }
 }
 
 wxPGVariant wxMultiChoicePropertyClass::DoGetValue() const
@@ -1508,7 +1524,6 @@ wxString wxMultiChoicePropertyClass::GetValueAsString( int ) const
 
 void wxMultiChoicePropertyClass::GenerateValueAsString()
 {
-
     // Allow zero-length strings list
     if ( !m_choices.IsOk() || !m_choices.GetCount() )
     {
@@ -1516,24 +1531,48 @@ void wxMultiChoicePropertyClass::GenerateValueAsString()
         return;
     }
 
-    wxString& tempstr = m_display;
+    wxString& tempStr = m_display;
+    wxArrayInt indices = GetValueAsIndices();
     unsigned int i;
-    unsigned int itemcount = m_value_wxArrayInt.GetCount();
+    unsigned int itemCount = indices.GetCount();
 
-    tempstr.Empty();
+    tempStr.Empty();
 
-    if ( itemcount )
-        tempstr.append ( wxT("\"") );
+    if ( itemCount )
+        tempStr.append( wxT("\"") );
 
-    for ( i = 0; i < itemcount; i++ )
+    for ( i = 0; i < itemCount; i++ )
     {
-        int ind = m_value_wxArrayInt.Item(i);
-        wxASSERT ( ind >= 0 && ind < (int)m_choices.GetCount() );
-        tempstr.append ( m_choices.GetLabel(ind) );
-        tempstr.append ( wxT("\"") );
-        if ( i < (itemcount-1) )
-            tempstr.append ( wxT(" \"") );
+        int ind = indices.Item(i);
+        wxCHECK_RET( ind >= 0 && ind < (int)m_choices.GetCount(),
+                     wxT("value out of range") );
+        tempStr.append( m_choices.GetLabel(ind) );
+        tempStr.append( wxT("\"") );
+        if ( i < (itemCount-1) )
+            tempStr.append ( wxT(" \"") );
     }
+}
+
+wxArrayInt wxMultiChoicePropertyClass::GetValueAsIndices() const
+{
+    const wxArrayInt& choiceValues = m_choices.GetValues();
+    if ( choiceValues.GetCount() )
+    {
+        // Translate values to string indices.
+        wxArrayInt selections;
+
+        unsigned int i;
+        for ( i=0; i<m_value_wxArrayInt.GetCount(); i++ )
+        {
+            int sIndex = choiceValues.Index(m_value_wxArrayInt[i]);
+            if ( sIndex >= 0 )
+                selections.Add(sIndex);
+        }
+
+        return selections;
+    }
+
+    return m_value_wxArrayInt;
 }
 
 bool wxMultiChoicePropertyClass::OnEvent( wxPropertyGrid* propgrid,
@@ -1546,21 +1585,38 @@ bool wxMultiChoicePropertyClass::OnEvent( wxPropertyGrid* propgrid,
         PrepareValueForDialogEditing(propgrid);
 
         // launch editor dialog
-        wxMultiChoiceDialog dlg(propgrid,
-                                _("Make a selection:"),
-                                m_label,
-                                m_choices.GetCount(),
-                                &m_choices.GetLabels()[0],
-                                wxCHOICEDLG_STYLE);
+        wxMultiChoiceDialog dlg( propgrid,
+                                 _("Make a selection:"),
+                                 m_label,
+                                 m_choices.GetCount(),
+                                 &m_choices.GetLabels()[0],
+                                 wxCHOICEDLG_STYLE );
 
-        dlg.Move ( propgrid->GetGoodEditorDialogPosition (this,dlg.GetSize()) );
-        dlg.SetSelections(m_value_wxArrayInt);
+        dlg.Move( propgrid->GetGoodEditorDialogPosition(this,dlg.GetSize()) );
+
+        dlg.SetSelections(GetValueAsIndices());
 
         if ( dlg.ShowModal() == wxID_OK )
         {
-            wxArrayInt arrint = dlg.GetSelections();
-            DoSetValue ( (void*)&arrint );
-            UpdateControl ( primary );
+            wxArrayInt arrInt = dlg.GetSelections();
+
+            const wxArrayInt& choiceValues = m_choices.GetValues();
+            if ( choiceValues.GetCount() )
+            {
+                // Translate string indices to values.
+                wxArrayInt values;
+
+                unsigned int i;
+                for ( i=0; i<arrInt.GetCount(); i++ )
+                    values.Add(choiceValues.Item(arrInt.Item(i)));
+
+                DoSetValue( (void*)&values );
+            }
+            else
+            {
+                DoSetValue( (void*)&arrInt );
+            }
+            UpdateControl( primary );
 
             return true;
         }
@@ -1583,12 +1639,18 @@ int wxMultiChoicePropertyClass::GetChoiceInfo( wxPGChoiceInfo* choiceinfo )
 bool wxMultiChoicePropertyClass::SetValueFromString( const wxString& text, int )
 {
     m_value_wxArrayInt.Empty();
-    wxArrayString& strings = m_choices.GetLabels();
+    const wxArrayString& strings = m_choices.GetLabels();
+    const wxArrayInt& values = m_choices.GetValues();
 
     WX_PG_TOKENIZER2_BEGIN(text,wxT('"'))
         int ind = strings.Index( token );
         if ( ind != wxNOT_FOUND )
-            m_value_wxArrayInt.Add ( ind );
+        {
+            if ( values.GetCount() )
+                ind = values.Item(ind);
+
+            m_value_wxArrayInt.Add(ind);
+        }
     WX_PG_TOKENIZER2_END()
 
     GenerateValueAsString();
