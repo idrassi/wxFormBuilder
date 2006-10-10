@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="wxAdditions Plugin (Unix) workspace">
+		<Project filename="wxAdditions-unix.cbp" active="1">
+			<Depends filename="sdk\plugin_interface\plugin_interface-unix.cbp" />
+			<Depends filename="sdk\tinyxml\TiCPP.cbp" />
+		</Project>
+		<Project filename="sdk\plugin_interface\plugin_interface-unix.cbp" />
+		<Project filename="sdk\tinyxml\TiCPP.cbp" />
+	</Workspace>
+</CodeBlocks_workspace_file>

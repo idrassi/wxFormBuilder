@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="5" />
+	<Project>
+		<Option title="Things (Unix)" />
+		<Option pch_mode="0" />
+		<Option default_target="" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Shared Library Release">
+				<Option output="../../lib/lib`wx-config --basename`_things-`wx-config --release`.so" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-DWXMAKINGDLL_THINGS" />
+					<Add option="-DWXUSINGDLL" />
+					<Add option="-DMONOLITHIC" />
+				</Compiler>
+				<Environment>
+					<Variable name="DEBUG" value="no" />
+				</Environment>
+			</Target>
+			<Target title="Shared Library Debug">
+				<Option output="../../lib/lib`wx-config --debug=yes --basename`_things-`wx-config --release`.so" />
+				<Option object_output=".objsd" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DWXMAKINGDLL_THINGS" />
+					<Add option="-DWXUSINGDLL" />
+					<Add option="-DMONOLITHIC" />
+					<Add option="-D_DEBUG" />
+				</Compiler>
+				<Environment>
+					<Variable name="DEBUG" value="yes" />
+				</Environment>
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="Shared Library Release;Shared Library Debug;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="`wx-config --debug=$(DEBUG) --cflags`" />
+			<Add directory="../../include" />
+		</Compiler>
+		<Linker>
+			<Add option="`wx-config --debug=$(DEBUG) --libs`" />
+		</Linker>
+		<Unit filename="../../include/wx/things/block.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../include/wx/things/bmpcombo.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../include/wx/things/dropdown.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../include/wx/things/genergdi.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../include/wx/things/geometry.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../include/wx/things/medsort.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../include/wx/things/menubtn.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../include/wx/things/optvalue.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../include/wx/things/range.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../include/wx/things/spinctld.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../include/wx/things/thingdef.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../include/wx/things/toggle.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../src/things/block.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../src/things/bmpcombo.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../src/things/dropdown.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../src/things/genergdi.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../src/things/geometry.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../src/things/menubtn.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../src/things/optvalue.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../src/things/range.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../src/things/spinctld.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Unit filename="../../src/things/toggle.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Shared Library Release" />
+			<Option target="Shared Library Debug" />
+		</Unit>
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>
