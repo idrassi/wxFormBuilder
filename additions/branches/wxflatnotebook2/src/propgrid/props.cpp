@@ -1793,7 +1793,6 @@ bool wxLongStringPropertyClass::SetValueFromString( const wxString& text, int )
 BEGIN_EVENT_TABLE(wxArrayEditorDialog, wxDialog)
     EVT_IDLE(wxArrayEditorDialog::OnIdle)
     EVT_LISTBOX(24, wxArrayEditorDialog::OnListBoxClick)
-    EVT_LISTBOX(24, wxArrayEditorDialog::OnListBoxClick)
     EVT_TEXT_ENTER(21, wxArrayEditorDialog::OnAddClick)
     EVT_BUTTON(22, wxArrayEditorDialog::OnAddClick)
     EVT_BUTTON(23, wxArrayEditorDialog::OnDeleteClick)
@@ -1809,14 +1808,21 @@ IMPLEMENT_ABSTRACT_CLASS(wxArrayEditorDialog, wxDialog)
 
 // -----------------------------------------------------------------------
 
-void wxArrayEditorDialog::OnIdle(wxIdleEvent&)
+void wxArrayEditorDialog::OnIdle(wxIdleEvent& event)
 {
     //
     // Do control focus detection here.
     //
 
-    if ( m_curFocus == 0 && FindFocus() == m_lbStrings )
+    wxWindow* focused = FindFocus();
+
+    // This strange focus thing is a workaround for wxGTK wxListBox focus
+    // reporting bug.
+    if ( m_curFocus == 0 && focused != m_edValue &&
+         focused != m_butAdd && focused != m_butUpdate &&
+         m_lbStrings->GetSelection() >= 0 )
     {
+        //wxLogDebug(wxT("Focused: %s"),focused?focused->GetClassInfo()->GetClassName():wxT("NULL"));
         // ListBox was just focused.
         m_butAdd->Enable(false);
         m_butUpdate->Enable(false);
@@ -1825,8 +1831,9 @@ void wxArrayEditorDialog::OnIdle(wxIdleEvent&)
         m_butDown->Enable(true);
         m_curFocus = 1;
     }
-    else if ( (m_curFocus == 1 && FindFocus() == m_edValue) /*|| m_curFocus == 2*/ )
+    else if ( (m_curFocus == 1 && focused == m_edValue) /*|| m_curFocus == 2*/ )
     {
+        //wxLogDebug(wxT("Focused: %s"),focused?focused->GetClassInfo()->GetClassName():wxT("NULL"));
         // TextCtrl was just focused.
         m_butAdd->Enable(true);
         bool upd_enable = false;
@@ -1838,6 +1845,8 @@ void wxArrayEditorDialog::OnIdle(wxIdleEvent&)
         m_butDown->Enable(false);
         m_curFocus = 0;
     }
+
+    event.Skip();
 }
 
 // -----------------------------------------------------------------------
@@ -1858,13 +1867,13 @@ void wxArrayEditorDialog::Init()
 
 // -----------------------------------------------------------------------
 
-wxArrayEditorDialog::wxArrayEditorDialog(wxWindow *parent,
-                              const wxString& message,
-                              const wxString& caption,
-                              long style,
-                              const wxPoint& pos,
-                              const wxSize& sz )
-                              : wxDialog()
+wxArrayEditorDialog::wxArrayEditorDialog( wxWindow *parent,
+                                          const wxString& message,
+                                          const wxString& caption,
+                                          long style,
+                                          const wxPoint& pos,
+                                          const wxSize& sz )
+    : wxDialog()
 {
     Init();
     Create(parent,message,caption,style,pos,sz);
@@ -1872,12 +1881,12 @@ wxArrayEditorDialog::wxArrayEditorDialog(wxWindow *parent,
 
 // -----------------------------------------------------------------------
 
-bool wxArrayEditorDialog::Create(wxWindow *parent,
-                const wxString& message,
-                const wxString& caption,
-                long style,
-                const wxPoint& pos,
-                const wxSize& sz )
+bool wxArrayEditorDialog::Create( wxWindow *parent,
+                                  const wxString& message,
+                                  const wxString& caption,
+                                  long style,
+                                  const wxPoint& pos,
+                                  const wxSize& sz )
 {
 
     bool res = wxDialog::Create (parent,1,caption,pos,sz,style);
@@ -1908,17 +1917,23 @@ bool wxArrayEditorDialog::Create(wxWindow *parent,
     wxBoxSizer* rowsizer = new wxBoxSizer( wxHORIZONTAL );
     m_edValue = new wxTextCtrl(this,21,wxEmptyString,
         wxDefaultPosition,wxDefaultSize,wxTE_PROCESS_ENTER);
-    rowsizer->Add ( m_edValue,
+    wxValidator* validator = GetTextCtrlValidator();
+    if ( validator )
+    {
+        m_edValue->SetValidator( *validator );
+        delete validator;
+    }
+    rowsizer->Add( m_edValue,
         1, wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL|wxALL, spacing );
 
     // Add button
     m_butAdd = new wxButton(this,22,_("Add"));
-    rowsizer->Add ( m_butAdd,
+    rowsizer->Add( m_butAdd,
         0, wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, spacing );
-    topsizer->Add ( rowsizer, 0, wxEXPAND, spacing );
+    topsizer->Add( rowsizer, 0, wxEXPAND, spacing );
 
     // Separator line
-    topsizer->Add ( new wxStaticLine(this,-1),
+    topsizer->Add( new wxStaticLine(this,-1),
         0, wxEXPAND|wxBOTTOM|wxLEFT|wxRIGHT, spacing );
 
     rowsizer = new wxBoxSizer( wxHORIZONTAL );
@@ -1928,7 +1943,7 @@ bool wxArrayEditorDialog::Create(wxWindow *parent,
     unsigned int i;
     for ( i=0; i<ArrayGetCount(); i++ )
         m_lbStrings->Append( ArrayGet(i) );
-    rowsizer->Add ( m_lbStrings, 1, wxEXPAND|wxRIGHT, spacing );
+    rowsizer->Add( m_lbStrings, 1, wxEXPAND|wxRIGHT, spacing );
 
     // Manipulator buttons
     wxBoxSizer* colsizer = new wxBoxSizer( wxVERTICAL );
@@ -1936,28 +1951,28 @@ bool wxArrayEditorDialog::Create(wxWindow *parent,
     if ( m_custBtText )
     {
         m_butCustom = new wxButton(this,28,::wxGetTranslation(m_custBtText));
-        colsizer->Add ( m_butCustom,
+        colsizer->Add( m_butCustom,
             0, wxALIGN_CENTER|wxTOP/*wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT*/,
             spacing );
     }
     m_butUpdate = new wxButton(this,27,_("Update"));
-    colsizer->Add ( m_butUpdate,
+    colsizer->Add( m_butUpdate,
         0, wxALIGN_CENTER|wxTOP, spacing );
     m_butRemove = new wxButton(this,23,_("Remove"));
-    colsizer->Add ( m_butRemove,
+    colsizer->Add( m_butRemove,
         0, wxALIGN_CENTER|wxTOP, spacing );
     m_butUp = new wxButton(this,25,_("Up"));
-    colsizer->Add ( m_butUp,
+    colsizer->Add( m_butUp,
         0, wxALIGN_CENTER|wxTOP, spacing );
     m_butDown = new wxButton(this,26,_("Down"));
-    colsizer->Add ( m_butDown,
+    colsizer->Add( m_butDown,
         0, wxALIGN_CENTER|wxTOP, spacing );
-    rowsizer->Add ( colsizer, 0, 0, spacing );
+    rowsizer->Add( colsizer, 0, 0, spacing );
 
-    topsizer->Add ( rowsizer, 1, wxLEFT|wxRIGHT|wxEXPAND, spacing );
+    topsizer->Add( rowsizer, 1, wxLEFT|wxRIGHT|wxEXPAND, spacing );
 
     // Separator line
-    topsizer->Add ( new wxStaticLine(this,-1),
+    topsizer->Add( new wxStaticLine(this,-1),
         0, wxEXPAND|wxTOP|wxLEFT|wxRIGHT, spacing );
 
     // buttons
@@ -1966,24 +1981,23 @@ bool wxArrayEditorDialog::Create(wxWindow *parent,
     const int but_sz_flags =
         wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT;
     */
-    rowsizer->Add ( new wxButton(this,wxID_OK,_("Ok")),
+    rowsizer->Add( new wxButton(this,wxID_OK,_("Ok")),
         0, but_sz_flags, spacing );
-    rowsizer->Add ( new wxButton(this,wxID_CANCEL,_("Cancel")),
+    rowsizer->Add( new wxButton(this,wxID_CANCEL,_("Cancel")),
         0, but_sz_flags, spacing );
-    topsizer->Add ( rowsizer, 0, wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL, 0 );
+    topsizer->Add( rowsizer, 0, wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL, 0 );
 
     m_edValue->SetFocus();
 
-    SetSizer ( topsizer );
+    SetSizer( topsizer );
     topsizer->SetSizeHints( this );
 
 #if !wxPG_SMALL_SCREEN
     if ( sz.x == wxDefaultSize.x &&
-         sz.y == wxDefaultSize.y
-       )
-        SetSize ( wxSize(275,360) );
+         sz.y == wxDefaultSize.y )
+        SetSize( wxSize(275,360) );
     else
-        SetSize (sz);
+        SetSize(sz);
 #endif
 
     return res;
@@ -2098,7 +2112,7 @@ void wxArrayEditorDialog::OnListBoxClick(wxCommandEvent& )
     int index = m_lbStrings->GetSelection();
     if ( index >= 0 )
     {
-        m_edValue->SetValue ( m_lbStrings->GetString(index) );
+        m_edValue->SetValue( m_lbStrings->GetString(index) );
     }
 }
 
@@ -2113,29 +2127,21 @@ public:
 
     void Init();
 
-    wxArrayStringEditorDialog(wxWindow *parent,
-                              const wxString& message,
-                              const wxString& caption,
-                              wxArrayString& array,
-                              long style = wxAEDIALOG_STYLE,
-                              const wxPoint& pos = wxDefaultPosition,
-                              const wxSize& sz = wxDefaultSize );
+    virtual void SetDialogValue( const wxVariant& value )
+    {
+        m_array = value.GetArrayString();
+    }
 
-    bool Create(wxWindow *parent,
-                const wxString& message,
-                const wxString& caption,
-                wxArrayString& array,
-                long style = wxAEDIALOG_STYLE,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& sz = wxDefaultSize );
+    virtual wxVariant GetDialogValue() const
+    {
+        return m_array;
+    }
 
-    inline void SetCustomButton ( const wxChar* custBtText, wxArrayStringPropertyClass* pcc )
+    inline void SetCustomButton( const wxChar* custBtText, wxArrayStringPropertyClass* pcc )
     {
         m_custBtText = custBtText;
         m_pCallingClass = pcc;
     }
-
-    const wxArrayString& GetArray() const { return m_array; }
 
     void OnCustomEditClick(wxCommandEvent& event);
 
@@ -2210,39 +2216,12 @@ wxArrayStringEditorDialog::wxArrayStringEditorDialog()
 
 void wxArrayStringEditorDialog::Init()
 {
-    wxArrayEditorDialog::Init();
     m_pCallingClass = (wxArrayStringPropertyClass*) NULL;
-}
-
-wxArrayStringEditorDialog::wxArrayStringEditorDialog( wxWindow *parent,
-                                                      const wxString& message,
-                                                      const wxString& caption,
-                                                      wxArrayString& array,
-                                                      long style,
-                                                      const wxPoint& pos,
-                                                      const wxSize& sz )
-    : wxArrayEditorDialog()
-{
-    Init();
-    Create(parent,message,caption,array,style,pos,sz);
-}
-
-bool wxArrayStringEditorDialog::Create( wxWindow *parent,
-                                        const wxString& message,
-                                        const wxString& caption,
-                                        wxArrayString& array,
-                                        long style,
-                                        const wxPoint& pos,
-                                        const wxSize& sz )
-{
-    m_array = array;
-
-    return wxArrayEditorDialog::Create (parent,message,caption,style,pos,sz);
 }
 
 void wxArrayStringEditorDialog::OnCustomEditClick(wxCommandEvent& )
 {
-    wxASSERT ( m_pCallingClass );
+    wxASSERT( m_pCallingClass );
     wxString str = m_edValue->GetValue();
     if ( m_pCallingClass->OnCustomStringEdit(m_parent,str) )
     {
@@ -2349,15 +2328,23 @@ void wxPropertyGrid::ArrayStringToString( wxString& dst, const wxArrayString& sr
     }
 }
 
+#define ARRSTRPROP_ARRAY_TO_STRING(STRING,ARRAY) \
+    wxPropertyGrid::ArrayStringToString(STRING,ARRAY,wxT('"'),wxT('"'),1);
+
 void wxArrayStringPropertyClass::GenerateValueAsString()
 {
-    wxPropertyGrid::ArrayStringToString(m_display,m_value,wxT('"'),wxT('"'),1);
+    ARRSTRPROP_ARRAY_TO_STRING(m_display, m_value)
 }
 
 // Default implementation doesn't do anything.
 bool wxArrayStringPropertyClass::OnCustomStringEdit( wxWindow*, wxString& )
 {
     return false;
+}
+
+wxArrayEditorDialog* wxArrayStringPropertyClass::CreateEditorDialog()
+{
+    return new wxArrayStringEditorDialog();
 }
 
 bool wxArrayStringPropertyClass::OnButtonClick( wxPropertyGrid* propGrid,
@@ -2367,26 +2354,60 @@ bool wxArrayStringPropertyClass::OnButtonClick( wxPropertyGrid* propGrid,
     // Update the value
     PrepareValueForDialogEditing(propGrid);
 
+    if ( !propGrid->EditorValidate() )
+        return false;
+
     // Create editor dialog.
-    wxArrayStringEditorDialog dlg;
+    wxArrayEditorDialog* dlg = CreateEditorDialog();
+    wxValidator* validator = GetValidator();
+    wxPGInDialogValidator dialogValidator;
 
-    if ( cbt )
-        dlg.SetCustomButton(cbt,this);
+    wxArrayStringEditorDialog* strEdDlg = wxDynamicCast(dlg, wxArrayStringEditorDialog);
 
-    dlg.Create(propGrid, wxEmptyString, m_label, m_value);
+    if ( strEdDlg )
+        strEdDlg->SetCustomButton(cbt, this);
+
+    dlg->SetDialogValue( wxVariant(m_value) );
+    dlg->Create(propGrid, wxEmptyString, m_label);
 
 #if !wxPG_SMALL_SCREEN
-    dlg.Move( propGrid->GetGoodEditorDialogPosition(this,dlg.GetSize()) );
+    dlg->Move( propGrid->GetGoodEditorDialogPosition(this,dlg->GetSize()) );
 #endif
 
-    int res = dlg.ShowModal();
-    if ( res == wxID_OK && dlg.IsModified() )
+    bool retVal;
+
+    for (;;)
     {
-        DoSetValue( dlg.GetArray() );
-        UpdateControl( primaryCtrl );
-        return true;
+        retVal = false;
+
+        int res = dlg->ShowModal();
+
+        if ( res == wxID_OK && dlg->IsModified() )
+        {
+            wxVariant value = dlg->GetDialogValue();
+            if ( !value.IsNull() )
+            {
+                wxArrayString actualValue = value.GetArrayString();
+                wxString tempStr;
+                ARRSTRPROP_ARRAY_TO_STRING(tempStr, actualValue)
+                if ( dialogValidator.DoValidate( propGrid, validator, tempStr ) )
+                {
+                    DoSetValue( actualValue );
+                    UpdateControl( primaryCtrl );
+                    retVal = true;
+                    break;
+                }
+            }
+            else
+                break;
+        }
+        else
+            break;
     }
-    return false;
+
+    delete dlg;
+
+    return retVal;
 }
 
 bool wxArrayStringPropertyClass::OnEvent( wxPropertyGrid* propGrid,
