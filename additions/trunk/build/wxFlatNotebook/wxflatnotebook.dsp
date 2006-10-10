@@ -452,6 +452,18 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\.\..\..\src\wxFlatNotebook\fnb_resources.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\.\..\..\src\wxFlatNotebook\popup_dlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\.\..\..\src\wxFlatNotebook\renderer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\..\..\..\src\msw\version.rc
 
 !IF  "$(CFG)" == "flatnotebook - Win32 DLL Universal Unicode Release"

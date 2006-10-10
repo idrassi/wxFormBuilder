@@ -676,7 +676,7 @@ const wxObject *&nbsp;</td><td class="memItemRight" valign=bottom><b>GetProperty
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagee29">SetPropertyChoices</a> (<a class="el" href="classwxPGId.htm">wxPGId</a> id, <a class="el" href="classwxPGChoices.htm">wxPGChoices</a> &amp;choices)</td></tr>
 
 <tr><td colspan=2><br><h2>Protected Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagerb0">CreatePropertyGrid</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classwxPropertyGridManager.htm#wxPropertyGridManagerb0">CreatePropertyGrid</a> () const </td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="wxPropertyGridPageb0" doxytag="wxPropertyGridManager::DoGetPropertyByName" ></a>
 virtual <a class="el" href="classwxPGId.htm">wxPGId</a>&nbsp;</td><td class="memItemRight" valign=bottom><b>DoGetPropertyByName</b> (const wxString &amp;name) const </td></tr>
@@ -1481,11 +1481,11 @@ Otherwise, this is similar as CreatePropertyByClass. <dl compact><dt><b>Remarks:
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a>* wxPropertyGridManager::CreatePropertyGrid </td>
+          <td class="md" nowrap valign="top"> virtual <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a>* wxPropertyGridManager::CreatePropertyGrid </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap> const<code> [protected]</code></td>
+          <td class="md" nowrap> const<code> [protected, virtual]</code></td>
         </tr>
 
       </table>
@@ -3925,7 +3925,7 @@ Reimplemented from <a class="el" href="classwxPropertyContainerMethods.htm#wxPro
     <td>
 
 <p>
-See <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida154">wxPropertyGrid::Insert</a>. 
+See <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida156">wxPropertyGrid::Insert</a>. 
 <p>
     </td>
   </tr>
@@ -3971,7 +3971,7 @@ See <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida154">wxPropertyGr
     <td>
 
 <p>
-See <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida154">wxPropertyGrid::Insert</a>. 
+See <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida156">wxPropertyGrid::Insert</a>. 
 <p>
     </td>
   </tr>
@@ -4963,7 +4963,7 @@ Replaces property with id with newly created property.
 <p>
 For example, this code replaces existing property named "Flags" with one that will have different set of items: <pre class="fragment"><div>            pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#wxPropertyGridPagea121">ReplaceProperty</a>(wxT(<span class="stringliteral">"Flags"</span>),
                 wxFlagsProperty(wxT(<span class="stringliteral">"Flags"</span>),wxPG_LABEL,newItems))
-</div></pre>For more info, see <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida154">wxPropertyGrid::Insert</a>.     </td>
+</div></pre>For more info, see <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida156">wxPropertyGrid::Insert</a>.     </td>
   </tr>
 </table>
 <a class="anchor" name="wxPropertyGridManagera160" doxytag="wxPropertyGridManager::ResetDefaultPriority" ></a><p>
@@ -5883,7 +5883,7 @@ Associates the help string with property.
 Set wxBitmap in front of the value. 
 <p>
 <dl compact><dt><b>Remarks:</b></dt><dd><ul>
-<li>Bitmap will be ignored if property class has implemented OnCustomPaint.</li><li>Bitmap will be scaled to a size returned by <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida61">wxPropertyGrid::GetImageSize()</a>; </li></ul>
+<li>Bitmap will be ignored if property class has implemented OnCustomPaint.</li><li>Bitmap will be scaled to a size returned by <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida63">wxPropertyGrid::GetImageSize()</a>; </li></ul>
 </dd></dl>
     </td>
   </tr>
@@ -6539,7 +6539,7 @@ Toggles priority of a property between wxPG_HIGH and wxPG_LOW.
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
 <li>manager.h</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Sat Aug 12 20:44:33 2006 for wxPropertyGrid by
+<hr size="1"><address style="align: right;"><small>Generated on Sat Sep 9 20:46:18 2006 for wxPropertyGrid by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.6 </small></address>

@@ -18,9 +18,11 @@
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__wndflags.htm#ga13">wxPG_COMPACTOR</a>&nbsp;&nbsp;&nbsp;0x00004000</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__wndflags.htm#ga18">wxPG_DEFAULT_STYLE</a>&nbsp;&nbsp;&nbsp;(0)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__wndflags.htm#ga19">wxPG_DEFAULT_STYLE</a>&nbsp;&nbsp;&nbsp;(0)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__wndflags.htm#ga12">wxPG_DESCRIPTION</a>&nbsp;&nbsp;&nbsp;0x00002000</td></tr>
+
+<tr><td class="memItemLeft" nowrap align=right valign=top>#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__wndflags.htm#ga18">wxPG_EX_GREY_LABEL_WHEN_DISABLED</a>&nbsp;&nbsp;&nbsp;0x00040000</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__wndflags.htm#ga17">wxPG_EX_HELP_AS_TOOLTIPS</a>&nbsp;&nbsp;&nbsp;0x00010000</td></tr>
 
@@ -46,7 +48,7 @@
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__wndflags.htm#ga5">wxPG_TOOLTIPS</a>&nbsp;&nbsp;&nbsp;0x00000100</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__wndflags.htm#ga19">wxPGMAN_DEFAULT_STYLE</a>&nbsp;&nbsp;&nbsp;(0)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__wndflags.htm#ga20">wxPGMAN_DEFAULT_STYLE</a>&nbsp;&nbsp;&nbsp;(0)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__wndflags.htm#ga10">wxTAB_TRAVERSAL</a>&nbsp;&nbsp;&nbsp;0x00080000</td></tr>
 
@@ -127,7 +129,7 @@ Changing this requires Refresh() to show changes.     </td>
     </td>
   </tr>
 </table>
-<a class="anchor" name="ga18" doxytag="propgrid.h::wxPG_DEFAULT_STYLE" ></a><p>
+<a class="anchor" name="ga19" doxytag="propgrid.h::wxPG_DEFAULT_STYLE" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -171,6 +173,30 @@ Combines various styles.
 
 <p>
 <a class="el" href="classwxPropertyGridManager.htm">wxPropertyGridManager</a> only: Show adjustable text box showing description or help text, if available, for currently selected property. 
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="ga18" doxytag="propgrid.h::wxPG_EX_GREY_LABEL_WHEN_DISABLED" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> #define wxPG_EX_GREY_LABEL_WHEN_DISABLED&nbsp;&nbsp;&nbsp;0x00040000
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Set this style to have labels of disabled properties become greyed along with the values. 
 <p>
     </td>
   </tr>
@@ -292,7 +318,7 @@ Extended window style that sets <a class="el" href="classwxPropertyGridManager.h
 <p>
 Categories are not initially shown (even if added). 
 <p>
-IMPORTANT NOTE: If you do not plan to use categories, then this style will waste resources. This flag can also be changed using <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida36">wxPropertyGrid::EnableCategories</a> method.     </td>
+IMPORTANT NOTE: If you do not plan to use categories, then this style will waste resources. This flag can also be changed using <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida37">wxPropertyGrid::EnableCategories</a> method.     </td>
   </tr>
 </table>
 <a class="anchor" name="ga6" doxytag="propgrid.h::wxPG_HIDE_MARGIN" ></a><p>
@@ -340,7 +366,7 @@ Toggling this style automatically expands all collapsed items.     </td>
 <p>
 Disables wxTextCtrl based editors for properties which can be edited in another way. 
 <p>
-Equals calling <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida183">wxPropertyGrid::LimitPropertyEditing</a> for all added properties.     </td>
+Equals calling <a class="el" href="classwxPropertyGrid.htm#wxPropertyGrida185">wxPropertyGrid::LimitPropertyEditing</a> for all added properties.     </td>
   </tr>
 </table>
 <a class="anchor" name="ga4" doxytag="propgrid.h::wxPG_SPLITTER_AUTO_CENTER" ></a><p>
@@ -463,7 +489,7 @@ Display tooltips for cell text that cannot be shown completely.
 If wxUSE_TOOLTIPS is 0, then this doesn't have any effect.     </td>
   </tr>
 </table>
-<a class="anchor" name="ga19" doxytag="propgrid.h::wxPGMAN_DEFAULT_STYLE" ></a><p>
+<a class="anchor" name="ga20" doxytag="propgrid.h::wxPGMAN_DEFAULT_STYLE" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -511,7 +537,7 @@ wxTAB_TRAVERSAL allows using Tab/Shift-Tab to travel between properties in grid.
 Travelling forwards from last property will navigate to the next control, and backwards from first will navigate to the previous one.     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Sat Aug 12 20:44:33 2006 for wxPropertyGrid by
+<hr size="1"><address style="align: right;"><small>Generated on Sat Sep 9 20:46:18 2006 for wxPropertyGrid by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.6 </small></address>

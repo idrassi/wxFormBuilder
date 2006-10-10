@@ -177,10 +177,10 @@ extern WXDLLIMPEXP_PG wxPGProperty* wxMultiChoiceProperty(const wxString& label,
                                                           const wxArrayString& choices = wxArrayString(),
                                                           const wxArrayInt& value = wxPG_EMPTY_ARRAYINT);
 
-
 extern WXDLLIMPEXP_PG wxPGProperty* wxMultiChoiceProperty(const wxString& label,
                                                           const wxString& name,
-                                                          const wxPGChoices& choices);
+                                                          const wxPGChoices& choices,
+                                                          const wxArrayInt& value = wxPG_EMPTY_ARRAYINT);
 
 extern WXDLLIMPEXP_PG wxPGProperty* wxMultiChoiceProperty(const wxString& label,
                                                           const wxString& name,
@@ -316,12 +316,17 @@ class wxMultiChoicePropertyClass : public wxPGProperty
     WX_PG_DECLARE_PROPERTY_CLASS()
 public:
 
-    wxMultiChoicePropertyClass(const wxString& label,
-                               const wxString& name,
-                               const wxArrayString& strings,
-                               const wxArrayInt& value);
-    wxMultiChoicePropertyClass( const wxString& label, const wxString& name = wxPG_LABEL,
-        const wxArrayInt& value = wxArrayInt() );
+    wxMultiChoicePropertyClass( const wxString& label,
+                                const wxString& name,
+                                const wxArrayString& strings,
+                                const wxArrayInt& value );
+    wxMultiChoicePropertyClass( const wxString& label,
+                                const wxString& name = wxPG_LABEL,
+                                const wxArrayInt& value = wxArrayInt() );
+    wxMultiChoicePropertyClass( const wxString& label,
+                                const wxString& name,
+                                const wxPGChoices& choices,
+                                const wxArrayInt& value = wxArrayInt() );
     virtual ~wxMultiChoicePropertyClass();
 
     virtual void DoSetValue( wxPGVariant value );
@@ -336,9 +341,11 @@ protected:
 
     void GenerateValueAsString();
 
-    wxPGChoices         m_choices; // Holds strings (any values given are ignored).
+    // Returns translation of values into string indices.
+    wxArrayInt GetValueAsIndices() const;
 
-    wxArrayInt          m_value_wxArrayInt; // Actual value.
+    wxPGChoices         m_choices; // Holds strings (any values given are ignored).
+    wxArrayInt          m_value_wxArrayInt;  // Actual value.
 
     wxString            m_display; // Cache displayed text since generating it is relatively complicated.
 };
