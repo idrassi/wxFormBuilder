@@ -79,8 +79,6 @@
 #if defined(__WXPYTHON__)
     #undef wxPG_ALLOW_WXADV
     #define wxPG_ALLOW_WXADV
-#elif defined(wxPG_NO_WXADV)
-    #error "wxPG_NO_WXADV is no longer used"
 #endif
 
 //
@@ -96,7 +94,7 @@
 //     In fact, it will more likely be updated once a week or so
 //     (less often when releases are made more sparsely).
 //
-#define wxPG_VERSION        1210
+#define wxPG_VERSION        1220
 
 
 // -----------------------------------------------------------------------
@@ -548,6 +546,18 @@ typedef void (*wxPGPaintCallback)(wxPGProperty* property,
 */
 #define wxPG_EX_NO_FLAT_TOOLBAR     0x00002000
 
+/** This extra style allows editing more similar to some Microsoft/Mono
+    provided property sheet controls. Currently this includes (but more may be
+    added later, incase I missed something):
+    * Pressing ENTER in control, in addition to confirming changes, will
+      unfocus it.
+    * Pressing ESC doesn't cancel edit (but still unfocuses the editor).
+
+    Note that ESC and ENTER events in editor controls are relayed to the
+    wxPropertyGrid itself, so that they can be detected by the application.
+*/
+//#define wxPG_EX_ALTERNATE_KEYS      0x00004000
+
 /** Shows alphabetic/categoric mode buttons from toolbar.
 */
 #define wxPG_EX_MODE_BUTTONS        0x00008000
@@ -564,6 +574,11 @@ typedef void (*wxPGPaintCallback)(wxPGProperty* property,
       wxWANTS_CHARS).
 */
 //#define wxPG_EX_NO_TAB_TO_BUTTON    0x00020000
+
+/** Set this style to have labels of disabled properties become greyed
+    along with the values.
+*/
+#define wxPG_EX_GREY_LABEL_WHEN_DISABLED    0x00040000
 
 
 /** Combines various styles.
@@ -1784,6 +1799,11 @@ public:
     */
     inline bool Hide( bool hide );
 
+    inline bool IsEnabled() const
+    {
+        return ( m_flags & wxPG_PROP_DISABLED ) ? false : true;
+    }
+
     /** If property's editor is created this forces its recreation. Useful
         in SetAttribute etc. Returns true if actually did anything.
     */
@@ -2271,7 +2291,7 @@ public:
 
     void AssignData( wxPGChoicesData* data );
 
-    inline void Assign( wxPGChoices& a )
+    inline void Assign( const wxPGChoices& a )
     {
         AssignData(a.m_data);
     }
@@ -2293,7 +2313,7 @@ public:
     /** Adds single item. */
     void AddAsSorted( const wxString& label, int value = wxPG_INVALID_VALUE );
 
-    inline void wxPGChoices::EnsureData()
+    inline void EnsureData()
     {
         if ( m_data == wxPGChoicesEmptyData )
             m_data = new wxPGChoicesData();
@@ -2303,7 +2323,7 @@ public:
     */
     inline wxArrayString& GetLabels()
     {
-        wxASSERT ( m_data->m_refCount != 0xFFFFFFF );
+        wxASSERT( m_data->m_refCount != 0xFFFFFFF );
         return m_data->m_arrLabels;
     }
 
@@ -2311,7 +2331,7 @@ public:
     */
     inline wxArrayInt& GetValues()
     {
-        wxASSERT ( m_data->m_refCount != 0xFFFFFFF );
+        wxASSERT( m_data->m_refCount != 0xFFFFFFF );
         return m_data->m_arrValues;
     }
 
@@ -2329,7 +2349,7 @@ public:
     /** Removes count items starting at position nIndex. */
     inline void RemoveAt(size_t nIndex, size_t count = 1)
     {
-        wxASSERT ( m_data->m_refCount != 0xFFFFFFF );
+        wxASSERT( m_data->m_refCount != 0xFFFFFFF );
         wxPGChoicesData* data = m_data;
         data->m_arrLabels.RemoveAt(nIndex,count);
         if ( data->m_arrValues.GetCount() )
@@ -2381,6 +2401,7 @@ public:
     {
         return m_data->m_arrLabels[ind];
     }
+
     inline const wxArrayString& GetLabels() const { return m_data->m_arrLabels; }
 
     inline size_t GetCount () const
@@ -2401,7 +2422,7 @@ public:
     // Returns data, increases refcount.
     inline wxPGChoicesData* GetData()
     {
-        wxASSERT ( m_data->m_refCount != 0xFFFFFFF );
+        wxASSERT( m_data->m_refCount != 0xFFFFFFF );
         m_data->m_refCount++;
         return m_data;
     }
@@ -4501,6 +4522,15 @@ public:
         return DoEditorValidate();
     }
 
+    /** Returns true if all property grid data changes have been committed. Usually
+        only returns false if value in active editor has been invalidated by a
+        wxValidator.
+    */
+    inline bool EditorValidate()
+    {
+        return DoEditorValidate();
+    }
+
     /** Centers the splitter. If argument is true, automatic splitter centering is
         enabled (only applicapple if style wxPG_SPLITTER_AUTO_CENTER was defined).
     */
@@ -4669,6 +4699,9 @@ public:
 
     /** Returns current cell background colour. */
     inline wxColour GetCellBackgroundColour() const { return m_colPropBack; }
+
+    /** Returns current cell text colour when disabled. */
+    inline wxColour GetCellDisableTextColour() const { return m_colDisPropFore; }
 
     /** Returns current cell text colour. */
     inline wxColour GetCellTextColour() const { return m_colPropFore; }
@@ -5156,6 +5189,10 @@ public:
     */
     void SetCellBackgroundColour(const wxColour& col);
 
+    /** Sets cell text colour for disabled properties.
+    */
+    void SetCellDisabledTextColour(const wxColour& col);
+
     /** Sets default cell text colour - applies to property name and value text.
         Note that appearance of editor widgets may not be affected.
     */
@@ -5325,7 +5362,7 @@ public:
     inline void SetPropertyValuePoint( wxPGId id, const wxPoint& value )
     {
         SetPropertyValue( id, wxT("wxPoint"), (void*)&value );
-        //wxASSERT ( wxStrcmp(wxPGIdToPtr(id)->GetValueType()->GetCustomTypeName(),wxT("wxPoint")) == 0 );
+        //wxASSERT( wxStrcmp(wxPGIdToPtr(id)->GetValueType()->GetCustomTypeName(),wxT("wxPoint")) == 0 );
         //SetPropertyValue ( id, wxPG_VALUETYPE(void), (void*)&value );
     }
     /** Sets value (wxSize&) of a property.
@@ -5333,7 +5370,7 @@ public:
     inline void SetPropertyValueSize( wxPGId id, const wxSize& value )
     {
         SetPropertyValue( id, wxT("wxSize"), (void*)&value );
-        //wxASSERT ( wxStrcmp(wxPGIdToPtr(id)->GetValueType()->GetCustomTypeName(),wxT("wxSize")) == 0 );
+        //wxASSERT( wxStrcmp(wxPGIdToPtr(id)->GetValueType()->GetCustomTypeName(),wxT("wxSize")) == 0 );
         //SetPropertyValue ( id, wxPG_VALUETYPE(void), (void*)&value );
     }
     /** Sets value (wxArrayInt&) of a property.
@@ -5733,7 +5770,17 @@ public:
                                 bool removeZeroes,
                                 wxString* precTemplate );
 
+
+protected:
+
+    /** wxPropertyGridState used by the grid is created here. If grid is used
+        in wxPropertyGridManager, there is no point overriding this - instead,
+        set custom wxPropertyGridPage classes.
+    */
+    virtual wxPropertyGridState* CreateState() const;
+
 #ifndef DOXYGEN
+public:
 
     // Control font changer helper.
     void SetCurControlBoldFont();
@@ -5747,39 +5794,21 @@ public:
     // Usually called internally after items added/deleted.
     void CalculateYs( wxPGPropertyWithChildren* startparent, int startindex );
 
-    //
     // Overridden functions.
-    //
     virtual bool Destroy();
-
     virtual wxSize DoGetBestSize() const;
-
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL );
-
     virtual bool SetFont( const wxFont& font );
-
 #if wxPG_SUPPORT_TOOLTIPS
     void SetToolTip( const wxString& tipString );
 #endif
-
     virtual void Freeze();
-
     virtual void SetExtraStyle( long exStyle );
-
     virtual void Thaw();
 
-#endif // DOXYGEN
 
 protected:
-
-    /** wxPropertyGridState used by the grid is created here. If grid is used
-        in wxPropertyGridManager, there is no point overriding this - instead,
-        set custom wxPropertyGridPage classes.
-    */
-    virtual wxPropertyGridState* wxPropertyGrid::CreateState() const;
-
-#ifndef DOXYGEN
 
     /** 1 if calling property event handler. */
     unsigned char       m_processingEvent;
@@ -5876,11 +5905,11 @@ protected:
     /** m_splitterx when drag began. */
     int                 m_startingSplitterX;
 
+    /** Bits are used to indicate which colours are customized. */
+    unsigned short      m_coloursCustomized;
+
     /** 0 = not dragging, 1 = drag just started, 2 = drag in progress */
     unsigned char       m_dragStatus;
-
-    /** helper used in OnResize. */
-    //signed char         m_widDiffCarry;
 
     /** x - m_splitterx. */
     signed char         m_dragOffset;
@@ -5890,9 +5919,6 @@ protected:
 
     /** True when editor control is focused. */
     unsigned char       m_editorFocused;
-
-    /** Bits are used to indicate which colours are customized. */
-    unsigned char       m_coloursCustomized;
 
     /** 1 if m_latsCaption is also the bottommost caption. */
     //unsigned char       m_lastCaptionBottomnest;
@@ -5935,7 +5961,8 @@ protected:
     int                 m_ctrlXAdjust; // x relative to splitter (needed for resize).
 
     wxColour            m_colLine;     // lines between cells
-    wxColour            m_colPropFore; // property names and texts are written in this color
+    wxColour            m_colPropFore; // property labels and values are written in this colour
+    wxColour            m_colDisPropFore;  // or with this colour when disabled
     wxColour            m_colPropBack; // background for m_colPropFore
     wxColour            m_colCapFore;  // text color for captions
     wxColour            m_colCapBack;  // background color for captions

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        propGrid.cpp
+// Name:        propgrid.cpp
 // Purpose:     wxPropertyGrid
 // Author:      Jaakko Salli
 // Modified by:
@@ -323,6 +323,11 @@
 // Colour for the empty but visible space below last property.
 #define wxPG_SLACK_BACKROUND        m_colPropBack
 
+// Milliseconds to wait for two mouse-ups after focus inorder
+// to trigger a double-click.
+#define DOUBLE_CLICK_CONVERSION_TRESHOLD        500
+
+
 //
 // Parenting types
 enum
@@ -404,42 +409,25 @@ void wxPropertyGrid::AutoGetTranslation ( bool ) { }
 // -----------------------------------------------------------------------
 
 //
-// Long-term Plans:
-// NB: No guarantees whatsoever of ever becoming into fruition.
-// * Have append/insert take ref arg, to allow temporary instances
-//   to be created.
-//   - Maybe constructor could actually be void of any extra init,
-//     to have it as lightweight as possible.
-// * wxVariant values.
-//   * Would not eliminate need for DoSetValue and GetValue in
-//     all cases (but would in most).
-//   * Value type would do ValueToString and ValueToInt conversion.
-//     Property ptr would be given as arg, so that int value type
-//     could convert itself into a choice string at value's index.
-// * Consider: variant values would allow really flexible system.
-// * wxVariant values for AddPropertyChoice.
-//
-
-//
 // -----------------------------------------------------------------------
 // TODO
 // -----------------------------------------------------------------------
 //
 
 //
-// For Next Release (1.2.1):
+// For Next Release (1.2.2):
 //
 // Maybe later:
+// * Key interceptor docs (remember GetGrid!).
+// * Traditional wxValidator mode?.
+// * wxPG_EX_ALTERNATE_KEYS?
 // * Make various wxPropertyGridState methods virtual (SetPropertyValues).
 // * Add pImpl.
 // * GetPropertyAttribute
-// * Replace FROM_STATE macros (but remember, it is redefined just prior to
-//   state methods!!!).
-// * WXK_RETURN to work with wxMSW wxEditEnumProperty
 // * Fix Python SetValues Freeze-Thaw (regarding autofill=True).
 // * Double-buffering to checkbox.
 // * Increase consistency of OnResize (need better testing code/procedure).
-//   One potential solution is to use, as someone suggested, panel on
+//   One potential solution is to use, as someone suggested, a large panel on
 //   wxScrolledWindow.
 // * If wxParentProperty is loaded from a text source, its value should
 //   be set *after* all children are inserted.
@@ -447,26 +435,44 @@ void wxPropertyGrid::AutoGetTranslation ( bool ) { }
 // * After 1.0.x compatibility removed, drop itemcount argument support.
 //
 // 1.3 Branch:
+// * Move to different directory style to enable CVS usage.
+// * Integrate the flexible MVC grid backend.
+// * wxPGId == wxPGProperty*
 // * wxSize, wxDateTime, wxPoint returned as values instead of const Foo&
 //   (so that empty values can be returned on invalid property).
 // * Get rid of wxPG_COMPATIBILITY_1_0_0s.
-// * wxPG_INVALID_VALUE to equal INT_MIN.
+// * Classnames = property names
+//   Construction requires new then probably. The only way around
+//   this would be a way too messy copying system.
 // * IsPropertyXXX to const?
 // * wxPGNameStr -> const wxString& (but retain typedef).
 // * wxPGId -> wxPGProperty* (but retain typedef).
-// * Multiple columns.
-//   If done, needs a new back-end (wxDataViewGrid or something like that).
-// * Label row.
+// * Change wxPG_SUBID1 etc to 1,2,3...
+// * Have wxPG_EX_GREY_LABEL_WHEN_DISABLED as default.
+// * wxVariant values.
+//   * Would not eliminate need for DoSetValue and GetValue in
+//     all cases (but would in most).
+//   * Value type would do ValueToString and ValueToInt conversion.
+//     Property ptr would be given as arg, so that int value type
+//     could convert itself into a choice string at value's index.
 // * Images in front of labels.
-// * wxPGId == wxPGProperty*
 // * SetPropertyBackgroundColour instead of SetPropertyColour.
 // * Replace SetAttribute with DoSetAttribute, and add SetAttribute as
 //   user-usable method (currently there is only SetAttrib).
 // * Get rid of priority system/compactor button (with compatibility defines,
 //   however).
 // * Real property attribute system.
+// * String attribute names (old defines can be set to strings, so the
+//   compatibility is kept).
 // * Deprecate IsModified (in favour of IsPropertyModified).
 // * Deprecate Disable.
+// * SetPropertyTextColour.
+// * Abstract wxPGEditorDialog scheme (longstringproperty and arraystringproperty
+//   to support it, at the least). Probably needs an adapter class
+//   (for validator support and such).
+// * Replace FROM_STATE macros (but remember, it is redefined just prior to
+//   state methods!!!).
+// * wxPG_INVALID_VALUE to equal INT_MIN. Or not? Does it matter?
 //
 // High Priority but Difficult to implement or justify:
 // * TAB should visit trigger buttons as well (but requires that wxButton or
@@ -478,11 +484,6 @@ void wxPropertyGrid::AutoGetTranslation ( bool ) { }
 // * Finalize: Font property images (drop down could use them as well, and even
 //   in more useful manner).
 // * wxMSW: Scrollbar freeze after mode switch (did resizing before that).
-// * Resolve global variable locking (caused deadlock under Linux - perhaps
-//   it doesn't allow locking when one already active?).
-//  - Writes to global variables are now locked, thus allowing different
-//    property grids to be manipulated from different threads (one grid
-//    should still only be referenced from single thread only).
 //
 // For Some of the Next Releases:
 // * Consider: Semi-unfocus on when clicking (l+r) on empty space.
@@ -2085,9 +2086,139 @@ extern const wxChar* wxPG_ClassName_wxBoolProperty; // in props.cpp
 WX_PG_IMPLEMENT_EDITOR_CLASS(Choice,wxPGChoiceEditor,wxPGEditor)
 
 
+// This is a special enhanced double-click processor class.
+// In essence, it allows for double-clicks for which the
+// first click "created" the control.
+class wxPGDoubleClickProcessor : public wxEvtHandler
+{
+public:
+
+    wxPGDoubleClickProcessor( wxPGOwnerDrawnComboBox* combo )
+        : wxEvtHandler()
+    {
+        m_timeLastMouseUp = 0;
+        m_combo = combo;
+        m_downReceived = false;
+    }
+
+protected:
+
+    void OnMouseEvent( wxMouseEvent& event )
+    {
+        wxLongLong t = ::wxGetLocalTimeMillis();
+        int evtType = event.GetEventType();
+
+        if ( m_combo->HasFlag(wxPGCC_DCLICK_CYCLES) &&
+             !m_combo->IsPopupShown() )
+        {
+            // Just check that it is in the text area
+            wxPoint pt = event.GetPosition();
+            if ( m_combo->GetTextRect().Inside(pt) )
+            {
+                if ( evtType == wxEVT_LEFT_DOWN )
+                {
+                    // Set value to avoid up-events without corresponding downs
+                    m_downReceived = true;
+                }
+                else if ( evtType == wxEVT_LEFT_DCLICK )
+                {
+                    // We'll make our own double-clicks
+                    event.SetEventType(0);
+                    return;
+                }
+                else if ( evtType == wxEVT_LEFT_UP )
+                {
+                    if ( m_downReceived || m_timeLastMouseUp == 1 )
+                    {
+                        wxLongLong timeFromLastUp = (t-m_timeLastMouseUp);
+        
+                        if ( timeFromLastUp < DOUBLE_CLICK_CONVERSION_TRESHOLD )
+                        {
+                            event.SetEventType(wxEVT_LEFT_DCLICK);
+                            m_timeLastMouseUp = 1;
+                        }
+                        else
+                        {
+                            m_timeLastMouseUp = t;
+                        }
+                    }
+                }
+            }
+        }
+
+        event.Skip();
+    }
+
+    void OnSetFocus( wxFocusEvent& event )
+    {
+        m_timeLastMouseUp = ::wxGetLocalTimeMillis();
+        event.Skip();
+    }
+
+private:
+    wxLongLong                  m_timeLastMouseUp;
+    wxPGOwnerDrawnComboBox*     m_combo;
+    bool                        m_downReceived;
+
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(wxPGDoubleClickProcessor, wxEvtHandler)
+    EVT_MOUSE_EVENTS(wxPGDoubleClickProcessor::OnMouseEvent)
+    EVT_SET_FOCUS(wxPGDoubleClickProcessor::OnSetFocus)
+END_EVENT_TABLE()
+
+
+
 class wxPGComboBox : public wxPGOwnerDrawnComboBox
 {
 public:
+
+    wxPGComboBox()
+        : wxPGOwnerDrawnComboBox()
+    {
+        m_dclickProcessor = (wxPGDoubleClickProcessor*) NULL;
+    }
+
+    ~wxPGComboBox()
+    {
+        if ( m_dclickProcessor )
+        {
+            RemoveEventHandler(m_dclickProcessor);
+            delete m_dclickProcessor;
+        }
+    }
+
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxString& value = wxEmptyString,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                int n = 0,
+                const wxString choices[] = (const wxString *) NULL,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxComboBoxNameStr)
+    {
+        if ( !wxPGOwnerDrawnComboBox::Create( parent,
+                                              id,
+                                              value,
+                                              pos,
+                                              size,
+                                              n,
+                                              choices,
+                                              style,
+                                              validator,
+                                              name ) )
+            return false;
+
+        m_dclickProcessor = new wxPGDoubleClickProcessor(this);
+
+        PushEventHandler(m_dclickProcessor);
+
+        return true;
+    }
+
     virtual bool OnDrawListItem( wxDC& dc, const wxRect& rect, int item, int flags )
     {
         wxPropertyGrid* pg = wxDynamicCast(GetParent(),wxPropertyGrid);
@@ -2115,6 +2246,9 @@ public:
         pg->OnComboItemPaint((wxPGCustomComboControl*)this,item,*((wxDC*)NULL),rect,0);
         return rect.width;
     }
+
+private:
+    wxPGDoubleClickProcessor*   m_dclickProcessor;
 };
 
 
@@ -2317,7 +2451,9 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
     wxWindow* ctrlParent = propGrid;
 //#endif
 
-    int odcbFlags = extraStyle | wxNO_BORDER | wxPGCC_ALT_KEYS;
+    // NB: Using wxWidgets wxOwnerDrawnComboBox needs adding wxTE_PROCESS_ENTER
+    //     into the flags.
+    int odcbFlags = extraStyle | wxNO_BORDER | wxPGCC_PROCESS_ENTER | wxPGCC_ALT_KEYS;
 
     if ( !(property->GetFlags() & wxPG_PROP_CUSTOMIMAGE) )
         odcbFlags |= wxODCB_STD_CONTROL_PAINT;
@@ -3574,12 +3710,11 @@ static int wxPGGetColAvg( const wxColour& col )
 
 void wxPropertyGrid::RegainColours()
 {
-    //wxColour def_bgcol = wxSystemSettings::GetColour ( wxSYS_COLOUR_SCROLLBAR );
-    wxColour def_bgcol = wxSystemSettings::GetColour ( wxSYS_COLOUR_WINDOW );
+    wxColour def_bgcol = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
 
-    if ( !(m_coloursCustomized & 0x02) )
+    if ( !(m_coloursCustomized & 0x0002) )
     {
-        wxColour col = wxSystemSettings::GetColour ( wxSYS_COLOUR_BTNFACE );
+        wxColour col = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
 
         // Make sure colour is dark enough
     #ifdef __WXGTK__
@@ -3593,10 +3728,10 @@ void wxPropertyGrid::RegainColours()
             m_colCapBack = col;
     }
 
-    if ( !(m_coloursCustomized & 0x01) )
+    if ( !(m_coloursCustomized & 0x0001) )
         m_colMargin = m_colCapBack;
 
-    if ( !(m_coloursCustomized & 0x04) )
+    if ( !(m_coloursCustomized & 0x0004) )
     {
     #ifdef __WXGTK__
         int colDec = -90;
@@ -3606,25 +3741,28 @@ void wxPropertyGrid::RegainColours()
         m_colCapFore = wxPGAdjustColour(m_colCapBack,colDec,5000,5000,true);
     }
 
-    if ( !(m_coloursCustomized & 0x08) )
+    if ( !(m_coloursCustomized & 0x0008) )
     {
-        wxColour bgcol = wxSystemSettings::GetColour ( wxSYS_COLOUR_WINDOW );
+        wxColour bgcol = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
         m_colPropBack = bgcol;
         // Set the brush as well.
         ((wxPGBrush*)m_arrBgBrushes.Item(0))->SetColour2(bgcol);
     }
 
-    if ( !(m_coloursCustomized & 0x10) )
-        m_colPropFore = wxSystemSettings::GetColour ( wxSYS_COLOUR_WINDOWTEXT );
+    if ( !(m_coloursCustomized & 0x0010) )
+        m_colPropFore = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
 
-    if ( !(m_coloursCustomized & 0x20) )
-        m_colSelBack = wxSystemSettings::GetColour ( wxSYS_COLOUR_HIGHLIGHT );
+    if ( !(m_coloursCustomized & 0x0020) )
+        m_colSelBack = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
 
-    if ( !(m_coloursCustomized & 0x40) )
-        m_colSelFore = wxSystemSettings::GetColour ( wxSYS_COLOUR_HIGHLIGHTTEXT );
+    if ( !(m_coloursCustomized & 0x0040) )
+        m_colSelFore = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
 
-    if ( !(m_coloursCustomized & 0x80) )
+    if ( !(m_coloursCustomized & 0x0080) )
         m_colLine = m_colCapBack;
+
+    if ( !(m_coloursCustomized & 0x0100) )
+        m_colDisPropFore = m_colCapFore;
 }
 
 // -----------------------------------------------------------------------
@@ -3740,6 +3878,15 @@ void wxPropertyGrid::SetCellTextColour( const wxColour& col )
 {
     m_colPropFore = col;
     m_coloursCustomized |= 0x10;
+    Refresh();
+}
+
+// -----------------------------------------------------------------------
+
+void wxPropertyGrid::SetCellDisabledTextColour( const wxColour& col )
+{
+    m_colDisPropFore = col;
+    m_coloursCustomized |= 0x100;
     Refresh();
 }
 
@@ -5234,7 +5381,7 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
 
 // -----------------------------------------------------------------------
 
-#define ITEM_ITERATION_UVC_VARIABLES \
+#define DECLARE_ITEM_ITERATION_UVC_VARIABLES \
     unsigned int ind; \
     wxPGProperty* p;
 
@@ -5364,7 +5511,7 @@ void wxPropertyGrid::DoDrawItems(
     wxPGPaintData paintdata;
     wxRect r;
 
-    ITEM_ITERATION_UVC_VARIABLES
+    DECLARE_ITEM_ITERATION_UVC_VARIABLES
 
     // Get first and last indexes to visibility cache
     unsigned int viStart = (firstItemTopY - vy) / lh;
@@ -5391,6 +5538,7 @@ void wxPropertyGrid::DoDrawItems(
     int y;
 
     long window_style = m_windowStyle;
+    int extraStyle = GetExtraStyle();
 
     //
     // With wxPG_DOUBLE_BUFFER, do double buffering
@@ -5783,6 +5931,8 @@ void wxPropertyGrid::DoDrawItems(
 
     if ( isEnabled )
         dc.SetTextForeground( m_colPropFore );
+    else
+        dc.SetTextForeground( m_colDisPropFore );
 
     dc.SetFont( normalfont );
 
@@ -5803,6 +5953,7 @@ void wxPropertyGrid::DoDrawItems(
     //
     // Second pass happens entirely on the left side, so sometimes
     // we can just skip it.
+
     if ( clipRect == NULL || clipRect->x < m_splitterx )
     {
 
@@ -5814,6 +5965,10 @@ void wxPropertyGrid::DoDrawItems(
         dc.SetClippingRegion ( r );
 
         dc.SetFont(normalfont);
+        if ( isEnabled )
+            dc.SetTextForeground( m_colPropFore );
+        else
+            dc.SetTextForeground( m_colDisPropFore );
 
         ITEM_ITERATION_UVC_LOOP_BEGIN(viStart,vi_end_y)
 
@@ -5928,29 +6083,42 @@ void wxPropertyGrid::DoDrawItems(
                 }
                 */
 
+                bool changedTxCol = false;
+
                 if ( p != selected )
                 {
-                // background
+                    // Disabled may get different colour.
+                    if ( !p->IsEnabled() )
+                    {
+                        if ( extraStyle & wxPG_EX_GREY_LABEL_WHEN_DISABLED )
+                        {
+                            dc.SetTextForeground( m_colDisPropFore );
+                            changedTxCol = true;
+                        }
+                    }
+
                     dc.DrawText( p->m_label, text_x+wxPG_XBEFORETEXT, y );
                 }
                 else
                 {
-                // Selected gets different colours.
+                    // Selected gets different colour.
                     if ( reallyFocused )
+                    {
                         dc.SetTextForeground( m_colSelFore );
+                        changedTxCol = true;
+                    }
 
                     dc.DrawText( p->m_label, text_x+wxPG_XBEFORETEXT, y );
+                }
 
+                if ( changedTxCol )
+                {
                     if ( isEnabled )
                         dc.SetTextForeground( m_colPropFore );
                     else
-                        dc.SetTextForeground( m_colCapFore );
-
-                /*#if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
-                    selected_painted = true;
-                #endif*/
-
+                        dc.SetTextForeground( m_colDisPropFore );
                 }
+
             }
             else
             {
@@ -5960,8 +6128,6 @@ void wxPropertyGrid::DoDrawItems(
             }
 
             y += m_fontHeight+m_spacingy+1;
-
-            //if ( y > lastItemBottomY ) { parent = NULL; break; }
 
         ITEM_ITERATION_UVC_LOOP_END(vi_end_y)
     }
@@ -6053,8 +6219,8 @@ void wxPropertyGrid::DoDrawItems(
                     }
 
                     // Greyed text?
-                    if ( p->m_flags & wxPG_PROP_DISABLED )
-                        dc.SetTextForeground( m_colCapFore );
+                    if ( !p->IsEnabled() )
+                        dc.SetTextForeground( m_colDisPropFore );
 
                     // Set bold font?
                     if ( p->m_flags & wxPG_PROP_MODIFIED && (window_style & wxPG_BOLD_MODIFIED) )
@@ -6077,14 +6243,6 @@ void wxPropertyGrid::DoDrawItems(
                             fullPaint = true;
                             imageRect.width = m_width - imageRect.x;
                         }
-                        /*else
-                        {
-                            if ( imageSize.x == -1 )
-                                imageRect.width = wxPG_CUSTOM_IMAGE_WIDTH;
-                            else
-                                imageRect.width = abs(imageSize.x);
-                            imageRect.width = wxPG_CUSTOM_IMAGE_WIDTH;
-                        }*/
 
                         dc.SetPen( outlinepen );
 
@@ -7052,15 +7210,66 @@ bool wxPropertyGrid::DoEditorValidate()
         m_iFlags |= wxPG_FL_VALIDATION_FAILED;
         if ( !validator->Validate(this) )
         {
-            //wxPrintf(wxT("  validation failed\n"));
+            // If you want to display message multiple times per change,
+            // uncomment the following line.
+            // NB: Not recommended, as it could get spurious.
+            //     Atleast needs some kind of min. time between
+            //     messages to be feasible.
+            //m_iFlags &= ~(wxPG_FL_VALIDATION_FAILED);
             return false;
         }
         m_iFlags &= ~(wxPG_FL_VALIDATION_FAILED);
     }
 #endif
-    //wxPrintf(wxT("  validation success\n"));
     return true;
 }
+
+// -----------------------------------------------------------------------
+
+#if wxUSE_VALIDATORS
+bool wxPGInDialogValidator::DoValidate( wxPropertyGrid* propGrid,
+                                        wxValidator* validator,
+                                        const wxString& value )
+{
+    if ( !validator )
+        return true;
+
+    wxTextCtrl* tc = m_textCtrl;
+
+    if ( !tc )
+    {
+        //wxWindow* edWnd = propGrid->GetEditorControl();
+        //if ( edWnd )
+        //     tc = wxDynamicCast(edWnd, wxTextCtrl);
+
+        //if ( !tc )
+        {
+            //m_destroyTC = true;
+            tc = new wxTextCtrl( propGrid, wxPG_SUBID_TEMP1, wxEmptyString,
+                                 wxPoint(30000,30000));
+            tc->Hide();
+        }
+
+        m_textCtrl = tc;
+    }
+
+    //wxString oldValue = tc->GetValue();
+    tc->SetValue(value);
+
+    validator->SetWindow(tc);
+    bool res = validator->Validate(propGrid);
+
+    //tc->SetValue(oldValue);
+    return res;
+}
+#else
+bool wxPGInDialogValidator::DoValidate( wxPropertyGrid* WXUNUSED(propGrid),
+                                        wxValidator* WXUNUSED(validator),
+                                        const wxString& WXUNUSED(value) )
+{
+    return true;
+}
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -7802,7 +8011,6 @@ bool wxPropertyGrid::ClearSelection()
 bool wxPropertyGrid::_Collapse( wxPGProperty* p, bool sendEvents )
 {
     wxCHECK_MSG( p, false, wxT("invalid property id") );
-    if ( !p ) return false;
 
     wxPGPropertyWithChildren* pwc = (wxPGPropertyWithChildren*)p;
     if ( pwc->GetParentingType() == 0 ) return false;
@@ -7869,7 +8077,6 @@ bool wxPropertyGrid::_Collapse( wxPGProperty* p, bool sendEvents )
 bool wxPropertyGrid::_Expand( wxPGProperty* p, bool sendEvents )
 {
     wxCHECK_MSG( p, false, wxT("invalid property id") );
-    if ( !p ) return false;
 
     wxPGPropertyWithChildren* pwc = (wxPGPropertyWithChildren*)p;
     if ( pwc->GetParentingType() == 0 ) return false;
@@ -9215,9 +9422,11 @@ void wxPropertyGrid::HandleKeyEvent(wxKeyEvent &event)
 
     // Must update changes if special key was used
     // (because it may trigger closing of this app)
-    if ( event.AltDown() ||
-         event.ControlDown() ||
-         event.MetaDown() )
+    if ( event.HasModifiers()
+#if defined(__WXMAC__)
+         || event.MetaDown()
+#endif
+       )
     {
         CommitChangesFromEditor();
     }
@@ -9271,6 +9480,7 @@ void wxPropertyGrid::OnKey( wxKeyEvent &event )
     //
 
     wxWindow* focused = wxWindow::FindFocus();
+    //wxLogDebug(wxT("OnKey"));
 
     if ( m_wndPrimary &&
          (focused==m_wndPrimary
@@ -9417,6 +9627,8 @@ bool wxPropertyGrid::ButtonTriggerKeyTest( wxKeyEvent &event )
     return false;
 }
 
+// -----------------------------------------------------------------------
+
 void wxPropertyGrid::OnChildKeyDown( wxKeyEvent &event )
 {
     int keycode = event.GetKeyCode();
@@ -9434,19 +9646,24 @@ void wxPropertyGrid::OnChildKeyDown( wxKeyEvent &event )
 
     // Must update changes if special key was used
     // (because it may trigger closing of this app)
-    if ( event.HasModifiers() )
+    if ( event.HasModifiers()
+#if defined(__WXMAC__)
+         || event.MetaDown()
+#endif
+       )
     {
         CommitChangesFromEditor();
     }
 
     // Since event handling may destroy the control which
     // triggered this event, we need to send it separately
-    // to the wxPropertyGrid itself.
-    if ( HandleChildKey(event,false) == false )
-        AddPendingEvent( event );
-    else
+    // to the wxPropertyGrid itself. Also, to allow pushed
+    // event handler to grab ENTER, ESC and such, this
+    // has been changed to add all keys as events.
+    if ( HandleChildKey(event,false) == true )
         event.Skip();
 
+    GetEventHandler()->AddPendingEvent(event);
 }
 
 void wxPropertyGrid::OnChildKeyUp( wxKeyEvent &event )
@@ -9464,6 +9681,8 @@ void wxPropertyGrid::OnChildKeyUp( wxKeyEvent &event )
     }
 
     m_keyComboConsumed = 0;
+
+    GetEventHandler()->AddPendingEvent(event);
 
     event.Skip();
 }
@@ -11051,7 +11270,7 @@ void wxPropertyGridState::Sort()
 
 // -----------------------------------------------------------------------
 
-bool wxPropertyGridState::ExpandAll( unsigned char do_expand )
+bool wxPropertyGridState::ExpandAll( unsigned char doExpand )
 {
     ITEM_ITERATION_DCAE_VARIABLES
 
@@ -11065,7 +11284,7 @@ bool wxPropertyGridState::ExpandAll( unsigned char do_expand )
             return false;
     }
 
-    if ( !do_expand )
+    if ( !doExpand )
     {
         if ( isGrid )
         {
@@ -11080,7 +11299,7 @@ bool wxPropertyGridState::ExpandAll( unsigned char do_expand )
     ITEM_ITERATION_DCAE_LOOP_BEGIN
 
         if ( parenting != 0 )
-            ((wxPGPropertyWithChildren*)p)->m_expanded = do_expand;
+            ((wxPGPropertyWithChildren*)p)->m_expanded = doExpand;
 
     ITEM_ITERATION_DCAE_LOOP_END
 
