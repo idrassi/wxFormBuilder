@@ -131,6 +131,9 @@ FLATNOTEBOOKDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_9)$(__DEBUGRUNTIME) /DWIN32 \
 	$(CPPFLAGS) $(CXXFLAGS)
 FLATNOTEBOOKDLL_OBJECTS =  \
 	$(OBJS)\flatnotebookdll_version.res \
+	$(OBJS)\flatnotebookdll_fnb_resources.obj \
+	$(OBJS)\flatnotebookdll_popup_dlg.obj \
+	$(OBJS)\flatnotebookdll_renderer.obj \
 	$(OBJS)\flatnotebookdll_wxFlatNotebook.obj
 FLATNOTEBOOKLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_21)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO_1) \
@@ -141,6 +144,9 @@ FLATNOTEBOOKLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_21)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I..\..\..\include /W4 /I.\..\..\include \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 FLATNOTEBOOKLIB_OBJECTS =  \
+	$(OBJS)\flatnotebooklib_fnb_resources.obj \
+	$(OBJS)\flatnotebooklib_popup_dlg.obj \
+	$(OBJS)\flatnotebooklib_renderer.obj \
 	$(OBJS)\flatnotebooklib_wxFlatNotebook.obj
 
 ### Conditionally set variables: ###
@@ -437,8 +443,26 @@ clean:
 $(OBJS)\flatnotebookdll_version.res: .\..\..\..\src\msw\version.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) /i $(SETUPHDIR) /i ..\..\..\include /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXMONOFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_flatnotebook_vc$(VENDORTAG) $**
 
+$(OBJS)\flatnotebookdll_fnb_resources.obj: .\.\..\..\src\wxFlatNotebook\fnb_resources.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(FLATNOTEBOOKDLL_CXXFLAGS) $**
+
+$(OBJS)\flatnotebookdll_popup_dlg.obj: .\.\..\..\src\wxFlatNotebook\popup_dlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(FLATNOTEBOOKDLL_CXXFLAGS) $**
+
+$(OBJS)\flatnotebookdll_renderer.obj: .\.\..\..\src\wxFlatNotebook\renderer.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(FLATNOTEBOOKDLL_CXXFLAGS) $**
+
 $(OBJS)\flatnotebookdll_wxFlatNotebook.obj: .\.\..\..\src\wxFlatNotebook\wxFlatNotebook.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FLATNOTEBOOKDLL_CXXFLAGS) $**
+
+$(OBJS)\flatnotebooklib_fnb_resources.obj: .\.\..\..\src\wxFlatNotebook\fnb_resources.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(FLATNOTEBOOKLIB_CXXFLAGS) $**
+
+$(OBJS)\flatnotebooklib_popup_dlg.obj: .\.\..\..\src\wxFlatNotebook\popup_dlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(FLATNOTEBOOKLIB_CXXFLAGS) $**
+
+$(OBJS)\flatnotebooklib_renderer.obj: .\.\..\..\src\wxFlatNotebook\renderer.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(FLATNOTEBOOKLIB_CXXFLAGS) $**
 
 $(OBJS)\flatnotebooklib_wxFlatNotebook.obj: .\.\..\..\src\wxFlatNotebook\wxFlatNotebook.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FLATNOTEBOOKLIB_CXXFLAGS) $**
