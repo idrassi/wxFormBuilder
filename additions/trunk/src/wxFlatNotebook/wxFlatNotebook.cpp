@@ -1495,7 +1495,7 @@ wxDragResult wxPageContainer::OnDropTarget(wxCoord x, wxCoord y, int nTabPage, w
 			}
 		}
 	}
-	else if ( GetWindowStyleFlag() & wxFNB_ALLOW_FOREIGN_DND )
+	else if ( GetParent()->GetWindowStyleFlag() & wxFNB_ALLOW_FOREIGN_DND )
 	{
 #if defined(__WXMSW__) || defined(__WXGTK__)
 		if(nTabPage >= 0)
