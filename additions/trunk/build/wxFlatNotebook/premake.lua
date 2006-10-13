@@ -11,7 +11,7 @@ package.config["Release"].objdir = ".objs"
 package.config["Release (Unicode)"].objdir = ".objsu"
 
 -- Set the targets.
-if ( TARGET == "cb-gcc" or TARGET == "gnu" ) then
+if ( target == "cb-gcc" or target == "gnu" ) then
 	package.config["Debug"].target = "wxmsw270md_scintilla_gcc"
 	package.config["Debug (Unicode)"].target = "wxmsw270umd_scintilla_gcc"
 	package.config["Release"].target = "wxmsw270m_scintilla_gcc"
@@ -33,14 +33,14 @@ package.config["Release (Unicode)"].buildflags = { "unicode", "no-symbols", "opt
 package.includepaths = { "../../include", "$(WXWIN)/include", "../tinyxml" }
 
 -- Setup the linker options.
-if ( TARGET == "cb-gcc" or TARGET == "gnu" ) then
+if ( target == "cb-gcc" or target == "gnu" ) then
 	package.libpaths = { "$(WXWIN)/lib/gcc_dll" }
 else
 	package.libpaths = { "$(WXWIN)/lib/vc_dll" }
 end
 
 -- Setup the output directory options.
-if ( TARGET == "cb-gcc" or TARGET == "gnu" ) then
+if ( target == "cb-gcc" or target == "gnu" ) then
 	package.bindir = { "../lib/gcc_dll" }
 else
 	package.bindir = { "../lib/vc_dll" }
