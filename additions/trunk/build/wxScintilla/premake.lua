@@ -11,16 +11,21 @@ package.config["Release"].objdir = ".objs"
 package.config["Release (Unicode)"].objdir = ".objsu"
 
 -- Set the targets.
-if ( target == "cb-gcc" or target == "gnu" ) then
-	package.config["Debug"].target = "wxmsw270md_scintilla_gcc"
-	package.config["Debug (Unicode)"].target = "wxmsw270umd_scintilla_gcc"
-	package.config["Release"].target = "wxmsw270m_scintilla_gcc"
-	package.config["Release (Unicode)"].target = "wxmsw270um_scintilla_gcc"
+if ( OS == "windows") then
+	if ( target == "cb-gcc" or target == "gnu" ) then
+		package.config["Debug"].target = "wxmsw270md_scintilla_gcc"
+		package.config["Debug (Unicode)"].target = "wxmsw270umd_scintilla_gcc"
+		package.config["Release"].target = "wxmsw270m_scintilla_gcc"
+		package.config["Release (Unicode)"].target = "wxmsw270um_scintilla_gcc"
+	else
+		package.config["Debug"].target = "wxmsw270md_scintilla_vc"
+		package.config["Debug (Unicode)"].target = "wxmsw270umd_scintilla_vc"
+		package.config["Release"].target = "wxmsw270m_scintilla_vc"
+		package.config["Release (Unicode)"].target = "wxmsw270um_scintilla_vc"
+	end
 else
-	package.config["Debug"].target = "wxmsw270md_scintilla_vc"
-	package.config["Debug (Unicode)"].target = "wxmsw270umd_scintilla_vc"
-	package.config["Release"].target = "wxmsw270m_scintilla_vc"
-	package.config["Release (Unicode)"].target = "wxmsw270um_scintilla_vc"
+	package.config["Debug"].target = "`wx-config --debug --basename`_scintilla-`wx-config --release`"
+	package.config["Release"].target = "`wx-config --basename`_scintilla-`wx-config --release`"
 end
 
 -- Set the build options for the Unicode build Targets.
@@ -67,8 +72,8 @@ if ( OS == "windows") then
 	package.config["Release"].defines = { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "NDEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "TIXML_USE_TICPP", "WXUSINGDLL" }
 	package.config["Release (Unicode)"].defines = { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "NDEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "UNICODE", "_UNICODE", "WXUSINGDLL" }
 else
-	package.config["Debug"].defines = { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "DEBUG", "__WX__", "__WXDEBUG__", "WXUSINGDLL" }
-	package.config["Release"].defines = { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "NDEBUG", "__WX__", "WXUSINGDLL" }
+	package.config["Debug"].defines = { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "GTK", "DEBUG", "__WX__", "__WXDEBUG__", "WXUSINGDLL" }
+	package.config["Release"].defines = { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "GTK", "NDEBUG", "__WX__", "WXUSINGDLL" }
 end
 
 -- Set build options for Linux.

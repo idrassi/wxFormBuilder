@@ -11,16 +11,21 @@ package.config["Release"].objdir = ".objs"
 package.config["Release (Unicode)"].objdir = ".objsu"
 
 -- Set the targets.
-if ( target == "cb-gcc" or target == "gnu" ) then
-	package.config["Debug"].target = "wxmsw270md_flatnotebook_gcc"
-	package.config["Debug (Unicode)"].target = "wxmsw270umd_flatnotebook_gcc"
-	package.config["Release"].target = "wxmsw270m_flatnotebook_gcc"
-	package.config["Release (Unicode)"].target = "wxmsw270um_flatnotebook_gcc"
+if ( OS == "windows") then
+	if ( target == "cb-gcc" or target == "gnu" ) then
+		package.config["Debug"].target = "wxmsw270md_flatnotebook_gcc"
+		package.config["Debug (Unicode)"].target = "wxmsw270umd_flatnotebook_gcc"
+		package.config["Release"].target = "wxmsw270m_flatnotebook_gcc"
+		package.config["Release (Unicode)"].target = "wxmsw270um_flatnotebook_gcc"
+	else
+		package.config["Debug"].target = "wxmsw270md_flatnotebook_vc"
+		package.config["Debug (Unicode)"].target = "wxmsw270umd_flatnotebook_vc"
+		package.config["Release"].target = "wxmsw270m_flatnotebook_vc"
+		package.config["Release (Unicode)"].target = "wxmsw270um_flatnotebook_vc"
+	end
 else
-	package.config["Debug"].target = "wxmsw270md_flatnotebook_vc"
-	package.config["Debug (Unicode)"].target = "wxmsw270umd_flatnotebook_vc"
-	package.config["Release"].target = "wxmsw270m_flatnotebook_vc"
-	package.config["Release (Unicode)"].target = "wxmsw270um_flatnotebook_vc"
+	package.config["Debug"].target = "`wx-config --debug --basename`_flatnotebook-`wx-config --release`"
+	package.config["Release"].target = "`wx-config --basename`_flatnotebook-`wx-config --release`"
 end
 
 -- Set the build options for the Unicode build Targets.
