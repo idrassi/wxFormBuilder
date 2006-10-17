@@ -2,7 +2,7 @@ package.name = "wxFlatNotebook"
 
 package.kind = "dll"
 package.language = "c++"
-package.files = { matchfiles( "*.h", "*.cpp" ) }
+package.files = { matchfiles( "../../src/wxFlatNotebook/*.cpp" ) }
 
 -- Set object output directory.
 package.config["Debug"].objdir = ".objsd"
@@ -12,15 +12,15 @@ package.config["Release (Unicode)"].objdir = ".objsu"
 
 -- Set the targets.
 if ( target == "cb-gcc" or target == "gnu" ) then
-	package.config["Debug"].target = "wxmsw270md_scintilla_gcc"
-	package.config["Debug (Unicode)"].target = "wxmsw270umd_scintilla_gcc"
-	package.config["Release"].target = "wxmsw270m_scintilla_gcc"
-	package.config["Release (Unicode)"].target = "wxmsw270um_scintilla_gcc"
+	package.config["Debug"].target = "wxmsw270md_flatnotebook_gcc"
+	package.config["Debug (Unicode)"].target = "wxmsw270umd_flatnotebook_gcc"
+	package.config["Release"].target = "wxmsw270m_flatnotebook_gcc"
+	package.config["Release (Unicode)"].target = "wxmsw270um_flatnotebook_gcc"
 else
-	package.config["Debug"].target = "wxmsw270md_scintilla_vc"
-	package.config["Debug (Unicode)"].target = "wxmsw270umd_scintilla_vc"
-	package.config["Release"].target = "wxmsw270m_scintilla_vc"
-	package.config["Release (Unicode)"].target = "wxmsw270um_scintilla_vc"
+	package.config["Debug"].target = "wxmsw270md_flatnotebook_vc"
+	package.config["Debug (Unicode)"].target = "wxmsw270umd_flatnotebook_vc"
+	package.config["Release"].target = "wxmsw270m_flatnotebook_vc"
+	package.config["Release (Unicode)"].target = "wxmsw270um_flatnotebook_vc"
 end
 
 -- Set the build options for the Unicode build Targets.
@@ -30,7 +30,7 @@ package.config["Release"].buildflags = { "no-symbols", "optimize-speed" }
 package.config["Release (Unicode)"].buildflags = { "unicode", "no-symbols", "optimize-speed" }
 
 -- Set include paths
-package.includepaths = { "../../include", "$(WXWIN)/include", "../tinyxml" }
+package.includepaths = { "../../include", "$(WXWIN)/include" }
 
 -- Setup the linker options.
 if ( target == "cb-gcc" or target == "gnu" ) then
@@ -41,25 +41,33 @@ end
 
 -- Setup the output directory options.
 if ( target == "cb-gcc" or target == "gnu" ) then
-	package.bindir = { "../lib/gcc_dll" }
+	package.bindir = ".../../lib/gcc_dll"
+	package.libdir = "../../lib/gcc_lib"
 else
-	package.bindir = { "../lib/vc_dll" }
+	package.bindir = "../../lib/vc_dll"
+	package.libdir = "../../lib/vc_lib"
 end
 
-package.config["Debug"].links = { "wxmsw27d" }
-package.config["Debug (Unicode)"].links = { "wxmsw27ud" }
-package.config["Release"].links = { "wxmsw27" }
-package.config["Release (Unicode)"].links = { "wxmsw27u" }
+-- Set libraries to link.
+if ( OS == "windows") then
+	package.config["Debug"].links = { "wxmsw27d" }
+	package.config["Debug (Unicode)"].links = { "wxmsw27ud" }
+	package.config["Release"].links = { "wxmsw27" }
+	package.config["Release (Unicode)"].links = { "wxmsw27u" }
+else
+	package.config["Debug"].linkoptions = { "`wx-config --debug --libs`"}
+	package.config["Release"].linkoptions = { "`wx-config --libs`" }
+end
 
 -- Set defines.
 if ( OS == "windows") then
-	package.config["Debug"].defines = { "DEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "__WXDEBUG__", "TIXML_USE_TICPP", "WXUSINGDLL" }
-	package.config["Debug (Unicode)"].defines = { "DEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "__WXDEBUG__", "TIXML_USE_TICPP", "UNICODE", "_UNICODE", "WXUSINGDLL" }
-	package.config["Release"].defines = { "NDEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "TIXML_USE_TICPP", "WXUSINGDLL" }
-	package.config["Release (Unicode)"].defines = { "NDEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "TIXML_USE_TICPP", "UNICODE", "_UNICODE", "WXUSINGDLL" }
+	package.config["Debug"].defines = { "WXMAKINGDLL_FNB", "MONOLITHIC", "DEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "__WXDEBUG__", "WXUSINGDLL" }
+	package.config["Debug (Unicode)"].defines = { "WXMAKINGDLL_FNB", "MONOLITHIC", "DEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "__WXDEBUG__", "UNICODE", "_UNICODE", "WXUSINGDLL" }
+	package.config["Release"].defines = { "WXMAKINGDLL_FNB", "MONOLITHIC", "NDEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "TIXML_USE_TICPP", "WXUSINGDLL" }
+	package.config["Release (Unicode)"].defines = { "WXMAKINGDLL_FNB", "MONOLITHIC", "NDEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "UNICODE", "_UNICODE", "WXUSINGDLL" }
 else
-	package.config["Debug"].defines = { "DEBUG", "__WX__", "__WXDEBUG__", "TIXML_USE_TICPP", "WXUSINGDLL" }
-	package.config["Release"].defines = { "NDEBUG", "__WX__", "TIXML_USE_TICPP", "WXUSINGDLL" }
+	package.config["Debug"].defines = { "WXMAKINGDLL_FNB", "MONOLITHIC", "DEBUG", "__WX__", "__WXDEBUG__", "WXUSINGDLL" }
+	package.config["Release"].defines = { "WXMAKINGDLL_FNB", "MONOLITHIC", "NDEBUG", "__WX__", "WXUSINGDLL" }
 end
 
 -- Set build optionsfor Linux.

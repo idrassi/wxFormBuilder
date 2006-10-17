@@ -1,7 +1,6 @@
 package.name = "wxPropGrid"
 
 package.kind = "dll"
---package.kind = "lib"
 package.language = "c++"
 package.files = { matchfiles( "../../src/propgrid/*.cpp" ) }
 
@@ -13,15 +12,15 @@ package.config["Release (Unicode)"].objdir = ".objsu"
 
 -- Set the targets.
 if ( target == "cb-gcc" or target == "gnu" ) then
-	package.config["Debug"].target = "wxmsw270md_scintilla_gcc"
-	package.config["Debug (Unicode)"].target = "wxmsw270umd_scintilla_gcc"
-	package.config["Release"].target = "wxmsw270m_scintilla_gcc"
-	package.config["Release (Unicode)"].target = "wxmsw270um_scintilla_gcc"
+	package.config["Debug"].target = "wxmsw270md_propgrid_gcc"
+	package.config["Debug (Unicode)"].target = "wxmsw270umd_propgrid_gcc"
+	package.config["Release"].target = "wxmsw270m_propgrid_gcc"
+	package.config["Release (Unicode)"].target = "wxmsw270um_propgrid_gcc"
 else
-	package.config["Debug"].target = "wxmsw270md_scintilla_vc"
-	package.config["Debug (Unicode)"].target = "wxmsw270umd_scintilla_vc"
-	package.config["Release"].target = "wxmsw270m_scintilla_vc"
-	package.config["Release (Unicode)"].target = "wxmsw270um_scintilla_vc"
+	package.config["Debug"].target = "wxmsw270md_propgrid_vc"
+	package.config["Debug (Unicode)"].target = "wxmsw270umd_propgrid_vc"
+	package.config["Release"].target = "wxmsw270m_propgrid_vc"
+	package.config["Release (Unicode)"].target = "wxmsw270um_propgrid_vc"
 end
 
 -- Set the build options for the Unicode build Targets.
@@ -42,15 +41,23 @@ end
 
 -- Setup the output directory options.
 if ( target == "cb-gcc" or target == "gnu" ) then
-	package.bindir = { "../lib/gcc_dll" }
+	package.bindir = ".../../lib/gcc_dll"
+	package.libdir = "../../lib/gcc_lib"
 else
-	package.bindir = { "../lib/vc_dll" }
+	package.bindir = "../../lib/vc_dll"
+	package.libdir = "../../lib/vc_lib"
 end
 
-package.config["Debug"].links = { "wxmsw27d" }
-package.config["Debug (Unicode)"].links = { "wxmsw27ud" }
-package.config["Release"].links = { "wxmsw27" }
-package.config["Release (Unicode)"].links = { "wxmsw27u" }
+-- Set libraries to link.
+if ( OS == "windows") then
+	package.config["Debug"].links = { "wxmsw27d" }
+	package.config["Debug (Unicode)"].links = { "wxmsw27ud" }
+	package.config["Release"].links = { "wxmsw27" }
+	package.config["Release (Unicode)"].links = { "wxmsw27u" }
+else
+	package.config["Debug"].linkoptions = { "`wx-config --debug --libs`"}
+	package.config["Release"].linkoptions = { "`wx-config --libs`" }
+end
 
 -- Set defines.
 if ( OS == "windows") then
