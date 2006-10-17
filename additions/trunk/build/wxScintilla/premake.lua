@@ -2,7 +2,7 @@ package.name = "wxScintilla"
 
 package.kind = "dll"
 package.language = "c++"
-package.files = { matchfiles( "*.h", "*.cpp" ) }
+package.files = { matchrecursive( "../../src/wxScintilla/*.cpp" ), matchrecursive( "../../src/wxScintilla/scintilla/*.cxx" ) }
 
 -- Set object output directory.
 package.config["Debug"].objdir = ".objsd"
@@ -30,7 +30,7 @@ package.config["Release"].buildflags = { "no-symbols", "optimize-speed" }
 package.config["Release (Unicode)"].buildflags = { "unicode", "no-symbols", "optimize-speed" }
 
 -- Set include paths
-package.includepaths = { "../../include", "$(WXWIN)/include", "../tinyxml" }
+package.includepaths = { "../../include", "$(WXWIN)/include", "../../src/wxScintilla", "../../src/wxScintilla/scintilla/include", "../../src/wxScintilla/scintilla/src" }
 
 -- Setup the linker options.
 if ( target == "cb-gcc" or target == "gnu" ) then
@@ -41,28 +41,37 @@ end
 
 -- Setup the output directory options.
 if ( target == "cb-gcc" or target == "gnu" ) then
-	package.bindir = { "../lib/gcc_dll" }
+	package.bindir = ".../../lib/gcc_dll"
+	package.libdir = "../../lib/gcc_lib"
 else
-	package.bindir = { "../lib/vc_dll" }
+	package.bindir = "../../lib/vc_dll"
+	package.libdir = "../../lib/vc_lib"
 end
 
-package.config["Debug"].links = { "wxmsw27d" }
-package.config["Debug (Unicode)"].links = { "wxmsw27ud" }
-package.config["Release"].links = { "wxmsw27" }
-package.config["Release (Unicode)"].links = { "wxmsw27u" }
+-- Set libraries to link.
+if ( OS == "windows") then
+	package.links = { "Gdi32" }
+	package.config["Debug"].links = { "wxmsw27d" }
+	package.config["Debug (Unicode)"].links = { "wxmsw27ud" }
+	package.config["Release"].links = { "wxmsw27" }
+	package.config["Release (Unicode)"].links = { "wxmsw27u" }
+else
+	package.config["Debug"].linkoptions = { "`wx-config --debug --libs`"}
+	package.config["Release"].linkoptions = { "`wx-config --libs`" }
+end
 
 -- Set defines.
 if ( OS == "windows") then
-	package.config["Debug"].defines = { "DEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "__WXDEBUG__", "TIXML_USE_TICPP", "WXUSINGDLL" }
-	package.config["Debug (Unicode)"].defines = { "DEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "__WXDEBUG__", "TIXML_USE_TICPP", "UNICODE", "_UNICODE", "WXUSINGDLL" }
-	package.config["Release"].defines = { "NDEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "TIXML_USE_TICPP", "WXUSINGDLL" }
-	package.config["Release (Unicode)"].defines = { "NDEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "TIXML_USE_TICPP", "UNICODE", "_UNICODE", "WXUSINGDLL" }
+	package.config["Debug"].defines = { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "DEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "__WXDEBUG__", "WXUSINGDLL" }
+	package.config["Debug (Unicode)"].defines = { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "DEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "__WXDEBUG__", "UNICODE", "_UNICODE", "WXUSINGDLL" }
+	package.config["Release"].defines = { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "NDEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "TIXML_USE_TICPP", "WXUSINGDLL" }
+	package.config["Release (Unicode)"].defines = { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "NDEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "UNICODE", "_UNICODE", "WXUSINGDLL" }
 else
-	package.config["Debug"].defines = { "DEBUG", "__WX__", "__WXDEBUG__", "TIXML_USE_TICPP", "WXUSINGDLL" }
-	package.config["Release"].defines = { "NDEBUG", "__WX__", "TIXML_USE_TICPP", "WXUSINGDLL" }
+	package.config["Debug"].defines = { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "DEBUG", "__WX__", "__WXDEBUG__", "WXUSINGDLL" }
+	package.config["Release"].defines = { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "NDEBUG", "__WX__", "WXUSINGDLL" }
 end
 
--- Set build optionsfor Linux.
+-- Set build options for Linux.
 if ( OS == "linux" ) then
 	package.config["Debug"].buildoptions = { "`wx-config --debug=yes --cflags`" }
 	package.config["Release"].buildoptions = { "`wx-config --debug=no --cflags`" }
