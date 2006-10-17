@@ -11,16 +11,21 @@ package.config["Release"].objdir = ".objs"
 package.config["Release (Unicode)"].objdir = ".objsu"
 
 -- Set the targets.
-if ( target == "cb-gcc" or target == "gnu" ) then
-	package.config["Debug"].target = "wxmsw270md_propgrid_gcc"
-	package.config["Debug (Unicode)"].target = "wxmsw270umd_propgrid_gcc"
-	package.config["Release"].target = "wxmsw270m_propgrid_gcc"
-	package.config["Release (Unicode)"].target = "wxmsw270um_propgrid_gcc"
+if ( OS == "windows") then
+	if ( target == "cb-gcc" or target == "gnu" ) then
+		package.config["Debug"].target = "wxmsw270md_propgrid_gcc"
+		package.config["Debug (Unicode)"].target = "wxmsw270umd_propgrid_gcc"
+		package.config["Release"].target = "wxmsw270m_propgrid_gcc"
+		package.config["Release (Unicode)"].target = "wxmsw270um_propgrid_gcc"
+	else
+		package.config["Debug"].target = "wxmsw270md_propgrid_vc"
+		package.config["Debug (Unicode)"].target = "wxmsw270umd_propgrid_vc"
+		package.config["Release"].target = "wxmsw270m_propgrid_vc"
+		package.config["Release (Unicode)"].target = "wxmsw270um_propgrid_vc"
+	end
 else
-	package.config["Debug"].target = "wxmsw270md_propgrid_vc"
-	package.config["Debug (Unicode)"].target = "wxmsw270umd_propgrid_vc"
-	package.config["Release"].target = "wxmsw270m_propgrid_vc"
-	package.config["Release (Unicode)"].target = "wxmsw270um_propgrid_vc"
+	package.config["Debug"].target = "`wx-config --debug --basename`_propgrid-`wx-config --release`"
+	package.config["Release"].target = "`wx-config --basename`_propgrid-`wx-config --release`"
 end
 
 -- Set the build options for the Unicode build Targets.
@@ -40,7 +45,7 @@ else
 end
 
 -- Setup the output directory options.
-if ( target == "cb-gcc" or target == "gnu" ) then
+if ( target == "cb-gcc" or target == "gnu" or OS ~= "windows" ) then
 	package.bindir = ".../../lib/gcc_dll"
 	package.libdir = "../../lib/gcc_lib"
 else
