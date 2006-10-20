@@ -34,8 +34,12 @@ package.config["Debug (Unicode)"].buildflags = { "unicode" }
 package.config["Release"].buildflags = { "no-symbols", "optimize-speed" }
 package.config["Release (Unicode)"].buildflags = { "unicode", "no-symbols", "optimize-speed" }
 
--- Set include paths
-package.includepaths = { "../../include", "$(WXWIN)/include", "../../src/wxScintilla", "../../src/wxScintilla/scintilla/include", "../../src/wxScintilla/scintilla/src" }
+-- Set include paths.
+if ( OS == "windows") then
+	package.includepaths = { "../../include", "$(WXWIN)/include", "../../src/wxScintilla", "../../src/wxScintilla/scintilla/include", "../../src/wxScintilla/scintilla/src" }
+else
+	package.includepaths = { "../../include", "../../src/wxScintilla", "../../src/wxScintilla/scintilla/include", "../../src/wxScintilla/scintilla/src" }
+end
 
 -- Setup the linker options.
 if ( target == "cb-gcc" or target == "gnu" ) then
@@ -72,8 +76,8 @@ if ( OS == "windows") then
 	package.config["Release"].defines = { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "NDEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "TIXML_USE_TICPP", "WXUSINGDLL" }
 	package.config["Release (Unicode)"].defines = { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "NDEBUG", "WIN32", "_WINDOWS", "HAVE_W32API_H", "__WX__", "__WXMSW__", "UNICODE", "_UNICODE", "WXUSINGDLL" }
 else
-	package.config["Debug"].defines = { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "GTK", "DEBUG", "__WX__", "__WXDEBUG__", "WXUSINGDLL" }
-	package.config["Release"].defines = { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "GTK", "NDEBUG", "__WX__", "WXUSINGDLL" }
+	package.config["Debug"].defines = { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "GTK", "DEBUG", "WXUSINGDLL" }
+	package.config["Release"].defines = { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "GTK", "NDEBUG", "WXUSINGDLL" }
 end
 
 -- Set build options for Linux.
