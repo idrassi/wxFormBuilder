@@ -50,7 +50,7 @@ end
 
 -- Setup the output directory options.
 if ( target == "cb-gcc" or target == "gnu" ) then
-	package.bindir = ".../../lib/gcc_dll"
+	package.bindir = "../../lib/gcc_dll"
 	package.libdir = "../../lib/gcc_lib"
 else
 	package.bindir = "../../lib/vc_dll"
