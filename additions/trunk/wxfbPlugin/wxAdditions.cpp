@@ -70,6 +70,13 @@ protected:
 
 	void OnFlatNotebookPageChanged( wxFlatNotebookEvent& event )
 	{
+		// Only handle events from this book - prevents problems with nested books, because OnSelected is fired on an
+		// object and all of its parents
+		if ( m_window != event.GetEventObject() )
+		{
+			return;
+		}
+
 		int selPage = event.GetSelection();
 		if ( selPage < 0 )
 		{
