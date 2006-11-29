@@ -49,8 +49,10 @@
 // Link libraries
 #if __VISUALC__ >= 1400 && !defined( WXUSINGDLL )
 	#pragma comment( lib, GET_WX_LIB_NAME( vc8_plotctrl ) )
+	#pragma comment( lib, GET_WX_LIB_NAME( vc8_flatnotebook ) )
 #else
 	#pragma comment( lib, GET_WX_LIB_NAME( plotctrl ) )
+	#pragma comment( lib, GET_WX_LIB_NAME( flatnotebook ) )
 #endif
 
 // AWX has no exported functions, so it cannot be used as a dll from VC
@@ -59,7 +61,6 @@
 #endif
 
 #pragma comment( lib, GET_WX_LIB_NAME( plot ) )
-#pragma comment( lib, GET_WX_LIB_NAME( flatnotebook ) )
 #pragma comment( lib, GET_WX_LIB_NAME( propgrid ) )
 #pragma comment( lib, GET_WX_LIB_NAME( scintilla ) )
 #pragma comment( lib, GET_WX_LIB_NAME( things ) )
