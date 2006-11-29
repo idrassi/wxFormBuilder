@@ -47,14 +47,19 @@ call wxBuild_default MINGW ALL
 cd ..
 
 :: -- wxFlatNotebook --
+echo Building wxFlatNotebook with VC8.0
+echo.
+cd wxFlatNotebook
+call wxBuild_wxFlatNotebook VC80 LIB
+
 echo Building wxFlatNotebook with VC7.1
 echo.
 cd wxFlatNotebook
-call wxBuild_default VCTK ALL
+call wxBuild_wxFlatNotebook VCTK ALL
 
 echo Building wxFlatNotebook with MinGW Gcc
 echo.
-call wxBuild_default MINGW ALL
+call wxBuild_wxFlatNotebook MINGW ALL
 cd ..
 
 :: -- wxScintilla --
