@@ -72,7 +72,7 @@ set INCLUDE=%WXWIN%\include;%INCLUDE%
 :: -- Setup the make executable and the actual makefile name --
 set MAKE=nmake
 set MAKEFILE=makefile.vc
-set FLAGS=CXXFLAGS=/Zc:wchar_t-
+set FLAGS=CXXFLAGS=/Zc:wchar_t- WX_LIB_FLAVOUR=_vc8
 goto START
 
 :SETUP_GCC_BUILD_ENVIRONMENT
