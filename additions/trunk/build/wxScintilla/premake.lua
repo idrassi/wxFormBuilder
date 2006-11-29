@@ -2,7 +2,11 @@ package.name = "wxScintilla"
 
 package.kind = "dll"
 package.language = "c++"
-package.files = { matchrecursive( "../../src/wxScintilla/*.cpp" ), matchrecursive( "../../src/wxScintilla/scintilla/*.cxx" ) }
+package.files =
+{
+	matchfiles( "../../src/wxScintilla/*.cpp", "../../include/wx/wxScintilla/*.h" ),
+	matchrecursive( "../../src/wxScintilla/scintilla/*.cxx", "../../src/wxScintilla/scintilla/*.h" )
+}
 
 -- Set object output directory.
 package.config["Debug"].objdir = ".objsd"
@@ -49,13 +53,8 @@ else
 end
 
 -- Setup the output directory options.
-if ( target == "cb-gcc" or target == "gnu" ) then
-	package.bindir = "../../lib/gcc_dll"
-	package.libdir = "../../lib/gcc_lib"
-else
-	package.bindir = "../../lib/vc_dll"
-	package.libdir = "../../lib/vc_lib"
-end
+package.bindir = "../../../../bin"
+package.libdir = "../../../../bin"
 
 -- Set libraries to link.
 if ( OS == "windows") then

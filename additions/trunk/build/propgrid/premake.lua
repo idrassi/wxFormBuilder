@@ -2,7 +2,7 @@ package.name = "wxPropGrid"
 
 package.kind = "dll"
 package.language = "c++"
-package.files = { matchfiles( "../../src/propgrid/*.cpp" ) }
+package.files = { matchfiles( "../../src/propgrid/*.cpp", "../../include/wx/propgrid/*.h") }
 
 -- Set object output directory.
 package.config["Debug"].objdir = ".objsd"
@@ -45,13 +45,8 @@ else
 end
 
 -- Setup the output directory options.
-if ( target == "cb-gcc" or target == "gnu" or OS ~= "windows" ) then
-	package.bindir = "../../lib/gcc_dll"
-	package.libdir = "../../lib/gcc_lib"
-else
-	package.bindir = "../../lib/vc_dll"
-	package.libdir = "../../lib/vc_lib"
-end
+package.bindir = "../../../../bin"
+package.libdir = "../../../../bin"
 
 -- Set libraries to link.
 if ( OS == "windows") then
