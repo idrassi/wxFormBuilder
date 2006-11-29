@@ -1,7 +1,7 @@
 @echo off
 ::**************************************************************************
 :: File:           build_wxadditions.bat
-:: Version:        1.03
+:: Version:        1.04
 :: Name:           RJP Computing 
 :: Date:           08/11/2006
 :: Description:    Use this to build all the projects for wxAdditions.
