@@ -614,6 +614,16 @@ public:
         return m_pPropGrid->GetPropertyColour(name);
     }
 
+    /** Returns cell text colour of a property. */
+    inline wxColour GetPropertyTextColour( wxPGId id ) const
+    {
+        return m_pPropGrid->GetPropertyTextColour(id);
+    }
+    inline wxColour GetPropertyTextColour( wxPGPropNameStr name ) const
+    {
+        return m_pPropGrid->GetPropertyTextColour(name);
+    }
+
     /** Returns a wxVariant list containing wxVariant versions of all
         property values. Order is not guaranteed, but generally it should
         match the visible order in the grid.
@@ -765,6 +775,17 @@ public:
     */
     void SetDescription( const wxString& label, const wxString& content );
 
+    /** Sets text colour of a category caption (but not it's children).
+    */
+    inline void SetCaptionTextColour( wxPGId id, const wxColour& col )
+    {
+        m_pPropGrid->SetCaptionTextColour( id, col );
+    }
+    inline void SetCaptionTextColour( wxPGPropNameStr name, const wxColour& col )
+    {
+        m_pPropGrid->SetCaptionTextColour( name, col );
+    }
+
     /** Sets the current category - Append will add non-categories under this one.
     */
     inline void SetCurrentCategory( wxPGId id )
@@ -813,19 +834,46 @@ public:
     void SetPropertyLabel( wxPGId id, const wxString& newlabel );
     void SetPropertyLabel( wxPGPropNameStr name, const wxString& newlabel );
 
-    /** Sets background colour of property and all its children.  Background brush
-        cache is optimized for often set colours to be set last.
+    /** Sets background colour of property and all its children. Colours of
+        captions are not affected. Background brush cache is optimized for often
+        set colours to be set last.
+
+        NOTE: This function is deprecated. Use SetPropertyBackgroundColour.
     */
     inline void SetPropertyColour( wxPGId id, const wxColour& col )
     {
-        m_pPropGrid->SetPropertyColour( id, col );
+        m_pPropGrid->SetPropertyBackgroundColour( id, col );
     }
     inline void SetPropertyColour( wxPGPropNameStr name, const wxColour& col )
     {
-        m_pPropGrid->SetPropertyColour( name, col );
+        m_pPropGrid->SetPropertyBackgroundColour( name, col );
     }
 
-    /** Sets background colour of property and all its children to the default. */
+    /** Sets background colour of property and all its children. Colours of
+        captions are not affected. Background brush cache is optimized for often
+        set colours to be set last.
+    */
+    inline void SetPropertyBackgroundColour( wxPGId id, const wxColour& col )
+    {
+        m_pPropGrid->SetPropertyBackgroundColour( id, col );
+    }
+    inline void SetPropertyBackgroundColour( wxPGPropNameStr name, const wxColour& col )
+    {
+        m_pPropGrid->SetPropertyBackgroundColour( name, col );
+    }
+
+    /** Sets text colour of property and all its children.
+    */
+    inline void SetPropertyTextColour( wxPGId id, const wxColour& col )
+    {
+        m_pPropGrid->SetPropertyTextColour( id, col );
+    }
+    inline void SetPropertyTextColour( wxPGPropNameStr name, const wxColour& col )
+    {
+        m_pPropGrid->SetPropertyTextColour( name, col );
+    }
+
+    /** Sets background and text colour of property and all its children to the default. */
     inline void SetPropertyColourToDefault( wxPGId id )
     {
         m_pPropGrid->SetPropertyColourToDefault(id);
@@ -846,7 +894,7 @@ public:
     void SetPropertyValueDouble( wxPGId id, double value );
     void SetPropertyValueBool( wxPGId id, bool value );
     void SetPropertyValueString( wxPGId id, const wxString& value );
-    void SetPropertyValueArrstr( wxPGId id, const wxArrayString& value );
+    void SetPropertyValueArrstr2( wxPGId id, const wxArrayString& value );
     void SetPropertyValueWxObjectPtr( wxPGId id, wxObject* value );
 #ifndef __WXPYTHON__
     void SetPropertyValue( wxPGId id, void* value );
@@ -864,10 +912,10 @@ public:
 #ifndef __WXPYTHON__
     void SetPropertyValue( wxPGPropNameStr name, void* value );
     void SetPropertyValue( wxPGPropNameStr name, wxVariant& value );
-    void SetPropertyValueArrstr( wxPGPropNameStr name, const wxArrayString& value );
-    wxPG_IMPLEMENT_PGMAN_METHOD_NORET1_INBODY(SetPropertyValueArrint,const wxArrayInt&)
+    void SetPropertyValueArrstr2( wxPGPropNameStr name, const wxArrayString& value );
+    wxPG_IMPLEMENT_PGMAN_METHOD_NORET1_INBODY(SetPropertyValueArrint2,const wxArrayInt&)
 #else
-    wxPG_IMPLEMENT_PGMAN_METHOD_NORET1_P1_INBODY(SetPropertyValueArrint,const wxArrayInt&)
+    wxPG_IMPLEMENT_PGMAN_METHOD_NORET1_P1_INBODY(SetPropertyValueArrint2,const wxArrayInt&)
 #endif
 #if wxUSE_DATETIME
     wxPG_IMPLEMENT_PGMAN_METHOD_NORET1_INBODY(SetPropertyValueDatetime,wxDateTime)
@@ -1159,6 +1207,10 @@ protected:
 
     // Initializes some members.
 	void Init2( int style );
+
+/*#ifdef __WXMSW__
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const;
+#endif*/
 
     /** Recalculates new positions for components, according to the
         given size.
