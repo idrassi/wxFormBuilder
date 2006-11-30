@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:		wxFlatNotebook.cpp
+// Name:		wxFlatNotebook.cpp 
 // Purpose:     generic implementation of flat style notebook class.
 // Author:      Eran Ifrah <eranif@bezeqint.net>
 // Modified by: Priyank Bolia <soft@priyank.in>
@@ -100,7 +100,8 @@ private:
 public:
 
 	///Default constructor
-	wxFlatNotebook() : m_popupWin(NULL) {}
+	wxFlatNotebook() 
+	{ Init(); }
 
 	/// Parametrized constructor
 	/**
@@ -113,14 +114,26 @@ public:
 	*/
 	wxFlatNotebook(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = wxT("Flat Notebook"));
 
+	/** 
+	 * See wxFlatNotebook constructor
+	 */
+	bool Create(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = wxT("Flat Notebook"));
+
 	/// Destructor
 	virtual ~wxFlatNotebook(void);
 
-	/// Advances the selection
 	/**
-	\param bForward - if set to true then selection should be advanced forward otherwise - backward
-	*/
+     * Cleans up all the optimization structures held globally
+     *
+	 */
+    static void CleanUp ();
+
+	/**
+	 * Advance the current selection
+	 *\param bForward - if set to true then selection should be advanced forward otherwise - backward
+	 */
 	void AdvanceSelection(bool bForward);
+
 	/// Apends new notebook page
 	/**
 	\param windows - window to be appended
@@ -128,7 +141,8 @@ public:
 	\param selected - determines if new page should be selected automatically
 	\param imgindex - page image index
 	*/
-	void AddPage(wxWindow* windows, const wxString& caption, const bool selected = false, const int imgindex = -1);
+	bool AddPage(wxWindow* windows, const wxString& caption, const bool selected = false, const int imgindex = -1);
+
 	/// Inserts new notebook page
 	/**
 	\param index - page index
@@ -145,9 +159,13 @@ public:
 	void SetSelection(size_t page);
 	/// Removes the window from the notebook, and destroys the window associated with that notebook page.
 	/**
-	\param page - index of page to be deleted
-	*/
-	void DeletePage(size_t page);
+	 * \param page - index of page to be deleted
+	 * \param notify - by default wxFlatNotebook fires two events:
+	 * - wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CLOSED 
+	 * - wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CLOSING 
+	 * to disable this functionality set notify to false
+	 */
+	void DeletePage(size_t page, bool notify = true);
 
 	/// Deletes all notebook pages and destroys all windows associated with pages
 	bool DeleteAllPages();
@@ -174,7 +192,7 @@ public:
 
 	/**
 	* Return the previous selection, useful when implementing smart tabulation
-	* \return previous selection, or wxNOT_FOUND
+	* \return previous selection, or wxNOT_FOUND 
 	*/
 	int GetPreviousSelection() const;
 
@@ -206,11 +224,15 @@ public:
 	*/
 	bool SetPageText(size_t page, const wxString& text);
 
-	/// Removes the window from the notebook, but does not delete the associated window with that notebook page.
 	/**
-	\param page - page index to be removed
-	*/
-	bool RemovePage(size_t page);
+	 * Removes the window from the notebook, and destroys the window associated with that notebook page.
+	 * \param page - index of page to be deleted
+	 * \param notify - by default wxFlatNotebook fires two events:
+	 * - wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CLOSED 
+	 * - wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CLOSING 
+	 * to disable this functionality set notify to false
+	 */
+	bool RemovePage(size_t page, bool notify = true);
 
 	/// Sets the amount of space around each page's icon and label, in pixels.
 	/**
@@ -366,6 +388,7 @@ private:
 	int m_nFrom;
 	int m_nPadding;
 	wxTabNavigatorWindow *m_popupWin;
+	bool m_sendPageChangeEvent; ///< Ugly but needed to allow SetSelection to send / dont send event
 
 	DECLARE_DYNAMIC_CLASS(wxFlatNotebook)
 	DECLARE_EVENT_TABLE()
@@ -571,7 +594,7 @@ public:
 	\param selected - determines if new page should be selected automatically
 	\param imgindex - page image index
 	*/
-	virtual void AddPage(const wxString& caption, const bool selected = false, const int imgindex = -1);
+	virtual bool AddPage(const wxString& caption, const bool selected = false, const int imgindex = -1);
 
 	/// Inserts new notebook page
 	/**
@@ -671,9 +694,22 @@ public:
 	*/
 	const wxColour&  GetNonoActiveTextColor() const { return m_nonActiveTextColor; }
 
+	/**
+	 * Return the active tab colour
+	 * \return tab colour
+	 */
 	const wxColour&  GetActiveTabColour() const { return m_activeTabColor; }
 
+	/**
+	 * Get the previous selected tab, wxNOT_FOUND if none
+	 * \return index of previous selected tab
+	 */
 	int GetPreviousSelection() const { return m_iPreviousActivePage; }
+
+	/**
+	 * Draw a tab preview 
+	 */
+	void DrawDragHint();
 
 	DECLARE_EVENT_TABLE()
 	// Event handlers
@@ -764,6 +800,7 @@ protected:
 	*/
 	virtual bool CanFitToScreen(size_t page);
 
+
 protected:
 
 	wxPageInfoArray m_pagesInfoVec;
@@ -793,6 +830,7 @@ protected:
 
 	int m_iPreviousActivePage;
 	int m_nArrowDownButtonStatus;
+
 };
 
 /**

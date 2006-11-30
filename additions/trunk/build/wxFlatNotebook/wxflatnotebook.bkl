@@ -16,6 +16,7 @@
 		$(ADDITIONS_SRC_DIR)/wxFlatNotebook/popup_dlg.cpp
 		$(ADDITIONS_SRC_DIR)/wxFlatNotebook/renderer.cpp
 		$(ADDITIONS_SRC_DIR)/wxFlatNotebook/wxFlatNotebook.cpp
+		$(ADDITIONS_SRC_DIR)/wxFlatNotebook/xh_fnb.cpp
     </set>
 
 	<!-- ************************************************************ -->

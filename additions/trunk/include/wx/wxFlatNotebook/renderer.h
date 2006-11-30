@@ -7,6 +7,7 @@
 #include <wx/wxFlatNotebook/smart_ptr.h>
 #include <map>
 #include <vector>
+#include <wx/event.h>
 
 class wxFNBRenderer
 {
@@ -14,6 +15,7 @@ protected:
 	// A bitmap that holds the background of the
 	// x button which is drawn on a tab
 	wxBitmap m_tabXBgBmp, m_xBgBmp, m_leftBgBmp, m_rightBgBmp;
+	wxBitmap m_arrowDown, m_arrowUp;
 
 public:
 	wxFNBRenderer();
@@ -21,10 +23,11 @@ public:
 
 	/**
 	 * Generic function that draws the tabs and updates values in the page container
+	 * MAC requires that the event will be skipped, so we must pass it
 	 * \param pageContainer window that contains the tabs drawing
 	 * \param dc device context
 	 */
-	virtual void DrawTabs(wxWindow* pageContainer, wxDC &dc);
+	virtual void DrawTabs(wxWindow* pageContainer, wxDC &dc, wxEvent &event);
 
 	/**
 	 * Draw a small 'x' button on top of the tab
@@ -119,11 +122,27 @@ public:
 	virtual void DrawX         (wxWindow *pageContainer, wxDC &dc);
 
 	/**
+	 * Draw tab drag hint, the default implementation is to do nothing ...
+	 * u can override this function to provide a nice feedback to user
+	 * \param pageContainer a pointer to the owner wxPageContainer
+	 * \param tabIdx index of the tab that will be replaced with the dragged tab
+	 */
+	virtual void DrawDragHint(wxWindow *pageContainer, int tabIdx);
+
+	/**
 	 * Draw drop down arrow on the right corner
 	 * \param pageContainer window tabs container
 	 * \param dc device context
 	 */
 	void DrawDropDownArrow(wxWindow* pageContainer, wxDC& dc);
+
+	/**
+	 * Return an array of tabs info that can fit to screen starting from 'from'
+	 * \param pageContainer 
+	 * \param [output] vTabInfo 
+	 * \param from 
+	 */
+	virtual void NumberTabsCanFit(wxWindow *pageContainer, std::vector<wxRect> &vTabInfo, int from = -1);
 
 protected:
 	/**
@@ -170,8 +189,7 @@ public:
 	wxFNBRendererVC8() : m_factor(1), m_first(true) {}
 	virtual ~wxFNBRendererVC8(){}
 	virtual void DrawTab(wxWindow* pageContainer, wxDC &dc, const int &posx, const int &tabIdx, const int &tabWidth, const int &tabHeight, const int btnStatus);
-	virtual void DrawTabs(wxWindow *pageContainer, wxDC &dc);
-	virtual void DrawTabX(wxWindow *pageContainer, wxDC &dc, const wxRect&, const int& tabIdx, const int btnStatus);
+	virtual void DrawTabs(wxWindow *pageContainer, wxDC &dc, wxEvent &event);
 	void NumberTabsCanFit(wxWindow *pageContainer, std::vector<wxRect> &vTabInfo, int from = -1);
 
 private:
