@@ -4,10 +4,8 @@
 #include <wx/wxFlatNotebook/renderer.h>
 #include <wx/listbox.h>
 #include <wx/image.h>
-#include <wx/mstream.h>
-
-extern unsigned char tab_selection_png[];
-extern size_t tab_selection_png_size;
+//#include <wx/mstream.h>
+#include <wx/wxFlatNotebook/fnb_resources.h>
 
 wxBitmap wxTabNavigatorWindow::m_bmp;
 
@@ -51,6 +49,11 @@ void wxTabNavigatorWindow::Create(wxWindow* parent)
 	if( panelHeight == 0 )
 	{
 		wxMemoryDC mem_dc;
+
+		// bitmap must be set before it can be used for anything
+		wxBitmap bmp(10, 10);
+		mem_dc.SelectObject(bmp);
+
 		wxFont font(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 		font.SetWeight( wxBOLD );
 		mem_dc.SetFont(font);
@@ -86,11 +89,9 @@ void wxTabNavigatorWindow::Create(wxWindow* parent)
 	// Create the bitmap, only once
 	if( !m_bmp.Ok() )
 	{
-		wxImage::AddHandler( new wxPNGHandler ); 
-		wxInputStream *str = new wxMemoryInputStream(tab_selection_png, tab_selection_png_size);
-		wxImage img(*str);
-		m_bmp =  wxBitmap(img);
-		delete str;
+		wxImage img(signpost_xpm);
+		img.SetAlpha(signpost_alpha, true);
+		m_bmp =  wxBitmap(img); 
 	}
 }
 
