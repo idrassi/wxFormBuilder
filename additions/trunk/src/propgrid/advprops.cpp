@@ -174,7 +174,7 @@ public:
     virtual wxWindow* CreateControls( wxPropertyGrid* propgrid, wxPGProperty* property,
         const wxPoint& pos, const wxSize& sz, wxWindow** psecondary ) const;
     virtual void UpdateControl( wxPGProperty* property, wxWindow* wnd ) const;
-    virtual bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
+    virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
         wxWindow* wnd, wxEvent& event ) const;
     virtual bool CopyValueFromControl( wxPGProperty* property, wxWindow* wnd ) const;
     virtual void SetValueToUnspecified( wxWindow* wnd ) const;
