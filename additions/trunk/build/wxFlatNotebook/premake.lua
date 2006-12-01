@@ -45,8 +45,13 @@ else
 end
 
 -- Setup the output directory options.
-package.bindir = "../../../../bin"
-package.libdir = "../../../../bin"
+if ( OS == "windows") then
+	package.bindir = "../../../../bin"
+	package.libdir = "../../../../bin"
+else
+	package.bindir = "../../../../bin/lib"
+	package.libdir = "../../../../bin/lib"
+end
 
 -- Set libraries to link.
 if ( OS == "windows") then
