@@ -55,8 +55,8 @@ if ( OS == "windows") then
 	package.config["Release"].links = { "wxmsw27" }
 	package.config["Release (Unicode)"].links = { "wxmsw27u" }
 else
-	package.config["Debug"].linkoptions = { "`wx-config --debug --libs`"}
-	package.config["Release"].linkoptions = { "`wx-config --libs`" }
+	package.config["Debug"].linkoptions = { "`wx-config --debug --libs` `pkg-config gtk+-2.0 --libs`"}
+	package.config["Release"].linkoptions = { "`wx-config --libs` `pkg-config gtk+-2.0 --libs`" }
 end
 
 -- Set defines.
@@ -72,7 +72,7 @@ end
 
 -- Set build optionsfor Linux.
 if ( OS == "linux" ) then
-	package.config["Debug"].buildoptions = { "`wx-config --debug=yes --cflags`" }
-	package.config["Release"].buildoptions = { "`wx-config --debug=no --cflags`" }
+	package.config["Debug"].buildoptions = { "`wx-config --debug=yes --cflags` `pkg-config gtk+-2.0 --cflags`" }
+	package.config["Release"].buildoptions = { "`wx-config --debug=no --cflags` `pkg-config gtk+-2.0 --cflags`" }
 end
 
