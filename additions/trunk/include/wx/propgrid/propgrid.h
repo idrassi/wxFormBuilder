@@ -248,7 +248,7 @@ class WXDLLEXPORT wxPGCustomComboControl;
 
 
 #ifdef __WXPYTHON__
-    #define wxPG_PGVARIANT_IS_VARIANT   0  // 1
+    #define wxPG_PGVARIANT_IS_VARIANT   1  // 1
     #define wxPG_VALUETYPE_IS_STRING    0  // 1
 #else
     #define wxPG_PGVARIANT_IS_VARIANT   0
@@ -268,17 +268,19 @@ class WXDLLEXPORT wxPGCustomComboControl;
 
 #if !wxPG_VALUETYPE_IS_STRING
     #define wxPG_VALUETYPE_MSGVAL       const wxPGValueType*
-    #define wxPG_CONST_WXCHAR_PTR       const wxChar*
-    #define wxPG_CONST_WXCHAR_DEFVAL    ((const wxChar*)NULL)
-    #define wxPG_TO_WXCHAR_PTR(A)       A
 #else
     #define wxPG_VALUETYPE_MSGVAL       wxString
-    #define wxPG_CONST_WXCHAR_PTR       wxString
-    #define wxPG_CONST_WXCHAR_DEFVAL    wxEmptyString
-    #define wxPG_TO_WXCHAR_PTR(A)       (A.c_str())
 #endif
 
+
 #ifndef __WXPYTHON__
+
+// Some Strings are returned as const wxChar* in C++, and as wxString in wxPython
+// (using just wxString for everything would've been better, but the current scheme
+// is necessary for better backwards compatibility).
+#define wxPG_CONST_WXCHAR_PTR       const wxChar*
+#define wxPG_CONST_WXCHAR_DEFVAL    ((const wxChar*)NULL)
+#define wxPG_TO_WXCHAR_PTR(A)       A
 
 #define wxPG_PYTHON_STATIC    static
 #define wxPG_GETVALUE_CONST
@@ -296,6 +298,13 @@ class WXDLLEXPORT wxPGCustomComboControl;
 #define SetPropertyValueDatetime    SetPropertyValue
 
 #else
+
+// Some Strings are returned as const wxChar* in C++, and as wxString in wxPython
+// (using just wxString for everything would've been better, but the current scheme
+// is necessary for better backwards compatibility).
+#define wxPG_CONST_WXCHAR_PTR       wxString
+#define wxPG_CONST_WXCHAR_DEFVAL    wxEmptyString
+#define wxPG_TO_WXCHAR_PTR(A)       (A.c_str())
 
 // Declaring GetValues as static will yield problems
 #define wxPG_PYTHON_STATIC
@@ -1320,11 +1329,17 @@ public:
     WX_PG_DECLARE_GETCLASSNAME \
     WX_PG_DECLARE_GETCLASSINFO \
 
+// We don't want to create SWIG interface for DoGetEditorClass (we'll use GetEditor instead)
+#ifndef SWIG
+    #define WX_PG_DECLARE_DOGETEDITORCLASS  virtual const wxPGEditor* DoGetEditorClass() const;
+#else
+    #define WX_PG_DECLARE_DOGETEDITORCLASS
+#endif
 
 #define WX_PG_DECLARE_PROPERTY_CLASS() \
 public: \
     virtual wxPG_VALUETYPE_MSGVAL GetValueType() const; \
-    virtual const wxPGEditor* DoGetEditorClass() const; \
+    WX_PG_DECLARE_DOGETEDITORCLASS \
     WX_PG_DECLARE_CLASSINFO() \
 private:
 
@@ -1334,7 +1349,7 @@ private:
 #define WX_PG_DECLARE_PROPERTY_CLASS_NOPARENS \
 public: \
     virtual wxPG_VALUETYPE_MSGVAL GetValueType() const; \
-    virtual const wxPGEditor* DoGetEditorClass() const; \
+    WX_PG_DECLARE_DOGETEDITORCLASS \
     WX_PG_DECLARE_CLASSINFO() \
 private:
 
@@ -1600,7 +1615,17 @@ public:
         the value type of this property. Keep atleast this method
         abstract so the class is kept abstract.
     */
-    virtual wxPG_VALUETYPE_MSGVAL GetValueType() const = 0;
+    //virtual wxPG_VALUETYPE_MSGVAL GetValueType() const = 0;
+#ifndef __WXPYTHON__
+    virtual const wxPGValueType* GetValueType() const = 0;
+#else
+  #ifndef SWIG
+    virtual const wxPGValueType* GetValueType() const;
+  #endif
+
+    // Implement this in Python
+    virtual wxString GetType() const;
+#endif
 
 #if !wxPG_VALUETYPE_IS_STRING
     const wxPGValueType* GetValueTypePtr() const { return GetValueType(); }
@@ -1657,7 +1682,7 @@ public:
     /** Returns 0 for normal items. 1 for categories, -1 for other properties with children,
         -2 for wxCustomProperty (mostly like -1 ones but with few expections).
         \remarks
-        Should not be overridden by new custom properties.
+        Should not be overridden by new custom properties. Usually only used internally.
     */
     inline signed char GetParentingType() const { return m_parentingType; }
 
@@ -1833,6 +1858,7 @@ public:
 
     const wxPGEditor* GetEditorClass() const;
 
+#ifndef __WXPYTHON__
     /** Returns type name of property that is compatible with CreatePropertyByType.
         and wxVariant::GetType.
     */
@@ -1840,6 +1866,7 @@ public:
     {
         return GetValueTypePtr()->GetType();
     }
+#endif
 
     /** Adds entry to property's wxPGChoices and editor control (if it is active).
         Returns index of item added.
@@ -4366,6 +4393,21 @@ public:
             if cur_page:
                 self.Thaw()
 
+
+        def RegisterEditor(self, editor, editorName=None):
+            """\
+            Transform class into instance, if necessary
+            """
+            if not isinstance(editor, PGEditor):
+                editor = editor()
+            if not editorName:
+                editorName = editor.__class__.__name__
+            try:
+                self._editor_instances.append(editor)
+            except:
+                self._editor_instances = [editor]
+            RegisterEditor(editor, editorName)
+
     }
 #endif
 
@@ -4436,6 +4478,7 @@ protected:
 #define wxPG_FL_VALIDATION_FAILED           0x00800000 // Validation failed. Clear on modify event.
 #define wxPG_FL_SELECTED_IS_FULL_PAINT      0x01000000 // Set if selected is fully painted (ie. both image and text)
 #define wxPG_MAN_FL_PAGE_INSERTED           0x02000000 // Set after page has been inserted to manager
+#define wxPG_FL_ABNORMAL_EDITOR             0x04000000 // Active editor control is abnormally large
 
 #endif // #ifndef SWIG
 
@@ -5853,6 +5896,10 @@ public:
     // sequences, and copies result to dst_str.
     static wxString& CreateEscapeSequences( wxString& dst_str, wxString& src_str );
 
+    /** Returns rectangle that fully contains properties between and including p1 and p2.
+    */
+    wxRect GetPropertyRect( const wxPGProperty* p1, const wxPGProperty* p2 ) const;
+
     /** Returns pointer to current active primary editor control (NULL if none).
 
         If editor uses clipper window, pointer is returned to the actual editor, not the clipper.
@@ -5886,6 +5933,11 @@ public:
         wxASSERT( m_ignoredEvents > 0 );
         m_ignoredEvents--;
     }
+
+#ifdef __WXPYTHON__
+    // Dummy method to put wxRect type info into the wrapper
+    wxRect DummywxRectTypeInit() const { return wxRect(1,2,3,4); }
+#endif
 
 #ifndef SWIG
 

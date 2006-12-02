@@ -710,7 +710,7 @@ bool wxBaseEnumPropertyClass::SetValueFromInt ( long value, int argFlags )
 
 // Class body is in propdev.h.
 
-wxPGProperty* wxEnumProperty ( const wxString& label, const wxString& name, const wxChar** labels,
+wxPGProperty* wxEnumProperty( const wxString& label, const wxString& name, const wxChar** labels,
     const long* values, int value )
 {
     return new wxEnumPropertyClass (label,name,labels,values,value);
@@ -719,7 +719,7 @@ wxPGProperty* wxEnumProperty ( const wxString& label, const wxString& name, cons
 wxPGProperty* wxEnumProperty( const wxString& label, const wxString& name,
     const wxArrayString& labels, const wxArrayInt& values, int value )
 {
-    return new wxEnumPropertyClass (label,name,labels,values,value);
+    return new wxEnumPropertyClass(label,name,labels,values,value);
 }
 
 wxPGProperty* wxEnumProperty( const wxString& label, const wxString& name,
@@ -728,7 +728,7 @@ wxPGProperty* wxEnumProperty( const wxString& label, const wxString& name,
     return new wxEnumPropertyClass (label,name,labels,*((const wxArrayInt*)NULL),value);
 }
 
-wxPGProperty* wxEnumProperty ( const wxString& label, const wxString& name,
+wxPGProperty* wxEnumProperty( const wxString& label, const wxString& name,
     wxPGChoices& choices, int value )
 {
     return new wxEnumPropertyClass (label,name,choices,value);

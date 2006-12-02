@@ -98,6 +98,12 @@ public:
 
     wxColourPropertyValue() { }
 
+    inline void Init( wxUint32 type, const wxColour& colour )
+    {
+        m_type = type;
+        m_colour = colour;
+    }
+
     inline wxColourPropertyValue( const wxColour& colour )
     {
         m_type = wxPG_COLOUR_CUSTOM;
@@ -111,8 +117,7 @@ public:
 
     inline wxColourPropertyValue( wxUint32 type, const wxColour& colour )
     {
-        m_type = type;
-        m_colour = colour;
+        Init( type, colour );
     }
 
 #ifndef SWIG
@@ -202,7 +207,7 @@ extern WXDLLIMPEXP_PG wxPGProperty* wxMultiChoiceProperty(const wxString& label,
 //
 #if defined(_WX_PROPGRID_PROPDEV_H_)
 
-#ifndef SWIG
+//#ifndef SWIG
 
 // -----------------------------------------------------------------------
 
@@ -211,7 +216,7 @@ class WXDLLIMPEXP_PG wxFontPropertyClass : public wxPGPropertyWithChildren
     WX_PG_DECLARE_PROPERTY_CLASS()
 public:
 
-    wxFontPropertyClass( const wxString& label, const wxString& name, const wxFont& );
+    wxFontPropertyClass( const wxString& label, const wxString& name, const wxFont& value );
     virtual ~wxFontPropertyClass();
 
     WX_PG_DECLARE_PARENTAL_TYPE_METHODS()
@@ -273,7 +278,7 @@ protected:
 
 // -----------------------------------------------------------------------
 
-class wxCursorPropertyClass : public wxEnumPropertyClass
+class WXDLLIMPEXP_PG wxCursorPropertyClass : public wxEnumPropertyClass
 {
     WX_PG_DECLARE_DERIVED_PROPERTY_CLASS()
 public:
@@ -290,7 +295,7 @@ public:
 
 WXDLLIMPEXP_PG const wxString& wxPGGetDefaultImageWildcard();
 
-class wxImageFilePropertyClass : public wxFilePropertyClass
+class WXDLLIMPEXP_PG wxImageFilePropertyClass : public wxFilePropertyClass
 {
     WX_PG_DECLARE_DERIVED_PROPERTY_CLASS()
 public:
@@ -309,9 +314,9 @@ protected:
 
 #endif
 
-#if wxUSE_CHOICEDLG
+#if wxUSE_CHOICEDLG || defined(SWIG)
 
-class wxMultiChoicePropertyClass : public wxPGProperty
+class WXDLLIMPEXP_PG wxMultiChoicePropertyClass : public wxPGProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS()
 public:
@@ -361,7 +366,7 @@ class WXDLLIMPEXP_PG wxDatePropertyClass : public wxPGProperty
     WX_PG_DECLARE_PROPERTY_CLASS()
 public:
 
-    wxDatePropertyClass( const wxString& label, const wxString& name, const wxDateTime& );
+    wxDatePropertyClass( const wxString& label, const wxString& name, const wxDateTime& value );
     virtual ~wxDatePropertyClass();
 
     virtual void DoSetValue( wxPGVariant value );
@@ -381,7 +386,7 @@ public:
     {
         return m_format;
     }
-    
+
     inline void SetDateValue( const wxDateTime& dt )
     {
         m_valueDateTime = dt;
@@ -410,7 +415,7 @@ protected:
 
 // -----------------------------------------------------------------------
 
-#endif // #ifndef SWIG
+//#endif // #ifndef SWIG
 
 #endif // _WX_PROPGRID_PROPDEV_H_
 

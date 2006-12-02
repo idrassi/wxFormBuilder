@@ -1294,6 +1294,10 @@ void wxPGComboControlBase::CreateTextCtrl( int extraStyle, const wxValidator& va
                                 extraStyle,
                                 validator);
 
+    #if defined(__WXMSW__) && !defined(__WXWINCE__)
+        ::SendMessage(GetHwndOf(m_text), EM_SETMARGINS, EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELONG(3, 3));
+    #endif
+
         // This is required for some platforms (GTK+ atleast)
         m_text->SetSizeHints(2,4);
     }

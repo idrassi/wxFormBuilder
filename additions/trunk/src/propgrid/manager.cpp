@@ -1172,17 +1172,13 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
     if ( m_iFlags & wxPG_FL_INITIALIZED )
     {
         int pgh = propgridBottomY - propgridY;
-        m_pPropGrid->SetSize ( 0, propgridY,
-            width, pgh );
+        m_pPropGrid->SetSize( 0, propgridY, width, pgh );
 
         m_extraHeight = height - pgh;
 
         m_width = width;
         m_height = height;
     }
-
-    //InvalidateBestSize();
-
 }
 
 // -----------------------------------------------------------------------
@@ -1193,13 +1189,7 @@ void wxPropertyGridManager::SetDescBoxHeight( int ht, bool refresh )
     {
         m_nextDescBoxSize = ht;
         if ( refresh )
-            RecalculatePositions(m_width,m_height);
-        /*
-        int newypos = m_height - ht - m_splitterHeight;
-        if ( refresh && m_pTxtHelpContent )
-            RefreshHelpBox(newypos,m_width,m_height);
-        else
-            m_splitterY = newypos;*/
+            RecalculatePositions(m_width, m_height);
     }
 }
 
