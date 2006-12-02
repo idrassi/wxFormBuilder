@@ -171,8 +171,8 @@ public:
     virtual ~wxPGSpinCtrlEditor();
 
     // See below for short explanations of what these are suppposed to do.
-    virtual wxWindow* CreateControls( wxPropertyGrid* propgrid, wxPGProperty* property,
-        const wxPoint& pos, const wxSize& sz, wxWindow** psecondary ) const;
+    wxPG_DECLARE_CREATECONTROLS
+
     virtual void UpdateControl( wxPGProperty* property, wxWindow* wnd ) const;
     virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
         wxWindow* wnd, wxEvent& event ) const;
@@ -195,8 +195,13 @@ wxPGSpinCtrlEditor::~wxPGSpinCtrlEditor()
 
 
 // Create controls and initialize event handling.
+#ifndef __WXPYTHON__
 wxWindow* wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxPGProperty* property,
                                               const wxPoint& pos, const wxSize& sz, wxWindow** ) const
+#else
+wxPGWindowPair wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxPGProperty* property,
+                                                   const wxPoint& pos, const wxSize& sz ) const
+#endif
 {
 
     // Get initial value (may be none if value is 'unspecified')
@@ -330,8 +335,8 @@ class wxPGDatePickerCtrlEditor : public wxPGEditor
 public:
     virtual ~wxPGDatePickerCtrlEditor();
 
-    virtual wxWindow* CreateControls( wxPropertyGrid* propgrid, wxPGProperty* property,
-        const wxPoint& pos, const wxSize& sz, wxWindow** psecondary ) const;
+    wxPG_DECLARE_CREATECONTROLS
+
     virtual void UpdateControl( wxPGProperty* property, wxWindow* wnd ) const;
     virtual bool wxPGDatePickerCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
         wxWindow* wnd, wxEvent& event ) const;
@@ -347,11 +352,18 @@ wxPGDatePickerCtrlEditor::~wxPGDatePickerCtrlEditor()
 {
 }
 
+#ifndef __WXPYTHON__
 wxWindow* wxPGDatePickerCtrlEditor::CreateControls( wxPropertyGrid* propgrid,
                                                     wxPGProperty* property,
                                                     const wxPoint& pos,
                                                     const wxSize& sz,
                                                     wxWindow** ) const
+#else
+wxPGWindowPair wxPGDatePickerCtrlEditor::CreateControls( wxPropertyGrid* propgrid,
+                                                         wxPGProperty* property,
+                                                         const wxPoint& pos,
+                                                         const wxSize& sz ) const
+#endif
 {
     wxCHECK_MSG( property->IsKindOf(WX_PG_CLASSINFO(wxDateProperty)),
                  NULL,
@@ -874,8 +886,6 @@ void wxSystemColourPropertyClass::DoSetValue( wxPGVariant value )
 
     m_flags &= ~(wxPG_PROP_UNSPECIFIED);
 
-    m_value.m_type = wxPG_COLOUR_CUSTOM;
-
     if ( pval != (wxColourPropertyValue*) NULL )
     {
         if ( !pval->m_colour.Ok() )
@@ -883,7 +893,7 @@ void wxSystemColourPropertyClass::DoSetValue( wxPGVariant value )
             m_flags |= wxPG_PROP_UNSPECIFIED;
             m_index = wxNOT_FOUND;
 
-            m_value.m_colour = *wxWHITE;
+            m_value.Init( wxPG_COLOUR_CUSTOM, *wxWHITE );
             return;
         }
         else if ( pval != &m_value )
@@ -893,7 +903,7 @@ void wxSystemColourPropertyClass::DoSetValue( wxPGVariant value )
     }
     else
     {
-        m_value.m_colour = *wxWHITE;
+        m_value.Init( wxPG_COLOUR_CUSTOM, *wxWHITE );
     }
 
     if ( m_value.m_type < wxPG_COLOUR_WEB_BASE )
