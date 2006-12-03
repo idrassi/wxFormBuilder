@@ -1195,6 +1195,13 @@ void wxPropertyGridManager::SetDescBoxHeight( int ht, bool refresh )
 
 // -----------------------------------------------------------------------
 
+int wxPropertyGridManager::GetDescBoxHeight() const
+{
+    return GetClientSize().y - m_splitterY;
+}
+
+// -----------------------------------------------------------------------
+
 void wxPropertyGridManager::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
@@ -1207,7 +1214,6 @@ void wxPropertyGridManager::OnPaint( wxPaintEvent& WXUNUSED(event) )
     int splitter_bottom = m_splitterY + m_splitterHeight;
     if ( r.y < splitter_bottom && r_bottom >= m_splitterY )
         RepaintSplitter ( m_splitterY, m_width, m_height, false );
-
 }
 
 // -----------------------------------------------------------------------

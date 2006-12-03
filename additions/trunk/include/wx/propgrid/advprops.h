@@ -89,7 +89,6 @@ public:
         For custom colour properties <b>with</b> values array specified:
 
         m_arrValues[index] or wxPG_COLOUR_CUSTOM
-
     */
     wxUint32    m_type;
 
@@ -386,7 +385,7 @@ public:
     {
         return m_format;
     }
-
+    
     inline void SetDateValue( const wxDateTime& dt )
     {
         m_valueDateTime = dt;
