@@ -481,10 +481,7 @@ public:
     }
 
     /** Returns height of the description text box. */
-    inline int GetDescBoxHeight() const
-    {
-        return m_nextDescBoxSize;
-    }
+    int GetDescBoxHeight() const;
 
     /** Returns id of first item (in target page), whether it is a category or a property. */
     inline wxPGId GetFirst() const

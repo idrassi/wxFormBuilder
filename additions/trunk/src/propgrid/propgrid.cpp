@@ -3939,6 +3939,8 @@ void wxPropertyGrid::SetExtraStyle( long exStyle )
 
 //#elif defined(__WXGTK20__)
 #endif
+        // Only apply wxPG_EX_NATIVE_DOUBLE_BUFFERING if the window
+        // truly was double-buffered.
         if ( !wxPGIsWindowBuffered(this) )
         {
             exStyle &= ~(wxPG_EX_NATIVE_DOUBLE_BUFFERING);
@@ -8770,22 +8772,11 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
     m_fWidth = fwidth;
     m_width = width;
     m_height = height;
-    //bool sb_really_toggled = false;
-    //bool sb_vis_toggled = false;
-
-    //sb_really_toggled = DetectScrollbar();
 
     int widthDiff = fwidth - old_fwidth;
 
-    // Determine if scrollbar appeared or disappeared.
-    /*if ( width > 150 && old_width > 150 &&
-        height > 120 && old_height > 120 )*/
-    /*{
-        sb_vis_toggled = sb_really_toggled;
-    }*/
-
 #if wxPG_DOUBLE_BUFFER
-    if ( !wxPGIsWindowBuffered(this) )
+    if ( !(GetExtraStyle() & wxPG_EX_NATIVE_DOUBLE_BUFFERING) )
     {
         int dblh = (m_lineHeight*2);
         if ( !m_doubleBuffer )
