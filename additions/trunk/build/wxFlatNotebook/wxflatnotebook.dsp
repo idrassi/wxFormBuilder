@@ -529,6 +529,10 @@ SOURCE=.\..\..\..\src\msw\version.rc
 
 SOURCE=.\.\..\..\src\wxFlatNotebook\wxFlatNotebook.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\.\..\..\src\wxFlatNotebook\xh_fnb.cpp
+# End Source File
 # End Group
 # End Target
 # End Project
