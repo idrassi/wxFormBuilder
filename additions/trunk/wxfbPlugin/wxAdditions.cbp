@@ -86,9 +86,9 @@
 				</Environment>
 			</Target>
 			<Environment>
+				<Variable name="WX_VER" value="270" />
 				<Variable name="sdk" value="sdk" />
 				<Variable name="WX_SUFFIX" value="" />
-				<Variable name="WX_VER" value="270" />
 			</Environment>
 		</Build>
 		<Compiler>
@@ -126,6 +126,8 @@
 			<Option target="Release" />
 			<Option target="Release (Unicode)" />
 		</Unit>
-		<Extensions />
+		<Extensions>
+			<code_completion />
+		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
