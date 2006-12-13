@@ -8,6 +8,10 @@ package.files =
 	matchrecursive( "../../src/wxScintilla/scintilla/*.cxx", "../../src/wxScintilla/scintilla/*.h" )
 }
 
+-- Local variables
+local wx_ver = "27"
+local wx_ver_minor = "0"
+
 -- Set object output directory.
 package.config["Debug"].objdir = ".objsd"
 package.config["Debug (Unicode)"].objdir = ".objsud"
@@ -17,15 +21,15 @@ package.config["Release (Unicode)"].objdir = ".objsu"
 -- Set the targets.
 if ( OS == "windows") then
 	if ( target == "cb-gcc" or target == "gnu" ) then
-		package.config["Debug"].target = "wxmsw270md_scintilla_gcc"
-		package.config["Debug (Unicode)"].target = "wxmsw270umd_scintilla_gcc"
-		package.config["Release"].target = "wxmsw270m_scintilla_gcc"
-		package.config["Release (Unicode)"].target = "wxmsw270um_scintilla_gcc"
+		package.config["Debug"].target = "wxmsw"..wx_ver..wx_ver_minor.."md_scintilla_gcc"
+		package.config["Debug (Unicode)"].target = "wxmsw"..wx_ver..wx_ver_minor.."umd_scintilla_gcc"
+		package.config["Release"].target = "wxmsw"..wx_ver..wx_ver_minor.."m_scintilla_gcc"
+		package.config["Release (Unicode)"].target = "wxmsw"..wx_ver..wx_ver_minor.."um_scintilla_gcc"
 	else
-		package.config["Debug"].target = "wxmsw270md_scintilla_vc"
-		package.config["Debug (Unicode)"].target = "wxmsw270umd_scintilla_vc"
-		package.config["Release"].target = "wxmsw270m_scintilla_vc"
-		package.config["Release (Unicode)"].target = "wxmsw270um_scintilla_vc"
+		package.config["Debug"].target = "wxmsw"..wx_ver..wx_ver_minor.."md_scintilla_vc"
+		package.config["Debug (Unicode)"].target = "wxmsw"..wx_ver..wx_ver_minor.."umd_scintilla_vc"
+		package.config["Release"].target = "wxmsw"..wx_ver..wx_ver_minor.."m_scintilla_vc"
+		package.config["Release (Unicode)"].target = "wxmsw"..wx_ver..wx_ver_minor.."um_scintilla_vc"
 	end
 else
 	package.config["Debug"].target = "`wx-config --debug --basename`_scintilla-`wx-config --release`"
@@ -40,14 +44,22 @@ package.config["Release (Unicode)"].buildflags = { "unicode", "no-symbols", "opt
 
 -- Set include paths.
 if ( OS == "windows") then
-	package.includepaths = { "../../include", "$(WXWIN)/include", "../../src/wxScintilla", "../../src/wxScintilla/scintilla/include", "../../src/wxScintilla/scintilla/src" }
+	if ( target == "cb-gcc" ) then
+		package.includepaths = { "../../include", "$(#WX.include)", "../../src/wxScintilla", "../../src/wxScintilla/scintilla/include", "../../src/wxScintilla/scintilla/src" }
+	else
+		package.includepaths = { "../../include", "$(WXWIN)/include", "../../src/wxScintilla", "../../src/wxScintilla/scintilla/include", "../../src/wxScintilla/scintilla/src" }
+	end
 else
 	package.includepaths = { "../../include", "../../src/wxScintilla", "../../src/wxScintilla/scintilla/include", "../../src/wxScintilla/scintilla/src" }
 end
 
 -- Setup the linker options.
 if ( target == "cb-gcc" or target == "gnu" ) then
-	package.libpaths = { "$(WXWIN)/lib/gcc_dll" }
+	if ( target == "cb-gcc" and OS == "windows" ) then
+		package.libpaths = { "$(#WX.lib)/gcc_dll" }
+	else
+		package.libpaths = { "$(WXWIN)/lib/gcc_dll" }
+	end
 else
 	package.libpaths = { "$(WXWIN)/lib/vc_dll" }
 end
@@ -57,17 +69,17 @@ if ( OS == "windows") then
 	package.bindir = "../../../../bin"
 	package.libdir = "../../../../bin"
 else
-	package.bindir = "../../../../bin/lib"
+	package.bindir = "../../../../bin"
 	package.libdir = "../../../../bin/lib"
 end
 
 -- Set libraries to link.
 if ( OS == "windows") then
 	package.links = { "Gdi32" }
-	package.config["Debug"].links = { "wxmsw27d" }
-	package.config["Debug (Unicode)"].links = { "wxmsw27ud" }
-	package.config["Release"].links = { "wxmsw27" }
-	package.config["Release (Unicode)"].links = { "wxmsw27u" }
+	package.config["Debug"].links = { "wxmsw"..wx_ver.."d" }
+	package.config["Debug (Unicode)"].links = { "wxmsw"..wx_ver.."ud" }
+	package.config["Release"].links = {	"wxmsw"..wx_ver }
+	package.config["Release (Unicode)"].links = { "wxmsw"..wx_ver.."u" }
 else
 	package.config["Debug"].linkoptions = { "`wx-config --debug --libs`"}
 	package.config["Release"].linkoptions = { "`wx-config --libs`" }
