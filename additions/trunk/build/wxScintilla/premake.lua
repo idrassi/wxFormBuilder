@@ -67,10 +67,8 @@ end
 -- Setup the output directory options.
 if ( OS == "windows") then
 	package.bindir = "../../../../bin"
-	package.libdir = "../../../../bin"
 else
-	package.bindir = "../../../../bin"
-	package.libdir = "../../../../bin/lib"
+	package.bindir = "../../../../bin/lib"
 end
 
 -- Set libraries to link.
