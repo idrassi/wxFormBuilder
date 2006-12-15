@@ -8921,7 +8921,7 @@ void wxPropertyGrid::SendEvent( int eventType, wxPGProperty* p )
     evt.SetPropertyGrid(this);
     evt.SetEventObject(m_eventObject);
     evt.SetProperty(p);
-    GetEventHandler()->AddPendingEvent(evt);
+    GetEventHandler()->ProcessEvent(evt);
 }
 
 // -----------------------------------------------------------------------
