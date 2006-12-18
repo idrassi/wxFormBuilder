@@ -34,6 +34,7 @@ DEFINE_EVENT_TYPE( wxEVT_FB_OBJECT_REMOVED )
 DEFINE_EVENT_TYPE( wxEVT_FB_PROPERTY_MODIFIED )
 DEFINE_EVENT_TYPE( wxEVT_FB_PROJECT_REFRESH )
 DEFINE_EVENT_TYPE( wxEVT_FB_CODE_GENERATION )
+DEFINE_EVENT_TYPE( wxEVT_FB_EVENT_HANDLER_MODIFIED )
 
 wxFBEvent::wxFBEvent( wxEventType commandType, int priority )
 :
@@ -112,4 +113,9 @@ m_object( event.m_object )
 wxEvent* wxFBObjectEvent::Clone() const
 {
 	return new wxFBObjectEvent( *this );
+}
+
+wxFBEventHandlerEvent::wxFBEventHandlerEvent(wxEventType commandType, PEvent event)
+ : wxFBEvent(commandType), m_event(event)
+{
 }

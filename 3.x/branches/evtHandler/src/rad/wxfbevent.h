@@ -60,6 +60,15 @@ private:
   PProperty m_property;
 };
 
+class wxFBEventHandlerEvent : public wxFBEvent
+{
+public:
+  wxFBEventHandlerEvent (wxEventType commandType, PEvent event);
+  PEvent GetFBEventHandler() { return m_event; }
+private:
+  PEvent m_event;
+};
+
 class wxFBObjectEvent : public wxFBEvent
 {
 public:
@@ -76,6 +85,7 @@ private:
 typedef void (wxEvtHandler::*wxFBEventFunction)        (wxFBEvent&);
 typedef void (wxEvtHandler::*wxFBPropertyEventFunction)(wxFBPropertyEvent&);
 typedef void (wxEvtHandler::*wxFBObjectEventFunction)  (wxFBObjectEvent&);
+typedef void (wxEvtHandler::*wxFBEventHandlerEventFunction)  (wxFBEventHandlerEvent&);
 
 #define wxFBEventHandler(fn) \
   (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxFBEventFunction, &fn)
@@ -85,6 +95,10 @@ typedef void (wxEvtHandler::*wxFBObjectEventFunction)  (wxFBObjectEvent&);
 
 #define wxFBObjectEventHandler(fn) \
   (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxFBObjectEventFunction, &fn)
+
+#define wxFBEventEventHandler(fn) \
+  (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxFBEventHandlerEventFunction, &fn)
+
 
 BEGIN_DECLARE_EVENT_TYPES()
   DECLARE_LOCAL_EVENT_TYPE( wxEVT_FB_PROJECT_LOADED,    -1 )
@@ -96,6 +110,7 @@ BEGIN_DECLARE_EVENT_TYPES()
   DECLARE_LOCAL_EVENT_TYPE( wxEVT_FB_PROPERTY_MODIFIED, -1 )
   DECLARE_LOCAL_EVENT_TYPE( wxEVT_FB_PROJECT_REFRESH,   -1 )
   DECLARE_LOCAL_EVENT_TYPE( wxEVT_FB_CODE_GENERATION,   -1 )
+  DECLARE_LOCAL_EVENT_TYPE( wxEVT_FB_EVENT_HANDLER_MODIFIED, -1 )
 END_DECLARE_EVENT_TYPES()
 
 #define EVT_FB_PROJECT_LOADED(fn) \
@@ -118,6 +133,9 @@ END_DECLARE_EVENT_TYPES()
 
 #define EVT_FB_PROPERTY_MODIFIED(fn) \
   wx__DECLARE_EVT0(wxEVT_FB_PROPERTY_MODIFIED,wxFBPropertyEventHandler(fn))
+
+#define EVT_FB_EVENT_HANDLER_MODIFIED(fn) \
+  wx__DECLARE_EVT0(wxEVT_FB_EVENT_HANDLER_MODIFIED,wxFBEventEventHandler(fn))
 
 #define EVT_FB_PROJECT_REFRESH(fn) \
   wx__DECLARE_EVT0(wxEVT_FB_PROJECT_REFRESH,wxFBEventHandler(fn))
