@@ -57,6 +57,13 @@ PropertyInfo::~PropertyInfo()
 {
 }
 
+EventInfo::EventInfo(const wxString &name, const wxString &eventClass,
+  const wxString &defValue,  const wxString &description)
+  : m_name(name), m_eventClass(eventClass), m_defaultValue(defValue),
+    m_description(description)
+{
+}
+
 bool Property::IsDefaultValue()
 {
 	return (m_info->GetDefaultValue() == m_value);
@@ -280,27 +287,23 @@ wxString ObjectBase::GetIndentString(int indent)
 }
 
 
-shared_ptr<Property> ObjectBase::GetProperty (wxString name)
+PProperty ObjectBase::GetProperty (wxString name)
 {
-	map< wxString, shared_ptr< Property > >::iterator it = m_properties.find( name );
+	PropertyMap::iterator it = m_properties.find( name );
 	if ( it != m_properties.end() )
-	{
 		return it->second;
-	}
-	else
-	{
-		Debug::Print(wxT("[ObjectBase::GetProperty] Property %s not found!"),name.c_str());
-		// este aserto falla siempre que se crea un sizeritem
-		// assert(false);
-		return shared_ptr<Property>((Property*)NULL);
-	}
+
+  Debug::Print(wxT("[ObjectBase::GetProperty] Property %s not found!"),name.c_str());
+	// este aserto falla siempre que se crea un sizeritem
+	// assert(false);
+	return PProperty();
 }
 
-shared_ptr<Property> ObjectBase::GetProperty (unsigned int idx)
+PProperty ObjectBase::GetProperty (unsigned int idx)
 {
 	assert (idx < m_properties.size());
 
-	map< wxString, shared_ptr< Property > >::iterator it = m_properties.begin();
+	PropertyMap::iterator it = m_properties.begin();
 	unsigned int i = 0;
 	while (i < idx && it != m_properties.end())
 	{
@@ -309,18 +312,47 @@ shared_ptr<Property> ObjectBase::GetProperty (unsigned int idx)
 	}
 
 	if (it != m_properties.end())
-	{
 		return it->second;
-	}
-	else
-	{
-		return  shared_ptr<Property>((Property*)NULL);
-	}
+
+	return PProperty();
 }
 
-void ObjectBase::AddProperty (wxString propname, shared_ptr<Property> value)
+PEvent ObjectBase::GetEvent (wxString name)
 {
-	m_properties.insert( map< wxString, shared_ptr< Property > >::value_type( propname, value ) );
+	EventMap::iterator it = m_events.find( name );
+	if ( it != m_events.end() )
+		return it->second;
+
+  Debug::Print(wxT("[ObjectBase::GetProperty] Property %s not found!"),name.c_str());
+	return PEvent();
+}
+
+PEvent ObjectBase::GetEvent (unsigned int idx)
+{
+	assert (idx < m_events.size());
+
+	EventMap::iterator it = m_events.begin();
+	unsigned int i = 0;
+	while (i < idx && it != m_events.end())
+	{
+		i++;
+		it++;
+	}
+
+	if (it != m_events.end())
+		return it->second;
+
+  return PEvent();
+}
+
+void ObjectBase::AddProperty (PProperty prop)
+{
+	m_properties.insert( PropertyMap::value_type( prop->GetName(), prop ) );
+}
+
+void ObjectBase::AddEvent(PEvent event)
+{
+	m_events.insert( EventMap::value_type( event->GetName(), event ) );
 }
 
 shared_ptr<ObjectBase> ObjectBase::FindNearAncestor(wxString type)
@@ -490,7 +522,7 @@ int ObjectBase::Deep()
 //  wxString ind_str = GetIndentString(indent);
 //
 //  s << ind_str << "[ " << GetClassName() << " ] " << GetObjectType() << endl;
-//  map< wxString, shared_ptr< Property > >::const_iterator it_prop;
+//  map< wxString, PProperty >::const_iterator it_prop;
 //  for (it_prop = m_properties.begin(); it_prop!= m_properties.end(); it_prop++)
 //  {
 //    s << ind_str << "property '" << it_prop->first << "' = '" <<
@@ -518,16 +550,25 @@ void ObjectBase::SerializeObject( ticpp::Element* serializedElement )
 
 	for ( unsigned int i = 0; i < GetPropertyCount(); i++ )
 	{
-		shared_ptr< Property > prop = GetProperty( i );
+		PProperty prop = GetProperty( i );
 		ticpp::Element prop_element( "property" );
 		prop_element.SetAttribute( "name", _STDSTR( prop->GetName() ) );
 		prop_element.SetText( _STDSTR( prop->GetValue() ) );
 		element.LinkEndChild( &prop_element );
 	}
 
+	for ( unsigned int i = 0; i < GetEventCount(); i++ )
+	{
+		PEvent event = GetEvent( i );
+		ticpp::Element event_element( "event" );
+		event_element.SetAttribute( "name", _STDSTR( event->GetName() ) );
+		event_element.SetText( _STDSTR( event->GetValue() ) );
+		element.LinkEndChild( &event_element );
+	}
+
 	for ( unsigned int i = 0 ; i < GetChildCount(); i++ )
 	{
-		shared_ptr< ObjectBase > child = GetChild( i );
+		PObjectBase child = GetChild( i );
 		ticpp::Element child_element;
 		child->SerializeObject( &child_element );
 		element.LinkEndChild( &child_element );
@@ -593,7 +634,7 @@ bool ObjectBase::ChangeChildPosition(shared_ptr<ObjectBase> obj, unsigned int po
 
 bool ObjectBase::IsNull (const wxString& pname)
 {
-	shared_ptr<Property> property = GetProperty( pname );
+	PProperty property = GetProperty( pname );
 	if (property)
 		return property->IsNull();
 	else
@@ -602,7 +643,7 @@ bool ObjectBase::IsNull (const wxString& pname)
 
 int ObjectBase::GetPropertyAsInteger (const wxString& pname)
 {
-	shared_ptr<Property> property = GetProperty( pname );
+	PProperty property = GetProperty( pname );
 	if (property)
 		return property->GetValueAsInteger();
 	else
@@ -611,7 +652,7 @@ int ObjectBase::GetPropertyAsInteger (const wxString& pname)
 
 wxFont   ObjectBase::GetPropertyAsFont    (const wxString& pname)
 {
-	shared_ptr<Property> property = GetProperty( pname );
+	PProperty property = GetProperty( pname );
 	if (property)
 		return property->GetValueAsFont();
 	else
@@ -620,7 +661,7 @@ wxFont   ObjectBase::GetPropertyAsFont    (const wxString& pname)
 
 wxColour ObjectBase::GetPropertyAsColour  (const wxString& pname)
 {
-	shared_ptr<Property> property = GetProperty( pname );
+	PProperty property = GetProperty( pname );
 	if (property)
 		return property->GetValueAsColour();
 	else
@@ -629,7 +670,7 @@ wxColour ObjectBase::GetPropertyAsColour  (const wxString& pname)
 
 wxString ObjectBase::GetPropertyAsString  (const wxString& pname)
 {
-	shared_ptr<Property> property = GetProperty( pname );
+	PProperty property = GetProperty( pname );
 	if (property)
 		return property->GetValueAsString();
 	else
@@ -638,7 +679,7 @@ wxString ObjectBase::GetPropertyAsString  (const wxString& pname)
 
 wxPoint  ObjectBase::GetPropertyAsPoint   (const wxString& pname)
 {
-	shared_ptr<Property> property = GetProperty( pname );
+	PProperty property = GetProperty( pname );
 	if (property)
 		return property->GetValueAsPoint();
 	else
@@ -647,7 +688,7 @@ wxPoint  ObjectBase::GetPropertyAsPoint   (const wxString& pname)
 
 wxSize   ObjectBase::GetPropertyAsSize    (const wxString& pname)
 {
-	shared_ptr<Property> property = GetProperty( pname );
+	PProperty property = GetProperty( pname );
 	if (property)
 		return property->GetValueAsSize();
 	else
@@ -656,7 +697,7 @@ wxSize   ObjectBase::GetPropertyAsSize    (const wxString& pname)
 
 wxBitmap ObjectBase::GetPropertyAsBitmap  (const wxString& pname)
 {
-	shared_ptr<Property> property = GetProperty( pname );
+	PProperty property = GetProperty( pname );
 	if (property)
 		return property->GetValueAsBitmap();
 	else
@@ -664,7 +705,7 @@ wxBitmap ObjectBase::GetPropertyAsBitmap  (const wxString& pname)
 }
 double ObjectBase::GetPropertyAsFloat( const wxString& pname )
 {
-	shared_ptr<Property> property = GetProperty( pname );
+	PProperty property = GetProperty( pname );
 	if (property)
 		return property->GetValueAsFloat();
 	else
@@ -673,7 +714,7 @@ double ObjectBase::GetPropertyAsFloat( const wxString& pname )
 wxArrayInt ObjectBase::GetPropertyAsArrayInt(const wxString& pname)
 {
 	wxArrayInt array;
-	shared_ptr<Property> property = GetProperty( pname );
+	PProperty property = GetProperty( pname );
 	if (property)
 	{
 		IntList il;
@@ -687,7 +728,7 @@ wxArrayInt ObjectBase::GetPropertyAsArrayInt(const wxString& pname)
 
 wxArrayString ObjectBase::GetPropertyAsArrayString(const wxString& pname)
 {
-	shared_ptr<Property> property = GetProperty( pname );
+	PProperty property = GetProperty( pname );
 	if (property)
 		return property->GetValueAsArrayString();
 	else
@@ -751,10 +792,46 @@ shared_ptr<PropertyInfo> ObjectInfo::GetPropertyInfo(unsigned int idx)
 
 	return result;
 }
+
+PEventInfo ObjectInfo::GetEventInfo(wxString name)
+{
+	PEventInfo result;
+
+	EventInfoMap::iterator it = m_events.find(name);
+	if (it != m_events.end())
+		result = it->second;
+
+	return result;
+}
+
+PEventInfo ObjectInfo::GetEventInfo(unsigned int idx)
+{
+	PEventInfo result;
+
+	assert (idx < m_events.size());
+
+	EventInfoMap::iterator it = m_events.begin();
+	unsigned int i = 0;
+	while (i < idx && it != m_events.end())
+	{
+		i++;
+		it++;
+	}
+
+	if (it != m_events.end())
+		result = it->second;
+
+	return result;
+}
+
 void ObjectInfo::AddPropertyInfo(shared_ptr<PropertyInfo> prop)
 {
-	//m_properties[ prop->GetName() ] = prop;
-	m_properties.insert( map< wxString, shared_ptr< PropertyInfo > >::value_type(prop->GetName(), prop) );
+	m_properties.insert( PropertyInfoMap::value_type(prop->GetName(), prop) );
+}
+
+void ObjectInfo::AddEventInfo(PEventInfo evtInfo)
+{
+  m_events.insert( EventInfoMap::value_type(evtInfo->GetName(), evtInfo) );
 }
 
 void ObjectInfo::AddBaseClassDefaultPropertyValue( size_t baseIndex, const wxString& propertyName, const wxString& defaultValue )
@@ -868,5 +945,6 @@ void CodeInfo::AddTemplate(wxString name, wxString _template)
 {
 	m_templates.insert(TemplateMap::value_type(name,_template));
 }
+
 
 

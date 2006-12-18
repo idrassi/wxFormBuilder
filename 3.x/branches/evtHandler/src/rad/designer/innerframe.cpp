@@ -165,7 +165,6 @@ wxInnerFrame::wxInnerFrame(wxWindow *parent, wxWindowID id,
   m_minSize = wxSize(100, 100);
   m_resizeBorder = 10;
 
-
   m_titleBar = new TitleBar(this,-1);
   m_frameContent = new wxPanel(this,-1,wxDefaultPosition,wxDefaultSize);
 
