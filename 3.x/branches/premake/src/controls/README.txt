@@ -17,12 +17,12 @@ Build Steps:
 	  wxFormBuilder directory structure and type:
 	
 		* Code::Blocks Projects and workspace:
-			Windows:	premake-win32 --target cb-gcc --file src\controls\build\premake.lua
-			Linux:		premake-linux --target cb-gcc --file src/controls/build/premake.lua
+			Windows:	premake-win32 --target cb-gcc --file src\controls\build\premake.lua --unicode --with-wx-shared
+			Linux:		premake-linux --target cb-gcc --file src/controls/build/premake.lua --unicode --with-wx-shared
 			
 		* GNU makefiles:
-			Windows:	premake-win32 --target gnu --file src\controls\build\premake.lua
-			Linux:		premake-linux --target gnu --file src/controls/build/premake.lua
+			Windows:	premake-win32 --target gnu --file src\controls\build\premake.lua --unicode --with-wx-shared
+			Linux:		premake-linux --target gnu --file src/controls/build/premake.lua --unicode --with-wx-shared
 	
 	- Navigate to '../src/controls/build' directory.
 
