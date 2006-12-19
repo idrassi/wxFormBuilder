@@ -9,35 +9,32 @@
 
 -- wxWidgets version
 local wx_ver = "27"
+local wx_ver_minor = "0"
 
 --******* Initial Setup ************
 --*	Most of the setting are set here.
 --**********************************
 
 -- Set the name of your package.
-package.name = "wxFormBuilder"
+package.name = "wxPropGrid"
 -- Set this if you want a different name for your target than the package's name.
-local targetName = ""
+local targetName = "propgrid"
 -- Set the kind of package you want to create.
 --		Options: exe | winexe | lib | dll
-package.kind = "winexe"
-if ( OS == "linux" ) then
-	package.config["Debug"].kind = exe
-end
+package.kind = "dll"
 -- Set the files to include.
-package.files = { matchrecursive( "*.cpp", "*.h", "*.rc" ) }
--- Set the files to exclude.
-package.excludes = { matchrecursive( "controls/*.cpp", "controls/*.h" ) }
+package.files = { matchfiles( "../../src/propgrid/*.cpp", "../../include/wx/propgrid/*.h") }
 -- Set the include paths.
-package.includepaths = { "controls/include", "boost", "../src", "../sdk/tinyxml", "../sdk/plugin_interface" }
--- Set the libraries it links to.
-package.links = { "wxFlatNotebook", "wxPropGrid", "wxScintilla", "TiCPP", "Plugin Interface", "Additional Components Plugin", "Common Components Plugin", "Layout Components Plugin" }
+package.includepaths = { "../../include" }
 -- Setup the output directory options.
 --		Note: Use 'libdir' for "lib" kind only.
-package.bindir = "../bin"
---package.libdir = "../../lib"
+if ( OS == "windows") then
+	package.bindir = "../../../../bin"
+else
+	package.bindir = "../../../../bin/lib"
+end
 -- Set the defines.
-package.defines = { "WXUSINGDLL_FNB", "TIXML_USE_TICPP", "NO_GCC_PRAGMA" }
+package.defines = { "WXMAKINGDLL_PROPGRID", "MONOLITHIC" }
 
 --------------------------- DO NOT EDIT BELOW ----------------------------------
 
@@ -65,10 +62,6 @@ end
 if ( string.len( targetName ) == 0 ) then
 	targetName = package.name
 end
-
--- Set the targets.
-package.config["Release"].target = targetName
-package.config["Debug"].target = targetName.."d"
 
 -- Set the build options.
 package.buildflags = { "extra-warnings" }
@@ -129,6 +122,25 @@ if ( OS == "windows" ) then
 	
 	-- Set the Windows defines.
 	table.insert( package.defines, { "__WXMSW__", "WIN32", "_WINDOWS" } )
+	
+	-- Set the targets.
+	if ( target == "cb-gcc" or target == "gnu" ) then
+		if ( options["unicode"] ) then
+			package.config["Debug"].target = "wxmsw"..wx_ver..wx_ver_minor.."umd_"..targetName.."_gcc"
+			package.config["Release"].target = "wxmsw"..wx_ver..wx_ver_minor.."um_"..targetName.."_gcc"
+		else
+			package.config["Debug"].target = "wxmsw"..wx_ver..wx_ver_minor.."md_"..targetName.."_gcc"
+			package.config["Release"].target = "wxmsw"..wx_ver..wx_ver_minor.."m_"..targetName.."_gcc"
+		end
+	else
+		if ( options["unicode"] ) then
+			package.config["Debug"].target = "wxmsw"..wx_ver..wx_ver_minor.."umd_"..targetName.."_vc"
+			package.config["Release"].target = "wxmsw"..wx_ver..wx_ver_minor.."um_"..targetName.."_vc"
+		else
+			package.config["Debug"].target = "wxmsw"..wx_ver..wx_ver_minor.."md_"..targetName.."_vc"
+			package.config["Release"].target = "wxmsw"..wx_ver..wx_ver_minor.."m_"..targetName.."_vc"
+		end
+	end
 else
 --******* LINUX SETUP *************
 --*	Settings that are Linux specific.
@@ -137,8 +149,8 @@ else
 	table.insert( package.excludes, matchrecursive( "*.rc" ) )
 	
 	-- Set wxWidgets build options.
-	table.insert( package.config["Debug"].buildoptions, "`wx-config --debug=yes --cflags`" )
-	table.insert( package.config["Release"].buildoptions, "`wx-config --debug=no --cflags`" )
+	table.insert( package.config["Debug"].buildoptions, "`wx-config --debug=yes --cflags` `pkg-config gtk+-2.0 --cflags`" )
+	table.insert( package.config["Release"].buildoptions, "`wx-config --debug=no --cflags` `pkg-config gtk+-2.0 --cflags`" )
 	
 	-- Set the wxWidgets link options.
 	table.insert( package.config["Debug"].linkoptions, "`wx-config --debug --libs`" )
@@ -146,4 +158,8 @@ else
 	
 	-- Set the Linux defines.
 	table.insert( package.defines, "__WXGTK__" )
+	
+	-- Set the targets.
+	package.config["Debug"].target = "`wx-config --debug --basename`_"..targetName.."-`wx-config --release`"
+	package.config["Release"].target = "`wx-config --basename`_"..targetName.."-`wx-config --release`"
 end
