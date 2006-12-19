@@ -55,12 +55,16 @@ void VObjEvtHandler::OnLeftClick(wxMouseEvent &event)
 	if (obj)
 	{
 		if (AppData()->GetSelectedObject() != obj)
+		{
 			AppData()->SelectObject(obj);
+		}
 		else
-		  // *!* Event should be skipped only in the case of the object selected
-      // is the same that the object clicked. You will experiment rare things
-      // in other case.
+		{
+		  	// *!* Event should be skipped only in the case of the object selected
+      		// is the same that the object clicked. You will experiment rare things
+      		// in other case.
 			event.Skip();
+		}
 	}
 
 	m_window->ClientToScreen(&event.m_x, &event.m_y);
