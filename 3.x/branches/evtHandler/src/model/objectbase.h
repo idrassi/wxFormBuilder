@@ -301,10 +301,6 @@ namespace ticpp
 class ObjectBase : public IObject, public enable_shared_from_this<ObjectBase>
 {
 private:
-	// number of instances of the class, será util para comprobar si
-	// efectivamente no se están produciendo leaks de memoria
-	static int s_instances; // it's no more needed
-
 	wxString     m_class;  // class name
 	wxString     m_type;   // type of object
 	WPObjectBase m_parent; // weak pointer, no reference loops please!
@@ -331,7 +327,7 @@ protected:
 
 public:
 
-	/// Constructor. (debe ser "protegido" -> NewInstance)
+	/// Constructor.
 	ObjectBase (wxString class_name);
 
 	/// Destructor.

@@ -1070,7 +1070,7 @@ wxPropertyGridManager* ObjectInspector::CreatePropertyGridManager(wxWindow *pare
 	}
 
 	wxPropertyGridManager* pg;
-	pg = new wxPropertyGridManager( this, id, wxDefaultPosition, wxDefaultSize, pgStyle );
+	pg = new wxPropertyGridManager( parent, id, wxDefaultPosition, wxDefaultSize, pgStyle );
 	pg->SetDescBoxHeight( descBoxHeight );
 	pg->SetExtraStyle( wxPG_EX_NATIVE_DOUBLE_BUFFERING );
 

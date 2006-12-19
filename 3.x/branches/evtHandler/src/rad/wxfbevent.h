@@ -27,26 +27,18 @@
 #define __WXFBEVENT__
 
 #include <wx/event.h>
-
 #include "model/objectbase.h"
 
 class wxFBEvent : public wxEvent
 {
 	public:
-		wxFBEvent( wxEventType commandType = wxEVT_NULL, int priority = 0 );
+		wxFBEvent( wxEventType commandType = wxEVT_NULL );
 		virtual ~wxFBEvent();
 
 		wxString GetEventName();
 
 		// required for sending with wxPostEvent()
 		wxEvent* Clone() const;
-
-		const int m_priority;
-
-		bool operator < ( const wxFBEvent& right ) const;
-
-	protected:
-	private:
 };
 
 class wxFBPropertyEvent : public wxFBEvent
@@ -64,6 +56,8 @@ class wxFBEventHandlerEvent : public wxFBEvent
 {
 public:
   wxFBEventHandlerEvent (wxEventType commandType, PEvent event);
+  wxFBEventHandlerEvent( const wxFBEventHandlerEvent& event );
+  wxEvent* Clone() const;
   PEvent GetFBEventHandler() { return m_event; }
 private:
   PEvent m_event;
