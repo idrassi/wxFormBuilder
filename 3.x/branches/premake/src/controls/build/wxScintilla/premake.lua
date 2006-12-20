@@ -85,7 +85,6 @@ end
 if ( options["unicode"] ) then
 	table.insert( package.defines, { "UNICODE", "_UNICODE" } )
 end
-table.insert( package.defines, "__WX__" )
 table.insert( package.config["Debug"].defines, { "DEBUG", "_DEBUG", "__WXDEBUG__" } )
 table.insert( package.config["Release"].defines, "NDEBUG" )
 
@@ -129,7 +128,7 @@ if ( OS == "windows" ) then
 	end
 	
 	-- Set the Windows defines.
-	table.insert( package.defines, { "__WXMSW__", "WIN32", "_WINDOWS" } )
+	table.insert( package.defines, { "__WXMSW__", "WIN32", "_WINDOWS", "__WX__" } )
 	
 	-- Set the targets.
 	if ( target == "cb-gcc" or target == "gnu" ) then
