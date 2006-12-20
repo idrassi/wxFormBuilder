@@ -29,6 +29,8 @@
 #include "wx/wx.h"
 #include <wx/tokenzr.h>
 #include "rad/appdata.h"
+#include "model/objectbase.h"
+#include "utils/wxfbexception.h"
 
 void CodeWriter::WriteLn(wxString code)
 {
@@ -95,7 +97,7 @@ void CodeWriter::Write(wxString code)
 	DoWrite( code );
 }
 
-TemplateParser::TemplateParser(shared_ptr<ObjectBase> obj, wxString _template)
+TemplateParser::TemplateParser(PObjectBase obj, wxString _template)
 : m_obj(obj), m_in(_template)
 {
 }
@@ -169,8 +171,7 @@ bool TemplateParser::ParseMacro()
 		ParseClass();
 		break;
 	default:
-		assert(false);
-		return false;
+		THROW_WXFBEX( wxT("Invalid Macro Type") );
 		break;
 	}
 
@@ -252,7 +253,7 @@ bool TemplateParser::ParseProperty()
 	wxString childName;
 	wxString propname = ParsePropertyName( &childName );
 
-	shared_ptr<Property> property = m_obj->GetProperty(propname);
+	PProperty property = m_obj->GetProperty(propname);
 	if ( NULL == property.get() )
 	{
 		wxLogError( wxT("The property '%s' does not exist for objects of class '%s'"), propname.c_str(), m_obj->GetClassName().c_str() );
@@ -307,11 +308,11 @@ bool TemplateParser::ParseInnerTemplate()
 	return true;
 }
 
-shared_ptr< ObjectBase > TemplateParser::GetWxParent()
+PObjectBase TemplateParser::GetWxParent()
 {
-	shared_ptr<ObjectBase> wxparent;
+	PObjectBase wxparent;
 
-	vector< shared_ptr<ObjectBase> > candidates;
+	std::vector< PObjectBase > candidates;
 	candidates.push_back( m_obj->FindNearAncestor( wxT("container") ) );
 	candidates.push_back( m_obj->FindNearAncestor( wxT("notebook") ) );
 	candidates.push_back( m_obj->FindNearAncestor( wxT("splitter") ) );
@@ -340,11 +341,11 @@ shared_ptr< ObjectBase > TemplateParser::GetWxParent()
 
 bool TemplateParser::ParseWxParent()
 {
-	shared_ptr<ObjectBase> wxparent( GetWxParent() );
+	PObjectBase wxparent( GetWxParent() );
 
 	if ( wxparent )
 	{
-		shared_ptr<Property> property = GetRelatedProperty( wxparent );
+		PProperty property = GetRelatedProperty( wxparent );
 		m_out << PropertyToCode(property);
 	}
 	else
@@ -359,10 +360,10 @@ bool TemplateParser::ParseWxParent()
 
 bool TemplateParser::ParseParent()
 {
-	shared_ptr<ObjectBase> parent(m_obj->GetParent());
+	PObjectBase parent(m_obj->GetParent());
 	if (parent)
 	{
-		shared_ptr<Property> property = GetRelatedProperty( parent );
+		PProperty property = GetRelatedProperty( parent );
 		m_out << PropertyToCode(property);
 	}
 	else
@@ -376,11 +377,11 @@ bool TemplateParser::ParseParent()
 bool TemplateParser::ParseChild()
 {
 	// Get the first child
-	shared_ptr<ObjectBase> child(m_obj->GetChild(0));
+	PObjectBase child(m_obj->GetChild(0));
 
 	if (child)
 	{
-		shared_ptr<Property> property = GetRelatedProperty( child );
+		PProperty property = GetRelatedProperty( child );
 		m_out << PropertyToCode(property);
 	}
 	else
@@ -389,7 +390,7 @@ bool TemplateParser::ParseChild()
 	return true;
 }
 
-shared_ptr<Property> TemplateParser::GetRelatedProperty( shared_ptr<ObjectBase> relative )
+PProperty TemplateParser::GetRelatedProperty( PObjectBase relative )
 {
 	ignore_whitespaces();
 	wxString propname = ParsePropertyName();
@@ -407,7 +408,7 @@ bool TemplateParser::ParseForEach()
 		wxString propname = ParsePropertyName();
 		wxString inner_template = ExtractInnerTemplate();
 
-		shared_ptr<Property> property = m_obj->GetProperty(propname);
+		PProperty property = m_obj->GetProperty(propname);
 		wxString propvalue = property->GetValue();
 
 		// el valor de la propiedad debe ser una cadena de caracteres
@@ -428,7 +429,7 @@ bool TemplateParser::ParseForEach()
 				// parseamos la plantilla interna
 				{
 					wxString code;
-					shared_ptr<TemplateParser> parser = CreateParser(m_obj,inner_template);
+					PTemplateParser parser = CreateParser(m_obj,inner_template);
 					parser->SetPredefined( token );
 					code = parser->ParseTemplate();
 					m_out << wxT("\n") << code;
@@ -441,7 +442,7 @@ bool TemplateParser::ParseForEach()
 			for ( unsigned int i = 0 ; i < array.Count(); i++ )
 			{
 				wxString code;
-				shared_ptr<TemplateParser> parser = CreateParser(m_obj,inner_template);
+				PTemplateParser parser = CreateParser(m_obj,inner_template);
 				parser->SetPredefined( ValueToCode( PT_WXSTRING_I18N, array[i] ) );
 				code = parser->ParseTemplate();
 				m_out << wxT("\n") << code;
@@ -454,46 +455,53 @@ bool TemplateParser::ParseForEach()
 	return true;
 }
 
-shared_ptr< Property > TemplateParser::GetProperty( wxString* childName )
+PProperty TemplateParser::GetProperty( wxString* childName )
 {
-	shared_ptr< Property > property( (Property*)NULL );
+	PProperty property( (Property*)NULL );
 
 	// Check for #wxparent, #parent, or #child
 	if ( GetNextToken() == TOK_MACRO )
 	{
-		Ident ident = ParseIdent();
-		switch (ident)
-		{
-			case ID_WXPARENT:
-			{
-				shared_ptr<ObjectBase> wxparent( GetWxParent() );
-				if ( wxparent )
-				{
-					property = GetRelatedProperty( wxparent );
-				}
-				break;
-			}
-			case ID_PARENT:
-			{
-				shared_ptr<ObjectBase> parent( m_obj->GetParent() );
-				if ( parent )
-				{
-					property = GetRelatedProperty( parent );
-				}
-				break;
-			}
-			case ID_CHILD:
-			{
-				shared_ptr<ObjectBase> child( m_obj->GetChild( 0 ) );
-				if ( child )
-				{
-					property = GetRelatedProperty( child );
-				}
-				break;
-			}
-			default:
-				break;
-		}
+	    try
+	    {
+            Ident ident = ParseIdent();
+            switch (ident)
+            {
+                case ID_WXPARENT:
+                {
+                    PObjectBase wxparent( GetWxParent() );
+                    if ( wxparent )
+                    {
+                        property = GetRelatedProperty( wxparent );
+                    }
+                    break;
+                }
+                case ID_PARENT:
+                {
+                    PObjectBase parent( m_obj->GetParent() );
+                    if ( parent )
+                    {
+                        property = GetRelatedProperty( parent );
+                    }
+                    break;
+                }
+                case ID_CHILD:
+                {
+                    PObjectBase child( m_obj->GetChild( 0 ) );
+                    if ( child )
+                    {
+                        property = GetRelatedProperty( child );
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+	    }
+	    catch( wxFBException& ex )
+	    {
+	        wxLogError( ex.what() );
+	    }
 	}
 
 	if ( !property )
@@ -525,7 +533,7 @@ bool TemplateParser::ParseIfNotNull()
 
 	// Get the property
 	wxString childName;
-	shared_ptr< Property > property( GetProperty( &childName ) );
+	PProperty property( GetProperty( &childName ) );
 	if ( !property )
 	{
 		return false;
@@ -544,7 +552,7 @@ bool TemplateParser::ParseIfNotNull()
 		}
 
 		// Generate the code from the block
-		shared_ptr< TemplateParser > parser = CreateParser( m_obj, inner_template );
+		PTemplateParser parser = CreateParser( m_obj, inner_template );
 		m_out << parser->ParseTemplate();
 	}
 
@@ -557,7 +565,7 @@ bool TemplateParser::ParseIfNull()
 
 	// Get the property
 	wxString childName;
-	shared_ptr< Property > property( GetProperty( &childName ) );
+	PProperty property( GetProperty( &childName ) );
 	if ( !property )
 	{
 		return false;
@@ -568,7 +576,7 @@ bool TemplateParser::ParseIfNull()
 	if ( property->IsNull() )
 	{
 		// Generate the code from the block
-		shared_ptr< TemplateParser > parser = CreateParser( m_obj, inner_template );
+		PTemplateParser parser = CreateParser( m_obj, inner_template );
 		m_out << parser->ParseTemplate();
 	}
 	else
@@ -578,7 +586,7 @@ bool TemplateParser::ParseIfNull()
 			if ( property->GetChildFromParent( childName ).empty() )
 			{
 				// Generate the code from the block
-				shared_ptr< TemplateParser > parser = CreateParser( m_obj, inner_template );
+				PTemplateParser parser = CreateParser( m_obj, inner_template );
 				m_out << parser->ParseTemplate();
 			}
 		}
@@ -643,7 +651,7 @@ bool TemplateParser::ParseIfEqual()
 
 	// Get the property
 	wxString childName;
-	shared_ptr< Property > property( GetProperty( &childName ) );
+	PProperty property( GetProperty( &childName ) );
 	if ( property )
 	{
 		// Get the value to compare to
@@ -667,7 +675,7 @@ bool TemplateParser::ParseIfEqual()
 		if ( propValue == value )
 		{
 			// Generate the code
-			shared_ptr<TemplateParser> parser = CreateParser(m_obj,inner_template);
+			PTemplateParser parser = CreateParser(m_obj,inner_template);
 			m_out << parser->ParseTemplate();
 			return true;
 		}
@@ -682,7 +690,7 @@ bool TemplateParser::ParseIfNotEqual()
 
 	// Get the property
 	wxString childName;
-	shared_ptr< Property > property( GetProperty( &childName ) );
+	PProperty property( GetProperty( &childName ) );
 	if ( property )
 	{
 		// Get the value to compare to
@@ -706,7 +714,7 @@ bool TemplateParser::ParseIfNotEqual()
 		if ( propValue != value )
 		{
 			// Generate the code
-			shared_ptr<TemplateParser> parser = CreateParser( m_obj, inner_template );
+			PTemplateParser parser = CreateParser( m_obj, inner_template );
 			m_out << parser->ParseTemplate();;
 			return true;
 		}
@@ -744,29 +752,36 @@ TemplateParser::Ident TemplateParser::SearchIdent(wxString ident)
 	else if (ident == wxT("class") )
 		return ID_CLASS;
 	else
-		return ID_ERROR;
+		THROW_WXFBEX( wxString::Format( wxT("Unknown macro: \"%s\""), ident.c_str() ) );
 }
 
 wxString TemplateParser::ParseTemplate()
 {
-	while (!m_in.Eof())
-	{
-		Token token = GetNextToken();
-		switch (token)
-		{
-		case TOK_MACRO:
-			ParseMacro();
-			break;
-		case TOK_PROPERTY:
-			ParseProperty();
-			break;
-		case TOK_TEXT:
-			ParseText();
-			break;
-		default:
-			return wxT("");
-		}
-	}
+    try
+    {
+        while (!m_in.Eof())
+        {
+            Token token = GetNextToken();
+            switch (token)
+            {
+            case TOK_MACRO:
+                ParseMacro();
+                break;
+            case TOK_PROPERTY:
+                ParseProperty();
+                break;
+            case TOK_TEXT:
+                ParseText();
+                break;
+            default:
+                return wxT("");
+            }
+        }
+    }
+    catch ( wxFBException& ex )
+    {
+        wxLogError( ex.what() );
+    }
 
 	return m_out;
 }
@@ -857,7 +872,7 @@ void TemplateParser::ParseAppend()
 
 void TemplateParser::ParseClass()
 {
-	shared_ptr<Property> subclass_prop = m_obj->GetProperty( wxT("subclass") );
+	PProperty subclass_prop = m_obj->GetProperty( wxT("subclass") );
 	if ( subclass_prop )
 	{
 		wxString subclass = subclass_prop->GetChildFromParent( wxT("name") );
@@ -871,7 +886,7 @@ void TemplateParser::ParseClass()
 	m_out << m_obj->GetClassName();
 }
 
-wxString TemplateParser::PropertyToCode(shared_ptr<Property> property)
+wxString TemplateParser::PropertyToCode(PProperty property)
 {
 	return ValueToCode(property->GetType(), property->GetValue());
 }

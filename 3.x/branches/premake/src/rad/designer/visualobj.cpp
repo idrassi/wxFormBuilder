@@ -29,7 +29,7 @@
 #include "utils/typeconv.h"
 #include "utils/debug.h"
 #include "rad/genericpanel.h"
-
+#include "model/objectbase.h"
 #include <rad/appdata.h>
 
 using namespace TypeConv;
@@ -42,7 +42,7 @@ BEGIN_EVENT_TABLE( VObjEvtHandler, wxEvtHandler )
 	EVT_SET_CURSOR( VObjEvtHandler::OnSetCursor )
 END_EVENT_TABLE()
 
-VObjEvtHandler::VObjEvtHandler(wxWindow *win, shared_ptr<ObjectBase> obj)
+VObjEvtHandler::VObjEvtHandler(wxWindow *win, PObjectBase obj)
 {
 	m_window = win;
 	m_object = obj;
@@ -50,18 +50,23 @@ VObjEvtHandler::VObjEvtHandler(wxWindow *win, shared_ptr<ObjectBase> obj)
 
 void VObjEvtHandler::OnLeftClick(wxMouseEvent &event)
 {
-	shared_ptr<ObjectBase> obj = m_object.lock();
+	PObjectBase obj = m_object.lock();
 
 	if (obj)
 	{
 		if (AppData()->GetSelectedObject() != obj)
+		{
 			AppData()->SelectObject(obj);
-		//else
-		//	event.Skip();
+		}
+		else
+		{
+		  	// *!* Event should be skipped only in the case of the object selected
+      		// is the same that the object clicked. You will experiment rare things
+      		// in other case.
+			event.Skip();
+		}
 	}
 
-
-	event.Skip();
 	m_window->ClientToScreen(&event.m_x, &event.m_y);
 	m_window->GetParent()->ScreenToClient(&event.m_x, &event.m_y);
 	::wxPostEvent(m_window->GetParent(), event);
@@ -70,7 +75,7 @@ void VObjEvtHandler::OnLeftClick(wxMouseEvent &event)
 
 void VObjEvtHandler::OnPaint(wxPaintEvent &event)
 {
-	shared_ptr<ObjectBase> wo = shared_dynamic_cast<ObjectBase>(m_object.lock());
+	PObjectBase wo = boost::shared_dynamic_cast<ObjectBase>(m_object.lock());
 	if (wo->IsContainer())
 	{
 		wxWindow *aux = m_window;
