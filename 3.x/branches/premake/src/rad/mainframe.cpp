@@ -44,6 +44,7 @@
 #include <wx/filename.h>
 
 #include <rad/appdata.h>
+#include "model/objectbase.h"
 
 #define ID_ABOUT         100
 #define ID_QUIT          101
@@ -136,6 +137,7 @@ BEGIN_EVENT_TABLE( MainFrame, wxFrame )
 	EVT_FB_PROJECT_REFRESH( MainFrame::OnProjectRefresh )
 	EVT_FB_PROJECT_SAVED( MainFrame::OnProjectSaved )
 	EVT_FB_PROPERTY_MODIFIED( MainFrame::OnPropertyModified )
+	EVT_FB_EVENT_HANDLER_MODIFIED( MainFrame::OnEventHandlerModified )
 
 END_EVENT_TABLE()
 
@@ -446,7 +448,7 @@ void MainFrame::OnImportXrc( wxCommandEvent &event )
 			xrc.SetObjectDatabase( AppData()->GetObjectDatabase() );
 			try
 			{
-				shared_ptr<ObjectBase> project = xrc.GetProject( &doc );
+				PObjectBase project = xrc.GetProject( &doc );
 				if ( project )
 				{
 					AppData()->MergeProject( project );
@@ -509,7 +511,7 @@ void MainFrame::OnClose( wxCloseEvent &event )
 void MainFrame::OnProjectLoaded( wxFBEvent& event )
 {
 	GetStatusBar()->SetStatusText( wxT( "Project Loaded!" ) );
-	shared_ptr< ObjectBase > project = AppData()->GetProjectData();
+	PObjectBase project = AppData()->GetProjectData();
 	if ( project )
 	{
 		wxString objDetails = wxString::Format( wxT("Name: %s | Class: %s"), project->GetPropertyAsString( wxT("name") ).c_str(), project->GetClassName().c_str() );
@@ -530,10 +532,10 @@ void MainFrame::OnObjectExpanded( wxFBObjectEvent& event )
 
 void MainFrame::OnObjectSelected( wxFBObjectEvent& event )
 {
-	shared_ptr<ObjectBase> obj = event.GetFBObject();
+	PObjectBase obj = event.GetFBObject();
 
 	wxString name;
-	shared_ptr<Property> prop( obj->GetProperty( wxT( "name" ) ) );
+	PProperty prop( obj->GetProperty( wxT( "name" ) ) );
 
 	if ( prop )
 		name = prop->GetValueAsString();
@@ -549,19 +551,33 @@ void MainFrame::OnObjectSelected( wxFBObjectEvent& event )
 
 void MainFrame::OnObjectCreated( wxFBObjectEvent& event )
 {
-	GetStatusBar()->SetStatusText( wxT( "Object Created!" ) );
+	wxString message;
+
+	if (event.GetFBObject())
+	{
+		message.Printf(wxT("Object '%s' of class '%s' created."),
+		event.GetFBObject()->GetPropertyAsString(wxT("name")).c_str(),
+		event.GetFBObject()->GetClassName().c_str());
+	}
+	else
+		message = wxT("Impossible to create the object. Did you forget to add a sizer?");
+
+	GetStatusBar()->SetStatusText(message);
 	UpdateFrame();
 }
 
 void MainFrame::OnObjectRemoved( wxFBObjectEvent& event )
 {
-	GetStatusBar()->SetStatusText( wxT( "Object Removed!" ) );
+	wxString message;
+	message.Printf(wxT("Object '%s' removed."),
+	event.GetFBObject()->GetPropertyAsString(wxT("name")).c_str());
+	GetStatusBar()->SetStatusText(message);
 	UpdateFrame();
 }
 
 void MainFrame::OnPropertyModified( wxFBPropertyEvent& event )
 {
-	shared_ptr< Property > prop = event.GetFBProperty();
+	PProperty prop = event.GetFBProperty();
 	if ( prop )
 	{
 		if ( prop->GetObject() == AppData()->GetSelectedObject() )
@@ -583,6 +599,17 @@ void MainFrame::OnPropertyModified( wxFBPropertyEvent& event )
 	}
 }
 
+void MainFrame::OnEventHandlerModified( wxFBEventHandlerEvent& event )
+{
+	wxString message;
+	message.Printf(wxT("Event handler '%s' of object '%s' modified."),
+	event.GetFBEventHandler()->GetName().c_str(),
+	event.GetFBEventHandler()->GetObject()->GetPropertyAsString(wxT("name")).c_str());
+
+	GetStatusBar()->SetStatusText(message);
+	UpdateFrame();
+}
+
 void MainFrame::OnCodeGeneration( wxFBEvent& event )
 {
 	// Using the previously unused Id field in the event to carry a boolean
@@ -596,7 +623,7 @@ void MainFrame::OnCodeGeneration( wxFBEvent& event )
 
 void MainFrame::OnProjectRefresh( wxFBEvent& event )
 {
-	shared_ptr< ObjectBase > project = AppData()->GetProjectData();
+	PObjectBase project = AppData()->GetProjectData();
 	if ( project )
 	{
 		wxString objDetails = wxString::Format( wxT("Name: %s | Class: %s"), project->GetPropertyAsString( wxT("name") ).c_str(), project->GetClassName().c_str() );

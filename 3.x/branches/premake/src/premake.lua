@@ -22,7 +22,7 @@ local targetName = ""
 --		Options: exe | winexe | lib | dll
 package.kind = "winexe"
 if ( OS == "linux" ) then
-	package.config["Debug"].kind = exe
+	package.config["Debug"].kind = "exe"
 end
 -- Set the files to include.
 package.files = { matchrecursive( "*.cpp", "*.h", "*.rc" ) }
@@ -31,13 +31,23 @@ package.excludes = { matchrecursive( "controls/*.cpp", "controls/*.h" ) }
 -- Set the include paths.
 package.includepaths = { "controls/include", "boost", "../src", "../sdk/tinyxml", "../sdk/plugin_interface" }
 -- Set the libraries it links to.
-package.links = { "wxFlatNotebook", "wxPropGrid", "wxScintilla", "TiCPP", "Plugin Interface", "Additional Components Plugin", "Common Components Plugin", "Layout Components Plugin" }
+package.links = { "wxFlatNotebook", "wxPropGrid", "wxScintilla", "TiCPP", "Plugin Interface" }
+-- Set the packages dependancies.
+package.depends = { "Additional Components Plugin", "Common Components Plugin", "Layout Components Plugin" }
 -- Setup the output directory options.
 --		Note: Use 'libdir' for "lib" kind only.
 package.bindir = "../bin"
 --package.libdir = "../../lib"
 -- Set the defines.
 package.defines = { "WXUSINGDLL_FNB", "TIXML_USE_TICPP", "NO_GCC_PRAGMA" }
+-- Load the dlls from the 'lib' subdirectory.
+if ( OS == "linux" ) then
+	if ( target == "cb-gcc" ) then
+		table.insert( package.linkoptions, "-Wl,-rpath,$``ORIGIN/lib" )
+	else
+		table.insert( package.linkoptions, "-Wl,-rpath,$$``ORIGIN/lib" )
+	end
+end
 
 --------------------------- DO NOT EDIT BELOW ----------------------------------
 
@@ -139,9 +149,6 @@ else
 	-- Set wxWidgets build options.
 	table.insert( package.config["Debug"].buildoptions, "`wx-config --debug=yes --cflags`" )
 	table.insert( package.config["Release"].buildoptions, "`wx-config --debug=no --cflags`" )
-	
-	-- Load dlls from the lib subdirectory
-	table.insert( package.linkoptions, "-Wl,-rpath,$``ORIGIN/lib" )
 	
 	-- Set the wxWidgets link options.
 	table.insert( package.config["Debug"].linkoptions, "`wx-config --debug --libs`" )

@@ -37,7 +37,7 @@
 
 using namespace TypeConv;
 
-wxString TypeConv::_StringToWxString(const string &str)
+wxString TypeConv::_StringToWxString(const std::string &str)
 {
     return _StringToWxString(str.c_str());
 }
@@ -48,9 +48,9 @@ wxString TypeConv::_StringToWxString(const char *str)
     return newstr;
 }
 
-string TypeConv::_WxStringToString(const wxString &str)
+std::string TypeConv::_WxStringToString(const wxString &str)
 {
-    string newstr( str.mb_str(wxConvUTF8) );
+    std::string newstr( str.mb_str(wxConvUTF8) );
     return newstr;
 }
 
@@ -742,9 +742,9 @@ bool MacroDictionary::SearchSynonymous(wxString synName, wxString& result)
 
     return found;
 }
-
+/*
 #define MACRO(x) m_map.insert(MacroMap::value_type(#x,x))
-#define MACRO2(x,y) m_map.insert(MacroMap::value_type(#x,y))
+#define MACRO2(x,y) m_map.insert(MacroMap::value_type(#x,y))*/
 
 void MacroDictionary::AddMacro(wxString name, int value)
 {
@@ -761,4 +761,5 @@ MacroDictionary::MacroDictionary()
     // Las macros serán incluidas en las bibliotecas de componentes...
     // Sizers macros
 }
+
 

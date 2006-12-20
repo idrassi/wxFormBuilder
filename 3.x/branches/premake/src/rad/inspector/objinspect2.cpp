@@ -30,9 +30,13 @@
 #include "rad/bitmaps.h"
 #include "rad/wxfbevent.h"
 #include "rad/appdata.h"
+#include "model/objectbase.h"
 
 #include <wx/tokenzr.h>
 #include <wx/config.h>
+
+#define WXFB_PROPERTY_GRID 1000
+#define WXFB_EVENT_GRID    1001
 
 // -----------------------------------------------------------------------
 // fbColourProperty
@@ -380,7 +384,9 @@ void wxBitmapWithResourcePropertyClass::ChildChanged( wxPGProperty* p )
 DEFINE_EVENT_TYPE( wxEVT_NEW_BITMAP_PROPERTY )
 
 BEGIN_EVENT_TABLE(ObjectInspector, wxPanel)
-	EVT_PG_CHANGED(-1, ObjectInspector::OnPropertyGridChange)
+	EVT_PG_CHANGED(WXFB_PROPERTY_GRID, ObjectInspector::OnPropertyGridChange)
+	EVT_PG_CHANGED(WXFB_EVENT_GRID, ObjectInspector::OnEventGridChange)
+
 	EVT_COMMAND( -1, wxEVT_NEW_BITMAP_PROPERTY, ObjectInspector::OnNewBitmapProperty )
 
 	EVT_FB_OBJECT_SELECTED( ObjectInspector::OnObjectSelected )
@@ -393,10 +399,22 @@ ObjectInspector::ObjectInspector( wxWindow* parent, int id, int style )
 : wxPanel(parent,id), m_style(style)
 {
 	AppData()->AddHandler( this->GetEventHandler() );
-	m_currentSel = shared_ptr< ObjectBase >();
+	m_currentSel = PObjectBase();
+
+	m_nb = new wxFlatNotebook( this, -1, wxDefaultPosition, wxDefaultSize, wxFNB_NO_X_BUTTON | wxFNB_NO_NAV_BUTTONS | wxFNB_NODRAG | wxFNB_DROPDOWN_TABS_LIST );
+
+	// the colour of property grid description looks ugly if we don't set this
+	// colour
+	m_nb->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+
+	m_pg = CreatePropertyGridManager(m_nb, WXFB_PROPERTY_GRID);
+	m_eg = CreatePropertyGridManager(m_nb, WXFB_EVENT_GRID);
+
+	m_nb->AddPage(m_pg,wxT("Properties"),false);
+	m_nb->AddPage(m_eg,wxT("Events"),false);
+
 	wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
-	CreatePropertyGridManager();
-	topSizer->Add( m_pg, 1, wxALL | wxEXPAND, 0 );
+	topSizer->Add( m_nb, 1, wxALL | wxEXPAND, 0 );
 	SetSizer( topSizer );
 }
 
@@ -414,7 +432,7 @@ void ObjectInspector::SavePosition()
 
 void ObjectInspector::Create( bool force )
 {
-	shared_ptr< ObjectBase > sel_obj = AppData()->GetSelectedObject();
+	PObjectBase sel_obj = AppData()->GetSelectedObject();
 	if ( sel_obj && ( sel_obj != m_currentSel || force ) )
 	{
 		Freeze();
@@ -433,33 +451,49 @@ void ObjectInspector::Create( bool force )
 		if ( pageCount > 0 )
 		{
 			for ( int pageIndex = pageCount - 1; pageIndex >= 0; --pageIndex )
-			{
 				m_pg->RemovePage( pageIndex );
 			}
+
+		// now we do the same thing for event grid...
+		pageCount = (int)m_eg->GetPageCount();
+		if ( pageCount > 0)
+		{
+		  for ( int pageIndex = pageCount - 1; pageIndex >= 0; --pageIndex)
+		    m_eg->RemovePage( pageIndex );
 		}
 
-		m_propmap.clear();
+		// ... and we create a default page
+		m_eg->AddPage( wxT("default"));
+		m_eg->SelectPage(wxT("default"));
+		m_eg->AppendCategory(sel_obj->GetClassName() + wxT(" Events"));
 
-		shared_ptr<ObjectInfo> obj_desc = sel_obj->GetObjectInfo();
+		m_propMap.clear();
+		m_eventMap.clear();
+
+		PObjectInfo obj_desc = sel_obj->GetObjectInfo();
 		if (obj_desc)
 		{
 
-			map<wxString,shared_ptr< Property > > map, dummy;
+			std::map<wxString,PProperty > map, dummy;
 
 			// We create the categories with the properties of the object organized by "classes"
 			CreateCategory( obj_desc->GetClassName(), sel_obj,obj_desc,map);
 
 			for (unsigned int i=0; i<obj_desc->GetBaseClassCount() ; i++)
 			{
-				shared_ptr<ObjectInfo> info_base = obj_desc->GetBaseClass(i);
+				PObjectInfo info_base = obj_desc->GetBaseClass(i);
 				CreateCategory( info_base->GetClassName(), sel_obj,info_base,map);
 			}
 
-			shared_ptr<ObjectBase> parent = sel_obj->GetParent();
+			PObjectBase parent = sel_obj->GetParent();
 			if (parent && parent->GetObjectInfo()->GetObjectType()->IsItem())
 			{
 				CreateCategory(parent->GetObjectInfo()->GetClassName(), parent, parent->GetObjectInfo(),dummy);
 			}
+
+			// we create the events for the object
+			AddEvents( sel_obj, obj_desc);
+
 
 			// Select previously selected page, or first page
 			int pageIndex = m_pg->GetPageByName( pageName );
@@ -499,7 +533,7 @@ int ObjectInspector::StringToBits(const wxString& strVal, wxPGChoices& constants
 	return val;
 }
 
-wxPGProperty* ObjectInspector::GetProperty(shared_ptr<Property> prop)
+wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
 {
 	wxPGProperty *result;
 	PropertyType type = prop->GetType();
@@ -530,14 +564,14 @@ wxPGProperty* ObjectInspector::GetProperty(shared_ptr<Property> prop)
 	}
 	else if (type == PT_BITLIST)
 	{
-		shared_ptr<PropertyInfo> prop_desc = prop->GetPropertyInfo();
-		shared_ptr<OptionList> opt_list = prop_desc->GetOptionList();
+		PPropertyInfo prop_desc = prop->GetPropertyInfo();
+		POptionList opt_list = prop_desc->GetOptionList();
 
 		assert(opt_list && opt_list->GetOptionCount() > 0);
 
 		wxPGChoices constants;
-		const map< wxString, wxString > options = opt_list->GetOptions();
-		map< wxString, wxString >::const_iterator it;
+		const std::map< wxString, wxString > options = opt_list->GetOptions();
+		std::map< wxString, wxString >::const_iterator it;
 		unsigned int i = 0;
 		for( it = options.begin(); it != options.end(); ++it )
 		{
@@ -554,7 +588,7 @@ wxPGProperty* ObjectInspector::GetProperty(shared_ptr<Property> prop)
 			for ( size_t i = 0; i < flagsProp->GetCount(); i++ )
 			{
 				wxPGProperty* prop = flagsProp->Item( i );
-				map< wxString, wxString >::const_iterator option = options.find( prop->GetLabel() );
+				std::map< wxString, wxString >::const_iterator option = options.find( prop->GetLabel() );
 				if ( option != options.end() )
 				{
 					m_pg->SetPropertyHelpString( prop, option->second );
@@ -568,14 +602,14 @@ wxPGProperty* ObjectInspector::GetProperty(shared_ptr<Property> prop)
 	}
 	else if (type == PT_OPTION)
 	{
-		shared_ptr<PropertyInfo> prop_desc = prop->GetPropertyInfo();
-		shared_ptr<OptionList> opt_list = prop_desc->GetOptionList();
+		PPropertyInfo prop_desc = prop->GetPropertyInfo();
+		POptionList opt_list = prop_desc->GetOptionList();
 
 		assert(opt_list && opt_list->GetOptionCount() > 0);
 
 		wxPGChoices constants;
-		const map< wxString, wxString > options = opt_list->GetOptions();
-		map< wxString, wxString >::const_iterator it;
+		const std::map< wxString, wxString > options = opt_list->GetOptions();
+		std::map< wxString, wxString >::const_iterator it;
 		unsigned int i = 0;
 		for( it = options.begin(); it != options.end(); ++it )
 		{
@@ -641,19 +675,17 @@ wxPGProperty* ObjectInspector::GetProperty(shared_ptr<Property> prop)
 	{
 		wxParentPropertyClass* parent = new wxParentPropertyClass ( name, wxPG_LABEL );
 
-		shared_ptr<PropertyInfo> prop_desc = prop->GetPropertyInfo();
+		PPropertyInfo prop_desc = prop->GetPropertyInfo();
 		std::list< PropertyChild >* children = prop_desc->GetChildren();
 		std::list< PropertyChild >::iterator it;
 		for( it = children->begin(); it != children->end(); ++it )
 		{
-			wxPGProperty* child = wxStringProperty( it->m_name, wxPG_LABEL, it->m_defaultValue );
+			wxPGProperty* child = wxStringProperty( it->m_name, wxPG_LABEL, wxEmptyString );
 			parent->AddChild( child );
 			m_pg->SetPropertyHelpString( child, it->m_description );
 		}
 
-		wxString value = parent->GetValueAsString( wxPG_FULL_VALUE );
-		prop->SetValue( value );
-		prop->ChangeDefaultValue( value );
+		parent->SetValueFromString( prop->GetValueAsString(), wxPG_FULL_VALUE );
 
 		result = parent;
 	}
@@ -667,12 +699,12 @@ wxPGProperty* ObjectInspector::GetProperty(shared_ptr<Property> prop)
 	return result;
 }
 
-void ObjectInspector::CreateCategory(const wxString& name, shared_ptr<ObjectBase> obj, shared_ptr<ObjectInfo> obj_info, map< wxString, shared_ptr< Property > >& properties )
+void ObjectInspector::CreateCategory(const wxString& name, PObjectBase obj, PObjectInfo obj_info, std::map< wxString, PProperty >& properties )
 {
 	Debug::Print( wxT("[ObjectInspector::CreatePropertyPanel] Creating Property Editor") );
 
 	// Get Category
-	shared_ptr< PropertyCategory > category = obj_info->GetCategory();
+	PPropertyCategory category = obj_info->GetCategory();
 	if ( !category )
 	{
 		return;
@@ -704,20 +736,19 @@ void ObjectInspector::CreateCategory(const wxString& name, shared_ptr<ObjectBase
 	m_pg->SetPropertyAttributeAll( wxPG_BOOL_USE_CHECKBOX, (long)1 );
 }
 
-void ObjectInspector::AddProperties( const wxString& name, shared_ptr< ObjectBase > obj, shared_ptr< ObjectInfo > obj_info, shared_ptr< PropertyCategory > category, map< wxString, shared_ptr< Property > >& properties )
+void ObjectInspector::AddProperties( const wxString& name, PObjectBase obj,
+  PObjectInfo obj_info, PPropertyCategory category, PropertyMap &properties )
 {
 	size_t propCount = category->GetPropertyCount();
 	for ( size_t i = 0; i < propCount; i++ )
 	{
 		wxString propName = category->GetPropertyName( i );
-		shared_ptr< Property > prop = obj->GetProperty( propName );
+		PProperty prop = obj->GetProperty( propName );
 
 		if ( !prop )
-		{
 			continue;
-		}
 
-		shared_ptr< PropertyInfo > propInfo = prop->GetPropertyInfo();
+		PPropertyInfo propInfo = prop->GetPropertyInfo();
 
 		// we do not want to duplicate inherited properties
 		if ( properties.find( propName ) == properties.end() )
@@ -735,35 +766,56 @@ void ObjectInspector::AddProperties( const wxString& name, shared_ptr< ObjectBas
 					m_pg->SetPropertyColour(id,wxColour(220,255,255)); // cyan
 			}
 
-			properties.insert( map< wxString, shared_ptr< Property > >::value_type( propName, prop ) );
-			m_propmap.insert( ObjInspectorMap::value_type( id.GetPropertyPtr(), prop ) );
+			properties.insert( PropertyMap::value_type( propName, prop ) );
+			m_propMap.insert( ObjInspectorPropertyMap::value_type( id.GetPropertyPtr(), prop ) );
 		}
 	}
 
 	size_t catCount = category->GetCategoryCount();
 	for ( size_t i = 0; i < catCount; i++ )
 	{
-		shared_ptr< PropertyCategory > nextCat = category->GetCategory( i );
+		PPropertyCategory nextCat = category->GetCategory( i );
 		m_pg->AppendIn( category->GetName(), wxPropertyCategory( nextCat->GetName() ) );
 		AddProperties( name, obj, obj_info, nextCat, properties );
+	}
+}
+
+void ObjectInspector::AddEvents(PObjectBase obj, PObjectInfo obj_info )
+{
+  size_t eventCount = obj_info->GetEventCount();
+	for ( size_t i = 0; i < eventCount; i++ )
+	{
+		PEventInfo eventInfo = obj_info->GetEventInfo(i);
+		PEvent     event     = obj->GetEvent(eventInfo->GetName());
+
+		if (!event)
+		  continue;
+
+		wxPGProperty *pgProp = wxStringProperty(eventInfo->GetName(), wxPG_LABEL,
+		   event->GetValue());
+
+		wxPGId id = m_eg->Append( pgProp);
+			m_eg->SetPropertyHelpString( id, eventInfo->GetDescription() );
+
+    m_eventMap.insert( ObjInspectorEventMap::value_type( id.GetPropertyPtr(), event) );
 	}
 }
 
 void ObjectInspector::OnPropertyGridChange( wxPropertyGridEvent& event )
 {
 	wxPGProperty* propPtr = event.GetPropertyPtr();
-	ObjInspectorMap::iterator it = m_propmap.find( propPtr );
+	ObjInspectorPropertyMap::iterator it = m_propMap.find( propPtr );
 
-	if ( m_propmap.end() == it )
+	if ( m_propMap.end() == it )
 	{
 		// Could be a child property
 		propPtr = propPtr->GetParent();
-		it = m_propmap.find( propPtr );
+		it = m_propMap.find( propPtr );
 	}
 
-	if ( it != m_propmap.end() )
+	if ( it != m_propMap.end() )
 	{
-		shared_ptr<Property> prop = it->second;
+		PProperty prop = it->second;
 		switch ( prop->GetType() )
 		{
 			case PT_TEXT:
@@ -875,20 +927,30 @@ void ObjectInspector::OnPropertyGridChange( wxPropertyGridEvent& event )
 				break;
 			}
 
-
 			default:
 				AppData()->ModifyProperty( prop, event.GetPropertyValueAsString() );
 		}
 	}
 }
 
+void ObjectInspector::OnEventGridChange(wxPropertyGridEvent& event)
+{
+	ObjInspectorEventMap::iterator it = m_eventMap.find( event.GetPropertyPtr() );
+
+	if ( it != m_eventMap.end() )
+	{
+		PEvent evt = it->second;
+		AppData()->ModifyEventHandler( evt, event.GetPropertyValueAsString() );
+	}
+}
+
 void ObjectInspector::OnNewBitmapProperty( wxCommandEvent& event )
 {
 	// Update property grid - change bitmap property
-	auto_ptr< NewBitmapEventDataHolder > data ( (NewBitmapEventDataHolder*)event.GetClientData() );
+	std::auto_ptr< NewBitmapEventDataHolder > data ( (NewBitmapEventDataHolder*)event.GetClientData() );
 	data->m_grid->Freeze();
 	wxPGId newId = data->m_grid->ReplaceProperty( event.GetString(), wxBitmapWithResourceProperty( event.GetString(), wxPG_LABEL, data->m_string ) );
-	m_propmap[ newId.GetPropertyPtr() ] = data->m_prop;
+	m_propMap[ newId.GetPropertyPtr() ] = data->m_prop;
 	data->m_grid->Expand( newId );
 	data->m_grid->Thaw();
 }
@@ -905,7 +967,7 @@ void ObjectInspector::OnProjectRefresh( wxFBEvent& event )
 
 void ObjectInspector::OnPropertyModified( wxFBPropertyEvent& event )
 {
-	shared_ptr<Property> prop = event.GetFBProperty();
+	PProperty prop = event.GetFBProperty();
 
 	if (prop->GetObject() != AppData()->GetSelectedObject())
 	  return;
@@ -974,7 +1036,7 @@ void ObjectInspector::OnPropertyModified( wxFBPropertyEvent& event )
 	m_pg->Refresh();
 }
 
-void ObjectInspector::CreatePropertyGridManager()
+wxPropertyGridManager* ObjectInspector::CreatePropertyGridManager(wxWindow *parent, wxWindowID id)
 {
 	int pgStyle;
 	int defaultDescBoxHeight;
@@ -1006,7 +1068,10 @@ void ObjectInspector::CreatePropertyGridManager()
 		descBoxHeight = defaultDescBoxHeight;
 	}
 
-	m_pg = new wxPropertyGridManager( this, -1, wxDefaultPosition, wxDefaultSize, pgStyle );
-	m_pg->SetDescBoxHeight( descBoxHeight );
-	m_pg->SetExtraStyle( wxPG_EX_NATIVE_DOUBLE_BUFFERING );
+	wxPropertyGridManager* pg;
+	pg = new wxPropertyGridManager( parent, id, wxDefaultPosition, wxDefaultSize, pgStyle );
+	pg->SetDescBoxHeight( descBoxHeight );
+	pg->SetExtraStyle( wxPG_EX_NATIVE_DOUBLE_BUFFERING );
+
+	return pg;
 }

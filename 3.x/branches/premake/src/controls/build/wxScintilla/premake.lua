@@ -85,6 +85,7 @@ end
 if ( options["unicode"] ) then
 	table.insert( package.defines, { "UNICODE", "_UNICODE" } )
 end
+
 table.insert( package.config["Debug"].defines, { "DEBUG", "_DEBUG", "__WXDEBUG__" } )
 table.insert( package.config["Release"].defines, "NDEBUG" )
 

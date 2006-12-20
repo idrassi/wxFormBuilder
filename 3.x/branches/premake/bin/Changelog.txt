@@ -41,9 +41,20 @@ date Version 3.00.05
   buttons for wxBoxSizer and wxStaticBoxSizer.
 * Fixed moving left, right, and into a new wxBoxSizer for spacers.
 * Fixed FS#72 — "When editing a property in the property grid, it is lost when you click away."
+* Fixed FS#73 — "Toolbar tools not selecting the object in the object tree."
+* Fixed FS#71 — "wxSplitter window sashpos not being set."
+* ID_DEFAULT is no longer defined when not used.
+* Ids beginning with "wxID_" are no longer defined, this is to avoid redefining
+  wxWidgets special identifiers.
+* Ids for forms now use the "id" property instead of being hardcoded to -1.
+^ wxID_ANY is now the default id.
 ^ Object tree now saves its state.
 ^ Object tree now also scrolls horizontally when selecting an object.
 ^ Added class name and line to error message for unknown classes when importing xrc.
+^ Improved both C++ and XRC code generation for wxSplitterWindow.
+^ Implemented FS#26 — "Chronological id creation."
++ Added support for using wxSplitterWindow with only one child.
++ Added min_pane_size and sashsize properties to wxSplitterWindow.
 + Added maximum size property to wxWindow properties.
 + Implemented FS#48 — "Improve error notification when a plugin is missing."
   If widgets are missing, the project will not load at all.
