@@ -1,13 +1,12 @@
 #!/bin/sh
-
-echo Genrerating the Code::Blocks projects and workspaces...
+#
 premake/premake-linux --target cb-gcc --unicode --with-wx-shared
 echo done...
-echo.
-
-echo Generating the GNU makefiles...
+echo 
+#
 premake/premake-linux --target gnu --unicode --with-wx-shared
 echo done...
-echo.
-
+echo 
+#
 echo Done generating all project files for wxFormBuilder.
+#
