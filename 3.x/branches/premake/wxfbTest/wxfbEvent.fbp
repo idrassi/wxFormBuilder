@@ -371,6 +371,15 @@
                         <property name="tooltip"></property>
                         <property name="window_extra_style"></property>
                         <property name="window_style"></property>
+                        <event name="OnGrid"></event>
+                        <event name="OnGridCmdColSize"></event>
+                        <event name="OnGridCmdEditorCreated"></event>
+                        <event name="OnGridCmdRangeSelect"></event>
+                        <event name="OnGridCmdRowSize"></event>
+                        <event name="OnGridColSize"></event>
+                        <event name="OnGridEditorCreated"></event>
+                        <event name="OnGridRangeSelect"></event>
+                        <event name="OnGridRowSize"></event>
                     </object>
                 </object>
             </object>
