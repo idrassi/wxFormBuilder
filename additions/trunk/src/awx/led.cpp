@@ -22,23 +22,23 @@ awxLed::awxLed(wxWindow* parent,
 			const wxSize& size,
 			awxLedColour color,
 			long style,
-			int timerInterval ) :
-    wxWindow(parent,id,pos,size,wxNO_FULL_REPAINT_ON_RESIZE | style )
+			int timerInterval )
+:
+wxWindow(parent,id,pos,size,wxNO_FULL_REPAINT_ON_RESIZE | style ),
+m_bitmap(new wxBitmap(15,15)),
+m_state( awxLED_OFF ),
+m_blink(0),
+m_x(0),
+m_y(0),
+m_timerInterval(timerInterval),
+m_on(false)
 {
+	m_timer = new BlinkTimer(this);
+	m_icons[awxLED_OFF] = new wxIcon((const char **)led_off_xpm);
+	m_icons[awxLED_ON] = NULL;;
 	SetInitialBestSize( wxSize( 15, 15 ) );
 	SetMinSize( wxSize( 15, 15 ) );
-    m_state = awxLED_OFF;
-    m_bitmap = new wxBitmap(15,15);
-    m_timer = NULL;
-    m_blink = 0;
-    m_x = m_y = 0;
-	m_on = false;
-	m_timerInterval = timerInterval;
-    m_icons[awxLED_OFF] = new wxIcon((const char **)led_off_xpm);
-    m_icons[awxLED_ON] = NULL;
     SetColour(color);
-
-    m_timer = new BlinkTimer(this);
 };
 
 awxLed::~awxLed()
@@ -61,13 +61,13 @@ void awxLed::Blink()
 void awxLed::DrawOnBitmap()
 {
     wxSize s = GetClientSize();
-    if((m_bitmap->GetWidth() != s.GetWidth()) || 
+    if((m_bitmap->GetWidth() != s.GetWidth()) ||
 	  (m_bitmap->GetHeight() != s.GetHeight())) {
 	   m_bitmap->Create(s.x,s.y);
     }
     wxMemoryDC dc;
     dc.SelectObject(*m_bitmap);
-    
+
 	wxBrush brush(this->GetBackgroundColour(), wxSOLID);
     dc.SetBackground(brush);
     dc.Clear();
@@ -96,7 +96,7 @@ void awxLed::SetColour(awxLedColour colour)
     }
 };
 
-void awxLed::SetState(awxLedState state) 
+void awxLed::SetState(awxLedState state)
 {
     m_state = state;
     if(m_timer->IsRunning()) {

@@ -171,7 +171,7 @@ bool wxPlotFunction::AddConstant(const wxString& name, double value)
 
 #include "wx/clipbrd.h"
 #if wxUSE_DATAOBJ && wxUSE_CLIPBOARD
-
+#include <wx/dataobj.h>
 wxPlotFunction wxClipboardGetPlotFunction()
 {
     bool is_opened = wxTheClipboard->IsOpened();

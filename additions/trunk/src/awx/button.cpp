@@ -69,7 +69,7 @@ awxButton::awxButton(wxWindow * parent, wxWindowID id,
     m_font = new wxFont(8,wxDEFAULT,wxNORMAL,wxBOLD);
 #else
     m_font = new wxFont(10,wxDEFAULT,wxNORMAL,wxBOLD);
-#endif    
+#endif
     m_laststate = State_ButtonNew;
 
     // use the up icon dimensions for the image
@@ -173,7 +173,7 @@ void awxButton::DrawOnBitmap()
 	   awxToolbar* mtb = wxDynamicCast(GetParent(),awxToolbar);
 	   if(mtb) {
 		  wxBitmap bmp = mtb->GetBackgroundRegion(GetId());
-		  if(bmp != wxNullBitmap && bmp.Ok()) {
+		  if(bmp.Ok()) {
 			 dc.DrawBitmap(bmp,0,0,false);
 		  }
 	   }
@@ -271,7 +271,7 @@ void awxButton::OnMouseEvent(wxMouseEvent & event)
     else if(event.ButtonUp()) {
 	   m_state = State_ButtonOver;
 	   wxPoint pos = event.GetPosition();
-	   if((pos.x < GetSize().GetWidth()) && 
+	   if((pos.x < GetSize().GetWidth()) &&
 		 (pos.y < GetSize().GetHeight())) {
 		  GetParent()->ProcessEvent(ev);
 	   }
@@ -328,7 +328,7 @@ bool awxButton::Press()
 
 void awxButton::Redraw()
 {
-    if(m_painted) {    
+    if(m_painted) {
 	   DrawOnBitmap();
 	   wxClientDC dc(this);
 	   dc.DrawBitmap(*m_bitmap,0,0,false);
@@ -362,7 +362,7 @@ void awxCheckButton::OnMouseEvent(wxMouseEvent & event)
     }
     else if(event.ButtonUp()) {
 	   wxPoint pos = event.GetPosition();
-	   if((pos.x < GetSize().GetWidth()) && 
+	   if((pos.x < GetSize().GetWidth()) &&
 		 (pos.y < GetSize().GetHeight())) {
 		  // mouse up must inside button range, toggle internal state
 		  m_snapin ^= true;
@@ -423,7 +423,7 @@ awxRadioButton::awxRadioButton(wxWindow * parent, wxWindowID id,
 						 awxRadioButtonBox* selectBox) :
     awxCheckButton(parent,id,pos,size,upXPM,overXPM,downXPM,disXPM)
 {
-    m_box = selectBox; 
+    m_box = selectBox;
     if(m_box) m_box->Add(this);
 };
 
@@ -441,7 +441,7 @@ void awxRadioButton::OnMouseEvent(wxMouseEvent & event)
     }
     else if(event.ButtonUp()) {
 	   wxPoint pos = event.GetPosition();
-	   if((pos.x < GetSize().GetWidth()) && 
+	   if((pos.x < GetSize().GetWidth()) &&
 		 (pos.y < GetSize().GetHeight())) {
 		  // mouse up must inside button range, toggle internal state
 		  m_snapin ^= true;
