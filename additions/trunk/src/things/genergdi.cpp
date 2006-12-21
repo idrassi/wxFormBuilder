@@ -21,6 +21,7 @@
 
 #include "wx/things/genergdi.h"
 #include "wx/tokenzr.h"
+#include "wx/bitmap.h"
 
 const wxGenericColour wxNullGenericColour;
 const wxGenericPen    wxNullGenericPen;
@@ -699,9 +700,16 @@ bool wxGenericBrush::IsSameAs(const wxGenericBrush& brush) const
 {
     wxCHECK_MSG(Ok() && brush.Ok(), 1, wxT("Invalid generic brush"));
     wxGenericBrushRefData *bData = (wxGenericBrushRefData*)brush.GetRefData();
-    return (M_GBRUSHDATA->m_colour  == bData->m_colour) &&
-           (M_GBRUSHDATA->m_style   == bData->m_style) &&
-           (M_GBRUSHDATA->m_stipple == bData->m_stipple);
+    bool retVal = 	(M_GBRUSHDATA->m_colour  == bData->m_colour) &&
+					(M_GBRUSHDATA->m_style   == bData->m_style);
+
+	#if wxCHECK_VERSION( 2, 8, 0 )
+		retVal = retVal && (M_GBRUSHDATA->m_stipple.IsSameAs( bData->m_stipple ) );
+	#else
+		retVal = retVal && (M_GBRUSHDATA->m_stipple == bData->m_stipple);
+	#endif
+
+	return retVal;
 }
 bool wxGenericBrush::IsSameAs(const wxBrush& brush) const
 {

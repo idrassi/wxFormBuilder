@@ -372,8 +372,6 @@ void wxCustomButton::Redraw()
 
 void wxCustomButton::Paint( wxDC &dc )
 {
-    dc.BeginDrawing();
-
     int w, h;
     GetSize(&w,&h);
 
@@ -452,7 +450,6 @@ void wxCustomButton::Paint( wxDC &dc )
     dc.SetBackground(wxNullBrush);
     dc.SetBrush(wxNullBrush);
     dc.SetPen(wxNullPen);
-    dc.EndDrawing();
 }
 
 void wxCustomButton::OnSize( wxSizeEvent &event )
