@@ -259,6 +259,7 @@ void wxFlatNotebook::SetSelection(size_t page)
 		event.SetSelection( (int)page );
 		event.SetOldSelection( oldSelection );
 		event.SetEventObject( this );
+		GetEventHandler()->ProcessEvent(event);
 
 		if( !event.IsAllowed() )
 		{
@@ -1626,7 +1627,7 @@ void wxPageContainer::MoveTabPage(int nMove, int nMoveTo)
 	m_iActivePage = nMoveTo-1;
 	m_iPreviousActivePage = -1;
 	DoSetSelection(m_iActivePage);
-	Refresh();
+//	Refresh();
 	m_pParent->Thaw();
 }
 

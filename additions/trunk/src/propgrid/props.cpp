@@ -119,10 +119,10 @@ void wxStringPropertyClass::SetAttribute( int id, wxVariant& value )
 
 wxPG_BEGIN_PROPERTY_CLASS_BODY(wxIntProperty,wxPGProperty,long,long)
     WX_PG_DECLARE_BASIC_TYPE_METHODS()
-    virtual bool SetValueFromInt ( long value, int flags );
+    virtual bool SetValueFromInt( long value, int flags );
 #if wxUSE_VALIDATORS
-    static wxValidator* GetClassValidator ();
-    virtual wxValidator* DoGetValidator () const;
+    static wxValidator* GetClassValidator();
+    virtual wxValidator* DoGetValidator() const;
 #endif
 wxPG_END_PROPERTY_CLASS_BODY()
 
@@ -2261,7 +2261,7 @@ void wxArrayStringPropertyClass::DoSetValue( wxPGVariant value )
 
 wxPGVariant wxArrayStringPropertyClass::DoGetValue() const
 {
-    return wxPGVariant(m_value);
+    return wxPGVariantCreator(m_value);
 }
 
 wxString wxArrayStringPropertyClass::GetValueAsString( int WXUNUSED(argFlags) ) const

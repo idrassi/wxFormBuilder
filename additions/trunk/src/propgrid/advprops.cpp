@@ -1465,6 +1465,7 @@ void wxImageFilePropertyClass::OnCustomPaint( wxDC& dc,
 
 #include <wx/choicdlg.h>
 
+#ifndef __WXPYTHON__
 wxPGProperty* wxPG_CONSTFUNC(wxMultiChoiceProperty)(const wxString& label,
                                                     const wxString& name,
                                                     const wxPGChoices& choices,
@@ -1472,6 +1473,7 @@ wxPGProperty* wxPG_CONSTFUNC(wxMultiChoiceProperty)(const wxString& label,
 {
     return new wxPG_PROPCLASS(wxMultiChoiceProperty)(label,name,choices,value);
 }
+#endif
 
 wxPGProperty* wxPG_CONSTFUNC(wxMultiChoiceProperty)(const wxString& label,
                                                     const wxString& name,
@@ -1493,8 +1495,7 @@ wxMultiChoicePropertyClass::wxMultiChoicePropertyClass(const wxString& label,
     wxPG_INIT_REQUIRED_TYPE(wxArrayInt)
 
     m_choices.Assign(choices);
-
-    DoSetValue( (void*)&value );
+    SetValueI(value);
 }
 
 
@@ -1507,8 +1508,7 @@ wxMultiChoicePropertyClass::wxMultiChoicePropertyClass(const wxString& label,
     wxPG_INIT_REQUIRED_TYPE(wxArrayInt)
 
     m_choices.Set(strings);
-
-    DoSetValue( (void*)&value );
+    SetValueI(value);
 }
 
 wxMultiChoicePropertyClass::wxMultiChoicePropertyClass(const wxString& label,
@@ -1522,12 +1522,11 @@ wxMultiChoicePropertyClass::~wxMultiChoicePropertyClass()
 {
 }
 
-void wxMultiChoicePropertyClass::DoSetValue( wxPGVariant value )
+void wxMultiChoicePropertyClass::SetValueI( const wxArrayInt& arr )
 {
-    wxArrayInt* pObj = (wxArrayInt*)wxPGVariantToVoidPtr(value);
-    if ( pObj )
+    if ( &arr )
     {
-        m_value_wxArrayInt = *pObj;
+        m_value_wxArrayInt = arr;
         GenerateValueAsString();
     }
     else
@@ -1536,9 +1535,20 @@ void wxMultiChoicePropertyClass::DoSetValue( wxPGVariant value )
     }
 }
 
+void wxMultiChoicePropertyClass::DoSetValue( wxPGVariant value )
+{
+#if !wxPG_PGVARIANT_IS_VARIANT
+    wxArrayInt* pObj = (wxArrayInt*)wxPGVariantToVoidPtr(value);
+    SetValueI(*pObj);
+#else
+    wxArrayInt arr = wxPGVariantToArrayInt(value);
+    SetValueI(arr);
+#endif
+}
+
 wxPGVariant wxMultiChoicePropertyClass::DoGetValue() const
 {
-    return wxPGVariant((void*)&m_value_wxArrayInt);
+    return wxPGVariantCreator(m_value_wxArrayInt);
 }
 
 wxString wxMultiChoicePropertyClass::GetValueAsString( int ) const
@@ -1634,11 +1644,11 @@ bool wxMultiChoicePropertyClass::OnEvent( wxPropertyGrid* propgrid,
                 for ( i=0; i<arrInt.GetCount(); i++ )
                     values.Add(choiceValues.Item(arrInt.Item(i)));
 
-                DoSetValue( (void*)&values );
+                SetValueI( values );
             }
             else
             {
-                DoSetValue( (void*)&arrInt );
+                SetValueI( arrInt );
             }
             UpdateControl( primary );
 
