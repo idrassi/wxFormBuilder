@@ -995,13 +995,18 @@ bool wxPropertyGridManager::ProcessEvent( wxEvent& event )
          m_selPage >= 0 )
     {
         wxPropertyGridPage* page = GetPage(m_selPage);
+        wxPropertyGridEvent* pgEvent = wxDynamicCast(&event, wxPropertyGridEvent);
 
         // Add property grid events to appropriate custom pages
         // but stop propagating to parent if page says it is
         // handling everything.
-        if ( !page->m_isDefault )
+        if ( pgEvent && !page->m_isDefault )
         {
-            page->AddPendingEvent(event);
+            if ( pgEvent->IsPending() )
+                page->AddPendingEvent(event);
+            else
+                page->ProcessEvent(event);
+
             if ( page->IsHandlingAllEvents() )
                 event.StopPropagation();
         }

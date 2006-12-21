@@ -3,6 +3,12 @@
 #include <wx/wxFlatNotebook/fnb_resources.h>
 #include <wx/image.h>
 
+#ifdef DEVELOPMENT
+# define FNB_LOG_MSG( msg ) { wxString logmsg; logmsg << msg; wxLogMessage( logmsg ); }
+#else
+# define FNB_LOG_MSG( msg ) { wxString logmsg; logmsg << msg; }
+#endif
+
 wxFNBRenderer::wxFNBRenderer()
 : m_tabXBgBmp(16, 16)
 , m_xBgBmp(16, 14)

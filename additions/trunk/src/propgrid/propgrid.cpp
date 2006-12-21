@@ -50,7 +50,7 @@
     #include "wx/filedlg.h"
     #include "wx/statusbr.h"
     #include "wx/intl.h"
-    #include <wx/frame.h>
+    #include "wx/frame.h"
 #endif
 
 
@@ -474,13 +474,13 @@ static bool wxPGIsWindowBuffered( const wxWindow* wnd )
 //
 
 //
-// For Next Release (1.2.4):
+// For Next Release:
+// * Fix MSW spinctrl indentation (using old tc indent fix)?
 // * IntProperty min/max (automatic use: validator, spinctrl).
-// * Proper refcounting hack (regarding double incref)?
-// * Crash if not imported in global scope?
+// * Python: Proper refcounting hack (regarding double incref)?
+// * Python: Crash if not imported in global scope?
 //
 // Maybe later:
-// * wxPGVariant as wxVariant provokes crash with wxArrayString value setting.
 //
 // * GetPropertyValue() to return Null wxVariant if the property value is
 //   unspecified (uncomment code in GetValueAsVariant).
@@ -501,6 +501,8 @@ static bool wxPGIsWindowBuffered( const wxWindow* wnd )
 // * After 1.0.x compatibility removed, drop itemcount argument support.
 //
 // 1.3 Branch:
+// * Maybe have wxPG_EX_PROCESS_EVENTS_IMMEDIATELY behaviour as default (and non-
+//   optional).
 // * Move to different directory style to enable CVS usage.
 // * Integrate the flexible MVC grid backend.
 // * wxPGId == wxPGProperty*
@@ -635,6 +637,10 @@ const wxChar *wxPGTypeName_wxString = wxT("string");
 const wxChar *wxPGTypeName_void = wxT("void*");
 const wxChar *wxPGTypeName_wxArrayString = wxT("arrstring");
 
+#ifdef __WXPYTHON__
+const wxChar *wxPGTypeName_PyObject = wxT("PyObject");
+#endif
+
 // -----------------------------------------------------------------------
 
 static void wxPGDrawFocusRect( wxDC& dc, const wxRect& rect )
@@ -712,7 +718,16 @@ void wxPropertyContainerMethods::DeletePropertyChoice( wxPGId id,
 
 // -----------------------------------------------------------------------
 // Statics in one class for easy destruction.
+// NB: We prefer to use wxModule, as it offers more consistent behaviour
+//     across platforms. However, for those rare problem situations, we
+//     also need to offer option to use simpler approach.
 // -----------------------------------------------------------------------
+
+#ifndef wxPG_USE_WXMODULE
+    #define wxPG_USE_WXMODULE 1
+#endif
+
+#if wxPG_USE_WXMODULE
 
 #include <wx/module.h>
 
@@ -721,11 +736,25 @@ class wxPGGlobalVarsClassManager : public wxModule
     DECLARE_DYNAMIC_CLASS(wxPGGlobalVarsClassManager)
 public:
     wxPGGlobalVarsClassManager() {}
-    virtual bool OnInit() { wxPGGlobalVars = new wxPGGlobalVarsClass(); return true; };
-    virtual void OnExit() { delete wxPGGlobalVars; wxPGGlobalVars = NULL; };
+    virtual bool OnInit() { wxPGGlobalVars = new wxPGGlobalVarsClass(); return true; }
+    virtual void OnExit() { delete wxPGGlobalVars; wxPGGlobalVars = NULL; }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxPGGlobalVarsClassManager, wxModule)
+
+#else // !wxPG_USE_WXMODULE
+
+class wxPGGlobalVarsClassManager
+{
+public:
+    wxPGGlobalVarsClassManager() {}
+    ~wxPGGlobalVarsClassManager() { delete wxPGGlobalVars; }
+};
+
+static wxPGGlobalVarsClassManager gs_pgGlobalVarsClassManager;
+
+#endif
+
 
 wxPGGlobalVarsClass* wxPGGlobalVars = (wxPGGlobalVarsClass*) NULL;
 
@@ -809,6 +838,21 @@ void wxPGProperty::Init()
 }
 
 
+void wxPGProperty::Init( const wxString& label, const wxString& name )
+{
+    m_label = label;
+#ifndef __WXPYTHON__
+    if ( &name != ((wxString*)NULL) )
+#else
+    if ( (&name != ((wxString*)NULL)) && name != wxT("_LABEL_AS_NAME") )
+#endif
+        DoSetName( name );
+    else
+        DoSetName( label );
+
+    Init();
+}
+
 wxPGProperty::wxPGProperty()
 #if wxPG_INCLUDE_WXOBJECT
     : wxObject()
@@ -823,17 +867,7 @@ wxPGProperty::wxPGProperty( const wxString& label, const wxString& name )
     : wxObject()
 #endif
 {
-    m_label = label;
-#ifndef __WXPYTHON__
-    if ( &name != ((wxString*)NULL) )
-#else
-    if ( (&name != ((wxString*)NULL)) && name != wxT("_LABEL_AS_NAME") )
-#endif
-        DoSetName( name );
-    else
-        DoSetName( label );
-
-    Init();
+    Init( label, name );
 }
 
 
@@ -1221,7 +1255,7 @@ bool wxPGProperty::RecreateEditor()
     wxPGProperty* selected = pg->GetSelection();
     if ( this == selected )
     {
-        pg->DoSelectProperty(this,wxPG_SEL_FORCE);
+        pg->DoSelectProperty(this, wxPG_SEL_FORCE);
         return true;
     }
     return false;
@@ -1354,14 +1388,6 @@ wxPGPropertyWithChildren::~wxPGPropertyWithChildren()
 // This is used by Insert etc.
 void wxPGPropertyWithChildren::AddChild2( wxPGProperty* prop, int index, bool correct_mode )
 {
-#ifdef __WXPYTHON__
-    // FIXME: This helps against crash on dtor, but I think it
-    //        should be handled in another manner (that is, not
-    //        via double-incref).
-    if ( prop->m_scriptObject )
-        Py_INCREF(prop->m_scriptObject);
-#endif
-
     if ( index < 0 || (size_t)index >= m_children.GetCount() )
     {
         if ( correct_mode ) prop->m_arrIndex = m_children.GetCount();
@@ -1379,16 +1405,6 @@ void wxPGPropertyWithChildren::AddChild2( wxPGProperty* prop, int index, bool co
 // This is used by properties that have fixed sub-properties
 void wxPGPropertyWithChildren::AddChild( wxPGProperty* prop )
 {
-#ifdef __WXPYTHON__
-    // FIXME: This helps against crash on dtor, but I think it
-    //        should be handled in another manner (that is, not
-    //        via double-incref, altough the solution probably
-    //        entails simply finding where the ref is decremented
-    //        unappropriately).
-    if ( prop->m_scriptObject )
-        Py_INCREF(prop->m_scriptObject);
-#endif
-
     prop->m_arrIndex = m_children.GetCount();
     m_children.Add( (void*)prop );
 
@@ -1524,13 +1540,6 @@ void wxPGPropertyWithChildren::Empty()
         for ( i=0; i<GetCount(); i++ )
         {
             wxPGProperty* p = (wxPGProperty*) Item(i);
-        /*#ifdef __WXPYTHON__
-            if ( p->m_scriptObject )
-            {
-                Py_DECREF(p->m_scriptObject);
-                p->m_scriptObject = NULL;
-            }
-        #endif*/
             delete p;
         }
     }
@@ -3602,6 +3611,11 @@ void wxPropertyGrid::Init1()
 {
     WX_PG_GLOBALS_LOCKER()
 
+#if !wxPG_USE_WXMODULE
+    if ( !wxPGGlobalVars )
+        wxPGGlobalVars = new wxPGGlobalVarsClass();
+#endif
+
     // Register type classes, if necessary.
     if ( wxPGGlobalVars->m_dictValueType.empty() )
         RegisterDefaultValues();
@@ -3914,7 +3928,7 @@ void wxPropertyGrid::Thaw()
 #endif
     // Force property re-selection
     if ( m_selected )
-        DoSelectProperty(m_selected,wxPG_SEL_FORCE);
+        DoSelectProperty(m_selected, wxPG_SEL_FORCE);
 }
 
 // -----------------------------------------------------------------------
@@ -4503,7 +4517,7 @@ wxPGId wxPropertyGrid::Append( wxPGProperty* property )
 wxPGId wxPropertyGrid::_Insert( wxPGProperty* priorthis, wxPGProperty* property )
 {
     wxASSERT( priorthis );
-    return FROM_STATE(DoInsert (priorthis->GetParent(), priorthis->GetArrIndex(), property ));
+    return FROM_STATE(DoInsert(priorthis->GetParent(), priorthis->GetArrIndex(), property));
 }
 
 // -----------------------------------------------------------------------
@@ -4517,17 +4531,17 @@ void wxPropertyContainerMethods::Delete( wxPGId id )
 
     if ( grid->GetState() == state )
     {
-        bool selRes = grid->ClearSelection();
+        bool selRes = grid->DoSelectProperty(wxPGIdGen(NULL), wxPG_SEL_DELETING);
         wxPG_CHECK_RET_DBG( selRes,
                             wxT("failed to deselect a property (editor probably had invalid value)") );
     }
 
-    state->DoDelete ( p );
+    state->DoDelete( p );
 
     if ( grid->GetState() == state && !grid->IsFrozen() )
     {
         // This should be enough to resolve even the worst
-        // graphics glitch imagined.
+        // graphics glitch imaginable.
         grid->Update();
         grid->Refresh();
     }
@@ -4586,7 +4600,7 @@ void wxPGTypeOperationFailed( const wxPGProperty* p, const wxChar* typestr,
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGrid::SetPropertyValue( wxPGId id, const wxPGValueType* typeclass, wxPGVariant value )
+void wxPropertyGrid::SetPropertyValue( wxPGId id, const wxPGValueType* typeclass, const wxPGVariant& value )
 {
     wxPG_PROP_ID_CALL_PROLOG()
 
@@ -4596,7 +4610,7 @@ void wxPropertyGrid::SetPropertyValue( wxPGId id, const wxPGValueType* typeclass
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGrid::SetPropertyValue( wxPGId id, const wxChar* typestring, wxPGVariant value )
+void wxPropertyGrid::SetPropertyValue( wxPGId id, const wxChar* typestring, const wxPGVariant& value )
 {
     wxPG_PROP_ID_CALL_PROLOG()
 
@@ -4856,31 +4870,6 @@ void wxPropertyGrid::FixPosForTextCtrl( wxWindow* ctrl )
 void wxPropertyGrid::SetCurControlBoldFont()
 {
     wxASSERT( m_wndPrimary );
-
-#ifdef __WXMSW__
-    // For reason for this, see below for GenerateEditorTextCtrl
-    const wxChar* className = m_wndPrimary->GetClassInfo()->GetClassName();
-    if ( wxStrcmp(className,wxT("wxTextCtrl")) == 0 ||
-         wxStrcmp(className,wxT("wxSpinCtrl")) == 0 )
-    {
-        wxString faceName = m_captionFont.GetFaceName();
-        int textCtrlXAdjust = 0;
-
-        if ( (faceName == wxT("MS Shell Dlg 2") ||
-              faceName == wxT("Tahoma")) &&
-              m_font.GetWeight() != wxFONTWEIGHT_BOLD )
-        {
-            textCtrlXAdjust = wxPG_TEXTCTRLXADJUST;
-        }
-
-        wxRect r = m_wndPrimary->GetRect();
-        r.x += textCtrlXAdjust;
-        r.width -= textCtrlXAdjust;
-        m_ctrlXAdjust += textCtrlXAdjust;
-        m_wndPrimary->SetSize(r);
-    }
-#endif
-
     m_wndPrimary->SetFont( m_captionFont );
 }
 
@@ -6299,7 +6288,6 @@ void wxPropertyGrid::DoDrawItems2( wxDC& dcMain,
                     dc.DrawLine ( grey_x, ly, m_width, ly );
                     ly += lh;
                 }
-
             }
 
             int use_depth = grey_x; // Default is to simply tidy up this wireframe.
@@ -6502,7 +6490,6 @@ void wxPropertyGrid::DoDrawItems2( wxDC& dcMain,
 
     if ( clipRect == NULL || clipRect->x < m_splitterx )
     {
-
         //wxLogDebug(wxT("  \\--> second pass..."));
 
         y = firstItemTopY;
@@ -6735,8 +6722,14 @@ void wxPropertyGrid::DoDrawItems2( wxDC& dcMain,
                 r.y = y;
                 y += m_spacingy;
 
-             // background
+                // background
                 dc.SetBrush( *(wxPGBrush*)m_arrBgBrushes[p->m_bgColIndex] );
+                //wxColour* valueTextColour = (wxPGBrush*)m_arrBgBrushes[p->m_bgColIndex]
+
+                if ( isEnabled && p->IsEnabled() )
+                    dc.SetTextForeground( *(wxPGColour*)m_arrFgCols[p->m_fgColIndex] );
+                else
+                    dc.SetTextForeground( m_colDisPropFore );
 
                 // draw value string only if editor widget not open
                 // (exception: no primary editor widget or it is hidden)
@@ -6767,8 +6760,8 @@ void wxPropertyGrid::DoDrawItems2( wxDC& dcMain,
                     }
 
                     // Greyed text?
-                    if ( !p->IsEnabled() )
-                        dc.SetTextForeground( m_colDisPropFore );
+                    //if ( !p->IsEnabled() )
+                    //    dc.SetTextForeground( m_colDisPropFore );
 
                     // Set bold font?
                     if ( p->m_flags & wxPG_PROP_MODIFIED && (window_style & wxPG_BOLD_MODIFIED) )
@@ -6819,18 +6812,17 @@ void wxPropertyGrid::DoDrawItems2( wxDC& dcMain,
                         editor->DrawValue(dc,p,valueRect);
 
                     // Return original text colour?
-                    if ( p->m_flags & wxPG_PROP_DISABLED )
+                    /*if ( p->m_flags & wxPG_PROP_DISABLED )
                     {
                         if ( isEnabled )
                             dc.SetTextForeground( m_colPropFore );
                         else
                             dc.SetTextForeground( m_colCapFore );
-                    }
+                    }*/
 
                     // Return original font?
                     if ( p->m_flags & wxPG_PROP_MODIFIED && (window_style & wxPG_BOLD_MODIFIED) )
                         dc.SetFont(normalfont);
-
                 }
                 else
                 {
@@ -6839,7 +6831,6 @@ void wxPropertyGrid::DoDrawItems2( wxDC& dcMain,
                          m_iFlags & wxPG_FL_CUR_USES_CUSTOM_IMAGE )
                     {
                         //wxLogDebug(wxT("Primary doesn't fill entire"));
-                        //dc.SetBrush ( m_wndPrimary->GetBackgroundColour() );
                         dc.SetBrush( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
                         dc.DrawRectangle( r );
                     }
@@ -6987,7 +6978,7 @@ void wxPropertyGrid::DrawItem( wxDC& dc, wxPGProperty* p )
 void wxPropertyGrid::RefreshProperty( wxPGProperty* p )
 {
     if ( p == m_selected )
-        DoSelectProperty(p,wxPG_SEL_FORCE);
+        DoSelectProperty(p, wxPG_SEL_FORCE);
 
     DrawItemAndChildren(p);
 }
@@ -7068,9 +7059,9 @@ void wxPropertyGrid::RedrawAllVisible ()
 // -----------------------------------------------------------------------
 
 #if wxPG_HEAVY_GFX
-void wxPropertyGrid::DrawSplitterDragColumn ( wxDC&, int ) { }
+void wxPropertyGrid::DrawSplitterDragColumn( wxDC&, int ) { }
 #else
-void wxPropertyGrid::DrawSplitterDragColumn ( wxDC& dc, int x )
+void wxPropertyGrid::DrawSplitterDragColumn( wxDC& dc, int x )
 {
     int vx, vy;
     GetViewStart(&vx,&vy);
@@ -7093,7 +7084,7 @@ void wxPropertyGrid::Clear()
 {
     if ( m_selected )
     {
-        bool selRes = ClearSelection();  // This must be before state clear
+        bool selRes = DoSelectProperty(wxPGIdGen(NULL), wxPG_SEL_DELETING);  // This must be before state clear
         wxPG_CHECK_RET_DBG( selRes,
                             wxT("failed to deselect a property (editor probably had invalid value)") );
     }
@@ -7539,7 +7530,7 @@ bool wxPropertyGrid::CommitChangesFromEditor( wxUint32 flags )
         if ( !m_selected->GetEditorClass()->CopyValueFromControl( m_selected, m_wndPrimary ) )
             EditorsValueWasNotModified();
 
-        DoPropertyChanged( m_selected );
+        DoPropertyChanged( m_selected, flags );
 
         return true;
     }
@@ -7549,9 +7540,9 @@ bool wxPropertyGrid::CommitChangesFromEditor( wxUint32 flags )
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGrid::DoPropertyChanged( wxPGProperty* p )
+// flags are same as with DoSelectProperty
+void wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
 {
-
     if ( m_processingEvent )
         return;
 
@@ -7602,9 +7593,9 @@ void wxPropertyGrid::DoPropertyChanged( wxPGProperty* p )
                 }
             }
 
-            curParent->ChildChanged ( curChild );
+            curParent->ChildChanged( curChild );
 
-            DrawItem ( curParent );
+            DrawItem( curParent );
 
             curChild = curParent;
             curParent = curParent->GetParent();
@@ -7637,11 +7628,10 @@ void wxPropertyGrid::DoPropertyChanged( wxPGProperty* p )
         if ( m_wndSecondary ) m_wndSecondary->Refresh();
 #endif
 
-        SendEvent( wxEVT_PG_CHANGED, changedProperty );
+        SendEvent( wxEVT_PG_CHANGED, changedProperty, selFlags );
     }
 
     m_processingEvent = 0;
-
 }
 
 // -----------------------------------------------------------------------
@@ -7784,8 +7774,6 @@ void wxPropertyGrid::OnCustomEditorEvent( wxCommandEvent &event )
         // Setting this is not required if res was true, so we do it now.
         m_iFlags |= wxPG_FL_VALUE_MODIFIED;
 
-        //wxPG_CLIENT_DC_INIT()
-        //DoPropertyChanged(dc,m_selected);
         DoPropertyChanged(selected);
 
     }
@@ -7807,8 +7795,6 @@ void wxPropertyGrid::PropertyWasModified( wxPGProperty* p )
 {
     wxCHECK_RET( p, wxT("invalid property id") );
     EditorsValueWasModified();
-    //wxPG_CLIENT_DC_INIT()
-    //DoPropertyChanged(dc,p);
     DoPropertyChanged(p);
 }
 
@@ -8294,17 +8280,20 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                 #if defined(__WXMSW__) && !defined(__WXWINCE__)
                     wxTextCtrl* tc = wxDynamicCast(m_wndPrimary, wxTextCtrl);
                     if ( tc )
-                        ::SendMessage(GetHwndOf(tc), EM_SETMARGINS, EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELONG(0, 0));
+                    {
+                    	#if wxCHECK_VERSION( 2, 8, 0 )
+                    		::SendMessage((HWND)tc->GetHandle(), EM_SETMARGINS, EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELONG(0, 0));
+						#else
+							::SendMessage(GetHwndOf(tc), EM_SETMARGINS, EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELONG(0, 0));
+						#endif
+                    }
                 #endif
 
                     // Store x relative to splitter (we'll need it).
                     m_ctrlXAdjust = m_wndPrimary->GetPosition().x - m_splitterx;
 
                     // Check if background clear is not necessary
-                    // FIXME: Reverse conditional (as would be logical)
                     wxPoint pos = m_wndPrimary->GetPosition();
-                    //if ( pos.x <= (m_splitterx+1) && pos.y <= p->m_y )
-                    //else
                     if ( pos.x > (m_splitterx+1) || pos.y > p->m_y )
                     {
                         m_iFlags &= ~(wxPG_FL_PRIMARY_FILLS_ENTIRE);
@@ -8357,6 +8346,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                     }
                     m_wndSecondary->SetSize( sec_rect );
                 #endif
+                    m_wndSecondary->Show();
 
                     SetupEventHandling(m_wndSecondary,wxPG_SUBID2);
 
@@ -8412,8 +8402,8 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
             #if wxPG_CREATE_CONTROLS_HIDDEN
                 m_wndPrimary->Thaw();
-                m_wndPrimary->Show(true);
             #endif
+                m_wndPrimary->Show(true);
             }
 
             DoDrawItems( dc, p, p, (const wxRect*) NULL );
@@ -8466,10 +8456,10 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
     }
 #endif
 
-    // call wx event handler (here so that deselecting gets processed as well)
-    SendEvent( wxEVT_PG_SELECTED, m_selected );
-
     m_iFlags &= ~(wxPG_FL_IN_SELECT_PROPERTY);
+
+    // call wx event handler (here so that it also occurs on deselection)
+    SendEvent( wxEVT_PG_SELECTED, m_selected, flags );
 
     return true;
 }
@@ -8908,21 +8898,33 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
 
     // Without this, virtual size (atleast under wxGTK) will be skewed
     RecalculateVirtualSize();
-
 }
 
 // -----------------------------------------------------------------------
 // wxPropertyGrid mouse event handling
 // -----------------------------------------------------------------------
 
-void wxPropertyGrid::SendEvent( int eventType, wxPGProperty* p )
+// selFlags uses same values DoSelectProperty's flags
+void wxPropertyGrid::SendEvent( int eventType, wxPGProperty* p, unsigned int selFlags )
 {
     // Send property grid event of specific type and with specific property
     wxPropertyGridEvent evt( eventType, GetId() );
     evt.SetPropertyGrid(this);
     evt.SetEventObject(m_eventObject);
     evt.SetProperty(p);
-    GetEventHandler()->ProcessEvent(evt);
+    wxEvtHandler* evtHandler = GetEventHandler();
+
+    // Always need to process event immediately if the property in question is
+    // about to be deleted.
+    if ( selFlags & wxPG_SEL_DELETING )
+    {
+        evtHandler->ProcessEvent(evt);
+    }
+    else
+    {
+        evt.SetPending(true);
+        evtHandler->AddPendingEvent(evt);
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -10448,6 +10450,21 @@ wxPGId wxPropertyContainerMethods::GetPropertyByNameA( wxPGPropNameStr name ) co
     return id;
 }
 
+// ----------------------------------------------------------------------------
+// VariantDatas
+// ----------------------------------------------------------------------------
+
+#if wxPG_PGVARIANT_IS_VARIANT
+
+IMPLEMENT_DYNAMIC_CLASS(wxPGVariantDataPoint, wxVariantData)
+IMPLEMENT_DYNAMIC_CLASS(wxPGVariantDataSize, wxVariantData)
+IMPLEMENT_DYNAMIC_CLASS(wxPGVariantDataArrayInt, wxVariantData)
+#ifdef __WXPYTHON__
+    IMPLEMENT_DYNAMIC_CLASS(wxPGVariantDataPyObject, wxVariantData)
+#endif
+
+#endif
+
 // -----------------------------------------------------------------------
 // Value type related methods (should all be pretty much static).
 
@@ -10526,6 +10543,37 @@ public:
     }
 };
 
+#ifdef __WXPYTHON__
+// Implement PyObject* type.
+const wxPGValueType *wxPGValueType_PyObject = (wxPGValueType*) NULL;
+class wxPGValueTypePyObjectClass : public wxPGValueType
+{
+public:
+    virtual wxPG_CONST_WXCHAR_PTR GetTypeName() const { return wxT("PyObject"); }
+    virtual wxPGVariant GetDefaultValue() const
+    {
+        return wxVariant( new wxPGVariantDataPyObject(Py_None) );
+    }
+    virtual wxVariant GenerateVariant( wxPGVariant value, const wxString& name ) const
+    {
+        value.SetName( name );
+        return value;  // Can be done since under wxPython, wxPGVariant is wxVariant
+    }
+    virtual wxPGProperty* GenerateProperty( const wxString&, const wxString& ) const
+    {
+        return (wxPGProperty*) NULL;
+    }
+    virtual void SetValueFromVariant( wxPGProperty* property, wxVariant& value ) const
+    {
+#if defined(__WXDEBUG__) || defined(__WXPYTHON__)
+        wxCHECK_RET( wxStrcmp(GetTypeName(),value.GetType().c_str()) == 0,
+            wxT("SetValueFromVariant: wxVariant type mismatch.") );
+#endif
+        property->DoSetValue(value);
+    }
+};
+#endif // __WXPYTHON__
+
 // Registers all default value types
 void wxPropertyGrid::RegisterDefaultValues()
 {
@@ -10536,6 +10584,9 @@ void wxPropertyGrid::RegisterDefaultValues()
     wxPGRegisterDefaultValueType( double );
     wxPGRegisterDefaultValueType( void );
     wxPGRegisterDefaultValueType( wxArrayString );
+#ifdef __WXPYTHON__
+    wxPGRegisterDefaultValueType( PyObject );
+#endif
 }
 
 // noDefCheck = true prevents infinite recursion.
@@ -10977,6 +11028,7 @@ wxPropertyGridEvent::wxPropertyGridEvent(wxEventType commandType, int id)
     : wxCommandEvent(commandType,id)
 {
     m_property = NULL;
+    m_pending = false;
 }
 
 // -----------------------------------------------------------------------
@@ -10988,6 +11040,7 @@ wxPropertyGridEvent::wxPropertyGridEvent(const wxPropertyGridEvent& event)
     m_eventObject = event.m_eventObject;
     m_pg = event.m_pg;
     m_property = event.m_property;
+    m_pending = false;
 }
 
 // -----------------------------------------------------------------------
@@ -11185,7 +11238,13 @@ IMPLEMENT_GET_VALUE(long,long,Long,0)
 IMPLEMENT_GET_VALUE(long,bool,Bool,false)
 IMPLEMENT_GET_VALUE(double,double,Double,0.0)
 IMPLEMENT_GET_VALUE(void,void*,VoidPtr,NULL)
-IMPLEMENT_GET_VALUE(wxArrayString,const wxArrayString&,ArrayString,*((wxArrayString*)NULL))
+#ifdef __WXPYTHON__
+  IMPLEMENT_GET_VALUE(PyObject,PyObject*,PyObject,Py_None)
+#endif
+
+#if !wxPG_PGVARIANT_IS_VARIANT
+    IMPLEMENT_GET_VALUE(wxArrayString,const wxArrayString&,ArrayString,*((wxArrayString*)NULL))
+#endif
 
 // wxObject is different than others.
 const wxObject* wxPropertyContainerMethods::GetPropertyValueAsWxObjectPtr( wxPGId id ) wxPG_GETVALUE_CONST
@@ -11824,7 +11883,7 @@ int wxPropertyGridState::GetLeftSplitterPos(wxClientDC& dc,
 // wxPropertyGridState property value setting and getting
 // -----------------------------------------------------------------------
 
-void wxPropertyGridState::SetPropVal( wxPGProperty* p, wxPGVariant value )
+void wxPropertyGridState::SetPropVal( wxPGProperty* p, const wxPGVariant& value )
 {
     p->DoSetValue(value);
     if ( m_selected==p && this==m_pPropGrid->GetState() )
@@ -11854,7 +11913,7 @@ bool wxPropertyGridState::ClearPropertyValue( wxPGProperty* p )
 
 bool wxPropertyGridState::SetPropertyValue( wxPGProperty* p,
                                             const wxPGValueType* typeclass,
-                                            wxPGVariant value )
+                                            const wxPGVariant& value )
 {
     if ( p )
     {
@@ -11873,7 +11932,7 @@ bool wxPropertyGridState::SetPropertyValue( wxPGProperty* p,
 
 // -----------------------------------------------------------------------
 
-bool wxPropertyGridState::SetPropertyValue( wxPGProperty* p, const wxChar* typestring, wxPGVariant value )
+bool wxPropertyGridState::SetPropertyValue( wxPGProperty* p, const wxChar* typestring, const wxPGVariant& value )
 {
     if ( p )
     {
@@ -12060,10 +12119,10 @@ bool wxPropertyGridState::Expand( wxPGProperty* p )
 
 // -----------------------------------------------------------------------
 
-bool wxPropertyGridState::DoSelectProperty( wxPGProperty* p, bool focus )
+bool wxPropertyGridState::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 {
     if ( this == m_pPropGrid->GetState() )
-        return m_pPropGrid->DoSelectProperty( p, focus?wxPG_SEL_FOCUS:0 );
+        return m_pPropGrid->DoSelectProperty( p, flags );
 
     m_selected = p;
     return true;
@@ -12447,19 +12506,6 @@ int wxPropertyGridState::PrepareToAddItem( wxPGProperty* property,
     if ( scheduledParent == m_properties )
         scheduledParent = (wxPGPropertyWithChildren*) NULL;
 
-/*
-#ifdef __WXPYTHON__
-    // Transfer ownership to wxPropertyGrid
-    if ( property->m_scriptObject )
-    {
-        Py_INCREF(property->m_scriptObject);
-        //OutputDebugString(wxString::Format(wxT("%X"),property->m_scriptObject));
-        //OutputDebugString(wxString::Format(wxT("%i"),PyObject_HasAttrString(property->m_scriptObject, "thisown")));
-        //PyObject_SetAttrString(property->m_scriptObject, "thisown", Py_False);
-    }
-#endif
-*/
-
     if ( parenting > 0 )
     {
         /*
@@ -12759,7 +12805,6 @@ wxPGId wxPropertyGridState::AppendIn( wxPGPropertyWithChildren* pwc,
 
 void wxPropertyGridState::DoDelete( wxPGProperty* item )
 {
-
     wxCHECK_RET( item != &m_regularArray && item != m_abcArray,
         wxT("wxPropertyGrid: Do not attempt to remove the root item.") );
 
@@ -12799,7 +12844,6 @@ void wxPropertyGridState::DoDelete( wxPGProperty* item )
             if ( IsInNonCatMode() )
                 m_abcArray->FixIndexesOfChildren();
         }
-
     }
 
     if ( !IsInNonCatMode() )
@@ -12853,6 +12897,14 @@ void wxPropertyGridState::DoDelete( wxPGProperty* item )
     }
 
     if ( item->GetName().Len() ) m_dictName.erase( wxPGNameConv(item->GetName()) );
+
+#ifdef __WXPYTHON__
+    // For some reason, Py_DECREF always crashes, even though we make
+    // matching Py_INCREF call in propgrid_cbacks.cpp. Maybe refcount is decremented
+    // somewhere automatically? Unlikely...
+    //if ( item->m_scriptObject )
+    //    Py_DECREF( item->m_scriptObject );
+#endif
 
     // We can actually delete it now
     delete item;

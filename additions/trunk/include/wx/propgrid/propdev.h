@@ -96,7 +96,10 @@ extern WXDLLIMPEXP_PG wxPGGlobalVarsClass* wxPGGlobalVars;
 class wxPGWindowPair
 {
 public:
-    wxPGWindowPair() { }
+    wxPGWindowPair()
+    {
+        m_primary = m_secondary = NULL;
+    }
 
     wxWindow*   m_primary;
     wxWindow*   m_secondary;
@@ -144,7 +147,7 @@ public:
     /** Constructor. */
     wxPGEditor()
     {
-    #ifdef __WXPYTHON__
+    #if defined(__WXPYTHON__)
         m_scriptObject = NULL;
     #endif
     }
@@ -237,7 +240,7 @@ public:
     */
     virtual bool CanContainCustomImage() const;
 
-#ifdef __WXPYTHON__
+#if defined(__WXPYTHON__) && !defined(SWIG)
     // This is the python object that contains and owns the C++ representation.
     PyObject*                   m_scriptObject;
 #endif
@@ -1644,52 +1647,6 @@ protected:
     }
 
 
-/*#define WX_PG_TOKENIZER1_BEGIN(WXSTRING,DELIMITER) \
-    const wxChar* ptr = WXSTRING.c_str(); \
-    wxString token; \
-    const wxChar* token_start = NULL; \
-    wxChar a = 0; \
-    do \
-    { \
-        a = *ptr; \
-        while ( a == ' ' ) { ptr++; a = *ptr; } \
-        token_start = ptr; \
-        while ( a != DELIMITER && a != 0 ) { ptr++; a = *ptr; } \
-        if ( ptr > token_start ) \
-        { \
-            unsigned int str_len = ptr-token_start; \
-            wxChar* store_ptr = token.GetWriteBuf ( str_len+1 ); \
-            wxTmemcpy ( store_ptr, token_start, str_len ); \
-            store_ptr[str_len] = 0; \
-            token.UngetWriteBuf ( str_len ); \
-            token.Trim(); \
-        } \
-        else \
-            token.Empty();
-
-#define WX_PG_TOKENIZER1_END() \
-        ptr++; \
-    } while ( a );*/
-
-/*
-
-#define WX_PG_TOKENIZER2_BEGIN(WXSTRING,DELIMITER) \
-    wxStringTokenizer tkz(WXSTRING,DELIMITER,wxTOKEN_RET_EMPTY); \
-    int phase = 0; \
-    while ( tkz.HasMoreTokens() ) \
-    { \
-        wxString token = tkz.GetNextToken(); \
-        if ( phase != 0 ) \
-        {
-
-#define WX_PG_TOKENIZER2_END() \
-            phase = -1; \
-        } \
-        phase += 1; \
-    }
-
-*/
-
 //
 // 2nd version: tokens are surrounded by DELIMITERs (for example, C-style strings).
 // TOKENIZER2 must use custom code (a class) for full compliancy
@@ -1731,128 +1688,6 @@ protected:
 
 #endif
 
-/*
-#if wxUSE_STL
-
-// 2nd version: tokens are surrounded by DELIMITERs (for example, C-style strings).
-// TOKENIZER2 must use custom code for full compliancy
-// with " surrounded strings with \" inside.
-#define WX_PG_TOKENIZER2_BEGIN(WXSTRING,DELIMITER) \
-    const wxChar* ptr = WXSTRING.c_str(); \
-    wxString token; \
-    wxStringBuffer strbuf(token,2048); \
-    wxChar* store_ptr_start = NULL; \
-    wxChar* store_ptr = NULL; \
-    wxChar a = *ptr; \
-    wxChar prev_a = 0; \
-    while ( a ) \
-    { \
-        if ( !store_ptr_start ) \
-        { \
-            if ( a == DELIMITER ) \
-            { \
-                store_ptr_start = store_ptr = strbuf; \
-                prev_a = 0; \
-            } \
-        } \
-        else \
-        { \
-            if ( prev_a != wxT('\\') ) \
-            { \
-                if ( a != DELIMITER ) \
-                { \
-                    if ( a != wxT('\\') ) \
-                    { \
-                        *store_ptr = a; \
-                        store_ptr++; \
-                    } \
-                } \
-                else \
-                { \
-                    *store_ptr = 0; \
-                    wxASSERT ( (store_ptr-store_ptr_start) < 2048 );
-
-#define WX_PG_TOKENIZER2_END() \
-                    store_ptr_start = NULL; \
-                } \
-                prev_a = a; \
-            } \
-            else \
-            { \
-                *store_ptr = a; \
-                store_ptr++; \
-                prev_a = 0; \
-            } \
-        } \
-        ptr++; \
-        a = *ptr; \
-    }
-
-
-#else // wxUSE_STL
-
-//
-// NON USE_STL COMPLIANT VERSION
-//
-// 2nd version: tokens are surrounded by DELIMITERs (for example, C-style strings).
-// TOKENIZER2 must use custom code for full compliancy
-// with " surrounded strings with \" inside.
-#define WX_PG_TOKENIZER2_BEGIN(WXSTRING,DELIMITER) \
-    const wxChar* ptr = WXSTRING.c_str(); \
-    const wxChar* ptr_end = &ptr[WXSTRING.length()]; \
-    wxString token; \
-    wxChar* store_ptr_start = NULL; \
-    wxChar* store_ptr = NULL; \
-    wxChar a = *ptr; \
-    wxChar prev_a = 0; \
-    while ( a ) \
-    { \
-        if ( !store_ptr_start ) \
-        { \
-            if ( a == DELIMITER ) \
-            { \
-                store_ptr_start = store_ptr = token.GetWriteBuf ( ptr_end-ptr+1 ); \
-                prev_a = 0; \
-            } \
-        } \
-        else \
-        { \
-            if ( prev_a != wxT('\\') ) \
-            { \
-                if ( a != DELIMITER ) \
-                { \
-                    if ( a != wxT('\\') ) \
-                    { \
-                        *store_ptr = a; \
-                        store_ptr++; \
-                    } \
-                } \
-                else \
-                { \
-                    *store_ptr = 0; \
-                    token.UngetWriteBuf ( store_ptr-store_ptr_start ); \
-
-#define WX_PG_TOKENIZER2_END() \
-                    store_ptr_start = NULL; \
-                } \
-                prev_a = a; \
-            } \
-            else \
-            { \
-                *store_ptr = a; \
-                store_ptr++; \
-                prev_a = 0; \
-            } \
-        } \
-        ptr++; \
-        a = *ptr; \
-    } \
-    if ( store_ptr_start ) \
-        token.UngetWriteBuf ( store_ptr-store_ptr_start );
-
-#endif // !wxUSE_STL
-
-*/
 // -----------------------------------------------------------------------
 
 #endif // !DOXYGEN

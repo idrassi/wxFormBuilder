@@ -925,6 +925,9 @@ public:
 #endif
     wxPG_IMPLEMENT_PGMAN_METHOD_NORET1_INBODY(SetPropertyValuePoint,const wxPoint&)
     wxPG_IMPLEMENT_PGMAN_METHOD_NORET1_INBODY(SetPropertyValueSize,const wxSize&)
+#ifdef __WXPYTHON__
+    wxPG_IMPLEMENT_PGMAN_METHOD_NORET1_INBODY(SetPropertyValuePyObject,PyObject*)
+#endif
 
 #ifndef __WXPYTHON__
     inline void SetPropertyValue( wxPGId id, wxObject& value )

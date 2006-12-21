@@ -174,7 +174,7 @@ WX_PG_DECLARE_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR_WITH_DECL(wxColourProperty,WX
 
 // MultiChoice is trickier.
 
-#ifndef SWIG
+#ifndef __WXPYTHON__
 
 extern WXDLLIMPEXP_PG wxPGProperty* wxMultiChoiceProperty(const wxString& label,
                                                           const wxString& name,
@@ -195,7 +195,13 @@ extern WXDLLIMPEXP_PG wxPGProperty* wxMultiChoiceProperty(const wxString& label,
 extern WXDLLIMPEXP_PG wxPGProperty* wxMultiChoiceProperty(const wxString& label,
                                                           const wxString& name = wxPG_LABEL,
                                                           const wxArrayString& choices = wxArrayString(),
-                                                          const wxArrayInt& value = wxPG_EMPTY_ARRAYINT);
+                                                    // This crazyness is needed for Python 2.3 (which uses
+                                                    // VC6) compatibility.
+                                                    #ifndef SWIG
+                                                          const wxArrayInt& value = (*((wxArrayInt*)NULL)));
+                                                    #else
+                                                          const wxArrayInt& value = wxArrayInt());
+                                                    #endif
 
 #endif
 
@@ -277,6 +283,8 @@ protected:
 
 // -----------------------------------------------------------------------
 
+#ifndef SWIG
+
 class WXDLLIMPEXP_PG wxCursorPropertyClass : public wxEnumPropertyClass
 {
     WX_PG_DECLARE_DERIVED_PROPERTY_CLASS()
@@ -287,6 +295,8 @@ public:
 
     WX_PG_DECLARE_CUSTOM_PAINT_METHODS()
 };
+
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -313,7 +323,7 @@ protected:
 
 #endif
 
-#if wxUSE_CHOICEDLG || defined(SWIG)
+#if wxUSE_CHOICEDLG && !defined(SWIG) //|| defined(SWIG)
 
 class WXDLLIMPEXP_PG wxMultiChoicePropertyClass : public wxPGProperty
 {
@@ -343,6 +353,7 @@ public:
 
 protected:
 
+    void SetValueI( const wxArrayInt& arr );  // I stands for internal
     void GenerateValueAsString();
 
     // Returns translation of values into string indices.
@@ -358,7 +369,7 @@ protected:
 
 // -----------------------------------------------------------------------
 
-#if wxUSE_DATETIME
+#if wxUSE_DATETIME && !defined(SWIG)
 
 class WXDLLIMPEXP_PG wxDatePropertyClass : public wxPGProperty
 {
