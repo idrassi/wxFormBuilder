@@ -13,7 +13,6 @@
 	<!-- ************************************************************ -->
     <set var="DEFAULT_SRC" template="wx_additions_sources">
 		$(ADDITIONS_SRC_DIR)/things/block.cpp
-        $(ADDITIONS_SRC_DIR)/things/bmpcombo.cpp
         $(ADDITIONS_SRC_DIR)/things/dropdown.cpp
         $(ADDITIONS_SRC_DIR)/things/genergdi.cpp
         $(ADDITIONS_SRC_DIR)/things/geometry.cpp
@@ -32,7 +31,6 @@
     <headers template="wx_additions_headers">
         <files>
             wx/things/block.h
-			wx/things/bmpcombo.h
 			wx/things/dropdown.h
 			wx/things/genergdi.h
 			wx/things/geometry.h
