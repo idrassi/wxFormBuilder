@@ -563,9 +563,8 @@ public:
     size_t GetPageCount() const
     {
     	if ( !(m_iFlags & wxPG_MAN_FL_PAGE_INSERTED) )
-    	{
     		return 0;
-    	}
+
     	return m_arrPages.GetCount();
 	}
 

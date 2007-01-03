@@ -76,6 +76,10 @@
 
 #include <wx/propgrid/odcombo.h>
 
+#ifdef __WXMSW__
+    #include <wx/msw/private.h>
+#endif
+
 
 // Two pics for the expand / collapse buttons.
 // Files are not supplied with this project (since it is
@@ -475,13 +479,13 @@ static bool wxPGIsWindowBuffered( const wxWindow* wnd )
 
 //
 // For Next Release:
+// * Third "unspecified" state to bool properties.
+//
+// Maybe later:
 // * Fix MSW spinctrl indentation (using old tc indent fix)?
 // * IntProperty min/max (automatic use: validator, spinctrl).
 // * Python: Proper refcounting hack (regarding double incref)?
 // * Python: Crash if not imported in global scope?
-//
-// Maybe later:
-//
 // * GetPropertyValue() to return Null wxVariant if the property value is
 //   unspecified (uncomment code in GetValueAsVariant).
 // * Key interceptor docs (remember GetGrid!).
@@ -935,6 +939,12 @@ void wxPGProperty::ShowError( const wxString& msg )
 }
 
 
+wxPropertyGrid* wxPGProperty::GetGrid() const
+{
+    return GetParentState()->GetGrid();
+}
+
+
 void wxPGProperty::UpdateControl( wxWindow* primary )
 {
     if ( primary )
@@ -1351,6 +1361,15 @@ const wxPGProperty* wxPGProperty::GetLastVisibleSubItem() const
 }
 
 
+bool wxPGProperty::UsesAutoUnspecified() const
+{
+    if ( GetGrid()->GetExtraStyle() & wxPG_EX_AUTO_UNSPECIFIED_VALUES )
+        return true;
+
+    return false;
+}
+
+
 // -----------------------------------------------------------------------
 // wxPGPropertyWithChildren
 // -----------------------------------------------------------------------
@@ -1633,11 +1652,18 @@ bool wxPGPropertyWithChildren::SetValueFromString( const wxString& text, int )
 
                     if ( len > 0 )
                     {
-                        if ( child->SetValueFromString ( token, wxPG_REPORT_ERROR ) )
+                        bool wasUnspecified = child->IsValueUnspecified();
+                        if ( child->SetValueFromString( token, wxPG_REPORT_ERROR ) )
                         {
                             // If modified, set mod flag and store value back to parent
                             child->SetFlag( wxPG_PROP_MODIFIED );
-                            child->ClearFlag( wxPG_PROP_UNSPECIFIED );
+
+                            // Clear unspecified flag only if SetValueFromString didn't
+                            // affect it.
+                            if ( child->IsValueUnspecified() &&
+                                 (wasUnspecified || !UsesAutoUnspecified()) )
+                                child->ClearFlag( wxPG_PROP_UNSPECIFIED );
+
                             ChildChanged( child );
                             changed = true;
                         }
@@ -1693,11 +1719,11 @@ bool wxPGPropertyWithChildren::SetValueFromString( const wxString& text, int )
 
                     wxPGProperty* child = Item(curChild);
 
-                    if ( child->SetValueFromString ( token, wxPG_REPORT_ERROR ) )
+                    if ( child->SetValueFromString( token, wxPG_REPORT_ERROR ) )
                     {
                         // If modified, set mod flag and store value back to parent
-                        child->SetFlag ( wxPG_PROP_MODIFIED );
-                        ChildChanged ( child );
+                        child->SetFlag( wxPG_PROP_MODIFIED );
+                        ChildChanged( child );
                         changed = true;
                     }
 
@@ -2195,19 +2221,6 @@ bool wxPGTextCtrlEditor::OnTextCtrlEvent( wxPropertyGrid* propGrid,
         if ( propGrid->IsEditorsValueModified() )
         {
             return true;
-            /*
-            if ( isTextCtrl )
-            {
-                if ( wxPGTextCtrlEditor::CopyTextCtrlValueFromControl(property,ctrl) )
-                    return true;
-            }
-            else
-            {
-                if ( property->GetEditorClass()->CopyValueFromControl(property,ctrl) )
-                    return true;
-            }
-
-            propGrid->EditorsValueWasNotModified();*/
         }
     }
     else if ( event.GetEventType() == wxEVT_COMMAND_TEXT_UPDATED )
@@ -2583,9 +2596,14 @@ void wxPropertyGrid::OnComboItemPaint( wxPGCustomComboControl* pCc,
 
         wxString text;
         if ( !(flags & wxPGCC_PAINTING_CONTROL) )
+        {
             text = pCb->GetString(item);
+        }
         else
-            text = p->GetValueAsString(0);
+        {
+            if ( !p->IsValueUnspecified() )
+                text = p->GetValueAsString(0);
+        }
 
         dc.DrawText( text, pt.x + wxPG_XBEFORETEXT, pt.y );
 
@@ -2803,7 +2821,7 @@ bool wxPGChoiceEditor::OnEvent( wxPropertyGrid* WXUNUSED(propGrid), wxPGProperty
 }
 
 
-bool wxPGChoiceEditor::CopyValueFromControl ( wxPGProperty* property, wxWindow* ctrl ) const
+bool wxPGChoiceEditor::CopyValueFromControl( wxPGProperty* property, wxWindow* ctrl ) const
 {
     wxPGOwnerDrawnComboBox* cb = (wxPGOwnerDrawnComboBox*)ctrl;
 
@@ -2822,7 +2840,7 @@ bool wxPGChoiceEditor::CopyValueFromControl ( wxPGProperty* property, wxWindow* 
 }
 
 
-void wxPGChoiceEditor::SetControlStringValue ( wxWindow* ctrl, const wxString& txt ) const
+void wxPGChoiceEditor::SetControlStringValue( wxWindow* ctrl, const wxString& txt ) const
 {
     wxPGOwnerDrawnComboBox* cb = (wxPGOwnerDrawnComboBox*)ctrl;
     wxASSERT( cb );
@@ -2830,7 +2848,7 @@ void wxPGChoiceEditor::SetControlStringValue ( wxWindow* ctrl, const wxString& t
 }
 
 
-void wxPGChoiceEditor::SetControlIntValue ( wxWindow* ctrl, int value ) const
+void wxPGChoiceEditor::SetControlIntValue( wxWindow* ctrl, int value ) const
 {
     wxPGOwnerDrawnComboBox* cb = (wxPGOwnerDrawnComboBox*)ctrl;
     wxASSERT( cb );
@@ -2838,14 +2856,14 @@ void wxPGChoiceEditor::SetControlIntValue ( wxWindow* ctrl, int value ) const
 }
 
 
-void wxPGChoiceEditor::SetValueToUnspecified ( wxWindow* ctrl ) const
+void wxPGChoiceEditor::SetValueToUnspecified( wxWindow* ctrl ) const
 {
     wxPGOwnerDrawnComboBox* cb = (wxPGOwnerDrawnComboBox*)ctrl;
     cb->SetSelection(-1);
 }
 
 
-bool wxPGChoiceEditor::CanContainCustomImage () const
+bool wxPGChoiceEditor::CanContainCustomImage() const
 {
     return true;
 }
@@ -3109,7 +3127,6 @@ public:
                       const wxSize& size = wxDefaultSize )
         : wxControl(parent,id,pos,size,wxNO_BORDER|wxWANTS_CHARS)
     {
-
         // Due to SetOwnFont stuff necessary for GTK+ 1.2, we need to have this
         SetFont( parent->GetFont() );
 
@@ -3926,6 +3943,7 @@ void wxPropertyGrid::Thaw()
 #if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
     Refresh();
 #endif
+
     // Force property re-selection
     if ( m_selected )
         DoSelectProperty(m_selected, wxPG_SEL_FORCE);
@@ -3962,7 +3980,7 @@ void wxPropertyGrid::SetExtraStyle( long exStyle )
         }
         else
         {
-        #ifdef wxPG_DOUBLE_BUFFER
+        #if wxPG_DOUBLE_BUFFER
             delete m_doubleBuffer;
             m_doubleBuffer = NULL;
         #endif
@@ -6555,9 +6573,12 @@ void wxPropertyGrid::DoDrawItems2( wxDC& dcMain,
 
                 if ( pwc->m_expanded )
                 {
+                // wxRenderer functions are non-mutating in nature, so it
+                // should be safe to cast "const wxPropertyGrid*" to "wxWindow*".
+                // Hopefully this does not cause problems.
                 #if (wxPG_USE_RENDERER_NATIVE)
                     wxRendererNative::Get().DrawTreeItemButton(
-                            this,
+                            (wxWindow*)this,
                             dc,
                             r,
                             wxCONTROL_EXPANDED
@@ -6573,7 +6594,7 @@ void wxPropertyGrid::DoDrawItems2( wxDC& dcMain,
                 {
                 #if (wxPG_USE_RENDERER_NATIVE)
                     wxRendererNative::Get().DrawTreeItemButton(
-                            this,
+                            (wxWindow*)this,
                             dc,
                             r,
                             0
@@ -7159,13 +7180,13 @@ bool wxPropertyGrid::EnableCategories( bool enable )
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGrid::SwitchState ( wxPropertyGridState* pNewState )
+void wxPropertyGrid::SwitchState( wxPropertyGridState* pNewState )
 {
     wxASSERT( pNewState );
 
     wxPGProperty* oldSelection = m_selected;
 
-    // Deselect.
+    // Deselect
     if ( m_selected )
     {
         bool selRes = ClearSelection();
@@ -7181,6 +7202,7 @@ void wxPropertyGrid::SwitchState ( wxPropertyGridState* pNewState )
     m_pState = pNewState;
 
     m_bottomy = 0; // This is necessary or y's won't get updated.
+    m_propHover = (wxPGProperty*) NULL;
 
     // If necessary, convert state to correct mode.
     if ( orig_mode != new_state_mode )
@@ -7520,6 +7542,8 @@ bool wxPropertyGrid::CommitChangesFromEditor( wxUint32 flags )
     {
         wxCHECK_MSG( m_selected, false, wxT("no selection") );
 
+        bool wasUnspecified = m_selected->IsValueUnspecified();
+
         if ( !(flags & (wxPG_SEL_NOVALIDATE|wxPG_SEL_FORCE)) &&
              !DoEditorValidate() )
         {
@@ -7529,6 +7553,9 @@ bool wxPropertyGrid::CommitChangesFromEditor( wxUint32 flags )
         // Save value (only if truly modified).
         if ( !m_selected->GetEditorClass()->CopyValueFromControl( m_selected, m_wndPrimary ) )
             EditorsValueWasNotModified();
+
+        if ( m_selected->IsValueUnspecified() && !wasUnspecified && UsesAutoUnspecified() )
+            flags |= wxPG_SEL_SETUNSPEC;
 
         DoPropertyChanged( m_selected, flags );
 
@@ -7554,8 +7581,10 @@ void wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
 
     m_processingEvent = 1;
 
-    // No longer unspecified
-    CLEAR_PROPERTY_UNSPECIFIED_FLAG(p);
+    // No longer unspecified (but not if the value was set to unspecified by
+    // user modification)
+    if ( !(selFlags & wxPG_SEL_SETUNSPEC) )
+        CLEAR_PROPERTY_UNSPECIFIED_FLAG(p);
 
     if ( m_iFlags & wxPG_FL_VALUE_MODIFIED )
     {
@@ -7609,7 +7638,7 @@ void wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
             DrawItemAndChildren( p );
         }
 
-        if ( curChild != p )
+        if ( curChild != p && !(selFlags & wxPG_SEL_SETUNSPEC) )
             //m_pState->ClearPropertyAndChildrenFlags(curChild,wxPG_PROP_UNSPECIFIED);
             CLEAR_PROPERTY_UNSPECIFIED_FLAG(curChild);
 
@@ -7728,6 +7757,8 @@ void wxPropertyGrid::OnCustomEditorEvent( wxCommandEvent &event )
 {
     wxPGProperty* selected = m_selected;
     wxASSERT( selected );
+    bool wasUnspecified = selected->IsValueUnspecified();
+    bool usesAutoUnspecified = UsesAutoUnspecified();
     wxWindow* wnd = m_wndPrimary;
     bool res1, res2;
 
@@ -7753,18 +7784,19 @@ void wxPropertyGrid::OnCustomEditorEvent( wxCommandEvent &event )
                 EditorsValueWasNotModified();
 
                 // However, even moot editing will clear the unspecified status
-                CLEAR_PROPERTY_UNSPECIFIED_FLAG(selected);
+                if ( wasUnspecified || !usesAutoUnspecified )
+                    CLEAR_PROPERTY_UNSPECIFIED_FLAG(selected);
             }
         }
         else
         {
             res1 = false;
             EditorsValueWasNotModified();
-            CLEAR_PROPERTY_UNSPECIFIED_FLAG(selected);
+            if ( wasUnspecified || !usesAutoUnspecified )
+                CLEAR_PROPERTY_UNSPECIFIED_FLAG(selected);
             return;
         }
     }
-
 
     // Then the property's custom handler (must be always called).
     res2 = selected->OnEvent( this, wnd, event );
@@ -7774,8 +7806,9 @@ void wxPropertyGrid::OnCustomEditorEvent( wxCommandEvent &event )
         // Setting this is not required if res was true, so we do it now.
         m_iFlags |= wxPG_FL_VALUE_MODIFIED;
 
-        DoPropertyChanged(selected);
+        int selFlags = ( !wasUnspecified && selected->IsValueUnspecified() && usesAutoUnspecified ) ? wxPG_SEL_SETUNSPEC : 0;
 
+        DoPropertyChanged(selected, selFlags);
     }
     else
         // Let unhandled button click events go to the parent
@@ -7784,18 +7817,18 @@ void wxPropertyGrid::OnCustomEditorEvent( wxCommandEvent &event )
             wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED,GetId());
             GetEventHandler()->AddPendingEvent(evt);
         }
-
 }
 
 // -----------------------------------------------------------------------
 
 // When a property's value was modified internally (using SetValueFromString
 // or SetValueFromInt, for example), then this should be called afterwards.
-void wxPropertyGrid::PropertyWasModified( wxPGProperty* p )
+// NB: Avoid using this method, if possible.
+void wxPropertyGrid::PropertyWasModified( wxPGProperty* p, int selFlags )
 {
     wxCHECK_RET( p, wxT("invalid property id") );
     EditorsValueWasModified();
-    DoPropertyChanged(p);
+    DoPropertyChanged(p, selFlags);
 }
 
 // -----------------------------------------------------------------------
@@ -8070,6 +8103,21 @@ void wxPropertyGrid::SetupEventHandling( wxWindow* argWnd, int id )
     CONNECT_CHILD(wxEVT_KILL_FOCUS,(wxFocusEventFunction),OnFocusEvent)
 }
 
+void wxPropertyGrid::FreeEditors()
+{
+    if ( m_wndSecondary )
+    {
+        m_wndSecondary->Destroy();
+        m_wndSecondary = (wxWindow*) NULL;
+    }
+
+    if ( m_wndPrimary )
+    {
+        m_wndPrimary->Destroy();
+        m_wndPrimary = (wxWindow*) NULL;
+    }
+}
+
 // Call with NULL to de-select property
 bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 {
@@ -8095,21 +8143,10 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
         // If frozen, always free controls. But don't worry, as Thaw will
         // recall SelectProperty to recreate them.
-        if ( m_wndSecondary )
-        {
-            m_wndSecondary->Destroy();
-            m_wndSecondary = (wxWindow*) NULL;
-        }
-
-        if ( m_wndPrimary )
-        {
-            m_wndPrimary->Destroy();
-            m_wndPrimary = (wxWindow*) NULL;
-        }
+        FreeEditors();
 
         // Prevent any further selection measures in this call
         p = (wxPGProperty*) NULL;
-
     }
     else
     {
@@ -8164,17 +8201,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                 }
             }
 
-            if ( m_wndSecondary )
-            {
-                m_wndSecondary->Destroy();
-                m_wndSecondary = (wxWindow*) NULL;
-            }
-
-            if ( m_wndPrimary )
-            {
-                m_wndPrimary->Destroy();
-                m_wndPrimary = (wxWindow*) NULL;
-            }
+            FreeEditors();
 
             m_iFlags &= ~(wxPG_FL_SELECTED_IS_PAINT_FLEXIBLE|wxPG_FL_SELECTED_IS_FULL_PAINT);
             m_selected = (wxPGProperty*) NULL;
@@ -8261,6 +8288,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                 if ( m_wndPrimary )
                 {
+                    //wxLogDebug(wxT("%s Editor created for %s"),editor->GetName(),p->GetName().c_str());
 
                     // Set validator, if any
                 /*#if wxUSE_VALIDATORS
@@ -8280,13 +8308,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                 #if defined(__WXMSW__) && !defined(__WXWINCE__)
                     wxTextCtrl* tc = wxDynamicCast(m_wndPrimary, wxTextCtrl);
                     if ( tc )
-                    {
-                    	#if wxCHECK_VERSION( 2, 8, 0 )
-                    		::SendMessage((HWND)tc->GetHandle(), EM_SETMARGINS, EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELONG(0, 0));
-						#else
-							::SendMessage(GetHwndOf(tc), EM_SETMARGINS, EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELONG(0, 0));
-						#endif
-                    }
+                        ::SendMessage(GetHwndOf(tc), EM_SETMARGINS, EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELONG(0, 0));
                 #endif
 
                     // Store x relative to splitter (we'll need it).
@@ -8916,7 +8938,8 @@ void wxPropertyGrid::SendEvent( int eventType, wxPGProperty* p, unsigned int sel
 
     // Always need to process event immediately if the property in question is
     // about to be deleted.
-    if ( selFlags & wxPG_SEL_DELETING )
+    if ( (selFlags & wxPG_SEL_DELETING) ||
+         (GetExtraStyle() & wxPG_EX_PROCESS_EVENTS_IMMEDIATELY) )
     {
         evtHandler->ProcessEvent(evt);
     }
@@ -9128,6 +9151,7 @@ bool wxPropertyGrid::HandleMouseDoubleClick( int WXUNUSED(x), unsigned int y,
     {
         // Select property here as well
         wxPGProperty* p = m_propHover;
+
         if ( p != m_selected )
             DoSelectProperty( p );
 
@@ -12034,7 +12058,7 @@ void wxPropertyGridState::SetPropertyUnspecified( wxPGProperty* p )
 
             size_t i;
             for ( i = 0; i < pwc->GetCount(); i++ )
-                SetPropertyUnspecified ( pwc->Item(i) );
+                SetPropertyUnspecified( pwc->Item(i) );
         }
     }
 

@@ -131,9 +131,9 @@ public:
             // control to the OnEvent.
             // NOTE: This event in particular is actually automatically conveyed, but
             //   it is just used as an example.
-            propgrid->Connect ( wxPG_SUBID1, wxEVT_COMMAND_TEXT_UPDATED,
-                               (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
-                               &wxPropertyGrid::OnCustomEditorEvent );
+            propgrid->Connect( wxPG_SUBID1, wxEVT_COMMAND_TEXT_UPDATED,
+                              (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
+                              &wxPropertyGrid::OnCustomEditorEvent );
         \endcode
       OnCustomEditorEvent will then forward events, first to wxPGEditor::OnEvent
       and then to wxPGProperty::OnEvent.

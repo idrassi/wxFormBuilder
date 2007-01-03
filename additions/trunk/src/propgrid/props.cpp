@@ -157,10 +157,16 @@ bool wxIntPropertyClass::SetValueFromString( const wxString& text, int argFlags 
     wxString s;
     long value;
 
-    if ( text.IsNumber() )
+    if ( text.length() == 0 )
     {
-        text.ToLong(&value,0); // we know its number, so need to check retval
+        SetValueToUnspecified();
+        return true;
+    }
 
+    // We know it is a number, but let's still check
+    // the return value.
+    if ( text.IsNumber() && text.ToLong( &value, 0 ) )
+    {
         if ( m_value != value )
         {
             return StdValidationProcedure(value);
@@ -267,6 +273,12 @@ bool wxUIntPropertyClass::SetValueFromString( const wxString& text, int WXUNUSED
 {
     wxString s;
     long value = 0;
+
+    if ( text.length() == 0 )
+    {
+        SetValueToUnspecified();
+        return true;
+    }
 
     const wxChar *start = text.c_str();
     if ( text[0] && !wxIsalnum(text[0]) )
@@ -425,6 +437,13 @@ bool wxFloatPropertyClass::SetValueFromString( const wxString& text, int argFlag
 {
     wxString s;
     double value;
+
+    if ( text.length() == 0 )
+    {
+        SetValueToUnspecified();
+        return true;
+    }
+
     bool res = text.ToDouble(&value);
     if ( res )
     {
