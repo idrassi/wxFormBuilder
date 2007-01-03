@@ -784,7 +784,7 @@ int wxPropertyGridManager::InsertPage( int index, const wxString& label,
                                     #endif
                                        wxPropertyGridPage* pageObj )
 {
-    if ( index < 0 )
+	if ( index < 0 )
         index = m_arrPages.GetCount();
 
     wxCHECK_MSG( (size_t)index == m_arrPages.GetCount(), -1,
@@ -799,6 +799,7 @@ int wxPropertyGridManager::InsertPage( int index, const wxString& label,
         {
             pageObj = GetPage(0);
             needInit = false;
+            index = 0;
         }
         else
         {
@@ -814,6 +815,7 @@ int wxPropertyGridManager::InsertPage( int index, const wxString& label,
             delete GetPage(0);
             m_arrPages[0] = pageObj;
             m_pPropGrid->m_pState = pageObj->GetStatePtr();
+            index = 0;
         }
     }
 
@@ -929,6 +931,8 @@ bool wxPropertyGridManager::RemovePage( int page )
         // Last page: do not remove page entry
         m_pPropGrid->Clear();
         m_selPage = -1;
+        m_iFlags &= ~wxPG_MAN_FL_PAGE_INSERTED;
+        pd->m_label.clear();
     }
     // Change selection if current is page
     else if ( page == m_selPage )
@@ -953,7 +957,7 @@ bool wxPropertyGridManager::RemovePage( int page )
         int toolPos = GetExtraStyle() & wxPG_EX_MODE_BUTTONS ? 3 : 0;
         toolPos += page;
 
-        m_pToolbar->DeleteToolByPos(toolPos);
+		m_pToolbar->DeleteToolByPos(toolPos);
 
         // Delete separator as well, for consistency
         if ( (GetExtraStyle() & wxPG_EX_MODE_BUTTONS) &&
@@ -1011,7 +1015,7 @@ bool wxPropertyGridManager::ProcessEvent( wxEvent& event )
                 event.StopPropagation();
         }
     }
-    
+
     return wxPanel::ProcessEvent(event);
 }
 
