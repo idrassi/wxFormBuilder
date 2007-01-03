@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma implementation "odcombobox.h"
+    #pragma implementation "odcombo.h"
 #endif
 
 #include "wx/wxprec.h"

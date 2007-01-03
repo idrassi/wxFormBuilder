@@ -9,11 +9,11 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_ODCOMBO_H_
-#define _WX_ODCOMBO_H_
+#ifndef _WX_PROPGRID_ODCOMBO_H_
+#define _WX_PROPGRID_ODCOMBO_H_
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "odcombobox.h"
+    #pragma interface "odcombo.h"
 #endif
 
 
@@ -1087,4 +1087,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxPGOwnerDrawnComboBox)
 };
 
-#endif // _WX_ODCOMBO_H_
+#endif // _WX_PROPGRID_ODCOMBO_H_

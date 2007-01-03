@@ -61,6 +61,10 @@
 
 #include <wx/propgrid/advprops.h>
 
+#ifdef __WXMSW__
+    #include <wx/msw/private.h>
+#endif
+
 // -----------------------------------------------------------------------
 
 #if defined(__WXMSW__)
@@ -133,11 +137,12 @@ WX_PG_IMPLEMENT_VALUE_TYPE(wxDateTime,wxDateProperty,wxT("datetime"),GetDateTime
 // wxSpinCtrl-based property editor
 // -----------------------------------------------------------------------
 
-#if wxUSE_SPINCTRL
+#if wxUSE_SPINBTN
 
 //
-// Implement an editor control that allows using wxSpinCtrl to
-// edit value of wxIntProperty (and similar).
+// Implement an editor control that allows using wxSpinCtrl (actually,
+// a combination of wxTextCtrl and wxSpinButton) to edit value of
+// wxIntProperty and wxFloatProperty (and similar).
 //
 // Note that new editor classes needs to be registered before use.
 // This can be accomplished using wxPGRegisterEditorClass macro, which
@@ -145,20 +150,9 @@ WX_PG_IMPLEMENT_VALUE_TYPE(wxDateTime,wxDateProperty,wxT("datetime"),GetDateTime
 // (see below). Registeration can also be performed in a constructor of a
 // property that is likely to require the editor in question.
 //
-// KNOWN ISSUES
-// * Settings value to unspecified doesn't work properly: When such value
-//   is edited manually (ie. not by spinbutton), it is not stored. This is
-//   because we can't interprete textctrl update events here because they
-//   occur even when value is set by program. For wxTextCtrl this is handled
-//   by checking the string length (GetLocation() method), but there is
-//   no suitable API for wxSpinCtrl.
-//
-// * Limited editing mode doesn't really work because wxSpinCtrl can't
-//   be set to read-only.
-//
 
 
-#include <wx/spinctrl.h>
+#include <wx/spinbutt.h>
 
 
 // NOTE: Regardless that this class inherits from a working editor, it has
@@ -173,17 +167,12 @@ public:
     // See below for short explanations of what these are suppposed to do.
     wxPG_DECLARE_CREATECONTROLS
 
-    virtual void UpdateControl( wxPGProperty* property, wxWindow* wnd ) const;
     virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
         wxWindow* wnd, wxEvent& event ) const;
-    virtual bool CopyValueFromControl( wxPGProperty* property, wxWindow* wnd ) const;
-    virtual void SetValueToUnspecified( wxWindow* wnd ) const;
-    virtual void SetControlStringValue( wxWindow* wnd, const wxString& txt ) const;
-    virtual void OnFocus( wxPGProperty* property, wxWindow* wnd ) const;
 };
 
 
-// This macro also defined global wxPGEditor_SpinCtrl for storing
+// This macro also defines global wxPGEditor_SpinCtrl for storing
 // the singleton class instance.
 WX_PG_IMPLEMENT_EDITOR_CLASS(SpinCtrl,wxPGSpinCtrlEditor,wxPGEditor)
 
@@ -197,81 +186,95 @@ wxPGSpinCtrlEditor::~wxPGSpinCtrlEditor()
 // Create controls and initialize event handling.
 #ifndef __WXPYTHON__
 wxWindow* wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxPGProperty* property,
-                                              const wxPoint& pos, const wxSize& sz, wxWindow** ) const
+                                              const wxPoint& pos, const wxSize& sz, wxWindow** pSecondary ) const
 #else
 wxPGWindowPair wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxPGProperty* property,
                                                    const wxPoint& pos, const wxSize& sz ) const
 #endif
 {
+    const int margin = 1;
+    wxSize butSz(18, sz.y);
+    wxSize tcSz(sz.x - butSz.x - margin, sz.y);
+    wxPoint butPos(pos.x + tcSz.x + margin, pos.y);
 
-    // Get initial value (may be none if value is 'unspecified')
-    wxString text;
-    if ( !(property->GetFlags() & wxPG_PROP_UNSPECIFIED) )
-        text = property->GetValueAsString(0);
-
-    // Determine minimum and maximum
-    int min = INT_MIN;
-    int max = INT_MAX;
-
-    // If it can't translate value to int, this will fail at run-time.
-    int value = propgrid->GetPropertyValueAsInt(property);
-
-    // Use two stage creation to allow cleaner display on wxMSW
-    wxSpinCtrl* ctrl = new wxSpinCtrl();
+    wxSpinButton* wnd2 = new wxSpinButton();
 #ifdef __WXMSW__
-    ctrl->Hide();
+    wnd2->Hide();
 #endif
-    ctrl->Create(propgrid,wxPG_SUBID1,
-                 text,pos,sz,
-                 wxNO_BORDER|wxSP_ARROW_KEYS,
-                 // In limited editing mode, use read-only textctrl
-                 // (if possible - but its not so this is merely
-                 // an example code)
-                 //|((property->GetFlags() & wxPG_PROP_NOEDITOR)?wxTE_READONLY:0)
-                 min,max,value);
+    wnd2->Create( propgrid, wxPG_SUBID2, butPos, butSz, wxSP_VERTICAL );
+    wnd2->SetRange( INT_MIN, INT_MAX );
+    wnd2->SetValue( 0 );
 
-    // Connect all required events to grid's OnCustomEditorEvent
-    // (all relevenat wxTextCtrl, wxComboBox and wxButton events are
-    // already connected)
-    propgrid->Connect( wxPG_SUBID1, wxEVT_COMMAND_SPINCTRL_UPDATED,
+    propgrid->Connect( wxPG_SUBID2, wxEVT_SCROLL_LINEUP,
                        (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
-                       &wxPropertyGrid::OnCustomEditorEvent );
+                       &wxPropertyGrid::OnCustomEditorEvent, NULL, propgrid );
+    propgrid->Connect( wxPG_SUBID2, wxEVT_SCROLL_LINEDOWN,
+                       (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
+                       &wxPropertyGrid::OnCustomEditorEvent, NULL, propgrid );
 
-    if ( property->HasFlag(wxPG_PROP_UNSPECIFIED) )
-    {
-        ctrl->SetValue(wxEmptyString);
-        //propgrid->IgnoreNextEvent();
-    }
+    // Let's add validator to make sure only numbers can be entered
+    wxString temps;
+    wxTextValidator validator(wxFILTER_NUMERIC, &temps);
 
-    // This centers the control in a platform dependent manner
-    propgrid->FixPosForTextCtrl( ctrl );
+#ifndef __WXPYTHON__
+    wxTextCtrl* wnd1 = (wxTextCtrl*) wxPGTextCtrlEditor::CreateControls( propgrid, property, pos, tcSz, NULL );
+    wnd1->SetValidator(validator);
 
-#ifdef __WXMSW__
-    ctrl->Show();
+    *pSecondary = wnd2;
+    return wnd1;
+#else
+    wxTextCtrl* wnd1 = (wxTextCtrl*) wxPGTextCtrlEditor::CreateControls( propgrid, property, pos, tcSz ).m_primary;
+    wnd1->SetValidator(validator);
+
+    return wxPGWindowPair(wnd1, wnd2);
 #endif
-
-    return ctrl;
-}
-
-// Copies value from property to control
-void wxPGSpinCtrlEditor::UpdateControl( wxPGProperty* property, wxWindow* wnd ) const
-{
-    wxSpinCtrl* ctrl = (wxSpinCtrl*) wnd;
-    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxSpinCtrl)) );
-
-    // We assume that property's data type is 'int' (or something similar),
-    // thus allowing us to get raw, unchecked value via DoGetValue.
-    ctrl->SetValue( property->DoGetValue().GetLong() );
 }
 
 // Control's events are redirected here
 bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
                                   wxWindow* wnd, wxEvent& event ) const
 {
-    if ( event.GetEventType() == wxEVT_COMMAND_SPINCTRL_UPDATED )
+    int evtType = event.GetEventType();
+
+    if ( evtType == wxEVT_SCROLL_LINEUP || evtType == wxEVT_SCROLL_LINEDOWN )
     {
-        wxSpinCtrl* ctrl = (wxSpinCtrl*) wnd;
-        wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxSpinCtrl)) );
+        wxString s = property->GetValueAsString(wxPG_FULL_VALUE);
+
+        double v_d;
+        long v_l;
+
+        if ( property->GetValueType() == wxPG_VALUETYPE(double) )
+        {
+            // Try double
+            if ( s.ToDouble(&v_d) )
+            {
+                if ( evtType == wxEVT_SCROLL_LINEUP ) v_d += 1.0;
+                else v_d -= 1.0;
+                wxPropertyGrid::DoubleToString(s, v_d, 6, true, NULL);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            // Try long
+            if ( s.ToLong(&v_l, 0) )
+            {
+                if ( evtType == wxEVT_SCROLL_LINEUP ) v_l++;
+                else v_l--;
+                s = wxString::Format(wxT("%i"),(int)v_l);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        wxTextCtrl* tc = wxDynamicCast(propgrid->GetEditorControl(), wxTextCtrl);
+        if ( tc )
+            tc->SetValue(s);
 
         return true;
     }
@@ -279,44 +282,7 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
     return wxPGTextCtrlEditor::OnEvent(propgrid,property,wnd,event);
 }
 
-// Copies value from control to property
-bool wxPGSpinCtrlEditor::CopyValueFromControl( wxPGProperty* property, wxWindow* wnd ) const
-{
-    wxSpinCtrl* ctrl = (wxSpinCtrl*) wnd;
-    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxSpinCtrl)) );
-
-    return property->SetValueFromInt(ctrl->GetValue(),wxPG_FULL_VALUE);
-}
-
-// Makes control look like it has unspecified value
-void wxPGSpinCtrlEditor::SetValueToUnspecified( wxWindow* wnd ) const
-{
-    wxSpinCtrl* ctrl = (wxSpinCtrl*) wnd;
-    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxSpinCtrl)) );
-
-    ctrl->SetValue(wxEmptyString);
-}
-
-// Used when control's value is wanted to set from string source
-// (obviously, not all controls can implement this properly,
-//  but wxSpinCtrl can)
-void wxPGSpinCtrlEditor::SetControlStringValue( wxWindow* wnd, const wxString& txt ) const
-{
-    wxSpinCtrl* ctrl = (wxSpinCtrl*) wnd;
-    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxSpinCtrl)) );
-
-    ctrl->SetValue(txt);
-}
-
-void wxPGSpinCtrlEditor::OnFocus( wxPGProperty* WXUNUSED(prop), wxWindow* wnd ) const
-{
-    wxSpinCtrl* ctrl = (wxSpinCtrl*) wnd;
-    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxSpinCtrl)) );
-
-    ctrl->SetSelection(-1,-1);
-}
-
-#endif // wxUSE_SPINCTRL
+#endif // wxUSE_SPINBTN
 
 
 // -----------------------------------------------------------------------
@@ -1275,11 +1241,6 @@ wxSize wxCursorPropertyClass::GetImageSize() const
 
 #if wxPG_CAN_DRAW_CURSOR
 
-// Needed for Cygwin
-#ifdef __WXMSW__
-    #include <winuser.h>
-#endif
-
 void wxCursorPropertyClass::OnCustomPaint( wxDC& dc,
                                            const wxRect& rect,
                                            wxPGPaintData& paintdata )
@@ -1867,7 +1828,7 @@ void wxPropertyContainerMethods::InitAllTypeHandlers()
 
 void wxPropertyContainerMethods::RegisterAdditionalEditors()
 {
-#if wxUSE_SPINCTRL
+#if wxUSE_SPINBTN
     wxPGRegisterEditorClass(SpinCtrl);
 #endif
 #if wxUSE_DATEPICKCTRL

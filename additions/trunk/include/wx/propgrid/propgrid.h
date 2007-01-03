@@ -9,8 +9,8 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __WX_PROPGRID_H__
-#define __WX_PROPGRID_H__
+#ifndef __WX_PROPGRID_PROPGRID_H__
+#define __WX_PROPGRID_PROPGRID_H__
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "propgrid.cpp"
@@ -52,7 +52,7 @@
     #define wxUSE_VALIDATORS        1
     #define wxUSE_DATETIME          1
     #define wxUSE_TOOLTIPS          1
-    #define wxUSE_SPINCTRL          1
+    #define wxUSE_SPINBTN           1
     #define wxUSE_DATEPICKCTRL      1
 #endif
 
@@ -95,7 +95,7 @@
 //     In fact, it will more likely be updated once a week or so
 //     (less often when releases are made more sparsely).
 //
-#define wxPG_VERSION        1250
+#define wxPG_VERSION        1252
 
 
 // -----------------------------------------------------------------------
@@ -621,7 +621,15 @@ typedef void (*wxPGPaintCallback)(wxPGProperty* property,
 /** Process all events immediately, if possible. That is, ProcessEvent is
     called instead of AddPendingEvent.
 */
-//#define wxPG_EX_PROCESS_EVENTS_IMMEDIATELY  0x00100000
+#define wxPG_EX_PROCESS_EVENTS_IMMEDIATELY  0x00100000
+
+
+/** Set this style to let user have ability to set values of properties to
+    unspecified state. Currently, this applies to following properties:
+    - wxIntProperty, wxUIntProperty, and wxFloatProperty: Clear the
+      text field.
+*/
+#define wxPG_EX_AUTO_UNSPECIFIED_VALUES     0x00200000
 
 
 /** Combines various styles.
@@ -1891,7 +1899,7 @@ public:
     inline wxPGId GetId() { return wxPGIdGen(this); }
 
     /** Returns property grid where property lies. */
-    inline wxPropertyGrid* GetGrid() const;
+    wxPropertyGrid* GetGrid() const;
 
     /** Returns highest level non-category, non-root parent. Useful when you
         have nested wxCustomProperties/wxParentProperties.
@@ -1915,6 +1923,11 @@ public:
     inline bool IsFlagSet( unsigned char flag ) const
     {
         return ( m_flags & flag ) ? true : false;
+    }
+
+    inline bool IsValueUnspecified() const
+    {
+        return ( m_flags & wxPG_PROP_UNSPECIFIED ) ? true : false;
     }
 
     inline bool HasFlag( unsigned char flag ) const
@@ -1989,6 +2002,10 @@ public:
     */
     wxVariant GetValueAsVariant() const;
 #endif
+
+    /** Returns true if containing grid uses wxPG_EX_AUTO_UNSPECIFIED_VALUES.
+    */
+    bool UsesAutoUnspecified() const;
 
     inline wxBitmap* GetValueImage() const
     {
@@ -2070,6 +2087,11 @@ public:
     }
 
     inline void SetLabel( const wxString& label ) { m_label = label; }
+
+    inline void SetValueToUnspecified()
+    {
+        m_flags |= wxPG_PROP_UNSPECIFIED;
+    }
 
 #if wxUSE_VALIDATORS
     /** Sets wxValidator for a property*/
@@ -3110,13 +3132,6 @@ protected:
 };
 
 #endif // #ifndef SWIG
-
-inline wxPropertyGrid* wxPGProperty::GetGrid() const
-{
-    //if ( m_parent )
-    //    return m_parent->GetParentState()->GetGrid();
-    return GetParentState()->GetGrid();
-}
 
 inline bool wxPGProperty::SetChoices( const wxArrayString& labels,
                                       const wxArrayInt& values )
@@ -4595,6 +4610,7 @@ protected:
 #define wxPG_SEL_NONVISIBLE 0x04 // For example, doesn't cause EnsureVisible
 #define wxPG_SEL_NOVALIDATE 0x08 // Do not validate editor's value before selecting
 #define wxPG_SEL_DELETING   0x10 // Property being deselected is about to be deleted
+#define wxPG_SEL_SETUNSPEC  0x20 // Property's values was set to unspecified by the user
 
 
 // -----------------------------------------------------------------------
@@ -6126,8 +6142,10 @@ public:
     inline void DecFrozen() { m_frozen--; }
 
     /** Call after a property modified internally.
+        selFlags are the same as with DoSelectProperty.
+        NB: Avoid using this method, if possible.
     */
-    void PropertyWasModified( wxPGProperty* p );
+    void PropertyWasModified( wxPGProperty* p, int selFlags = 0 );
 
     void OnComboItemPaint( wxPGCustomComboControl* pCb,int item,wxDC& dc,
                            wxRect& rect,int flags );
@@ -6521,9 +6539,9 @@ protected:
 
     void DoPropertyChanged( wxPGProperty* p, unsigned int selFlags = 0 );
 
-    //void DoSetPropertyPriority( wxPGProperty* p, int priority );
-
     void DoSetSplitterPosition( int newxpos, bool refresh = true );
+
+    void FreeEditors();
 
     wxPGProperty* GetLastItem( bool need_visible, bool allow_subprops = true );
 
@@ -6575,6 +6593,11 @@ protected:
     void RecalculateVirtualSize();
 
     void PGAdjustScrollbars( int y );
+
+    inline bool UsesAutoUnspecified() const
+    {
+        return ( GetExtraStyle() & wxPG_EX_AUTO_UNSPECIFIED_VALUES ) ? true : false;
+    }
 
     /** When splitter is dragged to a new position, this is drawn. */
     void DrawSplitterDragColumn( wxDC& dc, int x );
@@ -7077,5 +7100,5 @@ protected:
 
 // -----------------------------------------------------------------------
 
-#endif // __WX_PROPGRID_H__
+#endif // __WX_PROPGRID_PROPGRID_H__
 
