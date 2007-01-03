@@ -560,7 +560,14 @@ public:
     int GetPageByState( wxPropertyGridState* pstate ) const;
 
     /** Returns number of managed pages. */
-    size_t GetPageCount() const { return m_arrPages.GetCount(); }
+    size_t GetPageCount() const
+    {
+    	if ( !(m_iFlags & wxPG_MAN_FL_PAGE_INSERTED) )
+    	{
+    		return 0;
+    	}
+    	return m_arrPages.GetCount();
+	}
 
     /** Returns name of given page. */
     const wxString& GetPageName( int index ) const;
