@@ -50,10 +50,6 @@ bool WXDLLIMPEXP_PG operator == (const wxArrayInt& array1, const wxArrayInt& arr
 WX_PG_DECLARE_EDITOR_WITH_DECL(SpinCtrl,WXDLLIMPEXP_PG)
 #endif
 
-#if wxUSE_SLIDER
-WX_PG_DECLARE_EDITOR_WITH_DECL(Slider,WXDLLIMPEXP_PG)
-#endif
-
 #if wxUSE_DATEPICKCTRL && defined(wxPG_ALLOW_WXADV)
 WX_PG_DECLARE_EDITOR_WITH_DECL(DatePickerCtrl,WXDLLIMPEXP_PG)
 #endif
@@ -400,7 +396,7 @@ public:
     {
         return m_format;
     }
-
+    
     inline void SetDateValue( const wxDateTime& dt )
     {
         m_valueDateTime = dt;

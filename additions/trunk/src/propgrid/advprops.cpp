@@ -225,6 +225,7 @@ wxPGWindowPair wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
 #else
     wxTextCtrl* wnd1 = (wxTextCtrl*) wxPGTextCtrlEditor::CreateControls( propgrid, property, pos, tcSz ).m_primary;
     wnd1->SetValidator(validator);
+
     return wxPGWindowPair(wnd1, wnd2);
 #endif
 }
@@ -282,167 +283,6 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
 }
 
 #endif // wxUSE_SPINBTN
-
-
-// -----------------------------------------------------------------------
-// wxSlider-based property editor
-// -----------------------------------------------------------------------
-
-#if wxUSE_SLIDER
-
-//
-// Implement an editor control that allows using wxSlider to edit value of
-// wxFloatProperty (and similar).
-//
-// Note that new editor classes needs to be registered before use.
-// This can be accomplished using wxPGRegisterEditorClass macro, which
-// is used for Slider in wxPropertyContainerMethods::RegisterAdditionalEditors
-// (see below). Registeration can also be performed in a constructor of a
-// property that is likely to require the editor in question.
-//
-
-
-#include <wx/slider.h>
-
-class wxPGSliderEditor : public wxPGEditor
-{
-    WX_PG_DECLARE_EDITOR_CLASS()
-private:
-	int m_max;
-public:
-	wxPGSliderEditor()
-	:
-	m_max( 10000 )
-	{
-	}
-
-    virtual ~wxPGSliderEditor();
-
-    // See below for short explanations of what these are suppposed to do.
-    wxPG_DECLARE_CREATECONTROLS
-
-	virtual void UpdateControl( wxPGProperty* property, wxWindow* wnd ) const;
-    virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
-        wxWindow* wnd, wxEvent& event ) const;
-    virtual bool CopyValueFromControl( wxPGProperty* property, wxWindow* wnd ) const;
-    virtual void SetValueToUnspecified( wxWindow* wnd ) const;
-};
-
-
-// This macro also defines global wxPGEditor_Slider for storing
-// the singleton class instance.
-WX_PG_IMPLEMENT_EDITOR_CLASS(Slider,wxPGSliderEditor,wxPGEditor)
-
-// Trivial destructor.
-wxPGSliderEditor::~wxPGSliderEditor()
-{
-}
-
-
-#ifndef __WXPYTHON__
-wxWindow* wxPGSliderEditor::CreateControls( wxPropertyGrid* propgrid,
-											wxPGProperty* property,
-											const wxPoint& pos,
-											const wxSize& sz,
-											wxWindow** ) const
-#else
-wxPGWindowPair wxPGSliderEditor::CreateControls( wxPropertyGrid* propgrid,
-												 wxPGProperty* property,
-												 const wxPoint& pos,
-												 const wxSize& sz ) const
-#endif
-{
-    wxCHECK_MSG( property->IsKindOf(WX_PG_CLASSINFO(wxFloatProperty)),
-                 NULL,
-                 wxT("Slider editor can only be used with wxFloatProperty or derivative.") );
-
-    // Use two stage creation to allow cleaner display on wxMSW
-    wxSlider* ctrl = new wxSlider();
-#ifdef __WXMSW__
-    ctrl->Hide();
-#endif
-	wxString s = property->GetValueAsString();
-	double v_d = 0;
-	if ( s.ToDouble(&v_d) )
-	{
-		if ( v_d < 0 )
-			v_d = 0;
-		else if ( v_d > 1 )
-			v_d = 1;
-	}
-
-    ctrl->Create(propgrid,
-                 wxPG_SUBID1,
-                 (int)(v_d * m_max),
-                 0,
-                 m_max,
-                 pos,
-                 sz,
-                 wxSL_HORIZONTAL);
-
-    // Connect all required events to grid's OnCustomEditorEvent
-    // (all relevenat wxTextCtrl, wxComboBox and wxButton events are
-    // already connected)
-    propgrid->Connect( wxPG_SUBID1, wxEVT_SCROLL_THUMBTRACK,
-                       (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
-                       &wxPropertyGrid::OnCustomEditorEvent, NULL, propgrid );
-
-#ifdef __WXMSW__
-    ctrl->Show();
-#endif
-
-    return ctrl;
-}
-
-// Copies value from property to control
-void wxPGSliderEditor::UpdateControl( wxPGProperty* property, wxWindow* wnd ) const
-{
-    wxSlider* ctrl = wxDynamicCast( wnd, wxSlider );
-    if ( ctrl )
-    {
-		double val = wxPGVariantToDouble( property->DoGetValue() );
-		if ( val < 0 )
-			val = 0;
-		else if ( val > 1 )
-			val = 1;
-		ctrl->SetValue( (int)(val * m_max) );
-    }
-}
-
-// Control's events are redirected here
-bool wxPGSliderEditor::OnEvent( wxPropertyGrid* WXUNUSED(propgrid),
-                                        wxPGProperty* WXUNUSED(property),
-                                        wxWindow* WXUNUSED(wnd),
-                                        wxEvent& event ) const
-{
-    if ( event.GetEventType() == wxEVT_SCROLL_THUMBTRACK )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool wxPGSliderEditor::CopyValueFromControl( wxPGProperty* property, wxWindow* wnd ) const
-{
-    wxSlider* ctrl = wxDynamicCast( wnd, wxSlider );
-    if ( ctrl )
-    {
-		property->DoSetValue( wxPGVariant( (double)(ctrl->GetValue())/(double)(m_max) ) );
-    }
-
-    return true;
-}
-
-void wxPGSliderEditor::SetValueToUnspecified( wxWindow* WXUNUSED(wnd) ) const
-{
-    // TODO?
-    //wxDateProperty* prop = (wxDateProperty*) property;
-    //ctrl->SetValue(?);
-}
-
-
-#endif // wxUSE_SLIDER
 
 
 // -----------------------------------------------------------------------
@@ -1990,9 +1830,6 @@ void wxPropertyContainerMethods::RegisterAdditionalEditors()
 {
 #if wxUSE_SPINBTN
     wxPGRegisterEditorClass(SpinCtrl);
-#endif
-#if wxUSE_SLIDER
-    wxPGRegisterEditorClass(Slider);
 #endif
 #if wxUSE_DATEPICKCTRL
     wxPGRegisterEditorClass(DatePickerCtrl);
