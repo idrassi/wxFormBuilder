@@ -589,7 +589,7 @@ public:
 		return led;
 	}
 };
-/*
+
 class wxLedBarGraphComponent : public ComponentBase
 {
 public:
@@ -602,8 +602,6 @@ public:
 		return ledbg;
 	}
 };
-*/
-
 
 class ScintillaComponent : public ComponentBase
 {
@@ -816,6 +814,9 @@ MACRO(awxLED_YELLOW)
 
 // wxScintilla
 WINDOW_COMPONENT("wxScintilla", ScintillaComponent )
+
+// wxLedBarGraph
+WINDOW_COMPONENT("wxLedBarGraph", wxLedBarGraphComponent )
 
 END_LIBRARY()
 
