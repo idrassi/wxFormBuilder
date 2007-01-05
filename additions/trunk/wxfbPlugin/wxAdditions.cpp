@@ -39,6 +39,8 @@
 // wxScintilla
 #include <wx/wxScintilla/wxscintilla.h>
 
+#include <wx/ledBarGraph/ledBarGraph.h>
+
 #include <math.h>
 
 #include <wx/object.h>
@@ -572,6 +574,7 @@ public:
 	}*/
 };
 
+
 class awxLedComponent : public ComponentBase
 {
 public:
@@ -586,6 +589,21 @@ public:
 		return led;
 	}
 };
+/*
+class wxLedBarGraphComponent : public ComponentBase
+{
+public:
+	wxObject* Create(IObject *obj, wxObject *parent)
+	{
+		wxLedBarGraph* ledbg = new wxLedBarGraph((wxWindow *)parent, -1,
+			obj->GetPropertyAsPoint(_("pos")),
+			obj->GetPropertyAsSize(_("size")),
+			obj->GetPropertyAsInteger(_("window_style")));
+		return ledbg;
+	}
+};
+*/
+
 
 class ScintillaComponent : public ComponentBase
 {
