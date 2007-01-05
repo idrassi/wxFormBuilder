@@ -40,7 +40,8 @@ if ( options["unicode"] ) then
 		"wxmsw"..wx_ver..wx_ver_minor.."umd_awx_gcc",
 		"wxmsw"..wx_ver..wx_ver_minor.."umd_propgrid_gcc",
 		"wxmsw"..wx_ver..wx_ver_minor.."umd_scintilla_gcc",
-		"wxmsw"..wx_ver..wx_ver_minor.."umd_flatnotebook_gcc"
+		"wxmsw"..wx_ver..wx_ver_minor.."umd_flatnotebook_gcc",
+		"wxmsw"..wx_ver..wx_ver_minor.."umd_ledbargraph_gcc"
 	}
 	package.config["Release"].links =
 	{
@@ -49,7 +50,8 @@ if ( options["unicode"] ) then
 		"wxmsw"..wx_ver..wx_ver_minor.."um_awx_gcc",
 		"wxmsw"..wx_ver..wx_ver_minor.."um_propgrid_gcc",
 		"wxmsw"..wx_ver..wx_ver_minor.."um_scintilla_gcc",
-		"wxmsw"..wx_ver..wx_ver_minor.."um_flatnotebook_gcc"
+		"wxmsw"..wx_ver..wx_ver_minor.."um_flatnotebook_gcc",
+		"wxmsw"..wx_ver..wx_ver_minor.."um_ledbargraph_gcc"
 	}
 else
 	package.config["Debug"].links =
@@ -59,7 +61,8 @@ else
 		"wxmsw"..wx_ver..wx_ver_minor.."md_awx_gcc",
 		"wxmsw"..wx_ver..wx_ver_minor.."md_propgrid_gcc",
 		"wxmsw"..wx_ver..wx_ver_minor.."md_scintilla_gcc",
-		"wxmsw"..wx_ver..wx_ver_minor.."md_flatnotebook_gcc"
+		"wxmsw"..wx_ver..wx_ver_minor.."md_flatnotebook_gcc",
+		"wxmsw"..wx_ver..wx_ver_minor.."md_ledbargraph_gcc"
 	}
 	package.config["Release"].links =
 	{
@@ -68,7 +71,8 @@ else
 		"wxmsw"..wx_ver..wx_ver_minor.."m_awx_gcc",
 		"wxmsw"..wx_ver..wx_ver_minor.."m_propgrid_gcc",
 		"wxmsw"..wx_ver..wx_ver_minor.."m_scintilla_gcc",
-		"wxmsw"..wx_ver..wx_ver_minor.."m_flatnotebook_gcc"
+		"wxmsw"..wx_ver..wx_ver_minor.."m_flatnotebook_gcc",
+		"wxmsw"..wx_ver..wx_ver_minor.."m_ledbargraph_gcc"
 	}
 end
 -- Set the linker include paths
