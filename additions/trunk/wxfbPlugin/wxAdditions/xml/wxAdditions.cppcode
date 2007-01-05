@@ -157,6 +157,14 @@
 		</template>
 		<template name="include">@#include &lt;wx/awx/led.h&gt;</template>
 	</templates>
+	
+	<templates class="wxLedBarGraph">
+		<template name="declaration">#class* $name;</template>
+		<template name="construction">
+			$name = new #class( #wxparent $name, $id, $pos, $size, $window_style );
+		</template>
+		<template name="include">@#include &lt;wx/ledBarGraph/ledBarGraph.h&gt;</template>
+	</templates>
 
 	<templates class="wxScintilla">
 		<template name="declaration">#class* $name;</template>

@@ -206,6 +206,12 @@
 	</property>
   </objectinfo>
   
+    <objectinfo class="wxLedBarGraph" icon="ledBarGraph.xpm" type="widget">
+	<inherits class="wxAdditions"/>
+	<inherits class="wxWindow" />
+	<property name="name" type="text" >m_ledbg</property>
+  </objectinfo>
+  
   <objectinfo class="wxScintilla" icon="scintilla.xpm" smallicon="scintilla_small" type="expanded_widget">
 	<inherits class="wxAdditions"/>
 	<inherits class="wxWindow" />
