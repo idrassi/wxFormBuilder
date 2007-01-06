@@ -3,15 +3,21 @@
 #include <wx/wx.h>
 #include <wx/dcbuffer.h>
 
-#define ORIENT_VERTICAL 1
-#define ORIENT_HORIZONTAL 2
+enum ledBGOrient{
+    ledBG_ORIENT_VERTICAL = 0,
+    ledBG_ORIENT_HORIZONTAL
+};
 
-#define DOUBLE_SIDED 1
-#define SINGLE_SIDED_TOP_LEFT 2
-#define SINGLE_SIDED_BOTTOM_RIGHT 3
+enum ledBGDrawMode{
+    ledBG_DOUBLE_SIDED = 0,
+    ledBG_SINGLE_SIDED_TOP_LEFT,
+    ledBG_SINGLE_SIDED_BOTTOM_RIGHT
+};
 
-#define FIXED_N_BARS 1
-#define FIXED_BAR_SIZE 2
+enum ledBGSizeMode{
+    ledBG_FIXED_N_BARS = 0,
+    ledBG_FIXED_BAR_SIZE
+};
 /*
 	class ledBarGraph - simple wxControl that simulates an LED Bar Graph with multiple colors
 */
@@ -37,9 +43,9 @@ public:
 
 public:
     //functions used to configure the control
-    void SetSizingMode( int mode );
-    void SetDrawingMode( int mode );
-    void SetOrientation( int orient );
+    void SetSizingMode( ledBGSizeMode mode );
+    void SetDrawingMode( ledBGDrawMode mode );
+    void SetOrientation( ledBGOrient orient );
 
 	void SetMaxValue( double val );
 	void SetMinValue( double val );
@@ -63,9 +69,9 @@ private:
 		m_maxVal = 1;
 		m_minVal = -1;
 
-		m_orientation = ORIENT_HORIZONTAL;
-		m_sizingMode = FIXED_BAR_SIZE;
-        m_mode = SINGLE_SIDED_TOP_LEFT;
+		m_orientation = ledBG_ORIENT_HORIZONTAL;
+		m_sizingMode = ledBG_FIXED_BAR_SIZE;
+        m_mode = ledBG_SINGLE_SIDED_TOP_LEFT;
 	}
 
 	// Overrides

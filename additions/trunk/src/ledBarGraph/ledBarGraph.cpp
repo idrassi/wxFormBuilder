@@ -39,8 +39,8 @@ void wxLedBarGraph::OnResize( wxSizeEvent& evt )
 {
     wxRect rect = GetClientRect();
 
-    if( m_sizingMode == FIXED_N_BARS ){
-        if( m_orientation == ORIENT_HORIZONTAL ){
+    if( m_sizingMode == ledBG_FIXED_N_BARS ){
+        if( m_orientation == ledBG_ORIENT_HORIZONTAL ){
             m_barWidths = (rect.width/m_nBars);
         }else{
             m_barWidths = (rect.height/m_nBars);
@@ -50,7 +50,7 @@ void wxLedBarGraph::OnResize( wxSizeEvent& evt )
             return;
         }
     }else{
-        if( m_orientation == ORIENT_HORIZONTAL ){
+        if( m_orientation == ledBG_ORIENT_HORIZONTAL ){
             m_nBars = rect.width / m_barWidths;
         }else{
             m_nBars = rect.height / m_barWidths;
@@ -63,7 +63,7 @@ void wxLedBarGraph::OnResize( wxSizeEvent& evt )
 
     //this figures out the gutters.  because of how i calculate width and how I draw the rects,
 	//there is some error that I center in the control...
-    if( m_orientation == ORIENT_HORIZONTAL ){
+    if( m_orientation == ledBG_ORIENT_HORIZONTAL ){
         m_startX = (rect.width - ( m_nBars * m_barWidths))/2 ;
     }else{
         m_startX = (rect.height - ( m_nBars * m_barWidths))/2 ;
@@ -98,19 +98,19 @@ void wxLedBarGraph::OnPaint( wxPaintEvent& evt )
     int minY= -1 ;
     int maxY= 1;
 
-    if( m_mode == DOUBLE_SIDED ){
+    if( m_mode == ledBG_DOUBLE_SIDED ){
         minG = cntr - (m_nBars / 8);
         maxG = cntr + (m_nBars / 8);
 
         minY = cntr - 3*(m_nBars / 8);
         maxY = cntr + 3*(m_nBars / 8);
-    }else if( m_mode == SINGLE_SIDED_TOP_LEFT){
+    }else if( m_mode == ledBG_SINGLE_SIDED_TOP_LEFT){
         minG = -1;
         maxG =  (m_nBars / 4);
 
         minY = (m_nBars / 4) -1 ;
         maxY = 3*(m_nBars / 4);
-    }else if( m_mode == SINGLE_SIDED_BOTTOM_RIGHT){
+    }else if( m_mode == ledBG_SINGLE_SIDED_BOTTOM_RIGHT){
         minG = 3*(m_nBars / 4) ;
         maxG =  m_nBars;
 
@@ -124,7 +124,7 @@ void wxLedBarGraph::OnPaint( wxPaintEvent& evt )
 
 	//draw a black box for the first (left) gutter.
 	dc.SetBrush( blackBrush );
-    if( m_orientation == ORIENT_HORIZONTAL ){
+    if( m_orientation == ledBG_ORIENT_HORIZONTAL ){
         dc.DrawRectangle(0, 0, X, rect.height);
     }else{
         dc.DrawRectangle(0, 0, rect.width, X);
@@ -137,7 +137,7 @@ void wxLedBarGraph::OnPaint( wxPaintEvent& evt )
         bool maxedOut = false;
         bool drawMe = false;
 
-        if( m_mode == DOUBLE_SIDED ){
+        if( m_mode == ledBG_DOUBLE_SIDED ){
             if( m_value < 0  ){
                 thold = (int)(( m_nBars / 2 ) - ( fabs(m_value) * ( m_nBars / 2 )));
                 drawMe = (i >= thold) && ( i <= ( m_nBars / 2 ) );
@@ -164,7 +164,7 @@ void wxLedBarGraph::OnPaint( wxPaintEvent& evt )
                 drawMe = false;
             }
 
-        }else if( m_mode == SINGLE_SIDED_TOP_LEFT ){
+        }else if( m_mode == ledBG_SINGLE_SIDED_TOP_LEFT ){
             if( m_value <= -1  ){
                 if( i == 0){
                     maxedOut = true;
@@ -178,7 +178,7 @@ void wxLedBarGraph::OnPaint( wxPaintEvent& evt )
                 thold = (int)(m_nBars - (( m_nBars / 2 ) + ( - m_value * ( m_nBars/2 ))));
                 drawMe = (i <= thold) ;
             }
-        }else if( m_mode == SINGLE_SIDED_BOTTOM_RIGHT ){
+        }else if( m_mode == ledBG_SINGLE_SIDED_BOTTOM_RIGHT ){
             if( m_value <= -1  ){
                 if( i == m_nBars-1 ){
                     drawMe = true;
@@ -208,7 +208,7 @@ void wxLedBarGraph::OnPaint( wxPaintEvent& evt )
 		if( ! drawMe ){
 			//led off
 			dim = .15;
-		}else if (  maxedOut && (i == m_nBars -1 || i == 0) || (i == m_nBars/2) && m_mode == DOUBLE_SIDED ) {
+		}else if (  maxedOut && (i == m_nBars -1 || i == 0) || (i == m_nBars/2) && m_mode == ledBG_DOUBLE_SIDED ) {
             //max it out, dude!
             dim = 1;
         }else{
@@ -221,7 +221,7 @@ void wxLedBarGraph::OnPaint( wxPaintEvent& evt )
 		tmpColor = wxColour(  (int) (r * dim), (int) (g* dim), (int) (b* dim) );
 		dc.SetBrush( wxBrush( tmpColor ) );
 
-        if( m_orientation == ORIENT_HORIZONTAL ){
+        if( m_orientation == ledBG_ORIENT_HORIZONTAL ){
             dc.DrawRectangle(X, 0, X + m_barWidths, rect.height);
         }else{
             dc.DrawRectangle(0, X,  rect.width, X + m_barWidths);
@@ -234,7 +234,7 @@ void wxLedBarGraph::OnPaint( wxPaintEvent& evt )
 	//draw the black gutter on the right edge
 	dc.SetBrush( blackBrush );
 
-    if( m_orientation == ORIENT_HORIZONTAL ){
+    if( m_orientation == ledBG_ORIENT_HORIZONTAL ){
         dc.DrawRectangle(X, 0,rect.width , rect.height);
     }else{
         dc.DrawRectangle(0, X, rect.height, rect.width);
@@ -277,7 +277,7 @@ void wxLedBarGraph::SetBarWidths( int width )
 }
 
 
-void wxLedBarGraph::SetSizingMode( int mode )
+void wxLedBarGraph::SetSizingMode( ledBGSizeMode mode )
 {
     m_sizingMode = mode;
 
@@ -285,7 +285,7 @@ void wxLedBarGraph::SetSizingMode( int mode )
     OnResize(a);
 }
 
-void wxLedBarGraph::SetDrawingMode( int mode )
+void wxLedBarGraph::SetDrawingMode( ledBGDrawMode mode )
 {
     m_mode = mode;
 
@@ -293,7 +293,7 @@ void wxLedBarGraph::SetDrawingMode( int mode )
     OnResize(a);
 }
 
-void wxLedBarGraph::SetOrientation( int orient )
+void wxLedBarGraph::SetOrientation( ledBGOrient orient )
 {
     m_orientation = orient;
 
