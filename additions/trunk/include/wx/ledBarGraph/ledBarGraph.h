@@ -76,7 +76,11 @@ private:
 
 	// Overrides
 	wxSize DoGetBestSize() const {
-		return wxSize(155, 25);
+		if( m_orientation == ledBG_ORIENT_HORIZONTAL ){
+            return wxSize(155, 25);
+		}else{
+		    return wxSize(25, 155);
+		}
 	}
 
 	//force redraw when I get resized
