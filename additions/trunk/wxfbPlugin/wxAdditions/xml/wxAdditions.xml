@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <package name="wxAdditions" lib="libwxadditions" icon="plot16x16.png" desc="wxWidgets contributed controls">
-	
+
 	<!-- All wxAdditions inherit this class so that the linker header will be included -->
 	<objectinfo class="wxAdditions" type="interface"/>
 
@@ -29,7 +29,7 @@
 				<option name="wxPLOTCTRL_MARKER_VERT"		help="Draw two vertical lines."/>
 				<option name="wxPLOTCTRL_MARKER_HORIZ"		help="Draw two horizontal lines."/>
 				wxPLOTCTRL_MARKER_RECT
-			</property> 
+			</property>
 		</category>
 		<category name="Grid">
 			<property name="draw_grid" 					type="bool" help="Draw the plot grid over the whole window, else just tick marks at edge.">1</property>
@@ -52,7 +52,7 @@
 				<property name="y_axis_label" 				type="wxString_i18n" help="Set the Y axis label.">Y Axis</property>
 			</category>
 		</category>
-		<category name="Title">		
+		<category name="Title">
 			<property name="show_plot_title" 			type="bool" help="Show the plot title.">0</property>
 			<property name="plot_title" 				type="wxString_i18n" help="Set the plot title.">Title</property>
 			<property name="plot_title_font" 			type="wxFont" 	help="Set the title font, default swiss."></property>
@@ -63,7 +63,7 @@
 			<property name="key_position" 				type="wxPoint" help="Set the key position in %width, %height (0-100).">100,100</property>
 			<property name="key_font" 					type="wxFont" 	help="Set the key font."></property>
 			<property name="key_colour" 				type="wxColour" help="Set the key colour."></property>
-		</category>    
+		</category>
 	</objectinfo>
 
 	<objectinfo class="wxPropertyGrid" icon="propgrid.xpm" type="expanded_widget">
@@ -205,47 +205,47 @@
 		awxLED_RED
 	</property>
   </objectinfo>
-  
+
     <objectinfo class="wxLedBarGraph" icon="ledBarGraph.xpm" type="widget">
 	<inherits class="wxAdditions"/>
 	<inherits class="wxWindow" />
 	<property name="name" type="text" >m_ledbg</property>
-	<property name="bar_widths" type="text" >8</property>
-	<property name="nbars" type="text" >28</property>
-	
-	<property name="max_value" type="text" >10</property>
-	<property name="min_value" type="text" >-10</property>
-	<property name="value" type="text" >0</property>
-	
+	<property name="bar_widths" type="uint" >8</property>
+	<property name="nbars" type="uint" >28</property>
+
+	<property name="max_value" type="int" >10</property>
+	<property name="min_value" type="int" >-10</property>
+	<property name="value" type="int" >0</property>
+
 	<!--
 	<property name="drawing_mode" type="text" >0</property>
 	<property name="sizing_mode" type="text" >0</property>
 	<property name="orientation" type="text" >0</property>
 	-->
-	
-	
+
+
 	<property name="drawing_mode" type="option" >
 		<option name="ledBG_DOUBLE_SIDED" 	help="fill this in later"		/>
 		<option name="ledBG_SINGLE_SIDED_TOP_LEFT" 	help="fill this in later"	/>
 		<option name="ledBG_SINGLE_SIDED_BOTTOM_RIGHT" 	help="fill this in later"	/>
 		ledBG_DOUBLE_SIDED
 	</property>
-	
+
 	<property name="sizing_mode" type="option" >
 		<option name="ledBG_FIXED_N_BARS" 	help="fill this in later"/>
 		<option name="ledBG_FIXED_BAR_SIZE" 	help="fill this in later"/>
 		ledBG_FIXED_BAR_SIZE
 	</property>
-	
+
 	<property name="orientation" type="option" >
 		<option name="ledBG_ORIENT_VERTICAL" 	help="fill this in later"		/>
 		<option name="ledBG_ORIENT_HORIZONTAL" 	help="fill this in later"	/>
 		ledBG_ORIENT_HORIZONTAL
 	</property>
-	
-	
+
+
   </objectinfo>
-  
+
   <objectinfo class="wxScintilla" icon="scintilla.xpm" smallicon="scintilla_small" type="expanded_widget">
 	<inherits class="wxAdditions"/>
 	<inherits class="wxWindow" />
