@@ -599,6 +599,18 @@ public:
 			obj->GetPropertyAsPoint(_("pos")),
 			obj->GetPropertyAsSize(_("size")),
 			obj->GetPropertyAsInteger(_("window_style")));
+
+        ledbg->SetDrawingMode( (ledBGDrawMode) obj->GetPropertyAsInteger( _("drawing_mode") ));
+        ledbg->SetSizingMode( (ledBGSizeMode) obj->GetPropertyAsInteger( _("sizing_mode") ));
+        ledbg->SetOrientation( (ledBGOrient) obj->GetPropertyAsInteger( _("orientation") ));
+
+        ledbg->SetBarWidths( obj->GetPropertyAsInteger( _("bar_widths") ));
+        ledbg->SetNBars( obj->GetPropertyAsInteger( _("nbars") ));
+
+        ledbg->SetMaxValue( obj->GetPropertyAsInteger( _("max_value") ));
+        ledbg->SetMinValue( obj->GetPropertyAsInteger( _("min_value") ));
+        ledbg->SetValue( obj->GetPropertyAsInteger( _("value") ));
+
 		return ledbg;
 	}
 };

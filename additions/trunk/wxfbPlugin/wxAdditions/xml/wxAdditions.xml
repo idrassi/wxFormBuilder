@@ -210,6 +210,40 @@
 	<inherits class="wxAdditions"/>
 	<inherits class="wxWindow" />
 	<property name="name" type="text" >m_ledbg</property>
+	<property name="bar_widths" type="text" >8</property>
+	<property name="nbars" type="text" >28</property>
+	
+	<property name="max_value" type="text" >10</property>
+	<property name="min_value" type="text" >-10</property>
+	<property name="value" type="text" >0</property>
+	
+	<!--
+	<property name="drawing_mode" type="text" >0</property>
+	<property name="sizing_mode" type="text" >0</property>
+	<property name="orientation" type="text" >0</property>
+	-->
+	
+	
+	<property name="drawing_mode" type="option" >
+		<option name="ledBG_DOUBLE_SIDED" 	help="fill this in later"		/>
+		<option name="ledBG_SINGLE_SIDED_TOP_LEFT" 	help="fill this in later"	/>
+		<option name="ledBG_SINGLE_SIDED_BOTTOM_RIGHT" 	help="fill this in later"	/>
+		ledBG_DOUBLE_SIDED
+	</property>
+	
+	<property name="sizing_mode" type="option" >
+		<option name="ledBG_FIXED_N_BARS" 	help="fill this in later"/>
+		<option name="ledBG_FIXED_BAR_SIZE" 	help="fill this in later"/>
+		ledBG_FIXED_BAR_SIZE
+	</property>
+	
+	<property name="orientation" type="option" >
+		<option name="ledBG_ORIENT_VERTICAL" 	help="fill this in later"		/>
+		<option name="ledBG_ORIENT_HORIZONTAL" 	help="fill this in later"	/>
+		ledBG_ORIENT_HORIZONTAL
+	</property>
+	
+	
   </objectinfo>
   
   <objectinfo class="wxScintilla" icon="scintilla.xpm" smallicon="scintilla_small" type="expanded_widget">
