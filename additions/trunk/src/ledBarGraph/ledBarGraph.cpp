@@ -28,7 +28,7 @@ bool wxLedBarGraph::Create(wxWindow* parent, wxWindowID id,
 	//this->SetMinSize(  wxSize(100, 25) );
 
 	// Tell the sizers to use the given or best size
-	SetBestFittingSize(size);
+//	SetBestFittingSize(size);
 	return true;
 }
 void wxLedBarGraph::OnEraseBackGround(wxEraseEvent& myEvent)
@@ -296,6 +296,8 @@ void wxLedBarGraph::SetDrawingMode( ledBGDrawMode mode )
 void wxLedBarGraph::SetOrientation( ledBGOrient orient )
 {
     m_orientation = orient;
+
+   // InvalidateBestSize();
 
     wxSizeEvent a;
     OnResize(a);
