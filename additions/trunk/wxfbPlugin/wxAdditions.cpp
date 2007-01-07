@@ -607,9 +607,15 @@ public:
         ledbg->SetBarWidths( obj->GetPropertyAsInteger( _("bar_widths") ));
         ledbg->SetNBars( obj->GetPropertyAsInteger( _("nbars") ));
 
-        ledbg->SetMaxValue( obj->GetPropertyAsInteger( _("max_value") ));
-        ledbg->SetMinValue( obj->GetPropertyAsInteger( _("min_value") ));
-        ledbg->SetValue( obj->GetPropertyAsInteger( _("value") ));
+        double max = obj->GetPropertyAsFloat( _("max_value"));
+        double min = obj->GetPropertyAsFloat( _("min_value"));
+
+        ledbg->SetMaxValue( max );
+        ledbg->SetMinValue( min );
+
+        double val = obj->GetPropertyAsFloat( _("value") );
+        val = val* (max-min) + min;
+        ledbg->SetValue( val );
 
 		return ledbg;
 	}

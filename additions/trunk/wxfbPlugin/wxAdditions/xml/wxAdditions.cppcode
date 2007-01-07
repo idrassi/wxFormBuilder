@@ -161,7 +161,15 @@
 	<templates class="wxLedBarGraph">
 		<template name="declaration">#class* $name;</template>
 		<template name="construction">
-			$name = new #class( #wxparent $name, $id, $pos, $size, $window_style );
+			$name = new #class( #wxparent $name, $id, $pos, $size, $window_style ); #nl
+			$name>SetDrawingMode( $drawing_mode );#nl
+			$name>SetSizingMode( $sizing_mode ); #nl
+			$name>SetOrientation( $orientation ); #nl
+			$name>SetBarWidths( $bar_widths ); #nl
+			$name>SetNBars( $nbars ); #nl
+			$name>SetMaxValue( $max_value ); #nl
+			$name>SetMinValue( $min_value ); #nl
+			$name>SetValue( $value ); #nl
 		</template>
 		<template name="include">@#include &lt;wx/ledBarGraph/ledBarGraph.h&gt;</template>
 	</templates>

@@ -213,16 +213,10 @@
 	<property name="bar_widths" type="uint" >8</property>
 	<property name="nbars" type="uint" >28</property>
 
-	<property name="max_value" type="int" >10</property>
-	<property name="min_value" type="int" >-10</property>
-	<property name="value" type="int" >0</property>
-
-	<!--
-	<property name="drawing_mode" type="text" >0</property>
-	<property name="sizing_mode" type="text" >0</property>
-	<property name="orientation" type="text" >0</property>
-	-->
-
+	<property name="max_value" type="float" >10</property>
+	<property name="min_value" type="float" >-10</property>
+	
+	<property name="value" type="float" editor="Slider" help="Sample value to show off LedBarGraph">0</property>
 
 	<property name="drawing_mode" type="option" >
 		<option name="ledBG_DOUBLE_SIDED" 	help="fill this in later"		/>
