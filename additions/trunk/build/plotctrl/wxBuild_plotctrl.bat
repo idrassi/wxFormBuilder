@@ -1,16 +1,17 @@
 @echo off
 ::**************************************************************************
-:: File:           wxBuild_default.bat
-:: Version:        1.01
-:: Name:           RJP Computing 
-:: Date:           08/14/2006
-:: Description:    Build wxWidgets things with the MinGW/Visual C++.
+:: File:			wxBuild_plotctrl.bat
+:: Version:			1.03
+:: Name:			RJP Computing 
+:: Date:			08/14/2006
+:: Description:		Build wxWidgets things with the MinGW/Visual C++.
 ::                 
-::                 v1.01 - Added Compiler setup for VC7.1 and VC8.0.
-::                 v1.02 - Added INCLUDE variable to VC7.1 and VC8.0 setups.
+:: 					v1.01 - Added Compiler setup for VC7.1 and VC8.0.
+:: 					v1.02 - Added INCLUDE variable to VC7.1 and VC8.0 setups.
+:: 					v1.03 - Added FLAGS. Use to set extra command line options.
 ::**************************************************************************
-set WXBUILD_VERSION=1.02
-:: MinGW Gcc install lacation. This must match you systems configuration.
+set WXBUILD_VERSION=1.03
+:: MinGW Gcc install location. This must match you systems configuration.
 set GCCDIR=C:\MinGW
 
 if (%1) == () goto ERROR
@@ -312,7 +313,7 @@ goto SHOW_USAGE
 
 :SHOW_USAGE
 echo.
-echo wxBuild_default v%WXBUILD_VERSION%
+echo wxBuild_plotctrl v%WXBUILD_VERSION%
 echo     Build wxWidgets things with the MinGW/Visual C++ ToolKit.
 echo.
 echo Usage: "wxBuild_default.bat <Compiler{MINGW|VCTK|VC71|VC80}> <BuildTarget{LIB|DLL|ALL|CLEAN|NULL}> [Specific Option (See Below)]"
