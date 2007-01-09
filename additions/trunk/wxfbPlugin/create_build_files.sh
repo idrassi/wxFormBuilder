@@ -8,5 +8,5 @@ premake/premake-linux --target gnu --unicode --with-wx-shared
 echo done...
 echo 
 #
-echo Done generating all project files for wxFormBuilder.
+echo Done generating all project files for wxAdditions Plugin.
 #
