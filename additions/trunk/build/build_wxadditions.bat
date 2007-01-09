@@ -99,6 +99,17 @@ echo.
 call wxBuild_plotctrl MINGW ALL
 cd ..
 
+:: -- wxLedBarGraph --
+echo Building wxLedBarGraph with VC7.1
+echo.
+cd ledBarGraph
+call wxBuild_default VCTK ALL
+
+echo Building wxLedBarGraph with MinGW Gcc
+echo.
+call wxBuild_default MINGW ALL
+cd ..
+
 ::echo Clean up link libraries for MinGW Gcc.
 ::cd ..\lib\gcc_dll
 ::del /Q /F /S *.a

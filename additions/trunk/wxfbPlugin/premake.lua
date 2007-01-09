@@ -19,7 +19,7 @@ local wx_ver_minor = ""
 --**********************************
 package = newpackage()
 -- Set the name of your package.
-package.name = "wxAdditions Plugin"
+package.name = "wxAdditions_Plugin"
 -- Set the targets.
 package.config["Debug"].target = "wxadditionsd"
 package.config["Release"].target = "wxadditions"

@@ -151,7 +151,6 @@
 		<property name="include_advanced" type="bool" help="Include Advanced Properties">1</property>
 	</objectinfo>
 
-
   <objectinfo class="wxFlatNotebook" icon="flatnotebook.xpm" type="flatnotebook">
 	<inherits class="wxAdditions"/>
     <inherits class="wxWindow">
@@ -206,7 +205,7 @@
 	</property>
   </objectinfo>
 
-    <objectinfo class="wxLedBarGraph" icon="ledBarGraph.xpm" type="widget">
+  <objectinfo class="wxLedBarGraph" icon="ledBarGraph.xpm" type="widget">
 	<inherits class="wxAdditions"/>
 	<inherits class="wxWindow" />
 	<property name="name" type="text" >m_ledbg</property>
@@ -236,8 +235,6 @@
 		<option name="ledBG_ORIENT_HORIZONTAL" 	help="fill this in later"	/>
 		ledBG_ORIENT_HORIZONTAL
 	</property>
-
-
   </objectinfo>
 
   <objectinfo class="wxScintilla" icon="scintilla.xpm" smallicon="scintilla_small" type="expanded_widget">
