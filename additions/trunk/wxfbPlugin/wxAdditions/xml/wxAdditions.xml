@@ -210,8 +210,8 @@
 	<inherits class="wxWindow" />
 	<property name="name" type="text" >m_ledbg</property>
 	
-	<property name="bar_widths" type="uint" help="individual bar size in pixels - sizing mode must be set to ledBG_FIXED_BAR_SIZE for this to apply" >8</property>
-	<property name="nbars" type="uint"  help="number of bars for the control - sizing mode must be set to ledBG_FIXED_N_BARS for this to apply">28</property>
+	<property name="bar_widths" type="uint" editor="SpinCtrl" help="individual bar size in pixels - sizing mode must be set to ledBG_FIXED_BAR_SIZE for this to apply" >8</property>
+	<property name="nbars" type="uint"  editor="SpinCtrl" help="number of bars for the control - sizing mode must be set to ledBG_FIXED_N_BARS for this to apply">28</property>
 
 	<property name="max_value" type="float" help="Sets the maximum value for the control">10</property>
 	<property name="min_value" type="float" help="Sets the minimum value for the control">-10</property>
@@ -238,7 +238,7 @@
 	</property>
   </objectinfo>
 
-  <objectinfo class="wxScintilla" icon="scintilla.xpm" smallicon="scintilla_small" type="expanded_widget">
+  <objectinfo class="wxScintilla" icon="scintilla.xpm" smallicon="scintilla_small.xpm" type="expanded_widget">
 	<inherits class="wxAdditions"/>
 	<inherits class="wxWindow" />
 	<property name="name" type="text" >m_scintilla</property>
