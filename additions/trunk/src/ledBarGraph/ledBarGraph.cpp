@@ -237,7 +237,7 @@ void wxLedBarGraph::OnPaint( wxPaintEvent& evt )
     if( m_orientation == ledBG_ORIENT_HORIZONTAL ){
         dc.DrawRectangle(X, 0,rect.width , rect.height);
     }else{
-        dc.DrawRectangle(0, X, rect.height, rect.width);
+        dc.DrawRectangle(0, X, rect.width, rect.height);
     }
 }
 

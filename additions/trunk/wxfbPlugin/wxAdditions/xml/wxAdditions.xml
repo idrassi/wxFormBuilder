@@ -209,30 +209,31 @@
 	<inherits class="wxAdditions"/>
 	<inherits class="wxWindow" />
 	<property name="name" type="text" >m_ledbg</property>
-	<property name="bar_widths" type="uint" >8</property>
-	<property name="nbars" type="uint" >28</property>
-
-	<property name="max_value" type="float" >10</property>
-	<property name="min_value" type="float" >-10</property>
 	
-	<property name="value" type="float" editor="Slider" help="Sample value to show off LedBarGraph">0</property>
+	<property name="bar_widths" type="uint" help="individual bar size in pixels - sizing mode must be set to ledBG_FIXED_BAR_SIZE for this to apply" >8</property>
+	<property name="nbars" type="uint"  help="number of bars for the control - sizing mode must be set to ledBG_FIXED_N_BARS for this to apply">28</property>
 
-	<property name="drawing_mode" type="option" >
-		<option name="ledBG_DOUBLE_SIDED" 	help="fill this in later"		/>
-		<option name="ledBG_SINGLE_SIDED_TOP_LEFT" 	help="fill this in later"	/>
-		<option name="ledBG_SINGLE_SIDED_BOTTOM_RIGHT" 	help="fill this in later"	/>
+	<property name="max_value" type="float" help="Sets the maximum value for the control">10</property>
+	<property name="min_value" type="float" help="Sets the minimum value for the control">-10</property>
+	
+	<property name="value" type="float" editor="Slider" help="The value.  This should get updated by your program, it is modifiable just to show how the control works">0</property>
+
+	<property name="drawing_mode" type="option" help="choose between single and double-sided drawing modes">
+		<option name="ledBG_DOUBLE_SIDED" 	help="Green in the middle, with 2 red ends"		/>
+		<option name="ledBG_SINGLE_SIDED_TOP_LEFT" 	help="Green on the top/left, red on bottom/right"	/>
+		<option name="ledBG_SINGLE_SIDED_BOTTOM_RIGHT" 	help="Green on bottom/right, red on top/left"	/>
 		ledBG_DOUBLE_SIDED
 	</property>
 
-	<property name="sizing_mode" type="option" >
-		<option name="ledBG_FIXED_N_BARS" 	help="fill this in later"/>
-		<option name="ledBG_FIXED_BAR_SIZE" 	help="fill this in later"/>
+	<property name="sizing_mode" type="option" help="chooses which of the sizing parameters (bar_widths or nbars) actually apply to the control">
+		<option name="ledBG_FIXED_N_BARS" 	help="Uses the nbars parameter for sizing"/>
+		<option name="ledBG_FIXED_BAR_SIZE" 	help="Uses the bar_widths parameter for sizing"/>
 		ledBG_FIXED_BAR_SIZE
 	</property>
 
-	<property name="orientation" type="option" >
-		<option name="ledBG_ORIENT_VERTICAL" 	help="fill this in later"		/>
-		<option name="ledBG_ORIENT_HORIZONTAL" 	help="fill this in later"	/>
+	<property name="orientation" type="option" help="vertical or horizontal orientation">
+		<option name="ledBG_ORIENT_VERTICAL" 	help="Vertical orientation" />
+		<option name="ledBG_ORIENT_HORIZONTAL" 	help="Horizontal orientation"	/>
 		ledBG_ORIENT_HORIZONTAL
 	</property>
   </objectinfo>
