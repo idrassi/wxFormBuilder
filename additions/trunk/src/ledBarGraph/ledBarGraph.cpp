@@ -31,11 +31,12 @@ bool wxLedBarGraph::Create(wxWindow* parent, wxWindowID id,
 //	SetBestFittingSize(size);
 	return true;
 }
-void wxLedBarGraph::OnEraseBackGround(wxEraseEvent& myEvent)
-{
-};
 
-void wxLedBarGraph::OnResize( wxSizeEvent& evt )
+void wxLedBarGraph::OnEraseBackGround(wxEraseEvent& )
+{
+}
+
+void wxLedBarGraph::OnResize( wxSizeEvent& )
 {
     wxRect rect = GetClientRect();
 
@@ -78,7 +79,7 @@ There is still a lot of stuff in here that should not be recomputued on every pa
 call.  However, it is a bit easier to understand what is happening and debug problems with it
 written this way
 */
-void wxLedBarGraph::OnPaint( wxPaintEvent& evt )
+void wxLedBarGraph::OnPaint( wxPaintEvent& )
 {
 	wxBufferedPaintDC dc(this);
 	wxRect rect = GetClientRect();
