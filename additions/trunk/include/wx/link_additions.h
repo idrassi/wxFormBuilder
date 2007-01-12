@@ -64,6 +64,7 @@
 #pragma comment( lib, GET_WX_LIB_NAME( propgrid ) )
 #pragma comment( lib, GET_WX_LIB_NAME( scintilla ) )
 #pragma comment( lib, GET_WX_LIB_NAME( things ) )
+#pragma comment( lib, GET_WX_LIB_NAME( ledbargraph ) )
 
 #endif //_VISUALC_
 
