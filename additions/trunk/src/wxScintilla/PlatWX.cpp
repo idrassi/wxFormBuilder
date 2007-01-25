@@ -1402,7 +1402,13 @@ double ElapsedTime::Duration(bool reset) {
         bigBit = localTime.GetHi();
     }
     wxLongLong duration = localTime - prevTime;
+    #if wxCHECK_VERSION( 2, 8, 0 )
     double result = duration.ToDouble();
+    #else
+    double result;
+    wxString temp = duration.ToString();
+    temp.ToDouble( &result );
+    #endif
     result /= 1000.0;
     return result;
 }
