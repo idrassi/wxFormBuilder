@@ -5533,6 +5533,10 @@ void wxPropertyGrid::CalculateVisibles( int vy, bool full_recalc )
     if ( vy >= (int)m_bottomy )
         return;
 
+    // Control not yet properly built.
+    if ( m_height < 0 )
+        return;
+
 //    m_iFlags |= wxPG_FL_CHANGED;
 
     // Hide popup
