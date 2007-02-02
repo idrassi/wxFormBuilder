@@ -31,7 +31,7 @@ package.files = { matchfiles( "*.cpp", "*.h") }
 -- Set the include paths.
 package.includepaths = { "../include", "sdk/tinyxml", "sdk/plugin_interface" }
 -- Set the libraries it links to.
-package.links = { "TiCPP", "Plugin Interface" }
+package.links = { "TiCPP", "plugin-interface" }
 if ( OS == "windows" ) then
 	if ( options["unicode"] ) then
 		package.config["Debug"].links =
