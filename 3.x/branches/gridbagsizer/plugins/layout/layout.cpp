@@ -37,54 +37,14 @@
 
 class SpacerComponent : public ComponentBase
 {
-private:
-	void AddSizeProperty(XrcToXfbFilter &filter, TiXmlElement *xrcObj)
-	{
-		TiXmlElement *sizeProp = xrcObj->FirstChildElement("size");
-		if (sizeProp)
-		{
-			TiXmlText *xmlValue = sizeProp->FirstChild()->ToText();
-			if (xmlValue)
-			{
-				wxString width = wxT("");
-				wxString height = wxT("");
-				wxStringTokenizer tkz(wxString(xmlValue->Value(),wxConvUTF8),wxT(","));
-				if (tkz.HasMoreTokens())
-				{
-					width = tkz.GetNextToken();
-					if (tkz.HasMoreTokens())
-						height = tkz.GetNextToken();
-				}
-				filter.AddPropertyValue(_("width"),width);
-				filter.AddPropertyValue(_("height"),height);
-			}
-		}
-	}
-
 public:
+	// ImportFromXRC is handled in sizeritem components
+
 	TiXmlElement* ExportToXrc(IObject *obj)
 	{
 		ObjectToXrcFilter xrc(obj, _("spacer"));
-
-		// las propiedades width y height se mapean como size
-		xrc.AddPropertyValue(_("size"),
-			wxString::Format(_("%d,%d"),obj->GetPropertyAsInteger(_("width")),
-			obj->GetPropertyAsInteger(_("height"))));
-
+		xrc.AddPropertyPair( _("width"), _("height"), _("size") );
 		return xrc.GetXrcObject();
-	}
-
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
-	{
-		XrcToXfbFilter filter(xrcObj, _("spacer"));
-
-		// la propiedad "size" hay que descomponerla en weight y height
-		AddSizeProperty(filter, xrcObj);
-
-		filter.AddProperty(_("option"), _("proportion"), XRC_TYPE_INTEGER);
-		filter.AddProperty(_("flag"),   _("flag"),   XRC_TYPE_BITLIST);
-		filter.AddProperty(_("border"), _("border"), XRC_TYPE_INTEGER);
-		return filter.GetXfbObject();
 	}
 };
 
@@ -167,11 +127,9 @@ public:
 
 	TiXmlElement* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("gbsizeritem"));
-		xrc.AddProperty(_("row"), _("row"), XRC_TYPE_INTEGER);
-		xrc.AddProperty(_("column"), _("column"), XRC_TYPE_INTEGER);
-		xrc.AddProperty(_("rowspan"), _("rowspan"), XRC_TYPE_INTEGER);
-		xrc.AddProperty(_("colspan"), _("colspan"), XRC_TYPE_INTEGER);
+		ObjectToXrcFilter xrc(obj, _("sizeritem"));
+		xrc.AddPropertyPair( _("row"), _("column"), _("cellpos") );
+		xrc.AddPropertyPair( _("rowspan"), _("colspan"), _("cellspan") );
 		xrc.AddProperty(_("flag"),   _("flag"),   XRC_TYPE_BITLIST);
 		xrc.AddProperty(_("border"), _("border"), XRC_TYPE_INTEGER);
 		return xrc.GetXrcObject();
@@ -179,14 +137,24 @@ public:
 
 	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
 	{
+		// XrcLoader::GetObject imports spacers as sizeritems
 		XrcToXfbFilter filter(xrcObj, _("gbsizeritem"));
-		filter.AddProperty(_("row"), _("row"), XRC_TYPE_INTEGER);
-		filter.AddProperty(_("column"), _("column"), XRC_TYPE_INTEGER);
-		filter.AddProperty(_("rowspan"), _("rowspan"), XRC_TYPE_INTEGER);
-		filter.AddProperty(_("colspan"), _("colspan"), XRC_TYPE_INTEGER);
+		filter.AddPropertyPair( "cellpos", _("row"), _("column") );
+		filter.AddPropertyPair( "cellspan", _("rowspan"), _("colspan") );
 		filter.AddProperty(_("flag"),   _("flag"),   XRC_TYPE_BITLIST);
 		filter.AddProperty(_("border"), _("border"), XRC_TYPE_INTEGER);
-		return filter.GetXfbObject();
+		TiXmlElement* sizeritem = filter.GetXfbObject();
+
+		// XrcLoader::GetObject imports spacers as sizeritems, so check for a spacer
+		if ( xrcObj->FirstChildElement("size") && !xrcObj->FirstChildElement("object") )
+		{
+			// it is a spacer
+			XrcToXfbFilter spacer( xrcObj, _("spacer") );
+			spacer.AddPropertyPair( "size", _("width"), _("height") );
+			sizeritem->LinkEndChild( spacer.GetXfbObject() );
+		}
+
+		return sizeritem;
 	}
 };
 
@@ -248,7 +216,7 @@ public:
 		}
 		else
 		{
-			wxLogError( wxT("The SizerItem component's child is not a wxWindow or a wxSizer - this should not be possible!") );
+			wxLogError( wxT("The SizerItem component's child is not a wxWindow or a wxSizer or a spacer - this should not be possible!") );
 		}
 	}
 
@@ -267,7 +235,17 @@ public:
 		filter.AddProperty(_("option"), _("proportion"), XRC_TYPE_INTEGER);
 		filter.AddProperty(_("flag"),   _("flag"),   XRC_TYPE_BITLIST);
 		filter.AddProperty(_("border"), _("border"), XRC_TYPE_INTEGER);
-		return filter.GetXfbObject();
+		TiXmlElement* sizeritem = filter.GetXfbObject();
+
+		// XrcLoader::GetObject imports spacers as sizeritems, so check for a spacer
+		if ( xrcObj->FirstChildElement("size") && !xrcObj->FirstChildElement("object") )
+		{
+			// it is a spacer
+			XrcToXfbFilter spacer( xrcObj, _("spacer") );
+			spacer.AddPropertyPair( "size", _("width"), _("height") );
+			sizeritem->LinkEndChild( spacer.GetXfbObject() );
+		}
+		return sizeritem;
 	}
 };
 
