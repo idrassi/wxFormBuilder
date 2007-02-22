@@ -385,23 +385,18 @@ void ObjectDatabase::SetDefaultLayoutProperties(PObjectBase sizeritem)
 	}
 
 	PObjectBase child = sizeritem->GetChild(0);
+	PObjectInfo childInfo = child->GetObjectInfo();
 	wxString obj_type = child->GetObjectTypeName();
 
 	PProperty proportion = sizeritem->GetProperty( wxT("proportion") );
 
-	if (obj_type == wxT("notebook")			||
-		obj_type == wxT("flatnotebook")		||
-		obj_type == wxT("listbook")			||
-		obj_type == wxT("choicebook")		||
-		obj_type == wxT("expanded_widget")	||
-		obj_type == wxT("container")
-		)
+	if ( childInfo->IsSubclassOf( wxT("sizer") ) || obj_type == wxT("splitter") || childInfo->GetClassName() == wxT("spacer") )
 	{
 		if ( proportion )
 		{
 			proportion->SetValue( wxT("1") );
 		}
-		sizeritem->GetProperty( wxT("flag") )->SetValue( wxT("wxEXPAND | wxALL") );
+		sizeritem->GetProperty( wxT("flag") )->SetValue( wxT("wxEXPAND") );
 	}
 	else if ( obj_type == wxT("widget") || obj_type == wxT("statusbar") )
 	{
@@ -411,13 +406,19 @@ void ObjectDatabase::SetDefaultLayoutProperties(PObjectBase sizeritem)
 		}
 		sizeritem->GetProperty( wxT("flag") )->SetValue( wxT("wxALL") );
 	}
-	else if ( child->GetObjectInfo()->IsSubclassOf( wxT("sizer") ) || obj_type == wxT("splitter") || obj_type == wxT("spacer") )
+	else if (	obj_type == wxT("notebook")			||
+				obj_type == wxT("flatnotebook")		||
+				obj_type == wxT("listbook")			||
+				obj_type == wxT("choicebook")		||
+				obj_type == wxT("expanded_widget")	||
+				obj_type == wxT("container")
+				)
 	{
 		if ( proportion )
 		{
 			proportion->SetValue( wxT("1") );
 		}
-		sizeritem->GetProperty( wxT("flag") )->SetValue( wxT("wxEXPAND") );
+		sizeritem->GetProperty( wxT("flag") )->SetValue( wxT("wxEXPAND | wxALL") );
 	}
 }
 
@@ -1089,7 +1090,6 @@ bool ObjectDatabase::ShowInPalette(wxString type)
 	return (type == wxT("form")				||
 			type == wxT("sizer")			||
 			type == wxT("gbsizer")			||
-			type == wxT("spacer")			||
 			type == wxT("menu")				||
 			type == wxT("menuitem")			||
 			type == wxT("submenu")			||

@@ -1208,7 +1208,7 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
 		{
 			temp_name = wxT("sizer_add");
 		}
-		else if ( childInfo->GetObjectTypeName() == wxT("spacer") )
+		else if ( childInfo->GetClassName() == wxT("spacer") )
 		{
 			temp_name = wxT("spacer_add");
 		}
