@@ -117,7 +117,7 @@
     <property name="ContextHelp" type="bool" help="Include the 'ContextHelp' button">0</property>
   </objectinfo>
 
-  <objectinfo class="spacer" icon="spacer.xpm" type="spacer">
+  <objectinfo class="spacer" icon="spacer.xpm" type="widget">
     <property name="width" type="uint"	help="The width of the spacer">0</property>
     <property name="height" type="uint" help="The height of the spacer">0</property>
   </objectinfo>
