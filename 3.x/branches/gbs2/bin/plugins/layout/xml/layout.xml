@@ -39,7 +39,7 @@
 
   <objectinfo class="gbsizeritem" smallIcon="sizer.xpm" type="gbsizeritem">
     <inherits class="sizeritembase"/>
-    <property name="column" type="uint" help="Column for the item.">0</property>
+    <property name="column" type="int" help="Column for the item.">-1</property>
     <property name="row" type="uint" help="Row for the item.">0</property>
     <property name="colspan" type="uint" help="The number of columns that the item spans.">1</property>
     <property name="rowspan" type="uint" help="The number of rows that the item spans.">1</property>
@@ -98,7 +98,7 @@
     <property name="cols" type="uint" help="Number of Columns">2</property>
   </objectinfo>
 
-  <objectinfo class="wxGridBagSizer" icon="flex_grid_sizer.xpm" type="gbsizer">
+  <objectinfo class="wxGridBagSizer" icon="grid_bag_sizer.xpm" type="gbsizer">
  	<inherits class="sizer" />
  	<inherits class="flexgridsizerbase" />
     <property name="name" type="text" hidden="1">gbSizer</property>
