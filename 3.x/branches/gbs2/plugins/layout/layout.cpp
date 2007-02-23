@@ -51,79 +51,6 @@ public:
 class GBSizerItemComponent : public ComponentBase
 {
 public:
-	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
-	{
-		// Get parent sizer
-		wxObject* parent = GetManager()->GetParent( wxobject );
-		wxGridBagSizer* sizer = wxDynamicCast( parent, wxGridBagSizer );
-
-		if ( NULL == sizer )
-		{
-			wxLogError( wxT("The parent of a GBSizerItem is either missing or not a wxGridBagSizer - this should not be possible!") );
-			return;
-		}
-
-		// Get child window
-		wxObject* child = GetManager()->GetChild( wxobject, 0 );
-		if ( NULL == child )
-		{
-			wxLogError( wxT("The GBSizerItem component has no child - this should not be possible!") );
-			return;
-		}
-
-		// Get IObject for property access
-		IObject* obj = GetManager()->GetIObject( wxobject );
-		IObject* childObj = GetManager()->GetIObject( child );
-
-		// Check for intersection
-		wxGBPosition position( obj->GetPropertyAsInteger( _("row") ), obj->GetPropertyAsInteger( _("column") ) );
-		wxGBSpan span( obj->GetPropertyAsInteger( _("rowspan") ), obj->GetPropertyAsInteger( _("colspan") ) );
-		if ( sizer->CheckForIntersection( position, span ) )
-		{
-			wxLogStatus( _("Object named \"%s\" was not placed because it would intersect with other objects."), childObj->GetPropertyAsString( _("name") ).c_str() );
-			return;
-		}
-
-		// Add the spacer
-		if ( _("spacer") == childObj->GetClassName() )
-		{
-			sizer->Add(	childObj->GetPropertyAsInteger( _("width") ),
-						childObj->GetPropertyAsInteger( _("height") ),
-						position,
-						span,
-						obj->GetPropertyAsInteger(_("flag")),
-						obj->GetPropertyAsInteger(_("border"))
-						);
-			return;
-		}
-
-		// Add the child ( window or sizer ) to the sizer
-		wxWindow* windowChild = wxDynamicCast( child, wxWindow );
-		wxSizer* sizerChild = wxDynamicCast( child, wxSizer );
-
-		if ( windowChild != NULL )
-		{
-			sizer->Add( windowChild,
-						position,
-						span,
-						obj->GetPropertyAsInteger(_("flag")),
-						obj->GetPropertyAsInteger(_("border"))
-						);
-		}
-		else if ( sizerChild != NULL )
-		{
-			sizer->Add( sizerChild,
-						position,
-						span,
-						obj->GetPropertyAsInteger(_("flag")),
-						obj->GetPropertyAsInteger(_("border"))
-						);
-		}
-		else
-		{
-			wxLogError( wxT("The GBSizerItem component's child is not a wxWindow or a wxSizer or a Spacer - this should not be possible!") );
-		}
-	}
 
 	TiXmlElement* ExportToXrc(IObject *obj)
 	{
@@ -416,6 +343,51 @@ public:
 
 class GridBagSizerComponent : public FlexGridSizerBase
 {
+private:
+	void AddGridBagSizerChild( wxGridBagSizer* sizer, IObject* sizeritem, const wxGBPosition& position, const wxGBSpan& span, wxObject* child )
+	{
+		IObject* childObj = GetManager()->GetIObject( child );
+
+		if ( _("spacer") == childObj->GetClassName() )
+		{
+			sizer->Add(	childObj->GetPropertyAsInteger( _("width") ),
+						childObj->GetPropertyAsInteger( _("height") ),
+						position,
+						span,
+						sizeritem->GetPropertyAsInteger(_("flag")),
+						sizeritem->GetPropertyAsInteger(_("border"))
+						);
+			return;
+		}
+
+		// Add the child ( window or sizer ) to the sizer
+		wxWindow* windowChild = wxDynamicCast( child, wxWindow );
+		wxSizer* sizerChild = wxDynamicCast( child, wxSizer );
+
+		if ( windowChild != NULL )
+		{
+			sizer->Add( windowChild,
+						position,
+						span,
+						sizeritem->GetPropertyAsInteger(_("flag")),
+						sizeritem->GetPropertyAsInteger(_("border"))
+						);
+		}
+		else if ( sizerChild != NULL )
+		{
+			sizer->Add( sizerChild,
+						position,
+						span,
+						sizeritem->GetPropertyAsInteger(_("flag")),
+						sizeritem->GetPropertyAsInteger(_("border"))
+						);
+		}
+		else
+		{
+			wxLogError( wxT("The GBSizerItem component's child is not a wxWindow or a wxSizer or a Spacer - this should not be possible!") );
+		}
+	}
+
 public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
@@ -426,6 +398,87 @@ public:
 		AddProperties( obj, sizer );
 
 		return sizer;
+	}
+
+	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
+	{
+		// For storing objects whose postion needs to be determined
+		std::map< size_t, wxObject* > newObjects;
+
+		// Get sizer
+		wxGridBagSizer* sizer = wxDynamicCast( parent, wxGridBagSizer );
+		if ( NULL == sizer )
+		{
+			wxLogError( wxT("This should be a wxGridBagSizer!") );
+			return;
+		}
+
+		// Add the children
+		IManager* manager = GetManager();
+		size_t count = manager->GetChildCount( wxobject );
+		for ( size_t i = 0; i < count; ++i )
+		{
+			// Should be a GBSizerItem
+			wxObject* wxsizerItem = manager->GetChild( wxobject, i );
+			IObject* isizerItem = manager->GetIObject( wxsizerItem );
+			int column = isizerItem->GetPropertyAsInteger( _("column") );
+			if ( column < 0 )
+			{
+				// Needs to be auto positioned after the other children are added
+				newObjects[i] = wxsizerItem;
+				continue;
+			}
+
+			// Get the location of the item
+			wxGBSpan span( obj->GetPropertyAsInteger( _("rowspan") ), obj->GetPropertyAsInteger( _("colspan") ) );
+			wxGBPosition position( obj->GetPropertyAsInteger( _("row") ), column );
+
+			// Check for intersection
+			if ( sizer->CheckForIntersection( position, span ) )
+			{
+				return;
+			}
+
+			// Add the child to the sizer
+			AddGridBagSizerChild( sizer, isizerItem, position, span, manager->GetChild( wxsizerItem, 0 ) );
+		}
+
+
+
+		// Get child window
+		wxObject* child = GetManager()->GetChild( wxobject, 0 );
+		if ( NULL == child )
+		{
+			wxLogError( wxT("The GBSizerItem component has no child - this should not be possible!") );
+			return;
+		}
+
+		// Get IObject for property access
+		IObject* obj = GetManager()->GetIObject( wxobject );
+
+
+		// Check for intersection
+		wxGBSpan span( obj->GetPropertyAsInteger( _("rowspan") ), obj->GetPropertyAsInteger( _("colspan") ) );
+		wxGBPosition position( 0, obj->GetPropertyAsInteger( _("column") ) );
+		int row = obj->GetPropertyAsInteger( _("row") );
+		if ( row < 0 )
+		{
+			// search for first open slot
+			row = 0;
+			while ( sizer->CheckForIntersection( position, span ) )
+			{
+				row++;
+				position.SetRow( row );
+			}
+			GetManager()->ModifyProperty( wxobject, _("row"), wxString::Format( wxT("%i"), row ), false );
+		}
+		else
+		{
+			position.SetRow( row );
+
+		}
+
+
 	}
 
 	TiXmlElement* ExportToXrc(IObject *obj)
