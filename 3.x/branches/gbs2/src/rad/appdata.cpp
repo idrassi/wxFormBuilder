@@ -636,7 +636,7 @@ PObjectBase  ApplicationData::SearchSizerInto( PObjectBase obj )
 {
 	PObjectBase theSizer;
 
-	if ( obj->GetObjectTypeName() == wxT( "sizer" ) )
+	if ( obj->GetObjectInfo()->IsSubclassOf( wxT("sizer") ) )
 		theSizer = obj;
 	else
 	{
@@ -1698,26 +1698,13 @@ void ApplicationData::MovePosition( PObjectBase obj, bool right, unsigned int nu
 
 void ApplicationData::MoveHierarchy( PObjectBase obj, bool up )
 {
-	PObjectBase sizeritem;
-
-	// object must be inside a sizer
-
-	if ( obj->GetObjectTypeName() == wxT( "spacer" ) )
+	PObjectBase sizeritem = obj->GetParent();
+	if ( !( sizeritem && sizeritem->GetObjectInfo()->IsSubclassOf( wxT("sizeritembase") ) ) )
 	{
-		sizeritem = obj;
-	}
-	else
-	{
-		sizeritem = obj->GetParent();
-
-		if ( !( sizeritem && sizeritem->GetObjectTypeName() == wxT( "sizeritem" ) ) )
-		{
-			return;
-		}
+		return;
 	}
 
 	PObjectBase nextSizer = sizeritem->GetParent(); // points to the object's sizer
-
 	if ( nextSizer )
 	{
 		if ( up )
@@ -1726,9 +1713,9 @@ void ApplicationData::MoveHierarchy( PObjectBase obj, bool up )
 			{
 				nextSizer = nextSizer->GetParent();
 			}
-			while ( nextSizer && nextSizer->GetObjectTypeName() != wxT( "sizer" ) );
+			while ( nextSizer && !nextSizer->GetObjectInfo()->IsSubclassOf( wxT("sizer") ) );
 
-			if ( nextSizer && nextSizer->GetObjectTypeName() == wxT( "sizer" ) )
+			if ( nextSizer && nextSizer->GetObjectInfo()->IsSubclassOf( wxT("sizer") ) )
 			{
 				PCommand cmdReparent( new ReparentObjectCmd( sizeritem, nextSizer ) );
 				Execute( cmdReparent );
@@ -1783,34 +1770,31 @@ void ApplicationData::ToggleExpandLayout( PObjectBase obj )
 		return;
 	}
 
-	PObjectBase object;
-
 	PObjectBase parent = obj->GetParent();
-
-	if ( obj->GetObjectTypeName() == wxT( "spacer" ) )
-	{
-		object = obj;
-	}
-	else if ( parent && parent->GetObjectTypeName() == wxT( "sizeritem" ) )
-	{
-		object = parent;
-	}
-	else
+	if ( !parent )
 	{
 		return;
 	}
 
-	PProperty propFlag = object->GetProperty( wxT( "flag" ) );
+	if ( !parent->GetObjectInfo()->IsSubclassOf( wxT("sizeritembase") ) )
+	{
+		return;
+	}
 
-	assert( propFlag );
+	PProperty propFlag = parent->GetProperty( wxT("flag") );
+
+	if( !propFlag )
+	{
+		return;
+	}
 
 	wxString value;
 	wxString currentValue = propFlag->GetValueAsString();
 
 	value =
-	    ( TypeConv::FlagSet( wxT( "wxEXPAND" ), currentValue ) ?
-	      TypeConv::ClearFlag( wxT( "wxEXPAND" ), currentValue ) :
-	      TypeConv::SetFlag( wxT( "wxEXPAND" ), currentValue ) );
+	    ( TypeConv::FlagSet( wxT("wxEXPAND"), currentValue ) ?
+	      TypeConv::ClearFlag( wxT("wxEXPAND"), currentValue ) :
+	      TypeConv::SetFlag( wxT("wxEXPAND"), currentValue ) );
 
 	ModifyProperty( propFlag, value );
 }
@@ -1822,30 +1806,25 @@ void ApplicationData::ToggleStretchLayout( PObjectBase obj )
 		return;
 	}
 
-	PObjectBase object;
-
 	PObjectBase parent = obj->GetParent();
-
-	if ( obj->GetObjectTypeName() == wxT( "spacer" ) )
-	{
-		object = obj;
-	}
-	else if ( parent && parent->GetObjectTypeName() == wxT( "sizeritem" ) )
-	{
-		object = parent;
-	}
-	else
+	if ( !parent )
 	{
 		return;
 	}
 
-	PProperty propOption = object->GetProperty( wxT( "proportion" ) );
+	if ( parent->GetObjectTypeName() != wxT("sizeritem") )
+	{
+		return;
+	}
 
-	assert( propOption );
+	PProperty proportion = parent->GetProperty( wxT("proportion") );
+	if ( !proportion )
+	{
+		return;
+	}
 
-	wxString value = ( propOption->GetValue() == wxT( "1" ) ? wxT( "0" ) : wxT( "1" ) );
-
-	ModifyProperty( propOption, value );
+	wxString value = ( proportion->GetValue() != wxT("0") ? wxT( "0" ) : wxT( "1" ) );
+	ModifyProperty( proportion, value );
 }
 
 void ApplicationData::CheckProjectTree( PObjectBase obj )
@@ -1865,71 +1844,42 @@ void ApplicationData::CheckProjectTree( PObjectBase obj )
 
 bool ApplicationData::GetLayoutSettings( PObjectBase obj, int *flag, int *option, int *border, int* orient )
 {
-	if ( obj )
+	if ( !obj )
 	{
-		PObjectBase parent = obj->GetParent();
+		return false;
+	}
 
-		if ( obj->GetObjectTypeName() == wxT( "spacer" ) )
+	PObjectBase parent = obj->GetParent();
+	if ( !parent )
+	{
+		return false;
+	}
+
+	if ( parent->GetObjectInfo()->IsSubclassOf( wxT("sizeritembase") ) )
+	{
+		PProperty propOption = parent->GetProperty( wxT("proportion") );
+		if ( propOption )
 		{
-			PProperty propOption = obj->GetProperty( wxT( "proportion" ) );
-			PProperty propFlag   = obj->GetProperty( wxT( "flag" ) );
-			PProperty propBorder = obj->GetProperty( wxT( "border" ) );
-			assert( propOption && propFlag && propBorder );
-
 			*option = propOption->GetValueAsInteger();
-			*flag   = propFlag->GetValueAsInteger();
-			*border = propBorder->GetValueAsInteger();
+		}
 
-			if ( parent )
+		*flag = parent->GetPropertyAsInteger( wxT("flag") );
+		*border = parent->GetPropertyAsInteger( wxT("border") );
+
+		PObjectBase sizer = parent->GetParent();
+		if ( sizer )
+		{
+			wxString parentName = sizer->GetClassName();
+			if ( wxT("wxBoxSizer") == parentName || wxT("wxStaticBoxSizer") == parentName )
 			{
-				wxString parentName = parent->GetClassName();
-
-				if ( wxT( "wxBoxSizer" ) == parentName || wxT( "wxStaticBoxSizer" ) == parentName )
+				PProperty propOrient = sizer->GetProperty( wxT("orient") );
+				if ( propOrient )
 				{
-					PProperty propOrient = parent->GetProperty( wxT( "orient" ) );
-
-					if ( propOrient )
-					{
-						*orient = propOrient->GetValueAsInteger();
-					}
+					*orient = propOrient->GetValueAsInteger();
 				}
 			}
-
-			return true;
 		}
-		else if ( parent && parent->GetObjectTypeName() == wxT( "sizeritem" ) )
-		{
-			PProperty propOption = parent->GetProperty( wxT( "proportion" ) );
-			PProperty propFlag   = parent->GetProperty( wxT( "flag" ) );
-			PProperty propBorder = parent->GetProperty( wxT( "border" ) );
-			assert( propOption && propFlag && propBorder );
-
-			*option = propOption->GetValueAsInteger();
-			*flag   = propFlag->GetValueAsInteger();
-			*border = propBorder->GetValueAsInteger();
-
-			if ( parent )
-			{
-				PObjectBase sizer = parent->GetParent();
-
-				if ( sizer )
-				{
-					wxString parentName = sizer->GetClassName();
-
-					if ( wxT( "wxBoxSizer" ) == parentName || wxT( "wxStaticBoxSizer" ) == parentName )
-					{
-						PProperty propOrient = sizer->GetProperty( wxT( "orient" ) );
-
-						if ( propOrient )
-						{
-							*orient = propOrient->GetValueAsInteger();
-						}
-					}
-				}
-			}
-
-			return true;
-		}
+		return true;
 	}
 
 	return false;
@@ -1942,26 +1892,23 @@ void ApplicationData::ChangeAlignment ( PObjectBase obj, int align, bool vertica
 		return;
 	}
 
-	PObjectBase object;
-
 	PObjectBase parent = obj->GetParent();
-
-	if ( obj->GetObjectTypeName() == wxT( "spacer" ) )
-	{
-		object = obj;
-	}
-	else if ( parent && parent->GetObjectTypeName() == wxT( "sizeritem" ) )
-	{
-		object = parent;
-	}
-	else
+	if ( !parent )
 	{
 		return;
 	}
 
-	PProperty propFlag = object->GetProperty( wxT( "flag" ) );
+	if ( !parent->GetObjectInfo()->IsSubclassOf( wxT("sizeritembase") ) )
+	{
+		return;
+	}
 
-	assert( propFlag );
+	PProperty propFlag = parent->GetProperty( wxT( "flag" ) );
+
+	if ( !propFlag )
+	{
+		return;
+	}
 
 	wxString value = propFlag->GetValueAsString();
 
@@ -2019,26 +1966,23 @@ void ApplicationData::ToggleBorderFlag( PObjectBase obj, int border )
 		return;
 	}
 
-	PObjectBase borderObject;
-
 	PObjectBase parent = obj->GetParent();
-
-	if ( obj->GetObjectTypeName() == wxT( "spacer" ) )
-	{
-		borderObject = obj;
-	}
-	else if ( parent && parent->GetObjectTypeName() == wxT( "sizeritem" ) )
-	{
-		borderObject = parent;
-	}
-	else
+	if ( !parent )
 	{
 		return;
 	}
 
-	PProperty propFlag = borderObject->GetProperty( wxT( "flag" ) );
+	if ( !parent->GetObjectInfo()->IsSubclassOf( wxT("sizeritembase") ) )
+	{
+		return;
+	}
 
-	assert( propFlag );
+	PProperty propFlag = parent->GetProperty( wxT( "flag" ) );
+
+	if ( !propFlag )
+	{
+		return;
+	}
 
 	wxString value = propFlag->GetValueAsString();
 
@@ -2069,20 +2013,12 @@ void ApplicationData::ToggleBorderFlag( PObjectBase obj, int border )
 
 void ApplicationData::CreateBoxSizerWithObject( PObjectBase obj )
 {
-	PObjectBase sizer, sizeritem;
+	PObjectBase sizer;
+	PObjectBase sizeritem = obj->GetParent();
 
-	if ( obj->GetObjectTypeName() == wxT( "spacer" ) )
+	if ( !( sizeritem && sizeritem->GetObjectInfo()->IsSubclassOf( wxT( "sizeritembase" ) ) ) )
 	{
-		sizeritem = obj;
-	}
-	else
-	{
-		sizeritem = obj->GetParent();
-
-		if ( !( sizeritem && sizeritem->GetObjectTypeName() == wxT( "sizeritem" ) ) )
-		{
-			return;
-		}
+		return;
 	}
 
 	sizer = sizeritem->GetParent();
@@ -2220,7 +2156,7 @@ void ApplicationData::NotifyEvent( wxFBEvent& event )
 	if ( count == 0 )
 	{
 		count++;
-		wxLogDebug( wxT( "event: %s" ), event.GetEventName().c_str() );
+		Debug::Print( wxT( "event: %s" ), event.GetEventName().c_str() );
 		std::vector< wxEvtHandler* >::iterator handler;
 
 		for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )
@@ -2230,7 +2166,7 @@ void ApplicationData::NotifyEvent( wxFBEvent& event )
 	}
 	else
 	{
-		wxLogDebug( wxT( "Pending event: %s" ), event.GetEventName().c_str() );
+		Debug::Print( wxT( "Pending event: %s" ), event.GetEventName().c_str() );
 		std::vector< wxEvtHandler* >::iterator handler;
 
 		for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )
