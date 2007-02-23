@@ -29,7 +29,6 @@
 
   <objtype name="form">
     <childtype name="sizer" nmax="1" />
-	<childtype name="gbsizer" nmax="1" />
     <childtype name="menubar" nmax="1" />
     <childtype name="statusbar" nmax="1" />
     <childtype name="toolbar" nmax="1" />
@@ -48,7 +47,6 @@
 
   <objtype name="container">
     <childtype name="sizer" nmax="1" />
-    <childtype name="gbsizer" nmax="1"/>
   </objtype>
 
   <objtype name="sizeritem" item="1">
