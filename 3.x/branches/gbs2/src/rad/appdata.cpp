@@ -448,7 +448,7 @@ ApplicationData::ApplicationData( const wxString &rootdir )
 		m_manager( new wxFBManager ),
 		m_ipc( new wxFBIPC ),
 		m_fbpVerMajor( 1 ),
-		m_fbpVerMinor( 5 )
+		m_fbpVerMinor( 6 )
 {
 	m_objDb->SetXmlPath( m_rootDir + wxFILE_SEP_PATH + wxT( "xml" ) + wxFILE_SEP_PATH ) ;
 	m_objDb->SetIconPath( m_rootDir + wxFILE_SEP_PATH + wxT( "resources" ) + wxFILE_SEP_PATH + wxT( "icons" ) + wxFILE_SEP_PATH );
@@ -1465,6 +1465,47 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 	}
 
 	/* The file is now at at least version 1.4 */
+
+	if ( fileMajor < 1 || ( 1 == fileMajor && fileMinor < 6 ) )
+	{
+		if ( objClass == "spacer" )
+		{
+			// spacer used to be represented by its own class, it is now under a sizeritem like everything else.
+			// no need to check for a wxGridBagSizer, because it was introduced at the same time.
+
+			// the goal is to change the class to sizeritem, then create a spacer child, then move "width" and "height" to the spacer
+			parent->SetAttribute( "class", "sizeritem" );
+			ticpp::Element spacer( "object" );
+			spacer.SetAttribute( "class", "spacer" );
+
+			oldProps.clear();
+			oldProps.insert( "width" );
+			GetPropertiesToConvert( parent, oldProps, &newProps );
+
+			if ( !newProps.empty() )
+			{
+				// One in, one out
+				ticpp::Element* width = *newProps.begin();
+				spacer.LinkEndChild( width->Clone().release() );
+				parent->RemoveChild( width );
+			}
+
+			oldProps.clear();
+			oldProps.insert( "height" );
+			GetPropertiesToConvert( parent, oldProps, &newProps );
+
+			if ( !newProps.empty() )
+			{
+				// One in, one out
+				ticpp::Element* height = *newProps.begin();
+				spacer.LinkEndChild( height->Clone().release() );
+				parent->RemoveChild( height );
+			}
+			parent->LinkEndChild( &spacer );
+		}
+	}
+
+	/* The file is now at at least version 1.6 */
 }
 
 void ApplicationData::GetPropertiesToConvert( ticpp::Node* parent, const std::set< std::string >& names, std::set< ticpp::Element* >* properties )

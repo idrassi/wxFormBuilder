@@ -311,7 +311,7 @@ PEvent ObjectBase::GetEvent (wxString name)
 	if ( it != m_events.end() )
 		return it->second;
 
-  Debug::Print(wxT("[ObjectBase::GetProperty] Property %s not found!"),name.c_str());
+	Debug::Print(wxT("[ObjectBase::GetEvent] Event %s not found!"),name.c_str());
 	return PEvent();
 }
 

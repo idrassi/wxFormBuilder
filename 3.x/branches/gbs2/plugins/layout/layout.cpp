@@ -344,20 +344,20 @@ public:
 class GridBagSizerComponent : public FlexGridSizerBase
 {
 private:
-	void AddGridBagSizerChild( wxGridBagSizer* sizer, IObject* sizeritem, const wxGBPosition& position, const wxGBSpan& span, wxObject* child )
+	wxGBSizerItem* GetGBSizerItem( IObject* sizeritem, const wxGBPosition& position, const wxGBSpan& span, wxObject* child )
 	{
 		IObject* childObj = GetManager()->GetIObject( child );
 
 		if ( _("spacer") == childObj->GetClassName() )
 		{
-			sizer->Add(	childObj->GetPropertyAsInteger( _("width") ),
-						childObj->GetPropertyAsInteger( _("height") ),
-						position,
-						span,
-						sizeritem->GetPropertyAsInteger(_("flag")),
-						sizeritem->GetPropertyAsInteger(_("border"))
-						);
-			return;
+			return new wxGBSizerItem(	childObj->GetPropertyAsInteger( _("width") ),
+										childObj->GetPropertyAsInteger( _("height") ),
+										position,
+										span,
+										sizeritem->GetPropertyAsInteger(_("flag")),
+										sizeritem->GetPropertyAsInteger(_("border")),
+										NULL
+										);
 		}
 
 		// Add the child ( window or sizer ) to the sizer
@@ -366,25 +366,28 @@ private:
 
 		if ( windowChild != NULL )
 		{
-			sizer->Add( windowChild,
-						position,
-						span,
-						sizeritem->GetPropertyAsInteger(_("flag")),
-						sizeritem->GetPropertyAsInteger(_("border"))
-						);
+			return new wxGBSizerItem( 	windowChild,
+										position,
+										span,
+										sizeritem->GetPropertyAsInteger(_("flag")),
+										sizeritem->GetPropertyAsInteger(_("border")),
+										NULL
+										);
 		}
 		else if ( sizerChild != NULL )
 		{
-			sizer->Add( sizerChild,
-						position,
-						span,
-						sizeritem->GetPropertyAsInteger(_("flag")),
-						sizeritem->GetPropertyAsInteger(_("border"))
-						);
+			return new wxGBSizerItem( 	sizerChild,
+										position,
+										span,
+										sizeritem->GetPropertyAsInteger(_("flag")),
+										sizeritem->GetPropertyAsInteger(_("border")),
+										NULL
+										);
 		}
 		else
 		{
 			wxLogError( wxT("The GBSizerItem component's child is not a wxWindow or a wxSizer or a Spacer - this should not be possible!") );
+			return NULL;
 		}
 	}
 
@@ -397,16 +400,22 @@ public:
 
 		AddProperties( obj, sizer );
 
+		if ( !obj->IsNull( _("empty_cell_size") ) )
+		{
+			sizer->SetEmptyCellSize( obj->GetPropertyAsSize( _("empty_cell_size") ) );
+		}
+
 		return sizer;
 	}
 
 	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
 	{
 		// For storing objects whose postion needs to be determined
-		std::map< size_t, wxObject* > newObjects;
+		std::vector< std::pair< wxObject*, wxGBSizerItem* > > newObjects;
+		wxGBPosition lastPosition( 0, 0 );
 
 		// Get sizer
-		wxGridBagSizer* sizer = wxDynamicCast( parent, wxGridBagSizer );
+		wxGridBagSizer* sizer = wxDynamicCast( wxobject, wxGridBagSizer );
 		if ( NULL == sizer )
 		{
 			wxLogError( wxT("This should be a wxGridBagSizer!") );
@@ -421,64 +430,56 @@ public:
 			// Should be a GBSizerItem
 			wxObject* wxsizerItem = manager->GetChild( wxobject, i );
 			IObject* isizerItem = manager->GetIObject( wxsizerItem );
+
+			// Get the location of the item
+			wxGBSpan span( isizerItem->GetPropertyAsInteger( _("rowspan") ), isizerItem->GetPropertyAsInteger( _("colspan") ) );
+
 			int column = isizerItem->GetPropertyAsInteger( _("column") );
 			if ( column < 0 )
 			{
 				// Needs to be auto positioned after the other children are added
-				newObjects[i] = wxsizerItem;
+				wxGBSizerItem* item = GetGBSizerItem( isizerItem, lastPosition, span, manager->GetChild( wxsizerItem, 0 ) );
+				if ( item != NULL )
+				{
+					newObjects.push_back( std::pair< wxObject*, wxGBSizerItem* >( wxsizerItem, item ) );
+				}
 				continue;
 			}
 
-			// Get the location of the item
-			wxGBSpan span( obj->GetPropertyAsInteger( _("rowspan") ), obj->GetPropertyAsInteger( _("colspan") ) );
-			wxGBPosition position( obj->GetPropertyAsInteger( _("row") ), column );
+			wxGBPosition position( isizerItem->GetPropertyAsInteger( _("row") ), column );
 
 			// Check for intersection
 			if ( sizer->CheckForIntersection( position, span ) )
 			{
-				return;
+				continue;
 			}
+
+			lastPosition = position;
 
 			// Add the child to the sizer
-			AddGridBagSizerChild( sizer, isizerItem, position, span, manager->GetChild( wxsizerItem, 0 ) );
+			wxGBSizerItem* item = GetGBSizerItem( isizerItem, position, span, manager->GetChild( wxsizerItem, 0 ) );
+			if ( item != NULL )
+			{
+				sizer->Add( item );
+			}
 		}
 
-
-
-		// Get child window
-		wxObject* child = GetManager()->GetChild( wxobject, 0 );
-		if ( NULL == child )
+		std::vector< std::pair< wxObject*, wxGBSizerItem* > >::iterator it;
+		for ( it = newObjects.begin(); it != newObjects.end(); ++it )
 		{
-			wxLogError( wxT("The GBSizerItem component has no child - this should not be possible!") );
-			return;
-		}
-
-		// Get IObject for property access
-		IObject* obj = GetManager()->GetIObject( wxobject );
-
-
-		// Check for intersection
-		wxGBSpan span( obj->GetPropertyAsInteger( _("rowspan") ), obj->GetPropertyAsInteger( _("colspan") ) );
-		wxGBPosition position( 0, obj->GetPropertyAsInteger( _("column") ) );
-		int row = obj->GetPropertyAsInteger( _("row") );
-		if ( row < 0 )
-		{
-			// search for first open slot
-			row = 0;
+			wxGBPosition position = it->second->GetPos();
+			wxGBSpan span = it->second->GetSpan();
+			int column = position.GetCol();
 			while ( sizer->CheckForIntersection( position, span ) )
 			{
-				row++;
-				position.SetRow( row );
+				column++;
+				position.SetCol( column );
 			}
-			GetManager()->ModifyProperty( wxobject, _("row"), wxString::Format( wxT("%i"), row ), false );
+			it->second->SetPos( position );
+			sizer->Add( it->second );
+			GetManager()->ModifyProperty( it->first, _("row"), wxString::Format( wxT("%i"), position.GetRow() ), false );
+			GetManager()->ModifyProperty( it->first, _("column"), wxString::Format( wxT("%i"), column ), false );
 		}
-		else
-		{
-			position.SetRow( row );
-
-		}
-
-
 	}
 
 	TiXmlElement* ExportToXrc(IObject *obj)
