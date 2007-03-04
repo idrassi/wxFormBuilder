@@ -1,0 +1,16 @@
+Change list - KWIC kwxIndControlSource
+========================================
+
+
+version		kwic-0.2.0
+date		12/01/2005
+changes		:
+Solved kwxAngularMeter wrong behavior with background bitmap.
+
+version		kwic-0.1
+date		05/01/2005
+changes		:
+first release
+
+
+(C)2005-2006 KoanSoftware.com

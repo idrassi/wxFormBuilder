@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<package name="Industrial Controls" lib="libindctrls" icon="plot16x16.png" desc="Koan Industral Controls">
+	<objectinfo class="kwxLCDDisplay" icon="" type="expanded_widget">
+	        <inherits class="wxWindow" />
+		<property name="name" type="text">m_lcdDisplay</property>
+		<property name="n_digits" type="int">2</property>
+		<property name="value" type="wxString" help="
+Print a value on the display. The accepted characters are :
+- All the hexadecimal digits ( 0-F )
+- The characters :,.-roC and space
+- The character ^ is displayed as an o, but displayed at the top. ( The symbol of degrees )">0</property>
+		<property name="light_colour" type="wxColour" />
+		<property name="gray_colour" type="wxColour" />
+	</objectinfo>
+	<objectinfo class="kwxLCDClock" icon="" type="expanded_widget">
+	        <inherits class="wxWindow" />
+		<property name="name" type="text">m_lcdClock</property>
+                <property name="n_digits" type="int">8</property>
+		<property name="value" type="wxString" help="
+Print a value on the display. The accepted characters are :
+- All the hexadecimal digits ( 0-F )
+- The characters :,.-roC and space
+- The character ^ is displayed as an o, but displayed at the top. ( The symbol of degrees )">0</property>
+		<property name="light_colour" type="wxColour" />
+		<property name="gray_colour" type="wxColour" />
+		<property name="start_clock" type="bool">1</property>
+	</objectinfo>
+	<objectinfo class="kwxAngularRegulator" icon="" type="expanded_widget">
+		<inherits class="wxWindow" />
+		<property name="name" type="text">m_angRegulator</property>
+		<property name="range_min" type="int">0</property>
+		<property name="range_max" type="int">360</property>
+		<property name="angle_min" type="int">0</property>
+		<property name="angle_max" type="int">360</property>
+		<property name="value" type="int"></property>
+		<property name="ext_circle_colour" type="wxColour"></property>
+		<property name="int_circle_colour" type="wxColour"></property>
+		<property name="knob_border_colour" type="wxColour"></property>
+		<property name="knob_colour" type="wxColour"></property>
+		<property name="limits_colour" type="wxColour"></property>
+		<property name="tags_colour" type="wxColour"></property>
+	</objectinfo>
+	<objectinfo class="kwxAngularMeter" icon="" type="widget">
+		<inherits class="wxWindow" />
+		<property name="name" type="text">m_angMeter</property>
+		<property name="num_sectors" type="int">1</property>
+		<property name="num_tick" type="int">9</property>
+		<property name="range_min" type="int">0</property>
+		<property name="range_max" type="int">100</property>
+		<property name="angle_min" type="int">-20</property>
+		<property name="angle_max" type="int">200</property>
+		<property name="value" type="int">0</property>
+		<property name="needle_colour" type="wxColour">255,0,0</property>
+		<property name="back_colour" type="wxColour"></property>
+		<property name="border_colour" type="wxColour"></property>
+		<property name="text_font" type="wxFont"></property>
+		<property name="draw_current" type="bool"></property>
+	</objectinfo>
+	<objectinfo class="kwxLinearMeter" icon="" type="widget">
+		<inherits class="wxWindow" />
+		<property name="name" type="text">m_linMeter</property>
+		<property name="range_min" type="int">0</property>
+		<property name="range_max" type="int">100</property>
+		<property name="value" type="int">0</property>
+		<property name="active_bar_colour" type="wxColour"></property>
+		<property name="passive_bar_colour" type="wxColour"></property>
+		<property name="border_colour" type="wxColour"></property>
+		<property name="text_limit_colour" type="wxColour"></property>
+		<property name="text_value_colour" type="wxColour"></property>
+		<property name="tags_colour" type="wxColour"></property>
+		<property name="text_font" type="wxFont"></property>
+		<property name="horiz_direction" type="bool">0</property>
+		<property name="show_current" type="bool">1</property>
+		<property name="show_limits" type="bool">1</property>
+	</objectinfo>
+	<objectinfo class="kwxLinearRegulator" icon="" type="widget">
+		<inherits class="wxWindow" />
+		<property name="name" type="text">m_linRegulator</property>
+		<property name="range_min" type="int">0</property>
+		<property name="range_max" type="int">100</property>
+		<property name="value" type="int">0</property>
+		<property name="active_bar_colour" type="wxColour"></property>
+		<property name="passive_bar_colour" type="wxColour"></property>
+		<property name="border_colour" type="wxColour"></property>
+		<property name="text_limit_colour" type="wxColour"></property>
+		<property name="text_value_colour" type="wxColour"></property>
+		<property name="tags_colour" type="wxColour"></property>
+		<property name="text_font" type="wxFont"></property>
+		<property name="horiz_direction" type="bool">0</property>
+		<property name="show_current" type="bool">1</property>
+		<property name="show_limits" type="bool">1</property>
+	</objectinfo>	
+ </package>
