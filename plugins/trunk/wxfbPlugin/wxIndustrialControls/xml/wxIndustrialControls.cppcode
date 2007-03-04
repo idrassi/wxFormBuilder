@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<codegen language="C++">
+  <templates class="kwxLCDDisplay">
+    <template name="declaration">#class* $name;</template>
+    <template name="construction">$name = new #class(#wxparent $name, $pos, $size );</template>
+    <template name="settings">
+      $name->SetNumberDigits( $n_digits ); #nl
+      $name->SetValue( $value ); #nl
+      #ifnotnull $light_colour @{ $name->SetLightColour( $light_colour ); #nl @}
+      #ifnotnull $gray_colour @{ $name->SetGrayColour( $gray_colour ); #nl @}
+    </template>
+    <template name="include">@#include &lt;wx/wxIndustrialControls/LCDWindow.h&gt;</template>
+  </templates>
+  <templates class="kwxLCDClock">
+    <template name="declaration">#class* $name;</template>
+    <template name="construction">$name = new #class(#wxparent $name, $pos, $size );</template>
+    <template name="settings">
+      $name->SetNumberDigits( $n_digits ); #nl
+      $name->SetValue( $value ); #nl
+      #ifnotnull $light_colour @{ $name->SetLightColour( $light_colour ); #nl @}
+      #ifnotnull $gray_colour @{ $name->SetGrayColour( $gray_colour ); #nl @}
+      #ifequal $start_clock "1" @{ $name->StartClock(); @}
+    </template>
+    <template name="include">@#include &lt;wx/wxIndustrialControls/LCDClock.h&gt;</template>
+  </templates>
+  <templates class="kwxAngularRegulator">
+    <template name="declaration">#class* $name;</template>
+    <template name="construction">$name = new #class(#wxparent $name, $id, wxEmptyString, $pos, $size );</template>
+    <template name="settings">
+      $name->SetRange( $range_min , $range_max ); #nl
+      $name->SetAngle( $angle_min , $angle_max ); #nl
+      $name->SetValue( $value ); #nl
+      #ifnotnull $ext_circle_colour  @{ $name->SetExtCircleColour( $ext_circle_colour );   #nl @}
+      #ifnotnull $int_circle_colour  @{ $name->SetIntCircleColour( $int_circle_colour );   #nl @}
+      #ifnotnull $tags_colour        @{ $name->SetTagsColour( $tags_colour );              #nl @}
+      #ifnotnull $knob_border_colour @{ $name->SetKnobBorderColour( $knob_border_colour ); #nl @}
+      #ifnotnull $knob_colour        @{ $name->SetKnobColour( $knob_colour );              #nl @}
+    </template>
+    <template name="include">@#include &lt;wx/wxIndustrialControls/AngularRegulator.h&gt;</template>
+  </templates>
+  <templates class="kwxAngularMeter">
+    <template name="declaration">#class* $name;</template>
+    <template name="construction">$name = new #class(#wxparent $name, $id, wxEmptyString, $pos, $size );</template>
+    <template name="settings">
+      $name->SetNumSectors( $num_sectors );       #nl
+      $name->SetNumTick( $num_tick );             #nl
+      $name->SetRange( $range_min , $range_max ); #nl
+      $name->SetAngle( $angle_min , $angle_max ); #nl
+      $name->SetValue( $value );                  #nl
+      $name->DrawCurrent( $draw_current );        #nl
+      #ifnotnull $needle_colour   @{ $name->SetNeedleColour( $needle_colour );  #nl @}
+      #ifnotnull $back_colour     @{ $name->SetBackColour( $back_colour );      #nl @}
+      #ifnotnull $border_colour   @{ $name->SetBorderColour( $border_colour );  #nl @}
+      #ifnotnull $text_font       @{ $name->SetTxtFont( $text_font );           #nl @}
+    </template>
+    <template name="include">@#include &lt;wx/wxIndustrialControls/AngularMeter.h&gt;</template>
+  </templates>
+  <templates class="kwxLinearMeter">
+    <template name="declaration">#class* $name;</template>
+    <template name="construction">$name = new #class(#wxparent $name, $id, wxEmptyString, $pos, $size );</template>
+    <template name="settings">
+      $name->SetRangeVal( $range_min , $range_max ); #nl
+      $name->SetValue( $value );                     #nl
+      $name->SetOrizDirection( $horiz_direction );   #nl
+      $name->ShowCurrent( $show_current );           #nl
+      $name->ShowLimits( $show_limits );             #nl
+      #ifnotnull $active_bar_colour   @{ $name->SetActiveBarColour( $active_bar_colour );   #nl @}
+      #ifnotnull $passive_bar_colour  @{ $name->SetPassiveBarColour( $passive_bar_colour ); #nl @}
+      #ifnotnull $border_colour       @{ $name->SetBorderColour( $border_colour );          #nl @}
+      #ifnotnull $text_limit_colour   @{ $name->SetTxtLimitColour( $text_limit_colour );    #nl @}
+      #ifnotnull $text_value_colour   @{ $name->SetTxtValueColour( $text_value_colour );    #nl @}
+      #ifnotnull $tags_colour         @{ $name->SetTagsColour( $tags_colour );              #nl @}
+      #ifnotnull $text_font           @{ $name->SetTxtFont( $text_font );           #nl @}
+    </template>
+    <template name="include">@#include &lt;wx/wxIndustrialControls/LinearMeter.h&gt;</template>  
+  
+  </templates>
+  <templates class="kwxLinearRegulator">
+    <template name="declaration">#class* $name;</template>
+    <template name="construction">$name = new #class(#wxparent $name, $id, wxEmptyString, $pos, $size );</template>
+    <template name="settings">
+      $name->SetRangeVal( $range_min , $range_max ); #nl
+      $name->SetValue( $value );                     #nl
+      $name->SetOrizDirection( $horiz_direction );   #nl
+      $name->ShowCurrent( $show_current );           #nl
+      $name->ShowLimits( $show_limits );             #nl
+      #ifnotnull $active_bar_colour   @{ $name->SetActiveBarColour( $active_bar_colour );   #nl @}
+      #ifnotnull $passive_bar_colour  @{ $name->SetPassiveBarColour( $passive_bar_colour ); #nl @}
+      #ifnotnull $border_colour       @{ $name->SetBorderColour( $border_colour );          #nl @}
+      #ifnotnull $text_limit_colour   @{ $name->SetTxtLimitColour( $text_limit_colour );    #nl @}
+      #ifnotnull $text_value_colour   @{ $name->SetTxtValueColour( $text_value_colour );    #nl @}
+      #ifnotnull $tags_colour         @{ $name->SetTagsColour( $tags_colour );              #nl @}
+      #ifnotnull $text_font           @{ $name->SetTxtFont( $text_font );           #nl @}
+    </template>
+    <template name="include">@#include &lt;wx/wxIndustrialControls/LinearRegulator.h&gt;</template>    
+  </templates>
+</codegen>  
