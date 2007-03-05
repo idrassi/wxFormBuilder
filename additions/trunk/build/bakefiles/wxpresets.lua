@@ -148,7 +148,7 @@ function ConfigureWxWidgets( package, altTargetName, wxVer, wxVerMinor )
 		end
 		
 		-- Set the Windows defines.
-		table.insert( package.defines, { "__WXMSW__", "WIN32", "__WIN32__", "_WINDOWS" } )
+		table.insert( package.defines, { "__WXMSW__", "WIN32", "_WINDOWS" } )
 		
 		-- Set the targets.
 		if ( package.kind == "winexe" or package.kind == "exe" ) then
