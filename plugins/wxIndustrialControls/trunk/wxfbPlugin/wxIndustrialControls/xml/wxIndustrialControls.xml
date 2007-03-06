@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<package name="Industrial Controls" lib="libindctrls" icon="plot16x16.png" desc="Koan Industral Controls">
-	<objectinfo class="kwxLCDDisplay" icon="" type="expanded_widget">
+<package name="Industrial Controls" lib="libindctrls" icon="kwic.xpm" desc="Koan Industral Controls">
+	<objectinfo class="kwxLCDDisplay" icon="lcdwindow.xpm" type="expanded_widget">
 	        <inherits class="wxWindow" />
 		<property name="name" type="text">m_lcdDisplay</property>
 		<property name="n_digits" type="int">2</property>
@@ -12,7 +12,7 @@ Print a value on the display. The accepted characters are :
 		<property name="light_colour" type="wxColour" />
 		<property name="gray_colour" type="wxColour" />
 	</objectinfo>
-	<objectinfo class="kwxLCDClock" icon="" type="expanded_widget">
+	<objectinfo class="kwxLCDClock" icon="lcdclock.xpm" type="expanded_widget">
 	        <inherits class="wxWindow" />
 		<property name="name" type="text">m_lcdClock</property>
                 <property name="n_digits" type="int">8</property>
@@ -25,7 +25,7 @@ Print a value on the display. The accepted characters are :
 		<property name="gray_colour" type="wxColour" />
 		<property name="start_clock" type="bool">1</property>
 	</objectinfo>
-	<objectinfo class="kwxAngularRegulator" icon="" type="expanded_widget">
+	<objectinfo class="kwxAngularRegulator" icon="angularreg.xpm" type="expanded_widget">
 		<inherits class="wxWindow" />
 		<property name="name" type="text">m_angRegulator</property>
 		<property name="range_min" type="int">0</property>
@@ -40,7 +40,7 @@ Print a value on the display. The accepted characters are :
 		<property name="limits_colour" type="wxColour"></property>
 		<property name="tags_colour" type="wxColour"></property>
 	</objectinfo>
-	<objectinfo class="kwxAngularMeter" icon="" type="widget">
+	<objectinfo class="kwxAngularMeter" icon="angularmet.xpm" type="widget">
 		<inherits class="wxWindow" />
 		<property name="name" type="text">m_angMeter</property>
 		<property name="num_sectors" type="int">1</property>
@@ -56,7 +56,7 @@ Print a value on the display. The accepted characters are :
 		<property name="text_font" type="wxFont"></property>
 		<property name="draw_current" type="bool"></property>
 	</objectinfo>
-	<objectinfo class="kwxLinearMeter" icon="" type="widget">
+	<objectinfo class="kwxLinearMeter" icon="linearmet.xpm" type="widget">
 		<inherits class="wxWindow" />
 		<property name="name" type="text">m_linMeter</property>
 		<property name="range_min" type="int">0</property>
@@ -73,7 +73,7 @@ Print a value on the display. The accepted characters are :
 		<property name="show_current" type="bool">1</property>
 		<property name="show_limits" type="bool">1</property>
 	</objectinfo>
-	<objectinfo class="kwxLinearRegulator" icon="" type="widget">
+	<objectinfo class="kwxLinearRegulator" icon="linearreg.xpm" type="widget">
 		<inherits class="wxWindow" />
 		<property name="name" type="text">m_linRegulator</property>
 		<property name="range_min" type="int">0</property>

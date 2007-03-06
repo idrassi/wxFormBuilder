@@ -49,11 +49,11 @@ protected:
 protected:
 // Internal functions used by the control.
 // No time for documentation yet. Sorry.
-	int GetDigitWidth( void );
-	int GetDigitHeight( void );
+	int GetDigitWidth( void ) const;
+	int GetDigitHeight( void ) const;
 
-	int GetBitmapWidth( void );
-	int GetBitmapHeight( void );
+	int GetBitmapWidth( void ) const;
+	int GetBitmapHeight( void ) const;
 
 	int DigitX( int digit );
 	int DigitY( int digit );
