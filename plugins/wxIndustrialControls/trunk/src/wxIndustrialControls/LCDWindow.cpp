@@ -66,8 +66,10 @@ kwxLCDDisplay::~kwxLCDDisplay()
 
 wxSize kwxLCDDisplay::DoGetBestSize() const
 {
-    return wxSize(mNumberDigits*25,50);
+    //return wxSize(mNumberDigits*25,50);
+    return wxSize(mNumberDigits*GetDigitWidth()/2, GetDigitHeight()/2);
 }
+
 
 
 void kwxLCDDisplay::OnPaint( wxPaintEvent &event )
@@ -329,25 +331,25 @@ void kwxLCDDisplay::DrawSegment( wxDC *dc, int digit, int segment, bool state )
 // Protected functions that calculate sizes.
 // Needed by OnPaint
 
-int kwxLCDDisplay::GetDigitWidth( void )
+int kwxLCDDisplay::GetDigitWidth( void ) const
 {
 	return mSegmentLen + mSegmentWidth + mSpace;
 }
 
 
-int kwxLCDDisplay::GetDigitHeight( void )
+int kwxLCDDisplay::GetDigitHeight( void ) const
 {
 	return ( 2 * mSegmentLen ) + ( 2 * mSpace );
 }
 
 
-int kwxLCDDisplay::GetBitmapWidth( void )
+int kwxLCDDisplay::GetBitmapWidth( void ) const
 {
 	return ( mNumberDigits * GetDigitWidth() ) + mSpace;
 }
 
 
-int kwxLCDDisplay::GetBitmapHeight( void )
+int kwxLCDDisplay::GetBitmapHeight( void ) const
 {
 	return GetDigitHeight();
 }

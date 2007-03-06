@@ -30,7 +30,7 @@ package.files = { matchfiles( "*.cpp", "*.h", "*.rc" ) }
 -- Set the include paths.
 package.includepaths = { "../include", "sdk/tinyxml", "sdk/plugin_interface" }
 -- Set the libraries it links to.
-package.links = { "plugin-interface", "TiCPP" }
+package.links = { "plugin-interface", "TiCPP", "wxIndustrialControls" }
 
 -- Set the linker include paths
 if ( OS == "windows" ) then
