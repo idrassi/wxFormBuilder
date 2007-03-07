@@ -10256,7 +10256,7 @@ void wxPropertyGrid::OnFocusEvent( wxFocusEvent& event )
 #if 1
     if ( event.GetEventType() == wxEVT_SET_FOCUS )
         HandleFocusChange((wxWindow*)event.GetEventObject());
-    else if ( event.GetWindow() )
+    else
         HandleFocusChange(event.GetWindow());
 
     event.Skip();
