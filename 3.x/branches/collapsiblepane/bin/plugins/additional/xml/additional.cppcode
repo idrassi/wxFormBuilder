@@ -287,5 +287,23 @@
       $name->SetScrollRate( $scroll_rate_x, $scroll_rate_y );
     </template>
   </templates>
-
+    
+  <templates class="wxCollapsiblePane">
+    <template name="declaration">#class* $name;</template>
+    <template name="construction">
+      $name = new #class( #wxparent $name, $id, $label, $pos, $size, $window_style );
+      #ifequal $collapsed "1"
+		@{ #nl $name->Collapse(true); #nl @}
+      #ifequal $collapsed "0"
+		@{ #nl $name->Collapse(false); #nl @}
+    </template>
+    <template name="include">@#include &lt;wx/collpane.h&gt;</template>
+    <template name="evt_entry_OnCollapsiblePaneChanged">EVT_COLLAPSIBLEPANE_CHANGED( $id, #handler )</template>
+  </templates>
+    
+  <templates class="CollapsiblePaneWindow">
+    <template name="declaration">wxWindow* $name;</template>
+    <template name="construction">$name = #wxparent $name->GetPane();</template>
+  </templates>
+  
 </codegen>

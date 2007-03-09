@@ -755,12 +755,13 @@ void CppCodeGenerator::GenAttributeDeclaration(PObjectBase obj, Permission perm)
 		typeName == wxT("choicebook")		||
 		typeName == wxT("widget")			||
 		typeName == wxT("expanded_widget")	||
-		typeName == wxT("statusbar")			||
-		typeName == wxT("component")			||
-		typeName == wxT("container")			||
+		typeName == wxT("statusbar")		||
+		typeName == wxT("component")		||
+		typeName == wxT("container")		||
 		typeName == wxT("menubar")			||
 		typeName == wxT("toolbar")			||
-		typeName == wxT("splitter")
+		typeName == wxT("splitter")         ||
+		typeName == wxT("collapsiblepane")
 		)
 	{
 		wxString perm_str = obj->GetProperty( wxT("permission") )->GetValue();
@@ -1216,11 +1217,12 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
 		type == wxT("choicebook")		||
 		type == wxT("widget")			||
 		type == wxT("expanded_widget")	||
-		type == wxT("statusbar")			||
-		type == wxT("container")			||
+		type == wxT("statusbar")		||
+		type == wxT("container")		||
 		type == wxT("menubar")			||
 		type == wxT("toolbar")			||
-		type == wxT("splitter")
+		type == wxT("splitter")         ||
+		type == wxT("collapsiblepane")
 		)
 	{
 		// comprobamos si no se ha declarado como atributo de clase
@@ -1302,6 +1304,36 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
 			m_source->WriteLn( wxT("") );
 		}
 
+	}
+	else if ( type == wxT("collapsiblepanewindow") )
+	{
+        m_source->WriteLn( GetCode( obj, wxT("declaration") ) );
+		m_source->WriteLn( GetCode( obj, wxT("construction") ) );
+
+        // the child sizer
+        PObjectBase sizer = obj->GetChild( 0 );
+
+        //GenConstruction( sizer, true );
+        m_source->WriteLn( GetCode( sizer, wxT("declaration") ) );
+        m_source->WriteLn( GetCode( sizer, wxT("construction") ) );
+        GenSettings(sizer->GetObjectInfo(), sizer );
+
+        // generate teh code for the sizer's children
+        for ( unsigned int i = 0; i < sizer->GetChildCount(); i++ )
+        {
+            PObjectBase child = sizer->GetChild( i );
+            GenConstruction(child, false);
+        }
+
+        // the parent object is not a sizer. There is no template for
+        // this so we'll make it manually.
+        // It's not a good practice to embed templates into the source code,
+        // because you will need to recompile...
+        wxString _template =	wxT("#wxparent $name->SetSizer( $name ); #nl")
+                                wxT("$name->SetSizeHints( #wxparent $name );");
+
+        CppTemplateParser parser( sizer, _template, m_i18n, m_useRelativePath, m_basePath );
+        m_source->WriteLn( parser.ParseTemplate() );
 	}
 	else if ( info->IsSubclassOf( wxT("sizer") ) )
 	{

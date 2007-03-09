@@ -38,6 +38,7 @@
 #include <wx/checklst.h>
 #include <wx/datectrl.h>
 #include <wx/listctrl.h>
+#include <wx/collpane.h>
 
 // Includes notebook, listbook, choicebook
 #include "bookutils.h"
@@ -108,6 +109,7 @@ protected:
 	}
 
 	void OnSplitterSashChanged( wxSplitterEvent& event );
+	void OnCollapsiblePaneChanged( wxCollapsiblePaneEvent& event );
 
 	DECLARE_EVENT_TABLE()
 };
@@ -117,6 +119,7 @@ BEGIN_EVENT_TABLE( ComponentEvtHandler, wxEvtHandler )
 	EVT_LISTBOOK_PAGE_CHANGED( -1, ComponentEvtHandler::OnListbookPageChanged )
 	EVT_CHOICEBOOK_PAGE_CHANGED( -1, ComponentEvtHandler::OnChoicebookPageChanged )
 	EVT_SPLITTER_SASH_POS_CHANGED( -1, ComponentEvtHandler::OnSplitterSashChanged )
+	EVT_COLLAPSIBLEPANE_CHANGED( -1, ComponentEvtHandler::OnCollapsiblePaneChanged )
 END_EVENT_TABLE()
 
 class wxCustomSplitterWindow : public wxSplitterWindow
@@ -159,7 +162,6 @@ private:
 	}
 
 };
-
 ///////////////////////////////////////////////////////////////////////////////
 
 class CalendarCtrlComponent : public ComponentBase
@@ -958,6 +960,109 @@ public:
 		return filter.GetXfbObject();
 	}
 };
+
+class CollapsiblePaneComponent : public ComponentBase
+{
+public:
+
+	wxObject* Create(IObject *obj, wxObject *parent)
+	{
+		wxCollapsiblePane* collapsiblePane = new wxCollapsiblePane((wxWindow *)parent,-1,
+			obj->GetPropertyAsString(_("label")),
+			obj->GetPropertyAsPoint(_("pos")),
+			obj->GetPropertyAsSize(_("size")),
+			obj->GetPropertyAsInteger(_("window_style")));
+/*
+        ComponentEvtHandler* eventHandler = new ComponentEvtHandler( collapsiblePane, GetManager() );
+        collapsiblePane->PushEventHandler( eventHandler );
+        collapsiblePane->Collapse( false );
+
+	    bool collapsed = ( obj->GetPropertyAsInteger(_T("collapsed")) != 0 ? true : false );
+        wxCollapsiblePaneEvent event( collapsiblePane, -1, collapsed );
+        eventHandler->AddPendingEvent( event );
+*/
+        collapsiblePane->Collapse( ( obj->GetPropertyAsInteger(_T("collapsed")) != 0 ? true : false ) );
+        collapsiblePane->PushEventHandler( new ComponentEvtHandler( collapsiblePane, GetManager() ) );
+
+		return collapsiblePane;
+	}
+
+	TiXmlElement* ExportToXrc(IObject *obj)
+	{
+		ObjectToXrcFilter xrc(obj, _("wxCollapsiblePane"), obj->GetPropertyAsString(_("name")));
+		xrc.AddWindowProperties();
+		xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+		xrc.AddProperty(_("collapsed"),_("collapsed"),XRC_TYPE_BOOL);
+		return xrc.GetXrcObject();
+	}
+
+	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	{
+		XrcToXfbFilter filter(xrcObj, _("wxCollapsiblePane"));
+		filter.AddWindowProperties();
+		filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+		filter.AddProperty(_("collapsed"),_("collapsed"),XRC_TYPE_BOOL);
+		return filter.GetXfbObject();
+	}
+
+};
+
+void ComponentEvtHandler::OnCollapsiblePaneChanged( wxCollapsiblePaneEvent& event )
+{
+    if ( m_window != event.GetEventObject() )
+    {
+        return;
+    }
+
+	// Modify the "collapsed" property
+	wxCollapsiblePane* collapsiblePane = wxDynamicCast( m_window, wxCollapsiblePane );
+	if ( collapsiblePane != NULL )
+	{
+		bool collapsed = event.GetCollapsed();
+
+		m_manager->ModifyProperty( collapsiblePane, _("collapsed"), ( collapsed ? wxT("1") : wxT("0") ) );
+
+        collapsiblePane->Collapse( collapsed );
+
+        // select the corresponding collPane in the object tree
+        m_manager->SelectObject( collapsiblePane );
+	}
+}
+
+
+class CollapsiblePaneWindowComponent : public ComponentBase
+{
+public:
+
+	wxObject* Create(IObject *obj, wxObject *parent)
+	{
+		wxCollapsiblePane* collapsiblePane = wxDynamicCast( parent, wxCollapsiblePane );
+
+        if ( collapsiblePane == NULL )
+        {
+            wxLogError( _("CollapsiblePaneWindow must be added to a wxCollapsiblePane!") );
+            return NULL;
+        }
+
+		wxWindow* window = collapsiblePane->GetPane();
+		return window;
+	}
+
+	TiXmlElement* ExportToXrc(IObject *obj)
+	{
+		ObjectToXrcFilter xrc(obj, _("CollapsiblePaneWindow"), obj->GetPropertyAsString(_("name")));
+		xrc.AddWindowProperties();
+		return xrc.GetXrcObject();
+	}
+
+	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	{
+		XrcToXfbFilter filter(xrcObj, _("CollapsiblePaneWindow"));
+		filter.AddWindowProperties();
+		return filter.GetXfbObject();
+	}
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()
@@ -984,6 +1089,10 @@ ABSTRACT_COMPONENT("choicebookpage", ChoicebookPageComponent)
 
 // wxCheckListBox
 WINDOW_COMPONENT("wxCheckListBox",CheckListBoxComponent)
+
+// wxCollapsiblePane
+WINDOW_COMPONENT("wxCollapsiblePane",CollapsiblePaneComponent)
+WINDOW_COMPONENT("CollapsiblePaneWindow",CollapsiblePaneWindowComponent)
 
 // wxCalendarCtrl
 MACRO(wxCAL_SUNDAY_FIRST)
@@ -1079,4 +1188,5 @@ MACRO(wxCHB_BOTTOM)
 MACRO(wxCHB_DEFAULT)
 
 END_LIBRARY()
+
 
