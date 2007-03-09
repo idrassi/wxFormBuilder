@@ -256,6 +256,8 @@ void InsertObjectCmd::DoRestore()
 {
 	m_parent->RemoveChild( m_object );
 	m_object->SetParent( PObjectBase() );
+
+	//TODO: This needs to get moved to an array-based system.
 	m_data->SelectObject( m_oldSelected );
 }
 
@@ -280,6 +282,7 @@ void RemoveObjectCmd::DoRestore()
 {
 	m_parent->AddChild( m_object );
 	m_object->SetParent( m_parent );
+	//TODO: This needs to get moved to an array-based system.
 
 	// restauramos la posición
 	m_parent->ChangeChildPosition( m_object, m_oldPos );
@@ -381,7 +384,7 @@ void CutObjectCmd::DoRestore()
 	m_object->SetParent( m_parent );
 	m_parent->ChangeChildPosition( m_object, m_oldPos );
 
-
+	//TODO: This needs to get moved to an array-based system.
 
 	// restauramos el clipboard
 	//m_data->SetClipboardObject(m_clipboard);
@@ -487,15 +490,32 @@ PwxFBManager ApplicationData::GetManager()
 
 PObjectBase ApplicationData::GetSelectedObject()
 {
-	return m_selObj;
+    PObjectBase junk;// = NULL;
+    if( m_selObjs.size() > 0 ){
+        return m_selObjs.at(0);
+    }else{
+        return junk;
+    }
+}
+
+std::vector<PObjectBase> ApplicationData::GetSelectedObjects()
+{
+	return m_selObjs;
 }
 
 PObjectBase ApplicationData::GetSelectedForm()
 {
-	if ( m_selObj->GetObjectTypeName() == wxT( "form" ) )
-		return m_selObj;
-	else
-		return m_selObj->FindNearAncestor( wxT( "form" ) );
+
+
+	if( m_selObjs.size() > 0 ){
+        if ( m_selObjs.at(0)->GetObjectTypeName() == wxT( "form" ) )
+            return m_selObjs.at(0);
+        else
+            return m_selObjs.at(0)->FindNearAncestor( wxT( "form" ) );
+	}else{
+        PObjectBase junk;
+        return junk;
+	}
 }
 
 
@@ -672,14 +692,46 @@ void ApplicationData::ExpandObject( PObjectBase obj, bool expand )
 	NotifyObjectExpanded( obj );
 }
 
+void ApplicationData::AddSelectedObject( PObjectBase obj )
+{
+    std::vector< PObjectBase >::iterator it;
+	it = std::find( m_selObjs.begin(), m_selObjs.end(), obj);
+	if( m_selObjs.end() != it ){
+	    Debug::Print( wxT("found duplicate object in selection..."));
+	    return;
+	}
+
+	m_selObjs.push_back( obj );
+	NotifyObjectSelected( obj );
+}
+
+void ApplicationData::ClearSelectedObjects()
+{
+    m_selObjs.clear();
+}
+
 void ApplicationData::SelectObject( PObjectBase obj, bool force /*= false*/, bool notify /*= true */ )
 {
-	if ( ( obj == m_selObj ) && !force )
+    //Why is force necessary?  This might cause issues with multiple selections....
+    /*
+    if ( ( obj == m_selObj ) && !force )
 	{
 		return;
 	}
+	*/
+/*
+	std::vector< PObjectBase >::iterator it;
+	it = std::find( m_selObjs.begin(), m_selObjs.end(), obj);
+	if( m_selObjs.end() != it ){
+	    Debug::Print( wxT("found duplicate object in selection..."));
+	    return;
+	}
+	//m_selObjs.
+*/
 
-	m_selObj = obj;
+    m_selObjs.clear();
+    //do something here with making sure its a similar type?
+	m_selObjs.push_back( obj );
 
 	if ( notify )
 	{
@@ -944,6 +996,7 @@ void ApplicationData::PasteObject( PObjectBase parent )
 					obj = obj->GetChild( 0 );
 				}
 
+                //TODO: make this work with multiple selections
 				SelectObject( obj );
 			}
 		}
@@ -1211,7 +1264,8 @@ bool ApplicationData::LoadProject( const wxString &file, bool checkSingleInstanc
 			PObjectBase old_proj = m_project;
 			//m_project = shared_dynamic_cast<ProjectObject>(proj);
 			m_project = proj;
-			m_selObj = m_project;
+			m_selObjs.clear();
+			m_selObjs.push_back( m_project );
 			result = true;
 			m_modFlag = false;
 			m_cmdProc.Reset();
@@ -1672,7 +1726,8 @@ void ApplicationData::NewProject()
 
 {
 	m_project = m_objDb->CreateObject( "Project" );
-	m_selObj = m_project;
+	m_selObjs.clear();
+	m_selObjs.push_back( m_project );
 	m_modFlag = false;
 	m_cmdProc.Reset();
 	m_projectFile = wxT( "" );

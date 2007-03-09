@@ -48,14 +48,20 @@ VObjEvtHandler::VObjEvtHandler(wxWindow *win, PObjectBase obj)
 	m_object = obj;
 };
 
+//TODO: Add control-leftlclick functionality
 void VObjEvtHandler::OnLeftClick(wxMouseEvent &event)
 {
 	PObjectBase obj = m_object.lock();
 
 	if (obj)
 	{
-		if (AppData()->GetSelectedObject() != obj)
-		{
+	    std::vector<PObjectBase> objs =  AppData()->GetSelectedObjects();
+	    std::vector<PObjectBase>::iterator it;
+
+	    it = std::find( objs.begin(), objs.end(), obj );
+	    if( it == objs.end() ){
+		//if (AppData()->GetSelectedObject() != obj)
+		//{
 			AppData()->SelectObject(obj);
 		}
 		else
@@ -63,7 +69,9 @@ void VObjEvtHandler::OnLeftClick(wxMouseEvent &event)
 		  	// *!* Event should be skipped only in the case of the object selected
       		// is the same that the object clicked. You will experiment rare things
       		// in other case.
+			Debug::Print( wxT("skipping event") );
 			event.Skip();
+
 		}
 	}
 

@@ -54,7 +54,7 @@ ObjectTree::ObjectTree( wxWindow *parent, int id )
 : wxPanel( parent, id )
 {
 	AppData()->AddHandler( this->GetEventHandler() );
-	m_tcObjects = new wxTreeCtrl(this, -1, wxDefaultPosition, wxDefaultSize, wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT|wxTR_DEFAULT_STYLE|wxSIMPLE_BORDER);
+	m_tcObjects = new wxTreeCtrl(this, -1, wxDefaultPosition, wxDefaultSize, wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT|wxTR_DEFAULT_STYLE|wxSIMPLE_BORDER|wxTR_MULTIPLE);
 
 	wxBoxSizer* sizer_1 = new wxBoxSizer(wxVERTICAL);
     sizer_1->Add(m_tcObjects, 1, wxEXPAND, 0);
@@ -101,27 +101,43 @@ void ObjectTree::RebuildTree()
 
 void ObjectTree::OnSelChanged(wxTreeEvent &event)
 {
-	wxTreeItemId id = event.GetItem();
-	if (!id.IsOk()) return;
 
-	// Make selected items bold
-	wxTreeItemId oldId = event.GetOldItem();
-	if ( oldId.IsOk() )
-	{
-		m_tcObjects->SetItemBold( oldId, false );
-	}
-	m_tcObjects->SetItemBold( id );
 
-	wxTreeItemData *item_data = m_tcObjects->GetItemData(id);
 
-	if (item_data)
-	{
-		PObjectBase obj(((ObjectTreeItemData *)item_data)->GetObject());
-		assert(obj);
-		Disconnect( wxID_ANY, wxEVT_FB_OBJECT_SELECTED, wxFBObjectEventHandler( ObjectTree::OnObjectSelected ) );
-		AppData()->SelectObject(obj);
-		Connect( wxID_ANY, wxEVT_FB_OBJECT_SELECTED, wxFBObjectEventHandler( ObjectTree::OnObjectSelected ) );
-	}
+    //deselect, then re-select everything.  if it is noticeable, i'll find another way
+    for( int i=0; i<m_selection.GetCount(); i++ ){
+        wxTreeItemId id = m_selection.Item(i);
+       if (id.IsOk()) {
+            m_tcObjects->SetItemBold( id, false );
+       }
+    }
+
+    m_tcObjects->GetSelections(m_selection);
+    int size = m_selection.GetCount();
+    for( int i=0; i<size; i++ ){
+        wxTreeItemId id = m_selection.Item(i);
+       if (id.IsOk()) {
+            m_tcObjects->SetItemBold( id );
+       }
+    }
+
+    AppData()->ClearSelectedObjects();
+
+    for( int i=0; i<m_selection.GetCount(); i++ ){
+        wxTreeItemId id = m_selection.Item(i);
+
+        wxTreeItemData *item_data = m_tcObjects->GetItemData(id);
+
+        if (item_data)
+        {
+            PObjectBase obj(((ObjectTreeItemData *)item_data)->GetObject());
+            assert(obj);
+            Disconnect( wxID_ANY, wxEVT_FB_OBJECT_SELECTED, wxFBObjectEventHandler( ObjectTree::OnObjectSelected ) );
+            AppData()->AddSelectedObject(obj);
+            Connect( wxID_ANY, wxEVT_FB_OBJECT_SELECTED, wxFBObjectEventHandler( ObjectTree::OnObjectSelected ) );
+        }
+    }
+
 }
 
 void ObjectTree::OnRightClick(wxTreeEvent &event)
