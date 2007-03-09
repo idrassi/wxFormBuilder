@@ -105,6 +105,7 @@ void VisualEditor::UpdateVirtualSize()
 	if (panelW != w || panelH != h) SetVirtualSize(panelW, panelH);
 }
 
+
 void VisualEditor::OnClickBackPanel( wxMouseEvent& event )
 {
 	if ( m_form )

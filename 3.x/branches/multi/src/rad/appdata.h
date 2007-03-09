@@ -69,7 +69,7 @@ class ApplicationData
 
 		PObjectBase m_project;    // Proyecto
 
-		PObjectBase m_selObj;     // Objeto seleccionado
+		std::vector<PObjectBase> m_selObjs;     // Objeto seleccionado
 
 		PObjectBase m_clipboard;
 
@@ -265,6 +265,10 @@ class ApplicationData
 		// Object will not be selected if it already is selected, unless force = true
 		void SelectObject( PObjectBase obj, bool force = false, bool notify = true );
 
+        void AddSelectedObject( PObjectBase obj );
+
+        void ClearSelectedObjects();
+
 		void CreateObject( wxString name );
 
 		void RemoveObject( PObjectBase obj );
@@ -309,6 +313,8 @@ class ApplicationData
 
 		// Servicios para los observadores
 		PObjectBase GetSelectedObject();
+
+        std::vector<PObjectBase> GetSelectedObjects();
 
 		PObjectBase GetProjectData();
 

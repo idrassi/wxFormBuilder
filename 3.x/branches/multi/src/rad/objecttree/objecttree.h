@@ -50,6 +50,8 @@ private:
    wxTextCtrl* m_txtSelected;
    wxTreeCtrl* m_tcObjects;
 
+   wxArrayTreeItemIds m_selection;
+
    /**
     * Crea el arbol completamente.
     */
