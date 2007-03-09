@@ -386,7 +386,10 @@ void ObjectDatabase::SetDefaultLayoutProperties(PObjectBase sizeritem)
 
 	PProperty proportion = sizeritem->GetProperty( wxT("proportion") );
 
-	if ( childInfo->IsSubclassOf( wxT("sizer") ) || obj_type == wxT("splitter") || childInfo->GetClassName() == wxT("spacer") )
+	if ( childInfo->IsSubclassOf( wxT("sizer") ) ||
+	     obj_type == wxT("splitter")             ||
+	     childInfo->GetClassName() == wxT("spacer")
+	     )
 	{
 		if ( proportion )
 		{
@@ -411,7 +414,8 @@ void ObjectDatabase::SetDefaultLayoutProperties(PObjectBase sizeritem)
 				obj_type == wxT("listbook")			||
 				obj_type == wxT("choicebook")		||
 				obj_type == wxT("expanded_widget")	||
-				obj_type == wxT("container")
+				obj_type == wxT("container")        ||
+				obj_type == wxT("collapsiblepane")
 				)
 	{
 		if ( proportion )
@@ -724,12 +728,13 @@ bool ObjectDatabase::HasCppProperties(wxString type)
 			type == wxT("choicebook")		||
 			type == wxT("widget")			||
 			type == wxT("expanded_widget")	||
-			type == wxT("statusbar")			||
-			type == wxT("component")			||
-			type == wxT("container")			||
+			type == wxT("statusbar")		||
+			type == wxT("component")		||
+			type == wxT("container")	    ||
 			type == wxT("menubar")			||
 			type == wxT("toolbar")			||
-			type == wxT("splitter")
+			type == wxT("splitter")         ||
+			type == wxT("collapsiblepane")
 			);
 }
 
@@ -1100,12 +1105,14 @@ bool ObjectDatabase::ShowInPalette(wxString type)
 			type == wxT("choicebook")		||
 			type == wxT("widget")			||
 			type == wxT("expanded_widget")	||
-			type == wxT("statusbar")			||
-			type == wxT("component")			||
-			type == wxT("container")			||
+			type == wxT("statusbar")		||
+			type == wxT("component")		||
+			type == wxT("container")	    ||
 			type == wxT("menubar")			||
 			type == wxT("toolbar")			||
-			type == wxT("splitter")
+			type == wxT("splitter")         ||
+			type == wxT("collapsiblepane")  //||
+//			type == wxT("collapsiblepanewindow")
 			);
 }
 
@@ -1292,5 +1299,6 @@ PObjectType ObjectDatabase::GetObjectType(wxString name)
 
 	return type;
 }
+
 
 

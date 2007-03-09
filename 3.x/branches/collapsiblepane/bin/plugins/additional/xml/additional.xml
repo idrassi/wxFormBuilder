@@ -181,7 +181,7 @@
     <property name="sashpos" type="int"      help="The initial sash position.">0</property>
     <property name="sashsize" type="int"      help="Overrides platform metrics if greater than -1">-1</property>
     <property name="sashgravity" type="float" help= "Sets the sash gravity. Remarks: Gravity is real factor which controls position of sash while resizing wxSplitterWindow. Gravity tells wxSplitterWindow how much will left/top window grow while resizing.">0.0</property>
-    <property name="min_pane_size" type="uint" help="Minimum size for the panes. A minimum less than 1 is not allowed in the designer, because the designer prevents un-splitting.">0</property>  
+    <property name="min_pane_size" type="uint" help="Minimum size for the panes. A minimum less than 1 is not allowed in the designer, because the designer prevents un-splitting.">0</property>
 	<event name="OnSplitterSashPosChanging" class="wxSplitterEvent" help="The sash position is in the process of being changed. May be used to modify the position of the tracking bar to properly reflect the position that would be set if the drag were to be completed at this point. Processes a wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING event." />
 	<event name="OnSplitterSashPosChanged" class="wxSplitterEvent" help="The sash position was changed. May be used to modify the sash position before it is set, or to prevent the change from taking place. Processes a wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED event." />
 	<event name="OnSplitterUnsplit" class="wxSplitterEvent" help="The splitter has been just unsplit. Processes a wxEVT_COMMAND_SPLITTER_UNSPLIT event." />
@@ -278,4 +278,17 @@
     <property name="scroll_rate_y" type="uint" help="Set the vertical scrolling increment.">5</property>
   </objectinfo>
 
+  <objectinfo class="wxCollapsiblePane" icon="collapsiblepane.xpm" type="collapsiblepane">
+    <inherits class="wxWindow">
+        <property name="window_style">wxTAB_TRAVERSAL</property>
+	</inherits>
+    <property name="name" type="text">m_collapsiblePane</property>
+    <property name="label" type="wxString_i18n">Collapsible Pane</property>
+    <property name="collapsed" type="bool">0</property>
+    <event name="OnCollapsiblePane" class="wxCollapsiblePaneEvent" help="Process a wxEVT_COLLAPSIBLEPANE_CHANGED event, when the user shows or hides the collapsible pane." />
+  </objectinfo>
+
+  <objectinfo class="CollapsiblePaneWindow" icon="panel.xpm" type="collapsiblepanewindow">
+    <property name="name" type="text">m_collapsiblePaneWindow</property>
+  </objectinfo>
 </package>
