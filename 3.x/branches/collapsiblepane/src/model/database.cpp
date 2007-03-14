@@ -99,6 +99,10 @@ PObjectInfo ObjectDatabase::GetObjectInfo(wxString class_name)
 	{
 		info = it->second;
 	}
+	else
+	{
+		Debug::Print( wxT("No object info found for %s"), class_name.c_str() );
+	}
 
 	return info;
 }
@@ -281,7 +285,13 @@ PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase par
 					if (max < 0 || CountChildrenWithSameType(parent, childType) < max)
 					{
 						// No hay problemas para crear el item debajo de parent
-						PObjectBase item = NewObject(GetObjectInfo(childType->GetName()));
+						PObjectInfo childTypeInfo = GetObjectInfo( childType->GetName() );
+						if ( !childTypeInfo )
+						{
+							return PObjectBase();
+						}
+
+						PObjectBase item = NewObject( childTypeInfo );
 
 						//PObjectBase obj = CreateObject(classname,item);
 						PObjectBase obj = NewObject(objInfo);
@@ -1111,8 +1121,7 @@ bool ObjectDatabase::ShowInPalette(wxString type)
 			type == wxT("menubar")			||
 			type == wxT("toolbar")			||
 			type == wxT("splitter")         ||
-			type == wxT("collapsiblepane")  //||
-//			type == wxT("collapsiblepanewindow")
+			type == wxT("collapsiblepane")
 			);
 }
 

@@ -1325,15 +1325,12 @@ void CppCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget)
             GenConstruction(child, false);
         }
 
-        // the parent object is not a sizer. There is no template for
-        // this so we'll make it manually.
-        // It's not a good practice to embed templates into the source code,
-        // because you will need to recompile...
-        wxString _template =	wxT("#wxparent $name->SetSizer( $name ); #nl")
-                                wxT("$name->SetSizeHints( #wxparent $name );");
-
-        CppTemplateParser parser( sizer, _template, m_i18n, m_useRelativePath, m_basePath );
-        m_source->WriteLn( parser.ParseTemplate() );
+		wxString afterAddChild = GetCode( obj, wxT("after_addchild") );
+		if ( !afterAddChild.empty() )
+		{
+			m_source->WriteLn( afterAddChild );
+		}
+		m_source->WriteLn( wxT("") );
 	}
 	else if ( info->IsSubclassOf( wxT("sizer") ) )
 	{

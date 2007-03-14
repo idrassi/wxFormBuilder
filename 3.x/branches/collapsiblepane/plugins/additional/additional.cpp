@@ -1092,7 +1092,7 @@ WINDOW_COMPONENT("wxCheckListBox",CheckListBoxComponent)
 
 // wxCollapsiblePane
 WINDOW_COMPONENT("wxCollapsiblePane",CollapsiblePaneComponent)
-WINDOW_COMPONENT("CollapsiblePaneWindow",CollapsiblePaneWindowComponent)
+WINDOW_COMPONENT("collapsiblepanewindow",CollapsiblePaneWindowComponent)
 
 // wxCalendarCtrl
 MACRO(wxCAL_SUNDAY_FIRST)
