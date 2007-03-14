@@ -285,10 +285,10 @@
     <property name="name" type="text">m_collapsiblePane</property>
     <property name="label" type="wxString_i18n">Collapsible Pane</property>
     <property name="collapsed" type="bool">0</property>
-    <event name="OnCollapsiblePane" class="wxCollapsiblePaneEvent" help="Process a wxEVT_COLLAPSIBLEPANE_CHANGED event, when the user shows or hides the collapsible pane." />
+    <event name="OnCollapsiblePaneChanged" class="wxCollapsiblePaneEvent" help="Process a wxEVT_COLLAPSIBLEPANE_CHANGED event, when the user shows or hides the collapsible pane." />
   </objectinfo>
 
-  <objectinfo class="CollapsiblePaneWindow" icon="panel.xpm" type="collapsiblepanewindow">
-    <property name="name" type="text">m_collapsiblePaneWindow</property>
+  <objectinfo class="collapsiblepanewindow" icon="collapsiblepane.xpm" type="collapsiblepanewindow">
+	<property name="name" type="text">collapsiblePaneWindow</property>
   </objectinfo>
 </package>
