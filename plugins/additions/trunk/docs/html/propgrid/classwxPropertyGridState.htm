@@ -66,8 +66,8 @@ bool&nbsp;</td><td class="memItemRight" valign="bottom"><b>Collapse</b> (<a clas
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="classwxPGId.htm">wxPGId</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwxPropertyGridState.htm#01e1ceccf3fea1b0d119c6380d5dcde6">DoInsert</a> (<a class="el" href="classwxPGPropertyWithChildren.htm">wxPGPropertyWithChildren</a> *parent, int index, <a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *property)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="31e5dc89b87763a0fda673601561e45c"></a><!-- doxytag: member="wxPropertyGridState::DoSelectProperty" ref="31e5dc89b87763a0fda673601561e45c" args="(wxPGProperty *p, bool focus=false)" -->
-bool&nbsp;</td><td class="memItemRight" valign="bottom"><b>DoSelectProperty</b> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p, bool focus=false)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="935e545afb8085a1fc9a47ca2d9daa13"></a><!-- doxytag: member="wxPropertyGridState::DoSelectProperty" ref="935e545afb8085a1fc9a47ca2d9daa13" args="(wxPGProperty *p, unsigned int flags=0)" -->
+bool&nbsp;</td><td class="memItemRight" valign="bottom"><b>DoSelectProperty</b> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p, unsigned int flags=0)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="d2f00b8f80dbdc3c4c87d5d22da8e379"></a><!-- doxytag: member="wxPropertyGridState::EnableCategories" ref="d2f00b8f80dbdc3c4c87d5d22da8e379" args="(bool enable)" -->
 bool&nbsp;</td><td class="memItemRight" valign="bottom"><b>EnableCategories</b> (bool enable)</td></tr>
@@ -131,6 +131,10 @@ bool&nbsp;</td><td class="memItemRight" valign="bottom"><b>SetPropertyPriority</
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="a75ea338be9dd0c4a1263e7b921dc5d3"></a><!-- doxytag: member="wxPropertyGridState::SetPropertyUnspecified" ref="a75ea338be9dd0c4a1263e7b921dc5d3" args="(wxPGProperty *p)" -->
 void&nbsp;</td><td class="memItemRight" valign="bottom"><b>SetPropertyUnspecified</b> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwxPropertyGridState.htm#1bf36afcfb921dfbc532031e9902f857">SetPropertyValue</a> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p, const wxULongLong &amp;value)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwxPropertyGridState.htm#a386325c99c24238b26742bb5279df42">SetPropertyValue</a> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p, const wxLongLong &amp;value)</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwxPropertyGridState.htm#c30aff647f01e3b34ff936eb945d3476">SetPropertyValue</a> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p, const wxDateTime &amp;value)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwxPropertyGridState.htm#4527df2055b440309a1f39841a4225b8">SetPropertyValue</a> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p, const wxArrayInt &amp;value)</td></tr>
@@ -160,17 +164,17 @@ bool&nbsp;</td><td class="memItemRight" valign="bottom"><b>SetPropertyValue</b> 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="0b9f1699876e140d6e870555217f7ae2"></a><!-- doxytag: member="wxPropertyGridState::SetPropertyValue" ref="0b9f1699876e140d6e870555217f7ae2" args="(wxPGProperty *p, const wxString &amp;value)" -->
 bool&nbsp;</td><td class="memItemRight" valign="bottom"><b>SetPropertyValue</b> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p, const wxString &amp;value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="2b280387c6cdd2dac56947a403631b71"></a><!-- doxytag: member="wxPropertyGridState::SetPropertyValue" ref="2b280387c6cdd2dac56947a403631b71" args="(wxPGProperty *p, const wxChar *typestring, wxPGVariant value)" -->
-bool&nbsp;</td><td class="memItemRight" valign="bottom"><b>SetPropertyValue</b> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p, const wxChar *typestring, wxPGVariant value)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="8dfd9f1abdee4b4bbad5a957e02eebe4"></a><!-- doxytag: member="wxPropertyGridState::SetPropertyValue" ref="8dfd9f1abdee4b4bbad5a957e02eebe4" args="(wxPGProperty *p, const wxChar *typestring, const wxPGVariant &amp;value)" -->
+bool&nbsp;</td><td class="memItemRight" valign="bottom"><b>SetPropertyValue</b> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p, const wxChar *typestring, const wxPGVariant &amp;value)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="26f91f1aa75d9347f7822fedc6d8a820"></a><!-- doxytag: member="wxPropertyGridState::SetPropertyValue" ref="26f91f1aa75d9347f7822fedc6d8a820" args="(wxPGProperty *p, const wxPGValueType *typeclass, wxPGVariant value)" -->
-bool&nbsp;</td><td class="memItemRight" valign="bottom"><b>SetPropertyValue</b> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p, const <a class="el" href="classwxPGValueType.htm">wxPGValueType</a> *typeclass, wxPGVariant value)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="8a3e0dfb65e9851b53819fc35ce3e12c"></a><!-- doxytag: member="wxPropertyGridState::SetPropertyValue" ref="8a3e0dfb65e9851b53819fc35ce3e12c" args="(wxPGProperty *p, const wxPGValueType *typeclass, const wxPGVariant &amp;value)" -->
+bool&nbsp;</td><td class="memItemRight" valign="bottom"><b>SetPropertyValue</b> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p, const <a class="el" href="classwxPGValueType.htm">wxPGValueType</a> *typeclass, const wxPGVariant &amp;value)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="890a73f88d58c92e12e3da404e4aa294"></a><!-- doxytag: member="wxPropertyGridState::SetPropertyValues" ref="890a73f88d58c92e12e3da404e4aa294" args="(const wxList &amp;list, wxPGId default_category)" -->
 void&nbsp;</td><td class="memItemRight" valign="bottom"><b>SetPropertyValues</b> (const wxList &amp;list, <a class="el" href="classwxPGId.htm">wxPGId</a> default_category)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="9b7422b999ce1afd787ce7b184d18fba"></a><!-- doxytag: member="wxPropertyGridState::SetPropVal" ref="9b7422b999ce1afd787ce7b184d18fba" args="(wxPGProperty *p, wxPGVariant value)" -->
-void&nbsp;</td><td class="memItemRight" valign="bottom"><b>SetPropVal</b> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p, wxPGVariant value)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="b0b91ba5a662a666f9c139fb0fa1d50f"></a><!-- doxytag: member="wxPropertyGridState::SetPropVal" ref="b0b91ba5a662a666f9c139fb0fa1d50f" args="(wxPGProperty *p, const wxPGVariant &amp;value)" -->
+void&nbsp;</td><td class="memItemRight" valign="bottom"><b>SetPropVal</b> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p, const wxPGVariant &amp;value)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="9bde00639aaac355e07e58a188fa1ff9"></a><!-- doxytag: member="wxPropertyGridState::Sort" ref="9bde00639aaac355e07e58a188fa1ff9" args="()" -->
 void&nbsp;</td><td class="memItemRight" valign="bottom"><b>Sort</b> ()</td></tr>
@@ -473,6 +477,68 @@ Used by SetSplitterLeft.
 
 <p>
 Only inits arrays, doesn't migrate things or such. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="1bf36afcfb921dfbc532031e9902f857"></a><!-- doxytag: member="wxPropertyGridState::SetPropertyValue" ref="1bf36afcfb921dfbc532031e9902f857" args="(wxPGProperty *p, const wxULongLong &amp;value)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wxPropertyGridState::SetPropertyValue           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td>
+          <td class="paramname"> <em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const wxULongLong &amp;&nbsp;</td>
+          <td class="paramname"> <em>value</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Sets value (wxULongLong&amp;) of a property. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="a386325c99c24238b26742bb5279df42"></a><!-- doxytag: member="wxPropertyGridState::SetPropertyValue" ref="a386325c99c24238b26742bb5279df42" args="(wxPGProperty *p, const wxLongLong &amp;value)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wxPropertyGridState::SetPropertyValue           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td>
+          <td class="paramname"> <em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const wxLongLong &amp;&nbsp;</td>
+          <td class="paramname"> <em>value</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Sets value (wxLongLong&amp;) of a property. 
 <p>
 
 </div>
@@ -789,7 +855,7 @@ Sets value (long integer) of a property.
 </div><p>
 <hr>The documentation for this class was generated from the following file:<ul>
 <li>propgrid.h</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Sun Dec 3 13:35:17 2006 for wxPropertyGrid by&nbsp;
+<hr size="1"><address style="align: right;"><small>Generated on Sun Mar 11 11:38:15 2007 for wxPropertyGrid by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.1-p1 </small></address>
 </body>

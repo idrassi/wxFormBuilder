@@ -59,7 +59,9 @@ public:
 
     wxPGChoices*        m_fontFamilyChoices;
 
-    wxString            m_boolChoices[2]; // default is ["False", "True"]
+    int                 m_numBoolChoices;  // 2 or 3
+
+    wxString            m_boolChoices[3]; // default is ["False", "True"]. Extra space is for "Unspecified".
 
     bool                m_autoGetTranslation; // If true then some things are automatically translated
 

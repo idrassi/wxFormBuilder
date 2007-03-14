@@ -462,6 +462,11 @@ void wxPropertyGridManager::Init2( int style )
     if ( baseId < 0 )
         baseId = wxPG_MAN_ALTERNATE_BASE_ID;
 
+#ifdef __WXMAC__
+   // Smaller controls on Mac
+   SetWindowVariant(wxWINDOW_VARIANT_SMALL);
+#endif 
+
     // Create propertygrid.
     m_pPropGrid->Create(this,baseId,wxPoint(0,0),csz,
                         (m_windowStyle&wxPG_MAN_PASS_FLAGS_MASK)
@@ -777,6 +782,16 @@ bool wxPropertyGridManager::Compact( bool compact )
 
 // -----------------------------------------------------------------------
 
+size_t wxPropertyGridManager::GetPageCount() const
+{
+	if ( !(m_iFlags & wxPG_MAN_FL_PAGE_INSERTED) )
+		return 0;
+
+	return m_arrPages.GetCount();
+}
+
+// -----------------------------------------------------------------------
+
 int wxPropertyGridManager::InsertPage( int index, const wxString& label,
                                        const wxBitmap& bmp, wxPropertyGridPage* pageObj )
 {
@@ -1029,11 +1044,9 @@ bool wxPropertyGridManager::ProcessEvent( wxEvent& event )
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridManager::RepaintSplitter( int new_splittery, int new_width, int new_height,
-                                             bool desc_too )
+void wxPropertyGridManager::RepaintSplitter( wxDC& dc, int new_splittery, int new_width,
+                                             int new_height, bool desc_too )
 {
-    wxClientDC dc(this);
-
     int use_hei = new_height;
     if ( m_pButCompactor )
         use_hei = m_pButCompactor->GetPosition().y;
@@ -1104,7 +1117,8 @@ void wxPropertyGridManager::RefreshHelpBox( int new_splittery, int new_width, in
         }
     }
 
-    RepaintSplitter ( new_splittery, new_width, new_height, true );
+    wxClientDC dc(this);
+    RepaintSplitter( dc, new_splittery, new_width, new_height, true );
 
     m_splitterY = new_splittery;
 
@@ -1132,7 +1146,7 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
         #if defined(__WXMSW__)
             tbHeight = 24;
         #elif defined(__WXGTK__)
-            tbHeight = 22;
+            tbHeight = -1; // 22;
         #elif defined(__WXMAC__)
             tbHeight = 22;
         #else
@@ -1230,7 +1244,7 @@ void wxPropertyGridManager::OnPaint( wxPaintEvent& WXUNUSED(event) )
     int r_bottom = r.y + r.height;
     int splitter_bottom = m_splitterY + m_splitterHeight;
     if ( r.y < splitter_bottom && r_bottom >= m_splitterY )
-        RepaintSplitter ( m_splitterY, m_width, m_height, false );
+        RepaintSplitter( dc, m_splitterY, m_width, m_height, false );
 }
 
 // -----------------------------------------------------------------------

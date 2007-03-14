@@ -738,7 +738,7 @@ private:
 // wxComboPopup internal flags
 enum
 {
-    wxCP_IFLAG_CREATED      = 0x0001, // Set by wxComboControlBase after Create is called
+    wxPGCP_IFLAG_CREATED      = 0x0001, // Set by wxComboControlBase after Create is called
 };
 
 class WXDLLEXPORT_PGODC wxPGComboPopup
@@ -808,7 +808,7 @@ public:
     // Returns true if Create has been called.
     inline bool IsCreated() const
     {
-        return (m_iFlags & wxCP_IFLAG_CREATED) ? true : false;
+        return (m_iFlags & wxPGCP_IFLAG_CREATED) ? true : false;
     }
 
 protected:
