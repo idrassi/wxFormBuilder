@@ -203,6 +203,7 @@ wxPGWindowPair wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
 #endif
     wnd2->Create( propgrid, wxPG_SUBID2, butPos, butSz, wxSP_VERTICAL );
     wnd2->SetRange( INT_MIN, INT_MAX );
+    //wnd2->SetRange( 5, 12 );
     wnd2->SetValue( 0 );
 
     propgrid->Connect( wxPG_SUBID2, wxEVT_SCROLL_LINEUP,
@@ -238,18 +239,34 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
 
     if ( evtType == wxEVT_SCROLL_LINEUP || evtType == wxEVT_SCROLL_LINEDOWN )
     {
-        wxString s = property->GetValueAsString(wxPG_FULL_VALUE);
+        wxString s;
+        wxTextCtrl* tc = (wxTextCtrl*) wnd;
 
-        double v_d;
-        long v_l;
+        if ( tc )
+            s = tc->GetValue();
+        else
+            s = property->GetValueAsString(wxPG_FULL_VALUE);
+
+        wxSpinButton* spinButton = (wxSpinButton*) propgrid->GetEditorControlSecondary();
+        int spinMin = spinButton->GetMin();
+        int spinMax = spinButton->GetMax();
 
         if ( property->GetValueType() == wxPG_VALUETYPE(double) )
         {
+            double v_d;
+
             // Try double
             if ( s.ToDouble(&v_d) )
             {
                 if ( evtType == wxEVT_SCROLL_LINEUP ) v_d += 1.0;
                 else v_d -= 1.0;
+
+                // Min/Max
+                double dSpinMin = (double) spinMin;
+                double dSpinMax = (double) spinMax;
+                if ( v_d > dSpinMax ) v_d = dSpinMax;
+                else if ( v_d < dSpinMin ) v_d = dSpinMin;
+                
                 wxPropertyGrid::DoubleToString(s, v_d, 6, true, NULL);
             }
             else
@@ -259,11 +276,18 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
         }
         else
         {
+            long v_l;
+
             // Try long
             if ( s.ToLong(&v_l, 0) )
             {
                 if ( evtType == wxEVT_SCROLL_LINEUP ) v_l++;
                 else v_l--;
+
+                // Min/Max
+                if ( v_l > spinMax ) v_l = spinMax;
+                else if ( v_l < spinMin ) v_l = spinMin;
+
                 s = wxString::Format(wxT("%i"),(int)v_l);
             }
             else
@@ -272,7 +296,6 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
             }
         }
 
-        wxTextCtrl* tc = wxDynamicCast(propgrid->GetEditorControl(), wxTextCtrl);
         if ( tc )
             tc->SetValue(s);
 
@@ -578,12 +601,12 @@ bool wxFontPropertyClass::OnEvent( wxPropertyGrid* propgrid, wxWindow* primary,
 void wxFontPropertyClass::RefreshChildren()
 {
     if ( !GetCount() ) return;
-    Item(0)->DoSetValue ( (long)m_value_wxFont.GetPointSize() );
-    Item(1)->DoSetValue ( (long)m_value_wxFont.GetFamily() );
-    Item(2)->SetValueFromString ( m_value_wxFont.GetFaceName(), wxPG_FULL_VALUE );
-    Item(3)->DoSetValue ( (long)m_value_wxFont.GetStyle() );
-    Item(4)->DoSetValue ( (long)m_value_wxFont.GetWeight() );
-    Item(5)->DoSetValue ( m_value_wxFont.GetUnderlined() );
+    Item(0)->DoSetValue( (long)m_value_wxFont.GetPointSize() );
+    Item(1)->DoSetValue( (long)m_value_wxFont.GetFamily() );
+    Item(2)->SetValueFromString( m_value_wxFont.GetFaceName(), wxPG_FULL_VALUE );
+    Item(3)->DoSetValue( (long)m_value_wxFont.GetStyle() );
+    Item(4)->DoSetValue( (long)m_value_wxFont.GetWeight() );
+    Item(5)->DoSetValue( m_value_wxFont.GetUnderlined() );
 }
 
 void wxFontPropertyClass::ChildChanged( wxPGProperty* p )
@@ -594,7 +617,7 @@ void wxFontPropertyClass::ChildChanged( wxPGProperty* p )
 
     if ( ind == 0 )
     {
-        m_value_wxFont.SetPointSize( wxPGVariantToLong(DoGetValue()) );
+        m_value_wxFont.SetPointSize( wxPGVariantToLong(p->DoGetValue()) );
     }
     else if ( ind == 1 )
     {
@@ -628,7 +651,7 @@ void wxFontPropertyClass::ChildChanged( wxPGProperty* p )
     }
     else if ( ind == 5 )
     {
-        m_value_wxFont.SetUnderlined( wxPGVariantToBool(DoGetValue())?true:false );
+        m_value_wxFont.SetUnderlined( wxPGVariantToBool(p->DoGetValue())?true:false );
     }
 }
 

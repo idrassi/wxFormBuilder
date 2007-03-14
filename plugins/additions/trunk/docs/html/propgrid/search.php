@@ -374,7 +374,7 @@ main();
 
 
 ?>
-<hr size="1"><address style="align: right;"><small>Generated on Sun Dec 3 13:35:17 2006 for wxPropertyGrid by&nbsp;
+<hr size="1"><address style="align: right;"><small>Generated on Sun Mar 11 11:38:16 2007 for wxPropertyGrid by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.1-p1 </small></address>
 </body>

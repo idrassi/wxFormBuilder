@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
-<title>wxPropertyGrid: wxPropertyGrid 1.2.5 Overview</title>
+<title>wxPropertyGrid: wxPropertyGrid 1.2.7 Overview</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -21,7 +21,7 @@
       </form>
     </li>
   </ul></div>
-<h1>wxPropertyGrid 1.2.5 Overview</h1>
+<h1>wxPropertyGrid 1.2.7 Overview</h1>
 <p>
 <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> is a specialized two-column grid for editing properties such as strings, numbers, flagsets, fonts, and colours. It allows hierarchial, collapsible properties ( via so-called categories that can hold child properties), sub-properties, and has strong wxVariant support (for example, allows populating from near-arbitrary list of wxVariants).<p>
 <b>Documentation for wxPython bindings:</b> For a tutorial see the accompanied wxPython readme file and the test_propgrid.py sample. Otherwise, individual member functions should work very much the same as with the C++ wxWidgets, so you'll probably find <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> and <a class="el" href="classwxPropertyGridManager.htm">wxPropertyGridManager</a> class references handy.<p>
@@ -49,7 +49,7 @@ Header files:<br>
  <a class="el" href="index.htm#usage2">Using wxPropertyGridManager (Updated!)</a><br>
  <a class="el" href="index.htm#subclassing">Subclassing wxPropertyGrid and wxPropertyGridManager (New!)</a><br>
  <a class="el" href="index.htm#misc">Miscellaneous Topics (Updated!)</a><br>
- <a class="el" href="index.htm#proplist">Property Descriptions (Updated!)</a><br>
+ <a class="el" href="index.htm#proplist">Property Type Descriptions (Updated!)</a><br>
  <a class="el" href="index.htm#userhelp">Using wxPropertyGrid (Updated!)</a><br>
  <a class="el" href="index.htm#bugs">Known Bugs</a><br>
  <a class="el" href="index.htm#issues">Issues</a><br>
@@ -98,25 +98,25 @@ As seen here, <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> is
 wxStringProperty is a factory function that creates a property instance of a property class "wxStringProperty". Only the first function argument (label) is mandatory. When necessary, name defaults to label and initial value to default value. If wxPG_LABEL is used as the name argument, then the label is automatically used as a name as well (this is more efficient than manually defining both as the same). Empty name is also allowed, but in this case the property cannot be accessed by its name.<p>
 To demonstrate other common property classes, here's another code snippet:<p>
 <div class="fragment"><pre class="fragment">        <span class="comment">// Add int property</span>
-        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxIntProperty(wxT(<span class="stringliteral">"IntProperty"</span>), <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>, 12345678) );
+        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxIntProperty(wxT(<span class="stringliteral">"IntProperty"</span>), wxPG_LABEL, 12345678) );
 
         <span class="comment">// Add float property (value type is actually double)</span>
-        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxFloatProperty(wxT(<span class="stringliteral">"FloatProperty"</span>), <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>, 12345.678) );
+        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxFloatProperty(wxT(<span class="stringliteral">"FloatProperty"</span>), wxPG_LABEL, 12345.678) );
 
         <span class="comment">// Add a bool property</span>
-        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxBoolProperty(wxT(<span class="stringliteral">"BoolProperty"</span>), <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>, <span class="keyword">false</span>) );
+        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxBoolProperty(wxT(<span class="stringliteral">"BoolProperty"</span>), wxPG_LABEL, <span class="keyword">false</span>) );
 
         <span class="comment">// A string property that can be edited in a separate editor dialog.</span>
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxLongStringProperty(wxT(<span class="stringliteral">"LongStringProperty"</span>),
-                                         <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                                         wxPG_LABEL,
                                          wxT(<span class="stringliteral">"This is much longer string than the "</span>)
                                          wxT(<span class="stringliteral">"first one. Edit it by clicking the button."</span>)));
 
         <span class="comment">// String editor with dir selector button.</span>
-        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxDirProperty(wxT(<span class="stringliteral">"DirProperty"</span>), <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>, ::wxGetUserHome()) );
+        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxDirProperty(wxT(<span class="stringliteral">"DirProperty"</span>), wxPG_LABEL, ::wxGetUserHome()) );
 
         <span class="comment">// A file selector property.</span>
-        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxFileProperty(wxT(<span class="stringliteral">"FileProperty"</span>), <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>, wxEmptyString) );
+        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxFileProperty(wxT(<span class="stringliteral">"FileProperty"</span>), wxPG_LABEL, wxEmptyString) );
 
         <span class="comment">// Extra: set wildcard for file property (format same as in wxFileDialog).</span>
         pg-&gt;<a class="code" href="classwxPropertyContainerMethods.htm#7e412a0ff4ab53a4fc7854492f8a33f2">SetPropertyAttribute</a>(wxT(<span class="stringliteral">"TextFile"</span>),
@@ -169,8 +169,8 @@ Category code sample:<p>
 
         <span class="comment">// All these are added to "Main" category</span>
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxStringProperty(wxT(<span class="stringliteral">"Name"</span>)) );
-        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxIntProperty(wxT(<span class="stringliteral">"Age"</span>),<a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,25) );
-        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxIntProperty(wxT(<span class="stringliteral">"Height"</span>),<a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,180) );
+        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxIntProperty(wxT(<span class="stringliteral">"Age"</span>),wxPG_LABEL,25) );
+        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxIntProperty(wxT(<span class="stringliteral">"Height"</span>),wxPG_LABEL,180) );
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxIntProperty(wxT(<span class="stringliteral">"Weight"</span>)) );
 
         <span class="comment">// Another way</span>
@@ -187,23 +187,23 @@ If you want to combine number of properties under single parent (just like wxFon
 <li>wxParentProperty's value type is string, in which a child property that has children of its own will be embedded in braces ([]).</li><li>Children of wxParentProperty cannot be accessed globally by their name. Instead, use "Parent.Child" format.</li><li>However, events occur for the children, not the parent. In addition to GetPropertyParent, You can use wxPropertyGridEvent::GetMainParent() to find out property's highest wxParentProperty or wxCustomProperty.</li></ul>
 </dd></dl>
 Sample:<p>
-<div class="fragment"><pre class="fragment">        <a class="code" href="classwxPGId.htm">wxPGId</a> pid = pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxParentProperty(wxT(<span class="stringliteral">"Car"</span>),<a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>) );
+<div class="fragment"><pre class="fragment">        <a class="code" href="classwxPGId.htm">wxPGId</a> pid = pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxParentProperty(wxT(<span class="stringliteral">"Car"</span>),wxPG_LABEL) );
 
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#e63fbeeb19328b083ac586080a254c83">AppendIn</a>( pid, wxStringProperty(wxT(<span class="stringliteral">"Model"</span>)),
-                                            <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                                            wxPG_LABEL,
                                             wxT(<span class="stringliteral">"Lamborghini Diablo SV"</span>)) );
 
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#e63fbeeb19328b083ac586080a254c83">AppendIn</a>( pid, wxIntProperty(wxT(<span class="stringliteral">"Engine Size (cc)"</span>),
-                                         <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                                         wxPG_LABEL,
                                          5707) );
 
-        <a class="code" href="classwxPGId.htm">wxPGId</a> speedId = pg-&gt;<a class="code" href="classwxPropertyGrid.htm#e63fbeeb19328b083ac586080a254c83">AppendIn</a>( pid, wxParentProperty(wxT(<span class="stringliteral">"Speeds"</span>),<a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>) );
-        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#e63fbeeb19328b083ac586080a254c83">AppendIn</a>( speedId, wxIntProperty(wxT(<span class="stringliteral">"Max. Speed (mph)"</span>),<a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,300) );
-        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#e63fbeeb19328b083ac586080a254c83">AppendIn</a>( speedId, wxFloatProperty(wxT(<span class="stringliteral">"0-100 mph (sec)"</span>),<a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,3.9) );
-        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#e63fbeeb19328b083ac586080a254c83">AppendIn</a>( speedId, wxFloatProperty(wxT(<span class="stringliteral">"1/4 mile (sec)"</span>),<a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,8.6) );
+        <a class="code" href="classwxPGId.htm">wxPGId</a> speedId = pg-&gt;<a class="code" href="classwxPropertyGrid.htm#e63fbeeb19328b083ac586080a254c83">AppendIn</a>( pid, wxParentProperty(wxT(<span class="stringliteral">"Speeds"</span>),wxPG_LABEL) );
+        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#e63fbeeb19328b083ac586080a254c83">AppendIn</a>( speedId, wxIntProperty(wxT(<span class="stringliteral">"Max. Speed (mph)"</span>),wxPG_LABEL,300) );
+        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#e63fbeeb19328b083ac586080a254c83">AppendIn</a>( speedId, wxFloatProperty(wxT(<span class="stringliteral">"0-100 mph (sec)"</span>),wxPG_LABEL,3.9) );
+        pg-&gt;<a class="code" href="classwxPropertyGrid.htm#e63fbeeb19328b083ac586080a254c83">AppendIn</a>( speedId, wxFloatProperty(wxT(<span class="stringliteral">"1/4 mile (sec)"</span>),wxPG_LABEL,8.6) );
 
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#e63fbeeb19328b083ac586080a254c83">AppendIn</a>( pid, wxIntProperty(wxT(<span class="stringliteral">"Price ($)"</span>),
-                                         <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                                         wxPG_LABEL,
                                          300000) );
 
         <span class="comment">// Displayed value of "Car" property is now:</span>
@@ -226,7 +226,7 @@ A very simple example:<p>
         arr.Add(wxT(<span class="stringliteral">"Omnivore"</span>));
 
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxEnumProperty(wxT(<span class="stringliteral">"Diet"</span>),
-                                   <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                                   wxPG_LABEL,
                                    arrDiet) );
 
 
@@ -238,7 +238,7 @@ A very simple example:<p>
         { wxT(<span class="stringliteral">"Herbivore"</span>), wxT(<span class="stringliteral">"Carnivore"</span>), wxT(<span class="stringliteral">"Omnivore"</span>), NULL };
 
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxEnumProperty(wxT(<span class="stringliteral">"Diet"</span>),
-                                   <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                                   wxPG_LABEL,
                                    arrayDiet) );
 </pre></div><p>
 Here's extended example using values as well:<p>
@@ -258,7 +258,7 @@ Here's extended example using values as well:<p>
         <span class="comment">// Note that the initial value (the last argument) is the actual value,</span>
         <span class="comment">// not index or anything like that. Thus, our value selects "Omnivore".</span>
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxEnumProperty(wxT(<span class="stringliteral">"Diet"</span>),
-                                   <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                                   wxPG_LABEL,
                                    arrDiet,
                                    arrIds,
                                    50) );
@@ -274,7 +274,7 @@ Here's extended example using values as well:<p>
         { 40, 45, 50 };
 
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxEnumProperty(wxT(<span class="stringliteral">"Diet"</span>),
-                                   <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                                   wxPG_LABEL,
                                    array_diet,
                                    array_diet_ids) );
 </pre></div><p>
@@ -288,13 +288,13 @@ You can use it directly as well, filling it and then passing it to the factory f
         <span class="comment">// Note: you can add even whole arrays to wxPGChoices</span>
 
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxEnumProperty(wxT(<span class="stringliteral">"Diet"</span>),
-                                   <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                                   wxPG_LABEL,
                                    chs) );
 
         <span class="comment">// Add same choices to another property as well - this is efficient due</span>
         <span class="comment">// to reference counting</span>
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxEnumProperty(wxT(<span class="stringliteral">"Diet 2"</span>),
-                                   <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                                   wxPG_LABEL,
                                    chs) );
 </pre></div><p>
 If you later need to change choices used by a property, there is function for that as well.<p>
@@ -320,7 +320,7 @@ wxFlagsProperty is similar:<p>
             wxMAXIMIZE_BOX };
 
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxFlagsProperty(wxT(<span class="stringliteral">"Window Style"</span>),
-                                    <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                                    wxPG_LABEL,
                                     flags_prop_labels,
                                     flags_prop_values,
                                     wxDEFAULT_FRAME_STYLE) );
@@ -341,7 +341,7 @@ This section describes the use of less often needed property classes. To use the
         <span class="comment">// NB: This will use wxDatePickerCtrl only if wxPG_ALLOW_WXADV is defined</span>
         <span class="comment">//     in propgrid.h or in the library project settings.</span>
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxDateProperty(wxT(<span class="stringliteral">"MyDateProperty"</span>),
-                                   <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                                   wxPG_LABEL,
                                    wxDateTime::Now()) );
 
         <span class="comment">// Image file property. Wildcard is auto-generated from available</span>
@@ -352,27 +352,27 @@ This section describes the use of less often needed property classes. To use the
         <span class="comment">// Font property has sub-properties. Note that we give window's font as</span>
         <span class="comment">// initial value.</span>
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxFontProperty(wxT(<span class="stringliteral">"Font"</span>),
-                    <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                    wxPG_LABEL,
                     GetFont()) );
 
         <span class="comment">// Colour property with arbitrary colour.</span>
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxColourProperty(wxT(<span class="stringliteral">"My Colour 1"</span>),
-                                     <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                                     wxPG_LABEL,
                                      wxColour(242,109,0) ) );
 
         <span class="comment">// System colour property.</span>
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxSystemColourProperty (wxT(<span class="stringliteral">"My SysColour 1"</span>),
-                                            <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                                            wxPG_LABEL,
                                             wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)) );
 
         <span class="comment">// System colour property with custom colour.</span>
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxSystemColourProperty (wxT(<span class="stringliteral">"My SysColour 2"</span>),
-                                            <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                                            wxPG_LABEL,
                                             wxColour(0,200,160) ) );
 
         <span class="comment">// Cursor property</span>
         pg-&gt;<a class="code" href="classwxPropertyGrid.htm#304dc71900cdc1a8569e3078ad7f66f1">Append</a>( wxCursorProperty (wxT(<span class="stringliteral">"My Cursor"</span>),
-                                      <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                                      wxPG_LABEL,
                                       wxCURSOR_ARROW));
 </pre></div><h2><a class="anchor" name="operations">
 More About Operating with Properties</a></h2>
@@ -669,15 +669,15 @@ Here's some example code for creating and populating a <a class="el" href="class
         pgMan-&gt;<a class="code" href="classwxPropertyGridManager.htm#9c6d099a6815da9ba4b177ca6f6babc9">AppendCategory</a>(wxT(<span class="stringliteral">"Category A1"</span>));
 
         <span class="comment">// Remember, the next line equals pgman-&gt;Append( wxIntProperty(wxT("Number"),wxPG_LABEL,1) );</span>
-        pgMan-&gt;<a class="code" href="classwxPropertyGridManager.htm#5ce98997e68d79c1c3dd2aa1c5575a98">Append</a>( wxT(<span class="stringliteral">"Number"</span>),<a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,1 );
+        pgMan-&gt;<a class="code" href="classwxPropertyGridManager.htm#5ce98997e68d79c1c3dd2aa1c5575a98">Append</a>( wxT(<span class="stringliteral">"Number"</span>),wxPG_LABEL,1 );
 
-        pgMan-&gt;<a class="code" href="classwxPropertyGridManager.htm#5ce98997e68d79c1c3dd2aa1c5575a98">Append</a>( wxColourProperty(wxT(<span class="stringliteral">"Colour"</span>),<a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,*wxWHITE) );
+        pgMan-&gt;<a class="code" href="classwxPropertyGridManager.htm#5ce98997e68d79c1c3dd2aa1c5575a98">Append</a>( wxColourProperty(wxT(<span class="stringliteral">"Colour"</span>),wxPG_LABEL,*wxWHITE) );
 
         pgMan-&gt;<a class="code" href="classwxPropertyGridManager.htm#9b2de39af66922100296044f49ddd51e">AddPage</a>(wxT(<span class="stringliteral">"Second Page"</span>));
 
-        pgMan-&gt;<a class="code" href="classwxPropertyGridManager.htm#5ce98997e68d79c1c3dd2aa1c5575a98">Append</a>( wxT(<span class="stringliteral">"Text"</span>),<a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,wxT(<span class="stringliteral">"(no text)"</span>) );
+        pgMan-&gt;<a class="code" href="classwxPropertyGridManager.htm#5ce98997e68d79c1c3dd2aa1c5575a98">Append</a>( wxT(<span class="stringliteral">"Text"</span>),wxPG_LABEL,wxT(<span class="stringliteral">"(no text)"</span>) );
 
-        pgMan-&gt;<a class="code" href="classwxPropertyGridManager.htm#5ce98997e68d79c1c3dd2aa1c5575a98">Append</a>( wxFontProperty(wxT(<span class="stringliteral">"Font"</span>),<a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>) );
+        pgMan-&gt;<a class="code" href="classwxPropertyGridManager.htm#5ce98997e68d79c1c3dd2aa1c5575a98">Append</a>( wxFontProperty(wxT(<span class="stringliteral">"Font"</span>),wxPG_LABEL) );
 
         <span class="comment">// For total safety, finally reset the target page.</span>
         pgMan-&gt;<a class="code" href="classwxPropertyGridManager.htm#796cbac4aeb8e6f8540987ec18fe5e8f">SetTargetPage</a>(0);
@@ -720,8 +720,14 @@ Updates from wxTextCtrl Based Editor</a></h3>
 Changes from wxTextCtrl based property editors are committed (ie. wxEVT_PG_CHANGED is sent etc.) *only* when (1) user presser enter, (2) user moves to edit another property, or (3) when focus or mouse leaves the grid.<p>
 Because of this, you may find it useful, in some apps, to monitor wxEVT_COMMAND_TEXT_UPDATED (EVT_TEXT macro) for non-committed changes in editor. However, the current problem is that pressing Esc in editor cancels any changes made, thus possibly rendering your knowledge of changed state incomplete. There is no current, perfect solution for this problem.<h3><a class="anchor" name="splittercentering">
 Centering the Splitter (New!)</a></h3>
-If you need to center the splitter, but only once when the program starts, then do <b>not</b> use the wxPG_SPLITTER_AUTO_CENTER window style, but the <a class="el" href="classwxPropertyGrid.htm#5615a51771342a624f8f8786bcc2d465">wxPropertyGrid::CenterSplitter()</a> method. <b>However, be sure to call it after the sizer setup and SetSize calls!</b> (ie. usually at the end of the frame/dialog constructor)<h2><a class="anchor" name="proplist">
-Property Descriptions (Updated!)</a></h2>
+If you need to center the splitter, but only once when the program starts, then do <b>not</b> use the wxPG_SPLITTER_AUTO_CENTER window style, but the <a class="el" href="classwxPropertyGrid.htm#5615a51771342a624f8f8786bcc2d465">wxPropertyGrid::CenterSplitter()</a> method. <b>However, be sure to call it after the sizer setup and SetSize calls!</b> (ie. usually at the end of the frame/dialog constructor)<h3><a class="anchor" name="compilerdefines">
+Supported Preprocessor Defines</a></h3>
+Here is list of supported preprocessor defines (other than those that relate with wxWidgets core library):<p>
+<b>wxPG_USE_WXMODULE:</b> Define as 0 to not use wxModule to manage global variables. This may be needed in cases where <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> is linked as a plugin DLL, or when <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> is linked statically in a DLL.<p>
+<b>WXMAKINGLIB_PROPGRID:</b> Define if you are linking <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> statically but wxWidgets itself is DLL.<p>
+<b>WXMAKINGDLL_PROPGRID:</b> Define when building <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> as a DLL. This should be automatically defined correctly by the Bakefile-generated makefiles.<p>
+<b>wxPG_COMPATIBILITY_1_0_0:</b> Define to make <a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> more compatible with the old 1.0.x releases.<h2><a class="anchor" name="proplist">
+Property Type Descriptions (Updated!)</a></h2>
 Here are descriptions of built-in properties, with attributes (see <a class="el" href="classwxPropertyContainerMethods.htm#7e412a0ff4ab53a4fc7854492f8a33f2">wxPropertyGrid::SetPropertyAttribute</a>) that apply to them. Note that not all attributes are necessarily here. For complete list, see <a class="el" href="group__attrids.htm">Property Attributes</a>.<h3><a class="anchor" name="wxPropertyCategory">
 wxPropertyCategory</a></h3>
 <b>Inheritable Class:</b> <a class="el" href="classwxPropertyCategoryClass.htm">wxPropertyCategoryClass</a>.<p>
@@ -876,7 +882,7 @@ For instance:<p>
 
         <span class="comment">// Normal property constructor.</span>
         MyStringPropertyClass(<span class="keyword">const</span> wxString&amp; name,
-                              <span class="keyword">const</span> wxString&amp; label = <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                              <span class="keyword">const</span> wxString&amp; label = wxPG_LABEL,
                               <span class="keyword">const</span> wxString&amp; value = wxEmptyString)
             : wxLongStringPropertyClass(name,label,value)
         {
@@ -924,7 +930,7 @@ Built-in value types include: wxString, long, bool, double, void, wxArrayString.
 
         <span class="comment">// Minimal constructor must set the new value.</span>
         MyPropertyClass(<span class="keyword">const</span> wxString&amp; name,
-                        <span class="keyword">const</span> wxString&amp; label = <a class="code" href="group__miscellaneous.htm#g02064e949a659998a5b05d94a5203158">wxPG_LABEL</a>,
+                        <span class="keyword">const</span> wxString&amp; label = wxPG_LABEL,
                         UsedDataType value = DefaultValue)
             : wxInheritedPropertyClass(name,label,OtherDefaultValue)
         {
@@ -1007,7 +1013,8 @@ In header: <div class="fragment"><pre class="fragment">        WX_PG_DECLARE_STR
 </pre></div><p>
 In source: <div class="fragment"><pre class="fragment"><span class="preprocessor">        #include &lt;wx/propgrid/propdev.h&gt;</span>
 
-        WX_PG_IMPLEMENT_STRING_PROPERTY(PROPNAME,FLAGS)
+        <span class="comment">// FLAGS can be wxPG_NO_ESCAPE if escape sequences shall not be expanded.</span>
+        WX_PG_IMPLEMENT_STRING_PROPERTY(PROPNAME, FLAGS)
 
         bool PROPNAMEClass::OnButtonClick( <a class="code" href="classwxPropertyGrid.htm">wxPropertyGrid</a>* propgrid, wxString&amp; value )
         {
@@ -1021,7 +1028,7 @@ FLAGS is either wxPG_NO_ESCAPE (newlines and tabs are not translated to and from
 There is also WX_PG_IMPLEMENT_STRING_PROPERTY_WITH_VALIDATOR variant which also allows setting up a validator for the property. Like this:<p>
 <div class="fragment"><pre class="fragment"><span class="preprocessor">        #include &lt;wx/propgrid/propdev.h&gt;</span>
 
-        WX_PG_IMPLEMENT_STRING_PROPERTY_WITH_VALIDATOR(PROPNAME)
+        WX_PG_IMPLEMENT_STRING_PROPERTY_WITH_VALIDATOR(PROPNAME, FLAGS)
 
         bool PROPNAMEClass::OnButtonClick( <a class="code" href="classwxPropertyGrid.htm">wxPropertyGrid</a>* propgrid, wxString&amp; value )
         {
@@ -1200,23 +1207,8 @@ Creating Custom Property Editor</a></h2>
 <h3><a class="anchor" name="wxpythoneditors">
 In wxPython</a></h3>
 <ul>
-<li>Derive a custom class from wx.propgrid.PyEditor, or any of the derivative classes, such as wx.propgrid.PyChoiceEditor or wx.propgrid.PyComboBoxEditor. <b>You must use the version of the class that starts with Py</b>.</li></ul>
-<p>
-<ul>
-<li>To call method of a parent class, call self.$METHOD$_Parent instead of wx.propgrid.$PARENTCLASS$.$METHOD$ (or anything else that achieves the same thing). Doing otherwise will result in an infinite recursion.</li></ul>
-<p>
-<ul>
-<li>Before using the editor, it must be registered. Use code like this:</li></ul>
-<p>
-<div class="fragment"><pre class="fragment"><span class="preprocessor">        # pg = PropertyGrid or PropertyGridManager instance</span>
-<span class="preprocessor">        pg.RegisterEditor(MyPropertyEditor())</span>
-</pre></div><p>
-RegisterEditor also accepts editor name as second argument. If it is not given, editor's class name is used.<p>
-<ul>
-<li>After editor has been registered, property can be set to use it with:</li></ul>
-<p>
-<div class="fragment"><pre class="fragment">        pg.<a class="code" href="classwxPropertyContainerMethods.htm#13127b43df2394954d25b6b2cae23d37">SetPropertyEditor</a>(property, <span class="stringliteral">"MyPropertyEditor"</span>)
-</pre></div> <hr size="1"><address style="align: right;"><small>Generated on Sun Dec 3 13:35:15 2006 for wxPropertyGrid by&nbsp;
+<li>See README-propgrid-wxPython.txt </li></ul>
+<hr size="1"><address style="align: right;"><small>Generated on Sun Mar 11 11:38:07 2007 for wxPropertyGrid by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.1-p1 </small></address>
 </body>

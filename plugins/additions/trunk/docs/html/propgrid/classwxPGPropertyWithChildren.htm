@@ -110,7 +110,7 @@ const <a class="el" href="classwxPGEditor.htm">wxPGEditor</a> *&nbsp;</td><td cl
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="f17515e0c6d226f76a539753abc2e722"></a><!-- doxytag: member="wxPGPropertyWithChildren::GetFlags" ref="f17515e0c6d226f76a539753abc2e722" args="() const" -->
 unsigned int&nbsp;</td><td class="memItemRight" valign="bottom"><b>GetFlags</b> () const</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwxPGProperty.htm#c1e803893ab75218db30f90b3c5fff94">GetGrid</a> () const</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwxPGProperty.htm#bdc9814947a47582d15f414c76a751e3">GetGrid</a> () const</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="f52709136e8634375b18780895198792"></a><!-- doxytag: member="wxPGPropertyWithChildren::GetHelpString" ref="f52709136e8634375b18780895198792" args="() const" -->
 wxString&nbsp;</td><td class="memItemRight" valign="bottom"><b>GetHelpString</b> () const</td></tr>
@@ -168,6 +168,8 @@ bool&nbsp;</td><td class="memItemRight" valign="bottom"><b>HasFlag</b> (unsigned
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwxPGPropertyWithChildren.htm#cef596833ec18e0405ce49064c9e501c">Index</a> (const <a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *p) const </td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwxPGProperty.htm#f27ecd4faff8ff097e84f21c697ed38e">Init</a> (const wxString &amp;label, const wxString &amp;name)</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwxPGProperty.htm#be0d0b4e8b177ef6805c74b5c048f593">InsertChoice</a> (const wxString &amp;label, int index, int value=INT_MAX)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="1f934ed66b0a2f580153da89bad611b8"></a><!-- doxytag: member="wxPGPropertyWithChildren::IsEnabled" ref="1f934ed66b0a2f580153da89bad611b8" args="() const" -->
@@ -188,6 +190,9 @@ bool&nbsp;</td><td class="memItemRight" valign="bottom"><b>IsKindOf</b> (<a clas
 bool&nbsp;</td><td class="memItemRight" valign="bottom"><b>IsSomeParent</b> (<a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *candidate_parent) const</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwxPGProperty.htm#c7c326b7a1bdc13c3628f24fba460ad5">IsSubProperty</a> () const</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="f89d7625096a23c0b9df61e9545a4f60"></a><!-- doxytag: member="wxPGPropertyWithChildren::IsValueUnspecified" ref="f89d7625096a23c0b9df61e9545a4f60" args="() const" -->
+bool&nbsp;</td><td class="memItemRight" valign="bottom"><b>IsValueUnspecified</b> () const</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classwxPGProperty.htm">wxPGProperty</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwxPGPropertyWithChildren.htm#a132220293a0a204785ee49f83aee6e4">Item</a> (size_t i) const</td></tr>
 
@@ -249,6 +254,9 @@ void&nbsp;</td><td class="memItemRight" valign="bottom"><b>SetParentState</b> (<
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwxPGProperty.htm#5c5be1292d329945b0a24e33db485207">SetValueImage</a> (wxBitmap &amp;bmp)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="4e55506bbc49f0b7d447df71a00f2df6"></a><!-- doxytag: member="wxPGPropertyWithChildren::SetValueToUnspecified" ref="4e55506bbc49f0b7d447df71a00f2df6" args="()" -->
+void&nbsp;</td><td class="memItemRight" valign="bottom"><b>SetValueToUnspecified</b> ()</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="40a1d30293c87d936a2ad27e9bd75cca"></a><!-- doxytag: member="wxPGPropertyWithChildren::ShowError" ref="40a1d30293c87d936a2ad27e9bd75cca" args="(const wxString &amp;msg)" -->
 void&nbsp;</td><td class="memItemRight" valign="bottom"><b>ShowError</b> (const wxString &amp;msg)</td></tr>
 
@@ -260,6 +268,8 @@ void&nbsp;</td><td class="memItemRight" valign="bottom"><b>SubPropsChanged</b> (
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="3166cf5d6e39a8c5891e3163ed193bd1"></a><!-- doxytag: member="wxPGPropertyWithChildren::UpdateControl" ref="3166cf5d6e39a8c5891e3163ed193bd1" args="(wxWindow *primary)" -->
 void&nbsp;</td><td class="memItemRight" valign="bottom"><b>UpdateControl</b> (wxWindow *primary)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwxPGProperty.htm#11e1675d3a38ecce767e3417fad55a76">UsesAutoUnspecified</a> () const</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwxPGPropertyWithChildren.htm#39fc1d63dedee288560f8b4da4b157eb">wxPGPropertyWithChildren</a> (const wxString &amp;label, const wxString &amp;name)</td></tr>
 
@@ -900,16 +910,16 @@ Returns property's data extension (NULL if none).
 
 </div>
 </div><p>
-<a class="anchor" name="c1e803893ab75218db30f90b3c5fff94"></a><!-- doxytag: member="wxPGPropertyWithChildren::GetGrid" ref="c1e803893ab75218db30f90b3c5fff94" args="() const" -->
+<a class="anchor" name="bdc9814947a47582d15f414c76a751e3"></a><!-- doxytag: member="wxPGPropertyWithChildren::GetGrid" ref="bdc9814947a47582d15f414c76a751e3" args="() const" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a> * wxPGProperty::GetGrid           </td>
+          <td class="memname"><a class="el" href="classwxPropertyGrid.htm">wxPropertyGrid</a>* wxPGProperty::GetGrid           </td>
           <td>(</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"> const<code> [inline, inherited]</code></td>
+          <td width="100%"> const<code> [inherited]</code></td>
         </tr>
       </table>
 </div>
@@ -1342,6 +1352,37 @@ Hides or reveals the property.
 Returns index of given sub-property. 
 <p>
 
+</div>
+</div><p>
+<a class="anchor" name="f27ecd4faff8ff097e84f21c697ed38e"></a><!-- doxytag: member="wxPGPropertyWithChildren::Init" ref="f27ecd4faff8ff097e84f21c697ed38e" args="(const wxString &amp;label, const wxString &amp;name)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wxPGProperty::Init           </td>
+          <td>(</td>
+          <td class="paramtype">const wxString &amp;&nbsp;</td>
+          <td class="paramname"> <em>label</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const wxString &amp;&nbsp;</td>
+          <td class="paramname"> <em>name</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Initializes the property. 
+<p>
+Usually only called in the constructor. 
 </div>
 </div><p>
 <a class="anchor" name="be0d0b4e8b177ef6805c74b5c048f593"></a><!-- doxytag: member="wxPGPropertyWithChildren::InsertChoice" ref="be0d0b4e8b177ef6805c74b5c048f593" args="(const wxString &amp;label, int index, int value=INT_MAX)" -->
@@ -2016,9 +2057,30 @@ Set wxBitmap in front of the value.
 This bitmap will be ignored if property class has implemented OnCustomPaint. 
 </div>
 </div><p>
+<a class="anchor" name="11e1675d3a38ecce767e3417fad55a76"></a><!-- doxytag: member="wxPGPropertyWithChildren::UsesAutoUnspecified" ref="11e1675d3a38ecce767e3417fad55a76" args="() const" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool wxPGProperty::UsesAutoUnspecified           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"> const<code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns true if containing grid uses wxPG_EX_AUTO_UNSPECIFIED_VALUES. 
+<p>
+
+</div>
+</div><p>
 <hr>The documentation for this class was generated from the following file:<ul>
 <li>propgrid.h</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Sun Dec 3 13:35:16 2006 for wxPropertyGrid by&nbsp;
+<hr size="1"><address style="align: right;"><small>Generated on Sun Mar 11 11:38:10 2007 for wxPropertyGrid by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.1-p1 </small></address>
 </body>

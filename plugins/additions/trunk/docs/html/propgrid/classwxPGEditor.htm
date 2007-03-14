@@ -75,9 +75,9 @@ Base for property editor classes.
             <span class="comment">// control to the OnEvent.</span>
             <span class="comment">// NOTE: This event in particular is actually automatically conveyed, but</span>
             <span class="comment">//   it is just used as an example.</span>
-            propgrid-&gt;Connect ( wxPG_SUBID1, wxEVT_COMMAND_TEXT_UPDATED,
-                               (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
-                               &amp;<a class="code" href="classwxPropertyGrid.htm#4f5d8650023b5693b2b1c848930f2abc">wxPropertyGrid::OnCustomEditorEvent</a> );
+            propgrid-&gt;Connect( wxPG_SUBID1, wxEVT_COMMAND_TEXT_UPDATED,
+                              (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
+                              &amp;<a class="code" href="classwxPropertyGrid.htm#4f5d8650023b5693b2b1c848930f2abc">wxPropertyGrid::OnCustomEditorEvent</a> );
 </pre></div> OnCustomEditorEvent will then forward events, first to <a class="el" href="classwxPGEditor.htm#afbd3896d024ebffac669c55de56eb6f">wxPGEditor::OnEvent</a> and then to <a class="el" href="classwxPGProperty.htm#16fbe26240bf47ab0a9a02d21781da73">wxPGProperty::OnEvent</a>.</li><li>You need to call macro wxPGRegisterEditorClass(EditorName) before using a custom editor class.</li><li>See propgrid.cpp for how builtin editors works (starting from wxPGTextCtrlEditor). </li></ul>
 </dd></dl>
 
@@ -556,7 +556,7 @@ Loads value from property to the control.
 </div><p>
 <hr>The documentation for this class was generated from the following file:<ul>
 <li>propdev.h</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Sun Dec 3 13:35:16 2006 for wxPropertyGrid by&nbsp;
+<hr size="1"><address style="align: right;"><small>Generated on Sun Mar 11 11:38:10 2007 for wxPropertyGrid by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.1-p1 </small></address>
 </body>

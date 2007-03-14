@@ -174,7 +174,7 @@ bool wxIntPropertyClass::SetValueFromString( const wxString& text, int argFlags 
     }
     else if ( argFlags & wxPG_REPORT_ERROR )
     {
-        s.Printf ( wxT("! %s: \"%s\" is not a number."), m_label.c_str(), text.c_str() );
+        s.Printf( wxT("! %s: \"%s\" is not a number."), m_label.c_str(), text.c_str() );
         ShowError(s);
     }
     return false;
@@ -524,7 +524,10 @@ wxBoolPropertyClass::~wxBoolPropertyClass() { }
 
 void wxBoolPropertyClass::DoSetValue( wxPGVariant value )
 {
-    if ( wxPGVariantToLong(value) != 0 )
+    long v = wxPGVariantToLong(value);
+    if ( v == 2 )
+        SetValueToUnspecified();
+    else if ( v != 0 )
         m_value = 1;
     else
         m_value = 0;
@@ -553,6 +556,8 @@ int wxBoolPropertyClass::GetChoiceInfo( wxPGChoiceInfo* choiceinfo )
 {
     if ( choiceinfo )
     {
+        // 3 choice mode (ie. true, false, unspecified) does not work well (yet).
+        //choiceinfo->m_itemCount = wxPGGlobalVars->m_numBoolChoices;
         choiceinfo->m_itemCount = 2;
         choiceinfo->m_arrWxString = wxPGGlobalVars->m_boolChoices;
     }
@@ -564,6 +569,12 @@ bool wxBoolPropertyClass::SetValueFromString( const wxString& text, int /*argFla
     int value = 0;
     if ( text.CmpNoCase(wxPGGlobalVars->m_boolChoices[1]) == 0 || text.CmpNoCase(wxT("true")) == 0 )
         value = 1;
+
+    if ( text.length() == 0 )
+    {
+        SetValueToUnspecified();
+        return true;
+    }
 
     if ( (m_value && !value) || (!m_value && value) )
     {

@@ -249,7 +249,6 @@
     #define wxPG_NAT_BUTTON_BORDER_X        0
     #define wxPG_NAT_BUTTON_BORDER_Y        0
 
-    #define wxPG_TEXTCTRLXADJUST            0 // position adjustment for wxTextCtrl
     #define wxPG_TEXTCTRLYADJUST            0
 
     #define wxPG_CHOICEXADJUST                  0 // Extra pixels next to wxChoice/ComboBox.
@@ -308,8 +307,12 @@
 // Use this macro to generate standard custom image height from
 #define wxPG_STD_CUST_IMAGE_HEIGHT(LINEHEIGHT)  (LINEHEIGHT-3)
 
-// How many pixels between textctrl and button (not used by custom controls)
-#define wxPG_TEXTCTRL_AND_BUTTON_SPACING        2
+// How many pixels between textctrl and button
+#ifdef __WXMAC__
+    #define wxPG_TEXTCTRL_AND_BUTTON_SPACING        8
+#else
+    #define wxPG_TEXTCTRL_AND_BUTTON_SPACING        2
+#endif 
 
 #define wxPG_HIDER_BUTTON_HEIGHT        25
 
@@ -338,7 +341,7 @@
 enum
 {
     PT_CUSTOMPROPERTY           = -2,
-    PT_SUBPROPERTY              = -1,
+    PT_FIXEDCHILDREN              = -1,
     PT_NONE                     = 0,
     PT_CAPTION                  = 1,
     PT_ROOT                     = 2
@@ -505,6 +508,8 @@ static bool wxPGIsWindowBuffered( const wxWindow* wnd )
 // * After 1.0.x compatibility removed, drop itemcount argument support.
 //
 // 1.3 Branch:
+// * Custom values (one of which is Unspecified). Up to 255, use string table
+//   in property grid for relevant displayed strings.
 // * Maybe have wxPG_EX_PROCESS_EVENTS_IMMEDIATELY behaviour as default (and non-
 //   optional).
 // * Move to different directory style to enable CVS usage.
@@ -517,6 +522,7 @@ static bool wxPGIsWindowBuffered( const wxWindow* wnd )
 //   Construction requires new then probably. The only way around
 //   this would be a way too messy copying system.
 // * IsPropertyXXX to const?
+// * If child changed, send changed events for all related parents *as well*.
 // * wxPGNameStr -> const wxString& (but retain typedef).
 // * wxPGId -> wxPGProperty* (but retain typedef).
 // * Change wxPG_SUBID1 etc to 1,2,3...
@@ -767,6 +773,8 @@ wxPGGlobalVarsClass::wxPGGlobalVarsClass()
 {
     m_boolChoices[0] = _("False");
     m_boolChoices[1] = _("True");
+    m_boolChoices[2] = _("Unspecified");
+    m_numBoolChoices = 2;
 
     m_fontFamilyChoices = (wxPGChoices*) NULL;
 
@@ -1719,6 +1727,8 @@ bool wxPGPropertyWithChildren::SetValueFromString( const wxString& text, int )
 
                     wxPGProperty* child = Item(curChild);
 
+                    wxLogDebug(wxT("child(1) %i: %s"),curChild,token.c_str());
+
                     if ( child->SetValueFromString( token, wxPG_REPORT_ERROR ) )
                     {
                         // If modified, set mod flag and store value back to parent
@@ -1777,7 +1787,7 @@ void wxPGPropertyWithChildren::RefreshChildren ()
 
 wxPGProperty* wxParentProperty( const wxString& label, const wxString& name )
 {
-    return new wxParentPropertyClass (label,name);
+    return new wxParentPropertyClass(label,name);
 }
 
 
@@ -1792,7 +1802,7 @@ wxParentPropertyClass::wxParentPropertyClass( const wxString& label, const wxStr
 }
 
 
-wxParentPropertyClass::~wxParentPropertyClass () { }
+wxParentPropertyClass::~wxParentPropertyClass() { }
 
 
 void wxParentPropertyClass::DoSetValue( wxPGVariant value )
@@ -1814,7 +1824,7 @@ void wxParentPropertyClass::ChildChanged( wxPGProperty* WXUNUSED(p) )
 }
 
 
-wxString wxParentPropertyClass::GetValueAsString ( int argFlags ) const
+wxString wxParentPropertyClass::GetValueAsString( int argFlags ) const
 {
     if ( !GetCount() )
         return wxEmptyString;
@@ -1837,9 +1847,9 @@ const wxPGPropertyClassInfo* wxPGRootPropertyClass::GetClassInfo() const
 wxPGRootPropertyClass::wxPGRootPropertyClass()
     : wxPGPropertyWithChildren()
 {
-    m_parentingType = 2; // this was 1 in <= 1.1.6, but changed
-                         // so the depth calculations can become
-                         // more consistent.
+    m_parentingType = PT_ROOT; // this was PT_CAPTION in <= 1.1.6, but changed
+                               // so the depth calculations can become
+                               // more consistent.
     m_depth = 0;
 }
 
@@ -2214,8 +2224,6 @@ bool wxPGTextCtrlEditor::OnTextCtrlEvent( wxPropertyGrid* propGrid,
     if ( !ctrl )
         return false;
 
-    //bool isTextCtrl = ctrl->IsKindOf(CLASSINFO(wxTextCtrl));
-
     if ( event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER )
     {
         if ( propGrid->IsEditorsValueModified() )
@@ -2225,13 +2233,14 @@ bool wxPGTextCtrlEditor::OnTextCtrlEvent( wxPropertyGrid* propGrid,
     }
     else if ( event.GetEventType() == wxEVT_COMMAND_TEXT_UPDATED )
     {
+        wxPGDeclareRealTextCtrl(ctrl);
 
         // If value is unspecified and character count is zero,
         // then do not set as modified.
         if ( !(property->GetFlags() & wxPG_PROP_UNSPECIFIED) ||
-             !ctrl ||
-             (ctrl->IsKindOf(CLASSINFO(wxTextCtrl)) &&
-              ((wxTextCtrl*)ctrl)->GetLastPosition() > 0) )
+             !tc ||
+             (tc->IsKindOf(CLASSINFO(wxTextCtrl)) &&
+              (tc->GetLastPosition() > 0)) )
         {
 
             // We must check this since an 'empty' text event
@@ -3712,6 +3721,11 @@ void wxPropertyGrid::Init2()
 {
     wxASSERT( !(m_iFlags & wxPG_FL_INITIALIZED ) );
 
+#ifdef __WXMAC__
+   // Smaller controls on Mac
+   SetWindowVariant(wxWINDOW_VARIANT_SMALL);
+#endif 
+
     // Now create state, if one didn't exist already
     // (wxPropertyGridManager might have created it for us).
     if ( !m_pState )
@@ -3994,6 +4008,15 @@ void wxPropertyGrid::SetExtraStyle( long exStyle )
 
     if ( exStyle & wxPG_EX_HELP_AS_TOOLTIPS )
         m_windowStyle |= wxPG_TOOLTIPS;
+
+    if ( exStyle & wxPG_EX_AUTO_UNSPECIFIED_VALUES )
+    {
+        wxPGGlobalVars->m_numBoolChoices = 3;
+    }
+    else
+    {
+        wxPGGlobalVars->m_numBoolChoices = 2;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -4567,6 +4590,34 @@ void wxPropertyContainerMethods::Delete( wxPGId id )
 
 // -----------------------------------------------------------------------
 
+wxPGId wxPropertyContainerMethods::ReplaceProperty( wxPGId id, wxPGProperty* property )
+{
+    wxPG_PROP_ID_CALL_PROLOG_RETVAL(wxNullProperty)
+
+    wxPGProperty* replaced = wxPGIdToPtr(id);
+    wxCHECK_MSG( replaced && property,
+                 wxNullProperty,
+                 wxT("NULL property") );
+    wxCHECK_MSG( replaced->GetParentingType() == 0 || replaced->GetParentingType() == -1,
+                 wxNullProperty,
+                 wxT("cannot replace this type of property") );
+    wxCHECK_MSG( !m_pState->IsInNonCatMode(),
+                 wxNullProperty,
+                 wxT("cannot replace properties in alphabetic mode") );
+
+    // Get address to the slot
+    wxPGPropertyWithChildren* parent = replaced->GetParent();
+    int ind = replaced->GetIndexInParent();
+
+    wxPropertyGridState* state = replaced->GetParentState();
+    Delete(replaced); // Must use generic Delete
+    state->DoInsert(parent,ind,property);
+
+    return wxPGIdGen(property);
+}
+
+// -----------------------------------------------------------------------
+
 void wxPropertyGrid::PrepareAfterItemsAdded()
 {
 
@@ -4623,7 +4674,7 @@ void wxPropertyGrid::SetPropertyValue( wxPGId id, const wxPGValueType* typeclass
     wxPG_PROP_ID_CALL_PROLOG()
 
     if ( p && m_pState->SetPropertyValue(p,typeclass,value) )
-        DrawItemAndChildren( p );
+        DrawItemAndValueRelated( p );
 }
 
 // -----------------------------------------------------------------------
@@ -4633,7 +4684,7 @@ void wxPropertyGrid::SetPropertyValue( wxPGId id, const wxChar* typestring, cons
     wxPG_PROP_ID_CALL_PROLOG()
 
     if ( p && m_pState->SetPropertyValue(p,typestring,value) )
-        DrawItemAndChildren( p );
+        DrawItemAndValueRelated( p );
 }
 
 // -----------------------------------------------------------------------
@@ -4643,7 +4694,7 @@ void wxPropertyGrid::SetPropertyValueString( wxPGId id, const wxString& value )
     wxPG_PROP_ID_CALL_PROLOG()
 
     if ( m_pState->SetPropertyValueString(p,value) )
-        DrawItemAndChildren( p );
+        DrawItemAndValueRelated( p );
 }
 
 // -----------------------------------------------------------------------
@@ -4653,7 +4704,7 @@ void wxPropertyGrid::SetPropertyValueWxObjectPtr( wxPGId id, wxObject* value )
     wxPG_PROP_ID_CALL_PROLOG()
 
     if ( m_pState->SetPropertyValueWxObjectPtr(p,value) )
-        DrawItemAndChildren( p );
+        DrawItemAndValueRelated( p );
 }
 
 // -----------------------------------------------------------------------
@@ -4664,7 +4715,7 @@ void wxPropertyGrid::SetPropertyValue( wxPGId id, wxVariant& value )
     wxPG_PROP_ID_CALL_PROLOG()
 
     if ( m_pState->SetPropertyValue(p,value) )
-        DrawItemAndChildren( p );
+        DrawItemAndValueRelated( p );
 }
 #endif
 
@@ -4692,7 +4743,7 @@ void wxPropertyGrid::SetPropertyUnspecified( wxPGId id )
     DrawItemAndChildren(p);
 
     wxPGPropertyWithChildren* parent = p->GetParent();
-    while ( parent->GetParentingType() <= PT_SUBPROPERTY )
+    while ( parent->GetParentingType() <= PT_FIXEDCHILDREN )
     {
         DrawItem(parent);
         parent = parent->GetParent();
@@ -4905,7 +4956,12 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     wxPoint p(pos.x,pos.y);
     wxSize s(sz.x,sz.y);
 
-    // Take button into acccount
+   // Need to reduce width of text control on Mac
+#if defined(__WXMAC__)
+   s.x -= 8;
+#endif
+
+     // Take button into acccount
     if ( secondary )
     {
         s.x -= (secondary->GetSize().x + wxPG_TEXTCTRL_AND_BUTTON_SPACING);
@@ -4979,6 +5035,22 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
 
 wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize& sz )
 {
+#ifdef __WXMAC__
+   // Decorations are chunky on Mac, and we can't make the button square, so
+   // do things a bit differently on this platform.
+
+   wxPoint p(pos.x+sz.x,
+             pos.y+wxPG_BUTTON_SIZEDEC-wxPG_NAT_BUTTON_BORDER_Y);
+   wxSize s(25, -1);
+
+   wxButton* but = new wxButton();
+   but->Create(this,wxPG_SUBID2,wxT("..."),p,s,wxWANTS_CHARS);
+
+   // Now that we know the size, move to the correct position
+   p.x = pos.x + sz.x - but->GetSize().x - 2;
+   but->Move(p);
+
+#else 
     wxSize s(sz.y-(wxPG_BUTTON_SIZEDEC*2)+(wxPG_NAT_BUTTON_BORDER_Y*2),
         sz.y-(wxPG_BUTTON_SIZEDEC*2)+(wxPG_NAT_BUTTON_BORDER_Y*2));
 
@@ -4996,6 +5068,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
     but->Create(this,wxPG_SUBID2,wxT("..."),p,s,wxWANTS_CHARS);
 
     but->SetFont( m_captionFont );
+#endif
 
     return but;
 }
@@ -5099,8 +5172,11 @@ void wxPropertyGrid::SLAlloc( unsigned int itemcount, const wxChar** items )
 
 wxString& wxPropertyGrid::ExpandEscapeSequences( wxString& dst_str, wxString& src_str )
 {
-    if ( src_str.length() < 1 )
+    if ( src_str.length() == 0 )
+    {
+        dst_str = src_str;
         return src_str;
+    }
 
     const wxChar* src = src_str.c_str();
     wxChar* dst;
@@ -5109,6 +5185,7 @@ wxString& wxPropertyGrid::ExpandEscapeSequences( wxString& dst_str, wxString& sr
     bool prev_is_slash = false;
 
     wxChar a = *src;
+
     while ( a )
     {
         src++;
@@ -5163,8 +5240,11 @@ wxString& wxPropertyGrid::ExpandEscapeSequences( wxString& dst_str, wxString& sr
 
 wxString& wxPropertyGrid::CreateEscapeSequences ( wxString& dst_str, wxString& src_str )
 {
-    if ( src_str.length() < 1 )
+    if ( src_str.length() == 0 )
+    {
+        dst_str = src_str;
         return src_str;
+    }
 
     const wxChar* src = src_str.c_str();
     wxChar* dst;
@@ -5172,6 +5252,7 @@ wxString& wxPropertyGrid::CreateEscapeSequences ( wxString& dst_str, wxString& s
     dst = strbuf;
 
     wxChar a = *src;
+
     while ( a )
     {
         src++;
@@ -5216,7 +5297,6 @@ wxString& wxPropertyGrid::CreateEscapeSequences ( wxString& dst_str, wxString& s
     }
     *dst = 0;
     return dst_str;
-
 }
 
 // -----------------------------------------------------------------------
@@ -5518,8 +5598,6 @@ void wxPropertyGrid::CalculateYs( wxPGPropertyWithChildren* startparent,
 // Call when scroll position changes. Do not pre-fill m_prevVY.
 void wxPropertyGrid::CalculateVisibles( int vy, bool full_recalc )
 {
-    //int prevVY = m_prevVY;
-
     if ( vy < 0 )
     {
         int vx;
@@ -5533,18 +5611,13 @@ void wxPropertyGrid::CalculateVisibles( int vy, bool full_recalc )
     if ( vy >= (int)m_bottomy )
         return;
 
-    // Control not yet properly built.
     if ( m_height < 0 )
         return;
 
-//    m_iFlags |= wxPG_FL_CHANGED;
-
     // Hide popup
-    // FIXME: Delete after transient popup support added
+    // FIXME: Delete after transient popup support fully added
     if ( m_wndPrimary && m_wndPrimary->IsKindOf(CLASSINFO(wxPGOwnerDrawnComboBox)) )
-    {
         ((wxPGOwnerDrawnComboBox*)m_wndPrimary)->HidePopup();
-    }
 
     int vy2 = vy + m_height;
 
@@ -5890,7 +5963,7 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
         #endif
         }
 
-        DoDrawItems ( dc, firstItem, lastItem, clipRect );
+        DoDrawItems( dc, firstItem, lastItem, clipRect );
     }
 
     // Clear area beyond m_bottomy?
@@ -6196,6 +6269,9 @@ void wxPropertyGrid::DoDrawItems2( wxDC& dcMain,
     ITEM_ITERATION_UVC_LOOP_BEGIN(viStart,vi_end_y)
 
         wxPGPropertyWithChildren* parent = p->GetParent();
+
+        // Should not happen (but this is better than a crash)...
+        wxCHECK_RET( parent, wxT("NULL parent") );
 
         // Does this wireframe end?
         // Conditions:
@@ -6964,11 +7040,11 @@ wxRect wxPropertyGrid::GetPropertyRect( const wxPGProperty* p1, const wxPGProper
 
 void wxPropertyGrid::DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 )
 {
-    if ( FROM_STATE(m_itemsAdded) )
-        PrepareAfterItemsAdded();
-
     if ( m_frozen )
         return;
+
+    if ( FROM_STATE(m_itemsAdded) )
+        PrepareAfterItemsAdded();
 
     wxRect r = GetPropertyRect(p1, p2);
     if ( r.width > 0 )
@@ -7009,6 +7085,24 @@ void wxPropertyGrid::RefreshProperty( wxPGProperty* p )
 }
 
 // -----------------------------------------------------------------------
+
+void wxPropertyGrid::DrawItemAndValueRelated( wxPGProperty* p )
+{
+    if ( m_frozen )
+        return;
+
+    // Draw item, children, and parent too, if it is not category
+    wxPGProperty* parent = p->GetParent();
+
+    while ( parent &&
+            parent->GetParentingType() < PT_NONE )
+    {
+         DrawItem(parent);
+         parent = parent->GetParent();
+    }
+
+    DrawItemAndChildren(p);
+}
 
 void wxPropertyGrid::DrawItemAndChildren( wxPGProperty* p )
 {
@@ -7649,7 +7743,7 @@ void wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
         wxPGProperty* changedProperty;
 
         // Call wx event handler for property (or its topmost parent, but only
-        // when dealign with legitemate sub-properties - see above).
+        // when dealing with legitemate sub-properties - see above).
         if ( curChild->GetParentingType() != PT_CUSTOMPROPERTY )
             changedProperty = curChild;
         else
@@ -10256,6 +10350,8 @@ void wxPropertyGrid::OnFocusEvent( wxFocusEvent& event )
 #if 1
     if ( event.GetEventType() == wxEVT_SET_FOCUS )
         HandleFocusChange((wxWindow*)event.GetEventObject());
+    // Line changed to "else" when applying patch #1675902
+    //else if ( event.GetWindow() )
     else
         HandleFocusChange(event.GetWindow());
 
@@ -10787,7 +10883,7 @@ bool wxPGStringTokenizer::HasMoreTokens()
                 if ( m_readyToken.length() < req_len )
                     m_readyToken.resize( req_len, wxT(' ') );
             #else
-                store_ptr_base = m_readyToken.GetWriteBuf ( req_len );
+                store_ptr_base = m_readyToken.GetWriteBuf( req_len );
             #endif
                 store_index = 0;
                 prev_a = 0;
@@ -10816,7 +10912,7 @@ bool wxPGStringTokenizer::HasMoreTokens()
                     m_readyToken.resize(store_index,wxT(' '));
                 #else
                     store_ptr_base[store_index] = 0;
-                    m_readyToken.UngetWriteBuf ( store_index );
+                    m_readyToken.UngetWriteBuf( store_index );
                 #endif
                     m_curPos = ptr+1;
                     return true;
@@ -10839,7 +10935,7 @@ bool wxPGStringTokenizer::HasMoreTokens()
     }
 #if !wxUSE_STL
     if ( store_index != 0xFFFFFFFF )
-        m_readyToken.UngetWriteBuf ( store_index );
+        m_readyToken.UngetWriteBuf( store_index );
 #endif
     m_curPos = (const wxChar*) NULL;
     return false;
@@ -11519,7 +11615,7 @@ wxPGId wxPropertyGridState::GetNextProperty( wxPGId id ) const
 
     // If it's category or parentproperty, then go recursive
     parenting = pwc->GetParentingType();
-    if ( parenting > 0 /*|| parenting == -2*/ )
+    if ( parenting > PT_NONE )
         return GetNextProperty( wxPGIdGen(pwc) );
 
     return wxPGIdGen(pwc);
@@ -11566,7 +11662,7 @@ wxPGId wxPropertyGridState::GetPrevProperty( wxPGId id ) const
         int parenting = p2->GetParentingType();
 
         // Do we return it's last child?
-        while ( (parenting > 0 || parenting == -2) && p2->GetCount() )
+        while ( (parenting > 0 || parenting == PT_CUSTOMPROPERTY) && p2->GetCount() )
         {
             p2 = (wxPGPropertyWithChildren*)p2->Last();
             parenting = p2->GetParentingType();
@@ -11580,7 +11676,7 @@ wxPGId wxPropertyGridState::GetPrevProperty( wxPGId id ) const
 
     // Skip category and parentproperty.
     int parenting = p2->GetParentingType();
-    if ( parenting > 0 /*|| parenting == -2*/ )
+    if ( parenting > PT_NONE )
         return GetPrevProperty ( wxPGIdGen(p2) );
 
     return wxPGIdGen(p2);
@@ -12305,9 +12401,9 @@ wxVariant wxPropertyGridState::GetPropertyValues( const wxString& listname,
         ITEM_ITERATION_DCAE_ISP_LOOP_BEGIN
 
             // Use a trick to ignore wxParentProperty itself, but not its sub-properties.
-            if ( parenting == -2 )
+            if ( parenting == PT_CUSTOMPROPERTY )
             {
-                parenting = 1;
+                parenting = PT_CAPTION;
             }
             else if ( parenting <= 0 )
             {
@@ -12652,7 +12748,7 @@ int wxPropertyGridState::PrepareToAddItem( wxPGProperty* property,
         property->m_depthBgCol = greyDepth;
 
         // Add children to propertywithchildren.
-        if ( parenting < 0 )
+        if ( parenting < PT_NONE )
         {
             wxPGPropertyWithChildren* pwc = (wxPGPropertyWithChildren*)property;
 
@@ -12662,21 +12758,24 @@ int wxPropertyGridState::PrepareToAddItem( wxPGProperty* property,
             if ( propGrid && propGrid->GetWindowStyleFlag() & wxPG_HIDE_MARGIN )
                 pwc->m_expanded = 1; // ...unless it cannot not be expanded.
 
+            if ( pwc->GetCount() )
+            {
+                pwc->PrepareSubProperties();
+            }
+
             //
             // If children were added prior to append, then this is considered
-            // a "fixed" parent (otherwise the -2 is set, see below, to mark
-            // its customizable).
-            if ( pwc->GetCount() )
+            // a "fixed" parent (otherwise the PT_CUSTOMPROPERTY is set, see below,
+            // to mark it as customizable).
+            /*if ( pwc->GetCount() )
             {
                 pwc->PrepareSubProperties();
             }
             else
             {
-                pwc->m_parentingType = -2;
-            }
-
+                pwc->m_parentingType = PT_CUSTOMPROPERTY;
+            }*/
         }
-
     }
     else
     {
@@ -12698,10 +12797,29 @@ int wxPropertyGridState::PrepareToAddItem( wxPGProperty* property,
 
         // Calculate text extent for caption item.
         pc->CalculateTextExtent(propGrid,propGrid->GetCaptionFont());
-
     }
 
     return parenting;
+}
+
+// -----------------------------------------------------------------------
+
+void wxPropertyContainerMethods::BeginAddChildren( wxPGId id )
+{
+    wxPGPropertyWithChildren* pwc = (wxPGPropertyWithChildren*) wxPGIdToPtr(id);
+    wxCHECK_RET( pwc, wxT("NULL property") );
+    wxCHECK_RET( pwc->GetParentingType() == PT_FIXEDCHILDREN, wxT("only call on properties with fixed children") );
+    pwc->m_parentingType = PT_CUSTOMPROPERTY;
+}
+
+// -----------------------------------------------------------------------
+
+void wxPropertyContainerMethods::EndAddChildren( wxPGId id )
+{
+    wxPGPropertyWithChildren* pwc = (wxPGPropertyWithChildren*) wxPGIdToPtr(id);
+    wxCHECK_RET( pwc, wxT("NULL property") );
+    wxCHECK_RET( pwc->GetParentingType() == PT_CUSTOMPROPERTY, wxT("only call on properties for which BeginAddChildren was called prior") );
+    pwc->m_parentingType = PT_FIXEDCHILDREN;
 }
 
 // -----------------------------------------------------------------------
@@ -12724,19 +12842,19 @@ wxPGId wxPropertyGridState::DoInsert( wxPGPropertyWithChildren* parent, int inde
 
     wxPropertyGrid* propGrid = m_pPropGrid;
 
-    wxCHECK_MSG( parent->GetParentingType() != 0,
+    wxCHECK_MSG( parent->GetParentingType() != PT_NONE,
                  wxNullProperty,
-                 wxT("wxPropertyGrid: Invalid parent") );
+                 wxT("this parent cannot accomodate children") );
 
-    wxCHECK_MSG( (parent->GetParentingType() != -1),
+    wxCHECK_MSG( parent->GetParentingType() != PT_FIXEDCHILDREN,
                  wxNullProperty,
-                 wxT("wxPropertyGrid: Do not attempt to insert items under fixed parents.") );
+                 wxT("when adding properties to fixed parents, use BeginAddChildren and EndAddChildren.") );
 
     int parenting = PrepareToAddItem( property, (wxPropertyCategoryClass*)parent );
 
     // This type of invalid parenting value indicates we should exit now, returning
     // id of most recent category.
-    if ( parenting > 1 )
+    if ( parenting > PT_CAPTION )
         return wxPGIdGen(m_currentCategory);
 
     // Note that item must be added into current mode later.
@@ -12791,16 +12909,16 @@ wxPGId wxPropertyGridState::DoInsert( wxPGPropertyWithChildren* parent, int inde
     }
 
     // category stuff
-    if ( parenting > 0 )
+    if ( parenting > PT_NONE )
     {
-    // This is a category caption item.
+        // This is a category caption item.
 
         // Last caption is not the bottom one (this info required by append)
         m_lastCaptionBottomnest = 0;
     }
 
     // Only add name to hashmap if parent is root or category
-    if ( parent->GetParentingType() >= 1 && property->m_name.length() )
+    if ( parent->GetParentingType() >= PT_CAPTION && property->m_name.length() )
         m_dictName[property->m_name] = (void*) property;
 
     m_itemsAdded = 1;
@@ -12929,7 +13047,7 @@ void wxPropertyGridState::DoDelete( wxPGProperty* item )
 #ifdef __WXPYTHON__
     // For some reason, Py_DECREF always crashes, even though we make
     // matching Py_INCREF call in propgrid_cbacks.cpp. Maybe refcount is decremented
-    // somewhere automatically? Unlikely...
+    // somewhere automatically? Unlikely though...
     //if ( item->m_scriptObject )
     //    Py_DECREF( item->m_scriptObject );
 #endif

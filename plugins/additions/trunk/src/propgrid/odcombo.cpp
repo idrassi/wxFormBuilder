@@ -30,6 +30,7 @@
 #if wxUSE_COMBOBOX
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/log.h"
 
     #include "wx/button.h"
@@ -2154,7 +2155,7 @@ void wxPGComboControlBase::CreatePopup()
     m_popupExtraHandler = new wxPGComboPopupExtraEventHandler(this);
     popup->PushEventHandler( m_popupExtraHandler );
 
-    popupInterface->m_iFlags |= wxCP_IFLAG_CREATED;
+    popupInterface->m_iFlags |= wxPGCP_IFLAG_CREATED;
 }
 
 void wxPGComboControlBase::SetPopup( wxPGComboPopup* iface )
@@ -3091,7 +3092,13 @@ bool wxPGComboControl::Create(wxWindow *parent,
 
     if ( theme )
     {
+#if wxCHECK_VERSION(2, 8, 0)
         const bool isVista = (::wxGetWinVersion() >= wxWinVersion_6);
+#else
+        int Major = 0;
+        int family = wxGetOsVersion(&Major, NULL);
+        const bool isVista = ((family == wxWINDOWS_NT) && (Major >= 6));
+#endif
 
         if ( isVista )
             m_iFlags |= wxPGCC_BUTTON_STAYS_DOWN;
@@ -3354,7 +3361,13 @@ void wxPGComboControl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
     if ( hTheme )
     {
-        const bool useVistaComboBox = ::wxGetWinVersion() >= wxWinVersion_6;
+#if wxCHECK_VERSION(2, 8, 0)
+        const bool useVistaComboBox = (::wxGetWinVersion() >= wxWinVersion_6);
+#else
+        int Major = 0;
+        int family = wxGetOsVersion(&Major, NULL);
+        const bool useVistaComboBox = ((family == wxWINDOWS_NT) && (Major >= 6));
+#endif
 
         RECT rFull;
         wxCopyRectToRECT(borderRect, rFull);

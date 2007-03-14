@@ -38,6 +38,8 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__wndflags.htm#gcd84100a8aa22f6c6d429da8b2a22851">wxPG_DESCRIPTION</a>&nbsp;&nbsp;&nbsp;0x00002000</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__wndflags.htm#g26471c8fee273a31db23ab19cf845427">wxPG_EX_AUTO_UNSPECIFIED_VALUES</a>&nbsp;&nbsp;&nbsp;0x00200000</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__wndflags.htm#g6238d74d02ecdc6cba8b9aca3399944d">wxPG_EX_GREY_LABEL_WHEN_DISABLED</a>&nbsp;&nbsp;&nbsp;0x00040000</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__wndflags.htm#gf3ba8a5b97585dac004501c908221994">wxPG_EX_HELP_AS_TOOLTIPS</a>&nbsp;&nbsp;&nbsp;0x00010000</td></tr>
@@ -49,6 +51,8 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__wndflags.htm#gfea59060b85f5c16d66d23bb3aefc25a">wxPG_EX_NATIVE_DOUBLE_BUFFERING</a>&nbsp;&nbsp;&nbsp;0x00080000</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__wndflags.htm#g976404d581e44afb68bd27ec7470e1d0">wxPG_EX_NO_FLAT_TOOLBAR</a>&nbsp;&nbsp;&nbsp;0x00002000</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__wndflags.htm#g340c19eea207e64423cecccb3215da99">wxPG_EX_PROCESS_EVENTS_IMMEDIATELY</a>&nbsp;&nbsp;&nbsp;0x00100000</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__wndflags.htm#g8e231dedb7309db31824740cdf8a6b23">wxPG_HIDE_CATEGORIES</a>&nbsp;&nbsp;&nbsp;0x00000020</td></tr>
 
@@ -160,6 +164,25 @@ Combines various styles.
 
 </div>
 </div><p>
+<a class="anchor" name="g26471c8fee273a31db23ab19cf845427"></a><!-- doxytag: member="propgrid.h::wxPG_EX_AUTO_UNSPECIFIED_VALUES" ref="g26471c8fee273a31db23ab19cf845427" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define wxPG_EX_AUTO_UNSPECIFIED_VALUES&nbsp;&nbsp;&nbsp;0x00200000          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Set this style to let user have ability to set values of properties to unspecified state. 
+<p>
+Currently, this applies to following properties:<ul>
+<li>wxIntProperty, wxUIntProperty, and wxFloatProperty: Clear the text field. </li></ul>
+
+</div>
+</div><p>
 <a class="anchor" name="g6238d74d02ecdc6cba8b9aca3399944d"></a><!-- doxytag: member="propgrid.h::wxPG_EX_GREY_LABEL_WHEN_DISABLED" ref="g6238d74d02ecdc6cba8b9aca3399944d" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -260,6 +283,23 @@ Allows relying on native double-buffering.
 Extended window style that sets <a class="el" href="classwxPropertyGridManager.htm">wxPropertyGridManager</a> toolbar to not use flat style. 
 <p>
 
+</div>
+</div><p>
+<a class="anchor" name="g340c19eea207e64423cecccb3215da99"></a><!-- doxytag: member="propgrid.h::wxPG_EX_PROCESS_EVENTS_IMMEDIATELY" ref="g340c19eea207e64423cecccb3215da99" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define wxPG_EX_PROCESS_EVENTS_IMMEDIATELY&nbsp;&nbsp;&nbsp;0x00100000          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Process all events immediately, if possible. 
+<p>
+That is, ProcessEvent is called instead of AddPendingEvent. 
 </div>
 </div><p>
 <a class="anchor" name="g8e231dedb7309db31824740cdf8a6b23"></a><!-- doxytag: member="propgrid.h::wxPG_HIDE_CATEGORIES" ref="g8e231dedb7309db31824740cdf8a6b23" args="" -->
@@ -432,7 +472,7 @@ wxTAB_TRAVERSAL allows using Tab/Shift-Tab to travel between properties in grid.
 Travelling forwards from last property will navigate to the next control, and backwards from first will navigate to the previous one. 
 </div>
 </div><p>
-<hr size="1"><address style="align: right;"><small>Generated on Sun Dec 3 13:35:15 2006 for wxPropertyGrid by&nbsp;
+<hr size="1"><address style="align: right;"><small>Generated on Sun Mar 11 11:38:07 2007 for wxPropertyGrid by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.1-p1 </small></address>
 </body>
