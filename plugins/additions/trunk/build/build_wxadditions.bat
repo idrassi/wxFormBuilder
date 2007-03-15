@@ -7,8 +7,10 @@
 :: Description:    Use this to build all the projects for wxAdditions.
 ::                 Make sure to add the calls to any additions made to the
 ::                 wxAdditions library.
+::
+:: Prerequistes:   
 ::**************************************************************************
-
+goto test
 echo Generate all makefiles needed.
 echo.
 call bakefile_gen
@@ -98,7 +100,7 @@ echo Building wxPlotCtrl with MinGW Gcc
 echo.
 call wxBuild_plotctrl MINGW ALL
 cd ..
-
+:test
 :: -- wxLedBarGraph --
 echo Building wxLedBarGraph with VC7.1
 echo.
@@ -109,6 +111,22 @@ echo Building wxLedBarGraph with MinGW Gcc
 echo.
 call wxBuild_default MINGW ALL
 cd ..
+
+:: -- wxFB Plugin --
+echo Create the build files needed.
+cd ..\wxfbPlugin
+call create_build_files
+
+echo Building wxFB Plugin with MinGW Gcc
+echo.
+call mingw32-make CONFIG=Release
+
+echo Copy over need dll's to the wxAdditions plug-in directory
+copy /Y ..\lib\gcc_dll\wxmsw28um_awx_gcc.dll wxAdditions\wxmsw28um_awx_gcc.dll
+copy /Y ..\lib\gcc_dll\wxmsw28um_ledbargraph_gcc.dll wxAdditions\wxmsw28um_ledbargraph_gcc.dll
+copy /Y ..\lib\gcc_dll\wxmsw28um_plotctrl_gcc.dll wxAdditions\wxmsw28um_plotctrl_gcc.dll
+copy /Y ..\lib\gcc_dll\wxmsw28um_things_gcc.dll wxAdditions\wxmsw28um_things_gcc.dll
+cd ..\build
 
 ::echo Clean up link libraries for MinGW Gcc.
 ::cd ..\lib\gcc_dll
