@@ -10,7 +10,7 @@
 ::
 :: Prerequistes:   
 ::**************************************************************************
-goto test
+
 echo Generate all makefiles needed.
 echo.
 call bakefile_gen
@@ -100,7 +100,7 @@ echo Building wxPlotCtrl with MinGW Gcc
 echo.
 call wxBuild_plotctrl MINGW ALL
 cd ..
-:test
+
 :: -- wxLedBarGraph --
 echo Building wxLedBarGraph with VC7.1
 echo.
