@@ -39,9 +39,6 @@ if ( OS == "windows" ) then
 			"wxmsw"..wx_ver..wx_ver_minor.."umd_plotctrl_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."umd_things_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."umd_awx_gcc",
-			"wxmsw"..wx_ver..wx_ver_minor.."umd_propgrid_gcc",
-			"wxmsw"..wx_ver..wx_ver_minor.."umd_scintilla_gcc",
-			"wxmsw"..wx_ver..wx_ver_minor.."umd_flatnotebook_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."umd_ledbargraph_gcc"
 		}
 		package.config["Release"].links =
@@ -49,9 +46,6 @@ if ( OS == "windows" ) then
 			"wxmsw"..wx_ver..wx_ver_minor.."um_plotctrl_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."um_things_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."um_awx_gcc",
-			"wxmsw"..wx_ver..wx_ver_minor.."um_propgrid_gcc",
-			"wxmsw"..wx_ver..wx_ver_minor.."um_scintilla_gcc",
-			"wxmsw"..wx_ver..wx_ver_minor.."um_flatnotebook_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."um_ledbargraph_gcc"
 		}
 	else
@@ -60,9 +54,6 @@ if ( OS == "windows" ) then
 			"wxmsw"..wx_ver..wx_ver_minor.."md_plotctrl_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."md_things_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."md_awx_gcc",
-			"wxmsw"..wx_ver..wx_ver_minor.."md_propgrid_gcc",
-			"wxmsw"..wx_ver..wx_ver_minor.."md_scintilla_gcc",
-			"wxmsw"..wx_ver..wx_ver_minor.."md_flatnotebook_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."md_ledbargraph_gcc"
 		}
 		package.config["Release"].links =
@@ -70,9 +61,6 @@ if ( OS == "windows" ) then
 			"wxmsw"..wx_ver..wx_ver_minor.."m_plotctrl_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."m_things_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."m_awx_gcc",
-			"wxmsw"..wx_ver..wx_ver_minor.."m_propgrid_gcc",
-			"wxmsw"..wx_ver..wx_ver_minor.."m_scintilla_gcc",
-			"wxmsw"..wx_ver..wx_ver_minor.."m_flatnotebook_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."m_ledbargraph_gcc"
 		}
 	end
@@ -83,9 +71,6 @@ else
 			"`wx-config --debug=yes --unicode=yes --basename`_plotctrl-`wx-config --release`",
 			"`wx-config --debug=yes --unicode=yes --basename`_things-`wx-config --release`",
 			"`wx-config --debug=yes --unicode=yes --basename`_awx-`wx-config --release`",
-			"`wx-config --debug=yes --unicode=yes --basename`_propgrid-`wx-config --release`",
-			"`wx-config --debug=yes --unicode=yes --basename`_scintilla-`wx-config --release`",
-			"`wx-config --debug=yes --unicode=yes --basename`_flatnotebook-`wx-config --release`",
 			"`wx-config --debug=yes --unicode=yes --basename`_ledbargraph-`wx-config --release`"
 		}
 		package.config["Release"].links =
@@ -93,9 +78,6 @@ else
 			"`wx-config --debug=no --unicode=yes --basename`_plotctrl-`wx-config --release`",
 			"`wx-config --debug=no --unicode=yes --basename`_things-`wx-config --release`",
 			"`wx-config --debug=no --unicode=yes --basename`_awx-`wx-config --release`",
-			"`wx-config --debug=no --unicode=yes --basename`_propgrid-`wx-config --release`",
-			"`wx-config --debug=no --unicode=yes --basename`_scintilla-`wx-config --release`",
-			"`wx-config --debug=no --unicode=yes --basename`_flatnotebook-`wx-config --release`",
 			"`wx-config --debug=no --unicode=yes --basename`_ledbargraph-`wx-config --release`"
 		}
 	else
@@ -104,9 +86,6 @@ else
 			"`wx-config --debug=yes --unicode=no --basename`_plotctrl-`wx-config --release`",
 			"`wx-config --debug=yes --unicode=no --basename`_things-`wx-config --release`",
 			"`wx-config --debug=yes --unicode=no --basename`_awx-`wx-config --release`",
-			"`wx-config --debug=yes --unicode=no --basename`_propgrid-`wx-config --release`",
-			"`wx-config --debug=yes --unicode=no --basename`_scintilla-`wx-config --release`",
-			"`wx-config --debug=yes --unicode=no --basename`_flatnotebook-`wx-config --release`",
 			"`wx-config --debug=yes --unicode=no --basename`_ledbargraph-`wx-config --release`"
 		}
 		package.config["Release"].links =
@@ -114,9 +93,6 @@ else
 			"`wx-config --debug=no --unicode=no --basename`_plotctrl-`wx-config --release`",
 			"`wx-config --debug=no --unicode=no --basename`_things-`wx-config --release`",
 			"`wx-config --debug=no --unicode=no --basename`_awx-`wx-config --release`",
-			"`wx-config --debug=no --unicode=no --basename`_propgrid-`wx-config --release`",
-			"`wx-config --debug=no --unicode=no --basename`_scintilla-`wx-config --release`",
-			"`wx-config --debug=no --unicode=no --basename`_flatnotebook-`wx-config --release`",
 			"`wx-config --debug=no --unicode=no --basename`_ledbargraph-`wx-config --release`"
 		}
 	end
