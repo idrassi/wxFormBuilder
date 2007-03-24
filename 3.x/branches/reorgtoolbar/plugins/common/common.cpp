@@ -27,7 +27,6 @@
 #include <plugin.h>
 #include <xrcconv.h>
 
-#include <wx/grid.h>
 #include <wx/statline.h>
 #include <wx/listctrl.h>
 #include <wx/radiobox.h>
@@ -98,14 +97,12 @@ public:
 	m_window( win ),
 	m_manager( manager )
 	{
-
 	}
 
 protected:
 	void OnText( wxCommandEvent& event );
 	void OnChecked( wxCommandEvent& event );
 	void OnTool( wxCommandEvent& event );
-	void OnGridClick( wxGridEvent& event );
 
 	DECLARE_EVENT_TABLE()
 };
@@ -116,10 +113,6 @@ BEGIN_EVENT_TABLE( ComponentEvtHandler, wxEvtHandler )
 
 	// Tools do not get click events, so this will help select them
 	EVT_TOOL( wxID_ANY, ComponentEvtHandler::OnTool )
-
-	// Grid also seems to ignore clicks
-	EVT_GRID_CELL_LEFT_CLICK( ComponentEvtHandler::OnGridClick )
-	EVT_GRID_LABEL_LEFT_CLICK( ComponentEvtHandler::OnGridClick )
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -371,79 +364,6 @@ public:
 		return filter.GetXfbObject();
 	}
 };
-
-class PanelComponent : public ComponentBase
-{
-public:
-
-	wxObject* Create(IObject *obj, wxObject *parent)
-	{
-		wxPanel* panel = new wxPanel((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
-		return panel;
-	}
-
-	TiXmlElement* ExportToXrc(IObject *obj)
-	{
-		ObjectToXrcFilter xrc(obj, _("wxPanel"), obj->GetPropertyAsString(_("name")));
-		xrc.AddWindowProperties();
-		//xrc.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
-		return xrc.GetXrcObject();
-	}
-
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
-	{
-		XrcToXfbFilter filter(xrcObj, _("wxPanel"));
-		filter.AddWindowProperties();
-		//filter.AddProperty(_("style"),_("style"),XRC_TYPE_BITLIST);
-		return filter.GetXfbObject();
-	}
-
-};
-
-class GridComponent : public ComponentBase
-{
-public:
-
-	wxObject* Create(IObject *obj, wxObject *parent)
-	{
-		wxGrid *grid = new wxGrid((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("window_style")));
-
-		grid->CreateGrid(
-			obj->GetPropertyAsInteger(_("rows")),
-			obj->GetPropertyAsInteger(_("cols")));
-
-		grid->PushEventHandler( new ComponentEvtHandler( grid, GetManager() ) );
-
-		return grid;
-	}
-
-	TiXmlElement* ExportToXrc(IObject *obj)
-	{
-		ObjectToXrcFilter xrc(obj, _("wxGrid"), obj->GetPropertyAsString(_("name")));
-		xrc.AddWindowProperties();
-		return xrc.GetXrcObject();
-	}
-
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
-	{
-		XrcToXfbFilter filter(xrcObj, _("wxGrid"));
-		filter.AddWindowProperties();
-		return filter.GetXfbObject();
-	}
-};
-
-void ComponentEvtHandler::OnGridClick( wxGridEvent& event )
-{
-	m_manager->SelectObject( m_window );
-	event.Skip();
-}
-
 
 class ComboBoxComponent : public ComponentBase
 {
@@ -1258,8 +1178,6 @@ WINDOW_COMPONENT("wxButton",ButtonComponent)
 WINDOW_COMPONENT("wxBitmapButton",BitmapButtonComponent)
 WINDOW_COMPONENT("wxTextCtrl",TextCtrlComponent)
 WINDOW_COMPONENT("wxStaticText",StaticTextComponent)
-WINDOW_COMPONENT("wxPanel",PanelComponent)
-WINDOW_COMPONENT("wxGrid",GridComponent)
 WINDOW_COMPONENT("wxComboBox", ComboBoxComponent)
 WINDOW_COMPONENT("wxListBox", ListBoxComponent)
 WINDOW_COMPONENT("wxRadioBox", RadioBoxComponent)
@@ -1404,7 +1322,7 @@ MACRO(wxRA_USE_CHECKBOX)
 // wxStatusBar
 MACRO(wxST_SIZEGRIP)
 
-//wxMenuBar
+// wxMenuBar
 MACRO(wxMB_DOCKABLE)
 
 // wxMenuItem
