@@ -312,7 +312,7 @@
     #define wxPG_TEXTCTRL_AND_BUTTON_SPACING        8
 #else
     #define wxPG_TEXTCTRL_AND_BUTTON_SPACING        2
-#endif 
+#endif
 
 #define wxPG_HIDER_BUTTON_HEIGHT        25
 
@@ -403,10 +403,10 @@ static bool wxPGIsWindowBuffered( const wxWindow* wnd )
 
 #elif defined(__WXGTK20__)
 
-#include <gtk/gtk.h>
+//#include <gtk/gtk.h>
 static bool wxPGIsWindowBuffered( const wxWindow* wnd )
 {
-    return GTK_WIDGET_DOUBLE_BUFFERED(wnd->GetHandle());
+    return false;//GTK_WIDGET_DOUBLE_BUFFERED(wnd->GetHandle());
 }
 
 #elif defined(__WXMAC_OSX__) || defined(__WXCOCOA__) || defined(__WXDFB__)
@@ -3724,7 +3724,7 @@ void wxPropertyGrid::Init2()
 #ifdef __WXMAC__
    // Smaller controls on Mac
    SetWindowVariant(wxWINDOW_VARIANT_SMALL);
-#endif 
+#endif
 
     // Now create state, if one didn't exist already
     // (wxPropertyGridManager might have created it for us).
@@ -5050,7 +5050,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
    p.x = pos.x + sz.x - but->GetSize().x - 2;
    but->Move(p);
 
-#else 
+#else
     wxSize s(sz.y-(wxPG_BUTTON_SIZEDEC*2)+(wxPG_NAT_BUTTON_BORDER_Y*2),
         sz.y-(wxPG_BUTTON_SIZEDEC*2)+(wxPG_NAT_BUTTON_BORDER_Y*2));
 
