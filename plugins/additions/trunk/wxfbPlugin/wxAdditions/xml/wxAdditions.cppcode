@@ -67,7 +67,6 @@
 			$name->SetNBars( $nbars ); #nl
 			$name->SetMaxValue( $max_value ); #nl
 			$name->SetMinValue( $min_value ); #nl
-			$name->SetValue( $value ); #nl
 		</template>
 		<template name="include">@#include &lt;wx/ledBarGraph/ledBarGraph.h&gt;</template>
 	</templates>
