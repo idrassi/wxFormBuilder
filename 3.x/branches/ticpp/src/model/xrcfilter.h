@@ -28,6 +28,7 @@
 
 #include "utils/wxfbdefs.h"
 #include "model/database.h"
+#include <tinyxml.h>
 
 /**
  * Filtro de conversión de/a formato XRC.

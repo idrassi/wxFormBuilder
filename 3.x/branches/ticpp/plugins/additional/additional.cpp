@@ -108,7 +108,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxCalendarCtrl"));
 		filter.AddWindowProperties();
@@ -137,7 +137,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxDatePickerCtrl"));
 		filter.AddWindowProperties();
@@ -172,7 +172,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxHtmlWindow"));
 		filter.AddWindowProperties();
@@ -207,7 +207,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxToggleButton"));
 		filter.AddWindowProperties();
@@ -249,7 +249,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxTreeCtrl"));
 		filter.AddWindowProperties();
@@ -285,7 +285,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxScrollBar"));
 		filter.AddWindowProperties();
@@ -322,7 +322,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxSpinCtrl"));
 		filter.AddWindowProperties();
@@ -353,7 +353,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxSpinButton"));
 		filter.AddWindowProperties();
@@ -387,7 +387,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxCheckListBox"));
 		filter.AddWindowProperties();
@@ -424,7 +424,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxGrid"));
 		filter.AddWindowProperties();
@@ -466,7 +466,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxColourPickerCtrl"));
 		filter.AddProperty(_("value"),_("colour"),XRC_TYPE_COLOUR);
@@ -519,7 +519,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxFontPickerCtrl"));
 		filter.AddProperty(_("value"),_("value"),XRC_TYPE_FONT);
@@ -568,7 +568,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxFilePickerCtrl"));
 		filter.AddProperty(_("value"),_("value"),XRC_TYPE_FONT);
@@ -616,7 +616,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxDirPickerCtrl"));
 		filter.AddProperty(_("value"),_("value"),XRC_TYPE_FONT);

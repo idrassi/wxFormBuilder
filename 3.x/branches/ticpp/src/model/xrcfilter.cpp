@@ -32,6 +32,7 @@
 #include <wx/txtstrm.h>
 #include <sstream>
 #include "model/objectbase.h"
+#include <ticpp.h>
 
 TiXmlElement* XrcFilter::GetXrcClassInfo(const std::string &classname)
 {
