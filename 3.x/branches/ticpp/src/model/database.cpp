@@ -437,94 +437,83 @@ void ObjectDatabase::ResetObjectCounters()
 
 ///////////////////////////////////////////////////////////////////////
 
-PObjectBase  ObjectDatabase::CreateObject(TiXmlElement *xml_obj, PObjectBase parent)
+PObjectBase ObjectDatabase::CreateObject( ticpp::Element* xml_obj, PObjectBase parent )
 {
-	if (!xml_obj->Attribute(CLASS_TAG))
-		return PObjectBase();
-
-	std::string class_name = xml_obj->Attribute(CLASS_TAG);
-	PObjectBase object = CreateObject(class_name,parent);
-
-	if (object)
+	try
 	{
-		// Get the state of expansion in the object tree
-		int expanded = 1;
-		if ( TIXML_SUCCESS != xml_obj->QueryIntAttribute( EXPANDED_TAG, &expanded ) )
-		{
-			object->SetExpanded( true );
-		}
-		else
-		{
-			object->SetExpanded( (expanded != 0) );
-		}
+		std::string class_name;
+		xml_obj->GetAttribute( CLASS_TAG, &class_name, false );
 
-		// modificamos cada propiedad
-		TiXmlElement *xml_prop = xml_obj->FirstChildElement(PROPERTY_TAG);
-		while (xml_prop)
+		PObjectBase object = CreateObject( class_name, parent );
+		if ( object )
 		{
-			std::string prop_value;
-			std::string prop_name = xml_prop->Attribute(NAME_TAG);
-			PProperty prop = object->GetProperty( _WXSTR(prop_name) );
-			if (prop) // ¿ existe la propiedad ?
+			// Get the state of expansion in the object tree
+			bool expanded;
+			xml_obj->GetAttributeOrDefault( EXPANDED_TAG, &expanded, true );
+			object->SetExpanded( expanded );
+
+			// Load the properties
+			ticpp::Element* xml_prop = xml_obj->FirstChildElement( PROPERTY_TAG, false );
+			while ( xml_prop )
 			{
-				// modificamos el valor
-				TiXmlNode *xml_value = xml_prop->FirstChild();
-				if (xml_value && xml_value->ToText())
-					prop_value = xml_value->ToText()->Value();
+				std::string prop_name;
+				xml_prop->GetAttribute( NAME_TAG, &prop_name, false );
+				PProperty prop = object->GetProperty( _WXSTR(prop_name) );
+
+				if ( prop ) // does the property exist
+				{
+					// load the value
+					prop->SetValue( _WXSTR( xml_prop->GetText( false ) ) );
+				}
 				else
-					prop_value = ""; // valor nulo
+				{
+					wxLogError( wxT("The property named \"%s\" of class \"%s\" is not supported by this version of wxFormBuilder.\n")
+								wxT("If your project file was just converted from an older version, then the conversion was not complete.\n")
+								wxT("Otherwise, this project is from a newer version of wxFormBuilder.\n\n")
+								wxT("If you save this project, YOU WILL LOSE DATA"), _WXSTR(prop_name).c_str(), _WXSTR(class_name).c_str() );
+				}
 
-				prop->SetValue( _WXSTR(prop_value) );
+				xml_prop = xml_prop->NextSiblingElement( PROPERTY_TAG, false );
 			}
-			else
+
+			// load the event handlers
+			ticpp::Element* xml_event = xml_obj->FirstChildElement( EVENT_TAG, false );
+			while ( xml_event )
 			{
-				wxLogError( wxT("The property named \"%s\" of class \"%s\" is not supported by this version of wxFormBuilder.\n")
-							wxT("If your project file was just converted from an older version, then the conversion was not complete.\n")
-							wxT("Otherwise, this project is from a newer version of wxFormBuilder.\n\n")
-							wxT("If you save this project, YOU WILL LOSE DATA"), _WXSTR(prop_name).c_str(), _WXSTR(class_name).c_str() );
+				std::string event_name;
+				xml_event->GetAttribute( NAME_TAG, &event_name, false );
+				PEvent event = object->GetEvent( _WXSTR(event_name) );
+				if ( event )
+				{
+					event->SetValue( _WXSTR( xml_event->GetText( false ) ) );
+				}
+
+				xml_event = xml_event->NextSiblingElement( EVENT_TAG, false );
 			}
 
-			xml_prop = xml_prop->NextSiblingElement(PROPERTY_TAG);
-		}
 
-		// now, we modify every event handler
-		TiXmlElement *xml_event = xml_obj->FirstChildElement(EVENT_TAG);
-		while (xml_event)
-		{
-		  std::string event_value;
-			std::string event_name = xml_event->Attribute(NAME_TAG);
-			PEvent event = object->GetEvent( _WXSTR(event_name) );
-			if (event)
+			if ( parent )
 			{
-				TiXmlNode *xml_value = xml_event->FirstChild();
-				if (xml_value && xml_value->ToText())
-					event_value = xml_value->ToText()->Value();
-				else
-					event_value = "";
-
-				event->SetValue( _WXSTR(event_value) );
+				// set up parent/child relationship
+				parent->AddChild( object );
+				object->SetParent( parent );
 			}
 
-			xml_event = xml_event->NextSiblingElement(EVENT_TAG);
+			// create the children
+			ticpp::Element* child = xml_obj->FirstChildElement( OBJECT_TAG, false );
+			while ( child )
+			{
+				PObjectBase childObj = CreateObject( child, object );
+				child = child->NextSiblingElement( OBJECT_TAG, false );
+			}
 		}
 
-
-		if (parent)
-		{
-			// enlazamos
-			parent->AddChild(object);
-			object->SetParent(parent);
-		}
-
-		// creamos los hijos
-		TiXmlElement *child = xml_obj->FirstChildElement(OBJECT_TAG);
-		while (child)
-		{
-			PObjectBase childObj = CreateObject(child,object);
-			child = child->NextSiblingElement(OBJECT_TAG);
-		}
+		return object;
 	}
-	return object;
+	catch( ticpp::Exception& )
+	{
+		return PObjectBase();
+	}
 }
 
 //////////////////////////////

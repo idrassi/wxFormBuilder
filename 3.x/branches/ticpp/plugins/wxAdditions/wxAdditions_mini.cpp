@@ -339,7 +339,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxFlatNotebook"));
 		filter.AddWindowProperties();
@@ -456,7 +456,7 @@ public:
 	return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 	XrcToXfbFilter filter(xrcObj, _("notebookpage"));
 	filter.AddWindowProperties();

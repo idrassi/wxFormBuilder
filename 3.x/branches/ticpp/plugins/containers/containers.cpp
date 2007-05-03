@@ -199,7 +199,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxPanel"));
 		filter.AddWindowProperties();
@@ -264,7 +264,7 @@ class SplitterWindowComponent : public ComponentBase
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxSplitterWindow"));
 		filter.AddWindowProperties();
@@ -423,7 +423,7 @@ public:
         return xrc.GetXrcObject();
     }
 
-    TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+    ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
     {
         XrcToXfbFilter filter(xrcObj, _("wxScrolledWindow"));
         filter.AddWindowProperties();
@@ -456,7 +456,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxNotebook"));
 		filter.AddWindowProperties();
@@ -491,7 +491,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
     XrcToXfbFilter filter(xrcObj, _("notebookpage"));
 		filter.AddWindowProperties();
@@ -545,7 +545,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxListbook"));
 		filter.AddWindowProperties();
@@ -580,7 +580,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("listbookpage"));
 		filter.AddWindowProperties();
@@ -612,7 +612,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxChoicebook"));
 		filter.AddWindowProperties();
@@ -647,7 +647,7 @@ public:
 		return xrc.GetXrcObject();
 	}
 
-	TiXmlElement* ImportFromXrc(TiXmlElement *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter(xrcObj, _("choicebookpage"));
 		filter.AddWindowProperties();
