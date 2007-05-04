@@ -28,7 +28,7 @@
 
 #include "utils/wxfbdefs.h"
 #include "model/database.h"
-#include <tinyxml.h>
+#include <ticpp.h>
 
 /**
  * Filtro de conversión de/a formato XRC.
@@ -40,7 +40,7 @@ class XrcFilter
    * Documento XML que contiene la información de todos los componentes
    * contemplados en el formato XRC (xrc.xml)
    */
-  TiXmlDocument m_xrcDb;
+  ticpp::Document m_xrcDb;
 
   /**
    * ObjectDatabase
@@ -51,23 +51,23 @@ class XrcFilter
    * Dado el nombre de una clase obtiene la información XRC para dicha clase,
    * o NULL si no está definida en el formato XRC.
    */
-  TiXmlElement* GetXrcClassInfo(const std::string &classname);
+  ticpp::Element* GetXrcClassInfo(const std::string &classname);
 
   /**
    * Enlaza todas las propiedades de un objeto en un nodo XML.
    */
-  void LinkValues(TiXmlElement *element, TiXmlElement *xrcInfo,
+  void LinkValues(ticpp::Element *element, ticpp::Element *xrcInfo,
                   const PObjectBase obj);
   /**
    * "Cuelga" de propElement el valor de la propiedad prop.
    */
-  void LinkValue(const PProperty prop, TiXmlElement *propElement);
+  void LinkValue(const PProperty prop, ticpp::Element *propElement);
 
   /**
    * "Cuelga" de propElement la descripción de la fuente font en el formato
    * XRC
    */
-  void LinkFont(const wxFont &font, TiXmlElement *propElement);
+  void LinkFont(const wxFont &font, ticpp::Element *propElement);
 
   /**
    * Devuelve el nombre de la clase. Será el resultado de GetClassName()
@@ -79,14 +79,14 @@ class XrcFilter
   /**
    * Dado un objeto, crea un árbol XML en formato XRC
    */
-  TiXmlElement* GetElement(PObjectBase project);
-  void ImportXrcProperties(TiXmlElement *xrcObj, PObjectBase obj);
-  void ImportXrcProperty(TiXmlElement *xrcProperty, PProperty property);
-  void ImportColour(TiXmlElement *xrcProperty, PProperty property);
-  void ImportFont(TiXmlElement *xrcProperty, PProperty property);
-  void ImportXrcElements(TiXmlElement *xrcObj, TiXmlElement *xrcInfo, PObjectBase obj);
+  ticpp::Element* GetElement(PObjectBase project);
+  void ImportXrcProperties(ticpp::Element *xrcObj, PObjectBase obj);
+  void ImportXrcProperty(ticpp::Element *xrcProperty, PProperty property);
+  void ImportColour(ticpp::Element *xrcProperty, PProperty property);
+  void ImportFont(ticpp::Element *xrcProperty, PProperty property);
+  void ImportXrcElements(ticpp::Element *xrcObj, ticpp::Element *xrcInfo, PObjectBase obj);
 
-  PObjectBase GetObject(TiXmlElement *xrcObj, PObjectBase parent,
+  PObjectBase GetObject(ticpp::Element *xrcObj, PObjectBase parent,
                         bool is_form = false);
  public:
 
@@ -100,13 +100,13 @@ class XrcFilter
   /**
    * Obtiene el documento XML en formato XRC de un proyecto wxFB.
    */
-  TiXmlDocument *GetXrcDocument (PObjectBase project);
+  ticpp::Document* GetXrcDocument (PObjectBase project);
 
 
   /**
    * Dado un árbol XML en formato XRC, crea el arbol de objetos asociado.
    */
-  PObjectBase GetProject(TiXmlDocument *xrcDoc);
+  PObjectBase GetProject(ticpp::Document* xrcDoc);
 
 };
 
@@ -118,7 +118,7 @@ class XrcLoader
  private:
   PObjectDatabase m_objDb;
 
-  PObjectBase GetObject(TiXmlElement *xrcObj, PObjectBase parent);
+  PObjectBase GetObject(ticpp::Element *xrcObj, PObjectBase parent);
 
  public:
 
@@ -127,7 +127,7 @@ class XrcLoader
   /**
    * Dado un árbol XML en formato XRC, crea el arbol de objetos asociado.
    */
-  PObjectBase GetProject(TiXmlDocument *xrcDoc);
+  PObjectBase GetProject(ticpp::Document* xrcDoc);
 };
 
 #endif //__XRC_FILTER__
