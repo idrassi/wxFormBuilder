@@ -26,6 +26,7 @@
 #include <component.h>
 #include <plugin.h>
 #include <xrcconv.h>
+#include <ticpp.h>
 
 #include <wx/calctrl.h>
 #include <wx/html/htmlwin.h>
@@ -39,9 +40,9 @@
 #include <wx/grid.h>
 
 #if wxCHECK_VERSION( 2, 8, 0 )
-#include <wx/clrpicker.h>
-#include <wx/fontpicker.h>
-#include <wx/filepicker.h>
+	#include <wx/clrpicker.h>
+	#include <wx/fontpicker.h>
+	#include <wx/filepicker.h>
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -65,22 +66,22 @@ public:
 
 protected:
 	void OnGridClick( wxGridEvent& event );
-#if wxCHECK_VERSION( 2, 8, 0 )
-	void OnColourPickerColourChanged( wxColourPickerEvent& event );
-	void OnFontPickerFontChanged( wxFontPickerEvent& event );
-	void OnFilePickerFileChanged( wxFileDirPickerEvent& event );
-	void OnDirPickerDirChanged( wxFileDirPickerEvent& event );
-#endif
+	#if wxCHECK_VERSION( 2, 8, 0 )
+		void OnColourPickerColourChanged( wxColourPickerEvent& event );
+		void OnFontPickerFontChanged( wxFontPickerEvent& event );
+		void OnFilePickerFileChanged( wxFileDirPickerEvent& event );
+		void OnDirPickerDirChanged( wxFileDirPickerEvent& event );
+	#endif
 	DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE( ComponentEvtHandler, wxEvtHandler )
-#if wxCHECK_VERSION( 2, 8, 0 )
-	EVT_COLOURPICKER_CHANGED( -1, ComponentEvtHandler::OnColourPickerColourChanged )
-	EVT_FONTPICKER_CHANGED( -1, ComponentEvtHandler::OnFontPickerFontChanged )
-	EVT_FILEPICKER_CHANGED( -1, ComponentEvtHandler::OnFilePickerFileChanged )
-	EVT_DIRPICKER_CHANGED( -1, ComponentEvtHandler::OnDirPickerDirChanged )
-#endif
+	#if wxCHECK_VERSION( 2, 8, 0 )
+		EVT_COLOURPICKER_CHANGED( -1, ComponentEvtHandler::OnColourPickerColourChanged )
+		EVT_FONTPICKER_CHANGED( -1, ComponentEvtHandler::OnFontPickerFontChanged )
+		EVT_FILEPICKER_CHANGED( -1, ComponentEvtHandler::OnFilePickerFileChanged )
+		EVT_DIRPICKER_CHANGED( -1, ComponentEvtHandler::OnDirPickerDirChanged )
+	#endif
 	// Grid also seems to ignore clicks
 	EVT_GRID_CELL_LEFT_CLICK( ComponentEvtHandler::OnGridClick )
 	EVT_GRID_LABEL_LEFT_CLICK( ComponentEvtHandler::OnGridClick )
@@ -100,11 +101,10 @@ public:
 			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
 	}
 
-	TiXmlElement* ExportToXrc(IObject *obj)
+	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		ObjectToXrcFilter xrc(obj, _("wxCalendarCtrl"), obj->GetPropertyAsString(_("name")));
 		xrc.AddWindowProperties();
-		//xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
 		return xrc.GetXrcObject();
 	}
 
@@ -112,7 +112,6 @@ public:
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxCalendarCtrl"));
 		filter.AddWindowProperties();
-		//filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
 		return filter.GetXfbObject();
 	}
 };
@@ -129,11 +128,10 @@ public:
 			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
 	}
 
-	TiXmlElement* ExportToXrc(IObject *obj)
+	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		ObjectToXrcFilter xrc(obj, _("wxDatePickerCtrl"), obj->GetPropertyAsString(_("name")));
 		xrc.AddWindowProperties();
-		//xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
 		return xrc.GetXrcObject();
 	}
 
@@ -141,7 +139,6 @@ public:
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxDatePickerCtrl"));
 		filter.AddWindowProperties();
-		//filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
 		return filter.GetXfbObject();
 	}
 };
@@ -165,7 +162,7 @@ public:
 		return hw;
 	}
 
-	TiXmlElement* ExportToXrc(IObject *obj)
+	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		ObjectToXrcFilter xrc(obj, _("wxHtmlWindow"), obj->GetPropertyAsString(_("name")));
 		xrc.AddWindowProperties();
@@ -197,11 +194,10 @@ public:
 		return tb;
 	}
 
-	TiXmlElement* ExportToXrc(IObject *obj)
+	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		ObjectToXrcFilter xrc(obj, _("wxToggleButton"), obj->GetPropertyAsString(_("name")));
 		xrc.AddWindowProperties();
-		//xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
 		xrc.AddProperty(_("label"),_("label"), XRC_TYPE_TEXT);
 		xrc.AddProperty(_("value"),_("checked"), XRC_TYPE_BOOL);
 		return xrc.GetXrcObject();
@@ -211,7 +207,6 @@ public:
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxToggleButton"));
 		filter.AddWindowProperties();
-		//filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
 		filter.AddProperty(_("label"),_("label"), XRC_TYPE_TEXT);
 		filter.AddProperty(_("checked"),_("value"), XRC_TYPE_BOOL);
 		return filter.GetXfbObject();
@@ -242,7 +237,7 @@ public:
 		return tc;
 	}
 
-	TiXmlElement* ExportToXrc(IObject *obj)
+	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		ObjectToXrcFilter xrc(obj, _("wxTreeCtrl"), obj->GetPropertyAsString(_("name")));
 		xrc.AddWindowProperties();
@@ -274,7 +269,7 @@ public:
         return sb;
 	}
 
-	TiXmlElement* ExportToXrc(IObject *obj)
+	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		ObjectToXrcFilter xrc(obj, _("wxScrollBar"), obj->GetPropertyAsString(_("name")));
 		xrc.AddWindowProperties();
@@ -312,7 +307,7 @@ public:
 			obj->GetPropertyAsInteger(_("initial")));
 	}
 
-	TiXmlElement* ExportToXrc(IObject *obj)
+	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		ObjectToXrcFilter xrc(obj, _("wxSpinCtrl"), obj->GetPropertyAsString(_("name")));
 		xrc.AddWindowProperties();
@@ -346,7 +341,7 @@ public:
 			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
 	}
 
-	TiXmlElement* ExportToXrc(IObject *obj)
+	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		ObjectToXrcFilter xrc(obj, _("wxSpinButton"), obj->GetPropertyAsString(_("name")));
 		xrc.AddWindowProperties();
@@ -378,11 +373,10 @@ public:
 		return cl;
 	}
 
-	TiXmlElement* ExportToXrc(IObject *obj)
+	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		ObjectToXrcFilter xrc(obj, _("wxCheckListBox"), obj->GetPropertyAsString(_("name")));
 		xrc.AddWindowProperties();
-		//xrc.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
 		xrc.AddProperty(_("choices"), _("content"), XRC_TYPE_STRINGLIST);
 		return xrc.GetXrcObject();
 	}
@@ -391,7 +385,6 @@ public:
 	{
 		XrcToXfbFilter filter(xrcObj, _("wxCheckListBox"));
 		filter.AddWindowProperties();
-		//filter.AddProperty(_("style"),_("style"), XRC_TYPE_BITLIST);
 		filter.AddProperty(_("content"), _("choices"), XRC_TYPE_STRINGLIST);
 		return filter.GetXfbObject();
 	}
@@ -417,7 +410,7 @@ public:
 		return grid;
 	}
 
-	TiXmlElement* ExportToXrc(IObject *obj)
+	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		ObjectToXrcFilter xrc(obj, _("wxGrid"), obj->GetPropertyAsString(_("name")));
 		xrc.AddWindowProperties();
@@ -458,7 +451,7 @@ public:
 		return colourpicker;
 	}
 
-	TiXmlElement* ExportToXrc(IObject *obj)
+	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		ObjectToXrcFilter xrc(obj, _("wxColourPickerCtrl"), obj->GetPropertyAsString(_("name")));
 		xrc.AddProperty(_("colour"),_("value"),XRC_TYPE_COLOUR);
@@ -508,7 +501,7 @@ public:
 		return picker;
 	}
 
-	TiXmlElement* ExportToXrc(IObject *obj)
+	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		ObjectToXrcFilter xrc(obj, _("wxFontPickerCtrl"), obj->GetPropertyAsString(_("name")));
 		if ( !obj->IsNull( _("value") ) )
@@ -558,7 +551,7 @@ public:
 		return picker;
 	}
 
-	TiXmlElement* ExportToXrc(IObject *obj)
+	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		ObjectToXrcFilter xrc(obj, _("wxFilePickerCtrl"), obj->GetPropertyAsString(_("name")));
 		xrc.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
@@ -607,7 +600,7 @@ public:
 		return picker;
 	}
 
-	TiXmlElement* ExportToXrc(IObject *obj)
+	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		ObjectToXrcFilter xrc(obj, _("wxDirPickerCtrl"), obj->GetPropertyAsString(_("name")));
 		xrc.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
