@@ -27,7 +27,10 @@
 #define _XRC_CODE_GEN_
 
 #include "codegen.h"
-class ticpp::Element;
+namespace ticpp
+{
+	class Element;
+}
 
 /**
  * Generador de código XRC.

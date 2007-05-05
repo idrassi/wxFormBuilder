@@ -698,13 +698,9 @@ void XrcToXfbFilter::ImportFontProperty( const wxString &xrcPropName, ticpp::Ele
 		try
 		{
 			element = xrcProperty->FirstChildElement( "size" );
-			wxString size_str( element->GetText().c_str(), wxConvUTF8 );
-
 			long size;
-			if ( size_str.ToLong( &size ) )
-			{
-				font.SetPointSize( size );
-			}
+			element->GetText( &size );
+			font.SetPointSize( size );
 		}
 		catch( ticpp::Exception& )
 		{

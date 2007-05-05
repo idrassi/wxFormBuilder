@@ -26,7 +26,6 @@
 #include "xrcfilter.h"
 #include "utils/typeconv.h"
 #include "utils/debug.h"
-#include "tinyxml.h"
 #include <wx/filename.h>
 #include <wx/wfstream.h>
 #include <wx/txtstrm.h>
@@ -34,499 +33,7 @@
 #include "model/objectbase.h"
 #include <ticpp.h>
 
-ticpp::Element* XrcFilter::GetXrcClassInfo( const std::string &classname )
-{
-	ticpp::Element *root = m_xrcDb.FirstChildElement( "xrc" );
-	ticpp::Element *result = root->FirstChildElement( "object" );
-	while ( result && result->GetAttribute( "class" ) != classname )
-		result = result->NextSiblingElement( "object" );
-
-	return result;
-}
-
-ticpp::Element* XrcFilter::GetElement( const PObjectBase obj )
-{
-	ticpp::Element *element = new ticpp::Element( "object" );
-
-	try
-	{
-		ticpp::Element *xrcInfo = GetXrcClassInfo( GetXrcClassName( obj ) );
-		element->SetAttribute( "class", GetXrcClassName( obj ) );
-
-		// enlazamos los atributos
-		ticpp::Element *attr = xrcInfo->FirstChildElement( "attribute" );
-		while ( attr )
-		{
-			std::string attrName = attr->Attribute( "name" );
-			std::string propName = ( attr->Attribute( "property" ) ?
-			                         attr->Attribute( "property" ) : attrName );
-			element->SetAttribute( attrName, _STDSTR( obj->GetPropertyAsString( _WXSTR( propName ) ) ) );
-			attr = attr->NextSiblingElement( "attribute" );
-		}
-
-		// enlazamos los sub-elementos
-
-		// FIXME! no todos los objetos xrc heredan de wxWindow...
-		std::string typeName = _STDSTR( obj->GetObjectTypeName() );
-		if ( typeName == "container" || typeName == "widget" || typeName == "expanded_widget" || typeName == "form" || typeName == "statusbar" )
-			LinkValues( element, GetXrcClassInfo( "wxWindow" ), obj );
-
-		LinkValues( element, xrcInfo, obj ); // los propios del objeto
-	}
-	catch( ticpp::Exception& )
-	{
-		// the class does not support XRC.
-		element->SetAttribute( "class", "unknown" );
-	}
-
-	for ( unsigned int i = 0; i < obj->GetChildCount(); i++ )
-		element->LinkEndChild( GetElement( obj->GetChild( i ) ) );
-
-	return element;
-}
-
-void XrcFilter::LinkValues( ticpp::Element *element, ticpp::Element *xrcInfo,
-                            const PObjectBase obj )
-{
-	ticpp::Element *attr = xrcInfo->FirstChildElement( "element" );
-	while ( attr )
-	{
-		// los subelementos se corresponden con la propiedad cuyo nombre
-		// viene dado en el atributo "property" o en su defecto por "name"
-		PProperty prop = ( attr->Attribute( "property" )  ?
-		                   obj->GetProperty( _WXSTR( attr->Attribute( "property" ) ) ) :
-		                   obj->GetProperty( _WXSTR( attr->Attribute( "name" ) ) ) );
-
-		if ( prop && !prop->GetValue().empty() )
-		{
-			ticpp::Element *propElement = new ticpp::Element( attr->Attribute( "name" ) );
-			LinkValue( prop, propElement );
-			element->LinkEndChild( propElement );
-		}
-		///************************************************************************
-		else if ( !prop && xrcInfo->Attribute( "class" ) == std::string( "spacer" ) &&
-		          attr->Attribute( "name" ) == std::string( "size" ) )
-		{
-			// Sé que esto duele a la vista, pero no hay otra... el objeto de tipo
-			// "spacer" está especificado de una forma que no concuerda con el resto
-			// de objetos.
-			// Me refiero a las propiedades width y height, las cuales están mapeadas
-			// como una propiedad wxSize (llamada "size") en XRC, mientras que en la
-			// interfaz wxSizer son dos propiedades de tipo "int" separadas.
-			int width = obj->GetPropertyAsInteger( wxT( "width" ) );
-			int height = obj->GetPropertyAsInteger( wxT( "height" ) );
-
-			ticpp::Element *propElement = new ticpp::Element( "size" );
-
-			std::string sizeValue = _STDSTR( TypeConv::SizeToString( wxSize( width, height ) ) );
-			propElement->LinkEndChild( new TiXmlText( sizeValue ) );
-			element->LinkEndChild( propElement );
-		}
-		///************************************************************************
-
-		attr = attr->NextSiblingElement( "element" );
-	}
-}
-/*
-bool XrcFilter::IsSupported(const std::string& className)
-{
-  return (GetXrcClassInfo(className) != NULL);
-}*/
-
-std::string XrcFilter::GetXrcClassName( const PObjectBase obj )
-{
-	std::string className = _STDSTR( obj->GetObjectInfo()->GetClassName() );
-
-	if ( className == "Panel" || className == "Dialog" || className == "Frame" )
-		className = "wx" + className;
-
-	return className;
-}
-
-
-void XrcFilter::LinkValue( const PProperty prop, ticpp::Element *propElement )
-{
-	wxColour colour;
-	std::string value = _STDSTR( prop->GetValue() );
-	if ( prop->GetType() == PT_WXCOLOUR )
-	{
-		colour = prop->GetValueAsColour();
-		value = _STDSTR( wxString::Format( wxT( "#%02x%02x%02x" ),
-		                                   colour.Red(), colour.Green(), colour.Blue() ) );
-	}
-	if ( prop->GetType() == PT_WXFONT )
-		LinkFont( prop->GetValueAsFont(), propElement );
-	else
-		propElement->LinkEndChild( new TiXmlText( value ) );
-}
-
-void XrcFilter::LinkFont( const wxFont &font, ticpp::Element *propElement )
-{
-	wxString aux;
-	ticpp::Element *element = new ticpp::Element( "size" );
-	aux.Printf( wxT( "%d" ), font.GetPointSize() );
-	element->LinkEndChild( new TiXmlText( _STDSTR( aux ) ) );
-	propElement->LinkEndChild( element );
-
-	element = new ticpp::Element( "family" );
-	switch ( font.GetFamily() )
-	{
-		case wxDECORATIVE:
-			element->LinkEndChild( new TiXmlText( "decorative" ) );
-			break;
-		case wxROMAN:
-			element->LinkEndChild( new TiXmlText( "roman" ) );
-			break;
-		case wxSWISS:
-			element->LinkEndChild( new TiXmlText( "swiss" ) );
-			break;
-		case wxMODERN:
-			element->LinkEndChild( new TiXmlText( "modern" ) );
-			break;
-		default:
-			element->LinkEndChild( new TiXmlText( "default" ) );
-			break;
-	}
-	propElement->LinkEndChild( element );
-
-	element = new ticpp::Element( "style" );
-	switch ( font.GetStyle() )
-	{
-		case wxSLANT:
-			element->LinkEndChild( new TiXmlText( "slant" ) );
-			break;
-		case wxITALIC:
-			element->LinkEndChild( new TiXmlText( "italic" ) );
-			break;
-		default:
-			element->LinkEndChild( new TiXmlText( "normal" ) );
-			break;
-	}
-	propElement->LinkEndChild( element );
-
-	element = new ticpp::Element( "weight" );
-	switch ( font.GetWeight() )
-	{
-		case wxLIGHT:
-			element->LinkEndChild( new TiXmlText( "light" ) );
-			break;
-		case wxBOLD:
-			element->LinkEndChild( new TiXmlText( "bold" ) );
-			break;
-		default:
-			element->LinkEndChild( new TiXmlText( "normal" ) );
-			break;
-	}
-	propElement->LinkEndChild( element );
-
-	element = new ticpp::Element( "underlined" );
-	element->LinkEndChild( new TiXmlText( font.GetUnderlined() ? "1" : "0" ) );
-	propElement->LinkEndChild( element );
-
-	element = new ticpp::Element( "face" );
-	element->LinkEndChild( new TiXmlText( _STDSTR( font.GetFaceName() ) ) );
-	propElement->LinkEndChild( element );
-}
-
-
-
-void XrcFilter::ImportXrcProperty( ticpp::Element *xrcProperty, PProperty property )
-{
-	if ( !xrcProperty )
-		return;
-
-	if ( property->GetType() == PT_WXCOLOUR )
-	{
-		ImportColour( xrcProperty, property );
-	}
-	else if ( property->GetType() == PT_WXFONT )
-	{
-		ImportFont( xrcProperty, property );
-	}
-	else // es texto equivalente
-	{
-		TiXmlNode *xmlValue = xrcProperty->FirstChild();
-		if ( xmlValue && xmlValue->ToText() )
-		{
-			std::string value = xmlValue->ToText()->Value();
-			property->SetValue( _WXSTR( value ) );
-		}
-	}
-}
-
-void XrcFilter::ImportColour( ticpp::Element *xrcProperty, PProperty property )
-{
-	TiXmlNode *xmlValue = xrcProperty->FirstChild();
-	if ( xmlValue && xmlValue->ToText() )
-	{
-		std::string value = xmlValue->ToText()->Value();
-
-		// convertimos el formato "#rrggbb" a "rrr,ggg,bbb"
-		std::string hexColour = "0x" + value.substr( 1, 2 ) + " 0x" + value.substr( 3, 2 ) +
-		                        " 0x" + value.substr( 5, 2 );
-		std::istringstream strIn;
-		std::ostringstream strOut;
-		unsigned int red, green, blue;
-
-		strIn.str( hexColour );
-		strIn >> std::hex;
-
-		strIn >> red;
-		strIn >> green;
-		strIn >> blue;
-
-		strOut << red << "," << green << "," << blue;
-		property->SetValue( _WXSTR( strOut.str() ) );
-	}
-}
-
-void XrcFilter::ImportFont( ticpp::Element *xrcProperty, PProperty property )
-{
-	ticpp::Element *element;
-	TiXmlNode *xmlValue;
-	wxFont font;
-
-
-	// el tamaño
-	element = xrcProperty->FirstChildElement( "size" );
-	if ( element )
-	{
-		wxString size_str;
-		xmlValue = element->FirstChild();
-		if ( xmlValue && xmlValue->ToText() )
-			size_str = _WXSTR( xmlValue->ToText()->Value() );
-
-		long size;
-		if ( size_str.ToLong( &size ) )
-			font.SetPointSize( size );
-	}
-
-	// la familia
-	element = xrcProperty->FirstChildElement( "family" );
-	if ( element )
-	{
-		std::string family_str;
-		xmlValue = element->FirstChild();
-		if ( xmlValue && xmlValue->ToText() )
-			family_str = xmlValue->ToText()->Value();
-
-		if ( family_str == "decorative" )
-			font.SetFamily( wxDECORATIVE );
-		else if ( family_str == "roman" )
-			font.SetFamily( wxROMAN );
-		else if ( family_str == "swiss" )
-			font.SetFamily( wxSWISS );
-		else if ( family_str == "modern" )
-			font.SetFamily( wxMODERN );
-		else //if (family_str == "default")
-			font.SetFamily( wxDEFAULT );
-	}
-
-	// el estilo
-	element = xrcProperty->FirstChildElement( "style" );
-	if ( element )
-	{
-		std::string style_str;
-		xmlValue = element->FirstChild();
-		if ( xmlValue && xmlValue->ToText() )
-			style_str = xmlValue->ToText()->Value();
-
-		if ( style_str == "slant" )
-			font.SetStyle( wxSLANT );
-		else if ( style_str == "italic" )
-			font.SetStyle( wxITALIC );
-		else //if (style_str == "normal")
-			font.SetStyle( wxNORMAL );
-	}
-
-
-	// grosor
-	element = xrcProperty->FirstChildElement( "weight" );
-	if ( element )
-	{
-		std::string weight_str;
-		xmlValue = element->FirstChild();
-		if ( xmlValue && xmlValue->ToText() )
-			weight_str = xmlValue->ToText()->Value();
-
-		if ( weight_str == "light" )
-			font.SetWeight( wxLIGHT );
-		else if ( weight_str == "bold" )
-			font.SetWeight( wxBOLD );
-		else //if (sweight_str == "normal")
-			font.SetWeight( wxNORMAL );
-	}
-
-	// subrayado
-	element = xrcProperty->FirstChildElement( "underlined" );
-	if ( element )
-	{
-		std::string underlined_str;
-		xmlValue = element->FirstChild();
-		if ( xmlValue && xmlValue->ToText() )
-			underlined_str = xmlValue->ToText()->Value();
-
-		if ( underlined_str == "1" )
-			font.SetUnderlined( TRUE );
-		else
-			font.SetUnderlined( FALSE );
-	}
-
-	// tipo de letra
-	element = xrcProperty->FirstChildElement( "face" );
-	if ( element )
-	{
-		wxString face;
-		xmlValue = element->FirstChild();
-		if ( xmlValue && xmlValue->ToText() )
-			face = _WXSTR( xmlValue->ToText()->Value() );
-
-		font.SetFaceName( face );
-	}
-
-	property->SetValue( font );
-}
-
-void XrcFilter::ImportXrcElements( ticpp::Element *xrcObj, ticpp::Element *xrcInfo,
-                                   PObjectBase obj )
-{
-	ticpp::Element *element = xrcInfo->FirstChildElement( "element" );
-	while ( element )
-	{
-		std::string propName = ( element->Attribute( "property" ) ?
-		                         element->Attribute( "property" ) : element->Attribute( "name" ) );
-
-		PProperty property = obj->GetProperty( _WXSTR( propName ) );
-
-		if ( property )
-			ImportXrcProperty( xrcObj->FirstChildElement( element->Attribute( "name" ) ), property );
-
-		else if ( !property && xrcInfo->Attribute( "class" ) == std::string( "spacer" ) &&
-		          element->Attribute( "name" ) == std::string( "size" ) )
-		{
-			///***********************************************************************
-			// Vale la misma nota que LinkValues :-(
-			std::string str_size;
-			ticpp::Element* xrcProperty = xrcObj->FirstChildElement( "size" );
-
-			assert( xrcProperty );
-
-			TiXmlNode *xmlValue = xrcProperty->FirstChild();
-			if ( xmlValue && xmlValue->ToText() )
-			{
-				str_size = xmlValue->ToText()->Value();
-
-				PProperty propWidth = obj->GetProperty( wxT( "width" ) );
-				PProperty propHeight = obj->GetProperty( wxT( "height" ) );
-				assert ( propWidth && propHeight );
-
-				wxSize size = TypeConv::StringToSize( _WXSTR( str_size ) );
-				propWidth->SetValue( size.GetWidth() );
-				propHeight->SetValue( size.GetHeight() );
-			}
-			///***********************************************************************
-		}
-
-		element = element->NextSiblingElement( "element" );
-	}
-}
-
-void XrcFilter::ImportXrcProperties( ticpp::Element *xrcObj, PObjectBase obj )
-{
-	assert( xrcObj->Attribute( "class" ) );
-	ticpp::Element *xrcInfo = GetXrcClassInfo( xrcObj->Attribute( "class" ) );
-	assert( xrcInfo );
-
-
-	// comenzamos por los atributos
-	ticpp::Element *attr = xrcInfo->FirstChildElement( "attribute" );
-	while ( attr )
-	{
-		std::string propName = ( attr->Attribute( "property" ) ?
-		                         attr->Attribute( "property" ) : attr->Attribute( "name" ) );
-
-		PProperty property = obj->GetProperty( _WXSTR( propName ) );
-
-		// los atributos siempre son texto
-		if ( property && xrcObj->Attribute( attr->Attribute( "name" ) ) )
-			property->SetValue( _WXSTR( xrcObj->Attribute( attr->Attribute( "name" ) ) ) );
-
-		attr = attr->NextSiblingElement( "attribute" );
-	}
-
-	// y seguimos por los sub-elementos
-	ImportXrcElements( xrcObj, xrcInfo, obj );
-
-	// si es un widget o un form importamos los subelementos comunes
-	wxString typeName = obj->GetObjectTypeName();
-	if ( typeName == wxT( "container" ) || typeName == wxT( "widget" ) || typeName == wxT( "expanded_widget" ) || typeName == wxT( "form" ) || typeName == wxT( "statusbar" ) )
-	{
-		ImportXrcElements( xrcObj, GetXrcClassInfo( "wxWindow" ), obj );
-	}
-}
-
-PObjectBase XrcFilter::GetObject( ticpp::Element *xrcObj, PObjectBase parent,
-                                  bool is_form )
-{
-	// La estrategia será construir el objeto a partir del nombre
-	// para posteriormente modificar las propiedades.
-	// Con el atributo is_form intentaremos arreglar el problema del conflicto
-	// de nombres (wxPanel como form o como widget).
-
-	std::string className = xrcObj->Attribute( "class" );
-
-	if ( is_form )
-	{
-		// hay que quitarle el "wx" del principio
-		className = className.substr( 2, className.size() - 2 );
-	}
-
-	Debug::Print( wxT( "[XrcFilter::GetObject] importing %s" ), className.c_str() );
-
-	PObjectBase obj = m_objDb->CreateObject( className, parent );
-
-	if ( obj )
-	{
-		// ahora hay que importar todas las propiedades del objeto xrc
-		ImportXrcProperties( xrcObj, obj );
-
-		ticpp::Element *element = xrcObj->FirstChildElement( "object" );
-		while ( element )
-		{
-			PObjectBase child = GetObject( element, obj );
-			element = element->NextSiblingElement( "object" );
-		}
-	}
-	else
-		Debug::Print( wxT( "[XrcFilter::GetObject] Error!! importing %s" ), className.c_str() );
-	return obj;
-};
-///////////////////////////////////////////////////////////////////////////////
-
-XrcFilter::XrcFilter()
-{
-	// We aren't using this now, what does it do, and why are you trying to use it?
-	assert( false );
-	assert ( m_xrcDb.LoadFile( "./xml/xrc.xml" ) );
-}
-
-TiXmlDocument *XrcFilter::GetXrcDocument ( PObjectBase project )
-{
-	TiXmlDocument *doc = new TiXmlDocument();
-
-	ticpp::Element *element = new ticpp::Element( "resource" );
-	element->SetAttribute( "xmlns", "http://www.wxwindows.org/wxxrc" );
-	element->SetAttribute( "version", "2.3.0.1" );
-
-	for ( unsigned int i = 0; i < project->GetChildCount(); i++ )
-		element->LinkEndChild( GetElement( project->GetChild( i ) ) );
-
-	doc->LinkEndChild( element );
-
-	return doc;
-}
-
-PObjectBase XrcFilter::GetProject( TiXmlDocument *xrcDoc )
+PObjectBase XrcLoader::GetProject( ticpp::Document* xrcDoc )
 {
 	assert( m_objDb );
 	Debug::Print( wxT( "[XrcFilter::GetProject]" ) );
@@ -534,38 +41,18 @@ PObjectBase XrcFilter::GetProject( TiXmlDocument *xrcDoc )
 	PObjectBase project( m_objDb->CreateObject( "Project" ) );
 
 
-	ticpp::Element *root = xrcDoc->FirstChildElement( "resource" );
-	ticpp::Element *element = root->FirstChildElement( "object" );
-	while ( element )
-	{
-		PObjectBase obj = GetObject( element, project, true );
-		element = element->NextSiblingElement( "object" );
-	}
-
-	return project;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-PObjectBase XrcLoader::GetProject( TiXmlDocument *xrcDoc )
-{
-	assert( m_objDb );
-	Debug::Print( wxT( "[XrcFilter::GetProject]" ) );
-
-	PObjectBase project( m_objDb->CreateObject( "Project" ) );
-
-
-	ticpp::Element *root = xrcDoc->FirstChildElement( "resource" );
+	ticpp::Element *root = xrcDoc->FirstChildElement( "resource", false );
 	if ( !root )
 	{
 		wxLogError( _( "Missing root element \"resource\"" ) );
 		return project;
 	}
-	ticpp::Element *element = root->FirstChildElement( "object" );
+
+	ticpp::Element *element = root->FirstChildElement( "object", false );
 	while ( element )
 	{
 		PObjectBase obj = GetObject( element, project );
-		element = element->NextSiblingElement( "object" );
+		element = element->NextSiblingElement( "object", false );
 	}
 
 	return project;
@@ -573,10 +60,9 @@ PObjectBase XrcLoader::GetProject( TiXmlDocument *xrcDoc )
 
 PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 {
-	// La estrategia será construir el objeto a partir del nombre
-	// para posteriormente modificar las propiedades.
+	// First, create the object by the name, the modify the properties
 
-	std::string className = xrcObj->Attribute( "class" );
+	std::string className = xrcObj->GetAttribute( "class" );
 	if ( parent->GetObjectTypeName() == wxT( "project" ) )
 	{
 		if ( className == "wxBitmap" )
@@ -605,9 +91,9 @@ PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 				return PObjectBase();
 			}
 		}
-		// hay que quitarle el "wx" del principio
-		// esto es un apaño que aún no se como arreglarlo porque "wxPanel" es llamada
-		// como "Panel" para distinguirlo de un "form" y un "container"
+
+		// Forms wxPanel, wxFrame, wxDialog are stored internally as Panel, Frame, and Dialog
+		// to prevent conflicts with wxPanel as a container
 		className = className.substr( 2, className.size() - 2 );
 	}
 
@@ -654,21 +140,19 @@ PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 			{
 				object = m_objDb->CreateObject( fbObj, parent );
 
-				// Es posible que sea haya creado el objeto, creando un item
-				// previamente (ocurren en el caso de wxSplitterWindow). Por tanto,
-				// hay que asegurarse de que el objeto apuntado por "object" no sea
-				// el item.
+				// It is possible the CreateObject returns an "item" containing the object, e.g. SizerItem or SplitterItem
+				// If that is the case, reassign "object" to the actual object
 				if ( object && object->GetClassName() != _WXSTR( className ) && object->GetChildCount() > 0 )
 					object = object->GetChild( 0 );
 
 				if ( object )
 				{
-					// recursivamente importamos los objetos que están por debajo
-					ticpp::Element *element = xrcObj->FirstChildElement( "object" );
+					// Recursively import the children
+					ticpp::Element *element = xrcObj->FirstChildElement( "object", false );
 					while ( element )
 					{
 						GetObject( element, object );
-						element = element->NextSiblingElement( "object" );
+						element = element->NextSiblingElement( "object", false );
 					}
 				}
 			}
@@ -676,9 +160,7 @@ PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 	}
 	else
 	{
-		// es una clase desconocida, vamos a crear un wxPanel porque de lo
-		// contrario es muy posible que se produzca un fallo debido a que
-		// haya un sizeritem sin objeto incluido él.
+		// Create a wxPanel to represent unknown classes
 		object = m_objDb->CreateObject( "wxPanel", parent );
 		if ( object )
 		{
