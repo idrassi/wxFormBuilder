@@ -105,7 +105,7 @@
 	
 	<templates class="wxScintilla">
 		<template name="declaration">#class* $name;</template>
-		<template name="include">@#include &lt;wx/wxscintilla.h&gt;</template>
+		<template name="include">@#include &lt;wx/wxscintilla/wxscintilla.h&gt;</template>
 		<template name="construction">
 			$name = new #class( #wxparent $name, $id, $pos, $size, $window_style, wxEmptyString );
 			#nl $name->SetUseTabs( $use_tabs );
