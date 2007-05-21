@@ -531,6 +531,21 @@ public:
 	wxString GetChildFromParentProperty( const wxString& parentName, const wxString& childName );
 };
 
+/**
+* @author JFO
+* Tell if an object is a Frame. Usefull to know if we can add menu/toolbar, or to
+*   the visual aspect of the object
+*
+* @param pcObj
+*
+* @return true if the object is a frame
+*/
+inline bool IsFrame(ObjectBase* pObj)
+{
+    return pObj->GetClassName() == wxT("Frame")
+	    || pObj->GetClassName() == wxT("DocParentFrame");
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
