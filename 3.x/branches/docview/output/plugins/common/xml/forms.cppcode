@@ -191,4 +191,57 @@
 		<template name="evt_entry_OnInitDialog">EVT_INIT_DIALOG( #handler )</template>
 	</templates>
 
+	<templates class="DocParentFrame">
+		<template name="include">@#include &lt;wx/docview.h&gt;</template>	   
+		<template name="base">
+			#ifnotnull $subclass/name
+			@{ public $subclass/name @}
+
+			#ifnull $subclass/name
+			@{ public wxDocParentFrame @}
+		</template>
+		<template name="cons_decl">
+			$name(wxDocManager* manager, wxFrame *parent, wxWindowID id = $id, const wxString& title = $title, const wxPoint& pos = $pos, const wxSize& size = $size, long style = $style #ifnotnull $window_style @{ |$window_style @}, const wxString& name = "frame");
+		</template>
+		<template name="cons_def">
+			$name::$name(wxDocManager* manager, wxFrame *parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString& name) :
+
+			#ifnotnull $subclass/name
+			@{ $subclass/name @}
+
+			#ifnull $subclass/name
+			@{ wxDocParentFrame@}(manager, parent, id, title, pos, size, style, name)
+		</template>
+		<template name="settings">
+			this->SetSizeHints( $minimum_size, $maximum_size ); #nl
+			
+			#ifnotnull $window_extra_style
+			@{ this->SetExtraStyle( $window_extra_style ); #nl @}
+
+			#ifnotnull $extra_style
+			@{ this->SetExtraStyle( $extra_style ); #nl @}
+
+			#ifnotnull $font
+			@{ this->SetFont( $font ); #nl @}
+
+			#ifnotnull $fg
+			@{ this->SetForegroundColour( $fg ); #nl @}
+
+			#ifnotnull $bg
+			@{ this->SetBackgroundColour( $bg ); #nl @}
+
+			#ifequal $enabled "0"
+			@{ this->Enable( $enabled ); #nl @}
+
+			#ifequal $hidden "1"
+			@{ this->Hide(); #nl @}
+
+			#ifnotnull $tooltip
+			@{ this->SetToolTip( $tooltip ); #nl @}
+
+			#ifnotnull $center
+			@{ this->Centre( $center ); #nl @}
+		</template>
+	</templates>
+
 </codegen>

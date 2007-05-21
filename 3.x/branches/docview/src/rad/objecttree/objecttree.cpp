@@ -528,10 +528,14 @@ void ItemPopupMenu::OnMenuEvent (wxCommandEvent & event)
 	case MENU_EDIT_MENUS:
 		{
 			PObjectBase obj = AppData()->GetSelectedObject();
-			if (obj && (obj->GetClassName() == wxT("wxMenuBar") || obj->GetClassName() == wxT("Frame") ) )
+			// JFO : New Frame for doc/view architecture
+			// if (obj && (obj->GetClassName() == wxT("wxMenuBar") || obj->GetClassName() == wxT("Frame") ) )
+			if (obj && (obj->GetClassName() == wxT("wxMenuBar") || IsFrame(obj.get())))
 			{
 				MenuEditor me(NULL);
-				if (obj->GetClassName() == wxT("Frame") )
+				// JFO : New Frame for doc/view architecture
+				// if (obj->GetClassName() == wxT("Frame") )
+				if (IsFrame(obj.get()))
 				{
 					bool found = false;
 					PObjectBase menubar;
@@ -577,8 +581,8 @@ void ItemPopupMenu::OnUpdateEvent(wxUpdateUIEvent& e)
 	switch (e.GetId())
 	{
 	case MENU_EDIT_MENUS:
-		e.Enable(m_object && (m_object->GetClassName() == wxT("wxMenuBar" )
-			|| m_object->GetClassName() == wxT("Frame")));
+		e.Enable(m_object && ( m_object->GetClassName() == wxT("wxMenuBar")
+                            || IsFrame(m_object.get()) ));
 		break;
 	case MENU_CUT:
 	case MENU_COPY:

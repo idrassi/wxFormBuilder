@@ -253,7 +253,9 @@ void VisualEditor::Create()
 		}
 		else
 		{
-			if ( m_form->GetClassName() == wxT("Frame") )
+		    // JFO : Add a new frame for doc/view architecture
+			// if ( m_form->GetClassName() == wxT("Frame") )
+			if ( IsFrame(m_form.get()) )
 			{
 				m_back->GetFrameContentPanel()->SetOwnBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_APPWORKSPACE ) );
 			}
@@ -265,7 +267,9 @@ void VisualEditor::Create()
 
 
 		// --- [3] Title bar Setup
-		if (  m_form->GetClassName() == wxT("Frame") || m_form->GetClassName() == wxT("Dialog") )
+		// JFO : Add a new frame for doc/view architecture
+		// if (  m_form->GetClassName() == wxT("Frame") || m_form->GetClassName() == wxT("Dialog") )
+		if (  IsFrame(m_form.get()) || m_form->GetClassName() == wxT("Dialog") )
 		{
 			m_back->SetTitle( m_form->GetPropertyAsString( wxT("title") ) );
 			long style = m_form->GetPropertyAsInteger( wxT("style") );

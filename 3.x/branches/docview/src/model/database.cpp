@@ -248,10 +248,10 @@ PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase par
 		// de forms (como childType de project), pero hay mucho código no válido
 		// para forms que no sean de tipo "form". Dicho de otra manera, hay
 		// código que dependen del nombre del tipo, cosa que hay que evitar.
-		if (parentType->GetName() == wxT("form") && parent->GetClassName() != wxT("Frame") &&
-			(objType->GetName() == wxT("statusbar") ||
-			objType->GetName() == wxT("menubar") ||
-			objType->GetName() == wxT("toolbar") ))
+		if ( parentType->GetName() == wxT("form") && !IsFrame(parent.get())
+          && ( objType->GetName() == wxT("statusbar")
+            || objType->GetName() == wxT("menubar")
+            || objType->GetName() == wxT("toolbar") ) )
 			return PObjectBase(); // tipo no válido
 
 		if (max != 0) // tipo válido

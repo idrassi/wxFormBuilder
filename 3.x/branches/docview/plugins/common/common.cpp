@@ -209,6 +209,25 @@ public:
 	}
 };
 
+// JFO BEGIN
+/**
+* @class DocParentFrameFormComponent
+*
+* Used for document view architecture
+*/
+class DocParentFrameFormComponent : public ComponentBase
+{
+public:
+	wxObject* Create(IObject *obj, wxObject *parent)
+	{
+		wxPanel *panel = new wxPanel((wxWindow *)parent,-1);
+		panel->SetBackgroundColour(wxColour(50,50,50));
+		return panel;
+	}
+};
+// JFO END
+
+
 ///////////////////////////////////////////////////////////////////////////////
 // WIDGETS
 ///////////////////////////////////////////////////////////////////////////////
@@ -1186,6 +1205,7 @@ BEGIN_LIBRARY()
 ABSTRACT_COMPONENT("Frame",FrameFormComponent)
 ABSTRACT_COMPONENT("Panel",PanelFormComponent)
 ABSTRACT_COMPONENT("Dialog",DialogFormComponent)
+ABSTRACT_COMPONENT("DocParentFrame",DocParentFrameFormComponent) // JFO doc/view
 
 WINDOW_COMPONENT("wxButton",ButtonComponent)
 WINDOW_COMPONENT("wxBitmapButton",BitmapButtonComponent)
