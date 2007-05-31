@@ -43,6 +43,18 @@
 		<property name="size" type="wxSize">500,300</property>
 	</inherits>
 	<property name="name" type="text" hidden="1">MyFrame</property>
+</objectinfo>
+
+
+  <objectinfo class="DocParentFrame" icon="docparentframe.xpm" type="form">
+    <inherits class="wxFrame" />
+    <inherits class="wxTopLevelWindow" />
+    <inherits class="Common Events" />
+    <inherits class="wxWindow">
+      <property name="window_style">wxTAB_TRAVERSAL</property>
+      <property name="size" type="wxSize">500,300</property>
+    </inherits>
+    <property name="name" type="text" hidden="1">MyDocFrame</property>
   </objectinfo>
 
   <objectinfo class="Panel" icon="panel.xpm" type="form">
@@ -86,17 +98,6 @@
       <option name="wxBOTH"/>
 	</property>
 	<event name="OnInitDialog" class="wxInitDialogEvent" help="Process a wxEVT_INIT_DIALOG event. A wxEVT_INIT_DIALOG is sent as a dialog or panel is being initialised." />
-  </objectinfo>
-
-  <objectinfo class="DocParentFrame" icon="docparentframe.xpm" type="form">
-    <inherits class="wxFrame" />
-    <inherits class="wxTopLevelWindow" />
-    <inherits class="Common Events" />
-    <inherits class="wxWindow">
-      <property name="window_style">wxTAB_TRAVERSAL</property>
-      <property name="size" type="wxSize">500,300</property>
-    </inherits>
-    <property name="name" type="text" hidden="1">MyDocFrame</property>
   </objectinfo>
 
 </package>
