@@ -67,6 +67,16 @@
 	    		@}
 			@}
 		</template>
+		<template name="evt_entry_OnFlatNotebookPageChanged">EVT_FLATNOTEBOOK_PAGE_CHANGED( $id, #handler )</template>
+		<template name="evt_connect_OnFlatNotebookPageChanged">$name->Connect( wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CHANGED, #handler, NULL, this );</template>
+		<template name="evt_entry_OnFlatNotebookPageChanging">EVT_FLATNOTEBOOK_PAGE_CHANGING( $id, #handler )</template>
+		<template name="evt_connect_OnFlatNotebookPageChanging">$name->Connect( wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CHANGING, #handler, NULL, this );</template>
+		<template name="evt_entry_OnFlatNotebookPageClosed">EVT_FLATNOTEBOOK_PAGE_CLOSED( $id, #handler )</template>
+		<template name="evt_connect_OnFlatNotebookPageClosed">$name->Connect( wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CLOSED, #handler, NULL, this );</template>
+		<template name="evt_entry_OnFlatNotebookPageClosing">EVT_FLATNOTEBOOK_PAGE_CLOSING( $id, #handler )</template>
+		<template name="evt_connect_OnFlatNotebookPageClosing">$name->Connect( wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CLOSING, #handler, NULL, this );</template>
+		<template name="evt_entry_OnFlatNotebookPageContextMenu">EVT_FLATNOTEBOOK_CONTEXT_MENU( $id, #handler )</template>
+		<template name="evt_connect_OnFlatNotebookPageContextMenu">$name->Connect( wxEVT_COMMAND_FLATNOTEBOOK_CONTEXT_MENU, #handler, NULL, this );</template>
 	</templates>
 
 	<templates class="flatnotebookpage">

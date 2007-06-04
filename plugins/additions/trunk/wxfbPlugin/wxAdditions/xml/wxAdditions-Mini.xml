@@ -117,6 +117,11 @@
 	<option name="wxFNB_ALLOW_FOREIGN_DND" 			help="Allow drag'n'drop between different wxFlatNotebooks"/>
 		wxFNB_DEFAULT_STYLE
     </property>
+  	<event name="OnFlatNotebookPageChanged" class="wxFlatNotebookEvent" help="The page selection was changed. Processes a wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CHANGED event." />
+	<event name="OnFlatNotebookPageChanging" class="wxFlatNotebookEvent" help="The page selection is about to be changed. Processes a wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CHANGING event. This event can be vetoed." />
+	<event name="OnFlatNotebookPageClosed" class="wxFlatNotebookEvent" help="The page was closed. Processes a wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CLOSED event." />
+	<event name="OnFlatNotebookPageClosing" class="wxFlatNotebookEvent" help="The page is about to be closed. Processes a wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CLOSING event. This event can be vetoed." />
+	<event name="OnFlatNotebookPageContextMenu" class="wxFlatNotebookEvent" help="The context menu was activated. Processes a wxEVT_COMMAND_FLATNOTEBOOK_CONTEXT_MENU event." />
   </objectinfo>
 
   <objectinfo class="flatnotebookpage" icon="flatnotebook.xpm" type="flatnotebookpage">
