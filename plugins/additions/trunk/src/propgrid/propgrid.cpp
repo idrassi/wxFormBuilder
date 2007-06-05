@@ -508,6 +508,7 @@ static bool wxPGIsWindowBuffered( const wxWindow* wnd )
 // * After 1.0.x compatibility removed, drop itemcount argument support.
 //
 // 1.3 Branch:
+// * onevent wnd always actual control, never clipper.
 // * Custom values (one of which is Unspecified). Up to 255, use string table
 //   in property grid for relevant displayed strings.
 // * Maybe have wxPG_EX_PROCESS_EVENTS_IMMEDIATELY behaviour as default (and non-
@@ -2128,6 +2129,19 @@ bool wxPGClipperWindow::ProcessEvent(wxEvent& event)
 }
 
 #endif // wxPG_ENABLE_CLIPPER_WINDOW
+
+/*wxWindow* wxPropertyGrid::GetActualEditorControl( wxWindow* ctrl )
+{
+#if wxPG_ENABLE_CLIPPER_WINDOW
+    // Pass real control instead of clipper window
+    if ( ctrl->IsKindOf(CLASSINFO(wxPGClipperWindow)) )
+    {
+        return ((wxPGClipperWindow*)ctrl)->GetControl();
+    }
+#else
+    return ctrl;
+#endif
+}*/
 
 // -----------------------------------------------------------------------
 // wxPGTextCtrlEditor
@@ -5178,50 +5192,46 @@ wxString& wxPropertyGrid::ExpandEscapeSequences( wxString& dst_str, wxString& sr
         return src_str;
     }
 
-    const wxChar* src = src_str.c_str();
-    wxChar* dst;
-    wxStringBuffer strbuf(dst_str,src_str.length());
-    dst = strbuf;
     bool prev_is_slash = false;
 
-    wxChar a = *src;
+    wxString::const_iterator i = src_str.begin();
 
-    while ( a )
+    dst_str.clear();
+
+    for ( ; i != src_str.end(); i++ )
     {
-        src++;
+        wxUniChar a = wxPGGetIterChar(src_str, i);
 
         if ( a != wxT('\\') )
         {
             if ( !prev_is_slash )
             {
-                *dst = a;
+                dst_str << a;
             }
             else
             {
                 if ( a == wxT('n') )
                 {
             #ifdef __WXMSW__
-                    *dst = 13;
-                    dst++;
-                    *dst = 10;
+                    dst_str << wxT('\n');
+                    //dst_str << wxT('\10');
             #else
-                    *dst = 10;
+                    dst_str << wxT('\n');
+                    //dst_str << 10;
             #endif
                 }
                 else if ( a == wxT('t') )
-                    *dst = 9;
+                    dst_str << wxT('\t');
                 else
-                    *dst = a;
+                    dst_str << a;
             }
-            dst++;
             prev_is_slash = false;
         }
         else
         {
             if ( prev_is_slash )
             {
-                *dst = wxT('\\');
-                dst++;
+                dst_str << wxT('\\');
                 prev_is_slash = false;
             }
             else
@@ -5229,16 +5239,13 @@ wxString& wxPropertyGrid::ExpandEscapeSequences( wxString& dst_str, wxString& sr
                 prev_is_slash = true;
             }
         }
-
-        a = *src;
     }
-    *dst = 0;
     return dst_str;
 }
 
 // -----------------------------------------------------------------------
 
-wxString& wxPropertyGrid::CreateEscapeSequences ( wxString& dst_str, wxString& src_str )
+wxString& wxPropertyGrid::CreateEscapeSequences( wxString& dst_str, wxString& src_str )
 {
     if ( src_str.length() == 0 )
     {
@@ -5246,16 +5253,14 @@ wxString& wxPropertyGrid::CreateEscapeSequences ( wxString& dst_str, wxString& s
         return src_str;
     }
 
-    const wxChar* src = src_str.c_str();
-    wxChar* dst;
-    wxStringBuffer strbuf(dst_str,src_str.length()*2);
-    dst = strbuf;
+    wxString::const_iterator i = src_str.begin();
+    wxUniChar prev_a = wxT('\0');
 
-    wxChar a = *src;
+    dst_str.clear();
 
-    while ( a )
+    for ( ; i != src_str.end(); i++ )
     {
-        src++;
+        wxUniChar a = wxPGGetIterChar(src_str, i);
 
         if ( a >= wxT(' ')
         #if !wxUSE_UNICODE
@@ -5264,38 +5269,33 @@ wxString& wxPropertyGrid::CreateEscapeSequences ( wxString& dst_str, wxString& s
            )
         {
             // This surely is not something that requires an escape sequence.
-            *dst = a;
-            dst++;
+            dst_str << a;
         }
         else
         {
-            *dst = wxT('\\');
-            dst++;
-
             // This might need...
-            if ( a == 13 && *src == 10 )
+            if ( a == wxT('\r')  )
             {
                 // DOS style line end.
-                *dst = wxT('n');
-                src++;
+                // Already taken care below
+                //dst_str = wxT("\\n");
+                //src++;
             }
-            else if ( a == 10 )
+            else if ( a == wxT('\n') )
                 // UNIX style line end.
-                *dst = wxT('n');
-            else if ( a == 9 )
+                dst_str << wxT("\\n");
+            else if ( a == wxT('\t') )
                 // Tab.
-                *dst = wxT('t');
+                dst_str << wxT('\t');
             else
             {
-                wxLogDebug(wxT("WARNING: Could not create escape sequence for character #%i"),(int)a);
-                dst-=2; // Compensate.
+                //wxLogDebug(wxT("WARNING: Could not create escape sequence for character #%i"),(int)a);
+                dst_str << a;
             }
-            dst++;
         }
 
-        a = *src;
+        prev_a = a;
     }
-    *dst = 0;
     return dst_str;
 }
 
@@ -10583,6 +10583,8 @@ wxPGId wxPropertyContainerMethods::GetPropertyByNameA( wxPGPropNameStr name ) co
 IMPLEMENT_DYNAMIC_CLASS(wxPGVariantDataPoint, wxVariantData)
 IMPLEMENT_DYNAMIC_CLASS(wxPGVariantDataSize, wxVariantData)
 IMPLEMENT_DYNAMIC_CLASS(wxPGVariantDataArrayInt, wxVariantData)
+IMPLEMENT_DYNAMIC_CLASS(wxPGVariantDataLongLong, wxVariantData)
+IMPLEMENT_DYNAMIC_CLASS(wxPGVariantDataULongLong, wxVariantData)
 #ifdef __WXPYTHON__
     IMPLEMENT_DYNAMIC_CLASS(wxPGVariantDataPyObject, wxVariantData)
 #endif
@@ -10845,10 +10847,8 @@ wxPGEditor* wxPropertyContainerMethods::GetEditorByName( const wxString& editor_
 // -----------------------------------------------------------------------
 
 wxPGStringTokenizer::wxPGStringTokenizer( const wxString& str, wxChar delimeter )
+    : m_str(&str), m_curPos(str.begin()), m_delimeter(delimeter)
 {
-    m_str = &str;
-    m_curPos = str.c_str();
-    m_delimeter = delimeter;
 }
 
 wxPGStringTokenizer::~wxPGStringTokenizer()
@@ -10857,8 +10857,65 @@ wxPGStringTokenizer::~wxPGStringTokenizer()
 
 bool wxPGStringTokenizer::HasMoreTokens()
 {
-    wxASSERT_MSG( m_curPos, wxT("Do not call wxPGStringTokenizer methods after HasMoreTokens has returned false."));
+    const wxString& str = *m_str;
 
+    //wxASSERT_MSG( m_curPos != str.end(), wxT("Do not call wxPGStringTokenizer methods after HasMoreTokens has returned false."));
+
+    wxString::const_iterator i = m_curPos;
+
+    wxUniChar delim = m_delimeter;
+    wxUniChar a;
+    wxUniChar prev_a = wxT('\0');
+
+    bool inToken = false;
+
+    while ( i != str.end() )
+    {
+        a = wxPGGetIterChar(str, i);
+
+        if ( !inToken )
+        {
+            if ( a == delim )
+            {
+                inToken = true;
+                m_readyToken.clear();
+            }
+        }
+        else
+        {
+            if ( prev_a != wxT('\\') )
+            {
+                if ( a != delim )
+                {
+                    if ( a != wxT('\\') )
+                        m_readyToken << a;
+                }
+                else
+                {
+                    //wxLogDebug(m_readyToken);
+                    i++;
+                    m_curPos = i;
+                    return true;
+                }
+                prev_a = a;
+            }
+            else
+            {
+                m_readyToken << a;
+                prev_a = wxT('\0');
+            }
+        }
+        i++;
+    }
+
+    m_curPos = str.end();
+
+    if ( inToken )
+        return true;
+
+    return false;
+
+/*
     const wxChar* ptr = m_curPos;
     const wxChar* ptr_end = &m_str->c_str()[m_str->length()];
 
@@ -10939,11 +10996,12 @@ bool wxPGStringTokenizer::HasMoreTokens()
 #endif
     m_curPos = (const wxChar*) NULL;
     return false;
+*/
 }
 
 wxString wxPGStringTokenizer::GetNextToken()
 {
-    wxASSERT_MSG( m_curPos, wxT("Do not call wxPGStringTokenizer methods after HasMoreTokens has returned false."));
+    //wxASSERT_MSG( m_curPos != m_str->end(), wxT("Do not call wxPGStringTokenizer methods after HasMoreTokens has returned false."));
     return m_readyToken;
 }
 
@@ -11877,7 +11935,7 @@ static int wxPG_SortFunc(void **p1, void **p2)
 {
     wxPGProperty *pp1 = *((wxPGProperty**)p1);
     wxPGProperty *pp2 = *((wxPGProperty**)p2);
-    return pp1->GetLabel().Cmp ( pp2->GetLabel().c_str() );
+    return pp1->GetLabel().compare( pp2->GetLabel() );
 }
 
 void wxPropertyGridState::Sort( wxPGProperty* p )

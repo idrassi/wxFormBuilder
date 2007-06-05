@@ -240,7 +240,8 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
     if ( evtType == wxEVT_SCROLL_LINEUP || evtType == wxEVT_SCROLL_LINEDOWN )
     {
         wxString s;
-        wxTextCtrl* tc = (wxTextCtrl*) wnd;
+        // Can't use wnd since it might be clipper window
+        wxTextCtrl* tc = wxDynamicCast(propgrid->GetEditorControl(), wxTextCtrl);
 
         if ( tc )
             s = tc->GetValue();

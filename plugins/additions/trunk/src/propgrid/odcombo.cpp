@@ -628,7 +628,7 @@ void wxPGVListBoxComboPopup::SendComboBoxEvent( int selection )
             evt.SetClientData(clientData);
     }
 
-    m_combo->GetEventHandler()->AddPendingEvent(evt);
+    m_combo->GetEventHandler()->ProcessEvent(evt);
 }
 
 // returns true if key was consumed

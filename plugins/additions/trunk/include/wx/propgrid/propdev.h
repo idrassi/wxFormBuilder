@@ -1669,13 +1669,10 @@ public:
 protected:
 #ifndef SWIG
 
-    const wxString* m_str;
-    const wxChar*   m_curPos;
-#if wxUSE_STL
-    //wxString        m_buffer;
-#endif
-    wxString        m_readyToken;
-    wxChar          m_delimeter;
+    const wxString*             m_str;
+    wxString::const_iterator    m_curPos;
+    wxString                    m_readyToken;
+    wxUniChar                   m_delimeter;
 #endif
 };
 
