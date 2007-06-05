@@ -244,6 +244,19 @@
 #endif
 
 
+#ifndef SWIG
+    #if !wxCHECK_VERSION(2,9,0)
+        #if !defined(wxUniChar)
+            #define wxUniChar   wxChar
+        #endif
+        //#define wxPGGetIterChar(str, i)  str[i]
+        #define wxPGGetIterChar(str, i)  *i
+    #else
+        #define wxPGGetIterChar(str, i)  *i
+    #endif
+#endif
+
+
 // -----------------------------------------------------------------------
 
 //
@@ -1189,9 +1202,9 @@ protected: \
 
     WX_PG_DECLARE_VARIANT_DATA(wxPGVariantDataPoint, wxPoint, WXDLLIMPEXP_PG)
     WX_PG_DECLARE_VARIANT_DATA(wxPGVariantDataSize, wxSize, WXDLLIMPEXP_PG)
+    WX_PG_DECLARE_VARIANT_DATA(wxPGVariantDataArrayInt, wxArrayInt, WXDLLIMPEXP_PG)
     WX_PG_DECLARE_VARIANT_DATA(wxPGVariantDataLongLong, wxLongLong, WXDLLIMPEXP_PG)
     WX_PG_DECLARE_VARIANT_DATA(wxPGVariantDataULongLong, wxULongLong, WXDLLIMPEXP_PG)
-    WX_PG_DECLARE_VARIANT_DATA(wxPGVariantDataArrayInt, wxArrayInt, WXDLLIMPEXP_PG)
    #ifdef __WXPYTHON__
     WX_PG_DECLARE_VARIANT_DATA_PTR(wxPGVariantDataPyObject, PyObject, WXDLLIMPEXP_PG)
    #endif
@@ -4433,12 +4446,10 @@ public:
                         setter = cls.SetPropertyValuePoint
                     elif vtn == 'wxSize':
                         setter = cls.SetPropertyValueSize
-                    """
                     elif vtn == 'wxLongLong':
                         setter = cls.SetPropertyValueLongLong
                     elif vtn == 'wxULongLong':
                         setter = cls.SetPropertyValueULongLong
-                    """
                     elif vtn.startswith('wx'):
                         setter = cls.SetPropertyValueWxObjectPtr
                     elif not vtn:
