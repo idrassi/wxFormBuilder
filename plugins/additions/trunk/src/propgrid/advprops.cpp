@@ -88,12 +88,20 @@
 // -----------------------------------------------------------------------
 
 
-bool operator == (const wxFont&, const wxFont&)
+bool operator == (const wxFontPropertyValue& a, const wxFontPropertyValue& b)
 {
-    return false;
+    return (	( a.m_pointSize == b.m_pointSize ) 	&&
+				( a.m_family == b.m_family )		&&
+				( a.m_style == b.m_style )			&&
+				( a.m_weight == b.m_weight )		&&
+				( a.m_underlined == b.m_underlined )	&&
+				( a.m_faceName == b.m_faceName ) );
 }
 
-WX_PG_IMPLEMENT_VALUE_TYPE_WXOBJ(wxFont,wxFontProperty,(const wxFont*)NULL)
+// Implement dynamic class for type value.
+IMPLEMENT_DYNAMIC_CLASS(wxFontPropertyValue,wxObject)
+
+WX_PG_IMPLEMENT_VALUE_TYPE_WXOBJ(wxFontPropertyValue,wxFontProperty,(const wxFontPropertyValue*)NULL)
 
 // Implement dynamic class for type value.
 IMPLEMENT_DYNAMIC_CLASS(wxColourPropertyValue,wxObject)
@@ -267,7 +275,7 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
                 double dSpinMax = (double) spinMax;
                 if ( v_d > dSpinMax ) v_d = dSpinMax;
                 else if ( v_d < dSpinMin ) v_d = dSpinMin;
-                
+
                 wxPropertyGrid::DoubleToString(s, v_d, 6, true, NULL);
             }
             else
@@ -445,14 +453,14 @@ void wxPGDatePickerCtrlEditor::SetValueToUnspecified( wxWindow* WXUNUSED(wnd) ) 
 static const wxChar* gs_fp_es_family_labels[] = {
     wxT("Default"), wxT("Decorative"),
     wxT("Roman"), wxT("Script"),
-    wxT("Swiss"), wxT("Modern"),
+    wxT("Swiss"), wxT("Modern"),wxT("Teletype"),
     (const wxChar*) NULL
 };
 
 static long gs_fp_es_family_values[] = {
     wxDEFAULT, wxDECORATIVE,
     wxROMAN, wxSCRIPT,
-    wxSWISS, wxMODERN
+    wxSWISS, wxMODERN, wxTELETYPE
 };
 
 static const wxChar* gs_fp_es_style_labels[] = {
@@ -485,14 +493,14 @@ static long gs_fp_es_weight_values[] = {
 
 
 WX_PG_IMPLEMENT_PROPERTY_CLASS(wxFontProperty,wxBaseParentProperty,
-                               wxFont,const wxFont&,TextCtrlAndButton)
+                               wxFontPropertyValue,const wxFontPropertyValue&,TextCtrlAndButton)
 
 
 wxFontPropertyClass::wxFontPropertyClass( const wxString& label, const wxString& name,
-                                          const wxFont& value )
+                                          const wxFontPropertyValue& value )
     : wxPGPropertyWithChildren(label,name)
 {
-    wxPG_INIT_REQUIRED_TYPE(wxFont)
+    wxPG_INIT_REQUIRED_TYPE(wxFontPropertyValue)
     DoSetValue( wxPGVariantCreator(value) );
 
     // Initialize font family choices list
@@ -508,7 +516,8 @@ wxFontPropertyClass::wxFontPropertyClass( const wxString& label, const wxString&
 #else
         wxArrayString& faceNames = *enumerator.GetFacenames();
 #endif
-
+		// Allow empty string as a default facename
+		faceNames.Add( wxEmptyString );
         faceNames.Sort();
 
         wxPGGlobalVars->m_fontFamilyChoices = new wxPGChoices(faceNames);
@@ -550,13 +559,8 @@ wxFontPropertyClass::~wxFontPropertyClass () { }
 
 void wxFontPropertyClass::DoSetValue( wxPGVariant value )
 {
-    const wxFont* font = wxPGVariantToWxObjectPtr(value,wxFont);
-
-    if ( font && font->Ok() )
-        m_value_wxFont = *font;
-    else
-        m_value_wxFont = wxFont(10,wxSWISS,wxNORMAL,wxNORMAL);
-
+    const wxFontPropertyValue* font = wxPGVariantToWxObjectPtr(value,wxFontPropertyValue);
+    m_value_wxFont = *font;
     RefreshChildren();
 }
 
@@ -579,7 +583,7 @@ bool wxFontPropertyClass::OnEvent( wxPropertyGrid* propgrid, wxWindow* primary,
         PrepareValueForDialogEditing(propgrid);
 
         wxFontData data;
-        data.SetInitialFont(m_value_wxFont);
+        data.SetInitialFont(m_value_wxFont.GetFont());
         data.SetColour(*wxBLACK);
 
         wxFontDialog dlg(propgrid, data);
@@ -590,7 +594,7 @@ bool wxFontPropertyClass::OnEvent( wxPropertyGrid* propgrid, wxWindow* primary,
             wxFontData retData = dlg.GetFontData();
             wxFont font = retData.GetChosenFont();
 
-            DoSetValue(wxPGVariantCreator(font));
+            DoSetValue(wxPGVariantCreator(wxFontPropertyValue(font)));
             UpdateControl(primary);
 
             return true;
@@ -607,7 +611,7 @@ void wxFontPropertyClass::RefreshChildren()
     Item(2)->SetValueFromString( m_value_wxFont.GetFaceName(), wxPG_FULL_VALUE );
     Item(3)->DoSetValue( (long)m_value_wxFont.GetStyle() );
     Item(4)->DoSetValue( (long)m_value_wxFont.GetWeight() );
-    Item(5)->DoSetValue( m_value_wxFont.GetUnderlined() );
+    Item(5)->DoSetValue( m_value_wxFont.GetUnderlined() ? 1 : 0 );
 }
 
 void wxFontPropertyClass::ChildChanged( wxPGProperty* p )
@@ -1840,7 +1844,7 @@ void wxDatePropertyClass::SetAttribute( int id, wxVariant& value )
 void wxPropertyContainerMethods::InitAllTypeHandlers()
 {
     wxPG_INIT_REQUIRED_TYPE(wxColour)
-    wxPG_INIT_REQUIRED_TYPE(wxFont)
+    wxPG_INIT_REQUIRED_TYPE(wxFontPropertyValue)
     wxPG_INIT_REQUIRED_TYPE(wxArrayInt)
     wxPG_INIT_REQUIRED_TYPE(wxColourPropertyValue)
 #if wxUSE_DATETIME

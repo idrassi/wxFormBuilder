@@ -12,6 +12,8 @@
 #ifndef _WX_PROPGRID_ADVPROPS_H_
 #define _WX_PROPGRID_ADVPROPS_H_
 
+#include <wx/font.h>
+
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "advprops.cpp"
 #endif
@@ -24,8 +26,6 @@
 //
 #ifndef SWIG
 
-WX_PG_DECLARE_VALUE_TYPE_WITH_DECL(wxFont,WXDLLIMPEXP_PG)
-
 WX_PG_DECLARE_VALUE_TYPE_WITH_DECL(wxColour,WXDLLIMPEXP_PG)
 
 WX_PG_DECLARE_VALUE_TYPE_VOIDP_WITH_DECL(wxArrayInt,WXDLLIMPEXP_PG)
@@ -35,8 +35,6 @@ WX_PG_DECLARE_VALUE_TYPE_VOIDP_WITH_DECL(wxArrayInt,WXDLLIMPEXP_PG)
 #include <wx/datetime.h>
 WX_PG_DECLARE_VALUE_TYPE_BUILTIN_WITH_DECL(wxDateTime,WXDLLIMPEXP_PG)
 #endif
-
-bool WXDLLIMPEXP_PG operator == (const wxFont&, const wxFont&);
 
 bool WXDLLIMPEXP_PG operator == (const wxArrayInt& array1, const wxArrayInt& array2);
 
@@ -131,6 +129,104 @@ bool WXDLLIMPEXP_PG operator == (const wxColourPropertyValue&, const wxColourPro
 WX_PG_DECLARE_VALUE_TYPE_WITH_DECL(wxColourPropertyValue,WXDLLIMPEXP_PG)
 #endif
 
+/** \class wxFontPropertyValue
+    \ingroup classes
+    \brief Because the class wxFont cannot be a container for invalid font data (like default values).
+*/
+class WXDLLIMPEXP_PG wxFontPropertyValue : public wxObject
+{
+public:
+    int m_pointSize;		///< Point Size
+    int m_family;			///< Family
+    int m_style;			///< Style
+    int m_weight;			///< Weight
+    bool m_underlined;		///< Underlined
+    wxString m_faceName;	///< Face Name
+
+    inline void InitDefaults()
+    {
+		m_pointSize = -1;
+		m_family = wxFONTFAMILY_DEFAULT;
+		m_style = wxFONTSTYLE_NORMAL;
+		m_weight = wxFONTWEIGHT_NORMAL;
+		m_underlined = false;
+		m_faceName = wxEmptyString;
+    }
+
+    wxFontPropertyValue()
+    {
+    	InitDefaults();
+	}
+
+    inline wxFontPropertyValue( const wxFont& font )
+    {
+        if ( !font.IsOk() )
+        {
+        	InitDefaults();
+        }
+        else
+        {
+        	m_pointSize = font.GetPointSize();
+        	m_family = font.GetFamily();
+        	m_style = font.GetStyle();
+        	m_weight = font.GetWeight();
+        	m_underlined = font.GetUnderlined();
+        	m_faceName = font.GetFaceName();
+        }
+    }
+
+    inline wxFontPropertyValue( int pointSize,
+								int family = wxFONTFAMILY_DEFAULT,
+								int style = wxFONTSTYLE_NORMAL,
+								int weight = wxFONTWEIGHT_NORMAL,
+								bool underlined = false,
+								const wxString& faceName = wxEmptyString )
+	:
+	m_pointSize( pointSize ),
+	m_family( family ),
+	m_style( style ),
+	m_weight( weight ),
+	m_underlined( underlined ),
+	m_faceName( faceName )
+    {
+    }
+
+	wxFont GetFont() const
+	{
+		int pointSize = m_pointSize <= 0 ? wxNORMAL_FONT->GetPointSize() : m_pointSize;
+		return wxFont( pointSize, m_family, m_style, m_weight, m_underlined, m_faceName );
+	}
+
+	// Duplicate wxFont's interface for backward compatiblity
+	#define MAKE_GET_AND_SET( NAME, TYPE, VARIABLE ) 	\
+		TYPE Get##NAME() const { return VARIABLE; }		\
+		void Set##NAME( TYPE value ){ VARIABLE = value; }
+
+	MAKE_GET_AND_SET( PointSize, int, m_pointSize )
+	MAKE_GET_AND_SET( Family, int, m_family )
+	MAKE_GET_AND_SET( Style, int, m_style )
+	MAKE_GET_AND_SET( Weight, int, m_weight )
+	MAKE_GET_AND_SET( Underlined, bool, m_underlined )
+	MAKE_GET_AND_SET( FaceName, wxString, m_faceName )
+
+	// Allow implicit cast to wxFont
+	/*operator wxFont() const
+	{
+		return GetFont();
+	}*/
+
+#ifndef SWIG
+private:
+    DECLARE_DYNAMIC_CLASS(wxFontPropertyValue)
+#endif
+};
+
+#ifndef SWIG
+bool WXDLLIMPEXP_PG operator == (const wxFontPropertyValue&, const wxFontPropertyValue&);
+
+WX_PG_DECLARE_VALUE_TYPE_WITH_DECL(wxFontPropertyValue,WXDLLIMPEXP_PG)
+#endif
+
 #ifndef SWIG
     #define wxPG_EMPTY_CPV          (*((wxColourPropertyValue*)NULL))
     #define wxPG_NORMAL_FONT        (*wxNORMAL_FONT)
@@ -160,7 +256,7 @@ extern wxPGProperty* wxPG_CONSTFUNC(NAME)( const wxString& label, const wxString
 extern wxPGPropertyClassInfo NAME##ClassInfo;
 
 // Declare advanced properties.
-WX_PG_DECLARE_PROPERTY_WITH_DECL(wxFontProperty,const wxFont&,wxPG_NORMAL_FONT,WXDLLIMPEXP_PG)
+WX_PG_DECLARE_PROPERTY_WITH_DECL(wxFontProperty,const wxFontPropertyValue&,wxFontPropertyValue(),WXDLLIMPEXP_PG)
 WX_PG_DECLARE_PROPERTY_WITH_DECL(wxSystemColourProperty,const wxColourPropertyValue&,wxPG_EMPTY_CPV,WXDLLIMPEXP_PG)
 WX_PG_DECLARE_PROPERTY_WITH_DECL(wxCursorProperty,int,wxCURSOR_NONE,WXDLLIMPEXP_PG)
 WX_PG_DECLARE_PROPERTY_WITH_DECL(wxDateProperty,const wxDateTime&,wxDateTime(),WXDLLIMPEXP_PG)
@@ -221,7 +317,7 @@ class WXDLLIMPEXP_PG wxFontPropertyClass : public wxPGPropertyWithChildren
     WX_PG_DECLARE_PROPERTY_CLASS()
 public:
 
-    wxFontPropertyClass( const wxString& label, const wxString& name, const wxFont& value );
+    wxFontPropertyClass( const wxString& label, const wxString& name, const wxFontPropertyValue& value );
     virtual ~wxFontPropertyClass();
 
     WX_PG_DECLARE_PARENTAL_TYPE_METHODS()
@@ -232,7 +328,7 @@ public:
     //WX_PG_DECLARE_CUSTOM_PAINT_METHODS()
 
 protected:
-    wxFont m_value_wxFont;
+    wxFontPropertyValue m_value_wxFont;
 };
 
 // -----------------------------------------------------------------------
@@ -396,7 +492,7 @@ public:
     {
         return m_format;
     }
-    
+
     inline void SetDateValue( const wxDateTime& dt )
     {
         m_valueDateTime = dt;
