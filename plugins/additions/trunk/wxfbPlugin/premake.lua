@@ -13,6 +13,7 @@ project.name = "wxAdditions Plugin"
 -- wxWidgets version
 local wx_ver = "28"
 local wx_ver_minor = ""
+local wx_custom = "_wxfb"
 
 --******* Initial Setup ************
 --*	Most of the setting are set here.
@@ -68,42 +69,38 @@ else
 	if ( options["unicode"] ) then
 		package.config["Debug"].links =
 		{
-			"`wx-config --debug=yes --unicode=yes --basename`_plotctrl-`wx-config --release`",
-			"`wx-config --debug=yes --unicode=yes --basename`_things-`wx-config --release`",
-			"`wx-config --debug=yes --unicode=yes --basename`_awx-`wx-config --release`",
-			"`wx-config --debug=yes --unicode=yes --basename`_ledbargraph-`wx-config --release`"
+			"`wx-config --debug=yes --unicode=yes --basename`_plotctrl-`wx-config --release`" .. wx_custom,
+			"`wx-config --debug=yes --unicode=yes --basename`_things-`wx-config --release`" .. wx_custom,
+			"`wx-config --debug=yes --unicode=yes --basename`_awx-`wx-config --release`" .. wx_custom,
+			"`wx-config --debug=yes --unicode=yes --basename`_ledbargraph-`wx-config --release`" .. wx_custom
 		}
 		package.config["Release"].links =
 		{
-			"`wx-config --debug=no --unicode=yes --basename`_plotctrl-`wx-config --release`",
-			"`wx-config --debug=no --unicode=yes --basename`_things-`wx-config --release`",
-			"`wx-config --debug=no --unicode=yes --basename`_awx-`wx-config --release`",
-			"`wx-config --debug=no --unicode=yes --basename`_ledbargraph-`wx-config --release`"
+			"`wx-config --debug=no --unicode=yes --basename`_plotctrl-`wx-config --release`" .. wx_custom,
+			"`wx-config --debug=no --unicode=yes --basename`_things-`wx-config --release`" .. wx_custom,
+			"`wx-config --debug=no --unicode=yes --basename`_awx-`wx-config --release`" .. wx_custom,
+			"`wx-config --debug=no --unicode=yes --basename`_ledbargraph-`wx-config --release`" .. wx_custom
 		}
 	else
 		package.config["Debug"].links =
 		{
-			"`wx-config --debug=yes --unicode=no --basename`_plotctrl-`wx-config --release`",
-			"`wx-config --debug=yes --unicode=no --basename`_things-`wx-config --release`",
-			"`wx-config --debug=yes --unicode=no --basename`_awx-`wx-config --release`",
-			"`wx-config --debug=yes --unicode=no --basename`_ledbargraph-`wx-config --release`"
+			"`wx-config --debug=yes --unicode=no --basename`_plotctrl-`wx-config --release`" .. wx_custom,
+			"`wx-config --debug=yes --unicode=no --basename`_things-`wx-config --release`" .. wx_custom,
+			"`wx-config --debug=yes --unicode=no --basename`_awx-`wx-config --release`" .. wx_custom,
+			"`wx-config --debug=yes --unicode=no --basename`_ledbargraph-`wx-config --release`" .. wx_custom
 		}
 		package.config["Release"].links =
 		{
-			"`wx-config --debug=no --unicode=no --basename`_plotctrl-`wx-config --release`",
-			"`wx-config --debug=no --unicode=no --basename`_things-`wx-config --release`",
-			"`wx-config --debug=no --unicode=no --basename`_awx-`wx-config --release`",
-			"`wx-config --debug=no --unicode=no --basename`_ledbargraph-`wx-config --release`"
+			"`wx-config --debug=no --unicode=no --basename`_plotctrl-`wx-config --release`" .. wx_custom,
+			"`wx-config --debug=no --unicode=no --basename`_things-`wx-config --release`" .. wx_custom,
+			"`wx-config --debug=no --unicode=no --basename`_awx-`wx-config --release`" .. wx_custom,
+			"`wx-config --debug=no --unicode=no --basename`_ledbargraph-`wx-config --release`" .. wx_custom
 		}
 	end
 end
 
 -- Set the linker include paths
-if ( OS == "windows" ) then
-	package.libpaths = { "../lib/gcc_dll" }
-else
-	package.libpaths = { "../lib" }
-end
+package.libpaths = { "../lib/gcc_dll" }
 
 -- Load the dlls from the plugin's directory.
 if ( OS == "linux" ) then
@@ -162,6 +159,10 @@ end
 table.insert( package.defines, "__WX__" )
 table.insert( package.config["Debug"].defines, { "DEBUG", "_DEBUG", "__WXDEBUG__" } )
 table.insert( package.config["Release"].defines, "NDEBUG" )
+
+if ( target == "cb-gcc" or target == "gnu" ) then
+	table.insert( package.config["Release"].buildoptions, "-fno-strict-aliasing" )
+end
 
 if ( OS == "windows" ) then
 --******* WINDOWS SETUP ***********
