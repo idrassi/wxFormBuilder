@@ -46,6 +46,9 @@ clean:
 	dh_testroot
 	rm -f build-stamp configure-stamp
 
+	# make the build files
+	bash create_build_files.sh
+	
 	# Clean the Plugin.
 	-$(MAKE) --directory ../.. CONFIG=Release clean
 	
