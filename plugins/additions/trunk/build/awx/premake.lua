@@ -13,16 +13,16 @@ local wx_ver_minor = ""
 local wx_custom = "_wxfb"
 
 -- Set the name of your package.
-package.name = "propgrid"
+package.name = "awx"
 -- Set this if you want a different name for your target than the package's name.
 -- local targetName = ""
 
 -- Set the files to include.
-package.files = { matchfiles( "../../src/propgrid/*.cpp", "../../include/wx/propgrid/*.h") }
+package.files = { matchfiles( "../../src/awx/*.cpp", "../../include/wx/awx/*.h") }
 
 -- Set the defines.
 if ( options["shared"] ) then
-	package.defines = { "MONOLITHIC", "WXMAKINGDLL_PROPGRID" }
+	package.defines = { "MONOLITHIC" }
 end
 
 MakeWxAdditionsPackage( package, "", wx_ver, wx_ver_minor, wx_custom )
