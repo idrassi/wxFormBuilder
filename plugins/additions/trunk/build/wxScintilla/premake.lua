@@ -18,7 +18,7 @@ package.name = "scintilla"
 -- local targetName = ""
 
 -- Set the files to include.
-package.files = { matchfiles( "../../src/wxScintilla/*.c*", "../../include/wx/wxScintilla/*.h") }
+package.files = { matchfiles( "../../src/wxScintilla/*.c*", "../../src/wxScintilla/scintilla/src/*.c*", "../../src/wxScintilla/scintilla/include/*.c*", "../../include/wx/wxScintilla/*.h") }
 
 -- Set the defines.
 if ( options["shared"] ) then
@@ -32,3 +32,21 @@ if ( OS == "linux" ) then
 end
 
 MakeWxAdditionsPackage( package, "", wx_ver, wx_ver_minor, wx_custom )
+
+-- the __WX__ define makes wxScintiall define PLAT_WIN - that's no good
+if ( OS ~= "windows" ) then
+	for i,v in ipairs( package.defines ) do
+		if ( v == "__WX__" ) then
+			table.remove( package.defines, i )
+			break
+		end
+	end
+end
+
+-- we are not going to fix these warnings, so why look at them?
+for i,v in ipairs( package.buildflags ) do
+	if ( v == "extra-warnings" ) then
+		table.remove( package.buildflags, i )
+		break
+	end
+end
