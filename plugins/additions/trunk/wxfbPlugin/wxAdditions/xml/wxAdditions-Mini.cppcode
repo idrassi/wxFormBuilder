@@ -66,6 +66,7 @@
 	    			wxImage $name #append Image;
 	    		@}
 			@}
+			#nl $name->SetCustomizeOptions( $customize_options );
 		</template>
 		<template name="evt_entry_OnFlatNotebookPageChanged">EVT_FLATNOTEBOOK_PAGE_CHANGED( $id, #handler )</template>
 		<template name="evt_connect_OnFlatNotebookPageChanged">$name->Connect( wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CHANGED, #handler, NULL, this );</template>
