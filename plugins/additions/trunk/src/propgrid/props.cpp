@@ -1675,7 +1675,7 @@ bool wxFilePropertyClass::OnEvent( wxPropertyGrid* propGrid,
                           !m_initialPath.empty() ? m_initialPath : m_filename.GetPath(),
                           wxEmptyString,
                           m_wildcard,
-                          0,
+                          wxFD_FILE_MUST_EXIST | wxFD_PREVIEW,
                           wxDefaultPosition );
 
         if ( m_indFilter >= 0 )
