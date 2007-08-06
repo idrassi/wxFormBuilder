@@ -1334,6 +1334,7 @@ const wxString& wxPGGetDefaultImageWildcard()
     {
 
         wxString str;
+        wxString imageFiles( wxT("All image files|") );
 
         // TODO: This section may require locking (using global).
 
@@ -1350,6 +1351,10 @@ const wxString& wxPGGetDefaultImageWildcard()
             wxString ext_lo = handler->GetExtension();
             wxString ext_up = ext_lo.Upper();
 
+			imageFiles.append( wxT("*.") );
+			imageFiles.append( ext_lo );
+			imageFiles.append( wxT(";") );
+
             str.append( ext_up );
             str.append( wxT(" files (*.") );
             str.append( ext_up );
@@ -1358,9 +1363,10 @@ const wxString& wxPGGetDefaultImageWildcard()
             str.append( wxT("|") );
         }
 
+		imageFiles[imageFiles.length() - 1] = wxT('|');
         str.append ( wxT("All files (*.*)|*.*") );
 
-        wxPGGlobalVars->m_pDefaultImageWildcard = str;
+        wxPGGlobalVars->m_pDefaultImageWildcard = imageFiles + str;
     }
 
     return wxPGGlobalVars->m_pDefaultImageWildcard;
