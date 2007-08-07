@@ -880,19 +880,24 @@ WXDLLIMPEXP_PG void wxPGGetFailed ( const wxPGProperty* p, const wxChar* typestr
 */
 #define wxPG_FILE_DIALOG_TITLE              74
 
+/** Specific to wxFileProperty and derivatives, int, default is -1.
+    Sets a filter index for the dir dialog.
+*/
+#define wxPG_FILE_FILTER_INDEX              75
+
 /** Specific to wxDirProperty, wxString, default is empty.
     Sets a specific message for the dir dialog.
 */
-#define wxPG_DIR_DIALOG_MESSAGE             75
+#define wxPG_DIR_DIALOG_MESSAGE             76
 
 /** Sets displayed date format for wxDateProperty.
 */
-#define wxPG_DATE_FORMAT                    76
+#define wxPG_DATE_FORMAT                    77
 
 /** Sets wxDatePickerCtrl window style used with wxDateProperty. Default
     is wxDP_DEFAULT | wxDP_SHOWCENTURY.
 */
-#define wxPG_DATE_PICKER_STYLE              77
+#define wxPG_DATE_PICKER_STYLE              78
 
 
 #ifdef wxPG_COMPATIBILITY_1_0_0
@@ -4660,7 +4665,7 @@ public:
 #ifndef SWIG
 
     static wxPGEditor* GetEditorByName( const wxString& editorName );
-    
+
 protected:
 
     // Deriving classes must set this (it must be only or current page).

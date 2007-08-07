@@ -232,7 +232,7 @@ public:
     */
     virtual void DeleteItem( wxWindow* ctrl, int index ) const;
 
-    /** Extra processing when control gains focus. For example, wxTextCtrl 
+    /** Extra processing when control gains focus. For example, wxTextCtrl
         based controls should select all text.
     */
     virtual void OnFocus( wxPGProperty* property, wxWindow* wnd ) const;
@@ -1035,7 +1035,7 @@ struct wxPGPaintData
     /** In a measure item call, set this to the height of item at m_choiceItem index. */
     int                     m_drawnHeight;
 
-    
+
 };
 
 
@@ -1063,7 +1063,7 @@ public:
     }
 
     bool DoValidate( wxPropertyGrid* propGrid, wxValidator* validator, const wxString& value );
-    
+
 private:
     wxTextCtrl*         m_textCtrl;
 };
@@ -1142,7 +1142,7 @@ public:
 #ifndef SWIG
     wxEnumPropertyClass( const wxString& label, const wxString& name, const wxChar** labels,
         const long* values = NULL, int value = 0 );
-    wxEnumPropertyClass( const wxString& label, const wxString& name, 
+    wxEnumPropertyClass( const wxString& label, const wxString& name,
         wxPGChoices& choices, int value = 0 );
 
     // Special constructor for caching choices (used by derived class)
@@ -1175,7 +1175,7 @@ public:
 #ifndef SWIG
     wxFlagsPropertyClass( const wxString& label, const wxString& name, const wxChar** labels,
         const long* values = NULL, long value = 0 );
-    wxFlagsPropertyClass( const wxString& label, const wxString& name, 
+    wxFlagsPropertyClass( const wxString& label, const wxString& name,
         wxPGChoices& choices, long value = 0 );
 #endif
     wxFlagsPropertyClass( const wxString& label, const wxString& name,
@@ -1235,6 +1235,7 @@ public:
     virtual bool OnEvent( wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event );
 
     virtual void SetAttribute( int id, wxVariant& value );
+    int GetFilterIndex(){ return m_indFilter; }
 
 #if wxUSE_VALIDATORS
     static wxValidator* GetClassValidator();
@@ -1482,7 +1483,7 @@ public:
     }
 
     /** Override to return wxValidator to be used with the wxTextCtrl
-        in dialog. Note that the validator is used in the standard 
+        in dialog. Note that the validator is used in the standard
         wx way, ie. it immediately prevents user from entering invalid
         input.
 
