@@ -1325,7 +1325,7 @@ void wxCursorPropertyClass::OnCustomPaint( wxDC&, const wxRect&, wxPGPaintData& 
 
 #if wxUSE_IMAGE
 
-const wxString& wxPGGetDefaultImageWildcard()
+const wxString& wxPGGetDefaultImageWildcard( int* allImageFilesIndex = 0 )
 {
     WX_PG_GLOBALS_LOCKER()
 
@@ -1364,9 +1364,14 @@ const wxString& wxPGGetDefaultImageWildcard()
         }
 
 		imageFiles[imageFiles.length() - 1] = wxT('|');
+		str.append( imageFiles );
         str.append ( wxT("All files (*.*)|*.*") );
 
-        wxPGGlobalVars->m_pDefaultImageWildcard = imageFiles + str;
+        wxPGGlobalVars->m_pDefaultImageWildcard = str;
+        if ( allImageFilesIndex != 0 )
+        {
+			*allImageFilesIndex = handlers.GetCount();
+        }
     }
 
     return wxPGGlobalVars->m_pDefaultImageWildcard;
@@ -1381,7 +1386,7 @@ wxImageFilePropertyClass::wxImageFilePropertyClass( const wxString& label, const
     : wxFilePropertyClass(label,name,value)
 {
 
-    m_wildcard = wxPGGetDefaultImageWildcard();
+    m_wildcard = wxPGGetDefaultImageWildcard( &m_indFilter );
 
     m_pImage = (wxImage*) NULL;
     m_pBitmap = (wxBitmap*) NULL;

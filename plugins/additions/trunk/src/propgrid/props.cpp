@@ -1742,6 +1742,10 @@ void wxFilePropertyClass::SetAttribute( int id, wxVariant& value )
     {
         m_dlgTitle = value.GetString();
     }
+    else if ( id == wxPG_FILE_FILTER_INDEX )
+    {
+    	m_indFilter = value.GetInteger();
+    }
 }
 
 // -----------------------------------------------------------------------
