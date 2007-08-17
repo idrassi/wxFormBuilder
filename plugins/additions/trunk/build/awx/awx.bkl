@@ -12,11 +12,7 @@
 	<!-- 		Make sure to keep the sources variable the same.      -->
 	<!-- ************************************************************ -->
 	<set var="AWX_SRC">
-		$(ADDITIONS_SRC_DIR)/awx/button.cpp
 		$(ADDITIONS_SRC_DIR)/awx/led.cpp
-		$(ADDITIONS_SRC_DIR)/awx/obdlg.cpp
-		$(ADDITIONS_SRC_DIR)/awx/outbar.cpp
-		$(ADDITIONS_SRC_DIR)/awx/toolbar.cpp
 	</set>
 	
 	<!-- ************************************************************ -->
@@ -26,11 +22,7 @@
 	<!-- ************************************************************ -->
 	<headers template="wx_additions_headers">
 		<files>
-			wx/awx/button.h
 			wx/awx/led.h
-			wx/awx/obdlg.h
-			wx/awx/outbar.h
-			wx/awx/toolbar.h
 		</files>
 	</headers>
 
