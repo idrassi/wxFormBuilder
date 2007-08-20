@@ -1,10 +1,10 @@
 @echo off
 
-sdk\premake\premake-win32.exe --target cb-gcc --unicode --with-wx-shared
+premake\premake-win32.exe --target cb-gcc --unicode --with-wx-shared
 echo done...
 echo.
 
-sdk\premake\premake-win32.exe --target gnu --unicode --with-wx-shared
+premake\premake-win32.exe --target gnu --unicode --with-wx-shared
 echo done...
 echo.
 
