@@ -1,18 +1,20 @@
 @echo off
 ::**************************************************************************
 :: File:			wxBuild_default.bat
-:: Version:			1.03
+:: Version:			1.04
 :: Name:			RJP Computing 
-:: Date:			08/14/2006
+:: Date:			08/30/2007
 :: Description:		Build wxWidgets things with the MinGW/Visual C++.
 ::                 
 ::                 	v1.01 - Added Compiler setup for VC7.1 and VC8.0.
 ::                 	v1.02 - Added INCLUDE variable to VC7.1 and VC8.0 setups.
 :: 					v1.03 - Added FLAGS. Use to set extra command line options.
+:: 					v1.04 - Added MinGW Gcc 4.x.x compiler.
 ::**************************************************************************
-set WXBUILD_VERSION=1.03
+set WXBUILD_VERSION=1.04
 :: MinGW Gcc install location. This must match you systems configuration.
 set GCCDIR=C:\MinGW
+set GCC4DIR=C:\MinGW4
 
 if (%1) == () goto ERROR
 :: -- Check if user wants help --
@@ -31,6 +33,8 @@ if %1 == VC80   goto SETUP_VC80_BUILD_ENVIRONMENT
 if %1 == vc80   goto SETUP_VC80_BUILD_ENVIRONMENT
 if %1 == MINGW  goto SETUP_GCC_BUILD_ENVIRONMENT
 if %1 == mingw  goto SETUP_GCC_BUILD_ENVIRONMENT
+if %1 == MINGW4  goto SETUP_GCC4_BUILD_ENVIRONMENT
+if %1 == mingw4  goto SETUP_GCC4_BUILD_ENVIRONMENT
 goto COMPILER_ERROR
 
 
@@ -88,6 +92,36 @@ echo.
 set MAKE=mingw32-make.exe
 set MAKEFILE=makefile.gcc
 set FLAGS=
+goto START
+
+:SETUP_GCC_BUILD_ENVIRONMENT
+echo Assuming that MinGW has been installed to:
+echo   %GCCDIR%
+echo.
+:: -- Add MinGW directory to the systems PATH --
+echo Setting environment for MinGW Gcc v3.x.x...
+if "%OS%" == "Windows_NT" set PATH=%GCCDIR%\BIN;%PATH%
+if "%OS%" == "" set PATH="%GCCDIR%\BIN";"%PATH%"
+echo.
+:: -- Setup the make executable and the actual makefile name --
+set MAKE=mingw32-make.exe
+set MAKEFILE=makefile.gcc
+set FLAGS=
+goto START
+
+:SETUP_GCC4_BUILD_ENVIRONMENT
+echo Assuming that MinGW has been installed to:
+echo   %GCC4DIR%
+echo.
+:: -- Add MinGW directory to the systems PATH --
+echo Setting environment for MinGW Gcc v4.x.x...
+if "%OS%" == "Windows_NT" set PATH=%GCC4DIR%\BIN;%PATH%
+if "%OS%" == "" set PATH="%GCC4DIR%\BIN";"%PATH%"
+echo.
+:: -- Setup the make executable and the actual makefile name --
+set MAKE=mingw32-make.exe
+set MAKEFILE=makefile.gcc
+set FLAGS=CXXFLAGS=-Wno-attributes
 goto START
 
 :START
@@ -318,7 +352,8 @@ goto SHOW_OPTIONS
 :SHOW_OPTIONS
 echo.
 echo      Compiler Options:
-echo           MINGW = MinGW Gcc compiler
+echo           MINGW = MinGW Gcc v3.x.x compiler
+echo           MINGW4 = MinGW Gcc v4.x.x compiler
 echo           VCTK  = Visual C++ 7.1 Toolkit
 echo           VC71  = Visual C++ 7.1
 echo           VC80  = Visual C++ 8.0
@@ -349,7 +384,8 @@ goto END
 
 :END
 set WXBUILD_VERSION=
-set GccDir=
+set GCCDIR=
+set GCC4DIR=
 set MAKE=
 set MAKEFILE=
 set FLAGS=
