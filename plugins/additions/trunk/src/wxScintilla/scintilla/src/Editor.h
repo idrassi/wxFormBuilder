@@ -305,10 +305,10 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 
 	// Wrapping support
 	enum { eWrapNone, eWrapWord, eWrapChar } wrapState;
-	enum { wrapLineLarge = 0x7ffffff };
+	bool backgroundWrapEnabled;
 	int wrapWidth;
-	int wrapStart;
-	int wrapEnd;
+	int docLineLastWrapped;
+	int docLastLineToWrap;
 	int wrapVisualFlags;
 	int wrapVisualFlagsLocation;
 	int wrapVisualStartIndent;
@@ -377,7 +377,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void InvalidateCaret();
 	virtual void UpdateSystemCaret();
 
-	void NeedWrapping(int docLineStart = 0, int docLineEnd = wrapLineLarge);
+	void NeedWrapping(int docLineStartWrapping = 0, int docLineEndWrapping = 0x7ffffff);
 	bool WrapLines(bool fullWrap, int priorityWrapLineStart);
 	void LinesJoin();
 	void LinesSplit(int pixelWidth);
@@ -525,7 +525,6 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void GetHotSpotRange(int& hsStart, int& hsEnd);
 
 	int CodePage() const;
-	virtual bool ValidCodePage(int /* codePage */) const { return true; }
 	int WrapCount(int line);
 
 	virtual sptr_t DefWndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) = 0;

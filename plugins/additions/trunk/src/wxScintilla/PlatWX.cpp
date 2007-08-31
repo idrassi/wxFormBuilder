@@ -13,9 +13,6 @@
 #include <wx/image.h>
 #include <wx/imaglist.h>
 #include <wx/tokenzr.h>
-#ifdef wxHAVE_RAW_BITMAP
-#include <wx/rawbmp.h>
-#endif
 
 #include "Platform.h"
 #include "PlatWX.h"
@@ -31,7 +28,6 @@ wxRect wxRectFromPRectangle(PRectangle prc) {
              prc.Width(), prc.Height());
     return r;
 }
-
 PRectangle PRectangleFromwxRect(wxRect rc) {
     return PRectangle(rc.GetLeft(), rc.GetTop(),
                       rc.GetRight()+1, rc.GetBottom()+1);
@@ -207,6 +203,8 @@ public:
     void SetFont(Font &font_);
 };
 
+
+
 SurfaceImpl::SurfaceImpl() :
     hdc(0), hdcOwned(0), bitmap(0),
     x(0), y(0), unicodeMode(0)
@@ -332,83 +330,8 @@ void SurfaceImpl::RoundedRectangle(PRectangle rc, ColourAllocated fore, ColourAl
     hdc->DrawRoundedRectangle(wxRectFromPRectangle(rc), 4);
 }
 
-void SurfaceImpl::AlphaRectangle (PRectangle rc, int cornerSize, ColourAllocated fill, int alphaFill, ColourAllocated outline, int alphaOutline, int WXUNUSED(flags)) {
-
-#ifdef wxHAVE_RAW_BITMAP
-    wxUnusedVar(cornerSize);
-    int x, y;
-    wxRect r = wxRectFromPRectangle(rc);
-    wxBitmap bmp(r.width, r.height, 32);
-    wxAlphaPixelData pixData(bmp);
-    pixData.UseAlpha();
-    wxAlphaPixelData::Iterator p(pixData);
-
-    // Set the fill pixels
-    ColourDesired cdf(fill.AsLong());
-    int red   = cdf.GetRed();
-    int green = cdf.GetGreen();
-    int blue  = cdf.GetBlue();
-#ifdef __WXMSW__
-    int aFill = alphaFill;
-#else
-    int aFill = 0xff;
-#endif
-    for (y=0; y<r.height; y++) {
-        p.MoveTo(pixData, 0, y);
-        for (x=0; x<r.width; x++) {
-            p.Red()   = red   * aFill / 0xff;
-            p.Green() = green * aFill / 0xff;
-            p.Blue()  = blue  * aFill / 0xff;
-            p.Alpha() = alphaFill;
-            ++p;
-        }
-    }
-
-    // Set the outline pixels
-    ColourDesired cdo(outline.AsLong());
-    red   = cdo.GetRed();
-    green = cdo.GetGreen();
-    blue  = cdo.GetBlue();
-#ifdef __WXMSW__
-    int aOutline = alphaOutline;
-#else
-    int aOutline = 0xff;
-#endif
-    for (x=0; x<r.width; x++) {
-        p.MoveTo(pixData, x, 0);
-        p.Red()   = red   * aOutline / 0xff;
-        p.Green() = green * aOutline / 0xff;
-        p.Blue()  = blue  * aOutline / 0xff;
-        p.Alpha() = alphaOutline;
-        p.MoveTo(pixData, x, r.height-1);
-        p.Red()   = red   * aOutline / 0xff;
-        p.Green() = green * aOutline / 0xff;
-        p.Blue()  = blue  * aOutline / 0xff;
-        p.Alpha() = alphaOutline;
-    }
-    for (y=0; y<r.height; y++) {
-        p.MoveTo(pixData, 0, y);
-        p.Red()   = red   * aOutline / 0xff;
-        p.Green() = green * aOutline / 0xff;
-        p.Blue()  = blue  * aOutline / 0xff;
-        p.Alpha() = alphaOutline;
-        p.MoveTo(pixData, r.width-1, y);
-        p.Red()   = red   * aOutline / 0xff;
-        p.Green() = green * aOutline / 0xff;
-        p.Blue()  = blue  * aOutline / 0xff;
-        p.Alpha() = alphaOutline;
-    }
-
-    // Draw the bitmap
-    hdc->DrawBitmap(bmp, r.x, r.y, true);
-
-#else
-    wxUnusedVar(cornerSize);
-    wxUnusedVar(alphaFill);
-    wxUnusedVar(alphaOutline);
-    RectangleDraw(rc, outline, fill);
-#endif
-
+void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize, ColourAllocated fill, int alphaFill, ColourAllocated outline, int alphaOutline, int flags) {
+//? TODO ...
 }
 
 void SurfaceImpl::Ellipse(PRectangle rc, ColourAllocated fore, ColourAllocated back) {
@@ -638,7 +561,7 @@ Window::~Window() {
 
 void Window::Destroy() {
     if (id) {
-        Show(false);
+        Show(FALSE);
         GETWIN(id)->Destroy();
     }
     id = 0;
@@ -1198,7 +1121,7 @@ void ListBoxImpl::Select(int n) {
     bool select = true;
     if (n == -1) {
         n = 0;
-        select = false;
+        select = FALSE;
     }
     GETLB(id)->Focus(n);
     GETLB(id)->Select(n, select);
@@ -1351,7 +1274,7 @@ unsigned int Platform::DoubleClickTime() {
 }
 
 bool Platform::MouseButtonBounce() {
-    return false;
+    return FALSE;
 }
 void Platform::DebugDisplay(const char *s) {
     wxLogDebug(sci2wx(s));
