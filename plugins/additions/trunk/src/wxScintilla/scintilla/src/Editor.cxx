@@ -328,7 +328,7 @@ void LineLayoutCache::Dispose(LineLayout *ll) {
 			delete ll;
 		} else {
 			useCount--;
-		}
+ 		}
 	}
 }
 
@@ -429,8 +429,9 @@ Editor::Editor() {
 
 	wrapState = eWrapNone;
 	wrapWidth = LineLayout::wrapWidthInfinite;
-	wrapStart = wrapLineLarge;
-	wrapEnd = wrapLineLarge;
+	docLineLastWrapped = -1;
+	docLastLineToWrap = -1;
+	backgroundWrapEnabled = true;
 	wrapVisualFlags = 0;
 	wrapVisualFlagsLocation = 0;
 	wrapVisualStartIndent = 0;
@@ -1486,18 +1487,29 @@ void Editor::InvalidateCaret() {
 void Editor::UpdateSystemCaret() {
 }
 
-void Editor::NeedWrapping(int docLineStart, int docLineEnd) {
-	docLineStart = Platform::Clamp(docLineStart, 0, pdoc->LinesTotal());
-	if (wrapStart > docLineStart) {
-		wrapStart = docLineStart;
+void Editor::NeedWrapping(int docLineStartWrapping, int docLineEndWrapping) {
+	docLineStartWrapping = Platform::Minimum(docLineStartWrapping, pdoc->LinesTotal()-1);
+	docLineEndWrapping = Platform::Minimum(docLineEndWrapping, pdoc->LinesTotal()-1);
+	bool noWrap = (docLastLineToWrap == docLineLastWrapped);
+	if (docLineLastWrapped > (docLineStartWrapping - 1)) {
+		docLineLastWrapped = docLineStartWrapping - 1;
+		if (docLineLastWrapped < -1)
+			docLineLastWrapped = -1;
 		llc.Invalidate(LineLayout::llPositions);
 	}
-	if (wrapEnd < docLineEnd) {
-		wrapEnd = docLineEnd;
+	if (noWrap) {
+		docLastLineToWrap = docLineEndWrapping;
+	} else if (docLastLineToWrap < docLineEndWrapping) {
+		docLastLineToWrap = docLineEndWrapping + 1;
 	}
-	wrapEnd = Platform::Clamp(wrapEnd, 0, pdoc->LinesTotal());
+	if (docLastLineToWrap < -1)
+		docLastLineToWrap = -1;
+	if (docLastLineToWrap >= pdoc->LinesTotal())
+		docLastLineToWrap = pdoc->LinesTotal()-1;
 	// Wrap lines during idle.
-	if ((wrapState != eWrapNone) && (wrapEnd != wrapStart)) {
+	if ((wrapState != eWrapNone) &&
+		backgroundWrapEnabled &&
+		(docLastLineToWrap != docLineLastWrapped)) {
 		SetIdle(true);
 	}
 }
@@ -1506,33 +1518,33 @@ void Editor::NeedWrapping(int docLineStart, int docLineEnd) {
 // fullwrap: if true, all lines which need wrapping will be done,
 //           in this single call.
 // priorityWrapLineStart: If greater than zero, all lines starting from
-//           here to 1 page + 100 lines past will be wrapped (even if there are
+//           here to 100 lines past will be wrapped (even if there are
 //           more lines under wrapping process in idle).
-// If it is neither fullwrap, nor priorityWrap, then 1 page + 100 lines will be
+// If it is neither fullwrap, nor priorityWrap, then 100 lines will be
 // wrapped, if there are any wrapping going on in idle. (Generally this
 // condition is called only from idler).
 // Return true if wrapping occurred.
 bool Editor::WrapLines(bool fullWrap, int priorityWrapLineStart) {
 	// If there are any pending wraps, do them during idle if possible.
-	int linesInOneCall = LinesOnScreen() + 100;
 	if (wrapState != eWrapNone) {
-		if (wrapStart < wrapEnd) {
-			if (!SetIdle(true)) {
-				// Idle processing not supported so full wrap required.
+		if (docLineLastWrapped < docLastLineToWrap) {
+			if (!(backgroundWrapEnabled && SetIdle(true))) {
+				// Background wrapping is disabled, or idle processing
+				// not supported.  A full wrap is required.
 				fullWrap = true;
 			}
 		}
 		if (!fullWrap && priorityWrapLineStart >= 0 &&
 			// .. and if the paint window is outside pending wraps
-			(((priorityWrapLineStart + linesInOneCall) < wrapStart) ||
-			 (priorityWrapLineStart > wrapEnd))) {
+			(((priorityWrapLineStart + 100) < docLineLastWrapped) ||
+			 (priorityWrapLineStart > docLastLineToWrap))) {
 			// No priority wrap pending
 			return false;
 		}
 	}
 	int goodTopLine = topLine;
 	bool wrapOccurred = false;
-	if (wrapStart <= pdoc->LinesTotal()) {
+	if (docLineLastWrapped < pdoc->LinesTotal()) {
 		if (wrapState == eWrapNone) {
 			if (wrapWidth != LineLayout::wrapWidthInfinite) {
 				wrapWidth = LineLayout::wrapWidthInfinite;
@@ -1541,11 +1553,8 @@ bool Editor::WrapLines(bool fullWrap, int priorityWrapLineStart) {
 				}
 				wrapOccurred = true;
 			}
-			wrapStart = wrapLineLarge;
-			wrapEnd = wrapLineLarge;
+			docLineLastWrapped = 0x7ffffff;
 		} else {
-			if (wrapEnd >= pdoc->LinesTotal())
-				wrapEnd = pdoc->LinesTotal();
 			//ElapsedTime et;
 			int lineDocTop = cs.DocFromDisplay(topLine);
 			int subLineTop = topLine - cs.DisplayFromDoc(lineDocTop);
@@ -1559,42 +1568,44 @@ bool Editor::WrapLines(bool fullWrap, int priorityWrapLineStart) {
 			AutoSurface surface(this);
 			if (surface) {
 				bool priorityWrap = false;
-				int lastLineToWrap = wrapEnd;
-				int lineToWrap = wrapStart;
+				int lastLineToWrap = docLastLineToWrap;
+				int firstLineToWrap = docLineLastWrapped;
 				if (!fullWrap) {
 					if (priorityWrapLineStart >= 0) {
 						// This is a priority wrap.
-						lineToWrap = priorityWrapLineStart;
-						lastLineToWrap = priorityWrapLineStart + linesInOneCall;
+						firstLineToWrap = priorityWrapLineStart;
+						lastLineToWrap = firstLineToWrap + 100;
 						priorityWrap = true;
 					} else {
 						// This is idle wrap.
-						lastLineToWrap = wrapStart + linesInOneCall;
+						lastLineToWrap = docLineLastWrapped + 100;
 					}
-					if (lastLineToWrap >= wrapEnd)
-						lastLineToWrap = wrapEnd;
+					if (lastLineToWrap >= docLastLineToWrap)
+						lastLineToWrap = docLastLineToWrap;
 				} // else do a fullWrap.
 
-				// Platform::DebugPrintf("Wraplines: full = %d, priorityStart = %d (wrapping: %d to %d)\n", fullWrap, priorityWrapLineStart, lineToWrap, lastLineToWrap);
-				// Platform::DebugPrintf("Pending wraps: %d to %d\n", wrapStart, wrapEnd);
-				while (lineToWrap < lastLineToWrap) {
-					AutoLineLayout ll(llc, RetrieveLineLayout(lineToWrap));
+				// printf("Wraplines: full = %d, priorityStart = %d (wrapping: %d to %d)\n", fullWrap, priorityWrapLineStart, firstLineToWrap, lastLineToWrap);
+				// printf("Pending wraps: %d to %d\n", docLineLastWrapped, docLastLineToWrap);
+				while (firstLineToWrap < lastLineToWrap) {
+					firstLineToWrap++;
+					if (!priorityWrap)
+						docLineLastWrapped++;
+					if (firstLineToWrap < pdoc->LinesTotal()) {
+					AutoLineLayout ll(llc, RetrieveLineLayout(firstLineToWrap));
 					int linesWrapped = 1;
 					if (ll) {
-						LayoutLine(lineToWrap, surface, vs, ll, wrapWidth);
+						LayoutLine(firstLineToWrap, surface, vs, ll, wrapWidth);
 						linesWrapped = ll->lines;
 					}
-					if (cs.SetHeight(lineToWrap, linesWrapped)) {
+					if (cs.SetHeight(firstLineToWrap, linesWrapped)) {
 						wrapOccurred = true;
+						}
 					}
-					lineToWrap++;
 				}
-				if (!priorityWrap)
-					wrapStart = lineToWrap;
 				// If wrapping is done, bring it to resting position
-				if (wrapStart >= wrapEnd) {
-					wrapStart = wrapLineLarge;
-					wrapEnd = wrapLineLarge;
+				if (docLineLastWrapped > docLastLineToWrap) {
+					docLineLastWrapped = -1;
+					docLastLineToWrap = -1;
 				}
 			}
 			goodTopLine = cs.DisplayFromDoc(lineDocTop);
@@ -1710,7 +1721,7 @@ void Editor::PaintSelMargin(Surface *surfWindow, PRectangle &rc) {
 			rcSelMargin.left = rcSelMargin.right;
 			rcSelMargin.right = rcSelMargin.left + vs.ms[margin].width;
 
-			if (vs.ms[margin].style != SC_MARGIN_NUMBER) {
+			if (vs.ms[margin].symbol) {
 				/* alternate scheme:
 				if (vs.ms[margin].mask & SC_MASK_FOLDERS)
 					surface->FillRectangle(rcSelMargin, vs.styles[STYLE_DEFAULT].back.allocated);
@@ -1721,21 +1732,8 @@ void Editor::PaintSelMargin(Surface *surfWindow, PRectangle &rc) {
 				if (vs.ms[margin].mask & SC_MASK_FOLDERS)
 					// Required because of special way brush is created for selection margin
 					surface->FillRectangle(rcSelMargin, *pixmapSelPattern);
-				else {
-					ColourAllocated colour;
-					switch (vs.ms[margin].style) {
-					case SC_MARGIN_BACK:
-						colour = vs.styles[STYLE_DEFAULT].back.allocated;
-						break;
-					case SC_MARGIN_FORE:
-						colour = vs.styles[STYLE_DEFAULT].fore.allocated;
-						break;
-					default:
-						colour = vs.styles[STYLE_LINENUMBER].back.allocated;
-						break;
-					}
-					surface->FillRectangle(rcSelMargin, colour);
-				}
+				else
+					surface->FillRectangle(rcSelMargin, vs.styles[STYLE_LINENUMBER].back.allocated);
 			} else {
 				surface->FillRectangle(rcSelMargin, vs.styles[STYLE_LINENUMBER].back.allocated);
 			}
@@ -1842,7 +1840,7 @@ void Editor::PaintSelMargin(Surface *surfWindow, PRectangle &rc) {
 				PRectangle rcMarker = rcSelMargin;
 				rcMarker.top = yposScreen;
 				rcMarker.bottom = yposScreen + vs.lineHeight;
-				if (vs.ms[margin].style == SC_MARGIN_NUMBER) {
+				if (!vs.ms[margin].symbol) {
 					char number[100];
 					number[0] = '\0';
 					if (firstSubLine)
@@ -2133,7 +2131,7 @@ void Editor::LayoutLine(int line, Surface *surface, ViewStyle &vstyle, LineLayou
 					continue;
 				}
 				if (p > 0) {
-					if (wrapState == eWrapChar) {
+					if (wrapState == eWrapChar){
 						lastGoodBreak = pdoc->MovePositionOutsideChar(p + posLineStart, -1)
 												- posLineStart;
 						p = pdoc->MovePositionOutsideChar(p + 1 + posLineStart, 1) - posLineStart;
@@ -2212,7 +2210,7 @@ void Editor::DrawWrapMarker(Surface *surface, PRectangle rcPlace,
 		    surface->LineTo(xBase + xDir * xRelative, yBase + yDir * yRelative);
 		}
 	};
-	Relative rel = {surface, x0, xStraight ? 1 : -1, y0, yStraight ? 1 : -1};
+	Relative rel = {surface, x0, xStraight?1:-1, y0, yStraight?1:-1};
 
 	// arrow head
 	rel.MoveTo(xa, y);
@@ -3116,7 +3114,7 @@ long Editor::FormatRange(bool draw, RangeToFormat *pfr) {
 	// Printing supports only the line number margin.
 	int lineNumberIndex = -1;
 	for (int margin = 0; margin < ViewStyle::margins; margin++) {
-		if ((vsPrint.ms[margin].style == SC_MARGIN_NUMBER) && (vsPrint.ms[margin].width > 0)) {
+		if ((!vsPrint.ms[margin].symbol) && (vsPrint.ms[margin].width > 0)) {
 			lineNumberIndex = margin;
 		} else {
 			vsPrint.ms[margin].width = 0;
@@ -3612,11 +3610,9 @@ void Editor::NotifyModifyAttempt() {
 	NotifyParent(scn);
 }
 
-void Editor::NotifyDoubleClick(Point pt, bool) {
+void Editor::NotifyDoubleClick(Point, bool) {
 	SCNotification scn = {0};
 	scn.nmhdr.code = SCN_DOUBLECLICK;
-	scn.line = LineFromLocation(pt);
-	scn.position = PositionFromLocationClose(pt);
 	NotifyParent(scn);
 }
 
@@ -3718,8 +3714,19 @@ void Editor::CheckModificationForWrap(DocModification mh) {
 		llc.Invalidate(LineLayout::llCheckTextAndStyle);
 		if (wrapState != eWrapNone) {
 			int lineDoc = pdoc->LineFromPosition(mh.position);
-			int lines = Platform::Maximum(0, mh.linesAdded);
-			NeedWrapping(lineDoc, lineDoc + lines + 1);
+			if (mh.linesAdded <= 0) {
+				AutoSurface surface(this);
+				AutoLineLayout ll(llc, RetrieveLineLayout(lineDoc));
+				if (surface && ll) {
+					LayoutLine(lineDoc, surface, vs, ll, wrapWidth);
+					if (cs.GetHeight(lineDoc) != ll->lines) {
+						NeedWrapping(lineDoc - 1, lineDoc + 1);
+						Redraw();
+					}
+				}
+			} else {
+				NeedWrapping(lineDoc, lineDoc + 1 + mh.linesAdded);
+			}
 		}
 	}
 }
@@ -3762,7 +3769,6 @@ void Editor::NotifyModified(Document*, DocModification mh, void *) {
 				InvalidateRange(mh.position, mh.position + mh.length);
 			}
 		}
-		llc.Invalidate(LineLayout::llCheckTextAndStyle);
 	} else {
 		// Move selection and brace highlights
 		if (mh.modificationType & SC_MOD_INSERTTEXT) {
@@ -4879,7 +4885,7 @@ void Editor::CopySelectionRange(SelectionText *ss) {
 				text[size] = '\0';
 			}
 		}
-		ss->Set(text, size + 1, pdoc->dbcsCodePage,
+ 		ss->Set(text, size + 1, pdoc->dbcsCodePage,
 			vs.styles[STYLE_DEFAULT].characterSet, selType == selRectangle);
 	}
 }
@@ -5423,13 +5429,13 @@ bool Editor::Idle() {
 
 	bool idleDone;
 
-	bool wrappingDone = wrapState == eWrapNone;
+	bool wrappingDone = (wrapState == eWrapNone) || (!backgroundWrapEnabled);
 
 	if (!wrappingDone) {
 		// Wrap lines during idle.
 		WrapLines(false, -1);
 		// No more wrapping
-		if (wrapStart == wrapEnd)
+		if (docLineLastWrapped == docLastLineToWrap)
 			wrappingDone = true;
 	}
 
@@ -6351,16 +6357,16 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 		return pdoc->ExtendWordSelect(wParam, 1, lParam != 0);
 
 	case SCI_SETWRAPMODE:
-		switch (wParam) {
-		case SC_WRAP_WORD:
-			wrapState = eWrapWord;
-			break;
-		case SC_WRAP_CHAR:
-			wrapState = eWrapChar;
-			break;
-		default:
-			wrapState = eWrapNone;
-			break;
+		switch(wParam){
+			case SC_WRAP_WORD:
+				wrapState = eWrapWord;
+				break;
+			case SC_WRAP_CHAR:
+				wrapState = eWrapChar;
+				break;
+			default:
+				wrapState = eWrapNone;
+				break;
 		}
 		xOffset = 0;
 		InvalidateStyleRedraw();
@@ -6511,10 +6517,8 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 		return pdoc->LineEnd(wParam);
 
 	case SCI_SETCODEPAGE:
-		if (ValidCodePage(wParam)) {
-			pdoc->dbcsCodePage = wParam;
-			InvalidateStyleRedraw();
-		}
+		pdoc->dbcsCodePage = wParam;
+		InvalidateStyleRedraw();
 		break;
 
 	case SCI_GETCODEPAGE:
@@ -6599,14 +6603,14 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 
 	case SCI_SETMARGINTYPEN:
 		if (ValidMargin(wParam)) {
-			vs.ms[wParam].style = lParam;
+			vs.ms[wParam].symbol = (lParam == SC_MARGIN_SYMBOL);
 			InvalidateStyleRedraw();
 		}
 		break;
 
 	case SCI_GETMARGINTYPEN:
 		if (ValidMargin(wParam))
-			return vs.ms[wParam].style;
+			return vs.ms[wParam].symbol ? SC_MARGIN_SYMBOL : SC_MARGIN_NUMBER;
 		else
 			return 0;
 

@@ -12,7 +12,7 @@
  */
 class MarginStyle {
 public:
-	int style;
+	bool symbol;
 	int width;
 	int mask;
 	bool sensitive;
