@@ -9,6 +9,10 @@
 
 #include "ContractionState.h"
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 OneLine::OneLine() {
 	displayLine = 0;
 	//docLine = 0;
@@ -208,11 +212,11 @@ bool ContractionState::SetVisible(int lineDocStart, int lineDocEnd, bool visible
 			if (lines[line].visible != visible) {
 				delta += visible ? lines[line].height : -lines[line].height;
 				lines[line].visible = visible;
+				valid = false;
 			}
 		}
 	}
 	linesInDisplay += delta;
-	valid = false;
 	return delta != 0;
 }
 
