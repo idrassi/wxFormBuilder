@@ -11,7 +11,11 @@
 
 #include "KeyMap.h"
 
-KeyMap::KeyMap() : kmap(0), len(0), alloc(0) {
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
+Scintilla::KeyMap::KeyMap() : kmap(0), len(0), alloc(0) { // [CHANGED]
 	for (int i = 0; MapDefault[i].key; i++) {
 		AssignCmdKey(MapDefault[i].key,
 			MapDefault[i].modifiers,
@@ -19,18 +23,18 @@ KeyMap::KeyMap() : kmap(0), len(0), alloc(0) {
 	}
 }
 
-KeyMap::~KeyMap() {
+Scintilla::KeyMap::~KeyMap() { // [CHANGED]
 	Clear();
 }
 
-void KeyMap::Clear() {
+void Scintilla::KeyMap::Clear() { // [CHANGED]
 	delete []kmap;
 	kmap = 0;
 	len = 0;
 	alloc = 0;
 }
 
-void KeyMap::AssignCmdKey(int key, int modifiers, unsigned int msg) {
+void Scintilla::KeyMap::AssignCmdKey(int key, int modifiers, unsigned int msg) { // [CHANGED]
 	if ((len+1) >= alloc) {
 		KeyToCommand *ktcNew = new KeyToCommand[alloc + 5];
 		if (!ktcNew)
@@ -53,7 +57,7 @@ void KeyMap::AssignCmdKey(int key, int modifiers, unsigned int msg) {
 	len++;
 }
 
-unsigned int KeyMap::Find(int key, int modifiers) {
+unsigned int Scintilla::KeyMap::Find(int key, int modifiers) { // [CHANGED]
 	for (int i = 0; i < len; i++) {
 		if ((key == kmap[i].key) && (modifiers == kmap[i].modifiers)) {
 			return kmap[i].msg;
@@ -62,7 +66,7 @@ unsigned int KeyMap::Find(int key, int modifiers) {
 	return 0;
 }
 
-const KeyToCommand KeyMap::MapDefault[] = {
+const KeyToCommand Scintilla::KeyMap::MapDefault[] = { // [CHANGED]
     {SCK_DOWN,		SCI_NORM,	SCI_LINEDOWN},
     {SCK_DOWN,		SCI_SHIFT,	SCI_LINEDOWNEXTEND},
     {SCK_DOWN,		SCI_CTRL,	SCI_LINESCROLLDOWN},

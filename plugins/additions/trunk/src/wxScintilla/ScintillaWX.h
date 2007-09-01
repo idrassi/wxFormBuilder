@@ -16,18 +16,14 @@
 
 #ifndef __ScintillaWX_h__
 #define __ScintillaWX_h__
-
-//----------------------------------------------------------------------
-
+// [CHANGED] BEGIN
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
 #include "Platform.h"
-
 #include "Scintilla.h"
-#include "XPM.h"
+#include "ScintillaWidget.h"
 #ifdef SCI_LEXER
 #include "SciLexer.h"
 #include "PropSet.h"
@@ -36,27 +32,30 @@
 #endif
 #include "ContractionState.h"
 #include "SVector.h"
+#include "SplitVector.h"
+#include "Partitioning.h"
+#include "RunStyles.h"
 #include "CellBuffer.h"
 #include "CallTip.h"
 #include "KeyMap.h"
 #include "Indicator.h"
+#include "XPM.h"
 #include "LineMarker.h"
 #include "Style.h"
-#include "ViewStyle.h"
 #include "AutoComplete.h"
+#include "ViewStyle.h"
 #include "CharClassify.h"
-#include "RESearch.h"
+#include "Decoration.h"
 #include "Document.h"
+#include "PositionCache.h"
 #include "Editor.h"
+#include "SString.h"
 #include "ScintillaBase.h"
-
 #include <wx/wx.h>
 #include <wx/dataobj.h>
 #include <wx/clipbrd.h>
 #include <wx/dnd.h>
-
-//----------------------------------------------------------------------
-
+// [CHANGED] END
 #ifdef WXMAKINGDLL_SCI
     #define WXDLLIMPEXP_SCI WXEXPORT
 #elif defined(WXUSINGDLL)
@@ -68,6 +67,11 @@
 class WXDLLIMPEXP_SCI wxScintilla;           // forward
 class ScintillaWX;
 
+#ifdef SCI_NAMESPACE					// begin [CHANGED]
+#define SCI_SCOPE( x ) Scintilla::x
+#else
+#define SCI_SCOPE( x ) x
+#endif									// end [CHANGED]
 
 //----------------------------------------------------------------------
 // Helper classes
@@ -91,7 +95,7 @@ private:
 
 //----------------------------------------------------------------------
 
-class ScintillaWX : public ScintillaBase {
+class ScintillaWX : public SCI_SCOPE( ScintillaBase ) {
 public:
 
     ScintillaWX(wxScintilla* win);
@@ -111,9 +115,9 @@ public:
     virtual bool ModifyScrollBars(int nMax, int nPage);
     virtual void Copy();
     virtual void Paste();
-    virtual void CopyToClipboard(const SelectionText &selectedText);
+    virtual void CopyToClipboard(const SCI_SCOPE(SelectionText) &selectedText);
 
-    virtual void CreateCallTipWindow(PRectangle rc);
+    virtual void CreateCallTipWindow( SCI_SCOPE(PRectangle) rc);
     virtual void AddToPopUp(const char *label, int cmd = 0, bool enabled = true);
     virtual void ClaimSelection();
 
@@ -125,7 +129,7 @@ public:
                          long lParam);
 
     virtual void NotifyChange();
-    virtual void NotifyParent(SCNotification scn);
+    virtual void NotifyParent( SCI_SCOPE(SCNotification) scn);
 
     virtual void CancelModes();
 
@@ -139,10 +143,10 @@ public:
     void DoLoseFocus();
     void DoGainFocus();
     void DoSysColourChange();
-    void DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
-    void DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl);
-    void DoLeftButtonMove(Point pt);
-    void DoMiddleButtonUp(Point pt);
+    void DoLeftButtonDown( SCI_SCOPE(Point) pt, unsigned int curTime, bool shift, bool ctrl, bool alt); // [CHANGED]
+    void DoLeftButtonUp(SCI_SCOPE(Point) pt, unsigned int curTime, bool ctrl); // [CHANGED]
+    void DoLeftButtonMove(SCI_SCOPE(Point) pt); // [CHANGED]
+    void DoMiddleButtonUp(SCI_SCOPE(Point) pt); // [CHANGED]
     void DoMouseWheel(int rotation, int delta, int linesPerAction, int ctrlDown, bool isPageScroll);
     void DoAddChar(int key);
     int  DoKeyDown(const wxKeyEvent& event, bool* consumed);
@@ -158,7 +162,7 @@ public:
 #endif
 
     void DoCommand(int ID);
-    void DoContextMenu(Point pt);
+    void DoContextMenu(SCI_SCOPE(Point) pt); // [CHANGED]
     void DoOnListBox();
 
 
@@ -168,7 +172,7 @@ public:
     bool GetHideSelection() { return hideSelection; }
     void DoScrollToLine(int line);
     void DoScrollToColumn(int column);
-    void ClipChildren(wxDC& dc, PRectangle rect);
+    void ClipChildren(wxDC& dc, SCI_SCOPE(PRectangle) rect);
     void SetUseAntiAliasing(bool useAA);
     bool GetUseAntiAliasing();
 

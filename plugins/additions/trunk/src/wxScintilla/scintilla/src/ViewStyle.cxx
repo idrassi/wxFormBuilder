@@ -10,23 +10,34 @@
 #include "Platform.h"
 
 #include "Scintilla.h"
+#include "SplitVector.h"
+#include "Partitioning.h"
+#include "RunStyles.h"
 #include "Indicator.h"
 #include "XPM.h"
 #include "LineMarker.h"
 #include "Style.h"
 #include "ViewStyle.h"
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 MarginStyle::MarginStyle() :
-	symbol(false), width(0), mask(0), sensitive(false) {
+	style(SC_MARGIN_SYMBOL), width(0), mask(0), sensitive(false) {
 }
 
 // A list of the fontnames - avoids wasting space in each style
 FontNames::FontNames() {
+    size = 8;
+    names = new char *[size];
 	max = 0;
 }
 
 FontNames::~FontNames() {
 	Clear();
+    delete []names;
+    names = 0;
 }
 
 void FontNames::Clear() {
@@ -44,6 +55,17 @@ const char *FontNames::Save(const char *name) {
 			return names[i];
 		}
 	}
+    if (max >= size) {
+        // Grow array
+        int sizeNew = size * 2;
+        char **namesNew = new char *[sizeNew];
+    	for (int j=0;j<max;j++) {
+            namesNew[j] = names[j];
+        }
+        delete []names;
+        names = namesNew;
+        size = sizeNew;
+    }
 	names[max] = new char[strlen(name) + 1];
 	strcpy(names[max], name);
 	max++;
@@ -74,6 +96,7 @@ ViewStyle::ViewStyle(const ViewStyle &source) {
 	selbackground.desired = source.selbackground.desired;
 	selbackground2.desired = source.selbackground2.desired;
 	selAlpha = source.selAlpha;
+	selEOLFilled = source.selEOLFilled;
 
 	foldmarginColourSet = source.foldmarginColourSet;
 	foldmarginColour.desired = source.foldmarginColour.desired;
@@ -99,6 +122,7 @@ ViewStyle::ViewStyle(const ViewStyle &source) {
 	caretLineAlpha = source.caretLineAlpha;
 	edgecolour.desired = source.edgecolour.desired;
 	edgeState = source.edgeState;
+	caretStyle = source.caretStyle;
 	caretWidth = source.caretWidth;
 	someStylesProtected = false;
 	leftMarginWidth = source.leftMarginWidth;
@@ -125,10 +149,13 @@ void ViewStyle::Init() {
 	ResetDefaultStyle();
 
 	indicators[0].style = INDIC_SQUIGGLE;
+	indicators[0].under = false;
 	indicators[0].fore = ColourDesired(0, 0x7f, 0);
 	indicators[1].style = INDIC_TT;
+	indicators[1].under = false;
 	indicators[1].fore = ColourDesired(0, 0, 0xff);
 	indicators[2].style = INDIC_PLAIN;
+	indicators[2].under = false;
 	indicators[2].fore = ColourDesired(0xff, 0, 0);
 
 	lineHeight = 1;
@@ -143,6 +170,7 @@ void ViewStyle::Init() {
 	selbackground.desired = ColourDesired(0xc0, 0xc0, 0xc0);
 	selbackground2.desired = ColourDesired(0xb0, 0xb0, 0xb0);
 	selAlpha = SC_ALPHA_NOALPHA;
+	selEOLFilled = false;
 
 	foldmarginColourSet = false;
 	foldmarginColour.desired = ColourDesired(0xff, 0, 0);
@@ -163,6 +191,7 @@ void ViewStyle::Init() {
 	caretLineAlpha = SC_ALPHA_NOALPHA;
 	edgecolour.desired = ColourDesired(0xc0, 0xc0, 0xc0);
 	edgeState = EDGE_NONE;
+	caretStyle = CARETSTYLE_LINE;
 	caretWidth = 1;
 	someStylesProtected = false;
 
@@ -175,13 +204,13 @@ void ViewStyle::Init() {
 
 	leftMarginWidth = 1;
 	rightMarginWidth = 1;
-	ms[0].symbol = false;
+	ms[0].style = SC_MARGIN_NUMBER;
 	ms[0].width = 0;
 	ms[0].mask = 0;
-	ms[1].symbol = true;
+	ms[1].style = SC_MARGIN_SYMBOL;
 	ms[1].width = 16;
 	ms[1].mask = ~SC_MASK_FOLDERS;
-	ms[2].symbol = true;
+	ms[2].style = SC_MARGIN_SYMBOL;
 	ms[2].width = 0;
 	ms[2].mask = 0;
 	fixedColumnWidth = leftMarginWidth;
@@ -189,7 +218,7 @@ void ViewStyle::Init() {
 	maskInLine = 0xffffffff;
 	for (int margin=0; margin < margins; margin++) {
 		fixedColumnWidth += ms[margin].width;
-		symbolMargin = symbolMargin || ms[margin].symbol;
+		symbolMargin = symbolMargin || (ms[margin].style != SC_MARGIN_NUMBER);
 		if (ms[margin].width > 0)
 			maskInLine &= ~ms[margin].mask;
 	}
@@ -260,7 +289,7 @@ void ViewStyle::Refresh(Surface &surface) {
 	maskInLine = 0xffffffff;
 	for (int margin=0; margin < margins; margin++) {
 		fixedColumnWidth += ms[margin].width;
-		symbolMargin = symbolMargin || ms[margin].symbol;
+		symbolMargin = symbolMargin || (ms[margin].style != SC_MARGIN_NUMBER);
 		if (ms[margin].width > 0)
 			maskInLine &= ~ms[margin].mask;
 	}

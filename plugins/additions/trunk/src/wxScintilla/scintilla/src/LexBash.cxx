@@ -28,6 +28,10 @@
 
 #define HERE_DELIM_MAX 256
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 static inline int translateBashDigit(char ch) {
 	if (ch >= '0' && ch <= '9') {
 		return ch - '0';
@@ -338,7 +342,8 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 				HereDoc.Indent = false;
 			} else if (ch == '-'	// file test operators
 			           && isSingleCharOp(chNext)
-			           && !isalnum((chNext2 = styler.SafeGetCharAt(i+2)))) {
+			           && !isalnum((chNext2 = styler.SafeGetCharAt(i+2)))
+			           && isspace(chPrev)) {
 				styler.ColourTo(i + 1, SCE_SH_WORD);
 				state = SCE_SH_DEFAULT;
 				i++;

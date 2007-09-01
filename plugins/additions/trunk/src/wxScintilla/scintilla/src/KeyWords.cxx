@@ -19,6 +19,10 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 const LexerModule *LexerModule::base = 0;
 int LexerModule::nextLanguage = SCLEX_AUTOMATIC+1;
 
@@ -152,11 +156,13 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmCaml);
 	LINK_LEXER(lmClw);
 	LINK_LEXER(lmClwNoCase);
+	LINK_LEXER(lmCmake);
 	LINK_LEXER(lmConf);
 	LINK_LEXER(lmCPP);
 	LINK_LEXER(lmCPPNoCase);
 	LINK_LEXER(lmCsound);
 	LINK_LEXER(lmCss);
+	LINK_LEXER(lmD);
 	LINK_LEXER(lmDiff);
 	LINK_LEXER(lmEiffel);
 	LINK_LEXER(lmEiffelkw);
@@ -168,6 +174,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmForth);
 	LINK_LEXER(lmFortran);
 	LINK_LEXER(lmFreeBasic);
+	LINK_LEXER(lmGAP);
 	LINK_LEXER(lmGui4Cli);
 	LINK_LEXER(lmHaskell);
 	LINK_LEXER(lmHTML);
@@ -193,7 +200,9 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmPerl);
 	LINK_LEXER(lmPHP);
 	LINK_LEXER(lmPHPSCRIPT);
+	LINK_LEXER(lmPLM);
 	LINK_LEXER(lmPOV);
+	LINK_LEXER(lmProgress);
 	LINK_LEXER(lmProps);
 	LINK_LEXER(lmPS);
 	LINK_LEXER(lmPureBasic);
