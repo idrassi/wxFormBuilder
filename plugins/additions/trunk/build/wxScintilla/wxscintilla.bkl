@@ -14,6 +14,7 @@
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/CellBuffer.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/CharClassify.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/ContractionState.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/Decoration.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/Document.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/DocumentAccessor.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/Editor.cxx
@@ -33,17 +34,20 @@
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexBullant.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexCaml.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexCLW.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexCmake.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexConf.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexCPP.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexCrontab.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexCsound.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexCSS.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexD.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexEiffel.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexErlang.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexEScript.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexFlagship.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexForth.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexFortran.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexGAP.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexGui4Cli.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexHaskell.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexHTML.cxx
@@ -63,7 +67,9 @@
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexPascal.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexPB.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexPerl.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexPLM.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexPOV.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexProgress.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexPS.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexPython.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexRebol.cxx
@@ -81,8 +87,10 @@
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexVHDL.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LexYAML.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/LineMarker.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/PositionCache.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/PropSet.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/RESearch.cxx
+		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/RunStyles.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/ScintillaBase.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/Style.cxx
 		$(ADDITIONS_SRC_DIR)/wxScintilla/scintilla/src/StyleContext.cxx
