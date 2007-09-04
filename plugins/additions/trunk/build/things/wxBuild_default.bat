@@ -94,21 +94,6 @@ set MAKEFILE=makefile.gcc
 set FLAGS=
 goto START
 
-:SETUP_GCC_BUILD_ENVIRONMENT
-echo Assuming that MinGW has been installed to:
-echo   %GCCDIR%
-echo.
-:: -- Add MinGW directory to the systems PATH --
-echo Setting environment for MinGW Gcc v3.x.x...
-if "%OS%" == "Windows_NT" set PATH=%GCCDIR%\BIN;%PATH%
-if "%OS%" == "" set PATH="%GCCDIR%\BIN";"%PATH%"
-echo.
-:: -- Setup the make executable and the actual makefile name --
-set MAKE=mingw32-make.exe
-set MAKEFILE=makefile.gcc
-set FLAGS=
-goto START
-
 :SETUP_GCC4_BUILD_ENVIRONMENT
 echo Assuming that MinGW has been installed to:
 echo   %GCC4DIR%
