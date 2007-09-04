@@ -425,7 +425,7 @@ public:
 }
 #endif
 
-Scintilla::Point Editor::LocationFromPosition(int pos) { // [CHANGED]
+Point Editor::LocationFromPosition(int pos) { // [CHANGED]
 	Point pt;
 	RefreshStyleData();
 	if (pos == INVALID_POSITION)
@@ -971,7 +971,7 @@ This way, we favour the displaying of useful information: the begining of lines,
 where most code reside, and the lines after the caret, eg. the body of a function.
 
      |        |       |      |                                            |
-slop | strict | jumps | even | Caret can go to the margin                 | When reaching limitÝ(caret going out of
+slop | strict | jumps | even | Caret can go to the margin                 | When reaching limitÃ(caret going out of
      |        |       |      |                                            | visibility or going into the UZ) display is...
 -----+--------+-------+------+--------------------------------------------+--------------------------------------------------------------
   0  |   0    |   0   |   0  | Yes                                        | moved to put caret on top/on right
@@ -4730,7 +4730,7 @@ void Editor::GoToLine(int lineNo) {
 	EnsureCaretVisible();
 }
 
-static bool Close(Scintilla::Point pt1, Scintilla::Point pt2) { // [CHANGED]
+static bool Close(Point pt1, Point pt2) { // [CHANGED]
 	if (abs(pt1.x - pt2.x) > 3)
 		return false;
 	if (abs(pt1.y - pt2.y) > 3)

@@ -67,12 +67,13 @@
 class WXDLLIMPEXP_SCI wxScintilla;           // forward
 class ScintillaWX;
 
-#ifdef SCI_NAMESPACE					// begin [CHANGED]
-#define SCI_SCOPE( x ) Scintilla::x
-#else
-#define SCI_SCOPE( x ) x
-#endif									// end [CHANGED]
-
+#ifndef SCI_SCOPE							// begin [CHANGED]
+	#ifdef SCI_NAMESPACE
+		#define SCI_SCOPE( x ) Scintilla::x
+	#else
+		#define SCI_SCOPE( x ) x
+	#endif
+#endif										// end [CHANGED]
 //----------------------------------------------------------------------
 // Helper classes
 
