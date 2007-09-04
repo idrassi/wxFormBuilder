@@ -13,7 +13,7 @@
 ::**************************************************************************
 set WXBUILD_VERSION=1.03
 :: MinGW Gcc install location. This must match you systems configuration.
-set GCCDIR=C:\MinGW
+set GCCDIR=C:\MinGW4
 set GCC4DIR=C:\MinGW4
 
 if (%1) == () goto ERROR
