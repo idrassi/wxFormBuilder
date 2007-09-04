@@ -1803,8 +1803,16 @@ class  ScintillaWX;                      // forward declare
 class  WordList;
 
 #ifdef SCI_NAMESPACE // begin [CHANGED]
-namespace Scintilla{
+	#ifndef SCI_SCOPE
+		#define SCI_SCOPE( x ) Scintilla::x
+	#endif
+	namespace Scintilla{
+#else
+	#ifndef SCI_SCOPE
+		#define SCI_SCOPE( x ) x
+	#endif
 #endif
+
 struct SCNotification;
 #ifdef SCI_NAMESPACE
 }
@@ -3375,7 +3383,7 @@ protected:
 
     // Turn notifications from Scintilla into events
     void NotifyChange();
-    void NotifyParent (Scintilla::SCNotification* scn); // [CHAGED]
+    void NotifyParent (SCI_SCOPE(SCNotification*) scn); // [CHAGED]
 
     ScintillaWX* m_swx;
     wxStopWatch m_stopWatch;

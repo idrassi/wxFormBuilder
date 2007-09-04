@@ -16,14 +16,14 @@
 using namespace Scintilla;
 #endif
 
-Scintilla::Style::Style() { // [CHANGED]
+Style::Style() { // [CHANGED]
 	aliasOfDefaultFont = true;
 	Clear(ColourDesired(0, 0, 0), ColourDesired(0xff, 0xff, 0xff),
 	      Platform::DefaultFontSize(), 0, SC_CHARSET_DEFAULT,
 	      false, false, false, false, caseMixed, true, true, false);
 }
 
-Scintilla::Style::Style(const Style &source) { // [CHANGED]
+Style::Style(const Style &source) { // [CHANGED]
 	Clear(ColourDesired(0, 0, 0), ColourDesired(0xff, 0xff, 0xff),
 	      0, 0, 0,
 	      false, false, false, false, caseMixed, true, true, false);
@@ -41,7 +41,7 @@ Scintilla::Style::Style(const Style &source) { // [CHANGED]
 	hotspot = source.hotspot;
 }
 
-Scintilla::Style::~Style() { // [CHANGED]
+Style::~Style() { // [CHANGED]
 	if (aliasOfDefaultFont)
 		font.SetID(0);
 	else
@@ -49,7 +49,7 @@ Scintilla::Style::~Style() { // [CHANGED]
 	aliasOfDefaultFont = false;
 }
 
-Scintilla::Style &Scintilla::Style::operator=(const Style &source) { // [CHANGED]
+Style &Style::operator=(const Style &source) { // [CHANGED]
 	if (this == &source)
 		return * this;
 	Clear(ColourDesired(0, 0, 0), ColourDesired(0xff, 0xff, 0xff),
@@ -69,7 +69,7 @@ Scintilla::Style &Scintilla::Style::operator=(const Style &source) { // [CHANGED
 	return *this;
 }
 
-void Scintilla::Style::Clear(ColourDesired fore_, ColourDesired back_, int size_, // [CHANGED]
+void Style::Clear(ColourDesired fore_, ColourDesired back_, int size_, // [CHANGED]
                   const char *fontName_, int characterSet_,
                   bool bold_, bool italic_, bool eolFilled_,
                   bool underline_, ecaseForced caseForce_,
@@ -94,7 +94,7 @@ void Scintilla::Style::Clear(ColourDesired fore_, ColourDesired back_, int size_
 	aliasOfDefaultFont = false;
 }
 
-void Scintilla::Style::ClearTo(const Style &source) { // [CHANGED]
+void Style::ClearTo(const Style &source) { // [CHANGED]
 	Clear(
 		source.fore.desired,
 		source.back.desired,
@@ -111,7 +111,7 @@ void Scintilla::Style::ClearTo(const Style &source) { // [CHANGED]
 		source.hotspot);
 }
 
-bool Scintilla::Style::EquivalentFontTo(const Style *other) const { // [CHANGED]
+bool Style::EquivalentFontTo(const Style *other) const { // [CHANGED]
 	if (bold != other->bold ||
 	        italic != other->italic ||
 	        size != other->size ||
@@ -126,7 +126,7 @@ bool Scintilla::Style::EquivalentFontTo(const Style *other) const { // [CHANGED]
 	return strcmp(fontName, other->fontName) == 0;
 }
 
-void Scintilla::Style::Realise(Surface &surface, int zoomLevel, Style *defaultStyle, bool extraFontFlag) { // [CHANGED]
+void Style::Realise(Surface &surface, int zoomLevel, Style *defaultStyle, bool extraFontFlag) { // [CHANGED]
 	sizeZoomed = size + zoomLevel;
 	if (sizeZoomed <= 2)	// Hangs if sizeZoomed <= 1
 		sizeZoomed = 2;
