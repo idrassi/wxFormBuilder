@@ -517,6 +517,9 @@ wxPropertyGridManager::~wxPropertyGridManager()
 {
     END_MOUSE_CAPTURE
 
+    m_pPropGrid->DoSelectProperty(NULL);
+    m_pPropGrid->m_pState = NULL;
+
     size_t i;
     for ( i=0; i<m_arrPages.GetCount(); i++ )
     {

@@ -1360,11 +1360,12 @@ long wxFlagsPropertyClass::IdToBit ( const wxString& id ) const
     const wxArrayInt& values = GetValues();
     for ( i = 0; i < GetItemCount(); i++ )
     {
+#if wxCHECK_VERSION(2,9,0)
+        const wxString ptr = GetLabel(i);
+#else
         const wxChar* ptr = GetLabel(i);
-        if ( id == ptr
-             /*wxStrncmp(id,ptr,id_len) == 0 &&
-             ptr[id_len] == 0*/
-           )
+#endif
+        if ( id == ptr )
         {
             //*pindex = i;
             if ( values.GetCount() )
@@ -1905,6 +1906,7 @@ void wxArrayEditorDialog::OnIdle(wxIdleEvent& event)
     //
     // Do control focus detection here.
     //
+
     wxWindow* focused = FindFocus();
 
     // This strange focus thing is a workaround for wxGTK wxListBox focus
@@ -2410,12 +2412,12 @@ void wxPropertyGrid::ArrayStringToString( wxString& dst, const wxArrayString& sr
 
         if ( i < (itemCount-1) )
         {
-            dst.append ( postDelim );
+            dst.append( wxString(postDelim) );
             dst.append ( wxT(" ") );
-            dst.append ( preas );
+            dst.append( wxString(preas) );
         }
         else if ( preDelim )
-            dst.append ( postDelim );
+            dst.append( wxString(postDelim) );
     }
 }
 
