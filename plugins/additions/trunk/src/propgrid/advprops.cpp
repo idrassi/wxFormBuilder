@@ -336,7 +336,7 @@ public:
     wxPG_DECLARE_CREATECONTROLS
 
     virtual void UpdateControl( wxPGProperty* property, wxWindow* wnd ) const;
-    virtual bool wxPGDatePickerCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
+    virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
         wxWindow* wnd, wxEvent& event ) const;
     virtual bool CopyValueFromControl( wxPGProperty* property, wxWindow* wnd ) const;
     virtual void SetValueToUnspecified( wxWindow* wnd ) const;
@@ -453,14 +453,16 @@ void wxPGDatePickerCtrlEditor::SetValueToUnspecified( wxWindow* WXUNUSED(wnd) ) 
 static const wxChar* gs_fp_es_family_labels[] = {
     wxT("Default"), wxT("Decorative"),
     wxT("Roman"), wxT("Script"),
-    wxT("Swiss"), wxT("Modern"),wxT("Teletype"),
+    wxT("Swiss"), wxT("Modern"),
+	wxT("Teletype"),
     (const wxChar*) NULL
 };
 
 static long gs_fp_es_family_values[] = {
-    wxDEFAULT, wxDECORATIVE,
-    wxROMAN, wxSCRIPT,
-    wxSWISS, wxMODERN, wxTELETYPE
+    wxFONTFAMILY_DEFAULT, wxFONTFAMILY_DECORATIVE,
+    wxFONTFAMILY_ROMAN, wxFONTFAMILY_SCRIPT,
+    wxFONTFAMILY_SWISS, wxFONTFAMILY_MODERN,
+	wxFONTFAMILY_TELETYPE
 };
 
 static const wxChar* gs_fp_es_style_labels[] = {

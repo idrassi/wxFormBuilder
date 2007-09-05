@@ -16,6 +16,10 @@
     #pragma interface "propgrid.cpp"
 #endif
 
+#include <wx/window.h>
+#include <wx/bitmap.h>
+#include <wx/dcclient.h>
+#include <wx/scrolwin.h>
 #include <wx/dynarray.h>
 #include <wx/hashmap.h>
 #include <wx/variant.h>
@@ -76,26 +80,31 @@
 //    #define wxPG_ALLOW_WXADV
 
 #if defined(__WXPYTHON__)
-    #include <python.h>
+    #include <Python.h>
 
     #undef wxPG_ALLOW_WXADV
     #define wxPG_ALLOW_WXADV
 #endif
 
-//
-// wxPropertyGrid version macro
-//
-// Formula:
-//     Major Version * 1000
-//   + Minor Version * 100
-//   + Release * 10
-//   + Subrelease (zero for actual releases, some number for consequtive snapshots)
-//
-// NB: Subrelease does not necessarily get updated at every snapshot.
-//     In fact, it will more likely be updated once a week or so
-//     (less often when releases are made more sparsely).
-//
-#define wxPG_VERSION        1270
+// Defines for component version.
+// The following symbols should be updated for each new component release
+// since some kind of tests, like those of AM_WXCODE_CHECKFOR_COMPONENT_VERSION()
+// for "configure" scripts under unix, use them.
+#define wxPROPGRID_MAJOR          1
+#define wxPROPGRID_MINOR          2
+#define wxPROPGRID_RELEASE        9
+
+// For non-Unix systems (i.e. when building without a configure script),
+// users of this component can use the following macro to check if the
+// current version is at least major.minor.release
+#define wxCHECK_PROPGRID_VERSION(major,minor,release) \
+    (wxPROPGRID_MAJOR > (major) || \
+    (wxPROPGRID_MAJOR == (major) && wxPROPGRID_MINOR > (minor)) || \
+    (wxPROPGRID_MAJOR == (major) && wxPROPGRID_MINOR == (minor) && wxPROPGRID_RELEASE >= (release)))
+
+
+// Legacy version number
+#define wxPG_VERSION        ((wxPROPGRID_MAJOR*1000)+(wxPROPGRID_MINOR*100)+(wxPROPGRID_RELEASE*10))
 
 
 // -----------------------------------------------------------------------
@@ -663,6 +672,8 @@ typedef void (*wxPGPaintCallback)(wxPGProperty* property,
 
 /** Flags for wxPropertyGrid::SetPropertyAttribute etc */
 #define wxPG_RECURSE                      0x00000020
+#define wxPG_RECURSE_STARTS               0x00000040
+#define wxPG_FORCE                        0x00000080
 
 // -----------------------------------------------------------------------
 
@@ -676,6 +687,7 @@ typedef void (*wxPGPaintCallback)(wxPGProperty* property,
 #define wxPG_FULL_VALUE             0x00000001 // Get/Store full value instead of displayed value.
 #define wxPG_REPORT_ERROR           0x00000002
 #define wxPG_PROPERTY_SPECIFIC      0x00000004
+#define wxPG_EDITABLE_VALUE         0x00000008 // Get/Store value that must be editable in wxTextCtrl
 
 // -----------------------------------------------------------------------
 
@@ -805,6 +817,11 @@ WXDLLIMPEXP_PG void wxPGGetFailed ( const wxPGProperty* p, const wxChar* typestr
 /** Indicates the bit useable by derived properties.
 */
 #define wxPG_PROP_CLASS_SPECIFIC_2  0x0080
+
+/** Property value cannot be modified. However, editor may be created
+    so that the value can be easily copied.
+*/
+#define wxPG_PROP_READONLY          0x0100
 
 /** @}
 */
@@ -1453,7 +1470,7 @@ public:
 
 #define WX_PG_DECLARE_CLASSINFO() \
     WX_PG_DECLARE_GETCLASSNAME \
-    WX_PG_DECLARE_GETCLASSINFO \
+    WX_PG_DECLARE_GETCLASSINFO
 
 // We don't want to create SWIG interface for DoGetEditorClass (we'll use GetEditor instead)
 #ifndef SWIG
@@ -1958,7 +1975,9 @@ public:
         return (( m_y >= -1 )?true:false);
     }
 
-    inline bool IsFlagSet( unsigned char flag ) const
+	typedef short FlagType;
+
+    inline bool IsFlagSet( FlagType flag ) const
     {
         return ( m_flags & flag ) ? true : false;
     }
@@ -1968,7 +1987,7 @@ public:
         return ( m_flags & wxPG_PROP_UNSPECIFIED ) ? true : false;
     }
 
-    inline bool HasFlag( unsigned char flag ) const
+    bool HasFlag( FlagType flag ) const
     {
         return ( m_flags & flag ) ? true : false;
     }
@@ -1988,7 +2007,7 @@ public:
     /** Returns property's data extension (NULL if none). */
     inline wxPGPropertyDataExt* GetDataExt() { return m_dataExt; }
 
-    inline unsigned int GetFlags() const
+    unsigned int GetFlags() const
     {
         return (unsigned int)m_flags;
     }
@@ -2116,7 +2135,7 @@ public:
     */
     void SetChoicesExclusive();
 
-    inline void SetFlag( unsigned char flag ) { m_flags |= flag; }
+    void SetFlag( FlagType flag ) { m_flags |= flag; }
 
     inline void SetHelpString( const wxString& helpString )
     {
@@ -2201,7 +2220,7 @@ public:
         return wxEmptyString;
     }
 
-    inline void ClearFlag( unsigned char flag ) { m_flags &= ~(flag); }
+    void ClearFlag( FlagType flag ) { m_flags &= ~(flag); }
 
     // Use, for example, to detect if item is inside collapsed section.
     bool IsSomeParent( wxPGProperty* candidate_parent ) const;
@@ -2236,7 +2255,7 @@ protected:
                                           // Anyway, we had 3 excess bytes to use so short int will fit in
                                           // just fine.
 
-    unsigned char               m_flags; // This could be short int for increased flag capacity.
+    FlagType                    m_flags;
 
     // 1 = category
     // 0 = no children
@@ -2694,7 +2713,11 @@ public:
     inline int Index( const wxString& str ) const { return m_data->m_arrLabels.Index(str); }
 
     /** Inserts single item. */
+#if wxCHECK_VERSION(2,9,0)
+    void Insert( const wxString& label, int index, int value = wxPG_INVALID_VALUE );
+#else
     void Insert( const wxChar* label, int index, int value = wxPG_INVALID_VALUE );
+#endif
 
     // Returns data, increases refcount.
     inline wxPGChoicesData* GetData()
@@ -4302,11 +4325,7 @@ public:
 #ifdef SWIG
     %pythoncode {
         def MapType(class_,factory):
-            """\
-            Registers Python type/class to property mapping.
-
-            factory: Property builder function/class.
-            """
+            "Registers Python type/class to property mapping.\n\nfactory: Property builder function/class."
             global _type2property
             try:
                 mappings = _type2property
@@ -4317,9 +4336,7 @@ public:
 
 
         def DoDefaultTypeMappings(self):
-            """\
-            Map built-in properties.
-            """
+            "Map built-in properties."
             global _type2property
             try:
                 mappings = _type2property
@@ -4344,11 +4361,7 @@ public:
 
 
         def GetPropertyValue(self,p):
-            """\
-            Returns Python object value for property.
-
-            Caches getters on value type id basis for performance purposes.
-            """
+            "Returns Python object value for property.\n\nCaches getters on value type id basis for performance purposes."
             global _vt2getter
             vtid = self.GetPVTI(p)
             if not vtid:
@@ -4394,10 +4407,8 @@ public:
 
 
         def SetPropertyValueArrstr(self,p,v):
-            """\
-            NB: We must implement this in Python because SWIG has problems combining
-                conversion of list to wxArrayXXX and overloaded arguments.
-            """
+            "NB: We must implement this in Python because SWIG has problems combining"
+            "    conversion of list to wxArrayXXX and overloaded arguments."
             if not isinstance(p,basestring):
                 self._SetPropertyValueArrstr(p,v)
             else:
@@ -4405,10 +4416,8 @@ public:
 
 
         def SetPropertyValueArrint(self,p,v):
-            """\
-            NB: We must implement this in Python because SWIG has problems combining
-                conversion of list to wxArrayXXX and overloaded arguments.
-            """
+            "NB: We must implement this in Python because SWIG has problems combining"
+            "    conversion of list to wxArrayXXX and overloaded arguments."
             if not isinstance(p,basestring):
                 self._SetPropertyValueArrint(p,v)
             else:
@@ -4416,11 +4425,7 @@ public:
 
 
         def SetPropertyValue(self,p,v):
-            """\
-            Set property value from Python object.
-
-            Caches setters on value type id basis for performance purposes.
-            """
+            "Set property value from Python object.\n\nCaches setters on value type id basis for performance purposes."
             cls = self.__class__
             if not isinstance(v,basestring):
                 _vt2setter = cls._vt2setter
@@ -4472,9 +4477,7 @@ public:
 
 
         def DoDefaultValueTypeMappings(self):
-            """\
-            Map pg value type ids to getter methods.
-            """
+            "Map pg value type ids to getter methods."
             global _vt2getter
             try:
                 vt2getter = _vt2getter
@@ -4499,18 +4502,16 @@ public:
 
 
         def GetPropertyValues(self,dict_=None,as_strings=False):
-            """\
-            Returns values in the grid.
-
-            dict_: if not given, then a new one is created. dict_ can be
-              object as well, in which case it's __dict__ is used.
-            as_strings: if True, then string representations of values
-              are fetched instead of native types. Useful for config and such.
-
-            Return value: dictionary with values. It is always a dictionary,
-            so if dict_ was object with __dict__ attribute, then that attribute
-            is returned.
-            """
+            "Returns values in the grid."
+            ""
+            "dict_: if not given, then a new one is created. dict_ can be"
+            "  object as well, in which case it's __dict__ is used."
+            "as_strings: if True, then string representations of values"
+            "  are fetched instead of native types. Useful for config and such."
+            ""
+            "Return value: dictionary with values. It is always a dictionary,"
+            "so if dict_ was object with __dict__ attribute, then that attribute"
+            "is returned."
 
             if dict_ is None:
                 dict_ = {}
@@ -4531,16 +4532,13 @@ public:
 
 
         def SetPropertyValues(self,dict_):
-            """\
-            Sets property values from dict_, which can be either
-            dictionary or an object with __dict__ attribute.
-
-            autofill: If true, keys with not relevant properties
-              are auto-created. For more info, see AutoFill.
-
-            Notes:
-              * Keys starting with underscore are ignored.
-            """
+            "Sets property values from dict_, which can be either\ndictionary or an object with __dict__ attribute."
+            ""
+            "autofill: If true, keys with not relevant properties"
+            "  are auto-created. For more info, see AutoFill."
+            ""
+            "Notes:"
+            "  * Keys starting with underscore are ignored."
 
             autofill = False
 
@@ -4604,10 +4602,7 @@ public:
 
 
         def AutoFill(self,obj,parent=None):
-            """\
-            Clears properties and re-fills to match members and
-            values of given object or dictionary obj.
-            """
+            "Clears properties and re-fills to match members and\nvalues of given object or dictionary obj."
 
             self.edited_objects[parent] = obj
 
@@ -4643,9 +4638,7 @@ public:
 
 
         def RegisterEditor(self, editor, editorName=None):
-            """\
-            Transform class into instance, if necessary
-            """
+            "Transform class into instance, if necessary."
             if not isinstance(editor, PGEditor):
                 editor = editor()
             if not editorName:
@@ -4658,6 +4651,30 @@ public:
 
     }
 #endif
+
+	/** Sets property as read-only. It's value cannot be changed by the user, but the
+	    editor may still be created for copying purposes.
+	*/
+	void SetPropertyReadOnly( wxPGId id, bool readOnly = true )
+	{
+        wxPG_PROP_ID_CALL_PROLOG()
+		if ( readOnly )
+			p->SetFlag(wxPG_PROP_READONLY);
+		else
+			p->ClearFlag(wxPG_PROP_READONLY);
+	}
+
+	/** Sets property as read-only. It's value cannot be changed by the user, but the
+	    editor may still be created for copying purposes.
+	*/
+	void SetPropertyReadOnly( wxPGPropNameStr name, bool readOnly = true )
+	{
+        wxPG_PROP_NAME_CALL_PROLOG()
+		if ( readOnly )
+			p->SetFlag(wxPG_PROP_READONLY);
+		else
+			p->ClearFlag(wxPG_PROP_READONLY);
+	}
 
     // GetPropertyByNameI With nice assertion error message.
     wxPGId GetPropertyByNameA( wxPGPropNameStr name ) const;
@@ -5602,9 +5619,11 @@ public:
     */
     void SetPropertyAttributeAll( int attrid, wxVariant value );
 
-    /** Sets background colour of property and all its children. Colours of
+    /** Sets background colour of property and all its children, recursively. Colours of
         captions are not affected. Background brush cache is optimized for often
         set colours to be set last.
+        \remarks
+        * Children which already have custom background colour are not affected.
     */
     void SetPropertyBackgroundColour( wxPGId id, const wxColour& col );
     inline void SetPropertyBackgroundColour( wxPGPropNameStr name, const wxColour& col )
@@ -5629,6 +5648,8 @@ public:
     }
 
     /** Sets text colour of property and all its children.
+        \remarks
+        * Children which already have custom text colour are not affected.
     */
     void SetPropertyTextColour( wxPGId id, const wxColour& col );
     inline void SetPropertyTextColour( wxPGPropNameStr name, const wxColour& col )
@@ -6355,6 +6376,8 @@ protected:
     wxBitmap            *m_doubleBuffer;
 #endif
 
+    wxArrayPtrVoid      *m_windowsToDelete;
+
     /** Local time ms when control was created. */
     wxLongLong          m_timeCreated;
 
@@ -6683,7 +6706,7 @@ protected:
     static void RegisterDefaultValues();
 
     // Sets m_bgColIndex to this property and all its children.
-    void SetBackgroundColourIndex( wxPGProperty* p, int index );
+    void SetBackgroundColourIndex( wxPGProperty* p, int index, int flags );
 
     // Sets m_fgColIndex to this property and all its children.
     void SetTextColourIndex( wxPGProperty* p, int index, int flags );

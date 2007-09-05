@@ -628,7 +628,7 @@ void wxPGVListBoxComboPopup::SendComboBoxEvent( int selection )
             evt.SetClientData(clientData);
     }
 
-    m_combo->GetEventHandler()->ProcessEvent(evt);
+    m_combo->GetEventHandler()->AddPendingEvent(evt);
 }
 
 // returns true if key was consumed
@@ -2199,7 +2199,7 @@ void wxPGComboControlBase::SetPopup( wxPGComboPopup* iface )
     }
 
     // This must be after creation
-    if ( m_valueString )
+    if ( m_valueString.length() )
         iface->SetStringValue(m_valueString);
 
 }
@@ -3775,6 +3775,29 @@ int wxPGOwnerDrawnComboBox::DoInsert(const wxString& item, wxODCIndex pos)
 
     return pos;
 }
+
+#if wxCHECK_VERSION(2,9,0)
+int wxPGOwnerDrawnComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
+                                          unsigned int pos,
+                                          void **clientData,
+                                          wxClientDataType type)
+{
+    unsigned int i;
+    for ( i=0; i<items.GetCount(); i++ )
+    {
+        DoInsert(items[i], pos);
+        if ( clientData )
+        {
+            if ( type == wxClientData_Object )
+                DoSetItemClientObject(pos, (wxClientData*)clientData[i]);
+            else
+                DoSetItemClientData(pos, clientData[i]);
+        }
+        pos++;
+    }
+    return pos - 1;
+}
+#endif
 
 void wxPGOwnerDrawnComboBox::DoSetItemClientData(wxODCIndex n, void* clientData)
 {
