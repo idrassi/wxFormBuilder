@@ -49,10 +49,6 @@ wxColour wxColourFromCA(const ColourAllocated& ca) {
                     (unsigned char)cd.GetBlue());
 }
 
-#ifdef SCI_NAMESPACE
-}
-#endif
-
 //----------------------------------------------------------------------
 
 Palette::Palette() {
@@ -158,10 +154,6 @@ void Font::Release() {
 }
 
 //----------------------------------------------------------------------
-#ifdef SCI_NAMESPACE
-namespace Scintilla
-{
-#endif
 class SurfaceImpl : public Surface {
 private:
     wxDC*       hdc;
@@ -218,9 +210,7 @@ public:
     void BrushColour(ColourAllocated back);
     void SetFont(Font &font_);
 };
-#ifdef SCI_NAMESPACE
-}
-#endif
+
 SurfaceImpl::SurfaceImpl() :
     hdc(0), hdcOwned(0), bitmap(0),
     x(0), y(0), unicodeMode(0)
@@ -748,6 +738,9 @@ void Window::SetTitle (const char *s) {
     GETWIN(id)->SetLabel (sci2wx(s));
 }
 
+#ifdef SCI_NAMESPACE
+}
+#endif
 
 //----------------------------------------------------------------------
 // Helper classes for ListBox
@@ -1308,6 +1301,11 @@ ListBox *ListBox::Allocate() {
     return new ListBoxImpl();
 }
 
+#ifdef SCI_NAMESPACE
+namespace Scintilla
+{
+#endif
+
 //----------------------------------------------------------------------
 
 Menu::Menu() : id(0) {
@@ -1476,7 +1474,7 @@ int Platform::DBCSCharMaxLength() {
     return 1;
 }
 #ifdef __APPLE__ // [CHANGED]
-bool Platform::WaitMouseMoved(Scintilla::Point pt) { ::Point mpt; mpt.v = pt.x; mpt.h = pt.y; return ::WaitMouseMoved(mpt);} // [CHANGED]
+bool Platform::WaitMouseMoved(Scintilla::Point pt) { return false; /*::Point mpt; mpt.v = pt.x; mpt.h = pt.y; return ::WaitMouseMoved(mpt);*/} // [CHANGED]
 #endif // [CHAMGED]
 
 ElapsedTime::ElapsedTime() {
@@ -1497,7 +1495,9 @@ double ElapsedTime::Duration(bool reset) {
     result /= 1000.0;
     return result;
 }
-
+#ifdef SCI_NAMESPACE
+} // end namespace Scintilla
+#endif
 //----------------------------------------------------------------------
 
 #if wxUSE_UNICODE
