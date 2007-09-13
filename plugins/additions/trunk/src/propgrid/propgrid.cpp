@@ -1473,7 +1473,7 @@ wxString wxPGPropertyWithChildren::GetValueAsString( int argFlags ) const
 
         if ( i < iMaxMinusOne )
         {
-            if ( text.length() > PWC_CHILD_SUMMARY_CHAR_LIMIT && !(argFlags & wxPG_EDITABLE_VALUE) )
+            if ( text.length() > PWC_CHILD_SUMMARY_CHAR_LIMIT && !(argFlags & wxPG_EDITABLE_VALUE) && !(argFlags & wxPG_FULL_VALUE) )
                 break;
 
             curChild = (wxPGProperty*) m_children.Item(i+1);
@@ -6664,7 +6664,7 @@ void wxPropertyGrid::DoDrawItems2( wxDC& dcMain,
 
                 // background
                 dc.SetBrush( *(wxPGBrush*)m_arrBgBrushes[p->m_bgColIndex] );
-               
+
                 if ( isEnabled && p->IsEnabled() )
                     dc.SetTextForeground( *(wxPGColour*)m_arrFgCols[p->m_fgColIndex] );
                 else
@@ -8645,7 +8645,7 @@ bool wxPropertyGrid::SetPropertyPriority( wxPGProperty* p, int priority )
     */
     // Stefan Battmer:
     // Changed in a way that this update is only forced when the
-    // properties new priority actually differs from the current 
+    // properties new priority actually differs from the current
     // priority to improve update speed
     if ( p )
     {
