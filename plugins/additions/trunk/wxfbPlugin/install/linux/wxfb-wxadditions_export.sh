@@ -22,9 +22,15 @@ CheckAndMakeDir $outputDir
 CheckAndMakeDir $outputDir/share
 CheckAndMakeDir $outputDir/share/wxformbuilder
 CheckAndMakeDir $outputDir/share/wxformbuilder/plugins
+CheckAndMakeDir $outputDir/lib
+CheckAndMakeDir $outputDir/lib/wxformbuilder
   
-cp -R --interactive --verbose ../../wxAdditions $outputDir/share/wxformbuilder/plugins/
-cp -R --interactive --verbose ../../../lib/gcc_dll/*.so $outputDir/share/wxformbuilder/plugins/wxAdditions
+cp -R --interactive ../../wxAdditions $outputDir/share/wxformbuilder/plugins/
+mv $outputDir/share/wxformbuilder/plugins/wxAdditions/*.so $outputDir/lib/wxformbuilder/
+cp -R --interactive ../../../lib/gcc_dll/*.so $outputDir/lib/wxformbuilder/
+rm -f $outputDir/lib/wxformbuilder/*flatnotebook*
+rm -f $outputDir/lib/wxformbuilder/*propgrid*
+rm -f $outputDir/lib/wxformbuilder/*cintilla*
 
 exit
 
