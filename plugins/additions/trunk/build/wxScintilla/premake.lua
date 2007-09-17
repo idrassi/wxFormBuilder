@@ -33,16 +33,6 @@ end
 
 MakeWxAdditionsPackage( package, "", wx_ver, wx_ver_minor, wx_custom )
 
--- the __WX__ define makes wxScintiall define PLAT_WIN - that's no good
-if ( OS ~= "windows" ) then
-	for i,v in ipairs( package.defines ) do
-		if ( v == "__WX__" ) then
-			table.remove( package.defines, i )
-			break
-		end
-	end
-end
-
 -- we are not going to fix these warnings, so why look at them?
 for i,v in ipairs( package.buildflags ) do
 	if ( v == "extra-warnings" ) then
