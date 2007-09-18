@@ -86,6 +86,17 @@ echo.
 call wxBuild_default MINGW ALL
 cd ..
 
+:: -- wxTreeListCtrl --
+echo Building wxTreeListCtrl with VC7.1
+echo.
+cd treelistctrl
+call wxBuild_default VCTK ALL
+
+echo Building wxTreeListCtrl with MinGW Gcc
+echo.
+call wxBuild_default MINGW ALL
+cd ..
+
 :: -- wxPlotCtrl --
 echo Building wxPlotCtrl with VC8.0
 echo.

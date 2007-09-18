@@ -39,6 +39,7 @@ if ( OS == "windows" ) then
 		{
 			"wxmsw"..wx_ver..wx_ver_minor.."umd_plotctrl_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."umd_things_gcc",
+			"wxmsw"..wx_ver..wx_ver_minor.."umd_treelistctrl_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."umd_awx_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."umd_ledbargraph_gcc"
 		}
@@ -46,6 +47,7 @@ if ( OS == "windows" ) then
 		{
 			"wxmsw"..wx_ver..wx_ver_minor.."um_plotctrl_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."um_things_gcc",
+			"wxmsw"..wx_ver..wx_ver_minor.."um_treelistctrl_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."um_awx_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."um_ledbargraph_gcc"
 		}
@@ -54,6 +56,7 @@ if ( OS == "windows" ) then
 		{
 			"wxmsw"..wx_ver..wx_ver_minor.."md_plotctrl_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."md_things_gcc",
+			"wxmsw"..wx_ver..wx_ver_minor.."md_treelistctrl_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."md_awx_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."md_ledbargraph_gcc"
 		}
@@ -61,6 +64,7 @@ if ( OS == "windows" ) then
 		{
 			"wxmsw"..wx_ver..wx_ver_minor.."m_plotctrl_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."m_things_gcc",
+			"wxmsw"..wx_ver..wx_ver_minor.."m_treelistctrl_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."m_awx_gcc",
 			"wxmsw"..wx_ver..wx_ver_minor.."m_ledbargraph_gcc"
 		}
@@ -71,6 +75,7 @@ else
 		{
 			"`wx-config --debug=yes --unicode=yes --basename`_plotctrl-`wx-config --release`" .. wx_custom,
 			"`wx-config --debug=yes --unicode=yes --basename`_things-`wx-config --release`" .. wx_custom,
+			"`wx-config --debug=yes --unicode=yes --basename`_treelistctrl-`wx-config --release`" .. wx_custom,
 			"`wx-config --debug=yes --unicode=yes --basename`_awx-`wx-config --release`" .. wx_custom,
 			"`wx-config --debug=yes --unicode=yes --basename`_ledbargraph-`wx-config --release`" .. wx_custom
 		}
@@ -78,6 +83,7 @@ else
 		{
 			"`wx-config --debug=no --unicode=yes --basename`_plotctrl-`wx-config --release`" .. wx_custom,
 			"`wx-config --debug=no --unicode=yes --basename`_things-`wx-config --release`" .. wx_custom,
+			"`wx-config --debug=no --unicode=yes --basename`_treelistctrl-`wx-config --release`" .. wx_custom,
 			"`wx-config --debug=no --unicode=yes --basename`_awx-`wx-config --release`" .. wx_custom,
 			"`wx-config --debug=no --unicode=yes --basename`_ledbargraph-`wx-config --release`" .. wx_custom
 		}
@@ -86,6 +92,7 @@ else
 		{
 			"`wx-config --debug=yes --unicode=no --basename`_plotctrl-`wx-config --release`" .. wx_custom,
 			"`wx-config --debug=yes --unicode=no --basename`_things-`wx-config --release`" .. wx_custom,
+			"`wx-config --debug=yes --unicode=no --basename`_treelistctrl-`wx-config --release`" .. wx_custom,
 			"`wx-config --debug=yes --unicode=no --basename`_awx-`wx-config --release`" .. wx_custom,
 			"`wx-config --debug=yes --unicode=no --basename`_ledbargraph-`wx-config --release`" .. wx_custom
 		}
@@ -93,6 +100,7 @@ else
 		{
 			"`wx-config --debug=no --unicode=no --basename`_plotctrl-`wx-config --release`" .. wx_custom,
 			"`wx-config --debug=no --unicode=no --basename`_things-`wx-config --release`" .. wx_custom,
+			"`wx-config --debug=no --unicode=no --basename`_treelistctrl-`wx-config --release`" .. wx_custom,
 			"`wx-config --debug=no --unicode=no --basename`_awx-`wx-config --release`" .. wx_custom,
 			"`wx-config --debug=no --unicode=no --basename`_ledbargraph-`wx-config --release`" .. wx_custom
 		}
@@ -161,6 +169,7 @@ table.insert( package.config["Debug"].defines, { "DEBUG", "_DEBUG", "__WXDEBUG__
 table.insert( package.config["Release"].defines, "NDEBUG" )
 
 if ( target == "cb-gcc" or target == "gnu" ) then
+	table.insert( package.buildflags, "no-import-lib" )
 	table.insert( package.config["Release"].buildoptions, "-fno-strict-aliasing" )
 end
 

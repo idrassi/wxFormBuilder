@@ -2,8 +2,53 @@
 <package name="wxAdditions" lib="libwxadditions" icon="plot16x16.png" desc="wxWidgets contributed controls">
 
 	<!-- All wxAdditions inherit this class so that the linker header will be included -->
-
-	<objectinfo class="wxPlotCtrl" icon="plot.xpm" type="expanded_widget">
+	
+	<objectinfo class="wxTreeListCtrl" icon="treelistctrl.xpm" type="treelistctrl" startgroup="1">
+		<inherits class="wxAdditions"/>
+		<inherits class="wxWindow" />
+		<property name="name" type="text" >m_treeListCtrl</property>
+		<property name="column_image_size" type="wxSize" help="Size of column images"/>
+		<property name="style" type="bitlist">
+			<option name="wxTR_EDIT_LABELS"             help="Use this style if you wish the user to be able to edit labels in the tree list control."/>
+			<option name="wxTR_NO_BUTTONS"              help="For convenience to document that no buttons are to be drawn."/>
+			<option name="wxTR_HAS_BUTTONS"             help="Use this style to show + and - buttons to the left of parent items."/>
+			<option name="wxTR_TWIST_BUTTONS"           help="Use this style to show Mac-style twister buttons to the left of parent items. If both wxTR_HAS_BUTTONS and wxTR_TWIST_BUTTONS are given, twister buttons are generated."/>
+			<option name="wxTR_NO_LINES"                help="Use this style to hide vertical level connectors."/>
+			<option name="wxTR_FULL_ROW_HIGHLIGHT"      help="Use this style to have the background colour and the selection highlight extend over the entire horizontal row of the tree list control window. (This flag is ignored under Windows unless you specify wxTR_NO_LINES as well.)"/>
+			<option name="wxTR_LINES_AT_ROOT"           help="Use this style to show lines between root nodes. Only applicable if wxTR_HIDE_ROOT is set and wxTR_NO_LINES is not set."/>
+			<option name="wxTR_HIDE_ROOT"               help="Use this style to suppress the display of the root node, effectively causing the first-level nodes to appear as a series of root nodes."/>
+			<option name="wxTR_ROW_LINES"               help="Use this style to draw a contrasting border between displayed rows."/>
+			<option name="wxTR_HAS_VARIABLE_ROW_HEIGHT" help="Use this style to cause row heights to be just big enough to fit the content. If not set, all rows use the largest row height. The default is that this flag is unset."/>
+			<option name="wxTR_COLUMN_LINES"            help="Use this style to draw a contrasting border between displayed columns."/>
+			<option name="wxTR_SINGLE"                  help="For convenience to document that only one item may be selected at a time. Selecting another item causes the current selection, if any, to be deselected. This is the default."/>
+			<option name="wxTR_MULTIPLE"                help="Use this style to allow a range of items to be selected. If a second range is selected, the current range, if any, is deselected."/>
+			<option name="wxTR_EXTENDED"                help="Use this style to allow disjoint items to be selected. (Only partially implemented; may not work in all cases.)"/>
+			<option name="wxTR_DEFAULT_STYLE"           help="The set of flags that are closest to the defaults for the native control for a particular toolkit."/>
+			<option name="wxTR_VIRTUAL"                 help="The application provides items text on demand."/>
+			wxTR_DEFAULT_STYLE
+		</property>
+		<category name="Defaults">
+			<property name="row_bg" type="wxColour" help="Default row background color."/>
+			<property name="row_font" type="wxFont" help="Default row font."/>
+			<property name="row_text_color" type="wxColour" help="Default row text color."/>
+		</category>
+	</objectinfo>
+	
+	<objectinfo class="wxTreeListCtrlColumn" icon="treelistctrlcolumn.xpm" type="treelistctrlcolumn">
+		<property name="name" type="wxString_i18n" help="The title of the column">Column</property>
+		<property name="width" type="uint" help="Column size.">100</property>
+		<property name="alignment"	type="option" help="Verticle alignment of column text. This includes the label text.">
+			<option name="wxALIGN_LEFT" 	help="Align column left."/>
+			<option name="wxALIGN_CENTRE" help="Align column centered."/>
+			<option name="wxALIGN_RIGHT" 	help="Align column right."/>
+			wxALIGN_LEFT
+		</property>
+		<property name="image" type="bitmap" help="Column image"/>
+		<property name="shown" type="bool" help="Controls if the column should be shown.">1</property>
+		<property name="edit" type="bool" help="Controls if the column contents can be edited.">0</property>
+	</objectinfo>
+	
+	<objectinfo class="wxPlotCtrl" icon="plot.xpm" type="expanded_widget" startgroup="1">
 		<inherits class="wxAdditions"/>
 		<inherits class="wxWindow" />
 		<property name="name" type="text">m_plotCtrl</property>
@@ -65,56 +110,54 @@
 		</category>
 	</objectinfo>
 
-	
+	<objectinfo class="awxLed" icon="awxled.xpm" type="widget">
+		<inherits class="wxAdditions"/>
+		<inherits class="wxWindow" />
+		<property name="name" type="text" >m_awxLed</property>
+		<property name="state" type="option" >
+			<option name="awxLED_OFF" 	help="Turn the Led Off"/>
+			<option name="awxLED_ON" 	help="Turn the Led On"/>
+			<option name="awxLED_BLINK" help="Blink the Led"/>
+			awxLED_ON
+		</property>
+		<property name="color" type="option" >
+			<option name="awxLED_RED" 		help="Set the Led color to Red"		/>
+			<option name="awxLED_GREEN" 	help="Set the Led color to Green"	/>
+			<option name="awxLED_YELLOW" 	help="Set the Led color to Yellow"	/>
+			awxLED_RED
+		</property>
+	</objectinfo>
 
-  <objectinfo class="awxLed" icon="awxled.xpm" type="widget">
-	<inherits class="wxAdditions"/>
-	<inherits class="wxWindow" />
-	<property name="name" type="text" >m_awxLed</property>
-	<property name="state" type="option" >
-		<option name="awxLED_OFF" 	help="Turn the Led Off"/>
-	    <option name="awxLED_ON" 	help="Turn the Led On"/>
-        <option name="awxLED_BLINK" help="Blink the Led"/>
-		awxLED_ON
-	</property>
-	<property name="color" type="option" >
-        <option name="awxLED_RED" 		help="Set the Led color to Red"		/>
-        <option name="awxLED_GREEN" 	help="Set the Led color to Green"	/>
-        <option name="awxLED_YELLOW" 	help="Set the Led color to Yellow"	/>
-		awxLED_RED
-	</property>
-  </objectinfo>
+	<objectinfo class="wxLedBarGraph" icon="ledBarGraph.xpm" type="widget">
+		<inherits class="wxAdditions"/>
+		<inherits class="wxWindow" />
+		<property name="name" type="text" >m_ledbg</property>
 
-  <objectinfo class="wxLedBarGraph" icon="ledBarGraph.xpm" type="widget">
-	<inherits class="wxAdditions"/>
-	<inherits class="wxWindow" />
-	<property name="name" type="text" >m_ledbg</property>
-	
-	<property name="bar_widths" type="uint" editor="SpinCtrl" help="individual bar size in pixels - sizing mode must be set to ledBG_FIXED_BAR_SIZE for this to apply" >8</property>
-	<property name="nbars" type="uint"  editor="SpinCtrl" help="number of bars for the control - sizing mode must be set to ledBG_FIXED_N_BARS for this to apply">28</property>
+		<property name="bar_widths" type="uint" editor="SpinCtrl" help="individual bar size in pixels - sizing mode must be set to ledBG_FIXED_BAR_SIZE for this to apply" >8</property>
+		<property name="nbars" type="uint"  editor="SpinCtrl" help="number of bars for the control - sizing mode must be set to ledBG_FIXED_N_BARS for this to apply">28</property>
 
-	<property name="max_value" type="float" help="Sets the maximum value for the control">10</property>
-	<property name="min_value" type="float" help="Sets the minimum value for the control">-10</property>
-	
-	<property name="value" type="float" editor="Slider" help="The value.  This should get updated by your program, it is modifiable just to show how the control works">0</property>
+		<property name="max_value" type="float" help="Sets the maximum value for the control">10</property>
+		<property name="min_value" type="float" help="Sets the minimum value for the control">-10</property>
 
-	<property name="drawing_mode" type="option" help="choose between single and double-sided drawing modes">
-		<option name="ledBG_DOUBLE_SIDED" 	help="Green in the middle, with 2 red ends"		/>
-		<option name="ledBG_SINGLE_SIDED_TOP_LEFT" 	help="Green on the top/left, red on bottom/right"	/>
-		<option name="ledBG_SINGLE_SIDED_BOTTOM_RIGHT" 	help="Green on bottom/right, red on top/left"	/>
-		ledBG_DOUBLE_SIDED
-	</property>
+		<property name="value" type="float" editor="Slider" help="The value.  This should get updated by your program, it is modifiable just to show how the control works">0</property>
 
-	<property name="sizing_mode" type="option" help="chooses which of the sizing parameters (bar_widths or nbars) actually apply to the control">
-		<option name="ledBG_FIXED_N_BARS" 	help="Uses the nbars parameter for sizing"/>
-		<option name="ledBG_FIXED_BAR_SIZE" 	help="Uses the bar_widths parameter for sizing"/>
-		ledBG_FIXED_BAR_SIZE
-	</property>
+		<property name="drawing_mode" type="option" help="choose between single and double-sided drawing modes">
+			<option name="ledBG_DOUBLE_SIDED" 	help="Green in the middle, with 2 red ends"		/>
+			<option name="ledBG_SINGLE_SIDED_TOP_LEFT" 	help="Green on the top/left, red on bottom/right"	/>
+			<option name="ledBG_SINGLE_SIDED_BOTTOM_RIGHT" 	help="Green on bottom/right, red on top/left"	/>
+			ledBG_DOUBLE_SIDED
+		</property>
 
-	<property name="orientation" type="option" help="vertical or horizontal orientation">
-		<option name="ledBG_ORIENT_VERTICAL" 	help="Vertical orientation" />
-		<option name="ledBG_ORIENT_HORIZONTAL" 	help="Horizontal orientation"	/>
-		ledBG_ORIENT_HORIZONTAL
-	</property>
-  </objectinfo>
+		<property name="sizing_mode" type="option" help="chooses which of the sizing parameters (bar_widths or nbars) actually apply to the control">
+			<option name="ledBG_FIXED_N_BARS" 	help="Uses the nbars parameter for sizing"/>
+			<option name="ledBG_FIXED_BAR_SIZE" 	help="Uses the bar_widths parameter for sizing"/>
+			ledBG_FIXED_BAR_SIZE
+		</property>
+
+		<property name="orientation" type="option" help="vertical or horizontal orientation">
+			<option name="ledBG_ORIENT_VERTICAL" 	help="Vertical orientation" />
+			<option name="ledBG_ORIENT_HORIZONTAL" 	help="Horizontal orientation"	/>
+			ledBG_ORIENT_HORIZONTAL
+		</property>
+	</objectinfo>
 </package>
