@@ -27,11 +27,6 @@
 			<option name="wxTR_VIRTUAL"                 help="The application provides items text on demand."/>
 			wxTR_DEFAULT_STYLE
 		</property>
-		<category name="Defaults">
-			<property name="row_bg" type="wxColour" help="Default row background color."/>
-			<property name="row_font" type="wxFont" help="Default row font."/>
-			<property name="row_text_color" type="wxColour" help="Default row text color."/>
-		</category>
 	</objectinfo>
 	
 	<objectinfo class="wxTreeListCtrlColumn" icon="treelistctrlcolumn.xpm" type="treelistctrlcolumn">
