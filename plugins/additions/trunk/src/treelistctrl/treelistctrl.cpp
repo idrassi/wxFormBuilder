@@ -1464,7 +1464,9 @@ void wxTreeListHeaderWindow::OnMouse (wxMouseEvent &event) {
         }else if (event.LeftDClick() && hit_border) {
             SetColumnWidth (m_column, m_owner->GetBestColumnWidth (m_column));
             Refresh();
-
+            // Allow this event to get caught inside wxTreeListCtrl.
+			event.ResumePropagation( 1 );
+			event.Skip();
         }else if (event.Moving()) {
             bool setCursor;
             if (hit_border) {
@@ -3886,6 +3888,13 @@ void wxTreeListMainWindow::OnMouse (wxMouseEvent &event) {
         }
 
     }else if (event.LeftDown() || event.RightDown() || event.LeftDClick()) {
+
+		if ( event.LeftDown() )
+		{
+			// Allow this event to get caught outside of the control.
+			event.ResumePropagation( 1 );
+			event.Skip();
+		}
 
         if (event.LeftDown() || event.RightDown()) {
             SetFocus();
