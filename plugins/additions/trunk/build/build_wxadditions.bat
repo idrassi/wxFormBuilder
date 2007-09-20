@@ -137,6 +137,7 @@ copy /Y ..\lib\gcc_dll\wxmsw28um_awx_gcc.dll wxAdditions\wxmsw28um_awx_gcc.dll
 copy /Y ..\lib\gcc_dll\wxmsw28um_ledbargraph_gcc.dll wxAdditions\wxmsw28um_ledbargraph_gcc.dll
 copy /Y ..\lib\gcc_dll\wxmsw28um_plotctrl_gcc.dll wxAdditions\wxmsw28um_plotctrl_gcc.dll
 copy /Y ..\lib\gcc_dll\wxmsw28um_things_gcc.dll wxAdditions\wxmsw28um_things_gcc.dll
+copy /Y ..\lib\gcc_dll\wxmsw28um_treelistctrl_gcc.dll wxAdditions\wxmsw28um_treelistctrl_gcc.dll
 cd ..\build
 
 ::echo Clean up link libraries for MinGW Gcc.
