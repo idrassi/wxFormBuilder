@@ -37,6 +37,7 @@
 
 #include <wx/object.h>
 #include <wx/image.h>
+#include <wx/imaglist.h>
 #include <wx/window.h>
 
 ///////////////////////////////////////////////////////////////////////////////
