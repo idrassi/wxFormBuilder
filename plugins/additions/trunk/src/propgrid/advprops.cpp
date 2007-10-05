@@ -1370,12 +1370,17 @@ const wxString& wxPGGetDefaultImageWildcard( int* allImageFilesIndex = 0 )
         str.append ( wxT("All files (*.*)|*.*") );
 
         wxPGGlobalVars->m_pDefaultImageWildcard = str;
+        wxPGGlobalVars->m_pDefaultImageFilterIndex = handlers.GetCount();
         if ( allImageFilesIndex != 0 )
         {
 			*allImageFilesIndex = handlers.GetCount();
         }
     }
 
+	if ( allImageFilesIndex != 0 )
+	{
+		*allImageFilesIndex = wxPGGlobalVars->m_pDefaultImageFilterIndex;
+	}
     return wxPGGlobalVars->m_pDefaultImageWildcard;
 }
 

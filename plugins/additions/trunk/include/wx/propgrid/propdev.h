@@ -41,6 +41,7 @@ public:
     ~wxPGGlobalVarsClass();
 
     wxString            m_pDefaultImageWildcard; // Used by advprops, but here to make things easier.
+    int					m_pDefaultImageFilterIndex; // Used by advprops, but here to make things easier.
 
     //wxArrayPtrVoid      m_arrEditorClasses; // List of editor class instances.
     wxPGHashMapS2P      m_mapEditorClasses; // Map of editor class instances (keys are name string).
