@@ -46,7 +46,7 @@ package.targetprefix = "lib"
 -- Package options
 addoption( "unicode", "Use the Unicode character set" )
 addoption( "with-wx-shared", "Link against wxWidgets as a shared library" )
-if ( OS == "linux" ) then
+if ( not windows ) then
 	addoption( "disable-wx-debug", "Compile against a wxWidgets library without debugging" )
 end
 
@@ -63,7 +63,7 @@ else
 end
 
 -- Set debug flags
-if ( options["disable-wx-debug"] and ( OS == "linux" ) ) then
+if ( options["disable-wx-debug"] and ( not windows ) ) then
 	debug_option = "--debug=no"
 	debug_macro = { "NDEBUG", "__WXFB_DEBUG__" }
 else
@@ -102,7 +102,7 @@ table.insert( package.defines, "__WX__" )
 table.insert( package.config["Debug"].defines, debug_macro )
 table.insert( package.config["Release"].defines, "NDEBUG" )
 
-if ( OS == "windows" ) then
+if ( windows ) then
 --******* WINDOWS SETUP ***********
 --*	Settings that are Windows specific.
 --*********************************
