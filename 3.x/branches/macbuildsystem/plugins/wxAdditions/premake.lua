@@ -219,6 +219,11 @@ else
 	-- Ignore resource files in Linux/Mac.
 	table.insert( package.excludes, matchrecursive( "*.rc" ) )
 	
+	-- Add buildflag for proper dll building.
+	if ( macosx ) then
+		table.insert( package.buildflags, "dylib" )
+	end
+	
 	-- Set wxWidgets build options.
 	table.insert( package.config["Debug"].buildoptions, "`wx-config "..debug_option.." --cflags`" )
 	table.insert( package.config["Release"].buildoptions, "`wx-config --debug=no --cflags`" )

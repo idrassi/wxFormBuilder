@@ -235,6 +235,11 @@ else
 		table.insert( package.defines, { "GTK", "__WXGTK__" } )
 	end
 	
+	-- Add buildflag for proper dll building.
+	if ( macosx ) then
+		table.insert( package.buildflags, "dylib" )
+	end
+	
 	-- Get wxWidgets lib names
 	local wxconfig = io.popen("wx-config " .. debug_option .. " --basename")
 	local debugBasename = trim( wxconfig:read("*a") )
