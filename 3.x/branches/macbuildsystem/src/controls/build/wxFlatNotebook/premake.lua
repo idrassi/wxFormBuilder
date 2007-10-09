@@ -43,7 +43,7 @@ package.defines = { "WXMAKINGDLL_FNB", "MONOLITHIC" }
 -- Package options
 addoption( "unicode", "Use the Unicode character set" )
 addoption( "with-wx-shared", "Link against wxWidgets as a shared library" )
-if ( ) then
+if ( not windows ) then
 	addoption( "disable-wx-debug", "Compile against a wxWidgets library without debugging" )
 end
 

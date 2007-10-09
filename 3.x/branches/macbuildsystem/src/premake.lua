@@ -88,7 +88,7 @@ else
 end
 
 -- Set debug flags
-if ( options["disable-wx-debug"] and ( not windows )  then
+if ( options["disable-wx-debug"] and ( not windows ) ) then
 	debug_option = "--debug=no"
 	debug_macro = { "NDEBUG", "__WXFB_DEBUG__" }
 else
