@@ -29,7 +29,7 @@ package.includepaths = { "../../sdk/tinyxml", "../../sdk/plugin_interface" }
 package.links = { "plugin-interface", "TiCPP" }
 -- Setup the output directory options.
 --		Note: Use 'libdir' for "lib" kind only.
-if ( OS == "windows" ) then
+if ( windows ) then
 	package.bindir = "../../output/plugins/layout"
 else
 	package.bindir = "../../output/lib/wxformbuilder"
@@ -37,7 +37,6 @@ end
 --package.libdir = "../../lib"
 -- Set the defines.
 package.defines = { "BUILD_DLL", "TIXML_USE_TICPP" }
-
 
 -- Hack the dll output to prefix 'lib' to the begining.
 package.targetprefix = "lib"
@@ -51,7 +50,7 @@ package.targetprefix = "lib"
 -- Package options
 addoption( "unicode", "Use the Unicode character set" )
 addoption( "with-wx-shared", "Link against wxWidgets as a shared library" )
-if ( OS == "linux" ) then
+if ( not windows ) then
 	addoption( "disable-wx-debug", "Compile against a wxWidgets library without debugging" )
 end
 
@@ -68,7 +67,7 @@ else
 end
 
 -- Set debug flags
-if ( options["disable-wx-debug"] and ( OS == "linux" ) ) then
+if ( options["disable-wx-debug"] and ( not windows ) ) then
 	debug_option = "--debug=no"
 	debug_macro = { "NDEBUG", "__WXFB_DEBUG__" }
 else
@@ -201,10 +200,10 @@ if ( OS == "windows" ) then
 	-- Set the Windows defines.
 	table.insert( package.defines, { "__WXMSW__", "WIN32", "_WINDOWS" } )
 else
---******* LINUX SETUP *************
---*	Settings that are Linux specific.
---*********************************
-	-- Ignore resource files in Linux.
+--******* LINUX/MAC SETUP *************
+--*	Settings that are Linux/Mac specific.
+--*************************************
+	-- Ignore resource files in Linux/Mac.
 	table.insert( package.excludes, matchrecursive( "*.rc" ) )
 	
 	-- Set wxWidgets build options.
@@ -215,6 +214,8 @@ else
 	table.insert( package.config["Debug"].linkoptions, "`wx-config "..debug_option.." --libs`" )
 	table.insert( package.config["Release"].linkoptions, "`wx-config --libs`" )
 	
-	-- Set the Linux defines.
-	table.insert( package.defines, "__WXGTK__" )
+	-- Set the Linux define defines.
+	if ( linux ) then
+		table.insert( package.defines, "__WXGTK__" )
+	end
 end

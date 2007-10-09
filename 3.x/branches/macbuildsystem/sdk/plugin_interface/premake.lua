@@ -27,9 +27,6 @@ package.files = { matchrecursive( "*.cpp", "*.h", "*.rc" ) }
 package.includepaths = { "../tinyxml" }
 -- Set the libraries it links to.
 package.links = { "TiCPP" }
--- Setup the output directory options.
---		Note: Use 'libdir' for "lib" kind only.
---package.bindir = "../../bin/plugins/additional"
 package.libdir = "../lib"
 -- Set the defines.
 package.defines = { "TIXML_USE_TICPP" }

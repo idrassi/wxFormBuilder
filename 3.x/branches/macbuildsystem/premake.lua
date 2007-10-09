@@ -1,5 +1,5 @@
 project.name = "wxFormBuilder"
-if ( OS == "windows") then
+if ( windows ) then
 	project.bindir = "output"
 else
 	project.bindir = "output/lib/wxformbuilder"
