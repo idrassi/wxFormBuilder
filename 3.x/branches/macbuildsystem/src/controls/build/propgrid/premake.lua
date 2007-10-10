@@ -222,13 +222,6 @@ else
 	table.insert( package.config["Debug"].linkoptions, "`wx-config "..debug_option.." --libs`" )
 	table.insert( package.config["Release"].linkoptions, "`wx-config --libs`" )
 
-	-- Set the Linux/Mac defines.
-	if ( linux ) then
-		table.insert( package.defines, "__WXGTK__" )
-	elseif ( macosx )
-		table.insert( package.defines, { "__WXOSX__", "__WXMAC__" } )
-	end
-	
 	-- Add buildflag for proper dll building.
 	if ( macosx ) then
 		table.insert( package.buildflags, "dylib" )
