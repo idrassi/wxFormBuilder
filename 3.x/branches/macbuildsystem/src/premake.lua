@@ -234,3 +234,8 @@ else
 	table.insert( package.config["Debug"].linkoptions, "`wx-config "..debug_option.." --libs`" )
 	table.insert( package.config["Release"].linkoptions, "`wx-config --libs`" )
 end
+
+if ( macosx ) then
+	package.postbuildcommands = { "../install/macosx/postbuild.sh" }
+end
+
