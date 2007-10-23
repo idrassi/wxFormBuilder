@@ -4,9 +4,9 @@
 
 	cd ..
 	
-	install_name_tool -change ../../../../output/PlugIns/wxformbuilder/libwx_macu_flatnotebook-2.8_wxfb.dylib @executable_path/../libs/libwx_macu_flatnotebook-2.8_wxfb.dylib ./output/bin/wxformbuilder
-	install_name_tool -change ../../../../output/PlugIns/wxformbuilder/libwx_macu_propgrid-2.8_wxfb.dylib @executable_path/../libs/libwx_macu_propgrid-2.8_wxfb.dylib ./output/bin/wxformbuilder
-	install_name_tool -change ../../../../output/PlugIns/wxformbuilder/libwx_macu_scintilla-2.8_wxfb.dylib @executable_path/../libs/libwx_macu_scintilla-2.8_wxfb.dylib ./output/bin/wxformbuilder
+	install_name_tool -change ../../../../output/lib/wxformbuilder/libwx_macu_flatnotebook-2.8_wxfb.dylib @executable_path/../PlugIns/libwx_macu_flatnotebook-2.8_wxfb.dylib ./output/bin/wxformbuilder
+	install_name_tool -change ../../../../output/lib/wxformbuilder/libwx_macu_propgrid-2.8_wxfb.dylib @executable_path/../PlugIns/libwx_macu_propgrid-2.8_wxfb.dylib ./output/bin/wxformbuilder
+	install_name_tool -change ../../../../output/lib/wxformbuilder/libwx_macu_scintilla-2.8_wxfb.dylib @executable_path/../PlugIns/libwx_macu_scintilla-2.8_wxfb.dylib ./output/bin/wxformbuilder
 	install_name_tool -id @executable_path/../PlugIns/libwx_macu_flatnotebook-2.8_wxfb.dylib ./output/lib/wxformbuilder/libwx_macu_flatnotebook-2.8_wxfb.dylib
 	install_name_tool -id @executable_path/../PlugIns/libwx_macu_propgrid-2.8_wxfb.dylib ./output/lib/wxformbuilder/libwx_macu_propgrid-2.8_wxfb.dylib
 	install_name_tool -id @executable_path/../PlugIns/libwx_macu_scintilla-2.8_wxfb.dylib ./output/lib/wxformbuilder/libwx_macu_scintilla-2.8_wxfb.dylib
