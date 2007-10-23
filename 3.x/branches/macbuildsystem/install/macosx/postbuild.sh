@@ -1,6 +1,8 @@
 #!/bin/sh
 
-	TOFILE="./output/wxFormBuilder.app/Contents/info.plist"
+    export TOFILE=./output/wxFormBuilder.app/Contents/info.plist
+
+	cd ..
 	
 	install_name_tool -change ../../../../output/lib/wxformbuilder/libwx_macu_flatnotebook-2.8_wxfb.dylib @executable_path/../PlugIns/libwx_macu_flatnotebook-2.8_wxfb.dylib ./output/bin/wxformbuilder
 	install_name_tool -change ../../../../output/lib/wxformbuilder/libwx_macu_propgrid-2.8_wxfb.dylib @executable_path/../PlugIns/libwx_macu_propgrid-2.8_wxfb.dylib ./output/bin/wxformbuilder
