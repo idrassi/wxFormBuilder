@@ -54,7 +54,9 @@ end
 -- Set the defines.
 package.defines = { "WXUSINGDLL_FNB", "TIXML_USE_TICPP", "NO_GCC_PRAGMA", "SCI_NAMESPACE" }
 -- Load the shlibs from the 'lib/wxformbuilder' subdirectory.
-if ( not windows ) then
+if ( macosx ) then
+	table.insert( package.linkoptions, "-Wl,-L../output/lib/wxformbuilder" )
+elseif ( not windows ) then
 	if ( target == "cb-gcc" ) then
 		table.insert( package.linkoptions, "-Wl,-rpath,$``ORIGIN/../lib/wxformbuilder" )
 	else
