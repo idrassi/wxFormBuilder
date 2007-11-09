@@ -275,7 +275,7 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
                 double dSpinMax = (double) spinMax;
                 if ( v_d > dSpinMax ) v_d = dSpinMax;
                 else if ( v_d < dSpinMin ) v_d = dSpinMin;
-
+                
                 wxPropertyGrid::DoubleToString(s, v_d, 6, true, NULL);
             }
             else
@@ -562,8 +562,8 @@ wxFontPropertyClass::~wxFontPropertyClass () { }
 void wxFontPropertyClass::DoSetValue( wxPGVariant value )
 {
     const wxFontPropertyValue* font = wxPGVariantToWxObjectPtr(value,wxFontPropertyValue);
-    m_value_wxFont = *font;
-    RefreshChildren();
+        m_value_wxFont = *font;
+	RefreshChildren();
 }
 
 wxPGVariant wxFontPropertyClass::DoGetValue() const
