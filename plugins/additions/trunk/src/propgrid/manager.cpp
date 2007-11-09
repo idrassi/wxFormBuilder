@@ -423,10 +423,17 @@ void wxPropertyGridManager::Init1()
 
 // -----------------------------------------------------------------------
 
-// These flags are always used in wxPropertyGrid integrated in xPropertyGridManager.
-#define wxPG_MAN_PROPGRID_FORCED_FLAGS (wxSIMPLE_BORDER| \
-                                        wxNO_FULL_REPAINT_ON_RESIZE| \
-                                        wxCLIP_CHILDREN)
+// These flags are always used in wxPropertyGrid integrated in wxPropertyGridManager.
+#ifndef __WXMAC__
+  #define wxPG_MAN_PROPGRID_FORCED_FLAGS (wxSIMPLE_BORDER| \
+                                          wxNO_FULL_REPAINT_ON_RESIZE| \
+                                          wxCLIP_CHILDREN)
+#else
+  // Looks better with no border on Mac
+  #define wxPG_MAN_PROPGRID_FORCED_FLAGS (wxNO_BORDER| \
+                                          wxNO_FULL_REPAINT_ON_RESIZE| \
+                                          wxCLIP_CHILDREN)
+#endif
 
 // Which flags can be passed to underlying wxPropertyGrid.
 #define wxPG_MAN_PASS_FLAGS_MASK       (0xFFF0|wxTAB_TRAVERSAL)
@@ -465,7 +472,7 @@ void wxPropertyGridManager::Init2( int style )
 #ifdef __WXMAC__
    // Smaller controls on Mac
    SetWindowVariant(wxWINDOW_VARIANT_SMALL);
-#endif
+#endif 
 
     // Create propertygrid.
     m_pPropGrid->Create(this,baseId,wxPoint(0,0),csz,

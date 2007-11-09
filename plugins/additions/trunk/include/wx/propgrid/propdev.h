@@ -486,7 +486,7 @@ WX_PG_IMPLEMENT_SUBTYPE(VALUETYPE,VALUETYPE,DEFPROPERTY,TYPESTRING,GETTER,DEFVAL
 // Implements wxVariantData for the type.
 //
 #define WX_PG_IMPLEMENT_VALUE_TYPE_VDC(VDCLASS,VALUETYPE) \
-IMPLEMENT_DYNAMIC_CLASS(VDCLASS,wxVariantData) \
+WX_PG_IMPLEMENT_DYNAMIC_CLASS_VARIANTDATA(VDCLASS,wxVariantData) \
 VDCLASS::VDCLASS() { } \
 VDCLASS::VDCLASS(const VALUETYPE& value) \
 { \
@@ -559,8 +559,8 @@ public: \
         const VALUETYPE* real_value; \
         wxPG_CHECK_RET_DBG( wxStrcmp(GetTypeName(),value.GetType().c_str()) == 0, \
             wxT("GetPtrFromVariant: wxVariant type mismatch.") ); \
-        wxVariantData_##VALUETYPE* vd = (wxVariantData_##VALUETYPE*)value.GetData(); \
-        if ( vd->IsKindOf(CLASSINFO(wxVariantData_##VALUETYPE)) ) \
+        wxVariantData_##VALUETYPE* vd = wxDynamicCastVariantData(value.GetData(), wxVariantData_##VALUETYPE); \
+        if ( vd ) \
             real_value = &vd->GetValue(); \
         else \
             real_value  = ((const VALUETYPE*)value.GetWxObjectPtr()); \
@@ -607,7 +607,7 @@ public: \
         wxPG_CHECK_RET_DBG( wxStrcmp(GetTypeName(),value.GetType().c_str()) == 0, \
             wxT("SetValueFromVariant: wxVariant type mismatch.") ); \
         VDCLASS* vd = (VDCLASS*)value.GetData(); \
-        wxPG_CHECK_RET_DBG( vd->IsKindOf(CLASSINFO(VDCLASS)), \
+        wxPG_CHECK_RET_DBG( wxDynamicCastVariantData(vd, VDCLASS), \
             wxT("SetValueFromVariant: wxVariantData mismatch.")); \
         property->DoSetValue((void*)&vd->GetValue() ); \
     } \
@@ -966,11 +966,11 @@ void CLASSNAME::DoSetValue( wxPGVariant value ) \
     else \
         m_index = GetItemCount()-1; \
 } \
-wxPGVariant CLASSNAME::DoGetValue () const \
+wxPGVariant CLASSNAME::DoGetValue() const \
 { \
     return wxPGVariantCreator(m_value.m_colour); \
 } \
-wxString CLASSNAME::GetValueAsString ( int argFlags ) const \
+wxString CLASSNAME::GetValueAsString( int argFlags ) const \
 { \
     const wxPGEditor* editor = GetEditorClass(); \
     if ( editor != wxPG_EDITOR(Choice) && \
@@ -978,7 +978,7 @@ wxString CLASSNAME::GetValueAsString ( int argFlags ) const \
         argFlags |= wxPG_PROPERTY_SPECIFIC; \
     return wxSystemColourPropertyClass::GetValueAsString(argFlags); \
 } \
-long CLASSNAME::GetColour ( int index ) \
+long CLASSNAME::GetColour( int index ) \
 { \
     const wxArrayInt& values = GetValues(); \
     if ( !values.GetCount() ) \

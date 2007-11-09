@@ -2413,7 +2413,7 @@ void wxPropertyGrid::ArrayStringToString( wxString& dst, const wxArrayString& sr
         if ( i < (itemCount-1) )
         {
             dst.append( wxString(postDelim) );
-            dst.append ( wxT(" ") );
+            dst.append( wxT(" ") );
             dst.append( wxString(preas) );
         }
         else if ( preDelim )

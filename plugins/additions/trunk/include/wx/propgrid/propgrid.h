@@ -92,7 +92,7 @@
 // for "configure" scripts under unix, use them.
 #define wxPROPGRID_MAJOR          1
 #define wxPROPGRID_MINOR          2
-#define wxPROPGRID_RELEASE        9
+#define wxPROPGRID_RELEASE        10
 
 // For non-Unix systems (i.e. when building without a configure script),
 // users of this component can use the following macro to check if the
@@ -1030,11 +1030,24 @@ WX_PG_DECLARE_VALUE_TYPE_BUILTIN_WITH_DECL(wxArrayString,WXDLLIMPEXP_PG)
     WX_PG_DECLARE_VALUE_TYPE_BUILTIN_WITH_DECL(PyObject,WXDLLIMPEXP_PG)
 #endif
 
+//
+// With wxWidgets 2.9 and later we demand native C++ RTTI support
+#if wxCHECK_VERSION(2,9,0)
+    #ifdef wxNO_RTTI
+        #error "You need to enable compiler RTTI support when using wxWidgets 2.9.0 or later"
+    #endif
+    #define WX_PG_DECLARE_DYNAMIC_CLASS_VARIANTDATA(A)
+    #define WX_PG_IMPLEMENT_DYNAMIC_CLASS_VARIANTDATA(A, B)
+#else
+    #define WX_PG_DECLARE_DYNAMIC_CLASS_VARIANTDATA DECLARE_DYNAMIC_CLASS
+    #define WX_PG_IMPLEMENT_DYNAMIC_CLASS_VARIANTDATA IMPLEMENT_DYNAMIC_CLASS
+#endif
+
 // VDC = wxVariantData Class
 #define WX_PG_DECLARE_VALUE_TYPE_VDC(VALUETYPE) \
 wxVariantData_##VALUETYPE : public wxPGVariantDataWxObj \
 { \
-    DECLARE_DYNAMIC_CLASS(wxVariantData_##VALUETYPE) \
+    WX_PG_DECLARE_DYNAMIC_CLASS_VARIANTDATA(wxVariantData_##VALUETYPE) \
 protected: \
     VALUETYPE   m_value; \
 public: \
@@ -1083,6 +1096,10 @@ public:
 };
 
 #endif // #ifndef SWIG
+
+#if !wxCHECK_VERSION(2,9,0)
+typedef wxList wxVariantList;
+#endif
 
 // -----------------------------------------------------------------------
 // Editor class.
@@ -1976,6 +1993,11 @@ public:
     }
 
 	typedef short FlagType;
+#ifndef __WXPYTHON__
+    typedef void* ClientDataType;
+#else
+    typedef PyObject* ClientDataType;
+#endif
 
     inline bool IsFlagSet( FlagType flag ) const
     {
@@ -2191,13 +2213,21 @@ public:
     bool PrepareValueForDialogEditing( wxPropertyGrid* propgrid );
 
 #if wxPG_USE_CLIENT_DATA
-    inline void* GetClientData() const { return m_clientData; }
+    inline ClientDataType GetClientData() const { return m_clientData; }
 
     /** Sets client data (void*) of a property.
         \remarks
         This untyped client data has to be deleted manually.
     */
-    inline void SetClientData( void* clientData ) { m_clientData = clientData; }
+    inline void SetClientData( ClientDataType clientData )
+    {
+#ifdef __WXPYTHON__
+        if ( m_clientData )
+            Py_DECREF( m_clientData );
+        Py_INCREF( clientData );
+#endif
+        m_clientData = clientData;
+    }
 #endif
 
     /** Sets new set of choices for property.
@@ -2243,7 +2273,7 @@ protected:
     wxString                    m_name;
     wxPGPropertyWithChildren*   m_parent;
 #if wxPG_USE_CLIENT_DATA
-    void*                       m_clientData;
+    ClientDataType              m_clientData;
 #endif
     wxPGPropertyDataExt*        m_dataExt; // Optional data extension.
     unsigned int                m_arrIndex; // Index in parent's property array.
@@ -2922,6 +2952,10 @@ extern WXDLLIMPEXP_PG wxPGPropertyClassInfo wxPropertyCategoryClassInfo;
 #endif // DOXYGEN
 
 
+#ifndef wxDynamicCastVariantData
+    #define wxDynamicCastVariantData wxDynamicCast
+#endif
+
 // FIXME: Should this be out-of-inline?
 inline wxObject* wxPG_VariantToWxObject( wxVariant& variant, wxClassInfo* classInfo )
 {
@@ -2929,8 +2963,9 @@ inline wxObject* wxPG_VariantToWxObject( wxVariant& variant, wxClassInfo* classI
         return (wxObject*) NULL;
     wxVariantData* vdata = variant.GetData();
 
-    if ( vdata->IsKindOf( &wxPGVariantDataWxObj::ms_classInfo ) )
-         return (wxObject*) ((wxPGVariantDataWxObj*)vdata)->GetValuePtr();
+    wxPGVariantDataWxObj* vdataWxObj = wxDynamicCastVariantData(vdata, wxPGVariantDataWxObj);
+    if ( vdataWxObj )
+        return (wxObject*) vdataWxObj->GetValuePtr();
 
     return variant.GetWxObjectPtr();
 }
@@ -3150,7 +3185,7 @@ public:
         SetPropertyValue( p, wxT("wxULongLong"), wxPGVariantCreator(value) );
     }
 
-    void SetPropertyValues( const wxList& list, wxPGId default_category );
+    void SetPropertyValues( const wxVariantList& list, wxPGId default_category );
 
     void SetPropertyUnspecified( wxPGProperty* p );
 
@@ -3452,13 +3487,13 @@ public:
 
 #if wxPG_USE_CLIENT_DATA
     /** Returns client data (void*) of a property. */
-    inline void* GetPropertyClientData( wxPGId id ) const
+    inline wxPGProperty::ClientDataType GetPropertyClientData( wxPGId id ) const
     {
         wxPG_PROP_ID_CALL_PROLOG_RETVAL(NULL)
         return p->GetClientData();
     }
     /** Returns client data (void*) of a property. */
-    inline void* GetPropertyClientData( wxPGPropNameStr name ) const
+    inline wxPGProperty::ClientDataType GetPropertyClientData( wxPGPropNameStr name ) const
     {
         wxPG_PROP_NAME_CALL_PROLOG_RETVAL(NULL)
         return p->GetClientData();
@@ -4204,7 +4239,7 @@ public:
         \remarks
         This untyped client data has to be deleted manually.
     */
-    inline void SetPropertyClientData( wxPGId id, void* clientData )
+    inline void SetPropertyClientData( wxPGId id, wxPGProperty::ClientDataType clientData )
     {
         wxPG_PROP_ID_CALL_PROLOG()
         p->SetClientData(clientData);
@@ -4213,7 +4248,7 @@ public:
         \remarks
         This untyped client data has to be deleted manually.
     */
-    inline void SetPropertyClientData( wxPGPropNameStr name, void* clientData )
+    inline void SetPropertyClientData( wxPGPropNameStr name, wxPGProperty::ClientDataType clientData )
     {
         wxPG_PROP_NAME_CALL_PROLOG()
         p->SetClientData(clientData);
@@ -6041,7 +6076,7 @@ public:
         name is missing from the grid, new property is created under given default
         category (or root if omitted).
     */
-    void SetPropertyValues( const wxList& list, wxPGId default_category )
+    void SetPropertyValues( const wxVariantList& list, wxPGId default_category )
     {
         m_pState->SetPropertyValues(list,default_category);
     }
@@ -6050,7 +6085,7 @@ public:
     {
         SetPropertyValues(list.GetList(),default_category);
     }
-    inline void SetPropertyValues( const wxList& list, const wxString& default_category = wxEmptyString )
+    inline void SetPropertyValues( const wxVariantList& list, const wxString& default_category = wxEmptyString )
     {
         SetPropertyValues(list,GetPropertyByNameI(default_category));
     }
@@ -6879,7 +6914,7 @@ public:
 
 #if wxPG_USE_CLIENT_DATA
     /** Returns client data of relevant property. */
-    void* GetPropertyClientData() const
+    wxPGProperty::ClientDataType GetPropertyClientData() const
     {
         wxASSERT( m_property );
         return m_property->GetClientData();

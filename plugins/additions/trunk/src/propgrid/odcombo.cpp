@@ -969,6 +969,11 @@ wxSize wxPGVListBoxComboPopup::GetAdjustedSize( int minWidth, int prefHeight, in
     else
         height = 50;
 
+#if defined(__WXMAC__)
+    // Set a minimum height since otherwise scrollbars won't draw properly
+    height = wxMax(50, height);
+#endif
+
     // Take scrollbar into account in width calculations
     int widestWidth = m_widestWidth + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
     return wxSize(minWidth > widestWidth ? minWidth : widestWidth,
@@ -3802,7 +3807,13 @@ int wxPGOwnerDrawnComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
 void wxPGOwnerDrawnComboBox::DoSetItemClientData(wxODCIndex n, void* clientData)
 {
     wxASSERT(m_popupInterface);
-    m_popupInterface->SetItemClientData(n,clientData,m_clientDataItemsType);
+    m_popupInterface->SetItemClientData(n,clientData,
+#if wxCHECK_VERSION(2,9,0)
+        GetClientDataType()
+#else
+        m_clientDataItemsType
+#endif
+        );
 }
 
 void* wxPGOwnerDrawnComboBox::DoGetItemClientData(wxODCIndex n) const
