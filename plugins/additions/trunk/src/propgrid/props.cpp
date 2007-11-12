@@ -1981,9 +1981,12 @@ bool wxArrayEditorDialog::Create( wxWindow *parent,
                                   const wxPoint& pos,
                                   const wxSize& sz )
 {
-
+#ifdef __WXMAC__
+    bool res = wxDialog::Create(parent,1,caption,pos,sz,wxCAPTION | wxFRAME_TOOL_WINDOW);
+#else
     bool res = wxDialog::Create(parent,1,caption,pos,sz,style);
-
+#endif
+    
     SetFont(parent->GetFont()); // To allow entering chars of the same set as the propGrid
 
 #if !wxPG_SMALL_SCREEN
