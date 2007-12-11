@@ -8,6 +8,10 @@
 --		- call ConfigureWxWidgets() after your project is setup, not before.
 -- ----------------------------------------------------------------------------
 
+function trim (s)
+    return (string.gsub(s, "^%s*(.-)%s*$", "%1"))
+end
+
 -- Package options
 addoption( "unicode", "Use the Unicode character set" )
 addoption( "with-wx-shared", "Link against wxWidgets as a shared library" )
@@ -207,18 +211,28 @@ function ConfigureWxWidgets( package, altTargetName, wxVer, wxVerMinor, wxCustom
 		
 		-- Set the wxWidgets link options.
 		table.insert( package.config["Debug"].linkoptions, "`wx-config "..debug_option.." --libs`" )
-		table.insert( package.config["Release"].linkoptions, "`wx-config --libs`" )
-		
-		-- Set the Linux defines.
-		table.insert( package.defines, "__WXGTK__" )
+		table.insert( package.config["Release"].linkoptions, "`wx-config --debug=no --libs`" )
 		
 		-- Set the targets.
 		if ( package.kind == "winexe" or package.kind == "exe" ) then
 			package.config["Release"].target = targetName
 			package.config["Debug"].target = targetName.."d"
 		else
-			package.config["Debug"].target = "`wx-config "..debug_option.." --basename`_"..targetName.."-`wx-config --release`"..wx_custom
-			package.config["Release"].target = "`wx-config --basename`_"..targetName.."-`wx-config --release`"..wx_custom
+			-- Get wxWidgets lib names
+			local wxconfig = io.popen("wx-config " .. debug_option .. " --basename")
+			local debugBasename = trim( wxconfig:read("*a") )
+			wxconfig:close()
+			
+			wxconfig = io.popen("wx-config --debug=no --basename")
+			local basename = trim( wxconfig:read("*a") )
+			wxconfig:close()
+			
+			wxconfig = io.popen("wx-config --release")
+			local release = trim( wxconfig:read("*a") )
+			wxconfig:close()
+	
+			package.config["Debug"].target = debugBasename .. "_" .. targetName .. "-" .. release .. wx_custom
+			package.config["Release"].target = basename .. "_" .. targetName .. "-" .. release .. wx_custom
 		end
 	end
 end

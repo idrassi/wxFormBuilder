@@ -29,8 +29,21 @@ MakeWxAdditionsPackage( package, "", wx_ver, wx_ver_minor, wx_custom )
 
 -- gtk build/link options
 if ( OS == "linux" ) then
-	table.insert( package.config["Debug"].linkoptions, "-l`wx-config "..debug_option.." --basename`_things-`wx-config --release`"..wx_custom )
-	table.insert( package.config["Release"].linkoptions, "-l`wx-config --basename`_things-`wx-config --release`"..wx_custom )
+	-- Get wxWidgets lib names
+	local wxconfig = io.popen("wx-config " .. debug_option .. " --basename")
+	local debugBasename = trim( wxconfig:read("*a") )
+	wxconfig:close()
+
+	wxconfig = io.popen("wx-config --debug=no --basename")
+	local basename = trim( wxconfig:read("*a") )
+	wxconfig:close()
+
+	wxconfig = io.popen("wx-config --release")
+	local release = trim( wxconfig:read("*a") )
+	wxconfig:close()
+			
+	table.insert( package.config["Debug"].linkoptions, "-l" .. debugBasename .. "_things-" .. release .. wx_custom )
+	table.insert( package.config["Release"].linkoptions, "-l" .. basename .. "_things-" .. release .. wx_custom )
 	table.insert( package.buildoptions, "`pkg-config gtk+-2.0 --cflags`" )
 	table.insert( package.linkoptions, { "`pkg-config gtk+-2.0 --libs`", "-L../../lib" } )
 end

@@ -40,14 +40,19 @@ function MakeWxAdditionsPackage( package, altTargetName, wxVer, wxVerMinor, wxCu
 	end
 
 	-- Setup the output directory options.	
-	if ( ( target == "gnu" ) or ( target == "cb-gcc" ) ) then
-		package.bindir = "../../lib/gcc_dll"
-		package.libdir = "../../lib/gcc_lib"
+	if ( windows ) then
+		if ( ( target == "gnu" ) or ( target == "cb-gcc" ) ) then
+			package.bindir = "../../lib/gcc_dll"
+			package.libdir = "../../lib/gcc_lib"
+		else
+			package.bindir = "../../lib/vc_dll"
+			package.libdir = "../../lib/vc_lib"
+		end
 	else
-		package.bindir = "../../lib/vc_dll"
-		package.libdir = "../../lib/vc_lib"
+		package.bindir = "../../lib"
+		package.libdir = "../../lib"
 	end
-	
+		
 	-- Set the include paths.
 	table.insert( package.includepaths, "../../include" )
 	

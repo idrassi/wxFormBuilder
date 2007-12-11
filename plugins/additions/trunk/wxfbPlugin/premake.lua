@@ -7,6 +7,25 @@
 --*		- use the '/' slash for all paths.
 --*****************************************************************************
 
+-- Set debug flags
+if ( linux ) then
+	addoption( "disable-wx-debug", "Compile against a wxWidgets library without debugging" )
+	
+	if ( options["disable-wx-debug"] ) then
+		debug_option = "--debug=no"
+		debug_macro = { "NDEBUG", "__WXFB_DEBUG__" }
+	else
+		debug_option = "--debug=yes"
+		debug_macro = { "DEBUG", "_DEBUG", "__WXFB_DEBUG__" }
+	end
+	
+	if ( options["unicode"] ) then
+		unicode_option = "--unicode=yes"
+	else
+		unicode_option = "--unicode=no"
+	end
+end
+
 -- Create the project
 project.name = "wxAdditions Plugin"
 
@@ -33,6 +52,7 @@ package.files = { matchfiles( "*.cpp", "*.h") }
 package.includepaths = { "../include", "sdk/tinyxml", "sdk/plugin_interface" }
 -- Set the libraries it links to.
 package.links = { "TiCPP", "plugin-interface" }
+
 if ( OS == "windows" ) then
 	if ( options["unicode"] ) then
 		package.config["Debug"].links =
@@ -69,46 +89,30 @@ if ( OS == "windows" ) then
 			"wxmsw"..wx_ver..wx_ver_minor.."m_ledbargraph_gcc"
 		}
 	end
+	
+	-- Set the linker include paths
+	package.libpaths = { "../lib/gcc_dll" }
 else
-	if ( options["unicode"] ) then
-		package.config["Debug"].links =
-		{
-			"`wx-config --debug=yes --unicode=yes --basename`_plotctrl-`wx-config --release`" .. wx_custom,
-			"`wx-config --debug=yes --unicode=yes --basename`_things-`wx-config --release`" .. wx_custom,
-			"`wx-config --debug=yes --unicode=yes --basename`_treelistctrl-`wx-config --release`" .. wx_custom,
-			"`wx-config --debug=yes --unicode=yes --basename`_awx-`wx-config --release`" .. wx_custom,
-			"`wx-config --debug=yes --unicode=yes --basename`_ledbargraph-`wx-config --release`" .. wx_custom
-		}
-		package.config["Release"].links =
-		{
-			"`wx-config --debug=no --unicode=yes --basename`_plotctrl-`wx-config --release`" .. wx_custom,
-			"`wx-config --debug=no --unicode=yes --basename`_things-`wx-config --release`" .. wx_custom,
-			"`wx-config --debug=no --unicode=yes --basename`_treelistctrl-`wx-config --release`" .. wx_custom,
-			"`wx-config --debug=no --unicode=yes --basename`_awx-`wx-config --release`" .. wx_custom,
-			"`wx-config --debug=no --unicode=yes --basename`_ledbargraph-`wx-config --release`" .. wx_custom
-		}
-	else
-		package.config["Debug"].links =
-		{
-			"`wx-config --debug=yes --unicode=no --basename`_plotctrl-`wx-config --release`" .. wx_custom,
-			"`wx-config --debug=yes --unicode=no --basename`_things-`wx-config --release`" .. wx_custom,
-			"`wx-config --debug=yes --unicode=no --basename`_treelistctrl-`wx-config --release`" .. wx_custom,
-			"`wx-config --debug=yes --unicode=no --basename`_awx-`wx-config --release`" .. wx_custom,
-			"`wx-config --debug=yes --unicode=no --basename`_ledbargraph-`wx-config --release`" .. wx_custom
-		}
-		package.config["Release"].links =
-		{
-			"`wx-config --debug=no --unicode=no --basename`_plotctrl-`wx-config --release`" .. wx_custom,
-			"`wx-config --debug=no --unicode=no --basename`_things-`wx-config --release`" .. wx_custom,
-			"`wx-config --debug=no --unicode=no --basename`_treelistctrl-`wx-config --release`" .. wx_custom,
-			"`wx-config --debug=no --unicode=no --basename`_awx-`wx-config --release`" .. wx_custom,
-			"`wx-config --debug=no --unicode=no --basename`_ledbargraph-`wx-config --release`" .. wx_custom
-		}
-	end
+	package.config["Debug"].links =
+	{
+		"`wx-config " .. debug_option .. " " .. unicode_option .. " --basename`_plotctrl-`wx-config --release`" .. wx_custom,
+		"`wx-config " .. debug_option .. " " .. unicode_option .. " --basename`_things-`wx-config --release`" .. wx_custom,
+		"`wx-config " .. debug_option .. " " .. unicode_option .. " --basename`_treelistctrl-`wx-config --release`" .. wx_custom,
+		"`wx-config " .. debug_option .. " " .. unicode_option .. " --basename`_awx-`wx-config --release`" .. wx_custom,
+		"`wx-config " .. debug_option .. " " .. unicode_option .. " --basename`_ledbargraph-`wx-config --release`" .. wx_custom
+	}
+	package.config["Release"].links =
+	{
+		"`wx-config --debug=no " .. unicode_option .. " --basename`_plotctrl-`wx-config --release`" .. wx_custom,
+		"`wx-config --debug=no " .. unicode_option .. " --basename`_things-`wx-config --release`" .. wx_custom,
+		"`wx-config --debug=no " .. unicode_option .. " --basename`_treelistctrl-`wx-config --release`" .. wx_custom,
+		"`wx-config --debug=no " .. unicode_option .. " --basename`_awx-`wx-config --release`" .. wx_custom,
+		"`wx-config --debug=no " .. unicode_option .. " --basename`_ledbargraph-`wx-config --release`" .. wx_custom
+	}
+	
+	-- Set the linker include paths
+	package.libpaths = { "../lib" }
 end
-
--- Set the linker include paths
-package.libpaths = { "../lib/gcc_dll" }
 
 -- Load the dlls from the plugin's directory.
 if ( OS == "linux" ) then
@@ -165,7 +169,6 @@ if ( options["unicode"] ) then
 	table.insert( package.defines, { "UNICODE", "_UNICODE" } )
 end
 table.insert( package.defines, "__WX__" )
-table.insert( package.config["Debug"].defines, { "DEBUG", "_DEBUG", "__WXDEBUG__" } )
 table.insert( package.config["Release"].defines, "NDEBUG" )
 
 if ( target == "cb-gcc" or target == "gnu" ) then
@@ -177,6 +180,8 @@ if ( OS == "windows" ) then
 --******* WINDOWS SETUP ***********
 --*	Settings that are Windows specific.
 --*********************************
+	table.insert( package.config["Debug"].defines, { "DEBUG", "_DEBUG", "__WXDEBUG__", "__WXFB_DEBUG__" } )
+	
 	-- Set wxWidgets include paths 
 	if ( target == "cb-gcc" ) then
 		table.insert( package.includepaths, "$(#WX.include)" )
@@ -218,19 +223,18 @@ else
 --******* LINUX SETUP *************
 --*	Settings that are Linux specific.
 --*********************************
+	table.insert( package.config["Debug"].defines, debug_macro )
+
 	-- Ignore resource files in Linux.
 	table.insert( package.excludes, matchrecursive( "*.rc" ) )
 	
 	-- Set wxWidgets build options.
-	table.insert( package.config["Debug"].buildoptions, "`wx-config --debug=yes --cflags` `pkg-config gtk+-2.0 --cflags`" )
+	table.insert( package.config["Debug"].buildoptions, "`wx-config "..debug_option.." --cflags` `pkg-config gtk+-2.0 --cflags`" )
 	table.insert( package.config["Release"].buildoptions, "`wx-config --debug=no --cflags` `pkg-config gtk+-2.0 --cflags`" )
 	
 	-- Set the wxWidgets link options.
-	table.insert( package.config["Debug"].linkoptions, "`wx-config --debug --libs`" )
-	table.insert( package.config["Release"].linkoptions, "`wx-config --libs`" )
-	
-	-- Set the Linux defines.
-	table.insert( package.defines, "__WXGTK__" )
+	table.insert( package.config["Debug"].linkoptions, "`wx-config "..debug_option.." --libs`" )
+	table.insert( package.config["Release"].linkoptions, "`wx-config --debug=no --libs`" )
 end
 
 -- Add sdk projects here. (This needs to match the directory name not the package name.)
