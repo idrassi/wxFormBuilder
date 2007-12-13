@@ -7,7 +7,7 @@ Standards-Version: 3.7.2
 
 Package: wxfb-wxadditions
 Architecture: any
-Depends: ${shlibs:Depends}, wxformbuilder (>= 3.0.50)
+Depends: ${shlibs:Depends}, wxformbuilder (>= 3.0.51)
 Description: Additional controls for wxFormBuilder.
  wxAdditions is a collection of controls that are not part
  of the standard wxWidgets library. 
