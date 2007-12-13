@@ -17,5 +17,5 @@ sdk/premake/premake-linux --target gnu $unicode $debug --with-wx-shared
 echo done...
 echo 
 #
-echo Done generating all project files for wxFormBuilder.
+echo Done generating all project files for wxfbPlugin.
 #
