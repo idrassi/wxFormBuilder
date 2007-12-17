@@ -11,9 +11,9 @@
 :: 					v1.03 - Added FLAGS. Use to set extra command line options.
 :: 					v1.04 - Added MinGW Gcc 4.x.x compiler.
 ::**************************************************************************
-set WXBUILD_VERSION=1.03
+set WXBUILD_VERSION=1.04
 :: MinGW Gcc install location. This must match you systems configuration.
-set GCCDIR=C:\MinGW4
+set GCCDIR=C:\MinGW
 set GCC4DIR=C:\MinGW4
 
 if (%1) == () goto ERROR
