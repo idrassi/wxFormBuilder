@@ -86,9 +86,10 @@ void wxPlotPrintout::SetPageSetupData( wxPageSetupData *pageSetupData, bool is_s
 }
 
 
-wxPlotPrintout::wxPlotPrintout( wxPlotCtrl* plotWin, const wxString &title )
-               : wxPrintout(title), m_plotWin(plotWin)
+wxPlotPrintout::wxPlotPrintout( wxPlotCtrl* plotCtrl, const wxString &title )
+               : wxPrintout(title), m_plotCtrl(plotCtrl)
 {
+    wxASSERT_MSG(m_plotCtrl != NULL, wxT("NULL wxPlotCtrl for printing"));
 }
 
 bool wxPlotPrintout::OnBeginDocument(int startPage, int endPage)
@@ -102,7 +103,7 @@ bool wxPlotPrintout::OnBeginDocument(int startPage, int endPage)
 bool wxPlotPrintout::OnPrintPage(int page_n)
 {
     wxDC *dc = GetDC();
-    wxCHECK_MSG(dc && m_plotWin, false, wxT("Invalid dc or plotctrl"));
+    wxCHECK_MSG(dc && m_plotCtrl, false, wxT("Invalid dc or plotctrl"));
 
     if (page_n != 1) return false;
 
@@ -171,7 +172,7 @@ bool wxPlotPrintout::OnPrintPage(int page_n)
         dpi = double(ppiScr.x) * dc_pagepix_scale_x; //((double)pagePixSize.x / rect.width); //((double)rect.width / dcSize.x);
     }
 
-    m_plotWin->DrawWholePlot( dc, rect, dpi );
+    m_plotCtrl->DrawWholePlot( dc, rect, dpi );
     return true;
 }
 

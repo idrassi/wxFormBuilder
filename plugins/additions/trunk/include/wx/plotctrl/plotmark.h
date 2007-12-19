@@ -50,12 +50,12 @@ enum wxPlotMarkerType
     wxPLOTMARKER_CROSS,     // vertical and horizontal line, full height & width
                             //   position used for center of cross
                             //   size, brush, bitmap unused
-    wxPLOTMARKER_RECT,      // rectangle - see plot rect conditions
+    wxPLOTMARKER_RECT,      // rectangle - see GetPlotRect() conditions
                             //   pen draws outline and brush fills (if set)
                             //   bitmap unused
                             //   rect drawn centered on position
                             //   size is size of the rect
-    wxPLOTMARKER_ELLIPSE,   // ellipse   - see plot rect conditions
+    wxPLOTMARKER_ELLIPSE,   // ellipse   - see GetPlotRect() conditions
     wxPLOTMARKER_BITMAP     // the bitmap is drawn at the position
 };
 
@@ -71,6 +71,7 @@ public:
                  const wxGenericBrush& brush = wxNullGenericBrush,
                  const wxBitmap& bitmap = wxNullBitmap) : wxObject()
         { Create(marker_type, rect, size, pen, brush, bitmap); }
+
     // Create a shape marker to be drawn at the point with the given size
     //   in pixels
     wxPlotMarker(int marker_type,
@@ -79,6 +80,7 @@ public:
                  const wxGenericPen& pen,
                  const wxGenericBrush& brush = wxNullGenericBrush) : wxObject()
         { Create(marker_type, wxRect2DDouble(pt.m_x, pt.m_y, 0, 0), size, pen, brush); }
+
     // Create a bitmap marker
     wxPlotMarker(const wxPoint2DDouble& pt,
                  const wxBitmap& bitmap) : wxObject()
@@ -95,37 +97,60 @@ public:
                 const wxGenericBrush& brush = wxNullGenericBrush,
                 const wxBitmap& bitmap = wxNullBitmap);
 
-    // Simplified methods (use these)
-    void CreatePointMarker(const wxPoint2DDouble& pt,
-                           const wxGenericPen& pen)
+    // -----------------------------------------------------------------------
+    // Simplified methods (use these), note what elements are used.
+
+    // Create a wxPLOTMARKER_POINT
+    void CreatePointMarker(const wxPoint2DDouble& pt, const wxGenericPen& pen)
         { Create(wxPLOTMARKER_POINT, wxRect2DDouble(pt.m_x, pt.m_y, 0, 0), wxSize(-1, -1), pen); }
+
+    // Create a wxPLOTMARKER_LINE
     void CreateLineMarker(const wxRect2DDouble& rect, const wxGenericPen& pen)
         { Create(wxPLOTMARKER_LINE, rect, wxSize(-1, -1), pen); }
+
+    // Create a wxPLOTMARKER_HORIZ_LINE
     void CreateHorizLineMarker(double y, const wxGenericPen& pen)
         { Create(wxPLOTMARKER_HORIZ_LINE, wxRect2DDouble(0, y, -1, 0), wxSize(-1, -1), pen); }
+
+    // Create a wxPLOTMARKER_VERT_LINE
     void CreateVertLineMarker(double x, const wxGenericPen& pen)
         { Create(wxPLOTMARKER_VERT_LINE, wxRect2DDouble(x, 0, 0, -1), wxSize(-1, -1), pen); }
+
+    // Create a wxPLOTMARKER_CROSS
+    void CreateCrossMarker(const wxPoint2DDouble& pt, const wxGenericPen& pen)
+        { Create(wxPLOTMARKER_CROSS, wxRect2DDouble(pt.m_x, pt.m_y, -1, -1), wxSize(-1, -1), pen); }
+
+    // Create a wxPLOTMARKER_RECT
     void CreateRectMarker(const wxRect2DDouble& rect,
                           const wxGenericPen& pen,
                           const wxGenericBrush& brush = wxNullGenericBrush)
         { Create(wxPLOTMARKER_RECT, rect, wxSize(-1, -1), pen, brush); }
+
+    // Create a wxPLOTMARKER_RECT
     void CreateRectMarker(const wxPoint2DDouble& pt,
                           const wxSize& size,
                           const wxGenericPen& pen,
                           const wxGenericBrush& brush = wxNullGenericBrush)
         { Create(wxPLOTMARKER_RECT, wxRect2DDouble(pt.m_x, pt.m_y, 0, 0), size, pen, brush); }
+
 //    void CreateEllipseMarker(const wxRect2DDouble& rect,
 //                             const wxGenericPen& pen,
 //                             const wxGenericBrush& brush = wxNullGenericBrush)
 //        { Create(wxPLOTMARKER_ELLIPSE, rect, wxSize(-1, -1), pen, brush); }
+
+    // Create a wxPLOTMARKER_ELLIPSE
     void CreateEllipseMarker(const wxPoint2DDouble& pt,
                              const wxSize& size,
                              const wxGenericPen& pen,
                              const wxGenericBrush& brush = wxNullGenericBrush)
         { Create(wxPLOTMARKER_ELLIPSE, wxRect2DDouble(pt.m_x, pt.m_y, 0, 0), size, pen, brush); }
+
+    // Create a wxPLOTMARKER_BITMAP
     void CreateBitmapMarker(const wxPoint2DDouble& pt,
                             const wxBitmap& bitmap)
         { Create(wxPLOTMARKER_BITMAP, wxRect2DDouble(pt.m_x, pt.m_y, 0, 0), wxSize(-1, -1), wxNullGenericPen, wxNullGenericBrush, bitmap); }
+
+    // -----------------------------------------------------------------------
 
     // Get/Set the marker type
     int  GetMarkerType() const;

@@ -10,10 +10,6 @@
 #ifndef __WXOPTIONVALUE_H__
 #define __WXOPTIONVALUE_H__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "optvalue.h"
-#endif
-
 #include "wx/things/thingdef.h"
 class WXDLLIMPEXP_THINGS wxOptionValue;
 
@@ -33,9 +29,9 @@ WX_DECLARE_OBJARRAY_WITH_DECL(wxOptionValue, wxArrayOptionValue, class WXDLLIMPE
 class WXDLLIMPEXP_THINGS wxOptionValue : public wxObject
 {
 public:
-    wxOptionValue(bool create = true) : wxObject() { if (create) Create(); }
-    wxOptionValue( const wxOptionValue &optValue ) : wxObject() { Create(optValue); }
-    wxOptionValue( const wxString &str ) : wxObject() { Create(str); }
+    wxOptionValue(bool create = true)              { if (create) Create(); }
+    wxOptionValue( const wxOptionValue &optValue ) { Create(optValue); }
+    wxOptionValue( const wxString &str )           { Create(str); }
 
     // (Re)Create as an empty container
     bool Create();
