@@ -28,7 +28,7 @@ class WXDLLIMPEXP_PLOTCTRL wxPlotCtrl;
 class WXDLLIMPEXP_PLOTCTRL wxPlotPrintout : public wxPrintout
 {
 public:
-    wxPlotPrintout(wxPlotCtrl* plotWin, const wxString &title = wxEmptyString);
+    wxPlotPrintout(wxPlotCtrl* plotCtrl, const wxString &title = wxEmptyString);
     bool OnPrintPage(int page);
     bool HasPage(int page) { return page == 1; }
     bool OnBeginDocument(int startPage, int endPage);
@@ -47,7 +47,7 @@ public:
     bool ShowPrintSetupDialog();
     bool ShowPrintPageSetupDialog();
 
-    wxPlotCtrl *GetPlotCtrl() const { return m_plotWin; }
+    wxPlotCtrl *GetPlotCtrl() const { return m_plotCtrl; }
 
     // Get/Set the wxPrintData/wxPageSetupData that will be used
     //   if NULL then one will be created on first use and deleted when the
@@ -64,7 +64,7 @@ public:
     static void SetPageSetupData( wxPageSetupData *pageSetupData, bool is_static );
 
 protected:
-    wxPlotCtrl *m_plotWin;
+    wxPlotCtrl *m_plotCtrl;
 
     static wxPrintData *s_wxPlotPrintData;
     static wxPageSetupData *s_wxPlotPageSetupData;

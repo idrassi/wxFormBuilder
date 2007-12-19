@@ -49,7 +49,7 @@ public:
     wxPlotCtrl* GetOwner() const { return m_owner; }
     void SetOwner(wxPlotCtrl* owner) { m_owner = owner; }
 
-    // Get/Get the rect in the DC to draw on
+    // Get/Set the rect in the DC to draw on
     void SetDCRect(const wxRect& rect) { m_dcRect = rect; }
     const wxRect& GetDCRect() const { return m_dcRect; }
 

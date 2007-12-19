@@ -15,7 +15,7 @@
     #pragma interface "plotctrl.h"
 #endif
 
-#include "wx/wx.h"
+#include "wx/window.h"
 #include "wx/bitmap.h"
 #include "wx/plotctrl/plotdefs.h"
 #include "wx/plotctrl/plotcurv.h"
@@ -35,6 +35,7 @@ class WXDLLEXPORT wxEraseEvent;
 class WXDLLEXPORT wxScrollBar;
 class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxTextCtrl;
+class WXDLLEXPORT wxPaintDC;
 
 class WXDLLIMPEXP_THINGS wxRangeIntSelection;
 class WXDLLIMPEXP_THINGS wxRangeDoubleSelection;
@@ -71,15 +72,15 @@ class WXDLLIMPEXP_PLOTCTRL wxPlotDrawerMarker;
 #include <limits>
 extern std::numeric_limits<wxDouble> wxDouble_limits;
 
-extern const wxDouble wxPlot_MIN_DBL;   // = wxDouble_limits.min()*10
-extern const wxDouble wxPlot_MAX_DBL;   // = wxDouble_limits.max()/10
-extern const wxDouble wxPlot_MAX_RANGE; // = wxPlot_MAX_DBL*2
+extern const wxDouble wxPlotCtrl_MIN_DBL;   // = wxDouble_limits.min()*10
+extern const wxDouble wxPlotCtrl_MAX_DBL;   // = wxDouble_limits.max()/10
+extern const wxDouble wxPlotCtrl_MAX_RANGE; // = wxPlotCtrl_MAX_DBL*2
 
-#define CURSOR_GRAB (wxCURSOR_MAX+100)  // A hand cursor with fingers closed
+#define wxPLOTCTRL_CURSOR_GRAB (wxCURSOR_MAX+100)  // A hand cursor with fingers closed
 
 WX_DECLARE_OBJARRAY_WITH_DECL(wxPoint2DDouble, wxArrayPoint2DDouble, class WXDLLIMPEXP_PLOTCTRL);
-WX_DECLARE_OBJARRAY_WITH_DECL(wxRect2DDouble,  wxArrayRect2DDouble, class WXDLLIMPEXP_PLOTCTRL);
-WX_DECLARE_OBJARRAY_WITH_DECL(wxPlotCurve,     wxArrayPlotCurve, class WXDLLIMPEXP_PLOTCTRL);
+WX_DECLARE_OBJARRAY_WITH_DECL(wxRect2DDouble,  wxArrayRect2DDouble,  class WXDLLIMPEXP_PLOTCTRL);
+WX_DECLARE_OBJARRAY_WITH_DECL(wxPlotCurve,     wxArrayPlotCurve,     class WXDLLIMPEXP_PLOTCTRL);
 
 // IDs for the wxPlotCtrl children windows
 enum
@@ -179,21 +180,13 @@ enum wxPlotCtrlStyleUse_Type
 class WXDLLIMPEXP_PLOTCTRL wxPlotCtrlArea : public wxWindow
 {
 public:
-    wxPlotCtrlArea( wxWindow *parent, wxWindowID win_id )
-    {
-        Init();
-        (void)Create(parent, win_id);
-    }
+    wxPlotCtrlArea(wxWindow *parent, wxWindowID win_id,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxSize(100, 100),
+                   long style = wxNO_BORDER|wxWANTS_CHARS|wxCLIP_CHILDREN,
+                   const wxString& name = wxT("wxPlotCtrlArea"));
 
-    bool Create( wxWindow *parent, wxWindowID win_id );
     virtual ~wxPlotCtrlArea() {}
-
-    // Get the owner (parent) wxPlotCtrl
-    wxPlotCtrl *GetOwner() const { return m_owner; }
-
-    // Draw the area of the plot window in client coords bounded by rect
-    //  resizes backing bitmap if necessary
-    void CreateBitmap( const wxRect &rect );
 
     // implementation
     void OnEraseBackground( wxEraseEvent & ) { }
@@ -205,12 +198,11 @@ public:
 
     wxRect   m_mouseRect; // mouse drag rectangle, or 0,0,0,0 when not dragging
     wxPoint  m_mousePt;   // last mouse position
-    wxBitmap m_bitmap;
+    wxBitmap m_bitmap;    // backing bitmap to reduce flicker
     wxPlotCtrl *m_owner;
 
 private:
-    void Init();
-    DECLARE_CLASS(wxPlotCtrlArea)
+    DECLARE_ABSTRACT_CLASS(wxPlotCtrlArea)
     DECLARE_EVENT_TABLE()
 };
 
@@ -221,21 +213,16 @@ private:
 class WXDLLIMPEXP_PLOTCTRL wxPlotCtrlAxis : public wxWindow
 {
 public:
-    wxPlotCtrlAxis( wxWindow *parent, wxWindowID win_id, wxPlotCtrlAxis_Type style )
-    {
-        Init();
-        (void)Create( parent, win_id, style );
-    }
+    wxPlotCtrlAxis(wxPlotCtrlAxis_Type axis_type,
+                   wxWindow *parent, wxWindowID win_id,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = wxNO_BORDER|wxWANTS_CHARS|wxCLIP_CHILDREN,
+                   const wxString& name = wxT("wxPlotCtrlAxis"));
 
-    bool Create( wxWindow *parent, wxWindowID win_id, wxPlotCtrlAxis_Type style );
     virtual ~wxPlotCtrlAxis() {}
 
-    // Create the backing bitmap of the window contents
-    void CreateBitmap();
-    // Get the owner (parent) wxPlotCtrl
-    wxPlotCtrl *GetOwner() const { return m_owner; }
-
-    bool IsXAxis() const { return (m_style & wxPLOTCTRL_X_AXIS) != 0; }
+    bool IsXAxis() const { return WXPC_HASBIT(m_axis_type, wxPLOTCTRL_X_AXIS); }
 
     // implementation
     void OnEraseBackground( wxEraseEvent & ) { }
@@ -243,14 +230,13 @@ public:
     void OnMouse( wxMouseEvent &event );
     void OnChar( wxKeyEvent &event );
 
-    wxPoint m_mousePt;  // last mouse position
-    wxPlotCtrlAxis_Type m_style;
-    wxBitmap m_bitmap;
+    wxPoint m_mousePt;               // last mouse position
+    wxPlotCtrlAxis_Type m_axis_type; // X or Y axis
+    wxBitmap m_bitmap;               // backing bitmap to reduce flicker
     wxPlotCtrl *m_owner;
 
 private:
-    void Init();
-    DECLARE_CLASS(wxPlotCtrlAxis)
+    DECLARE_ABSTRACT_CLASS(wxPlotCtrlAxis)
     DECLARE_EVENT_TABLE()
 };
 
@@ -293,7 +279,7 @@ public:
     //       in order to know the type and use it as a wxPlotFunction, wxPlotData
     //       or a class derived from one of these use
     //       wxPlotData *pd = wxDynamicCast( GetCurve(i), wxPlotData );
-    //       pd will be NULL if GetCurve isn't a wxPlotData (or derived from it)
+    //       pd will be NULL if GetCurve isn't a wxPlotData or derived from it.
     // ------------------------------------------------------------------------
 
     // Add a curve to the plot, takes ownership of the curve and deletes it
@@ -302,7 +288,7 @@ public:
     bool AddCurve( const wxPlotCurve &curve, bool select=true, bool send_event=false );
     // Delete this curve
     bool DeleteCurve( wxPlotCurve* curve, bool send_event=false );
-    // Delete this curve, if curve_index = -1, delete all curves
+    // Delete the curve at the curve_index, if curve_index = -1, delete all curves
     bool DeleteCurve( int curve_index, bool send_event=false );
 
     // Total number of curves associated with the plotctrl
@@ -393,7 +379,7 @@ public:
     // Get the particluar selection for the curve at index curve_index
     wxRangeDoubleSelection *GetCurveSelection(int curve_index) const;
 
-    // the selections of wxPlotData curves are of the indexes of the data
+    // the selections of wxPlotData curves are indexes of the data
     //   for curves that are wxPlotCurves or wxPlotFunctions the selection is empty
     const wxArrayRangeIntSelection& GetDataCurveSelections() const { return m_dataSelections; }
     // Get the particluar selection for the curve at index curve_index
@@ -416,13 +402,13 @@ public:
     //   if there's nothing to select or already selected it returns false
     //   if curve_index == -1 then try to select points in all curves
     bool SelectXRange(int curve_index, const wxRangeDouble &range, bool send_event = false)
-        { return DoSelectRectangle(curve_index, wxRect2DDouble(range.m_min, -wxPlot_MAX_DBL, range.GetRange(), wxPlot_MAX_RANGE), true, send_event); }
+        { return DoSelectRectangle(curve_index, wxRect2DDouble(range.m_min, -wxPlotCtrl_MAX_DBL, range.GetRange(), wxPlotCtrl_MAX_RANGE), true, send_event); }
     bool DeselectXRange(int curve_index, const wxRangeDouble &range, bool send_event = false)
-        { return DoSelectRectangle(curve_index, wxRect2DDouble(range.m_min, -wxPlot_MAX_DBL, range.GetRange(), wxPlot_MAX_RANGE), false, send_event); }
+        { return DoSelectRectangle(curve_index, wxRect2DDouble(range.m_min, -wxPlotCtrl_MAX_DBL, range.GetRange(), wxPlotCtrl_MAX_RANGE), false, send_event); }
     bool SelectYRange(int curve_index, const wxRangeDouble &range, bool send_event = false)
-        { return DoSelectRectangle(curve_index, wxRect2DDouble(-wxPlot_MAX_DBL, range.m_min, wxPlot_MAX_RANGE, range.GetRange()), true, send_event); }
+        { return DoSelectRectangle(curve_index, wxRect2DDouble(-wxPlotCtrl_MAX_DBL, range.m_min, wxPlotCtrl_MAX_RANGE, range.GetRange()), true, send_event); }
     bool DeselectYRange(int curve_index, const wxRangeDouble &range, bool send_event = false)
-        { return DoSelectRectangle(curve_index, wxRect2DDouble(-wxPlot_MAX_DBL, range.m_min, wxPlot_MAX_RANGE, range.GetRange()), false, send_event); }
+        { return DoSelectRectangle(curve_index, wxRect2DDouble(-wxPlotCtrl_MAX_DBL, range.m_min, wxPlotCtrl_MAX_RANGE, range.GetRange()), false, send_event); }
 
     // Select a single point wxRangeInt(pt, pt) or a range of points wxRangeInt(pt1, pt2)
     //   if there's nothing to select or already selected it returns false,
@@ -459,7 +445,8 @@ public:
     //   data curves have known sizes, function curves use default rect, unless set
     bool MakeCurveVisible(int curve_index, bool send_event=false);
 
-    // Set the origin of the plot window
+    // Get/Set the origin of the plot window
+    wxPoint2DDouble GetOrigin() { return m_viewRect.GetPosition(); } // should be const, but GetPosition isn't
     bool SetOrigin( double origin_x, double origin_y, bool send_event=false )
         { return SetZoom( m_zoom.m_x, m_zoom.m_y, origin_x, origin_y, send_event ); }
 
@@ -476,7 +463,7 @@ public:
     virtual bool SetZoom( double zoom_x, double zoom_y,
                   double origin_x, double origin_y, bool send_event=false );
 
-    // Zoom in client coordinates, window.[xy] is top left (unlike plot axis)
+    // Zoom in window client coordinates, window.[xy] is top left (unlike plot axis)
     bool SetZoom( const wxRect &window, bool send_event=false );
 
     // Set/Get the default size the plot should take when either no curves are
@@ -500,17 +487,20 @@ public:
     // Fix the aspect ratio of the x and y axes, if set then when the zoom is
     //  set the smaller of the two (x or y) zooms is multiplied by the ratio
     //  to calculate the other.
-    void SetFixAspectRatio(bool fix, double ratio = 1.0);
-    void FixAspectRatio( double *zoom_x, double *zoom_y, double *origin_x, double *origin_y );
+    void SetFixAspectRatio(bool fixed_ratio, double ratio = 1.0);
+    // Given the input x, y zooms and the SetAspectRatio ratio correct the
+    //   input zooms and origins. Only adjusts input variables.
+    void FixAspectRatio( double *zoom_x, double *zoom_y, double *origin_x, double *origin_y ) const;
 
     // ------------------------------------------------------------------------
     // Mouse Functions for the area window
     // ------------------------------------------------------------------------
 
-    // The current (last) pixel position of the mouse in the plotArea
+    // The current (last) pixel position of the mouse in the plotArea from the
+    //   wxMouseEvent.
     const wxPoint& GetAreaMouseCoord() const { return m_area->m_mousePt; }
 
-    // The current plotArea position of the mouse cursor
+    // The current plotArea position of the mouse cursor in plot coords
     wxPoint2DDouble GetAreaMousePoint() const
         { return wxPoint2DDouble(GetPlotCoordFromClientX(m_area->m_mousePt.x),
                                  GetPlotCoordFromClientY(m_area->m_mousePt.y)); }
@@ -526,7 +516,7 @@ public:
     void SetAreaMouseMarker(wxPlotCtrlMarker_Type type);
     wxPlotCtrlMarker_Type GetAreaMouseMarker() const { return m_area_mouse_marker; }
 
-    // Set the mouse cursor wxCURSOR_XXX + CURSOR_GRAB for the plot area
+    // Set the mouse cursor wxCURSOR_XXX + wxPLOTCTRL_CURSOR_GRAB for the plot area
     void SetAreaMouseCursor(int cursorid);
 
     // ------------------------------------------------------------------------
@@ -580,7 +570,7 @@ public:
     void SetCorrectTicks( bool correct = true ) { m_correct_ticks = correct; }
 
     // get/set the width of a 1 pixel pen in mm for printing
-    double GetPrintingPenWidth(void) { return m_pen_print_width; }
+    double GetPrintingPenWidth() const { return m_pen_print_width; }
     void SetPrintingPenWidth(double width) { m_pen_print_width = width; }
 
     // ------------------------------------------------------------------------
@@ -693,15 +683,19 @@ public:
     virtual void ProcessAxisEVT_MOUSE_EVENTS( wxMouseEvent &event );
 
     // EVT_CHAR from the area and axis windows are passed to these functions
-    virtual void ProcessAreaEVT_CHAR( wxKeyEvent &event ) { OnChar(event); return; }
+    virtual void ProcessAreaEVT_CHAR( wxKeyEvent &event ) { OnChar(event); }
     virtual void ProcessAreaEVT_KEY_DOWN( wxKeyEvent &event );
     virtual void ProcessAreaEVT_KEY_UP( wxKeyEvent &event );
-    virtual void ProcessAxisEVT_CHAR( wxKeyEvent &event ) { OnChar(event); return; }
+    virtual void ProcessAxisEVT_CHAR( wxKeyEvent &event ) { OnChar(event); }
+
+    // EVT_PAINT events forwarded from the Area and Axis windows
+    virtual void ProcessAreaEVT_PAINT( wxPaintEvent& event, wxPaintDC& paintDC, wxPlotCtrlArea* areaWin );
+    virtual void ProcessAxisEVT_PAINT( wxPaintEvent& event, wxPaintDC& paintDC, wxPlotCtrlAxis* axisWin );
 
     void OnChar( wxKeyEvent &event );
     void OnScroll( wxScrollEvent& event );
     void OnPaint( wxPaintEvent &event );
-    void OnEraseBackground( wxEraseEvent &event ) { event.Skip(false); }
+    void OnEraseBackground( wxEraseEvent & ) { }
     void OnIdle( wxIdleEvent &event );
     void OnMouse( wxMouseEvent &event );
     void OnTextEnter( wxCommandEvent &event );
@@ -991,6 +985,7 @@ public:
     double GetY() const { return m_y; }
     void SetPosition( double x, double y ) { m_x = x; m_y = y; }
 
+    // The index into the data curve or -1 for unused
     int GetCurveDataIndex() const { return m_curve_dataindex; }
     void SetCurveDataIndex(int data_index) { m_curve_dataindex = data_index; }
 
@@ -999,7 +994,7 @@ public:
     void SetCurve(wxPlotCurve *curve, int curve_index)
         { m_curve = curve; m_curve_index = curve_index; }
 
-    // index of the curve in wxPlotCtrl::GetCurve(index)
+    // index of the curve in wxPlotCtrl::GetCurve(index) or -1 is not used
     int  GetCurveIndex() const { return m_curve_index; }
     void SetCurveIndex( int curve_index ) { m_curve_index = curve_index; }
 
@@ -1024,7 +1019,7 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-// wxPlotCtrlEvent
+// wxPlotCtrlSelEvent
 //-----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_PLOTCTRL wxPlotCtrlSelEvent : public wxPlotCtrlEvent
@@ -1081,45 +1076,77 @@ private:
 
 BEGIN_DECLARE_EVENT_TYPES()
 
+// ----------------------------------------------------------------------------
 // wxPlotCtrlEvent
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_ADD_CURVE,          0) // a curve has been added
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_DELETING_CURVE,     0) // a curve is about to be deleted, event.Skip(false) to prevent
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_DELETED_CURVE,      0) // a curve has been deleted
 
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_CURVE_SEL_CHANGING, 0) // curve selection changing, event.Skip(false) to prevent
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_CURVE_SEL_CHANGED,  0) // curve selection has changed
+// a curve has been added, event's curve is new curve with it's index
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_ADD_CURVE,          0)
+// a curve is about to be deleted, event.Skip(false) to prevent
+//   the curve_index is valid and may be -1 for all curves
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_DELETING_CURVE,     0)
+// a curve has been deleted
+//   the curve_index is valid and may be -1 for all curves
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_DELETED_CURVE,      0)
 
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_MOUSE_MOTION,       0) // mouse moved
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_CLICKED,            0) // mouse left or right clicked
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_DOUBLECLICKED,      0) // mouse left or right doubleclicked
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_POINT_CLICKED,      0) // clicked on a plot point (+-2pixels)
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_POINT_DOUBLECLICKED,0) // dclicked on a plot point (+-2pixels)
+// curve selection changing, event.Skip(false) to prevent
+//   the curve and it's index are the curve to be switched to, the current
+//   values can be found from the plotctrl itself.
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_CURVE_SEL_CHANGING, 0)
+// curve selection has changed
+//   the curve and it's index are for the newly selected curve
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_CURVE_SEL_CHANGED,  0)
 
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_AREA_SEL_CREATING,  0) // mouse left down and drag begin
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_AREA_SEL_CHANGING,  0) // mouse left down and dragging
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_AREA_SEL_CREATED,   0) // mouse left down and drag end
+// mouse moved
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_MOUSE_MOTION,       0)
+// mouse left or right clicked
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_CLICKED,            0)
+// mouse left or right doubleclicked
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_DOUBLECLICKED,      0)
+// clicked on a plot point (+-2pixels)
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_POINT_CLICKED,      0)
+// dclicked on a plot point (+-2pixels)
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_POINT_DOUBLECLICKED,0)
 
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_VIEW_CHANGING,      0) // zoom or origin of plotctrl is about to change
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_VIEW_CHANGED,       0) // zoom or origin of plotctrl has changed
+// mouse left down and drag begin
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_AREA_SEL_CREATING,  0)
+// mouse left down and dragging
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_AREA_SEL_CHANGING,  0)
+// mouse left down and drag end
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_AREA_SEL_CREATED,   0)
 
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_CURSOR_CHANGING,    0) // cursor point/curve is about to change, event.Skip(false) to prevent
-                                                           // if the cursor is invalidated since
-                                                           // the curve is gone you cannot prevent it
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_CURSOR_CHANGED,     0) // cursor point/curve changed
+// zoom or origin of plotctrl is about to change
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_VIEW_CHANGING,      0)
+// zoom or origin of plotctrl has changed
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_VIEW_CHANGED,       0)
 
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_ERROR,              0) // an error has occured, see event.GetString()
-                                                           // usually nonfatal NaN overflow errors
+// cursor point/curve is about to change, event.Skip(false) to prevent
+//   if the cursor is invalidated since the curve is gone you cannot prevent it
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_CURSOR_CHANGING,    0)
+// cursor point/curve changed
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_CURSOR_CHANGED,     0)
 
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_BEGIN_TITLE_EDIT,   0) // title is about to be edited, event.Skip(false) to prevent
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_END_TITLE_EDIT,     0) // title has been edited and changed, event.Skip(false) to prevent
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_BEGIN_X_LABEL_EDIT, 0) // x label is about to be edited, event.Skip(false) to prevent
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_END_X_LABEL_EDIT,   0) // x label has been edited and changed, event.Skip(false) to prevent
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_BEGIN_Y_LABEL_EDIT, 0) // y label is about to be edited, event.Skip(false) to prevent
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_END_Y_LABEL_EDIT,   0) // y label has been edited and changed, event.Skip(false) to prevent
+// an error has occured, see event.GetString(), usually nonfatal NaN overflow errors
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_ERROR,              0)
 
+// title is about to be edited, event.Skip(false) to prevent
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_BEGIN_TITLE_EDIT,   0)
+// title has been edited and changed, event.Skip(false) to prevent
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_END_TITLE_EDIT,     0)
+// x label is about to be edited, event.Skip(false) to prevent
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_BEGIN_X_LABEL_EDIT, 0)
+// x label has been edited and changed, event.Skip(false) to prevent
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_END_X_LABEL_EDIT,   0)
+// y label is about to be edited, event.Skip(false) to prevent
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_BEGIN_Y_LABEL_EDIT, 0)
+// y label has been edited and changed, event.Skip(false) to prevent
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_END_Y_LABEL_EDIT,   0)
+
+// The function of the mouse in the area window is about to change, event.Skip(false) to prevent
 DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_MOUSE_FUNC_CHANGING,0)
+// The function of the mouse in the area window has changed
 DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_MOUSE_FUNC_CHANGED, 0)
 
+// ----------------------------------------------------------------------------
 // wxPlotCtrlSelEvent
 //DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_RANGE_SEL_CREATING,0)
 //DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_RANGE_SEL_CREATED, 0)
@@ -1135,6 +1162,7 @@ DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_VALUE_SEL_CHANG
 DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_PLOTCTRL, wxEVT_PLOTCTRL_AREA_SEL_CHANGED,   0)
 */
 END_DECLARE_EVENT_TYPES()
+
 // ----------------------------------------------------------------------------
 // wxPlotCtrlEvent macros
 // ----------------------------------------------------------------------------

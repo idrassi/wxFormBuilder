@@ -41,7 +41,7 @@ class WXDLLIMPEXP_PLOTCTRL wxPlotFunction;
 //          note: current may exceed max by a few iterations in some cases
 
 // Usage: create a function like this
-//   void LM_LeastSquareProgressHandler(const wxString &text, int current, int max)
+//   bool LM_LeastSquareProgressHandler(const wxString &text, int current, int max)
 //     { [ do stuff... for example update a progress dialog ]
 //       wxString str = text + wxString::Format(wxT("\nIteration # %d of %d"), current, max);
 //       int percent = wxMin(int(100.0*current/max), 99); // iterations may overflow!

@@ -34,10 +34,11 @@ class WXDLLIMPEXP_PLOTCTRL wxPlotFunction: public wxPlotCurve
 {
 public:
     wxPlotFunction() : wxPlotCurve() {}
-    wxPlotFunction(const wxPlotFunction &curve) : wxPlotCurve() { Create(curve); }
+    wxPlotFunction(const wxPlotFunction &curve) { Create(curve); }
     wxPlotFunction(const wxString &function, const wxString &vars = wxT("x"),
-                   bool useDegrees = false) : wxPlotCurve()
-        { Create(function, vars, useDegrees); }
+                   bool useDegrees = false) { Create(function, vars, useDegrees); }
+
+    virtual wxPlotCurve* Clone() const { return new wxPlotFunction(*this); }
 
     virtual ~wxPlotFunction() {}
 

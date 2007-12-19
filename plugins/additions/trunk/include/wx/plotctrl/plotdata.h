@@ -57,15 +57,17 @@ class WXDLLIMPEXP_PLOTCTRL wxPlotData : public wxPlotCurve
 {
 public:
     wxPlotData() : wxPlotCurve() {}
-    wxPlotData( const wxPlotData& plotData ):wxPlotCurve() { Create(plotData); }
+    wxPlotData( const wxPlotData& plotData ) { Create(plotData); }
 
-    wxPlotData( int points, bool zero = true ):wxPlotCurve() { Create(points, zero); }
-    wxPlotData( double *x_data, double *y_data, int points, bool static_data = false ):wxPlotCurve()
+    wxPlotData( int points, bool zero = true ) { Create(points, zero); }
+    wxPlotData( double *x_data, double *y_data, int points, bool static_data = false )
         { Create( x_data, y_data, points, static_data ); }
-    wxPlotData( const wxString &filename, int x_col, int y_col, int options = wxPLOTDATA_LOAD_DEFAULT ):wxPlotCurve()
+    wxPlotData( const wxString &filename, int x_col, int y_col, int options = wxPLOTDATA_LOAD_DEFAULT )
         { LoadFile( filename, x_col, y_col, options ); }
-    wxPlotData( const wxPlotFunction &plotFunc, double x_start, double dx, int points ):wxPlotCurve()
+    wxPlotData( const wxPlotFunction &plotFunc, double x_start, double dx, int points )
         { Create( plotFunc, x_start, dx, points ); }
+
+    virtual wxPlotCurve* Clone() const { return new wxPlotData(*this); }
 
     virtual ~wxPlotData() {}
 
@@ -99,14 +101,32 @@ public:
     bool Resize( int new_size, double dx, double y );
 
     // Append the source curve to the end, Yi data is copied only if both have it.
-    wxPlotData Append(const wxPlotData &source) const;
-    // Insert a the source curve at data index, Yi data is copied only if both have it.
+    //   returns a new wxPlotData
+    wxPlotData Append(const wxPlotData &source) const { return Insert(source, -1); }
+    // Append the single x,y point to the end of the data,
+    //   if this data has the imaginary component yi will be used, else ignored.
+    //   returns a new wxPlotData
+    wxPlotData Append(double x, double y, double yi = 0) const { return Insert(-1, x, y, yi); }
+    // Insert a the source curve at data index, if index is -1 inserts at end
+    //   Yi data is copied only if both have it.
+    //   returns a new wxPlotData
     wxPlotData Insert(const wxPlotData &source, int index) const;
+    // Insert a single point into the data, if index is -1 inserts at end
+    //   if this data has the imaginary component yi will be used, else ignored.
+    //   returns a new wxPlotData
+    wxPlotData Insert(int index, double x, double y, double yi = 0) const;
+    // Insert the arrays into the data, if index is -1 inserts at end
+    //   The arrays must be at least as long as src_count and only yi can be NULL.
+    //   if this data has the imaginary component yi will be used, else ignored.
+    //   returns a new wxPlotData
+    wxPlotData Insert(int index, size_t src_count, double* x, double* y, double* yi = NULL) const;
     // Delete a number of points in the curve, if count < 0 then delete to end
     //   do not delete from 0 to end, it will assert, Destroy the data instead
+    //   returns a new wxPlotData
     wxPlotData Remove(int index, int count = -1) const;
     // Get a sub-section of this curve from index of size count points.
     //   if count < 0 then get data from index to end
+    //   returns a new wxPlotData
     wxPlotData GetSubPlotData(int index, int count = -1) const;
 
     // Unref the data

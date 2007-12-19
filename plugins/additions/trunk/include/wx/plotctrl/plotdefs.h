@@ -4,7 +4,7 @@
 // Author:      John Labenski
 // Modified by:
 // Created:     1/08/2005
-// RCS-ID:      $Id: plotdefs.h,v 1.3 2006/03/20 03:29:21 jrl1 Exp $
+// RCS-ID:      $Id: plotdefs.h,v 1.5 2007/10/10 04:09:04 jrl1 Exp $
 // Copyright:   (c) John Labenski
 // Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
@@ -14,6 +14,24 @@
 
 #include "wx/defs.h"
 #include "wx/geometry.h"
+
+//-----------------------------------------------------------------------------
+// The version of wxPlotCtrl
+//-----------------------------------------------------------------------------
+
+#define wxPLOTCTRL_MAJOR_VERSION      1
+#define wxPLOTCTRL_MINOR_VERSION      0
+#define wxPLOTCTRL_RELEASE_VERSION    1
+#define wxPLOTCTRL_SUBRELEASE_VERSION 0
+#define wxPLOTCTRL_VERSION_STRING     wxT("wxPlotCtrl 1.0.1")
+
+// For non-Unix systems (i.e. when building without a configure script),
+// users of this component can use the following macro to check if the
+// current version is at least major.minor.release
+#define wxCHECK_PLOTCTRL_VERSION(major,minor,release) \
+    (wxPLOTCTRL_MAJOR_VERSION > (major) || \
+    (wxPLOTCTRL_MAJOR_VERSION == (major) && wxPLOTCTRL_MINOR_VERSION > (minor)) || \
+    (wxPLOTCTRL_MAJOR_VERSION == (major) && wxPLOTCTRL_MINOR_VERSION == (minor) && wxPLOTCTRL_RELEASE_VERSION >= (release)))
 
 // ----------------------------------------------------------------------------
 // DLLIMPEXP macros
@@ -49,6 +67,8 @@
 
 inline void PRINT_WXRECT(const wxString& str, const wxRect& r)                 { wxPrintf(wxT("%s xy(%d %d) wh(%d %d) rb(%d %d)\n"), str.c_str(), r.x,   r.y,   r.width,   r.height,   r.GetRight(), r.GetBottom()); }
 inline void PRINT_WXRECT2DDOUBLE(const wxString& str, const wxRect2DDouble& r) { wxPrintf(wxT("%s xy(%g %g) wh(%g %g) rb(%g %g)\n"), str.c_str(), r.m_x, r.m_y, r.m_width, r.m_height, r.GetRight(), r.GetBottom()); }
+
+#define WXPC_HASBIT(var, mask) (((var)&(mask)) != 0)
 
 // ----------------------------------------------------------------------------
 // Speed up drawing routines in wxDC

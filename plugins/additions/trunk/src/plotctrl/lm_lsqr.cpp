@@ -157,7 +157,7 @@ bool LM_LeastSquare::Create(const wxPlotData &plotData, const wxPlotFunction &pl
     double *x_data = m_plotData->GetXData();
     double *y_data = m_plotData->GetYData();
     int data_count = m_plotData->GetCount();
-    for (int i=0; i<data_count; i++, x_data++, y_data++)
+    for (int i = 0; i < data_count; i++, x_data++, y_data++)
     {
         if (!wxFinite(*x_data) && !wxFinite(*y_data))
         {
@@ -184,7 +184,7 @@ bool LM_LeastSquare::Create(const wxPlotData &plotData, const wxPlotFunction &pl
     if (!(m_plotData && m_plotFunc && m_vars && m_x && m_fvec && m_diag && m_fjac && m_qtf && m_ipvt))
     {
         Destroy();
-        wxFAIL_MSG(wxT("can't allocate memory"));
+        wxFAIL_MSG(wxT("can't allocate memory for LM_LeastSquare::Create"));
         return false;
     }
 
@@ -210,7 +210,7 @@ int LM_LeastSquare::Fit(const double *x0, int init_count)
         wxCHECK_MSG(init_count <= m_n, 0, wxT("Invalid initializer count"));
 
         // initialize the variables
-        for (i=0; i<init_count; i++)
+        for (i = 0; i < init_count; i++)
         {
             if (!wxFinite(x0[i]))
             {
@@ -222,12 +222,12 @@ int LM_LeastSquare::Fit(const double *x0, int init_count)
         }
 
         // initialize the rest, if any
-        for (i=init_count; i<m_n; i++)
+        for (i = init_count; i < m_n; i++)
             m_x[i] = m_init_value;
     }
     else
     {
-        for (i=0; i<m_n; i++)
+        for (i = 0; i < m_n; i++)
             m_x[i] = m_init_value;
     }
 
@@ -243,7 +243,7 @@ int LM_LeastSquare::Fit(const double *x0, int init_count)
         if (wa3) free(wa3);
         if (wa4) free(wa4);
 
-        wxFAIL_MSG(wxT("can't allocate memory"));
+        wxFAIL_MSG(wxT("can't allocate memory for LM_LeastSquare::Fit"));
         return 0;
     }
 
@@ -284,7 +284,6 @@ int LM_LeastSquare::Fit(const double *x0, int init_count)
     return m_nfev;
 }
 
-#define LM_LSQR_INFO_COUNT 8
 wxString LM_LeastSquare::GetResultMessage() const
 {
     wxString msg;
@@ -381,7 +380,7 @@ void LM_LeastSquare::fcn(int m, int n, double x[], double fvec[], int *iflag)
     double f = 0;
     memcpy(m_vars, x, n*sizeof(double));
 
-    for (int i=0; i<m; i++, x_data++, y_data++)
+    for (int i = 0; i < m; i++, x_data++, y_data++)
     {
 /*      // this is checked in Create now
         if (!wxFinite(*x_data) && !wxFinite(*y_data))

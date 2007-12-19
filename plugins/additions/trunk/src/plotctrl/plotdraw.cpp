@@ -89,6 +89,7 @@ extern "C" {
             dc->DrawEllipse(x0, y0, w, h);
 
 #elif defined(__WXMSW__) && wxPLOTCTRL_FAST_GRAPHICS
+    #include "wx/msw/private.h" // include <windows.h> but also undef MSW's junk
 
     #define INITIALIZE_FAST_GRAPHICS \
         double dc_scale_x = 1, dc_scale_y = 1; \
@@ -225,7 +226,7 @@ int ClipLineToRect( double &x0, double &y0,
     else if (out1 == wxInside)
         points_out = 1;
 
-    for (int i=0; i<points_out; i++)
+    for (int i = 0; i < points_out; i++)
     {
         if (out & wxOutTop)
         {
@@ -538,7 +539,7 @@ void wxPlotDrawerXAxis::Draw(wxDC *dc, bool refresh)
     int y_pos = (GetDCRect().height - y)/2 + 2; // FIXME I want to center this
     // double current = ceil(m_viewRect.GetLeft() / m_xAxisTick_step) * m_xAxisTick_step;
     int i, count = m_tickPositions.GetCount();
-    for (i=0; i<count; i++)
+    for (i = 0; i < count; i++)
     {
         dc->DrawText(m_tickLabels[i], m_tickPositions[i], y_pos);
 
@@ -586,7 +587,7 @@ void wxPlotDrawerYAxis::Draw(wxDC *dc, bool refresh)
     wxString label;
     // double current = ceil(m_viewRect.GetTop() / m_yAxisTick_step) * m_yAxisTick_step;
     int i, count = m_tickLabels.GetCount();
-    for (i=0; i<count; i++)
+    for (i = 0; i < count; i++)
     {
         dc->DrawText( m_tickLabels[i], 2, m_tickPositions[i] );
 
@@ -744,7 +745,7 @@ void wxPlotDrawerCurve::Draw(wxDC *dc, wxPlotCurve *curve, int curve_index)
 
     int clipped = ClippedNeither;
 
-    for (i=dcRect.x; i<right; i++)
+    for (i = dcRect.x; i < right; i++)
     {
         x1 = m_owner->GetPlotCoordFromClientX(i);
         y1 = yy1 = curve->GetY(x1);
@@ -767,7 +768,7 @@ void wxPlotDrawerCurve::Draw(wxDC *dc, wxPlotCurve *curve, int curve_index)
             j1 = m_owner->GetClientCoordFromPlotY(yy1);
             wxPLOTCTRL_DRAW_LINE(dc, window, pen, i-1, j0, i, j1);
 
-            if (selected && !((clipped & ClippedSecond) != 0))
+            if (selected && !WXPC_HASBIT(clipped, ClippedSecond))
             {
                 wxPLOTCTRL_DRAW_ELLIPSE(dc, window, pen, i, j1, 2, 2);
             }
@@ -795,6 +796,7 @@ void wxPlotDrawerDataCurve::Draw(wxDC *dc, wxPlotData* curve, int curve_index)
     wxRect2DDouble viewRect( GetPlotViewRect() ); //m_viewRect );
     wxRect2DDouble subViewRect( m_owner->GetPlotRectFromClientRect(dcRect) );
     wxRect2DDouble curveRect( curve->GetBoundingRect() );
+
     if (!wxPlotRect2DDoubleIntersects(curveRect, subViewRect)) return;
 
 /*  // FIXME - drawing symbol bitmaps in MSW is very slow
@@ -848,7 +850,7 @@ void wxPlotDrawerDataCurve::Draw(wxDC *dc, wxPlotData* curve, int curve_index)
     const wxArrayRangeInt &ranges = m_owner->GetDataCurveSelection(curve_index)->GetRangeArray();
     int n_range = 0, range_count = ranges.GetCount();
     int min_sel = -1, max_sel = -1;
-    for (n_range=0; n_range<range_count; n_range++)
+    for (n_range = 0; n_range < range_count; n_range++)
     {
         const wxRangeInt& range = ranges[n_range];
         if ((range.m_max >= n_start) || (range.m_min >= n_start))
@@ -939,7 +941,7 @@ void wxPlotDrawerDataCurve::Draw(wxDC *dc, wxPlotData* curve, int curve_index)
             if (n == min_sel)
                 dc->SetPen( selectedPen );
 
-            if (draw_symbols && !((clipped & ClippedSecond) != 0) &&
+            if (draw_symbols && !WXPC_HASBIT(clipped, ClippedSecond) &&
                 ((i0 != i1) || (j0 != j1) || (n == min_sel) || (n == n_start)))
             {
                 //dc->DrawBitmap( bitmap, i1 - bitmapHalfWidth, j1 - bitmapHalfHeight, true );
@@ -1006,7 +1008,8 @@ void wxPlotDrawerMarker::Draw(wxDC *dc, const wxArrayPlotMarker& markers)
     {
         const wxPlotMarker &marker = markers[n];
         wxCHECK_RET(marker.Ok(), wxT("Invalid marker"));
-        wxRect2DDouble r = marker.GetPlotRect();
+
+        wxRect2DDouble r(marker.GetPlotRect());
         x0 = r.m_x;
         y0 = r.m_y;
         x1 = r.GetRight();
@@ -1019,7 +1022,7 @@ void wxPlotDrawerMarker::Draw(wxDC *dc, const wxArrayPlotMarker& markers)
 
         // determine what to draw
         int marker_type = marker.GetMarkerType();
-        wxSize size     = marker.GetSize();
+        wxSize size(marker.GetSize());
 
         if (marker_type == wxPLOTMARKER_BITMAP)
         {
@@ -1071,14 +1074,15 @@ void wxPlotDrawerMarker::Draw(wxDC *dc, const wxArrayPlotMarker& markers)
             bool is_horiz = r.m_width  < 0;
             bool is_vert  = r.m_height < 0;
 
-            bool cross = is_horiz && is_vert;
+            bool cross = (is_horiz && is_vert) || (marker_type == wxPLOTMARKER_CROSS);
 
-            if (is_horiz)
+            // find the limits of the edges of the lines
+            if (is_horiz || cross)
             {
                 x0 = subViewRect.m_x - subViewRect.m_width; // push outside win
                 x1 = subViewRect.GetRight() + subViewRect.m_width;
             }
-            if (is_vert)
+            if (is_vert || cross)
             {
                 y0 = subViewRect.m_y - subViewRect.m_height;
                 y1 = subViewRect.GetBottom() + subViewRect.m_height;
@@ -1086,7 +1090,7 @@ void wxPlotDrawerMarker::Draw(wxDC *dc, const wxArrayPlotMarker& markers)
 
             if ((marker_type == wxPLOTMARKER_POINT) || ((x0 == x1) && (y0 == y1)))
             {
-                if (ClipLineToRect(x0, y0, x1, y1, subViewRect) != ClippedOut)
+                if (ClipLineToRect(x0, y0, x0, y0, subViewRect) != ClippedOut)
                 {
                     int i0 = m_owner->GetClientCoordFromPlotX(x0);
                     int j0 = m_owner->GetClientCoordFromPlotY(y0);
@@ -1095,7 +1099,7 @@ void wxPlotDrawerMarker::Draw(wxDC *dc, const wxArrayPlotMarker& markers)
             }
             else if ((marker_type == wxPLOTMARKER_VERT_LINE) || ((x0 == x1) && (y0 != y1)))
             {
-                if (ClipLineToRect(x0, y0, x1, y1, subViewRect) != ClippedOut)
+                if (ClipLineToRect(x0, y0, x0, y1, subViewRect) != ClippedOut)
                 {
                     int i0 = m_owner->GetClientCoordFromPlotX(x0);
                     int j0 = m_owner->GetClientCoordFromPlotY(y0);
@@ -1105,7 +1109,7 @@ void wxPlotDrawerMarker::Draw(wxDC *dc, const wxArrayPlotMarker& markers)
             }
             else if ((marker_type == wxPLOTMARKER_HORIZ_LINE) || ((y0 == y1) && (x0 != x1)))
             {
-                if (ClipLineToRect(x0, y0, x1, y1, subViewRect) != ClippedOut)
+                if (ClipLineToRect(x0, y0, x1, y0, subViewRect) != ClippedOut)
                 {
                     int i0 = m_owner->GetClientCoordFromPlotX(x0);
                     int i1 = m_owner->GetClientCoordFromPlotX(x1);
@@ -1115,8 +1119,22 @@ void wxPlotDrawerMarker::Draw(wxDC *dc, const wxArrayPlotMarker& markers)
             }
             else if ((marker_type == wxPLOTMARKER_CROSS) || cross)
             {
+                if (wxPlotRect2DDoubleContains(r.m_x, r.m_y, subViewRect))
+                {
+                    double y = r.m_y;
+                    ClipLineToRect(x0, y, x1, y, subViewRect);
+                    int i0 = m_owner->GetClientCoordFromPlotX(x0);
+                    int i1 = m_owner->GetClientCoordFromPlotX(x1);
+                    int j0 = m_owner->GetClientCoordFromPlotY(y);
+                    wxPLOTCTRL_DRAW_LINE(dc, window, pen, i0, j0, i1, j0);
 
-
+                    double x = r.m_x;
+                    ClipLineToRect(x, y0, x, y1, subViewRect);
+                        i0 = m_owner->GetClientCoordFromPlotX(x);
+                        j0 = m_owner->GetClientCoordFromPlotY(y0);
+                    int j1 = m_owner->GetClientCoordFromPlotY(y1);
+                    wxPLOTCTRL_DRAW_LINE(dc, window, pen, i0, j0, i0, j1);
+                }
             }
             else                                // rectangle
             {

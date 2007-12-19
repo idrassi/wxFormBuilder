@@ -42,10 +42,10 @@ extern double LinearInterpolateX( double x0, double y0,
 // Constants
 //----------------------------------------------------------------------------
 
-#if !wxCHECK_VERSION( 2, 8, 0 )
 // defines wxArrayDouble for use as necessary
-WX_DEFINE_USER_EXPORTED_ARRAY_DOUBLE(double, wxArrayDouble, class WXDLLIMPEXP_PLOTCTRL);
-#endif
+#if !wxCHECK_VERSION(2, 7, 1)
+    WX_DEFINE_USER_EXPORTED_ARRAY_DOUBLE(double, wxArrayDouble, class WXDLLIMPEXP_PLOTCTRL);
+#endif // !wxCHECK_VERSION(2, 7, 1)
 
 // wxNullPlotBounds = wxRect2DDouble(0,0,0,0)
 WXDLLIMPEXP_DATA_PLOTCTRL(extern const wxRect2DDouble) wxNullPlotBounds;
@@ -123,6 +123,11 @@ public:
     // see the remmed out code in this function if you subclass it
     wxPlotCurve();
     virtual ~wxPlotCurve() {}
+
+    // Make a clone of this curve, same as increasing the ref count, but
+    // the new object is created on the heap. See wxPlotFunction, wxPlotData
+    // Note: Cannot be pure virtual because of the wxArray of wxPlotCurves.
+    virtual wxPlotCurve* Clone() const { return new wxPlotCurve; }
 
     // override as necessary so that Ok means that GetY works
     virtual bool Ok() const;

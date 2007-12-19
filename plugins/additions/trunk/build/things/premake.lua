@@ -26,3 +26,9 @@ if ( options["shared"] ) then
 end
 
 MakeWxAdditionsPackage( package, "", wx_ver, wx_ver_minor, wx_custom )
+
+-- gtk build/link options
+if ( OS == "linux" ) then
+	table.insert( package.buildoptions, "`pkg-config gtk+-2.0 --cflags`" )
+	table.insert( package.linkoptions, "`pkg-config gtk+-2.0 --libs`" )
+end
