@@ -33,8 +33,7 @@
 class CodeEditor;
 
 class wxScintilla;
-class wxFlatNotebook;
-class wxFlatNotebookImageList;
+class wxAuiNotebook;
 
 class wxFindDialogEvent;
 
@@ -50,8 +49,7 @@ private:
 	CodeEditor* m_hPanel;
 	PTCCodeWriter m_hCW;
 	PTCCodeWriter m_cppCW;
-	wxFlatNotebookImageList* m_icons;
-	wxFlatNotebook* m_notebook;
+	wxAuiNotebook* m_notebook;
 
 	void InitStyledTextCtrl( wxScintilla* stc );
 

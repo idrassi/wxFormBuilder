@@ -88,26 +88,11 @@ void wxFbPalette::Create()
 {
   wxBoxSizer *top_sizer = new wxBoxSizer(wxVERTICAL);
 
-  long nbStyle;
-  wxConfigBase* config = wxConfigBase::Get();
-  config->Read( wxT("/palette/notebook_style"), &nbStyle, wxFNB_NO_X_BUTTON | wxFNB_NO_NAV_BUTTONS | DRAG_OPTION | wxFNB_DROPDOWN_TABS_LIST  | wxFNB_VC8 | wxFNB_CUSTOM_DLG );
-
-  m_notebook = new wxFlatNotebook( this, -1, wxDefaultPosition, wxDefaultSize, nbStyle );
-  m_notebook->SetCustomizeOptions( wxFNB_CUSTOM_TAB_LOOK | wxFNB_CUSTOM_ORIENTATION | wxFNB_CUSTOM_LOCAL_DRAG );
+  m_notebook = new wxAuiNotebook( this, -1, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TAB_MOVE | wxAUI_NB_WINDOWLIST_BUTTON );
 
   unsigned int pkg_count = AppData()->GetPackageCount();
 
   Debug::Print( wxT("[Palette] Pages %d"),pkg_count);
-
-  // Populate icon vector
-  for (unsigned int j = 0; j < pkg_count;j++)
-  {
-	PObjectPackage pkg = AppData()->GetPackage(j);
-	m_icons.Add( pkg->GetPackageIcon() );
-  }
-
-  // Add icons to notebook
-  m_notebook->SetImageList( &m_icons );
 
   for (unsigned int i = 0; i < pkg_count;i++)
   {
@@ -149,7 +134,7 @@ void wxFbPalette::Create()
     sizer->Fit(panel);
     sizer->SetSizeHints(panel);
 
-    m_notebook->AddPage(panel, pkg_name, false, i);
+    m_notebook->AddPage(panel, pkg_name, false, pkg->GetPackageIcon());
 
   }
   //Title *title = new Title( this, wxT("Component Palette") );
@@ -205,10 +190,10 @@ wxFbPalette::~wxFbPalette()
 {
 	wxConfigBase* config = wxConfigBase::Get();
 	wxString pages;
-	for ( size_t i = 0; i < (size_t)m_notebook->GetPageCount(); ++i )
+	for ( size_t i = 0; i < m_notebook->GetPageCount(); ++i )
 	{
 		pages << m_notebook->GetPageText( i ) << wxT(",");
 	}
 	config->Write( wxT("/palette/pageOrder"), pages );
-	config->Write( wxT("/palette/notebook_style"), m_notebook->GetWindowStyleFlag() );
+	config->Flush();
 }

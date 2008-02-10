@@ -27,7 +27,7 @@
 #define __MAIN_FRAME__
 
 #include "wx/wx.h"
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
+#include <wx/aui/auibook.h>
 //#include "wx/aui/aui.h"
 #include "wx/splitter.h"
 #include <wx/fdrepdlg.h>
@@ -68,8 +68,7 @@ class MainFrame : public wxFrame
   int m_rightSplitterWidth;
 
   //wxFrameManager m_mgr;
-  wxFlatNotebook *m_notebook;
-  wxFlatNotebookImageList m_icons;
+  wxAuiNotebook *m_notebook;
   wxFbPalette *m_palette;
   ObjectTree *m_objTree;
   ObjectInspector *m_objInsp;
@@ -137,7 +136,7 @@ class MainFrame : public wxFrame
   void OnChangeBorder(wxCommandEvent& e);
   void OnXrcPreview(wxCommandEvent& e);
   void OnGenInhertedClass(wxCommandEvent& e);
-  void OnFlatNotebookPageChanged( wxFlatNotebookEvent& event );
+  void OnNotebookPageChanged( wxAuiNotebookEvent& event );
 
   void OnProjectLoaded( wxFBEvent& event );
   void OnProjectSaved( wxFBEvent& event );
@@ -167,7 +166,7 @@ class MainFrame : public wxFrame
   void OnFindDialog( wxCommandEvent& event );
   void OnFind( wxFindDialogEvent& event );
   void OnFindClose( wxFindDialogEvent& event );
-  
+
   bool SaveWarning();
   };
 

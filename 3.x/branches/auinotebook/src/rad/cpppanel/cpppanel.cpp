@@ -45,7 +45,7 @@
 #include <wx/config.h>
 
 #include <wx/wxScintilla/wxscintilla.h>
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
+#include <wx/aui/auibook.h>
 
 BEGIN_EVENT_TABLE ( CppPanel,  wxPanel )
 	EVT_FB_CODE_GENERATION( CppPanel::OnCodeGeneration )
@@ -62,31 +62,20 @@ END_EVENT_TABLE()
 
 CppPanel::CppPanel( wxWindow *parent, int id )
 :
-wxPanel( parent, id ),
-m_icons( new wxFlatNotebookImageList )
+wxPanel( parent, id )
 {
 	AppData()->AddHandler( this->GetEventHandler() );
 	wxBoxSizer *top_sizer = new wxBoxSizer( wxVERTICAL );
 
-	long nbStyle;
-	wxConfigBase* config = wxConfigBase::Get();
-	config->Read( wxT("/mainframe/editor/cpp/notebook_style"), &nbStyle, wxFNB_NO_X_BUTTON | wxFNB_NO_NAV_BUTTONS | wxFNB_NODRAG | wxFNB_FF2 | wxFNB_CUSTOM_DLG );
-
-	m_notebook = new wxFlatNotebook( this, -1, wxDefaultPosition, wxDefaultSize, nbStyle );
-	m_notebook->SetCustomizeOptions( wxFNB_CUSTOM_TAB_LOOK | wxFNB_CUSTOM_ORIENTATION | wxFNB_CUSTOM_LOCAL_DRAG );
-
-	// Set notebook icons
-	m_icons->Add( AppBitmaps::GetBitmap( wxT( "cpp" ), 16 ) );
-	m_icons->Add( AppBitmaps::GetBitmap( wxT( "h" ), 16 ) );
-	m_notebook->SetImageList( m_icons );
+	m_notebook = new wxAuiNotebook( this, -1, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TAB_SPLIT );
 
 	m_cppPanel = new CodeEditor( m_notebook, -1 );
 	InitStyledTextCtrl( m_cppPanel->GetTextCtrl() );
-	m_notebook->AddPage( m_cppPanel, wxT( "cpp" ), false, 0 );
+	m_notebook->AddPage( m_cppPanel, wxT( "cpp" ), false, AppBitmaps::GetBitmap( wxT( "cpp" ), 16 ) );
 
 	m_hPanel = new CodeEditor( m_notebook, -1 );
 	InitStyledTextCtrl( m_hPanel->GetTextCtrl() );
-	m_notebook->AddPage( m_hPanel, wxT( "h" ), false, 1 );
+	m_notebook->AddPage( m_hPanel, wxT( "h" ), false, AppBitmaps::GetBitmap( wxT( "h" ), 16 ) );
 
 	top_sizer->Add( m_notebook, 1, wxEXPAND, 0 );
 
@@ -102,10 +91,7 @@ m_icons( new wxFlatNotebookImageList )
 
 CppPanel::~CppPanel()
 {
-	delete m_icons;
 	AppData()->RemoveHandler( this->GetEventHandler() );
-	wxConfigBase *config = wxConfigBase::Get();
-	config->Write( wxT("/mainframe/editor/cpp/notebook_style"), m_notebook->GetWindowStyleFlag() );
 }
 
 void CppPanel::InitStyledTextCtrl( wxScintilla *stc )
@@ -153,7 +139,7 @@ void CppPanel::InitStyledTextCtrl( wxScintilla *stc )
 
 void CppPanel::OnFind( wxFindDialogEvent& event )
 {
-	wxFlatNotebook* languageBook = wxDynamicCast( this->GetParent(), wxFlatNotebook );
+	wxAuiNotebook* languageBook = wxDynamicCast( this->GetParent(), wxAuiNotebook );
 	if ( NULL == languageBook )
 	{
 		return;
@@ -171,7 +157,7 @@ void CppPanel::OnFind( wxFindDialogEvent& event )
 		return;
 	}
 
-	wxFlatNotebook* notebook = wxDynamicCast( m_cppPanel->GetParent(), wxFlatNotebook );
+	wxAuiNotebook* notebook = wxDynamicCast( m_cppPanel->GetParent(), wxAuiNotebook );
 	if ( NULL == notebook )
 	{
 		return;
@@ -227,7 +213,7 @@ void CppPanel::OnCodeGeneration( wxFBEvent& event )
     PObjectBase objectToGenerate;
 
 	// Generate code in the panel if the panel is active
-	bool doPanel = IsShown();
+	bool doPanel = true;//IsShown();
 
 	// Using the previously unused Id field in the event to carry a boolean
 	bool panelOnly = ( event.GetId() != 0 );
