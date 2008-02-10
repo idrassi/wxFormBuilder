@@ -53,7 +53,7 @@ else
 	package.libpaths = { "../output/lib/wxformbuilder", "../sdk/lib" }
 end
 -- Set the libraries it links to.
-package.links = { "wxFlatNotebook", "wxPropGrid", "wxScintilla", "TiCPP", "plugin-interface" }
+package.links = { "wxPropGrid", "wxScintilla", "TiCPP", "plugin-interface" }
 
 -- Add libraries and build options for stack trace in MinGW
 if ( windows and ( (target == "cb-gcc") or (target == "gnu") ) ) then

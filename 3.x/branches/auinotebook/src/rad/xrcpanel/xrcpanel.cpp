@@ -41,7 +41,7 @@
 #include <wx/fdrepdlg.h>
 
 #include <wx/wxScintilla/wxscintilla.h>
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
+#include <wx/aui/auibook.h>
 
 BEGIN_EVENT_TABLE( XrcPanel,  wxPanel )
 	EVT_FB_CODE_GENERATION( XrcPanel::OnCodeGeneration )
@@ -111,7 +111,7 @@ void XrcPanel::InitStyledTextCtrl( wxScintilla *stc )
 
 void XrcPanel::OnFind( wxFindDialogEvent& event )
 {
-	wxFlatNotebook* notebook = wxDynamicCast( this->GetParent(), wxFlatNotebook );
+	wxAuiNotebook* notebook = wxDynamicCast( this->GetParent(), wxAuiNotebook );
 	if ( NULL == notebook )
 	{
 		return;
@@ -174,8 +174,8 @@ void XrcPanel::OnCodeGeneration( wxFBEvent& event )
 	if(!project)return;
 
 	// Generate code in the panel if the panel is active
-	if ( IsShown() )
-	{
+	//if ( IsShown() )
+	//{
 		Freeze();
 		wxScintilla* editor = m_xrcPanel->GetTextCtrl();
 		editor->SetReadOnly( false );
@@ -191,7 +191,7 @@ void XrcPanel::OnCodeGeneration( wxFBEvent& event )
 		editor->SetAnchor( 0 );
 		editor->SetCurrentPos( 0 );
 		Thaw();
-	}
+	//}
 
 	if ( panelOnly )
 	{

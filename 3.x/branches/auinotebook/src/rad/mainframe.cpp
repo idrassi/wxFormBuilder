@@ -344,14 +344,14 @@ m_findDialog( NULL )
 	// So splitter windows can be restored correctly
 	Connect( wxEVT_IDLE, wxIdleEventHandler( MainFrame::OnIdle ) );
 
-	// So we don't respond to a FlatNoteBookPageChanged event during construction
-	m_notebook->Connect( wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CHANGED, wxFlatNotebookEventHandler( MainFrame::OnFlatNotebookPageChanged ), 0, this );
+	// So we don't respond to a PageChanged event during construction
+	m_notebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::OnNotebookPageChanged ), NULL, this );
 };
 
 
 MainFrame::~MainFrame()
 {
-	m_notebook->Disconnect( wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CHANGED, wxFlatNotebookEventHandler( MainFrame::OnFlatNotebookPageChanged ), 0, this );
+	m_notebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::OnNotebookPageChanged ), NULL, this );
 
 #ifdef __WXMAC__
     // work around problem on wxMac
@@ -467,7 +467,6 @@ void MainFrame::SavePosition( const wxString &name )
 	}
 
 	config->SetPath( wxT( ".." ) );
-	config->Write( wxT("/mainframe/editor/notebook_style"), m_notebook->GetWindowStyleFlag() );
 }
 
 void MainFrame::OnSaveProject( wxCommandEvent &event )
@@ -1257,14 +1256,14 @@ bool MainFrame::SaveWarning()
 	return ( result != wxCANCEL );
 }
 
-void MainFrame::OnFlatNotebookPageChanged( wxFlatNotebookEvent& event )
+void MainFrame::OnNotebookPageChanged( wxAuiNotebookEvent& event )
 {
 	UpdateFrame();
 
 	if ( m_autoSash )
 	{
 		m_page_selection = event.GetSelection();
-		Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > selection = %d"), m_page_selection);
+		Debug::Print(wxT("MainFrame::OnNotebookPageChanged > selection = %d"), m_page_selection);
 
 		wxSize panel_size;
 		int sash_pos;
@@ -1350,7 +1349,7 @@ void MainFrame::OnFindClose( wxFindDialogEvent& )
 
 void MainFrame::OnFind( wxFindDialogEvent& event )
 {
-	for ( int page = 0; page < m_notebook->GetPageCount(); ++page )
+	for ( size_t page = 0; page < m_notebook->GetPageCount(); ++page )
 	{
 		event.StopPropagation();
 		event.SetClientData( m_findDialog );
@@ -1465,29 +1464,18 @@ wxToolBar * MainFrame::CreateFBToolBar()
 
 wxWindow * MainFrame::CreateDesignerWindow( wxWindow *parent )
 {
-	long nbStyle;
-	wxConfigBase* config = wxConfigBase::Get();
-	config->Read( wxT("/mainframe/editor/notebook_style"), &nbStyle, wxFNB_BOTTOM | wxFNB_NO_X_BUTTON | wxFNB_NO_NAV_BUTTONS | wxFNB_NODRAG  | wxFNB_FF2 | wxFNB_CUSTOM_DLG );
-
-	m_notebook = new wxFlatNotebook( parent, ID_EDITOR_FNB, wxDefaultPosition, wxDefaultSize, nbStyle );
-	m_notebook->SetCustomizeOptions( wxFNB_CUSTOM_TAB_LOOK | wxFNB_CUSTOM_ORIENTATION | wxFNB_CUSTOM_LOCAL_DRAG );
-
-	// Set notebook icons
-	m_icons.Add( AppBitmaps::GetBitmap( wxT( "designer" ), 16 ) );
-	m_icons.Add( AppBitmaps::GetBitmap( wxT( "c++" ), 16 ) );
-	m_icons.Add( AppBitmaps::GetBitmap( wxT( "xrc" ), 16 ) );
-	m_notebook->SetImageList( &m_icons );
+	m_notebook = new wxAuiNotebook( parent, ID_EDITOR_FNB, wxDefaultPosition, wxDefaultSize, wxAUI_NB_BOTTOM );
 
 	m_visualEdit = new VisualEditor( m_notebook );
 	AppData()->GetManager()->SetVisualEditor( m_visualEdit );
 
-	m_notebook->AddPage( m_visualEdit, wxT( "Designer" ), false, 0 );
+	m_notebook->AddPage( m_visualEdit, wxT( "Designer" ), false, AppBitmaps::GetBitmap( wxT( "designer" ), 16 ) );
 
 	m_cpp = new CppPanel( m_notebook, -1 );
-	m_notebook->AddPage( m_cpp, wxT( "C++" ), false, 1 );
+	m_notebook->AddPage( m_cpp, wxT( "C++" ), false, AppBitmaps::GetBitmap( wxT( "c++" ), 16 ) );
 
 	m_xrc = new XrcPanel( m_notebook, -1 );
-	m_notebook->AddPage( m_xrc, wxT( "XRC" ), false, 2 );
+	m_notebook->AddPage( m_xrc, wxT( "XRC" ), false, AppBitmaps::GetBitmap( wxT( "xrc" ), 16 ) );
 
 	return m_notebook;
 }

@@ -29,10 +29,6 @@
 #include "xrcconv.h"
 #include <ticpp.h>
 
-// wxFlatNotebook
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
-#include <wx/wxFlatNotebook/xh_fnb.h>
-
 // wxPropertyGrid
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
@@ -65,60 +61,10 @@ protected:
 	// Enable folding for wxScintilla
 	void OnMarginClick ( wxScintillaEvent& event );
 
-	void OnFlatNotebookPageChanged( wxFlatNotebookEvent& event )
-	{
-		// Only handle events from this book - prevents problems with nested books, because OnSelected is fired on an
-		// object and all of its parents
-		if ( m_window != event.GetEventObject() )
-		{
-			return;
-		}
-
-		int selPage = event.GetSelection();
-		if ( selPage < 0 )
-		{
-			return;
-		}
-
-		size_t count = m_manager->GetChildCount( m_window );
-		for ( size_t i = 0; i < count; i++ )
-		{
-			wxObject* wxChild = m_manager->GetChild( m_window, i );
-			IObject*  iChild = m_manager->GetIObject( wxChild );
-			if ( iChild )
-			{
-				if ( (int)i == selPage && !iChild->GetPropertyAsInteger( _("select") ) )
-				{
-					m_manager->ModifyProperty( wxChild, _("select"), wxT("1"), false );
-				}
-				else if ( (int)i != selPage && iChild->GetPropertyAsInteger( _("select") ) )
-				{
-					m_manager->ModifyProperty( wxChild, _("select"), wxT("0"), false );
-				}
-			}
-		}
-
-		// Select the corresponding panel in the object tree
-		wxFlatNotebook* book = wxDynamicCast( m_window, wxFlatNotebook );
-		if ( NULL != book )
-		{
-			m_manager->SelectObject( book->GetPage( selPage ) );
-		}
-	}
-
-	void OnFlatNotebookPageClosing( wxFlatNotebookEvent& event )
-	{
-		wxMessageBox( wxT("wxFlatNotebook pages can normally be closed.\nHowever, it is difficult to design a page that has been closed, so this action has been vetoed."),
-						wxT("Page Close Vetoed!"), wxICON_INFORMATION, NULL );
-		event.Veto();
-	}
-
 	DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE( ComponentEvtHandler, wxEvtHandler )
-	EVT_FLATNOTEBOOK_PAGE_CHANGED( -1, ComponentEvtHandler::OnFlatNotebookPageChanged )
-	EVT_FLATNOTEBOOK_PAGE_CLOSING( -1, ComponentEvtHandler::OnFlatNotebookPageClosing )
 	EVT_SCI_MARGINCLICK( -1, ComponentEvtHandler::OnMarginClick )
 END_EVENT_TABLE()
 
@@ -316,166 +262,6 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class FlatNotebookComponent : public ComponentBase
-{
-public:
-	wxObject* Create(IObject *obj, wxObject *parent)
-	{
-		wxFlatNotebook* book = new wxFlatNotebook((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
-
-		if ( obj->GetPropertyAsInteger( _("has_images") ) != 0 )
-		{
-			wxFlatNotebookImageList* images = new wxFlatNotebookImageList();
-			book->SetImageList( images );
-		}
-
-		book->SetCustomizeOptions( obj->GetPropertyAsInteger( _("customize_options") ) );
-
-		book->PushEventHandler( new ComponentEvtHandler( book, GetManager() ) );
-
-		return book;
-	}
-
-	ticpp::Element* ExportToXrc(IObject *obj)
-	{
-		ObjectToXrcFilter xrc(obj, _("wxFlatNotebook"), obj->GetPropertyAsString(_("name")));
-		xrc.AddWindowProperties();
-		return xrc.GetXrcObject();
-	}
-
-	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
-	{
-		XrcToXfbFilter filter(xrcObj, _("wxFlatNotebook"));
-		filter.AddWindowProperties();
-		return filter.GetXfbObject();
-	}
-};
-
-class FlatNotebookPageComponent : public ComponentBase
-{
-public:
-	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
-	{
-		// Easy read-only property access
-		IObject* obj = GetManager()->GetIObject( wxobject );
-		wxFlatNotebook* book = wxDynamicCast( wxparent, wxFlatNotebook );
-		wxWindow* page = wxDynamicCast( GetManager()->GetChild( wxobject, 0 ), wxWindow );
-
-		// Error checking
-		if ( !( obj && book && page ) )
-		{
-			wxLogError( _("FlatNotebookPageComponent is missing its wxFormBuilder object(%i), its parent(%i), or its child(%i)"), obj, book, page );
-			return;
-		}
-
-		// Prevent events during construction - two event handlers have been pushed onto the stack
-		// VObjEvtHandler and Component Event handler
-		wxEvtHandler* vobjEvtHandler = book->PopEventHandler();
-		wxEvtHandler* bookEvtHandler = book->PopEventHandler();
-
-		int selection = book->GetSelection();
-
-		// Apply image to page
-		IObject* parentObj = GetManager()->GetIObject( wxparent );
-		if ( parentObj->GetPropertyAsInteger( _("has_images") ) != 0 )
-		{
-			if ( !obj->GetPropertyAsString( _("bitmap") ).empty() )
-			{
-				wxFlatNotebookImageList* imageList = book->GetImageList();
-				if ( parentObj->GetPropertyAsInteger( _("auto_scale_images") ) != 0 )
-				{
-					wxImage image = obj->GetPropertyAsBitmap( _("bitmap") ).ConvertToImage();
-					imageList->Add( image.Scale( 16, 16 ) );
-				}
-				else
-				{
-					imageList->Add( obj->GetPropertyAsBitmap( _("bitmap") ) );
-				}
-				book->AddPage( page, obj->GetPropertyAsString( _("label") ), false, imageList->GetCount() - 1 );
-			}
-			else
-			{
-				book->AddPage(page,obj->GetPropertyAsString(_("label")));
-			}
-		}
-		else
-		{
-			book->AddPage(page,obj->GetPropertyAsString(_("label")));
-		}
-
-		if ( obj->GetPropertyAsString( _("select") ) == wxT("0") && selection >= 0 )
-		{
-			book->SetSelection( selection) ;
-		}
-		else
-		{
-			book->SetSelection( book->GetPageCount() - 1 );
-		}
-
-		// Restore event handling
-		book->PushEventHandler( bookEvtHandler );
-		book->PushEventHandler( vobjEvtHandler );
-	}
-
-	void OnSelected( wxObject* wxobject )
-	{
-		// Get actual page - first child
-		wxObject* page = GetManager()->GetChild( wxobject, 0 );
-		if ( NULL == page )
-		{
-			return;
-		}
-
-		wxFlatNotebook* book = wxDynamicCast( GetManager()->GetParent( wxobject ), wxFlatNotebook );
-		if ( book )
-		{
-			for ( int i = 0; i < book->GetPageCount(); ++i )
-			{
-				if ( book->GetPage( i ) == page )
-				{
-					// Prevent infinite event loop
-					wxEvtHandler* bookEvtHandler = book->PopEventHandler();
-					wxEvtHandler* vobjEvtHandler = book->PopEventHandler();
-
-					// Select Page
-					book->SetSelection( i );
-
-					// Restore event handling
-					book->PushEventHandler( vobjEvtHandler );
-					book->PushEventHandler( bookEvtHandler );
-				}
-			}
-		}
-	}
-
-	ticpp::Element* ExportToXrc(IObject *obj)
-	{
-		ObjectToXrcFilter xrc( obj, _("notebookpage") );
-		xrc.AddProperty( _("label"), _("label"), XRC_TYPE_TEXT );
-		xrc.AddProperty( _("selected"), _("selected"), XRC_TYPE_BOOL );
-		if ( !obj->IsNull( _("bitmap") ) )
-		{
-			xrc.AddProperty( _("bitmap"), _("bitmap"), XRC_TYPE_BITMAP );
-		}
-		return xrc.GetXrcObject();
-	}
-
-	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
-	{
-		XrcToXfbFilter filter( xrcObj, _("notebookpage") );
-		filter.AddWindowProperties();
-		filter.AddProperty( _("selected"), _("selected"), XRC_TYPE_BOOL );
-		filter.AddProperty( _("label"), _("label"), XRC_TYPE_TEXT );
-		filter.AddProperty( _("bitmap"), _("bitmap"), XRC_TYPE_BITMAP );
-		return filter.GetXfbObject();
-	}
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
 class ScintillaComponent : public ComponentBase
 {
 public:
@@ -618,12 +404,6 @@ void ComponentEvtHandler::OnMarginClick( wxScintillaEvent& event )
 
 BEGIN_LIBRARY()
 
-// Load additional XRC handlers
-// This code is actually in the entry point of the plugin - the function GetComponentLibrary()
-// I know this looks funky, but it is perfectly valid
-wxXmlResource *res = wxXmlResource::Get();
-res->AddHandler( new wxFlatNotebookXmlHandler );
-
 // wxPropertyGrid
 WINDOW_COMPONENT("wxPropertyGrid", PropertyGridComponent)
 MACRO(wxPG_AUTO_SORT)
@@ -648,37 +428,6 @@ MACRO(wxPG_COMPACTOR)
 MACRO(wxPGMAN_DEFAULT_STYLE)
 MACRO(wxPG_DESCRIPTION)
 MACRO(wxPG_TOOLBAR)
-
-// wxFlatNotebook
-WINDOW_COMPONENT("wxFlatNotebook",FlatNotebookComponent)
-ABSTRACT_COMPONENT("flatnotebookpage",FlatNotebookPageComponent)
-MACRO(wxFNB_VC71)
-MACRO(wxFNB_FANCY_TABS)
-MACRO(wxFNB_TABS_BORDER_SIMPLE)
-MACRO(wxFNB_NO_X_BUTTON)
-MACRO(wxFNB_NO_NAV_BUTTONS)
-MACRO(wxFNB_MOUSE_MIDDLE_CLOSES_TABS)
-MACRO(wxFNB_BOTTOM)
-MACRO(wxFNB_NODRAG)
-MACRO(wxFNB_VC8)
-MACRO(wxFNB_X_ON_TAB)
-MACRO(wxFNB_BACKGROUND_GRADIENT)
-MACRO(wxFNB_COLORFUL_TABS)
-MACRO(wxFNB_DCLICK_CLOSES_TABS)
-MACRO(wxFNB_SMART_TABS)
-MACRO(wxFNB_DROPDOWN_TABS_LIST)
-MACRO(wxFNB_ALLOW_FOREIGN_DND)
-MACRO(wxFNB_FF2)
-MACRO(wxFNB_CUSTOM_DLG)
-
-// wxFNB Customizatio Options
-MACRO(wxFNB_CUSTOM_TAB_LOOK)
-MACRO(wxFNB_CUSTOM_ORIENTATION)
-MACRO(wxFNB_CUSTOM_FOREIGN_DRAG)
-MACRO(wxFNB_CUSTOM_LOCAL_DRAG)
-MACRO(wxFNB_CUSTOM_CLOSE_BUTTON)
-MACRO(wxFNB_CUSTOM_ALL)
-
 
 // wxScintilla
 WINDOW_COMPONENT("wxScintilla", ScintillaComponent )
