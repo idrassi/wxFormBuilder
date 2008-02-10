@@ -32,8 +32,8 @@ function make_src_tarball
 	cp -R $basedir   ../$tmpdir
 	cd ..
 	
-	#move debian dir to base
-	mv  $tmpdir/install/linux/debian $tmpdir/debian
+	#remove debian dir
+	rm -rf $tmpdir/install/linux/debian
 	
 	tar czf $tmpdir.tar.gz $tmpdir
 	rm -rf $tmpdir
