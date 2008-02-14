@@ -27,7 +27,7 @@ build-stamp: configure-stamp
 	$(MAKE) CONFIG=Release
 	touch $@
 
-clean:
+clean: configure-stamp
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp configure-stamp
