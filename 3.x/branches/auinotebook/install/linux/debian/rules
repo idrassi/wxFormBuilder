@@ -10,6 +10,7 @@ CLEAN_BUILD_FILES = $(PREMAKE) --disable-wx-debug --skip-symlink --clean
 get-orig-source:
 	svn export https://wxformbuilder.svn.sourceforge.net/svnroot/wxformbuilder/3.x/branches/auinotebook wxformbuilder
 		
+	rm -f $(CURDIR)/wxformbuilder/sdk/premake/premake*
 	cd $(CURDIR)/wxformbuilder && install/linux/create_src_tarball
 	rm -rf $(CURDIR)/wxformbuilder
 
