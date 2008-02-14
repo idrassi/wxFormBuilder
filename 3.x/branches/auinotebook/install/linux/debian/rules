@@ -3,17 +3,7 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-DEB_HOST_ARCH := $(shell dpkg-architecture -qDEB_HOST_ARCH)
-
-ifeq ($(DEB_HOST_ARCH),amd64)
-	PREMAKE = $(CURDIR)/sdk/premake/premake-amd64
-else
-	ifeq ($(DEB_HOST_ARCH),powerpc)
-		PREMAKE = $(CURDIR)/sdk/premake/premake-ppc
-	else
-		PREMAKE = $(CURDIR)/sdk/premake/premake-linux
-	endif
-endif
+PREMAKE = $(CURDIR)/sdk/premake/src/bin/premake
 CREATE_BUILD_FILES = $(PREMAKE) --target gnu --unicode --disable-wx-debug --with-wx-shared --skip-symlink --rpath /usr/lib/wxformbuilder
 CLEAN_BUILD_FILES = $(PREMAKE) --disable-wx-debug --skip-symlink --clean
 
@@ -27,6 +17,7 @@ configure: configure-stamp
 configure-stamp:
 	dh_testdir
 	touch configure-stamp
+	cd $(CURDIR)/sdk/premake/src && $(MAKE) CONFIG=Release
 	$(CREATE_BUILD_FILES)
 
 build: build-stamp
@@ -40,10 +31,9 @@ clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp configure-stamp
-	$(CREATE_BUILD_FILES)
 	$(MAKE) CONFIG=Release clean
 	$(CLEAN_BUILD_FILES)
-
+	cd $(CURDIR)/sdk/premake/src && $(MAKE) CONFIG=Release clean
 	dh_clean 
 
 install: build
