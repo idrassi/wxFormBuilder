@@ -8,7 +8,11 @@ DEB_HOST_ARCH := $(shell dpkg-architecture -qDEB_HOST_ARCH)
 ifeq ($(DEB_HOST_ARCH),amd64)
 	PREMAKE = $(CURDIR)/sdk/premake/premake-amd64
 else
-	PREMAKE = $(CURDIR)/sdk/premake/premake-linux
+	ifeq ($(DEB_HOST_ARCH),powerpc)
+		PREMAKE = $(CURDIR)/sdk/premake/premake-ppc
+	else
+		PREMAKE = $(CURDIR)/sdk/premake/premake-linux
+	endif
 endif
 CREATE_BUILD_FILES = $(PREMAKE) --target gnu --unicode --disable-wx-debug --with-wx-shared --skip-symlink --rpath /usr/lib/wxformbuilder
 CLEAN_BUILD_FILES = $(PREMAKE) --disable-wx-debug --skip-symlink --clean
