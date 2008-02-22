@@ -93,54 +93,39 @@ void wxFbPalette::Create()
   unsigned int pkg_count = AppData()->GetPackageCount();
 
   Debug::Print( wxT("[Palette] Pages %d"),pkg_count);
-
+  int pageHeight = 36;
   for (unsigned int i = 0; i < pkg_count;i++)
   {
     PObjectPackage pkg = AppData()->GetPackage(i);
     wxString pkg_name = pkg->GetPackageName();
 
     wxPanel *panel = new wxPanel(m_notebook,-1);
-	panel->SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE) );
     wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 
-    wxPanel *tbPanel = new wxPanel(panel,-1);
-	tbPanel->SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE) );
-    wxBoxSizer *tbSizer = new wxBoxSizer(wxHORIZONTAL);
-
-    wxPanel *sbPanel = new wxPanel(panel,-1);
-	sbPanel->SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE) );
-    wxBoxSizer *sbSizer = new wxBoxSizer(wxHORIZONTAL);
-
-    wxToolBar *toolbar = new wxToolBar(tbPanel, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
+    wxToolBar *toolbar = new wxToolBar(panel, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
     toolbar->SetToolBitmapSize(wxSize(22, 22));
-	toolbar->SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE) );
     PopulateToolbar(pkg, toolbar);
     m_tv.push_back(toolbar);
 
-    tbSizer->Add(toolbar, 1, wxEXPAND | wxALIGN_CENTER_VERTICAL);
-    tbPanel->SetSizer(tbSizer);
+    sizer->Add(toolbar, 1, 0 );
 
-    wxSpinButton *sb = new wxSpinButton(sbPanel, -1, wxDefaultPosition, wxDefaultSize, wxSP_HORIZONTAL);
+    wxSpinButton *sb = new wxSpinButton(panel, -1, wxDefaultPosition, wxDefaultSize, wxSP_HORIZONTAL);
     sb->SetRange(0, (int)pkg->GetObjectCount() - 1);
     sb->SetValue(0);
     m_posVector.push_back(0);
-    sbSizer->Add(sb, 0, wxEXPAND);//wxALL | wxALIGN_TOP, 0);
-    sbPanel->SetSizer(sbSizer);
+    sizer->Add(sb, 0, wxEXPAND);
 
-    sizer->Add(tbPanel,1,wxEXPAND, 0);
-    sizer->Add(sbPanel,0,wxEXPAND, 0);
-    panel->SetAutoLayout(true);
     panel->SetSizer(sizer);
     sizer->Fit(panel);
     sizer->SetSizeHints(panel);
 
     m_notebook->AddPage(panel, pkg_name, false, pkg->GetPackageIcon());
-
+	pageHeight = panel->GetSize().GetHeight();
   }
-  //Title *title = new Title( this, wxT("Component Palette") );
-  //top_sizer->Add(title,0,wxEXPAND,0);
-  top_sizer->Add(m_notebook,1,wxEXPAND,0);
-  SetAutoLayout(true);
+
+  m_notebook->SetMinSize( wxSize( -1, m_notebook->GetHeightForPageHeight( pageHeight ) ) );
+  top_sizer->Add(m_notebook,0,wxEXPAND,0);
+
   SetSizer(top_sizer);
   top_sizer->Fit(this);
   top_sizer->SetSizeHints(this);
@@ -188,12 +173,4 @@ void wxFbPalette::OnButtonClick(wxCommandEvent &event)
 
 wxFbPalette::~wxFbPalette()
 {
-	wxConfigBase* config = wxConfigBase::Get();
-	wxString pages;
-	for ( size_t i = 0; i < m_notebook->GetPageCount(); ++i )
-	{
-		pages << m_notebook->GetPageText( i ) << wxT(",");
-	}
-	config->Write( wxT("/palette/pageOrder"), pages );
-	config->Flush();
 }

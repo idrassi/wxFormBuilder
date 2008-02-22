@@ -37,7 +37,7 @@ Title::Title(wxWindow *parent,const wxString &title) : wxPanel(parent,-1)
 
   sizer->Add(text,0,wxALL | wxEXPAND,2);
   SetSizer(sizer);
-  Fit();
+  sizer->Fit( this );
 }
 
 wxWindow * Title::CreateTitle (wxWindow *inner, const wxString &title)
