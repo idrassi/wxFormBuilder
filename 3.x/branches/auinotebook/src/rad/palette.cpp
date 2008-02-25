@@ -118,9 +118,9 @@ void wxFbPalette::Create()
     panel->SetSizer(sizer);
     sizer->Fit(panel);
     sizer->SetSizeHints(panel);
+	pageHeight = panel->GetSize().GetHeight();
 
     m_notebook->AddPage(panel, pkg_name, false, pkg->GetPackageIcon());
-	pageHeight = panel->GetSize().GetHeight();
   }
 
   m_notebook->SetMinSize( wxSize( -1, m_notebook->GetHeightForPageHeight( pageHeight ) ) );
