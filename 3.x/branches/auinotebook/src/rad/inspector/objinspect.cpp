@@ -609,7 +609,7 @@ ObjectInspector::ObjectInspector( wxWindow* parent, int id, int style )
 	AppData()->AddHandler( this->GetEventHandler() );
 	m_currentSel = PObjectBase();
 
-	m_nb = new wxAuiNotebook( this, -1, wxDefaultPosition, wxDefaultSize, wxAUI_NB_WINDOWLIST_BUTTON );
+	m_nb = new wxAuiNotebook( this, -1, wxDefaultPosition, wxDefaultSize, wxAUI_NB_WINDOWLIST_BUTTON | wxAUI_NB_TAB_SPLIT );
 
 	// the colour of property grid description looks ugly if we don't set this
 	// colour
