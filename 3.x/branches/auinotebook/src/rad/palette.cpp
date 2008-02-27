@@ -30,7 +30,8 @@
 #include "utils/typeconv.h"
 #include "rad/title.h"
 #include "wx/config.h"
-#include <rad/appdata.h>
+#include "rad/appdata.h"
+#include "rad/fbaui/wxfbauinotebook.h"
 
 #define ID_PALETTE_BUTTON 999
 
@@ -88,7 +89,7 @@ void wxFbPalette::Create()
 {
   wxBoxSizer *top_sizer = new wxBoxSizer(wxVERTICAL);
 
-  m_notebook = new wxAuiNotebook( this, -1, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TAB_MOVE | wxAUI_NB_WINDOWLIST_BUTTON );
+  m_notebook = new wxFBAuiNotebook( this, -1, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TAB_MOVE | wxAUI_NB_WINDOWLIST_BUTTON );
 
   unsigned int pkg_count = AppData()->GetPackageCount();
 
@@ -173,4 +174,6 @@ void wxFbPalette::OnButtonClick(wxCommandEvent &event)
 
 wxFbPalette::~wxFbPalette()
 {
+	wxConfigBase* config = wxConfigBase::Get();
+	config->Write( wxT("/palette/pageOrder"), m_notebook->GetPageOrder() );
 }
