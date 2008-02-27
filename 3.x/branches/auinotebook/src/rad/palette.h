@@ -27,19 +27,19 @@
 #define __PALETTE__
 
 #include <wx/wx.h>
-#include <wx/aui/auibook.h>
 #include <wx/spinbutt.h>
 #include <vector>
 #include <utils/wxfbdefs.h>
 #include <model/database.h>
 
+class wxFBAuiNotebook;
 typedef std::vector<wxToolBar*> ToolbarVector;
 
 class wxFbPalette : public wxPanel
 {
  private:
   ToolbarVector m_tv;
-  wxAuiNotebook *m_notebook;
+  wxFBAuiNotebook *m_notebook;
   static wxWindowID nextId;
   std::vector<int> m_posVector;
 
