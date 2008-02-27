@@ -55,8 +55,10 @@ BEGIN_EVENT_TABLE( XrcPanel,  wxPanel )
 	EVT_FIND_NEXT( wxID_ANY, XrcPanel::OnFind )
 END_EVENT_TABLE()
 
-XrcPanel::XrcPanel( wxWindow *parent, int id )
-		: wxPanel ( parent, id )
+XrcPanel::XrcPanel( wxAuiNotebook *parent, int id )
+:
+wxPanel( parent, id ),
+m_parent( parent )
 {
 	AppData()->AddHandler( this->GetEventHandler() );
 	wxBoxSizer *top_sizer = new wxBoxSizer( wxVERTICAL );
@@ -156,7 +158,7 @@ void XrcPanel::OnCodeGeneration( wxFBEvent& event )
     PObjectBase project;
 
 	// Using the previously unused Id field in the event to carry a boolean
-	bool panelOnly = ( event.GetId() != 0 );
+	bool panelOnly = ( event.GetId() == 1 );
 
 	// For code preview generate only code relevant to selected form,
 	//  otherwise generate full project code.
@@ -174,8 +176,8 @@ void XrcPanel::OnCodeGeneration( wxFBEvent& event )
 	if(!project)return;
 
 	// Generate code in the panel if the panel is active
-	//if ( IsShown() )
-	//{
+	if ( m_parent->GetSelection() == m_parent->GetPageIndex( this ) )
+	{
 		Freeze();
 		wxScintilla* editor = m_xrcPanel->GetTextCtrl();
 		editor->SetReadOnly( false );
@@ -191,7 +193,7 @@ void XrcPanel::OnCodeGeneration( wxFBEvent& event )
 		editor->SetAnchor( 0 );
 		editor->SetCurrentPos( 0 );
 		Thaw();
-	//}
+	}
 
 	if ( panelOnly )
 	{

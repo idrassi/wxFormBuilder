@@ -50,11 +50,12 @@ private:
 	PTCCodeWriter m_hCW;
 	PTCCodeWriter m_cppCW;
 	wxAuiNotebook* m_notebook;
+	wxAuiNotebook* m_parent;
 
 	void InitStyledTextCtrl( wxScintilla* stc );
 
 public:
-	CppPanel( wxWindow *parent, int id );
+	CppPanel( wxAuiNotebook *parent, int id );
 	~CppPanel();
 
 	void OnPropertyModified( wxFBPropertyEvent& event );
