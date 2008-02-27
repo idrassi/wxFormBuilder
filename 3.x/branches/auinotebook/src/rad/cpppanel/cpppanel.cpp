@@ -60,9 +60,10 @@ BEGIN_EVENT_TABLE ( CppPanel,  wxPanel )
 	EVT_FIND_NEXT( wxID_ANY, CppPanel::OnFind )
 END_EVENT_TABLE()
 
-CppPanel::CppPanel( wxWindow *parent, int id )
+CppPanel::CppPanel( wxAuiNotebook *parent, int id )
 :
-wxPanel( parent, id )
+wxPanel( parent, id ),
+m_parent( parent )
 {
 	AppData()->AddHandler( this->GetEventHandler() );
 	wxBoxSizer *top_sizer = new wxBoxSizer( wxVERTICAL );
@@ -213,10 +214,8 @@ void CppPanel::OnCodeGeneration( wxFBEvent& event )
     PObjectBase objectToGenerate;
 
 	// Generate code in the panel if the panel is active
-	bool doPanel = true;//IsShown();
-
-	// Using the previously unused Id field in the event to carry a boolean
-	bool panelOnly = ( event.GetId() != 0 );
+	bool doPanel = ( m_parent->GetSelection() == m_parent->GetPageIndex( this ) );
+	bool panelOnly = ( event.GetId() == 1 );
 
 	// Only generate to panel + panel is not shown = do nothing
 	if ( panelOnly && !doPanel )

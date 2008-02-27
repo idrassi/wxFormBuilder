@@ -35,7 +35,7 @@ class CodeEditor;
 class wxFBEvent;
 class wxFBPropertyEvent;
 class wxFBObjectEvent;
-
+class wxAuiNotebook;
 class wxScintilla;
 
 class wxFindDialogEvent;
@@ -45,11 +45,12 @@ class XrcPanel : public wxPanel
 private:
 	CodeEditor* m_xrcPanel;
 	PTCCodeWriter m_cw;
+	wxAuiNotebook* m_parent;
 
 	void InitStyledTextCtrl( wxScintilla* stc );
 
 public:
-	XrcPanel( wxWindow *parent, int id );
+	XrcPanel( wxAuiNotebook *parent, int id );
 	~XrcPanel();
 
 	void OnPropertyModified( wxFBPropertyEvent& event );
