@@ -771,7 +771,7 @@ bool CppCodeGenerator::GenEventEntry( PObjectBase obj, PObjectInfo obj_info, con
 		if ( disconnect && _template.empty() )
 		{
 			_template = code_info->GetTemplate( wxT("evt_") + templateName );
-			_template.Replace( wxT("Connect"), wxT("Disconnect"), false );
+			_template.Replace( wxT("Connect"), wxT("Disconnect"), true );
 		}
 
 		if ( !_template.empty() )
