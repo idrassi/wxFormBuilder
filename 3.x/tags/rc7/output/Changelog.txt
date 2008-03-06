@@ -6,6 +6,7 @@ date Version 3.00.56
 * FS#336 - "Incorrect ScrollBar Disconnection"
 * FS#310 - "FB should not try to disconnect event handlers in dialog/frame's destructor."
   This is now optional, see the "disconnect_events" property of the Project object.
+* FS#337 - "Incorrect Vertical Toolbar Rendering"
 
 02/18/2008 Version 3.00.55 (RC7)
 * FS#319 - "Problems with Non-ASCII characters"
