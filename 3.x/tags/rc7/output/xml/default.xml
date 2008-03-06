@@ -34,6 +34,9 @@
 		  <option name="table" help="Use event macro tables to link event handlers to events."/>
 		  connect
 		</property>
+		<property name="disconnect_events" type="bool" help="For event_generation=connect Only.&#x0A;Disconnect events in the destructor.">
+		  1
+		</property>
 		<property name="help_provider" type="option" help="For C++ Only.&#x0A;The class of help provider to use for context-sensitive help.">
 			<option name="none" help="No support for context-sensitive help."/>
 			<option name="wxSimpleHelpProvider" help="Use wxSimpleHelpProvider to provide context-sensitive help."/>
