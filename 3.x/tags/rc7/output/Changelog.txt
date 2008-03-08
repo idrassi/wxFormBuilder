@@ -9,6 +9,7 @@ date Version 3.00.56
 * FS#337 - "Incorrect Vertical Toolbar Rendering"
 * FS#328 - "Unknown style flag wxTE_BESTWRAP for wxTextCtrl"
   Removed the flag, it is the default, and #define'd to 0x0000, so it was pointless anyway.
+* FS#339 - "wx/icon.h not included when using resource icons in wxToolBar"
 
 02/18/2008 Version 3.00.55 (RC7)
 * FS#319 - "Problems with Non-ASCII characters"
