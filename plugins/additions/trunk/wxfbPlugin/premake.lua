@@ -239,4 +239,4 @@ end
 
 -- Add sdk projects here. (This needs to match the directory name not the package name.)
 dopackage( "sdk/plugin_interface" )
-dopackage( "sdk/tinyxml" )
+dopackage( "sdk/tinyxml/ticpp.lua" )

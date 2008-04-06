@@ -51,6 +51,7 @@ function MakeWxAdditionsPackage( package, altTargetName, wxVer, wxVerMinor, wxCu
 	else
 		package.bindir = "../../lib"
 		package.libdir = "../../lib"
+		table.insert( package.buildoptions, "-fPIC" )
 	end
 		
 	-- Set the include paths.
