@@ -1474,7 +1474,11 @@ int Platform::DBCSCharMaxLength() {
     return 1;
 }
 #ifdef __APPLE__ // [CHANGED]
-bool Platform::WaitMouseMoved(Scintilla::Point pt) { return false; /*::Point mpt; mpt.v = pt.x; mpt.h = pt.y; return ::WaitMouseMoved(mpt);*/} // [CHANGED]
+bool Platform::WaitMouseMoved( 
+	#ifdef SCI_NAMESPACE 
+		Scintilla::
+	#endif
+			Point pt) { return false; /*::Point mpt; mpt.v = pt.x; mpt.h = pt.y; return ::WaitMouseMoved(mpt);*/} // [CHANGED]
 #endif // [CHAMGED]
 
 ElapsedTime::ElapsedTime() {

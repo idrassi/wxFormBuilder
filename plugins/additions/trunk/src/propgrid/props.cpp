@@ -46,6 +46,7 @@
     #include "wx/filedlg.h"
     #include "wx/statusbr.h"
     #include "wx/intl.h"
+    #include "wx/frame.h"
 #endif
 
 #include <wx/filename.h>

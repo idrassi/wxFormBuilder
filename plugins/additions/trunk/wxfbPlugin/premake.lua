@@ -8,7 +8,7 @@
 --*****************************************************************************
 
 -- Set debug flags
-if ( linux ) then
+if ( not windows ) then
 	addoption( "disable-wx-debug", "Compile against a wxWidgets library without debugging" )
 	
 	if ( options["disable-wx-debug"] ) then
@@ -220,8 +220,8 @@ if ( OS == "windows" ) then
 	-- Set the Windows defines.
 	table.insert( package.defines, { "__WXMSW__", "WIN32", "_WINDOWS" } )
 else
---******* LINUX SETUP *************
---*	Settings that are Linux specific.
+--******* NON WINDOWS SETUP *************
+--*	Settings that are specific to non-windows platforms
 --*********************************
 	table.insert( package.config["Debug"].defines, debug_macro )
 
@@ -229,8 +229,12 @@ else
 	table.insert( package.excludes, matchrecursive( "*.rc" ) )
 	
 	-- Set wxWidgets build options.
-	table.insert( package.config["Debug"].buildoptions, "`wx-config "..debug_option.." --cflags` `pkg-config gtk+-2.0 --cflags`" )
-	table.insert( package.config["Release"].buildoptions, "`wx-config --debug=no --cflags` `pkg-config gtk+-2.0 --cflags`" )
+	table.insert( package.config["Debug"].buildoptions, "`wx-config "..debug_option.." --cflags`" )
+	table.insert( package.config["Release"].buildoptions, "`wx-config --debug=no --cflags`" )
+	
+	if ( linux ) then
+		table.insert( package.buildoptions, "`pkg-config gtk+-2.0 --cflags`" );
+	end	
 	
 	-- Set the wxWidgets link options.
 	table.insert( package.config["Debug"].linkoptions, "`wx-config "..debug_option.." --libs`" )
