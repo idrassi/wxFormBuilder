@@ -178,7 +178,7 @@ public:
 
 		// Apply image to page
 		bool doImageAdd = false;
-		wxImageList* imageList;
+		wxImageList* imageList = NULL;
 		IObject* parentObj = GetManager()->GetIObject( wxparent );
 		if ( !parentObj->IsNull( _("column_image_size") ) )
 		{
