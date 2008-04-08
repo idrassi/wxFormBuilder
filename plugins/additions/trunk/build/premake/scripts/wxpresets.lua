@@ -44,7 +44,7 @@ function ConfigureWxWidgets( package, altTargetName, wxVer, wxVerMinor, wxCustom
 	end
 
 	-- Set debug flags
-	if ( options["disable-wx-debug"] and ( OS == "linux" ) ) then
+	if ( options["disable-wx-debug"] and ( not windows ) then
 		debug_option = "--debug=no"
 		debug_macro = { "NDEBUG" }
 	else
