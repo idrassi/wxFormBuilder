@@ -16,7 +16,7 @@ end
 addoption( "unicode", "Use the Unicode character set" )
 addoption( "with-wx-shared", "Link against wxWidgets as a shared library" )
 
-if ( OS == "linux" ) then
+if ( not windows ) then
 	addoption( "disable-wx-debug", "Compile against a wxWidgets library without debugging" )
 end
 
