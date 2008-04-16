@@ -1987,7 +1987,7 @@ bool wxArrayEditorDialog::Create( wxWindow *parent,
 #else
     bool res = wxDialog::Create(parent,1,caption,pos,sz,style);
 #endif
-    
+
     SetFont(parent->GetFont()); // To allow entering chars of the same set as the propGrid
 
 #if !wxPG_SMALL_SCREEN
@@ -2524,7 +2524,7 @@ bool wxArrayStringPropertyClass::SetValueFromString( const wxString& text, int )
 
         // Need to replace backslashes with empty characters
         // (opposite what is done in GenerateValueString).
-        token.Replace ( wxT("\\"), wxT(""), true );
+        //token.Replace ( wxT("\\"), wxT(""), true );
 
         m_value.Add ( token );
 
