@@ -3595,6 +3595,10 @@ END_DECLARE_EVENT_TYPES()
 typedef void (wxEvtHandler::*wxScintillaEventFunction)(wxScintillaEvent&);
 
 #if !wxCHECK_VERSION(2, 5, 0)
+// fix wxScintilla missing handler
+#ifndef wxScintillaEventHandler
+#define wxScintillaEventHandler(func)          (wxObjectEventFunction)(wxEventFunction) (wxScintillaEventFunction) &func
+#endif
 #define EVT_SCI_CHANGE(id, fn)                  DECLARE_EVENT_TABLE_ENTRY (wxEVT_SCI_CHANGE,                id,       -1, (wxObjectEventFunction) (wxEventFunction) (wxScintillaEventFunction) & fn, (wxObject *) NULL),
 #define EVT_SCI_STYLENEEDED(id, fn)             DECLARE_EVENT_TABLE_ENTRY (wxEVT_SCI_STYLENEEDED,           id,       -1, (wxObjectEventFunction) (wxEventFunction) (wxScintillaEventFunction) & fn, (wxObject *) NULL),
 #define EVT_SCI_CHARADDED(id, fn)               DECLARE_EVENT_TABLE_ENTRY (wxEVT_SCI_CHARADDED,             id,       -1, (wxObjectEventFunction) (wxEventFunction) (wxScintillaEventFunction) & fn, (wxObject *) NULL),
@@ -3623,6 +3627,10 @@ typedef void (wxEvtHandler::*wxScintillaEventFunction)(wxScintillaEvent&);
 #define EVT_SCI_CALLTIP_CLICK(id, fn))          DECLARE_EVENT_TABLE_ENTRY (wxEVT_SCI_CALLTIP_CLICK          id,       -1, (wxObjectEventFunction) (wxEventFunction) (wxScintillaEventFunction) & fn, (wxObject *) NULL),
 #define EVT_SCI_AUTOCOMP_SELECTION(id, fn))     DECLARE_EVENT_TABLE_ENTRY (wxEVT_SCI_AUTOCOMP_SELECTION     id,       -1, (wxObjectEventFunction) (wxEventFunction) (wxScintillaEventFunction) & fn, (wxObject *) NULL),
 #else
+// fix wxScintilla missing handler
+#ifndef wxScintillaEventHandler
+#define wxScintillaEventHandler(func)          (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxScintillaEventFunction, &func)
+#endif
 #define EVT_SCI_CHANGE(id, fn)                  DECLARE_EVENT_TABLE_ENTRY (wxEVT_SCI_CHANGE,                id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxScintillaEventFunction, & fn ), (wxObject *) NULL),
 #define EVT_SCI_STYLENEEDED(id, fn)             DECLARE_EVENT_TABLE_ENTRY (wxEVT_SCI_STYLENEEDED,           id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxScintillaEventFunction, & fn ), (wxObject *) NULL),
 #define EVT_SCI_CHARADDED(id, fn)               DECLARE_EVENT_TABLE_ENTRY (wxEVT_SCI_CHARADDED,             id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxScintillaEventFunction, & fn ), (wxObject *) NULL),
@@ -3650,7 +3658,6 @@ typedef void (wxEvtHandler::*wxScintillaEventFunction)(wxScintillaEvent&);
 #define EVT_SCI_CALLTIP_CLICK(id, fn))          DECLARE_EVENT_TABLE_ENTRY (wxEVT_SCI_CALLTIP_CLICK          id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxScintillaEventFunction, & fn ), (wxObject *) NULL),
 #define EVT_SCI_AUTOCOMP_SELECTION(id, fn))     DECLARE_EVENT_TABLE_ENTRY (wxEVT_SCI_AUTOCOMP_SELECTION     id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxScintillaEventFunction, & fn ), (wxObject *) NULL),
 #endif
-
 #endif
 
 //----------------------------------------------------------------------
