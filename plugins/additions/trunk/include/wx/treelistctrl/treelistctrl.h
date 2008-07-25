@@ -81,7 +81,7 @@ public:
         m_edit = edit;
     }
 
-    wxTreeListColumnInfo (const wxTreeListColumnInfo& other) {
+    wxTreeListColumnInfo (const wxTreeListColumnInfo& other) : wxObject( other ) {
         m_text = other.m_text;
         m_width = other.m_width;
         m_flag = other.m_flag;
