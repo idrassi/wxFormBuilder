@@ -14,7 +14,7 @@
     <set var="DEFAULT_SRC" template="wx_additions_sources">
 		$(ADDITIONS_SRC_DIR)/plotctrl/fourier.c
 		$(ADDITIONS_SRC_DIR)/plotctrl/fparser.cpp
-		$(ADDITIONS_SRC_DIR)/plotctrl/fpoptimizer.cc
+		$(ADDITIONS_SRC_DIR)/plotctrl/fpoptimizer.cpp
 		$(ADDITIONS_SRC_DIR)/plotctrl/lm_lsqr.cpp
 		$(ADDITIONS_SRC_DIR)/plotctrl/plotctrl.cpp
 		$(ADDITIONS_SRC_DIR)/plotctrl/plotcurv.cpp

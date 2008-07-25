@@ -1,17 +1,18 @@
 @echo off
 ::**************************************************************************
 :: File:			wxBuild_plotctrl.bat
-:: Version:			1.04
+:: Version:			1.05
 :: Name:			RJP Computing 
-:: Date:			08/30/2007
+:: Date:			07/25/2008
 :: Description:		Build wxWidgets things with the MinGW/Visual C++.
 ::                 
-:: 					v1.01 - Added Compiler setup for VC7.1 and VC8.0.
-:: 					v1.02 - Added INCLUDE variable to VC7.1 and VC8.0 setups.
+::                 	v1.01 - Added Compiler setup for VC7.1 and VC8.0.
+::                 	v1.02 - Added INCLUDE variable to VC7.1 and VC8.0 setups.
 :: 					v1.03 - Added FLAGS. Use to set extra command line options.
 :: 					v1.04 - Added MinGW Gcc 4.x.x compiler.
+:: 					v1.05 - Removed wchar_t setting from VC8.0 setup.
 ::**************************************************************************
-set WXBUILD_VERSION=1.04
+set WXBUILD_VERSION=1.05
 :: MinGW Gcc install location. This must match you systems configuration.
 set GCCDIR=C:\MinGW
 set GCC4DIR=C:\MinGW4
@@ -76,7 +77,7 @@ set INCLUDE=%WXWIN%\include;%INCLUDE%
 :: -- Setup the make executable and the actual makefile name --
 set MAKE=nmake
 set MAKEFILE=makefile.vc
-set FLAGS=CXXFLAGS=/Zc:wchar_t- WX_LIB_FLAVOUR=_vc8
+set FLAGS=
 goto START
 
 :SETUP_GCC_BUILD_ENVIRONMENT

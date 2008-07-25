@@ -152,7 +152,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmBash);
 	LINK_LEXER(lmBatch);
 	LINK_LEXER(lmBlitzBasic);
-	//LINK_LEXER(lmBullant);
+	LINK_LEXER(lmBullant);
 	LINK_LEXER(lmCaml);
 	LINK_LEXER(lmClw);
 	LINK_LEXER(lmClwNoCase);
@@ -168,7 +168,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmEiffelkw);
 	LINK_LEXER(lmErlang);
 	LINK_LEXER(lmErrorList);
-	//LINK_LEXER(lmESCRIPT);
+	LINK_LEXER(lmESCRIPT);
 	LINK_LEXER(lmF77);
 	LINK_LEXER(lmFlagShip);
 	LINK_LEXER(lmForth);
@@ -176,7 +176,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmFreeBasic);
 	LINK_LEXER(lmGAP);
 	LINK_LEXER(lmGui4Cli);
-	//LINK_LEXER(lmHaskell);
+	LINK_LEXER(lmHaskell);
 	LINK_LEXER(lmHTML);
 	LINK_LEXER(lmInno);
 	LINK_LEXER(lmKix);
@@ -184,7 +184,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmLISP);
 	LINK_LEXER(lmLot);
 	LINK_LEXER(lmLout);
-	//LINK_LEXER(lmLua);
+	LINK_LEXER(lmLua);
 	LINK_LEXER(lmMake);
 	LINK_LEXER(lmMatlab);
 	LINK_LEXER(lmMETAPOST);
@@ -194,8 +194,8 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmNsis);
 	LINK_LEXER(lmNull);
 	LINK_LEXER(lmOctave);
-	//LINK_LEXER(lmOpal);
-	//LINK_LEXER(lmPascal);
+	LINK_LEXER(lmOpal);
+	LINK_LEXER(lmPascal);
 	LINK_LEXER(lmPB);
 	LINK_LEXER(lmPerl);
 	LINK_LEXER(lmPHP);
@@ -209,7 +209,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmPython);
 	LINK_LEXER(lmREBOL);
 	LINK_LEXER(lmRuby);
-	//LINK_LEXER(lmScriptol);
+	LINK_LEXER(lmScriptol);
 	LINK_LEXER(lmSmalltalk);
 	LINK_LEXER(lmSpecman);
 	LINK_LEXER(lmSpice);
