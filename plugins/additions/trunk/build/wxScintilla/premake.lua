@@ -10,7 +10,7 @@
 -- wxWidgets version
 local wx_ver = "28"
 local wx_ver_minor = ""
-local wx_custom = "_wxfb"
+local wx_custom = options["flavor"] or ""
 
 -- Set the name of your package.
 package.name = "scintilla"
