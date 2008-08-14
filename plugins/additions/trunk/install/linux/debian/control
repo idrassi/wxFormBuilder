@@ -1,0 +1,27 @@
+Source: libwxadditions28
+Priority: extra
+Maintainer: Ryan Mulder <rjmyst3@gmail.com>
+Build-Depends: debhelper (>= 5)
+Standards-Version: 3.7.2
+Section: libs
+ 
+Package: libwxadditions28-dev
+Section: libdevel
+Architecture: any
+Depends: libwxadditions28 (= ${Source-Version})
+Description: more widgets
+ widgets galore
+
+Package: libwxadditions28
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: more widgets
+ widgets galore
+
+Package: libwxadditions28-dbg
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: more widgets
+ widgets galore
