@@ -1,5 +1,5 @@
 /* XPM */
-static char * led_off_xpm[] = {
+static const char * led_off_xpm[] = {
 "15 15 53 1",
 " 	c None",
 ".	c #A4A5A4",
