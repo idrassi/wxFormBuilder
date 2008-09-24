@@ -1,8 +1,9 @@
 Source: libwxadditions28
 Priority: extra
-Maintainer: Ryan Mulder <rjmyst3@gmail.com>
+XSBC-Original-Maintainer: Ryan Mulder <rjmyst3@gmail.com>
+Maintainer: Ubuntu MOTU Developers <ubuntu-motu@lists.ubuntu.com>
 Build-Depends: debhelper (>= 5)
-Standards-Version: 3.7.2
+Standards-Version: 3.8.0
 Section: libs
  
 Package: libwxadditions28-dev
