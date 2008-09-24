@@ -9,7 +9,7 @@ Section: libs
 Package: libwxadditions28-dev
 Section: libdevel
 Architecture: any
-Depends: libwxadditions28 (= ${Source-Version})
+Depends: libwxadditions28 (= ${binary:Version})
 Description: more widgets
  widgets galore
 
