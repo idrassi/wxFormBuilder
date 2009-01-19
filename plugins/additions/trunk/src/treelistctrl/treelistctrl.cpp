@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id: treelistctrl.cpp,v 1.105 2008/12/01 17:23:41 pgriddev Exp $
 // Copyright:   (c) 2004-2008 Robert Roebling, Julian Smart, Alberto Griggio,
-//              Vadim Zeitlin, Otto Wyss, Ronan Chartois
+//              Vadim Zeitlin, Otto Wyss, Guru Kathiresan, Ronan Chartois
 // Licence:     wxWindows
 /////////////////////////////////////////////////////////////////////////////
 
@@ -33,6 +33,9 @@
 #include <wx/treebase.h>
 #include <wx/timer.h>
 #include <wx/textctrl.h>
+#include <wx/odcombo.h>
+#include <wx/spinctrl.h>
+#include <wx/datectrl.h>
 #include <wx/imaglist.h>
 #include <wx/settings.h>
 #include <wx/dcclient.h>
@@ -238,8 +241,8 @@ private:
 //  wxTreeListMainWindow (internal)
 //-----------------------------------------------------------------------------
 
-class wxEditTextCtrl;
-
+class wxEditCtrlBase;
+template < class CtrlType > class wxEditCtrlHelper;
 
 // this is the "true" control
 class  wxTreeListMainWindow: public wxScrolledWindow
@@ -600,7 +603,12 @@ protected:
 
     friend class wxTreeListItem;
     friend class wxTreeListRenameTimer;
-    friend class wxEditTextCtrl;
+	friend class wxEditCtrlBase;
+	friend class wxEditCtrlHelper< wxTextCtrl >;
+	friend class wxEditCtrlHelper< wxComboBox >;
+	friend class wxEditCtrlHelper< wxChoice >;
+	friend class wxEditCtrlHelper< wxSpinCtrl >;
+	friend class wxEditCtrlHelper< wxDatePickerCtrl >;
 
     wxFont               m_normalFont;
     wxFont               m_boldFont;
@@ -647,7 +655,7 @@ protected:
     bool                 m_editAccept;  // currently unused, OnRenameAccept() argument makes it redundant
     wxString             m_editRes;
     int                  m_editCol;
-    wxEditTextCtrl      *m_editControl;
+    wxEditCtrlBase      *m_editControl;
 
     // char navigation
     wxTimer             *m_findTimer;
@@ -714,11 +722,67 @@ private:
     wxTreeListMainWindow   *m_owner;
 };
 
-// control used for in-place edit
-class  wxEditTextCtrl: public wxTextCtrl
+//Float Validator 
+class wxEditFloatValidator : public wxValidator
 {
+     float* val;
+ public:
+     wxEditFloatValidator(float* val);
+     wxObject* Clone() const;
+     bool TransferFromWindow();
+     bool TransferToWindow();
+     bool Validate(wxWindow* parent);
+};
+//Long Type Validator 
+class wxEditLongValidator : public wxValidator
+{
+     long *val;
+ public:
+     wxEditLongValidator(long* val);
+     wxObject* Clone() const;
+     bool TransferFromWindow();
+     bool TransferToWindow();
+     bool Validate(wxWindow* parent);
+};
+
+// control used for in-place edit
+class wxEditCtrlBase
+{
+protected:
+	wxTreeListMainWindow  *m_owner;
+    bool               *m_accept;
+    wxString           *m_res;
+    wxString            m_startValue;
+    bool                m_finished;  // true==deleting, don't process events anymore
+	
+	virtual wxString GetValueAsString() const = 0;
+
 public:
-    wxEditTextCtrl (wxWindow *parent,
+	virtual void EndEdit(bool isCancelled) = 0;
+	virtual void ConnectEvents() = 0;
+	
+    void wxEditCtrlBase::SetOwner(wxTreeListMainWindow *owner) {
+		m_owner = owner;	
+	}
+
+	wxEditCtrlBase::wxEditCtrlBase(bool *accept, wxString *res, wxTreeListMainWindow *owner, const wxString &value)
+	:
+	m_owner( owner ),
+	m_accept( accept ),
+	m_res( res ),
+	m_startValue( value ),
+	m_finished( false )	 
+	{
+		(*m_accept) = false;
+		(*m_res) = wxEmptyString;
+	}
+
+	virtual ~wxEditCtrlBase(){}
+};
+
+template < class CtrlType > class wxEditCtrlHelper : public CtrlType, public wxEditCtrlBase {
+public:	
+    wxEditCtrlHelper (wxWindow *parent,
                     const wxWindowID id,
                     bool *accept,
                     wxString *res,
@@ -727,30 +791,193 @@ public:
                     const wxPoint &pos = wxDefaultPosition,
                     const wxSize &size = wxDefaultSize,
                     int style = 0,
-                    const wxValidator& validator = wxDefaultValidator,
-                    const wxString &name = wxTextCtrlNameStr );
-    ~wxEditTextCtrl();
+                    const wxValidator& validator = wxDefaultValidator);
+	
+	void ConnectEvents() {
+		Connect( wxEVT_CHAR, wxCharEventHandler( wxEditCtrlHelper< CtrlType >::OnChar ) );
+		Connect( wxEVT_KEY_UP, wxCharEventHandler( wxEditCtrlHelper< CtrlType >::OnKeyUp ) );
+		Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( wxEditCtrlHelper< CtrlType >::OnKillFocus ) );
+	}
+	
+	virtual wxString GetValueAsString() const;
+	
+	virtual void EndEdit(bool isCancelled) {
+		if (m_finished) return;
+		m_finished = true;
 
-    virtual bool Destroy();  // wxWindow override
-    void EndEdit(bool isCancelled);
-    void SetOwner(wxTreeListMainWindow *owner) { m_owner = owner; }
+		if (m_owner) {
+			(*m_accept) = ! isCancelled;
+			(*m_res) = isCancelled ? m_startValue : GetValueAsString();
+			m_owner->OnRenameAccept(*m_res == m_startValue);
+			m_owner->m_editControl = NULL;
+			m_owner->m_editItem = NULL;
+			m_owner->SetFocus(); // This doesn't work. TODO.
+			m_owner = NULL;
+		}
+		
+		Destroy();
+	}
 
-    void OnChar( wxKeyEvent &event );
-    void OnKeyUp( wxKeyEvent &event );
-    void OnKillFocus( wxFocusEvent &event );
+	virtual ~wxEditCtrlHelper() {
+		EndEdit(true); // cancelled
+	}
+	
+    virtual bool Destroy() { // wxWindow override
+		Hide();
+		wxTheApp->GetTraits()->ScheduleForDestroy(this);
+		return true;
+	}  
+	
+	void OnChar( wxKeyEvent &event ){
+		if (m_finished)
+		{
+			event.Skip();
+			return;
+		}
+		if (event.GetKeyCode() == WXK_RETURN)
+		{
+			EndEdit(false);  // not cancelled
+			return;
+		}
+		if (event.GetKeyCode() == WXK_ESCAPE)
+		{
+			EndEdit(true);  // cancelled
+			return;
+		}
+		event.Skip();
+	}
 
+	void OnKeyUp( wxKeyEvent &event ) {
+		if (m_finished)
+		{
+			event.Skip();
+			return;
+		}
 
-private:
-    wxTreeListMainWindow  *m_owner;
-    bool               *m_accept;
-    wxString           *m_res;
-    wxString            m_startValue;
-    bool                m_finished;  // true==deleting, don't process events anymore
+		// auto-grow the textctrl:
+		wxSize parentSize = m_owner->GetSize();
+		wxPoint myPos = GetPosition();
+		wxSize mySize = GetSize();
+		int sx, sy;
+		GetTextExtent(GetValueAsString() + _T("M"), &sx, &sy);
+		if (myPos.x + sx > parentSize.x) sx = parentSize.x - myPos.x;
+		if (mySize.x > sx) sx = mySize.x;
+		SetSize(sx, -1);
 
-    DECLARE_EVENT_TABLE()
+		event.Skip();
+	}
+
+	void OnKillFocus( wxFocusEvent &event ) {
+		if (m_finished)
+		{
+			event.Skip();
+			return;
+		}
+
+		EndEdit(false);  // not cancelled
+	}	
 };
 
+wxEditCtrlHelper< wxTextCtrl >::wxEditCtrlHelper (wxWindow *parent,
+                    const wxWindowID id,
+                    bool *accept,
+                    wxString *res,
+                    wxTreeListMainWindow *owner,
+                    const wxString &value,
+                    const wxPoint &pos,
+                    const wxSize &size,
+                    int style,
+                    const wxValidator& validator)
+		: wxTextCtrl (parent, id, value, pos, size, style | wxSIMPLE_BORDER, validator),
+		  wxEditCtrlBase (accept, res, owner, value)
+{
+}
 
+wxString wxEditCtrlHelper< wxTextCtrl >::GetValueAsString() const {
+	return GetValue();
+}
+
+wxEditCtrlHelper< wxComboBox >::wxEditCtrlHelper (wxWindow *parent,
+                                const wxWindowID id,
+                                bool *accept,
+                                wxString *res,
+                                wxTreeListMainWindow *owner,
+                                const wxString &value,
+                                const wxPoint &pos,
+                                const wxSize &size,
+                                int style,
+                                const wxValidator& validator)
+    : wxComboBox (parent, id, value, pos, size, wxArrayString(), style, validator),
+	  wxEditCtrlBase (accept, res, owner, value)
+{	    
+}
+
+wxString wxEditCtrlHelper< wxComboBox >::GetValueAsString() const {
+	return GetValue();
+}
+
+wxEditCtrlHelper< wxChoice >::wxEditCtrlHelper (wxWindow *parent,
+                                const wxWindowID id,
+                                bool *accept,
+                                wxString *res,
+                                wxTreeListMainWindow *owner,
+                                const wxString &value,
+                                const wxPoint &pos,
+                                const wxSize &size,
+                                int style,
+                                const wxValidator& validator)
+    : wxChoice (parent, id, pos, size, wxArrayString(), style, validator),
+	  wxEditCtrlBase (accept, res, owner, value)
+{	    
+}
+
+wxString wxEditCtrlHelper< wxChoice >::GetValueAsString() const {
+	return GetStringSelection();
+}
+ 
+wxEditCtrlHelper< wxSpinCtrl >::wxEditCtrlHelper (wxWindow *parent,
+                                const wxWindowID id,
+                                bool *accept,
+                                wxString *res,
+                                wxTreeListMainWindow *owner,
+                                const wxString &value,
+                                const wxPoint &pos,
+                                const wxSize &size,
+                                int style,
+                                const wxValidator&)
+    : wxSpinCtrl (parent, id, value, pos, size, style|wxNO_BORDER),
+	  wxEditCtrlBase (accept, res, owner, value)
+{	
+}
+
+wxString wxEditCtrlHelper< wxSpinCtrl >::GetValueAsString() const {
+	return wxString::Format(wxT("%d"),GetValue());
+}
+
+wxEditCtrlHelper< wxDatePickerCtrl >::wxEditCtrlHelper (wxWindow *parent,
+                                const wxWindowID id,
+                                bool *accept,
+                                wxString *res,
+                                wxTreeListMainWindow *owner,
+                                const wxString &value,
+                                const wxPoint &pos,
+                                const wxSize &size,
+                                int style,
+                                const wxValidator&)
+	: wxDatePickerCtrl (parent, id,wxDateTime::Now(), pos, size, style|wxNO_BORDER),
+	  wxEditCtrlBase (accept, res, owner, value)
+{	
+	wxDateTime dtValue;
+	if ( NULL != dtValue.ParseDate(value) )
+	{
+		SetValue(dtValue);
+	}
+}
+
+wxString wxEditCtrlHelper< wxDatePickerCtrl >::GetValueAsString() const {
+	return GetValue().FormatDate();
+}
+ 
 // a tree item (NOTE: this class is storage only, does not generate events)
 class  wxTreeListItem
 {
@@ -960,116 +1187,88 @@ void wxTreeListRenameTimer::Notify()
 }
 
 //-----------------------------------------------------------------------------
-// wxEditTextCtrl (internal)
+// wxEditFloatValidator (internal)
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE (wxEditTextCtrl,wxTextCtrl)
-    EVT_CHAR           (wxEditTextCtrl::OnChar)
-    EVT_KEY_UP         (wxEditTextCtrl::OnKeyUp)
-    EVT_KILL_FOCUS     (wxEditTextCtrl::OnKillFocus)
-END_EVENT_TABLE()
+ wxEditFloatValidator::wxEditFloatValidator(float* pval)
+ {
+     val=pval;  
+ }
+ 
+ // Note the 'const' here
+ wxObject* wxEditFloatValidator::Clone() const
+ {
+     return new wxEditFloatValidator(val);
+ }
+ 
+ bool wxEditFloatValidator::TransferFromWindow()
+ {
+     wxString s=((wxTextCtrl*)m_validatorWindow)->GetValue();
+     double t;
+	 s.Trim(false);
+     if ( s.ToDouble( &t ) )
+	 {
+		 *val = static_cast< float >( t );
+		 return true;
+	 }
+	 return false;
+ }
+  
+ bool wxEditFloatValidator::TransferToWindow()
+ {
+     ((wxTextCtrl*)m_validatorWindow)->SetValue(wxString::Format(wxT("%g"),*val));
+     return true;
+ }
+ 
+ bool wxEditFloatValidator::Validate(wxWindow* )
+ {
+     wxString s=((wxTextCtrl*)m_validatorWindow)->GetValue();
+     double t;
+	 s.Trim(false);
+     return s.ToDouble( &t );	 
+ }
+//-----------------------------------------------------------------------------
+// wxEditLongValidator (internal)
+//-----------------------------------------------------------------------------
 
-wxEditTextCtrl::wxEditTextCtrl (wxWindow *parent,
-                                const wxWindowID id,
-                                bool *accept,
-                                wxString *res,
-                                wxTreeListMainWindow *owner,
-                                const wxString &value,
-                                const wxPoint &pos,
-                                const wxSize &size,
-                                int style,
-                                const wxValidator& validator,
-                                const wxString &name)
-    : wxTextCtrl (parent, id, value, pos, size, style | wxSIMPLE_BORDER, validator, name)
-{
-    m_res = res;
-    m_accept = accept;
-    m_owner = owner;
-    (*m_accept) = false;
-    (*m_res) = wxEmptyString;
-    m_startValue = value;
-    m_finished = false;
-}
-
-wxEditTextCtrl::~wxEditTextCtrl() {
-    EndEdit(true); // cancelled
-}
-
-void wxEditTextCtrl::EndEdit(bool isCancelled) {
-    if (m_finished) return;
-    m_finished = true;
-
-    if (m_owner) {
-        (*m_accept) = ! isCancelled;
-        (*m_res) = isCancelled ? m_startValue : GetValue();
-        m_owner->OnRenameAccept(*m_res == m_startValue);
-        m_owner->m_editControl = NULL;
-        m_owner->m_editItem = NULL;
-        m_owner->SetFocus(); // This doesn't work. TODO.
-        m_owner = NULL;
-    }
-
-    Destroy();
-}
-
-bool wxEditTextCtrl::Destroy() {
-    Hide();
-    wxTheApp->GetTraits()->ScheduleForDestroy(this);
-    return true;
-}
-
-void wxEditTextCtrl::OnChar( wxKeyEvent &event )
-{
-    if (m_finished)
-    {
-        event.Skip();
-        return;
-    }
-    if (event.GetKeyCode() == WXK_RETURN)
-    {
-        EndEdit(false);  // not cancelled
-        return;
-    }
-    if (event.GetKeyCode() == WXK_ESCAPE)
-    {
-        EndEdit(true);  // cancelled
-        return;
-    }
-    event.Skip();
-}
-
-void wxEditTextCtrl::OnKeyUp( wxKeyEvent &event )
-{
-    if (m_finished)
-    {
-        event.Skip();
-        return;
-    }
-
-    // auto-grow the textctrl:
-    wxSize parentSize = m_owner->GetSize();
-    wxPoint myPos = GetPosition();
-    wxSize mySize = GetSize();
-    int sx, sy;
-    GetTextExtent(GetValue() + _T("M"), &sx, &sy);
-    if (myPos.x + sx > parentSize.x) sx = parentSize.x - myPos.x;
-    if (mySize.x > sx) sx = mySize.x;
-    SetSize(sx, -1);
-
-    event.Skip();
-}
-
-void wxEditTextCtrl::OnKillFocus( wxFocusEvent &event )
-{
-    if (m_finished)
-    {
-        event.Skip();
-        return;
-    }
-
-    EndEdit(false);  // not cancelled
-}
-
+ wxEditLongValidator::wxEditLongValidator(long* pval)
+ {
+     val=pval;  
+ }
+ 
+ // Note the 'const' here
+ wxObject* wxEditLongValidator::Clone() const
+ {
+     return new wxEditLongValidator(val);
+ }
+ 
+ bool wxEditLongValidator::TransferFromWindow()
+ {
+     wxString s=((wxTextCtrl*)m_validatorWindow)->GetValue();
+     long t;
+	 s.Trim(false);
+	 if ( s.ToLong( &t ) )
+	 {
+		 *val = t;
+		 return true;
+	 }
+	 return false;
+ }
+  
+ bool wxEditLongValidator::TransferToWindow()
+ {
+     ((wxTextCtrl*)m_validatorWindow)->SetValue(wxString::Format(wxT("%d"),*val));
+     return true;
+ }
+ 
+ bool wxEditLongValidator::Validate(wxWindow* )
+ {
+     wxString s=((wxTextCtrl*)m_validatorWindow)->GetValue();
+     long t;
+	 s.Trim(false);
+	 return s.ToLong( &t );     
+ }
+ 
 //-----------------------------------------------------------------------------
 //  wxTreeListHeaderWindow
 //-----------------------------------------------------------------------------
@@ -3745,7 +3944,13 @@ void wxTreeListMainWindow::EditLabel (const wxTreeItemId& item, int column) {
         x += m_editItem->GetTextX() - 2;  // wrong by 2, don't know why
         w += m_editItem->GetWidth();
     } else {
-        for (int i = 0; i < column; ++i) x += header_win->GetColumnWidth (i); // start of column
+        for (int i = 0; i < column; ++i) 
+		{
+			if ( header_win->IsColumnShown(i) )
+			{
+				x += header_win->GetColumnWidth (i); // start of column
+			}
+		}
         w += header_win->GetColumnWidth (column);  // currently non-main column width not pre-computed
     }
     switch (header_win->GetColumnAlignment (column)) {
@@ -3768,10 +3973,79 @@ void wxTreeListMainWindow::EditLabel (const wxTreeItemId& item, int column) {
         m_editControl->EndEdit(true);  // cancelled
     }
     m_editCol = column;  // only used in OnRenameAccept()
-    m_editControl = new wxEditTextCtrl (this, -1, &m_editAccept, &m_editRes,
-                                               this, m_editItem->GetText (column),
-                                               wxPoint (x, y), wxSize (w, h), style);
-    m_editControl->SetFocus();
+
+	wxControl* ctrl( 0 );
+	int pick_type = header_win->GetColumn(column).GetPickType();
+	switch(pick_type)
+	{
+		case wxTR_COLUMN_TEXT:
+		case wxTR_COLUMN_INT_TEXT:
+		case wxTR_COLUMN_FLOAT_TEXT:
+		default:
+		{
+			wxEditCtrlHelper< wxTextCtrl >* text = new wxEditCtrlHelper< wxTextCtrl > (this, -1, &m_editAccept, &m_editRes,
+					this, m_editItem->GetText (column),
+					wxPoint (x, y), wxSize (w, h), style);
+			if (pick_type == wxTR_COLUMN_INT_TEXT)
+				text->SetValidator(wxEditLongValidator(NULL));
+			else if (pick_type == wxTR_COLUMN_FLOAT_TEXT)
+				text->SetValidator(wxTextValidator(wxFILTER_NUMERIC,NULL));
+			m_editControl = text;
+			ctrl = text;
+			break;
+		}
+		case wxTR_COLUMN_COMBO:
+		{
+			wxEditCtrlHelper< wxComboBox > *combo = new wxEditCtrlHelper< wxComboBox >(this, -1, &m_editAccept, &m_editRes,
+					this, wxEmptyString,
+					wxPoint (x, y), wxSize (w, h), style);	
+			combo->Append( header_win->GetColumn(column).GetChoices() );
+			combo->SetStringSelection( m_editItem->GetText (column) );
+			combo->SetSizeHints(wxSize (w, h),wxSize (w, h),wxSize (w, h));
+			combo->SetSize(x, y,w, h);
+			combo->SetClientSize(w, h);
+			combo->Refresh();
+			m_editControl = combo;
+			ctrl = combo;
+			break;
+		}
+		case wxTR_COLUMN_CHOICE:
+		{
+			wxEditCtrlHelper< wxChoice > *choice = new wxEditCtrlHelper< wxChoice >(this, -1, &m_editAccept, &m_editRes,
+					this, wxEmptyString,
+					wxPoint (x, y), wxSize (w, h), style);	
+			choice->Append( header_win->GetColumn(column).GetChoices() );
+			choice->SetStringSelection( m_editItem->GetText (column) );
+			choice->SetSizeHints(wxSize (w, h),wxSize (w, h),wxSize (w, h));
+			choice->SetSize(x, y,w, h);
+			choice->SetClientSize(w, h);
+			choice->Refresh();
+			m_editControl = choice;
+			ctrl = choice;
+			break;
+		}
+		case wxTR_COLUMN_SPIN:
+		{
+			wxEditCtrlHelper< wxSpinCtrl > *spin = new wxEditCtrlHelper< wxSpinCtrl >(this, -1, &m_editAccept, &m_editRes,
+				this, m_editItem->GetText (column),
+				wxPoint (x, y), wxSize (w, h), style);			
+			m_editControl = spin;
+			ctrl = spin;
+			break;
+		}
+		case wxTR_COLUMN_DATEPICK:
+		{
+			wxEditCtrlHelper< wxDatePickerCtrl > *datepick = new wxEditCtrlHelper< wxDatePickerCtrl >(this, -1, &m_editAccept, &m_editRes,
+				this, m_editItem->GetText (column),
+				wxPoint (x, y), wxSize (w, h), wxDP_DROPDOWN);			
+			m_editControl = datepick;
+			ctrl = datepick;
+			break;
+		}
+	}
+    
+    ctrl->SetFocus();
+	m_editControl->ConnectEvents();
 }
 
 void wxTreeListMainWindow::OnRenameTimer() {
@@ -4853,6 +5127,26 @@ bool wxTreeListCtrl::IsColumnEditable(int column) const
 bool wxTreeListCtrl::IsColumnShown(int column) const
 {
     return m_header_win->GetColumn(column).IsShown();
+}
+
+void wxTreeListCtrl::SetColumnPickType (int column, int pick_type)
+{
+	m_header_win->GetColumn(column).SetPickType(pick_type);
+}
+
+int wxTreeListCtrl::GetColumnPickType (int column) const
+{
+	return m_header_win->GetColumn(column).GetPickType();
+}
+
+wxArrayString wxTreeListCtrl::GetColumnChoices(int column) const
+{
+	return m_header_win->GetColumn(column).GetChoices();
+}
+
+void wxTreeListCtrl::SetColumnChoices(int column, const wxArrayString& choices)
+{
+	m_header_win->GetColumn(column).SetChoices(choices);
 }
 
 void wxTreeListCtrl::SetColumnAlignment (int column, int flag)
