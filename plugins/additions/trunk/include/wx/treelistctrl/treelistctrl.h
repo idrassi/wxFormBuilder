@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id: treelistctrl.h,v 1.35 2008/07/28 13:55:12 pgriddev Exp $
 // Copyright:   (c) 2004 Robert Roebling, Julian Smart, Alberto Griggio,
-//              Vadim Zeitlin, Otto Wyss
+//              Vadim Zeitlin, Otto Wyss , Guru Kathiresan
 // Licence:     wxWindows
 /////////////////////////////////////////////////////////////////////////////
 
@@ -38,6 +38,7 @@
 #include <wx/control.h>
 #include <wx/pen.h>
 #include <wx/listctrl.h> // for wxListEvent
+#include <wx/arrstr.h>
 
 class WXDLLIMPEXP_TREELISTCTRL wxTreeListItem;
 class WXDLLIMPEXP_TREELISTCTRL wxTreeListHeaderWindow;
@@ -45,6 +46,14 @@ class WXDLLIMPEXP_TREELISTCTRL wxTreeListMainWindow;
 
 #define wxTR_COLUMN_LINES 0x1000 // put border around items
 #define wxTR_VIRTUAL      0x4000 // The application provides items text on demand.
+static const int wxTR_COLUMN_NONE			= 0;
+static const int wxTR_COLUMN_TEXT			= 1;
+static const int wxTR_COLUMN_INT_TEXT		= 2;
+static const int wxTR_COLUMN_FLOAT_TEXT		= 3;
+static const int wxTR_COLUMN_COMBO			= 4;
+static const int wxTR_COLUMN_DATEPICK		= 5;
+static const int wxTR_COLUMN_SPIN			= 6;
+static const int wxTR_COLUMN_CHOICE			= 7;
 
 // Using this typedef removes an ambiguity when calling Remove()
 #ifdef __WXMSW__
@@ -71,24 +80,35 @@ public:
                           int flag = wxALIGN_LEFT,
                           int image = -1,
                           bool shown = true,
-                          bool edit = false) {
-        m_text = text;
-        m_width = width;
-        m_flag = flag;
-        m_image = image;
-        m_selected_image = -1;
-        m_shown = shown;
-        m_edit = edit;
+                          bool edit = false,
+						  int pick_type = wxTR_COLUMN_NONE,
+						  wxArrayString choices = wxArrayString() )
+        :
+		m_text( text ),
+        m_width( width ),
+        m_flag( flag ),
+        m_image( image ),
+        m_selected_image( -1 ),
+        m_shown( shown ),
+        m_edit( edit ),
+        m_pick_type( pick_type ),
+		m_choices( choices )
+	{
     }
 
-    wxTreeListColumnInfo (const wxTreeListColumnInfo& other) : wxObject( other ) {
-        m_text = other.m_text;
-        m_width = other.m_width;
-        m_flag = other.m_flag;
-        m_image = other.m_image;
-        m_selected_image = other.m_selected_image;
-        m_shown = other.m_shown;
-        m_edit = other.m_edit;
+    wxTreeListColumnInfo (const wxTreeListColumnInfo& other)
+		:
+		wxObject( other ),
+		m_text( other.m_text ),
+        m_width( other.m_width ),
+        m_flag( other.m_flag ),
+        m_image( other.m_image ),
+        m_selected_image( other.m_selected_image ),
+        m_shown( other.m_shown ),
+        m_edit( other.m_edit ),
+        m_pick_type( other.m_pick_type ),
+		m_choices( other.m_choices )
+	{
     }
 
     ~wxTreeListColumnInfo() {}
@@ -116,6 +136,12 @@ public:
     bool IsShown() const { return m_shown; }
     wxTreeListColumnInfo& SetShown(bool shown) { m_shown = shown; return *this; }
 
+	int GetPickType(void) const { return m_pick_type;}
+	wxTreeListColumnInfo& SetPickType(int pick_type) { m_pick_type = pick_type; return *this; }
+	
+	wxArrayString GetChoices(void) const { return m_choices;}
+	wxTreeListColumnInfo& SetChoices( const wxArrayString& choices) { m_choices = choices; return *this; }
+
 private:
     wxString m_text;
     int m_width;
@@ -124,6 +150,8 @@ private:
     int m_selected_image;
     bool m_shown;
     bool m_edit;
+    int m_pick_type;
+	wxArrayString m_choices;
 };
 
 //----------------------------------------------------------------------------
@@ -225,8 +253,10 @@ public:
                     int flag = wxALIGN_LEFT,
                     int image = -1,
                     bool shown = true,
-                    bool edit = false) {
-        AddColumn (wxTreeListColumnInfo (text, width, flag, image, shown, edit));
+                    bool edit = false,
+					int pick_type = wxTR_COLUMN_NONE,
+					wxArrayString choices = wxArrayString()) {
+        AddColumn (wxTreeListColumnInfo (text, width, flag, image, shown, edit, pick_type, choices));
     }
     void AddColumn (const wxTreeListColumnInfo& colInfo);
 
@@ -237,9 +267,11 @@ public:
                        int flag = wxALIGN_LEFT,
                        int image = -1,
                        bool shown = true,
-                       bool edit = false) {
+                       bool edit = false,
+					   int pick_type = wxTR_COLUMN_NONE,
+					   wxArrayString choices = wxArrayString()) {
         InsertColumn (before,
-                      wxTreeListColumnInfo (text, width, flag, image, shown, edit));
+                      wxTreeListColumnInfo (text, width, flag, image, shown, edit, pick_type, choices));
     }
     void InsertColumn (int before, const wxTreeListColumnInfo& colInfo);
 
@@ -274,6 +306,12 @@ public:
 
     void SetColumnEditable (int column, bool edit = true);
     bool IsColumnEditable (int column) const;
+
+	void SetColumnPickType (int column, int pick_type);
+	int GetColumnPickType (int column) const;
+	
+	wxArrayString GetColumnChoices(int column) const;
+	void SetColumnChoices(int column, const wxArrayString& choices);
 
     // Functions to work with items.
 
