@@ -46,14 +46,6 @@ class WXDLLIMPEXP_TREELISTCTRL wxTreeListMainWindow;
 
 #define wxTR_COLUMN_LINES 0x1000 // put border around items
 #define wxTR_VIRTUAL      0x4000 // The application provides items text on demand.
-static const int wxTR_COLUMN_NONE			= 0;
-static const int wxTR_COLUMN_TEXT			= 1;
-static const int wxTR_COLUMN_INT_TEXT		= 2;
-static const int wxTR_COLUMN_FLOAT_TEXT		= 3;
-static const int wxTR_COLUMN_COMBO			= 4;
-static const int wxTR_COLUMN_DATEPICK		= 5;
-static const int wxTR_COLUMN_SPIN			= 6;
-static const int wxTR_COLUMN_CHOICE			= 7;
 
 // Using this typedef removes an ambiguity when calling Remove()
 #ifdef __WXMSW__
@@ -75,13 +67,25 @@ enum {
 class WXDLLIMPEXP_TREELISTCTRL wxTreeListColumnInfo: public wxObject {
 
 public:
+	enum PickType
+	{
+		Text = 0,
+		TextInteger,
+		TextFloat,
+		TextAscii,
+		Combo,
+		Choice,
+		/* DatePick,		 disabled until bugs in datepicker are fixed */
+		Spin
+	};
+	
     wxTreeListColumnInfo (const wxString &text = wxEmptyString,
                           int width = DEFAULT_COL_WIDTH,
                           int flag = wxALIGN_LEFT,
                           int image = -1,
                           bool shown = true,
                           bool edit = false,
-						  int pick_type = wxTR_COLUMN_NONE,
+						  int pick_type = Text,
 						  wxArrayString choices = wxArrayString() )
         :
 		m_text( text ),
@@ -254,7 +258,7 @@ public:
                     int image = -1,
                     bool shown = true,
                     bool edit = false,
-					int pick_type = wxTR_COLUMN_NONE,
+					int pick_type = wxTreeListColumnInfo::Text,
 					wxArrayString choices = wxArrayString()) {
         AddColumn (wxTreeListColumnInfo (text, width, flag, image, shown, edit, pick_type, choices));
     }
@@ -268,7 +272,7 @@ public:
                        int image = -1,
                        bool shown = true,
                        bool edit = false,
-					   int pick_type = wxTR_COLUMN_NONE,
+					   int pick_type = wxTreeListColumnInfo::Text,
 					   wxArrayString choices = wxArrayString()) {
         InsertColumn (before,
                       wxTreeListColumnInfo (text, width, flag, image, shown, edit, pick_type, choices));
