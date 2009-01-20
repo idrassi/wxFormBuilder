@@ -42,6 +42,7 @@
 #include <wx/dcscreen.h>
 #include <wx/scrolwin.h>
 #include <wx/dcmemory.h>
+#include <wx/valtext.h>
 #if wxCHECK_VERSION(2, 7, 0)
 #include <wx/renderer.h>
 #endif
@@ -722,29 +723,6 @@ private:
     wxTreeListMainWindow   *m_owner;
 };
 
-//Float Validator 
-class wxEditFloatValidator : public wxValidator
-{
-     float* val;
- public:
-     wxEditFloatValidator(float* val);
-     wxObject* Clone() const;
-     bool TransferFromWindow();
-     bool TransferToWindow();
-     bool Validate(wxWindow* parent);
-};
-//Long Type Validator 
-class wxEditLongValidator : public wxValidator
-{
-     long *val;
- public:
-     wxEditLongValidator(long* val);
-     wxObject* Clone() const;
-     bool TransferFromWindow();
-     bool TransferToWindow();
-     bool Validate(wxWindow* parent);
-};
-
 // control used for in-place edit
 class wxEditCtrlBase
 {
@@ -945,13 +923,21 @@ wxEditCtrlHelper< wxSpinCtrl >::wxEditCtrlHelper (wxWindow *parent,
                                 const wxSize &size,
                                 int style,
                                 const wxValidator&)
-    : wxSpinCtrl (parent, id, value, pos, size, style|wxNO_BORDER),
+    : wxSpinCtrl (parent, id, value, pos, size, style|wxSIMPLE_BORDER),
 	  wxEditCtrlBase (accept, res, owner, value)
 {	
 }
 
 wxString wxEditCtrlHelper< wxSpinCtrl >::GetValueAsString() const {
 	return wxString::Format(wxT("%d"),GetValue());
+}
+
+wxDateTime StringToDate( const wxString& value ) {
+	wxDateTime dtValue( wxDefaultDateTime );
+	if ( NULL != dtValue.ParseDate(value) ) {
+		return dtValue;
+	}
+	return wxDefaultDateTime;
 }
 
 wxEditCtrlHelper< wxDatePickerCtrl >::wxEditCtrlHelper (wxWindow *parent,
@@ -964,14 +950,9 @@ wxEditCtrlHelper< wxDatePickerCtrl >::wxEditCtrlHelper (wxWindow *parent,
                                 const wxSize &size,
                                 int style,
                                 const wxValidator&)
-	: wxDatePickerCtrl (parent, id,wxDateTime::Now(), pos, size, style|wxNO_BORDER),
+	: wxDatePickerCtrl (parent, id, StringToDate(value), pos, size, style|wxNO_BORDER),
 	  wxEditCtrlBase (accept, res, owner, value)
 {	
-	wxDateTime dtValue;
-	if ( NULL != dtValue.ParseDate(value) )
-	{
-		SetValue(dtValue);
-	}
 }
 
 wxString wxEditCtrlHelper< wxDatePickerCtrl >::GetValueAsString() const {
@@ -1185,89 +1166,6 @@ void wxTreeListRenameTimer::Notify()
 {
     m_owner->OnRenameTimer();
 }
-
-//-----------------------------------------------------------------------------
-// wxEditFloatValidator (internal)
-//-----------------------------------------------------------------------------
-
- wxEditFloatValidator::wxEditFloatValidator(float* pval)
- {
-     val=pval;  
- }
- 
- // Note the 'const' here
- wxObject* wxEditFloatValidator::Clone() const
- {
-     return new wxEditFloatValidator(val);
- }
- 
- bool wxEditFloatValidator::TransferFromWindow()
- {
-     wxString s=((wxTextCtrl*)m_validatorWindow)->GetValue();
-     double t;
-	 s.Trim(false);
-     if ( s.ToDouble( &t ) )
-	 {
-		 *val = static_cast< float >( t );
-		 return true;
-	 }
-	 return false;
- }
-  
- bool wxEditFloatValidator::TransferToWindow()
- {
-     ((wxTextCtrl*)m_validatorWindow)->SetValue(wxString::Format(wxT("%g"),*val));
-     return true;
- }
- 
- bool wxEditFloatValidator::Validate(wxWindow* )
- {
-     wxString s=((wxTextCtrl*)m_validatorWindow)->GetValue();
-     double t;
-	 s.Trim(false);
-     return s.ToDouble( &t );	 
- }
-//-----------------------------------------------------------------------------
-// wxEditLongValidator (internal)
-//-----------------------------------------------------------------------------
-
- wxEditLongValidator::wxEditLongValidator(long* pval)
- {
-     val=pval;  
- }
- 
- // Note the 'const' here
- wxObject* wxEditLongValidator::Clone() const
- {
-     return new wxEditLongValidator(val);
- }
- 
- bool wxEditLongValidator::TransferFromWindow()
- {
-     wxString s=((wxTextCtrl*)m_validatorWindow)->GetValue();
-     long t;
-	 s.Trim(false);
-	 if ( s.ToLong( &t ) )
-	 {
-		 *val = t;
-		 return true;
-	 }
-	 return false;
- }
-  
- bool wxEditLongValidator::TransferToWindow()
- {
-     ((wxTextCtrl*)m_validatorWindow)->SetValue(wxString::Format(wxT("%d"),*val));
-     return true;
- }
- 
- bool wxEditLongValidator::Validate(wxWindow* )
- {
-     wxString s=((wxTextCtrl*)m_validatorWindow)->GetValue();
-     long t;
-	 s.Trim(false);
-	 return s.ToLong( &t );     
- }
  
 //-----------------------------------------------------------------------------
 //  wxTreeListHeaderWindow
@@ -3944,10 +3842,8 @@ void wxTreeListMainWindow::EditLabel (const wxTreeItemId& item, int column) {
         x += m_editItem->GetTextX() - 2;  // wrong by 2, don't know why
         w += m_editItem->GetWidth();
     } else {
-        for (int i = 0; i < column; ++i) 
-		{
-			if ( header_win->IsColumnShown(i) )
-			{
+        for (int i = 0; i < column; ++i) {
+			if ( header_win->IsColumnShown(i) ) {
 				x += header_win->GetColumnWidth (i); // start of column
 			}
 		}
@@ -3978,23 +3874,45 @@ void wxTreeListMainWindow::EditLabel (const wxTreeItemId& item, int column) {
 	int pick_type = header_win->GetColumn(column).GetPickType();
 	switch(pick_type)
 	{
-		case wxTR_COLUMN_TEXT:
-		case wxTR_COLUMN_INT_TEXT:
-		case wxTR_COLUMN_FLOAT_TEXT:
+		case wxTreeListColumnInfo::Text:
+		case wxTreeListColumnInfo::TextInteger:
+		case wxTreeListColumnInfo::TextFloat:
+		case wxTreeListColumnInfo::TextAscii:
 		default:
 		{
 			wxEditCtrlHelper< wxTextCtrl >* text = new wxEditCtrlHelper< wxTextCtrl > (this, -1, &m_editAccept, &m_editRes,
 					this, m_editItem->GetText (column),
 					wxPoint (x, y), wxSize (w, h), style);
-			if (pick_type == wxTR_COLUMN_INT_TEXT)
-				text->SetValidator(wxEditLongValidator(NULL));
-			else if (pick_type == wxTR_COLUMN_FLOAT_TEXT)
-				text->SetValidator(wxTextValidator(wxFILTER_NUMERIC,NULL));
+			switch(pick_type)
+			{
+				case wxTreeListColumnInfo::TextInteger:
+				{
+					wxArrayString excludes;
+					excludes.Add( wxT('.') );
+					excludes.Add( wxT('e') );
+					wxTextValidator val(wxFILTER_NUMERIC|wxFILTER_EXCLUDE_CHAR_LIST,NULL);
+					val.SetExcludes( excludes );				
+					text->SetValidator(val);
+					break;
+				}
+				case wxTreeListColumnInfo::TextFloat:
+				{
+					text->SetValidator(wxTextValidator(wxFILTER_NUMERIC,NULL));
+					break;
+				}
+				case wxTreeListColumnInfo::TextAscii:
+				{
+					text->SetValidator(wxTextValidator(wxFILTER_ASCII,NULL));
+					break;
+				}
+				default:
+					break;
+			}
 			m_editControl = text;
 			ctrl = text;
 			break;
 		}
-		case wxTR_COLUMN_COMBO:
+		case wxTreeListColumnInfo::Combo:
 		{
 			wxEditCtrlHelper< wxComboBox > *combo = new wxEditCtrlHelper< wxComboBox >(this, -1, &m_editAccept, &m_editRes,
 					this, wxEmptyString,
@@ -4009,7 +3927,7 @@ void wxTreeListMainWindow::EditLabel (const wxTreeItemId& item, int column) {
 			ctrl = combo;
 			break;
 		}
-		case wxTR_COLUMN_CHOICE:
+		case wxTreeListColumnInfo::Choice:
 		{
 			wxEditCtrlHelper< wxChoice > *choice = new wxEditCtrlHelper< wxChoice >(this, -1, &m_editAccept, &m_editRes,
 					this, wxEmptyString,
@@ -4024,7 +3942,7 @@ void wxTreeListMainWindow::EditLabel (const wxTreeItemId& item, int column) {
 			ctrl = choice;
 			break;
 		}
-		case wxTR_COLUMN_SPIN:
+		case wxTreeListColumnInfo::Spin:
 		{
 			wxEditCtrlHelper< wxSpinCtrl > *spin = new wxEditCtrlHelper< wxSpinCtrl >(this, -1, &m_editAccept, &m_editRes,
 				this, m_editItem->GetText (column),
@@ -4032,16 +3950,17 @@ void wxTreeListMainWindow::EditLabel (const wxTreeItemId& item, int column) {
 			m_editControl = spin;
 			ctrl = spin;
 			break;
-		}
-		case wxTR_COLUMN_DATEPICK:
+		}/*
+		case wxTreeListColumnInfo::DatePick:
 		{
 			wxEditCtrlHelper< wxDatePickerCtrl > *datepick = new wxEditCtrlHelper< wxDatePickerCtrl >(this, -1, &m_editAccept, &m_editRes,
 				this, m_editItem->GetText (column),
-				wxPoint (x, y), wxSize (w, h), wxDP_DROPDOWN);			
+				wxPoint (x, y), wxSize (w, h), style);			
 			m_editControl = datepick;
 			ctrl = datepick;
 			break;
 		}
+		As of 2.8.8, datepicker is really buggy when retrieving the value in a KillFocus event */
 	}
     
     ctrl->SetFocus();
