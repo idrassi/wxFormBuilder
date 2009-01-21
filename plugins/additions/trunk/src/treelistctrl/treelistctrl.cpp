@@ -33,7 +33,8 @@
 #include <wx/treebase.h>
 #include <wx/timer.h>
 #include <wx/textctrl.h>
-#include <wx/odcombo.h>
+#include <wx/combobox.h>
+#include <wx/choice.h>
 #include <wx/spinctrl.h>
 #include <wx/datectrl.h>
 #include <wx/imaglist.h>
@@ -43,6 +44,7 @@
 #include <wx/scrolwin.h>
 #include <wx/dcmemory.h>
 #include <wx/valtext.h>
+#include <wx/app.h>
 #if wxCHECK_VERSION(2, 7, 0)
 #include <wx/renderer.h>
 #endif
@@ -739,11 +741,11 @@ public:
 	virtual void EndEdit(bool isCancelled) = 0;
 	virtual void ConnectEvents() = 0;
 	
-    void wxEditCtrlBase::SetOwner(wxTreeListMainWindow *owner) {
+    void SetOwner(wxTreeListMainWindow *owner) {
 		m_owner = owner;	
 	}
 
-	wxEditCtrlBase::wxEditCtrlBase(bool *accept, wxString *res, wxTreeListMainWindow *owner, const wxString &value)
+	wxEditCtrlBase(bool *accept, wxString *res, wxTreeListMainWindow *owner, const wxString &value)
 	:
 	m_owner( owner ),
 	m_accept( accept ),
@@ -772,9 +774,9 @@ public:
                     const wxValidator& validator = wxDefaultValidator);
 	
 	void ConnectEvents() {
-		Connect( wxEVT_CHAR, wxCharEventHandler( wxEditCtrlHelper< CtrlType >::OnChar ) );
-		Connect( wxEVT_KEY_UP, wxCharEventHandler( wxEditCtrlHelper< CtrlType >::OnKeyUp ) );
-		Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( wxEditCtrlHelper< CtrlType >::OnKillFocus ) );
+		wxEvtHandler::Connect( wxEVT_CHAR, wxCharEventHandler( wxEditCtrlHelper< CtrlType >::OnChar ) );
+		wxEvtHandler::Connect( wxEVT_KEY_UP, wxCharEventHandler( wxEditCtrlHelper< CtrlType >::OnKeyUp ) );
+		wxEvtHandler::Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( wxEditCtrlHelper< CtrlType >::OnKillFocus ) );
 	}
 	
 	virtual wxString GetValueAsString() const;
@@ -801,7 +803,7 @@ public:
 	}
 	
     virtual bool Destroy() { // wxWindow override
-		Hide();
+		wxWindow::Hide();
 		wxTheApp->GetTraits()->ScheduleForDestroy(this);
 		return true;
 	}  
@@ -834,13 +836,13 @@ public:
 
 		// auto-grow the textctrl:
 		wxSize parentSize = m_owner->GetSize();
-		wxPoint myPos = GetPosition();
-		wxSize mySize = GetSize();
+		wxPoint myPos = wxWindow::GetPosition();
+		wxSize mySize = wxWindow::GetSize();
 		int sx, sy;
-		GetTextExtent(GetValueAsString() + _T("M"), &sx, &sy);
+		wxWindow::GetTextExtent(GetValueAsString() + _T("M"), &sx, &sy);
 		if (myPos.x + sx > parentSize.x) sx = parentSize.x - myPos.x;
 		if (mySize.x > sx) sx = mySize.x;
-		SetSize(sx, -1);
+		wxWindow::SetSize(sx, -1);
 
 		event.Skip();
 	}
@@ -856,7 +858,7 @@ public:
 	}	
 };
 
-wxEditCtrlHelper< wxTextCtrl >::wxEditCtrlHelper (wxWindow *parent,
+template < > wxEditCtrlHelper< wxTextCtrl >::wxEditCtrlHelper (wxWindow *parent,
                     const wxWindowID id,
                     bool *accept,
                     wxString *res,
@@ -871,11 +873,11 @@ wxEditCtrlHelper< wxTextCtrl >::wxEditCtrlHelper (wxWindow *parent,
 {
 }
 
-wxString wxEditCtrlHelper< wxTextCtrl >::GetValueAsString() const {
+template < > wxString wxEditCtrlHelper< wxTextCtrl >::GetValueAsString() const {
 	return GetValue();
 }
 
-wxEditCtrlHelper< wxComboBox >::wxEditCtrlHelper (wxWindow *parent,
+template < > wxEditCtrlHelper< wxComboBox >::wxEditCtrlHelper (wxWindow *parent,
                                 const wxWindowID id,
                                 bool *accept,
                                 wxString *res,
@@ -890,11 +892,11 @@ wxEditCtrlHelper< wxComboBox >::wxEditCtrlHelper (wxWindow *parent,
 {	    
 }
 
-wxString wxEditCtrlHelper< wxComboBox >::GetValueAsString() const {
+template < > wxString wxEditCtrlHelper< wxComboBox >::GetValueAsString() const {
 	return GetValue();
 }
 
-wxEditCtrlHelper< wxChoice >::wxEditCtrlHelper (wxWindow *parent,
+template < > wxEditCtrlHelper< wxChoice >::wxEditCtrlHelper (wxWindow *parent,
                                 const wxWindowID id,
                                 bool *accept,
                                 wxString *res,
@@ -909,11 +911,11 @@ wxEditCtrlHelper< wxChoice >::wxEditCtrlHelper (wxWindow *parent,
 {	    
 }
 
-wxString wxEditCtrlHelper< wxChoice >::GetValueAsString() const {
+template < > wxString wxEditCtrlHelper< wxChoice >::GetValueAsString() const {
 	return GetStringSelection();
 }
  
-wxEditCtrlHelper< wxSpinCtrl >::wxEditCtrlHelper (wxWindow *parent,
+template < > wxEditCtrlHelper< wxSpinCtrl >::wxEditCtrlHelper (wxWindow *parent,
                                 const wxWindowID id,
                                 bool *accept,
                                 wxString *res,
@@ -928,7 +930,7 @@ wxEditCtrlHelper< wxSpinCtrl >::wxEditCtrlHelper (wxWindow *parent,
 {	
 }
 
-wxString wxEditCtrlHelper< wxSpinCtrl >::GetValueAsString() const {
+template < > wxString wxEditCtrlHelper< wxSpinCtrl >::GetValueAsString() const {
 	return wxString::Format(wxT("%d"),GetValue());
 }
 
@@ -940,7 +942,7 @@ wxDateTime StringToDate( const wxString& value ) {
 	return wxDefaultDateTime;
 }
 
-wxEditCtrlHelper< wxDatePickerCtrl >::wxEditCtrlHelper (wxWindow *parent,
+template < > wxEditCtrlHelper< wxDatePickerCtrl >::wxEditCtrlHelper (wxWindow *parent,
                                 const wxWindowID id,
                                 bool *accept,
                                 wxString *res,
@@ -955,7 +957,7 @@ wxEditCtrlHelper< wxDatePickerCtrl >::wxEditCtrlHelper (wxWindow *parent,
 {	
 }
 
-wxString wxEditCtrlHelper< wxDatePickerCtrl >::GetValueAsString() const {
+template < > wxString wxEditCtrlHelper< wxDatePickerCtrl >::GetValueAsString() const {
 	return GetValue().FormatDate();
 }
  
