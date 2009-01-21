@@ -5,6 +5,7 @@
 	
 	<objectinfo class="wxTreeListCtrl" icon="treelistctrl.xpm" type="treelistctrl" startgroup="1">
 		<inherits class="wxAdditions"/>
+		<inherits class="wxTreeCtrlBase"/>
 		<inherits class="wxWindow" />
 		<property name="name" type="text" >m_treeListCtrl</property>
 		<property name="column_image_size" type="wxSize" help="Size of column images"/>
@@ -14,7 +15,7 @@
 			<option name="wxTR_HAS_BUTTONS"             help="Use this style to show + and - buttons to the left of parent items."/>
 			<option name="wxTR_TWIST_BUTTONS"           help="Use this style to show Mac-style twister buttons to the left of parent items. If both wxTR_HAS_BUTTONS and wxTR_TWIST_BUTTONS are given, twister buttons are generated."/>
 			<option name="wxTR_NO_LINES"                help="Use this style to hide vertical level connectors."/>
-			<option name="wxTR_FULL_ROW_HIGHLIGHT"      help="Use this style to have the background colour and the selection highlight extend over the entire horizontal row of the tree list control window. (This flag is ignored under Windows unless you specify wxTR_NO_LINES as well.)"/>
+			<option name="wxTR_FULL_ROW_HIGHLIGHT"      help="Use this style to have the background colour and the selection highlight extend over the entire horizontal row of the tree list control window."/>
 			<option name="wxTR_LINES_AT_ROOT"           help="Use this style to show lines between root nodes. Only applicable if wxTR_HIDE_ROOT is set and wxTR_NO_LINES is not set."/>
 			<option name="wxTR_HIDE_ROOT"               help="Use this style to suppress the display of the root node, effectively causing the first-level nodes to appear as a series of root nodes."/>
 			<option name="wxTR_ROW_LINES"               help="Use this style to draw a contrasting border between displayed rows."/>
@@ -41,6 +42,17 @@
 		<property name="image" type="bitmap" help="Column image"/>
 		<property name="shown" type="bool" help="Controls if the column should be shown.">1</property>
 		<property name="edit" type="bool" help="Controls if the column contents can be edited.">0</property>
+		<property name="editor" type="option" help="The editor for the contents.">
+				<option name="Text"		help="Text Control."/>
+				<option name="TextInteger"		help="wxTextCtrl with an Integer Validator."/>
+				<option name="TextFloat"		help="wxTextCtrl with an Float Validator."/>
+				<option name="TextAscii"		help="wxTextCtrl with an Ascii Validator."/>
+				<option name="Combo"	help="wxComboBox (see 'choices' property)"/>
+				<option name="Choice"	help="wxChoice (see 'choices' property)"/>
+				<option name="Spin"		help="wxSpinCtrl"/>
+				Text
+			</property>
+		<property name="choices" type="stringlist" help="Available choices for Choice and Combo editors."></property>
 	</objectinfo>
 	
 	<objectinfo class="wxPlotCtrl" icon="plot.xpm" type="expanded_widget" startgroup="1">

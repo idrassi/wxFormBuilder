@@ -12,7 +12,8 @@
 			@}
 		</template>
 		<template name="construction">
-			$name = new #class( #wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} );
+			$name = new #class( #wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} ); #nl
+			wxArrayString $name #append Choices;
 		</template>
 		<template name="settings">
 			#ifnotnull $column_image_size
@@ -28,6 +29,12 @@
 	
 	<templates class="wxTreeListCtrlColumn">
 		<template name="column_add">
+			#parent $name #append Choices.Clear();
+			#ifnull $choices @{ #nl @}
+			#foreach $choices
+			@{ #parent $name #append Choices.Add( #pred ); @}
+			#ifnotnull $choices @{ #nl @}
+			
 			#ifnotnull #parent $column_image_size
 			@{
 				#ifnotnull $image
@@ -39,18 +46,18 @@
 						#parent $name #append Images->Add( #parent $name #append Image.Scale( #parent $name #append ImageSize.GetWidth(), #parent $name #append ImageSize.GetHeight() ) ); #nl
 						#parent $name #append Index++; #nl
 					@} #nl
-					#parent $name->AddColumn( $name, $width, $alignment, #parent $name #append Index, $shown, $edit );
+					#parent $name->AddColumn( $name, $width, $alignment, #parent $name #append Index, $shown, $edit, wxTreeListColumnInfo::$editor, #parent $name #append Choices );
 				@}
 				
 				#ifnull $image
 				@{
-					#parent $name->AddColumn( $name, $width, $alignment, -1, $shown, $edit );
+					#parent $name->AddColumn( $name, $width, $alignment, -1, $shown, $edit, wxTreeListColumnInfo::$editor, #parent $name #append Choices );
 				@}
 			@}
 			
 			#ifnull #parent $column_image_size
 			@{
-				#parent $name->AddColumn( $name, $width, $alignment, -1, $shown, $edit );
+				#parent $name->AddColumn( $name, $width, $alignment, -1, $shown, $edit, wxTreeListColumnInfo::$editor, #parent $name #append Choices );
 			@}
 		</template>
 	</templates>

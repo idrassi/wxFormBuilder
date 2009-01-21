@@ -205,7 +205,9 @@ public:
 			obj->GetPropertyAsInteger( _("alignment") ),
 			doImageAdd ? imageList->GetImageCount() - 1 : -1,
 			obj->GetPropertyAsInteger( _("shown") ) != 0,
-			obj->GetPropertyAsInteger( _("edit") ) !=0
+			obj->GetPropertyAsInteger( _("edit") ) !=0,
+			obj->GetPropertyAsInteger( _("editor") ),
+			obj->GetPropertyAsArrayString( _("choices") )
 			);
 	}
 
@@ -461,11 +463,19 @@ MACRO(wxTR_LINES_AT_ROOT)
 MACRO(wxTR_HIDE_ROOT)
 MACRO(wxTR_ROW_LINES)
 MACRO(wxTR_HAS_VARIABLE_ROW_HEIGHT)
+MACRO(wxTR_COLUMN_LINES)
 MACRO(wxTR_SINGLE)
 MACRO(wxTR_MULTIPLE)
 MACRO(wxTR_EXTENDED)
 MACRO(wxTR_DEFAULT_STYLE)
 MACRO(wxTR_VIRTUAL)
+lib->RegisterMacro( wxT("Text"), wxTreeListColumnInfo::Text );
+lib->RegisterMacro( wxT("TextInteger"), wxTreeListColumnInfo::TextInteger );
+lib->RegisterMacro( wxT("TextFloat"), wxTreeListColumnInfo::TextFloat );
+lib->RegisterMacro( wxT("TextAscii"), wxTreeListColumnInfo::TextAscii );
+lib->RegisterMacro( wxT("Combo"), wxTreeListColumnInfo::Combo );
+lib->RegisterMacro( wxT("Choice"), wxTreeListColumnInfo::Choice );
+lib->RegisterMacro( wxT("Spin"), wxTreeListColumnInfo::Spin );
 
 // wxTreeListCtrl
 ABSTRACT_COMPONENT( "wxTreeListCtrlColumn", wxTreeListCtrlColumnComponent )
