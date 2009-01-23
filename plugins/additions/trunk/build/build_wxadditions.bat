@@ -122,6 +122,7 @@ call create_build_files
 
 echo Building wxFB Plugin with MinGW Gcc
 echo.
+echo Building using the wxWidgets directory %WXWIN%
 call mingw32-make CONFIG=Release
 
 echo Copy over need dll's to the wxAdditions plug-in directory
