@@ -2,13 +2,13 @@ Source: wxfb-wxadditions
 Section: devel
 Priority: optional
 Maintainer: Ryan Mulder <rjmyst3@gmail.com>
-Build-Depends: debhelper (>= 5), libwxgtk2.8-dev, libgtk2.0-dev, libwxadditions28-dev (>= 2.8.8)
-Standards-Version: 3.8.0
+Build-Depends: debhelper (>= 5), libwxgtk2.8-dev, libwxadditions28-dev
+Standards-Version: 3.7.2
 
 Package: wxfb-wxadditions
 Architecture: any
-Depends: ${shlibs:Depends}, wxformbuilder (>= 3.0.51)
-Description: Additional controls for wxFormBuilder.
+Depends: ${shlibs:Depends}, wxformbuilder (>= 3.0.51), libwxadditions28
+Description: Additional controls for wxFormBuilder
  wxAdditions is a collection of controls that are not part
  of the standard wxWidgets library. 
  .
