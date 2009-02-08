@@ -1,6 +1,13 @@
+libwxadditions28 (2.8.7-0ubuntu2~intrepid1) intrepid; urgency=low
+
+  * Remove debug libs from libwxadditions package
+  * Updated wxTreeListCtrl
+
+ -- Ryan Mulder <rjmyst3@gmail.com>  Sat, 07 Feb 2009 22:38:25 -0500
+ 
 libwxadditions28 (2.8.7-0ubuntu1~hardy1) hardy; urgency=low
 
-  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+  * Initial release
 
  -- Ryan Mulder <rjmyst3@gmail.com>  Wed, 13 Aug 2008 21:58:14 -0400
 
