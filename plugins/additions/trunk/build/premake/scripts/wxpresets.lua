@@ -232,7 +232,9 @@ function ConfigureWxWidgets( package, altTargetName, wxVer, wxVerMinor, wxCustom
 			wxconfig:close()
 	
 			package.config["Debug"].target = debugBasename .. "_" .. targetName .. "-" .. release .. wx_custom
+			table.insert( package.config["Debug"].linkoptions, "-Wl,-soname,lib" .. package.config["Debug"].target .. ".so" )
 			package.config["Release"].target = basename .. "_" .. targetName .. "-" .. release .. wx_custom
+			table.insert( package.config["Release"].linkoptions, "-Wl,-soname,lib" .. package.config["Release"].target .. ".so" )
 		end
 	end
 end
