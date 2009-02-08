@@ -1,4 +1,4 @@
-libwxadditions28 (2.8.7-0ubuntu2~intrepid1) intrepid; urgency=low
+libwxadditions28 (2.8.8-0ubuntu1~intrepid1) intrepid; urgency=low
 
   * Remove debug libs from libwxadditions package
   * Updated wxTreeListCtrl
