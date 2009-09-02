@@ -3602,7 +3602,7 @@ void wxPropertyGrid::Init1()
     m_gutterWidth = wxPG_GUTTER_MIN;
     m_subgroup_extramargin = 10;
 
-    m_lineHeight = 0;
+    m_lineHeight = 12;
 
     m_width = m_height = m_fWidth = 0;
 
@@ -4162,7 +4162,7 @@ bool wxPropertyGrid::SetFont( const wxFont& font )
     // TODO: Following code is disabled with wxMac because
     //   it is reported to fail. I (JMS) cannot debug it
     //   personally right now.
-#if !defined(__WXMAC__)
+#if !defined(__WXMAC__) || wxCHECK_VERSION(2, 8, 10)
     bool res = wxScrolledWindow::SetFont( font );
     if ( res )
     {
@@ -4194,7 +4194,7 @@ bool wxPropertyGrid::SetFont( const wxFont& font )
 
     return res;
 #else
-    // ** wxMAC Only **
+    // ** wxMAC Only with wxWidgets older than 2.8.10 **
     // TODO: Remove after SetFont crash fixed.
     if ( m_iFlags & wxPG_FL_INITIALIZED )
     {
