@@ -1,9 +1,9 @@
 @echo off
 ::**************************************************************************
 :: File:			wxBuild_default.bat
-:: Version:			1.05
+:: Version:			1.06
 :: Name:			RJP Computing 
-:: Date:			07/25/2008
+:: Date:			09/03/2009
 :: Description:		Build wxWidgets things with the MinGW/Visual C++.
 ::                 
 ::                 	v1.01 - Added Compiler setup for VC7.1 and VC8.0.
@@ -11,6 +11,7 @@
 :: 					v1.03 - Added FLAGS. Use to set extra command line options.
 :: 					v1.04 - Added MinGW Gcc 4.x.x compiler.
 :: 					v1.05 - Removed wchar_t setting from VC8.0 setup.
+:: 					v1.06 - Added VC9.0 compiler setup.
 ::**************************************************************************
 set WXBUILD_VERSION=1.05
 :: MinGW Gcc install location. This must match you systems configuration.
@@ -32,6 +33,8 @@ if %1 == VC71   goto SETUP_VC71_BUILD_ENVIRONMENT
 if %1 == vc71   goto SETUP_VC71_BUILD_ENVIRONMENT
 if %1 == VC80   goto SETUP_VC80_BUILD_ENVIRONMENT
 if %1 == vc80   goto SETUP_VC80_BUILD_ENVIRONMENT
+if %1 == VC90   goto SETUP_VC90_BUILD_ENVIRONMENT
+if %1 == vc90   goto SETUP_VC90_BUILD_ENVIRONMENT
 if %1 == MINGW  goto SETUP_GCC_BUILD_ENVIRONMENT
 if %1 == mingw  goto SETUP_GCC_BUILD_ENVIRONMENT
 if %1 == MINGW4  goto SETUP_GCC4_BUILD_ENVIRONMENT
@@ -72,12 +75,24 @@ goto START
 :: Add the full VC 2005 includes.
 echo Setting environment for Visual C++ 8.0...
 echo.
-call "C:\Program Files\Microsoft Visual Studio 8\Common7\Tools\vsvars32.bat"
+call "%VS80COMNTOOLS%vsvars32.bat"
 set INCLUDE=%WXWIN%\include;%INCLUDE%
 :: -- Setup the make executable and the actual makefile name --
 set MAKE=nmake
 set MAKEFILE=makefile.vc
 set FLAGS=
+goto START
+
+:SETUP_VC90_BUILD_ENVIRONMENT
+:: Add the VC 2008 includes.
+echo Setting environment for Visual C++ 9.0...
+echo.
+call "%VS90COMNTOOLS%vsvars32.bat"
+set INCLUDE=%WXWIN%\include;%INCLUDE%
+:: -- Setup the make executable and the actual makefile name --
+set MAKE=nmake
+set MAKEFILE=makefile.vc
+set FLAGS=USE_ODBC=1 USE_OPENGL=1 USE_QA=1 USE_GDIPLUS=1
 goto START
 
 :SETUP_GCC_BUILD_ENVIRONMENT
@@ -122,6 +137,8 @@ if %2 == ALL  goto ALL_BUILD
 if %2 == all  goto ALL_BUILD
 if %2 == CLEAN  goto CLEAN
 if %2 == clean  goto CLEAN
+if %2 == MOVE  goto MOVE
+if %2 == move  goto MOVE
 if %2 == NULL  goto SECIFIC_BUILD
 if %2 == null  goto SECIFIC_BUILD
 goto WRONGPARAM
@@ -141,6 +158,58 @@ goto LIB_BUILD
 echo Cleaning...
 echo.
 %MAKE% -f %MAKEFILE% clean
+echo.
+goto END
+
+:MOVE
+echo Moving binary files...
+echo.
+if %1 == VCTK   goto MOVE_VCTK
+if %1 == vctk   goto MOVE_VCTK
+if %1 == VC71   goto MOVE_VCTK
+if %1 == vc71   goto MOVE_VCTK
+if %1 == VC80   goto MOVE_VC80
+if %1 == vc80   goto MOVE_VC80
+if %1 == VC90   goto MOVE_VC90
+if %1 == vc90   goto MOVE_VC90
+if %1 == MINGW  goto MOVE_MINGW
+if %1 == mingw  goto MOVE_MINGW
+if %1 == MINGW4  goto MOVE_MINGW4
+if %1 == mingw4  goto MOVE_MINGW4
+goto MOVE_ERROR
+
+:MOVE_VCTK
+:: Move Visual C++ 7.1 directories.
+if exist ..\..\lib\vc_lib move /Y ..\..\lib\vc_lib ..\..\lib\vc7_lib
+if exist ..\..\lib\vc_dll move /Y ..\..\lib\vc_dll ..\..\lib\vc7_dll
+echo.
+goto END
+
+:MOVE_VC80
+:: Move Visual C++ 8.0 directories.
+if exist ..\..\lib\vc_lib move /Y ..\..\lib\vc_lib ..\..\lib\vc8_lib
+if exist ..\..\lib\vc_dll move /Y ..\..\lib\vc_dll ..\..\lib\vc8_dll
+echo.
+goto END
+
+:MOVE_VC90
+:: Move Visual C++ 9.0 directories.
+if exist ..\..\lib\vc_lib move /Y ..\..\lib\vc_lib ..\..\lib\vc9_lib
+if exist ..\..\lib\vc_dll move /Y ..\..\lib\vc_dll ..\..\lib\vc9_dll
+echo.
+goto END
+
+:MOVE_MINGW
+:: Move MinGW 3.x.x directories.
+if exist ..\..\lib\gcc_lib move /Y ..\..\lib\gcc_lib ..\..\lib\gcc3_lib
+if exist ..\..\lib\gcc_dll move /Y ..\..\lib\gcc_dll ..\..\lib\gcc3_dll
+echo.
+goto END
+
+:MOVE_MINGW4
+:: Move MinGW 4.x.x directories.
+if exist ..\..\lib\gcc_lib move /Y ..\..\lib\gcc_lib ..\..\lib\gcc4_lib
+if exist ..\..\lib\gcc_dll move /Y ..\..\lib\gcc_dll ..\..\lib\gcc4_dll
 echo.
 goto END
 
@@ -332,7 +401,7 @@ echo.
 echo wxBuild_default v%WXBUILD_VERSION%
 echo     Build wxWidgets things with the MinGW/Visual C++ ToolKit.
 echo.
-echo Usage: "wxBuild_default.bat <Compiler{MINGW|VCTK|VC71|VC80}> <BuildTarget{LIB|DLL|ALL|CLEAN|NULL}> [Specific Option (See Below)]"
+echo Usage: "wxBuild_default.bat <Compiler{MINGW|VCTK|VC71|VC80|VC90}> <BuildTarget{LIB|DLL|ALL|CLEAN|NULL}> [Specific Option (See Below)]"
 goto SHOW_OPTIONS
 
 :SHOW_OPTIONS
@@ -343,6 +412,7 @@ echo           MINGW4 = MinGW Gcc v4.x.x compiler
 echo           VCTK  = Visual C++ 7.1 Toolkit
 echo           VC71  = Visual C++ 7.1
 echo           VC80  = Visual C++ 8.0
+echo           VC90  = Visual C++ 9.0
 echo.
 echo      BuildTarget Options:
 echo           LIB   = Builds all the static library targets.
