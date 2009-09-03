@@ -11,127 +11,91 @@
 :: Prerequistes:   
 ::**************************************************************************
 
+if (%1) == () goto ERROR
+:: -- Check if user wants help --
+if (%1) == (/?)  goto SHOW_USAGE
+if (%1) == (-?)  goto SHOW_USAGE
+if (%1) == HELP  goto SHOW_USAGE
+if (%1) == help  goto SHOW_USAGE
+if (%2) == ()    goto ERROR
+
 echo Generate all makefiles needed.
 echo.
 call bakefile_gen
 
 :: -- AWX --
-echo Building AWX with VC8.0
+echo Building AWX with %1
 echo.
 cd awx
-call wxBuild_default VC80 ALL
-
-echo Building AWX with MinGW Gcc
-echo.
-call wxBuild_default MINGW4 ALL
+call wxBuild_default %1 ALL
+call wxBuild_default %1 MOVE
 cd ..
 
 :: -- wxPlot --
-echo Building wxPlot with VC8.0
+echo Building wxPlot with %1
 echo.
 cd plot
-call wxBuild_default VC80 ALL
-
-echo Building wxPlot with MinGW Gcc
-echo.
-call wxBuild_default MINGW4 ALL
+call wxBuild_default %1 ALL
+call wxBuild_default %1 MOVE
 cd ..
 
 :: -- wxPropGrid --
-echo Building wxPropGrid with VC8.0
+echo Building wxPropGrid with %1
 echo.
 cd propgrid
-call wxBuild_default VC80 ALL
-
-echo Building wxPropGrid with MinGW Gcc
-echo.
-call wxBuild_default MINGW4 ALL
+call wxBuild_default %1 ALL
+call wxBuild_default %1 MOVE
 cd ..
 
 :: -- wxFlatNotebook --
-echo Building wxFlatNotebook with VC8.0
+echo Building wxFlatNotebook with %1
 echo.
 cd wxFlatNotebook
-call wxBuild_wxFlatNotebook VC80 ALL
-
-echo Building wxFlatNotebook with MinGW Gcc
-echo.
-call wxBuild_wxFlatNotebook MINGW4 ALL
+::call wxBuild_wxFlatNotebook %1 ALL
+call wxBuild_default %1 ALL
+call wxBuild_default %1 MOVE
 cd ..
 
 :: -- wxScintilla --
-echo Building wxScintilla with VC8.0
+echo Building wxScintilla with %1
 echo.
 cd wxScintilla
-call wxBuild_default VC80 ALL
-
-echo Building wxScintilla with MinGW Gcc
-echo.
-call wxBuild_default MINGW4 ALL
+call wxBuild_default %1 ALL
+call wxBuild_default %1 MOVE
 cd ..
 
 :: -- wxThings --
-echo Building wxThings with VC8.0
+echo Building wxThings with %1
 echo.
 cd things
-call wxBuild_default VC80 ALL
-
-echo Building wxThings with MinGW Gcc
-echo.
-call wxBuild_default MINGW4 ALL
+call wxBuild_default %1 ALL
+call wxBuild_default %1 MOVE
 cd ..
 
 :: -- wxTreeListCtrl --
-echo Building wxTreeListCtrl with VC8.0
+echo Building wxTreeListCtrl with %1
 echo.
 cd treelistctrl
-call wxBuild_default VC80 ALL
-
-echo Building wxTreeListCtrl with MinGW Gcc
-echo.
-call wxBuild_default MINGW4 ALL
+call wxBuild_default %1 ALL
+call wxBuild_default %1 MOVE
 cd ..
 
-
 :: -- wxPlotCtrl --
-echo Building wxPlotCtrl with VC8.0
+echo Building wxPlotCtrl with %1
 echo.
 cd plotctrl
-call wxBuild_plotctrl VC80 ALL
-
-echo Building wxPlotCtrl with MinGW Gcc
-echo.
-call wxBuild_plotctrl MINGW4 ALL
+::call wxBuild_plotctrl %1 ALL
+call wxBuild_default %1 ALL
+call wxBuild_default %1 MOVE
 cd ..
 
 :: -- wxLedBarGraph --
-echo Building wxLedBarGraph with VC8.0
+echo Building wxLedBarGraph with %1
 echo.
 cd ledBarGraph
-call wxBuild_default VC80 ALL
-
-echo Building wxLedBarGraph with MinGW Gcc
-echo.
-call wxBuild_default MINGW4 ALL
+call wxBuild_default %1 ALL
+call wxBuild_default %1 MOVE
 cd ..
-
-:: -- wxFB Plugin --
-echo Create the build files needed.
-cd ..\wxfbPlugin
-call create_build_files
-
-echo Building wxFB Plugin with MinGW Gcc
-echo.
-echo Building using the wxWidgets directory %WXWIN%
-call mingw32-make CONFIG=Release
-
-echo Copy over need dll's to the wxAdditions plug-in directory
-copy /Y ..\lib\gcc_dll\wxmsw28um_awx_gcc.dll wxAdditions\wxmsw28um_awx_gcc.dll
-copy /Y ..\lib\gcc_dll\wxmsw28um_ledbargraph_gcc.dll wxAdditions\wxmsw28um_ledbargraph_gcc.dll
-copy /Y ..\lib\gcc_dll\wxmsw28um_plotctrl_gcc.dll wxAdditions\wxmsw28um_plotctrl_gcc.dll
-copy /Y ..\lib\gcc_dll\wxmsw28um_things_gcc.dll wxAdditions\wxmsw28um_things_gcc.dll
-copy /Y ..\lib\gcc_dll\wxmsw28um_treelistctrl_gcc.dll wxAdditions\wxmsw28um_treelistctrl_gcc.dll
-cd ..\build
 
 ::echo Clean up link libraries for MinGW Gcc.
 ::cd ..\lib\gcc_dll
@@ -139,4 +103,30 @@ cd ..\build
 ::cd ..\build
 
 echo Done building wxAdditions.
-pause
+goto END
+
+:ERROR
+echo.
+echo ERROR OCCURED!
+echo Not enough command line parameters.
+goto SHOW_USAGE
+
+:SHOW_USAGE
+echo.
+echo Usage: "wxBuild_default.bat <Compiler{MINGW|VCTK|VC71|VC80|VC90}>"
+goto SHOW_OPTIONS
+
+:SHOW_OPTIONS
+echo.
+echo      Compiler Options:
+echo           MINGW  = MinGW Gcc v3.x.x compiler
+echo           MINGW4 = MinGW Gcc v4.x.x compiler
+echo           VCTK   = Visual C++ 7.1 Toolkit
+echo           VC71   = Visual C++ 7.1
+echo           VC80   = Visual C++ 8.0
+echo           VC90   = Visual C++ 9.0
+echo.
+goto END
+
+:END
+
