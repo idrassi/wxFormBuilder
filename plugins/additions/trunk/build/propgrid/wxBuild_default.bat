@@ -107,7 +107,7 @@ echo.
 :: -- Setup the make executable and the actual makefile name --
 set MAKE=mingw32-make.exe
 set MAKEFILE=makefile.gcc
-set FLAGS=
+set FLAGS=-j %NUMBER_OF_PROCESSORS%
 goto START
 
 :SETUP_GCC4_BUILD_ENVIRONMENT
@@ -122,7 +122,7 @@ echo.
 :: -- Setup the make executable and the actual makefile name --
 set MAKE=mingw32-make.exe
 set MAKEFILE=makefile.gcc
-set FLAGS=CXXFLAGS=-Wno-attributes
+set FLAGS=CXXFLAGS=-Wno-attributes -j %NUMBER_OF_PROCESSORS%
 goto START
 
 :START
