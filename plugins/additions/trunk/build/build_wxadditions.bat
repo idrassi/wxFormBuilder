@@ -1,9 +1,9 @@
 @echo off
 ::**************************************************************************
 :: File:           build_wxadditions.bat
-:: Version:        1.06
+:: Version:        1.07
 :: Name:           RJP Computing 
-:: Date:           07/25/2008
+:: Date:           11/09/2009
 :: Description:    Use this to build all the projects for wxAdditions.
 ::                 Make sure to add the calls to any additions made to the
 ::                 wxAdditions library.
@@ -17,18 +17,29 @@ if (%1) == (/?)  goto SHOW_USAGE
 if (%1) == (-?)  goto SHOW_USAGE
 if (%1) == HELP  goto SHOW_USAGE
 if (%1) == help  goto SHOW_USAGE
-if (%2) == ()    goto ERROR
+::if (%2) == ()    goto ERROR
 
 echo Generate all makefiles needed.
 echo.
 call bakefile_gen
+
+echo Copy build file to all build directories...
+copy /Y wxBuild_default.bat awx\
+copy /Y wxBuild_default.bat ledBarGraph\
+copy /Y wxBuild_default.bat plot\
+copy /Y wxBuild_default.bat plotctrl\
+copy /Y wxBuild_default.bat propgrid\
+copy /Y wxBuild_default.bat things\
+copy /Y wxBuild_default.bat treelistctrl\
+copy /Y wxBuild_default.bat wxFlatNotebook\
+copy /Y wxBuild_default.bat wxScintilla\
+echo.
 
 :: -- AWX --
 echo Building AWX with %1
 echo.
 cd awx
 call wxBuild_default %1 ALL
-call wxBuild_default %1 MOVE
 cd ..
 
 :: -- wxPlot --
@@ -36,7 +47,6 @@ echo Building wxPlot with %1
 echo.
 cd plot
 call wxBuild_default %1 ALL
-call wxBuild_default %1 MOVE
 cd ..
 
 :: -- wxPropGrid --
@@ -44,16 +54,13 @@ echo Building wxPropGrid with %1
 echo.
 cd propgrid
 call wxBuild_default %1 ALL
-call wxBuild_default %1 MOVE
 cd ..
 
 :: -- wxFlatNotebook --
 echo Building wxFlatNotebook with %1
 echo.
 cd wxFlatNotebook
-::call wxBuild_wxFlatNotebook %1 ALL
 call wxBuild_default %1 ALL
-call wxBuild_default %1 MOVE
 cd ..
 
 :: -- wxScintilla --
@@ -61,7 +68,6 @@ echo Building wxScintilla with %1
 echo.
 cd wxScintilla
 call wxBuild_default %1 ALL
-call wxBuild_default %1 MOVE
 cd ..
 
 :: -- wxThings --
@@ -69,7 +75,6 @@ echo Building wxThings with %1
 echo.
 cd things
 call wxBuild_default %1 ALL
-call wxBuild_default %1 MOVE
 cd ..
 
 :: -- wxTreeListCtrl --
@@ -77,16 +82,13 @@ echo Building wxTreeListCtrl with %1
 echo.
 cd treelistctrl
 call wxBuild_default %1 ALL
-call wxBuild_default %1 MOVE
 cd ..
 
 :: -- wxPlotCtrl --
 echo Building wxPlotCtrl with %1
 echo.
 cd plotctrl
-::call wxBuild_plotctrl %1 ALL
 call wxBuild_default %1 ALL
-call wxBuild_default %1 MOVE
 cd ..
 
 :: -- wxLedBarGraph --
@@ -94,7 +96,6 @@ echo Building wxLedBarGraph with %1
 echo.
 cd ledBarGraph
 call wxBuild_default %1 ALL
-call wxBuild_default %1 MOVE
 cd ..
 
 ::echo Clean up link libraries for MinGW Gcc.

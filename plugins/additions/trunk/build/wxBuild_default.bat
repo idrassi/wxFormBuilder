@@ -13,7 +13,7 @@
 :: 					v1.05 - Removed wchar_t setting from VC8.0 setup.
 :: 					v1.06 - Added VC9.0 compiler setup.
 ::**************************************************************************
-set WXBUILD_VERSION=1.05
+set WXBUILD_VERSION=1.06
 :: MinGW Gcc install location. This must match you systems configuration.
 set GCCDIR=C:\MinGW
 set GCC4DIR=C:\MinGW4
