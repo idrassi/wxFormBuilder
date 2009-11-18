@@ -17,6 +17,9 @@
 #endif
 
 #include <wx/propgrid/propgrid.h>
+class wxToolBar;
+class wxButton;
+class wxStaticText;
 
 // -----------------------------------------------------------------------
 
