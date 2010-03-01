@@ -31,6 +31,8 @@
 #include <wx/calctrl.h>
 #include <wx/html/htmlwin.h>
 #include <wx/treectrl.h>
+#include <wx/dataview.h>
+#include <wx/imaglist.h>
 #include <wx/spinbutt.h>
 #include <wx/spinctrl.h>
 #include <wx/tglbtn.h>
@@ -82,6 +84,9 @@ protected:
 		void OnText( wxCommandEvent& event );
 	#endif
 	void OnGenericDirCtrlExpandItem( wxTreeEvent& event );
+	//void OnColClick( wxDataViewEvent& event );
+	//void OnColEndDrag( wxDataViewEvent& event );
+	//void OnLeftDClick( wxDataViewEvent& event );
 	DECLARE_EVENT_TABLE()
 };
 
@@ -478,6 +483,116 @@ public:
 		XrcToXfbFilter filter(xrcObj, _("wxTreeCtrl"));
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
+	}
+};
+
+class DataViewCtrlComponent : public ComponentBase
+{
+public:
+	wxObject* Create(IObject *obj, wxObject *parent)
+	{
+		/*wxDataViewCtrl *dv = new wxDataViewCtrl((wxWindow *)parent,-1,
+			obj->GetPropertyAsPoint(_("pos")),
+			obj->GetPropertyAsSize(_("size")),
+			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+
+        return dv;*/
+		wxLog::EnableLogging(false);
+		int style = obj->GetPropertyAsInteger(_("style"));
+		
+		wxDataViewTreeCtrl* tc =
+				new wxDataViewTreeCtrl( (wxWindow *) parent, wxID_ANY,
+										obj->GetPropertyAsPoint( _("pos") ),
+										obj->GetPropertyAsSize(_("size") ), style );
+										
+		wxImageList *ilist = new wxImageList( 16, 16 );
+			ilist->Add( wxIcon(smiley_xpm) );
+			tc->SetImageList( ilist );
+
+			wxDataViewItem item =
+				tc->AppendContainer( wxDataViewItem(0), "The Root", 0 );
+		
+				tc->AppendItem( item, "Child 1", 0 );
+				tc->AppendItem( item, "Child 2", 0 );
+				tc->AppendItem( item, "Child 3, very long, long, long, long", 0 );
+
+			wxDataViewItem cont =
+				tc->AppendContainer( item, "Container child", 0 );
+				tc->AppendItem( cont, "Child 4", 0 );
+				tc->AppendItem( cont, "Child 5", 0 );
+
+			tc->Expand(cont);
+			
+			return tc;
+	}
+/*
+	ticpp::Element* ExportToXrc(IObject *obj)
+	{
+		ObjectToXrcFilter xrc(obj, _("wxDataViewCtrl"), obj->GetPropertyAsString(_("name")));
+		xrc.AddWindowProperties();
+		return xrc.GetXrcObject();
+	}
+
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
+	{
+		XrcToXfbFilter filter(xrcObj, _("wxDataViewCtrl"));
+		filter.AddWindowProperties();
+		return filter.GetXfbObject();
+	}
+*/
+};
+
+class DataViewColumnComponent : public ComponentBase
+{
+public:
+	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
+	{
+		// Easy read-only property access
+		IObject* obj = GetManager()->GetIObject( wxobject );
+		wxDataViewCtrl* dataView = wxDynamicCast( wxparent, wxDataViewCtrl );
+
+		// Error checking
+		if ( !( obj && dataView ) )
+		{
+			wxLogError( _("DataViewColumnComponent is missing its wxFormBuilder object(%i) or its parent(%i)"), obj,dataView );
+			return;
+		}
+		
+		wxString renderer = obj->GetPropertyAsString( _("flags") );
+		
+		if( renderer == wxT("wxDataViewTextRenderer") )
+		{
+			dataView->AppendTextColumn( "Column with strings" , 0 ,  wxDATAVIEW_CELL_INERT );
+		}
+		else if( renderer == wxT("wxDataViewIconTextRenderer") )
+		{
+			dataView->AppendIconTextColumn( "Column with icons" , 0 ,  wxDATAVIEW_CELL_INERT  );
+		}
+		else if( renderer == wxT("wxDataViewToggleRenderer") )
+		{
+			dataView->AppendToggleColumn( "toggle" , 0 ,  wxDATAVIEW_CELL_INERT );
+		}
+		else if( renderer == wxT("wxDataViewProgressRenderer") )
+		{
+			dataView->AppendProgressColumn( "progress" , 0 ,  wxDATAVIEW_CELL_INERT );
+		}
+		else if( renderer == wxT("wxDataViewBitmapRenderer") )
+		{
+			dataView->AppendBitmapColumn( "wxBitmap" , 0 ,  wxDATAVIEW_CELL_INERT );
+		}
+		else if( renderer == wxT("wxDataViewDateRenderer") )
+		{
+			dataView->AppendDateColumn( "datetime" , 0 ,  wxDATAVIEW_CELL_INERT  );
+		}
+		else
+		{
+			dataView->AppendTextColumn(  "string" , 0 ,  wxDATAVIEW_CELL_INERT );
+		}
+	}
+
+	void OnSelected( wxObject* wxobject )
+	{
+
 	}
 };
 
@@ -1358,6 +1473,17 @@ MACRO(wxTR_MULTIPLE)
 MACRO(wxTR_EXTENDED)
 MACRO(wxTR_DEFAULT_STYLE)
 
+// wxDataViewCtrl
+WINDOW_COMPONENT( "wxDataViewCtrl", DataViewCtrlComponent )
+ABSTRACT_COMPONENT( "wxDataViewColumn", DataViewColumnComponent )
+MACRO(wxDV_SINGLE)					// Single selection mode. This is the default. 
+MACRO(wxDV_MULTIPLE)				// Multiple selection mode. 
+MACRO(wxDV_ROW_LINES)				// Use alternating colours for rows if supported by platform and theme. 
+MACRO(wxDV_HORIZ_RULES)				// Display fine rules between row if supported. 
+MACRO(wxDV_VERT_RULES)				// Display fine rules between columns is supported. 
+MACRO(wxDV_VARIABLE_LINE_HEIGHT)	// Allow variable line heights. This can be inefficient when displaying large number of items. 
+MACRO(wxDV_NO_HEADER) 				// Do not show column headers (which are shown by default).
+
 // wxGrid
 MACRO(wxALIGN_LEFT)
 MACRO(wxALIGN_CENTRE)
@@ -1384,4 +1510,3 @@ MACRO(wxDIRCTRL_SHOW_FILTERS)
 MACRO(wxDIRCTRL_EDIT_LABELS)
 
 END_LIBRARY()
-

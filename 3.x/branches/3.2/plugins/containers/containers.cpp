@@ -31,7 +31,7 @@
 #include <wx/splitter.h>
 #include <wx/listctrl.h>
 
-// Includes notebook, listbook, choicebook, auibook
+// Includes notebook, listbook, choicebook, treebook, toolbook, auibook
 #include "bookutils.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -57,6 +57,8 @@ protected:
 	void OnNotebookPageChanged( wxNotebookEvent& event );
 	void OnListbookPageChanged( wxListbookEvent& event );
 	void OnChoicebookPageChanged( wxChoicebookEvent& event );
+	void OnTreebookPageChanged( wxTreebookEvent& event );
+	void OnToolbookPageChanged( wxToolbookEvent& event );
 	void OnAuiNotebookPageChanged( wxAuiNotebookEvent& event );
 	void OnSplitterSashChanged( wxSplitterEvent& event );
 
@@ -82,11 +84,11 @@ protected:
 			IObject*  iChild = m_manager->GetIObject( wxChild );
 			if ( iChild )
 			{
-				if ( (int)i == selPage && !iChild->GetPropertyAsInteger( _("select") ) )
+				if ( (int)i == selPage && !iChild->GetPropertyAsInteger( _("selected") ) )
 				{
 					m_manager->ModifyProperty( wxChild, _("select"), wxT("1"), false );
 				}
-				else if ( (int)i != selPage && iChild->GetPropertyAsInteger( _("select") ) )
+				else if ( (int)i != selPage && iChild->GetPropertyAsInteger( _("selected") ) )
 				{
 					m_manager->ModifyProperty( wxChild, _("select"), wxT("0"), false );
 				}
@@ -512,6 +514,11 @@ public:
 	{
     ObjectToXrcFilter xrc(obj, _("notebookpage"));
 		xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+        if ( !obj->IsNull( _("bitmap") ) )
+		{
+			xrc.AddProperty( _("bitmap"), _("bitmap"), XRC_TYPE_BITMAP );
+//			xrc.AddProperty( _("image"), _("image"), XRC_TYPE_INTEGER );
+		}
 		xrc.AddProperty(_("select"),_("selected"),XRC_TYPE_BOOL);
 		return xrc.GetXrcObject();
 	}
@@ -521,6 +528,8 @@ public:
     XrcToXfbFilter filter(xrcObj, _("notebookpage"));
 		filter.AddWindowProperties();
 		filter.AddProperty(_("selected"),_("select"),XRC_TYPE_BOOL);
+		filter.AddProperty( _("bitmap"), _("bitmap"), XRC_TYPE_BITMAP );
+//		filter.AddProperty( _("image"), _("image"), XRC_TYPE_INTEGER );
 		filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
 		return filter.GetXfbObject();
 	}
@@ -593,14 +602,19 @@ public:
 	}
 
 	void OnSelected( wxObject* wxobject )
-		{
+    {
 		BookUtils::OnSelected< wxListbook >( wxobject, GetManager() );
-				}
+    }
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		ObjectToXrcFilter xrc(obj, _("listbookpage"));
 		xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+        if ( !obj->IsNull( _("bitmap") ) )
+		{
+			xrc.AddProperty( _("bitmap"), _("bitmap"), XRC_TYPE_BITMAP );
+//			xrc.AddProperty( _("image"), _("image"), XRC_TYPE_INTEGER );
+		}
 		xrc.AddProperty(_("select"),_("selected"),XRC_TYPE_BOOL);
 		return xrc.GetXrcObject();
 	}
@@ -610,6 +624,8 @@ public:
 		XrcToXfbFilter filter(xrcObj, _("listbookpage"));
 		filter.AddWindowProperties();
 		filter.AddProperty(_("selected"),_("select"),XRC_TYPE_BOOL);
+		filter.AddProperty( _("bitmap"), _("bitmap"), XRC_TYPE_BITMAP );
+//		filter.AddProperty( _("image"), _("image"), XRC_TYPE_INTEGER );
 		filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
 		return filter.GetXfbObject();
 	}
@@ -682,6 +698,286 @@ public:
 	}
 };
 
+class TreebookComponent : public ComponentBase
+{
+public:
+	wxObject* Create(IObject *obj, wxObject *parent)
+	{
+		wxTreebook* book = new wxTreebook((wxWindow *)parent,-1,
+                                        obj->GetPropertyAsPoint(_("pos")),
+                                        obj->GetPropertyAsSize(_("size")),
+                                        obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+
+		BookUtils::AddImageList( obj, book );
+
+		book->PushEventHandler( new ComponentEvtHandler( book, GetManager() ) );
+
+		return book;
+	}
+
+	ticpp::Element* ExportToXrc(IObject *obj)
+	{
+		ObjectToXrcFilter xrc(obj, _("wxTreebook"), obj->GetPropertyAsString(_("name")));
+		xrc.AddWindowProperties();
+		return xrc.GetXrcObject();
+	}
+
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
+	{
+		XrcToXfbFilter filter(xrcObj, _("wxTreebook"));
+		filter.AddWindowProperties();
+		return filter.GetXfbObject();
+	}
+};
+
+void ComponentEvtHandler::OnTreebookPageChanged( wxTreebookEvent& event )
+{
+	OnBookPageChanged< wxTreebook >( event.GetSelection(), &event );
+	event.Skip();
+}
+
+class TreebookPageComponent : public ComponentBase
+{
+public:
+	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
+	{
+		// Easy read-only property access
+		IObject* obj = GetManager()->GetIObject( wxobject );
+		wxTreebook* book = wxDynamicCast( wxparent, wxTreebook );
+		wxWindow* page = wxDynamicCast( GetManager()->GetChild( wxobject, 0 ), wxWindow );
+
+		// Error checking
+		if ( !( obj && book && page ) )
+		{
+			wxLogError( _("TreebookPageComponent is missing its wxFormBuilder object(%i), its parent(%i), or its child(%i)"), obj, book, page );
+			return;
+		}
+
+        // TODO : size_t depth = GetLong( wxT("depth") ); GetPropertyAsLong needed?
+        size_t depth = obj->GetPropertyAsInteger( _("depth") );
+
+        if( depth > book->GetPageCount() )
+		{
+			wxLogError( _("TreebookPageComponent has an invalid depth."), obj, book, page );
+			// TODO : Change depth property to 0
+			return;
+		}
+
+		// Prevent events during construction - two event handlers have been pushed onto the stack
+		// VObjEvtHandler and Component Event handler
+		wxEvtHandler* vobjEvtHandler = book->PopEventHandler();
+		wxEvtHandler* bookEvtHandler = book->PopEventHandler();
+
+		int selection = book->GetSelection();
+        int imageIndex = 0;
+
+		// Apply image to page
+		IObject* parentObj = GetManager()->GetIObject( wxparent );
+		if ( !parentObj->GetPropertyAsString( _("bitmapsize") ).empty() )
+		{
+			if ( !obj->GetPropertyAsString( _("bitmap") ).empty() )
+			{
+				wxSize imageSize = parentObj->GetPropertyAsSize( _("bitmapsize") );
+				int width = imageSize.GetWidth();
+				int height = imageSize.GetHeight();
+				if ( width > 0 && height > 0 )
+				{
+					wxImageList* imageList = book->GetImageList();
+					if ( imageList != NULL )
+					{
+						wxImage image = obj->GetPropertyAsBitmap( _("bitmap") ).ConvertToImage();
+						imageIndex = imageList->Add( image.Scale( width, height ) );
+                        book->SetPageImage( book->GetPageCount(), imageIndex );
+					}
+				}
+			}
+		}
+
+		if ( depth == 0 )
+		{
+		    book->AddPage( page, obj->GetPropertyAsString( _("label") ), false, imageIndex );
+		}
+        else
+        {
+            // TODO : Set a different value in cpp/pythoncode than $depth - 1
+            book->InsertSubPage( depth - 1, page, obj->GetPropertyAsString( _("label") ), false, imageIndex );
+        }
+
+		if ( obj->GetPropertyAsString( _("select") ) == wxT("0") && selection >= 0 )
+		{
+			book->SetSelection(selection);
+		}
+		else
+		{
+			book->SetSelection( book->GetPageCount() - 1 );
+		}
+
+		// Restore event handling
+		book->PushEventHandler( bookEvtHandler );
+		book->PushEventHandler( vobjEvtHandler );
+	}
+
+	void OnSelected( wxObject* wxobject )
+	{
+		BookUtils::OnSelected< wxTreebook >( wxobject, GetManager() );
+	}
+
+	ticpp::Element* ExportToXrc(IObject *obj)
+	{
+		ObjectToXrcFilter xrc(obj, _("treebookpage"));
+		xrc.AddProperty(_("depth"),_("depth"),XRC_TYPE_INTEGER);
+		xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+		xrc.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_BITMAP);
+//		xrc.AddProperty(_("image"),_("image"),XRC_TYPE_INTEGER);
+		xrc.AddProperty(_("select"),_("selected"),XRC_TYPE_BOOL);
+		return xrc.GetXrcObject();
+	}
+
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
+	{
+		XrcToXfbFilter filter(xrcObj, _("treebookpage"));
+		filter.AddWindowProperties();
+		filter.AddProperty(_("depth"),_("depth"),XRC_TYPE_INTEGER);
+		filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+		filter.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_BITMAP);
+//		filter.AddProperty(_("image"),_("image"),XRC_TYPE_INTEGER);
+		filter.AddProperty(_("selected"),_("select"),XRC_TYPE_BOOL);
+		return filter.GetXfbObject();
+	}
+};
+
+class ToolbookComponent : public ComponentBase
+{
+public:
+	wxObject* Create(IObject *obj, wxObject *parent)
+	{
+		wxToolbook* book = new wxToolbook((wxWindow *)parent,-1,
+			obj->GetPropertyAsPoint(_("pos")),
+			obj->GetPropertyAsSize(_("size")),
+			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+
+		BookUtils::AddImageList( obj, book );
+
+		book->PushEventHandler( new ComponentEvtHandler( book, GetManager() ) );
+
+		return book;
+	}
+/*
+	ticpp::Element* ExportToXrc(IObject *obj)
+	{
+		ObjectToXrcFilter xrc(obj, _("wxToolbook"), obj->GetPropertyAsString(_("name")));
+		xrc.AddWindowProperties();
+		return xrc.GetXrcObject();
+	}
+
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
+	{
+		XrcToXfbFilter filter(xrcObj, _("wxToolbook"));
+		filter.AddWindowProperties();
+		return filter.GetXfbObject();
+	}
+*/
+};
+
+void ComponentEvtHandler::OnToolbookPageChanged( wxToolbookEvent& event )
+{
+	OnBookPageChanged< wxToolbook >( event.GetSelection(), &event );
+	event.Skip();
+}
+
+class ToolbookPageComponent : public ComponentBase
+{
+public:
+	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
+	{
+		// Easy read-only property access
+		IObject* obj = GetManager()->GetIObject( wxobject );
+		wxToolbook* book = wxDynamicCast( wxparent, wxToolbook );
+		wxWindow* page = wxDynamicCast( GetManager()->GetChild( wxobject, 0 ), wxWindow );
+
+		// Error checking
+		if ( !( obj && book && page ) )
+		{
+			wxLogError( _("ToolbookPageComponent is missing its wxFormBuilder object(%i), its parent(%i), or its child(%i)"), obj, book, page );
+			return;
+		}
+
+		// Prevent events during construction - two event handlers have been pushed onto the stack
+		// VObjEvtHandler and Component Event handler
+		wxEvtHandler* vobjEvtHandler = book->PopEventHandler();
+		wxEvtHandler* bookEvtHandler = book->PopEventHandler();
+
+		int selection = book->GetSelection();
+        int imageIndex = 0;
+
+		// Apply image to page
+		IObject* parentObj = GetManager()->GetIObject( wxparent );
+		if ( !parentObj->GetPropertyAsString( _("bitmapsize") ).empty() )
+		{
+			if ( !obj->GetPropertyAsString( _("bitmap") ).empty() )
+			{
+				wxSize imageSize = parentObj->GetPropertyAsSize( _("bitmapsize") );
+				int width = imageSize.GetWidth();
+				int height = imageSize.GetHeight();
+				if ( width > 0 && height > 0 )
+				{
+					wxImageList* imageList = book->GetImageList();
+					if ( imageList != NULL )
+					{
+						wxImage image = obj->GetPropertyAsBitmap( _("bitmap") ).ConvertToImage();
+						imageIndex = imageList->Add( image.Scale( width, height ) );
+                        book->SetPageImage( book->GetPageCount(), imageIndex );
+					}
+				}
+			}
+		}
+        book->AddPage( page, obj->GetPropertyAsString( _("label") ), false, imageIndex );
+
+		if ( obj->GetPropertyAsString( _("select") ) == wxT("0") && selection >= 0 )
+		{
+			book->SetSelection(selection);
+		}
+		else
+		{
+			book->SetSelection( book->GetPageCount() - 1 );
+		}
+
+		// Restore event handling
+		book->PushEventHandler( bookEvtHandler );
+		book->PushEventHandler( vobjEvtHandler );
+    }
+
+	void OnSelected( wxObject* wxobject )
+	{
+		BookUtils::OnSelected< wxToolbook >( wxobject, GetManager() );
+	}
+/*
+	ticpp::Element* ExportToXrc(IObject *obj)
+	{
+        ObjectToXrcFilter xrc( obj, _("toolbookpage") );
+		xrc.AddProperty( _("label"), _("label"), XRC_TYPE_TEXT );
+        if ( !obj->IsNull( _("bitmap") ) )
+		{
+			xrc.AddProperty( _("bitmap"), _("bitmap"), XRC_TYPE_BITMAP );
+//			xrc.AddProperty( _("image"), _("image"), XRC_TYPE_INTEGER );
+		}
+		xrc.AddProperty( _("select"), _("selected"), XRC_TYPE_BOOL );
+		return xrc.GetXrcObject();
+	}
+
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
+	{
+        XrcToXfbFilter filter( xrcObj, _("toolbookpage") );
+		filter.AddWindowProperties();
+		filter.AddProperty( _("label"), _("label"), XRC_TYPE_TEXT );
+		filter.AddProperty( _("bitmap"), _("bitmap"), XRC_TYPE_BITMAP );
+//		filter.AddProperty( _("image"), _("image"), XRC_TYPE_INTEGER );
+		filter.AddProperty( _("selected"), _("select"), XRC_TYPE_BOOL );
+		return filter.GetXfbObject();
+	}
+*/
+};
+
 class AuiNotebookComponent : public ComponentBase
 {
 public:
@@ -699,7 +995,6 @@ public:
 
 		return book;
 	}
-
 /*
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
@@ -776,9 +1071,14 @@ public:
 /*
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("auinotebookpage"));
-		xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
-		xrc.AddProperty(_("selected"),_("selected"),XRC_TYPE_BOOL);
+		ObjectToXrcFilter xrc( obj, _("auinotebookpage" ) );
+		xrc.AddProperty( _("label"), _("label"), XRC_TYPE_TEXT );
+        if ( !obj->IsNull( _("bitmap") ) )
+		{
+			xrc.AddProperty( _("bitmap"), _("bitmap"), XRC_TYPE_BITMAP );
+//			xrc.AddProperty( _("image"), _("image"), XRC_TYPE_INTEGER );
+		}
+		xrc.AddProperty( _("select"), _("selected"), XRC_TYPE_BOOL );
 		return xrc.GetXrcObject();
 	}
 
@@ -786,8 +1086,9 @@ public:
 	{
 		XrcToXfbFilter filter(xrcObj, _("auinotebookpage"));
 		filter.AddWindowProperties();
-		filter.AddProperty(_("selected"),_("selected"),XRC_TYPE_BOOL);
-		filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+		filter.AddProperty( _("selected"), _("select"), XRC_TYPE_BOOL );
+		filter.AddProperty( _("bitmap"), _("bitmap"), XRC_TYPE_BITMAP );
+		filter.AddProperty( _("label"), _("label"), XRC_TYPE_TEXT );
 		return filter.GetXfbObject();
 	}
 */
@@ -796,7 +1097,6 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()
-
 
 WINDOW_COMPONENT("wxPanel",PanelComponent)
 
@@ -813,6 +1113,12 @@ ABSTRACT_COMPONENT("listbookpage", ListbookPageComponent)
 
 WINDOW_COMPONENT("wxChoicebook", ChoicebookComponent)
 ABSTRACT_COMPONENT("choicebookpage", ChoicebookPageComponent)
+
+WINDOW_COMPONENT("wxTreebook", TreebookComponent)
+ABSTRACT_COMPONENT("treebookpage", TreebookPageComponent)
+
+WINDOW_COMPONENT("wxToolbook", ToolbookComponent)
+ABSTRACT_COMPONENT("toolbookpage", ToolbookPageComponent)
 
 WINDOW_COMPONENT("wxAuiNotebook", AuiNotebookComponent)
 ABSTRACT_COMPONENT("auinotebookpage", AuiNotebookPageComponent)
@@ -833,6 +1139,13 @@ MACRO(wxSPLIT_HORIZONTAL)
 // wxScrolledWindow
 MACRO(wxHSCROLL);
 MACRO(wxVSCROLL);
+
+// wxBookCtrl flags (common for wxNotebook, wxListbook, wxChoicebook, wxTreebook)
+MACRO(wxBK_DEFAULT)
+MACRO(wxBK_TOP)
+MACRO(wxBK_BOTTOM)
+MACRO(wxBK_LEFT)
+MACRO(wxBK_RIGHT)
 
 // wxNotebook
 MACRO(wxNB_TOP)
@@ -871,4 +1184,3 @@ MACRO(wxAUI_NB_CLOSE_ON_ACTIVE_TAB)
 MACRO(wxAUI_NB_CLOSE_ON_ALL_TABS)
 
 END_LIBRARY()
-

@@ -193,14 +193,14 @@ Python code generation written by
 	<template name="construction">
 		#ifnotnull $choices
 		@{
-			$name #append Choices = [ $choices ] #nl
+			self.$name #append Choices = [ $choices ] #nl
 			
 		@}
 		#ifnull $choices
 		@{
-			$name #append Choices = [] #nl
+			self.$name #append Choices = [] #nl
 		@}
-		self.$name = #class( #wxparent $name, $id, $pos, $size, $name #append Choices, $window_style #ifnotnull $window_name @{, wx.DefaultValidator, $window_name @} )
+		self.$name = #class( #wxparent $name, $id, $pos, $size, self.$name #append Choices, $window_style #ifnotnull $window_name @{, wx.DefaultValidator, $window_name @} )
 	</template>
 	<template name="settings">self.$name.SetSelection( $selection )</template>
 	<template name="evt_connect_OnChoice">self.$name.Bind( wx.EVT_CHOICE, #handler )</template>

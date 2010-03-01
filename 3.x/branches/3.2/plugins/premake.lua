@@ -5,7 +5,7 @@ dopackage( "additional" )
 dopackage( "common" )
 dopackage( "containers" )
 dopackage( "layout" )
-dopackage( "wxAdditions" )
+--dopackage( "wxAdditions" )
 
 -- Add dependency packages here.
 dopackage( "../sdk/plugin_interface" )

@@ -212,6 +212,72 @@ public:
 	}
 };
 
+class WizardFormComponent : public ComponentBase
+{
+public:
+	wxObject* Create(IObject* /*obj*/, wxObject *parent)
+	{
+		wxPanel *panel = new wxPanel((wxWindow *)parent,-1);
+		return panel;
+	}
+
+	ticpp::Element* ExportToXrc(IObject *obj)
+	{
+		ObjectToXrcFilter xrc( obj, _("wxWizard"), obj->GetPropertyAsString( _("name") ) );
+		xrc.AddWindowProperties();
+		xrc.AddProperty( _("title"), _("title"), XRC_TYPE_TEXT);
+		if ( !obj->IsNull( _("center") ) )
+		{
+			xrc.AddPropertyValue( _("centered"), _("1") );
+		}
+    if ( !obj->IsNull( _("bitmap") ) )
+		{
+			xrc.AddProperty( _("bitmap"), _("bitmap"), XRC_TYPE_BITMAP );
+		}
+		return xrc.GetXrcObject();
+	}
+
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
+	{
+		XrcToXfbFilter filter(xrcObj, _("Wizard"));
+		filter.AddWindowProperties();
+		filter.AddProperty( _("title"), _("title"), XRC_TYPE_TEXT);
+		filter.AddProperty(_("centered"), _("center"), XRC_TYPE_BITLIST);
+		filter.AddProperty( _("bitmap"), _("bitmap"), XRC_TYPE_BITMAP );
+		return filter.GetXfbObject();
+	}
+};
+
+class WizardPageComponent : public ComponentBase
+{
+public:
+	wxObject* Create(IObject* /*obj*/, wxObject *parent)
+	{
+		wxPanel* panel = new wxPanel((wxWindow *)parent,-1);
+		return panel;
+	}
+
+	ticpp::Element* ExportToXrc(IObject *obj)
+	{
+    ObjectToXrcFilter xrc(obj, _("wxWizardPage"));
+		xrc.AddProperty( _("page_name"),  _("name"), XRC_TYPE_TEXT);
+    if ( !obj->IsNull( _("bitmap") ) )
+		{
+			xrc.AddProperty( _("bitmap"), _("bitmap"), XRC_TYPE_BITMAP );
+		}
+		return xrc.GetXrcObject();
+	}
+
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
+	{
+    XrcToXfbFilter filter(xrcObj, _("wizardpage"));
+		filter.AddWindowProperties();
+		filter.AddProperty( _("name"), _("page_name"), XRC_TYPE_TEXT);
+		filter.AddProperty( _("bitmap"), _("bitmap"), XRC_TYPE_BITMAP );
+		return filter.GetXfbObject();
+	}
+};
+
 class MenuBarFormComponent : public ComponentBase
 {
 public:
@@ -1459,7 +1525,10 @@ ABSTRACT_COMPONENT("Panel",PanelFormComponent)
 ABSTRACT_COMPONENT("Dialog",DialogFormComponent)
 ABSTRACT_COMPONENT("MenuBar",MenuBarFormComponent)
 ABSTRACT_COMPONENT("ToolBar",ToolBarFormComponent)
+ABSTRACT_COMPONENT( "Wizard", WizardFormComponent )
+ABSTRACT_COMPONENT( "wizardpage", WizardPageComponent )
 
+//MACRO(wxWIZARD_EX_HELPBUTTON)
 WINDOW_COMPONENT("wxButton",ButtonComponent)
 WINDOW_COMPONENT("wxBitmapButton",BitmapButtonComponent)
 WINDOW_COMPONENT("wxTextCtrl",TextCtrlComponent)
@@ -1676,5 +1745,3 @@ MACRO(wxAC_DEFAULT_STYLE)
 MACRO(wxAC_NO_AUTORESIZE)
 
 END_LIBRARY()
-
-

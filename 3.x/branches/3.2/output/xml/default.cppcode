@@ -4,7 +4,7 @@
     <template name="header_preamble">
 		#ifnotequal $help_provider "none"
 		@{ @#include &lt;wx/cshelp.h&gt; #nl @}
-		
+
 		#ifnotequal $internationalize "0"
 		@{ @#include &lt;wx/intl.h&gt; #nl @}
     </template>
@@ -36,8 +36,8 @@
   <templates class="wxWindow">
   	<template name="include">
          #ifequal $validator_type "wxGenericValidator" @{ @#include &lt;wx/valgen.h&gt; #nl @}
-         #ifequal $validator_type "wxTextValidator" @{ @#include &lt;wx/valtext.h&gt; #nl @}   
-         #ifequal $validator_data_type "wxArrayInt" @{ @#include &lt;wx/dynarray.h&gt; #nl @}      
+         #ifequal $validator_type "wxTextValidator" @{ @#include &lt;wx/valtext.h&gt; #nl @}
+         #ifequal $validator_data_type "wxArrayInt" @{ @#include &lt;wx/dynarray.h&gt; #nl @}
          </template>
          <template name="valvar_declaration">
          	#ifnotnull $validator_variable
@@ -47,10 +47,10 @@
 		<template name="settings">
 			#ifnotnull $window_extra_style
 			@{ $name->SetExtraStyle( $window_extra_style ); #nl @}
-                         
+
 			#ifnotnull $validator_variable
                          @{ #ifnotnull $validator_data_type
-                         @{ #ifequal $validator_type "wxGenericValidator" @{ $name->SetValidator( $validator_type( &amp;$validator_variable ) ); #nl @} 
+                         @{ #ifequal $validator_type "wxGenericValidator" @{ $name->SetValidator( $validator_type( &amp;$validator_variable ) ); #nl @}
                             #ifequal $validator_type "wxTextValidator" @{ $name->SetValidator( $validator_type( $validator_style, &amp;$validator_variable ) ); #nl @}
                          @} @}
 
@@ -215,24 +215,39 @@
 		<template name="guard_macro_close">@#endif // __$file #append __</template>
 		<template name="Frame_cons_decl">
 			/** Constructor */ #nl
-			$name( wxWindow* parent );
+			$name( wxWindow* parent ); #nl
+			/** Destructor */ #nl
+			~$name();
 		</template>
 		<template name="Frame_cons_def">
 			$name::$name( wxWindow* parent ) #nl #append : #nl$basename( parent )
 		</template>
+		<template name="Frame_dtor_def">
+			~$name::$name()
+		</template>
 		<template name="Panel_cons_decl">
 			/** Constructor */ #nl
-			$name( wxWindow* parent );
+			$name( wxWindow* parent ); #nl
+			/** Destructor */ #nl
+			~$name();
 		</template>
 		<template name="Panel_cons_def">
 			$name::$name( wxWindow* parent ) #nl #append : #nl$basename( parent )
 		</template>
+		<template name="Panel_dtor_def">
+			~$name::$name()
+		</template>
 		<template name="Dialog_cons_decl">
 			/** Constructor */ #nl
-			$name( wxWindow* parent );
+			$name( wxWindow* parent ); #nl
+			/** Destructor */ #nl
+			~$name();
 		</template>
 		<template name="Dialog_cons_def">
 			$name::$name( wxWindow* parent ) #nl #append : #nl$basename( parent )
+		</template>
+		<template name="Dialog_dtor_def">
+			~$name::$name()
 		</template>
   </templates>
 </codegen>
