@@ -5,21 +5,18 @@ else
 	project.bindir = "output/lib/wxformbuilder"
 end
 
--- Configureations. All I am doing is reordering them so that
+-- Configurations. All I am doing is reordering them so that
 -- it defaults to a Release build.
 project.configs = { "Release", "Debug" }
 
 -- Add packages here.
-dopackage( "src/controls/build/propgrid" )
-dopackage( "src/controls/build/wxFlatNotebook" )
-dopackage( "src/controls/build/wxScintilla" )
 dopackage( "sdk/plugin_interface" )
 dopackage( "sdk/tinyxml/ticpp.lua" )
 dopackage( "plugins/additional" )
 dopackage( "plugins/common" )
 dopackage( "plugins/containers" )
 dopackage( "plugins/layout" )
-dopackage( "plugins/wxAdditions" )
+--dopackage( "plugins/wxAdditions" )
 
 -- do this package last, so the post build step actually happens at the end of all the building
 dopackage( "src" )

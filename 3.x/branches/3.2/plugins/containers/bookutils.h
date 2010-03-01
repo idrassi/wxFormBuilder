@@ -31,6 +31,8 @@
 #include <wx/notebook.h>
 #include <wx/listbook.h>
 #include <wx/choicebk.h>
+#include <wx/treebook.h>
+#include <wx/toolbook.h>
 #include <wx/aui/auibook.h>
 
 class SuppressEventHandlers
