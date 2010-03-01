@@ -27,11 +27,27 @@
 #define __VISUAL_EDITOR__
 
 
-#include "wx/wx.h"
+#include <wx/wx.h>
+#include <wx/intl.h>
+#include <wx/sashwin.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/statbmp.h>
+#include <wx/gdicmn.h>
+#include <wx/font.h>
+#include <wx/colour.h>
+#include <wx/settings.h>
+#include <wx/string.h>
+#include <wx/panel.h>
+#include <wx/sizer.h>
+#include <wx/statline.h>
+#include <wx/button.h>
+#include <wx/gbsizer.h>
+
 #include "utils/wxfbdefs.h"
 #include "rad/designer/visualobj.h"
 //#include "rad/designer/resizablepanel.h"
-#include <wx/sashwin.h>
 
 #include "innerframe.h"
 
@@ -65,6 +81,36 @@ class DesignerWindow : public wxInnerFrame
        HighlightPaintHandler(wxWindow *win);
        void OnPaint(wxPaintEvent &event);
    };
+
+  class Wizard : public wxPanel
+  {
+    protected:
+      enum
+      {
+        ID_WIZ_PANEL = 1000,
+        ID_WIZ_BITMAP,
+        ID_WIZ_PAGE,
+      };
+
+      wxStaticBitmap* m_bmpPage;
+      wxPanel* m_pnlPage;
+      wxStaticLine* m_lneSep;
+      wxButton* m_btnBack;
+      wxButton* m_btnNext;
+      wxButton* m_btnCancel;
+/*
+      void OnWizardBack( wxCommandEvent& event );
+      void OnWizardNext( wxCommandEvent& event );
+      void OnWizardCancel( wxCommandEvent& event );
+*/
+    public:
+
+      Wizard( wxWindow* parent, wxWindowID id = ID_WIZ_PANEL,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxSize( 420,350 ),
+             long style = wxTAB_TRAVERSAL );
+      ~Wizard();
+  };
 
  protected:
 
@@ -147,6 +193,4 @@ class VisualEditor : public wxScrolledWindow
   void OnProjectRefresh ( wxFBEvent &event);
 };
 
-
 #endif //__VISUAL_EDITOR__
-

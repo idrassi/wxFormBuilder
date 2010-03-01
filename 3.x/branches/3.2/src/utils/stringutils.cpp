@@ -381,7 +381,7 @@ void XMLUtils::ConvertAndChangeDeclaration( const wxString& path, const wxString
 		}
 
 		// declStart and declEnd are both valid, replace that section with a new declaration
-		contents.replace( declStart, declEnd - declStart + 2, wxString::Format( wxT("<\?xml version=\"%s\" encoding=\"UTF-8\" standalone=\"%s\" \?>"), version.c_str(), standalone.c_str() ).c_str() );
+//		contents.replace( declStart, declEnd - declStart + 2, wxString::Format( wxT("<\?xml version=\"%s\" encoding=\"UTF-8\" standalone=\"%s\" \?>"), version.c_str(), standalone.c_str() ).c_str() ); TODO: Fix This
 	}
 
 	// Remove the old file

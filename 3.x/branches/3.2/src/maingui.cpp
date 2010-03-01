@@ -23,8 +23,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 #include "splashscreen.h"
-#include "rad/mainframe.h"
-#include "rad/appdata.h"
+//#include <wx/splash.h>
 #include <wx/filename.h>
 #include <wx/image.h>
 #include <wx/sysopt.h>
@@ -34,13 +33,17 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/clipbrd.h>
 #include <wx/msgout.h>
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
-#include "utils/wxfbexception.h"
+#include <wx/aui/auibook.h>
 #include <memory>
+
 #include "maingui.h"
+#include "rad/mainframe.h"
+#include "rad/appdata.h"
 
 #include "utils/debug.h"
 #include "utils/typeconv.h"
+#include "utils/wxfbexception.h"
+
 #include "model/objectbase.h"
 
 // Abnormal Termination Handling
@@ -62,10 +65,10 @@ void LogStack();
 
 static const wxCmdLineEntryDesc s_cmdLineDesc[] =
 {
-	{ wxCMD_LINE_SWITCH, wxT("g"), wxT("generate"),	wxT("Generate code from passed file.") },
-	{ wxCMD_LINE_OPTION, wxT("l"), wxT("language"),	wxT("Override the code_generation property from the passed file and generate the passed languages. Separate multiple languages with commas.") },
-	{ wxCMD_LINE_SWITCH, wxT("h"), wxT("help"),		wxT("Show this help message."), wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_HELP  },
-	{ wxCMD_LINE_PARAM, NULL, NULL,	wxT("File to open."), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
+	{ wxCMD_LINE_SWITCH, "g", "generate", "Generate code from passed file." },
+	{ wxCMD_LINE_OPTION, "l", "language", "Override the code_generation property from the passed file and generate the passed languages. Separate multiple languages with commas." },
+	{ wxCMD_LINE_SWITCH, "h", "help", "Show this help message.", wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_HELP },
+	{ wxCMD_LINE_PARAM, NULL, NULL, "File to open.", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
 	{ wxCMD_LINE_NONE }
 };
 
@@ -211,12 +214,17 @@ int MyApp::OnRun()
 
 	#ifndef __WXFB_DEBUG__
 	wxBitmap bitmap;
+//	wxSplashScreen* splash;
 	std::auto_ptr< cbSplashScreen > splash;
 	if ( !justGenerate )
 	{
 		if ( bitmap.LoadFile( dataDir + wxFILE_SEP_PATH + wxT( "resources" ) + wxFILE_SEP_PATH + wxT( "splash.png" ), wxBITMAP_TYPE_PNG ) )
 		{
 			splash = std::auto_ptr< cbSplashScreen >( new cbSplashScreen( bitmap, -1, 0, wxNewId() ) );
+/*			splash = new wxSplashScreen(bitmap,
+										wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_TIMEOUT,
+										3000, NULL, -1, wxDefaultPosition, wxDefaultSize,
+										wxNO_BORDER | wxFRAME_NO_TASKBAR | wxSTAY_ON_TOP); */
 		}
 	}
 	#endif
@@ -233,15 +241,9 @@ int MyApp::OnRun()
 	config->Read( wxT( "SizeW" ), &w );
 	config->Read( wxT( "SizeH" ), &h );
 
-	long style = config->Read( wxT("style"), wxFB_WIDE_GUI );
-	if ( style != wxFB_CLASSIC_GUI )
-	{
-		style = wxFB_WIDE_GUI;
-	}
-
 	config->SetPath( wxT("/") );
 
-	m_frame = new MainFrame( NULL ,-1, (int)style, wxPoint( x, y ), wxSize( w, h ) );
+	m_frame = new MainFrame( NULL ,-1, 0, wxPoint( x, y ), wxSize( w, h ) );
 	if ( !justGenerate )
 	{
 		m_frame->Show( TRUE );
@@ -327,7 +329,6 @@ bool MyApp::OnInit()
 int MyApp::OnExit()
 {
 	MacroDictionary::Destroy();
-	wxFlatNotebook::CleanUp();
 	AppDataDestroy();
 
 	if( !wxTheClipboard->IsOpened() )

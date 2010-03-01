@@ -26,45 +26,26 @@
 #ifndef __OBJ_INSPECT__
 #define __OBJ_INSPECT__
 
-#include "wx/wx.h"
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
-#include <wx/propgrid/propgrid.h>
-#include <wx/propgrid/propdev.h>
-#include <wx/propgrid/advprops.h>
-#include <wx/propgrid/manager.h>
-#include "utils/wxfbdefs.h"
-#include "model/objectbase.h"
-
-#if wxUSE_SLIDER
-WX_PG_DECLARE_EDITOR_WITH_DECL(Slider,WXDLLIMPEXP_PG)
+#if !wxUSE_PROPGRID
+    #error "Please set wxUSE_PROPGRID to 1 and rebuild the library."
 #endif
 
-// -----------------------------------------------------------------------
+#include <wx/config.h>
+#include <wx/tokenzr.h>
+#include <wx/aui/auibook.h>
 
-WX_PG_DECLARE_CUSTOM_COLOUR_PROPERTY(fbColourProperty)
+#include <wx/propgrid/property.h>
+#include <wx/propgrid/manager.h>
 
-// -----------------------------------------------------------------------
+#include "model/objectbase.h"
+#include "rad/appdata.h"
+#include "rad/wxfbevent.h"
+#include "utils/debug.h"
 
-WX_PG_DECLARE_VALUE_TYPE_VOIDP(wxPoint)
-
-WX_PG_DECLARE_PROPERTY(wxPointProperty,const wxPoint&,wxPoint(0,0))
-
-// -----------------------------------------------------------------------
-
-WX_PG_DECLARE_VALUE_TYPE_VOIDP(wxSize)
-
-WX_PG_DECLARE_PROPERTY(wxSizeProperty,const wxSize&,wxSize(0,0))
-
-// -----------------------------------------------------------------------
-
-WX_PG_DECLARE_PROPERTY( wxBitmapWithResourceProperty, const wxString&, wxEmptyString )
-
-// -----------------------------------------------------------------------
-
-class wxFBEventHandlerEvent;
-class wxFBPropertyEvent;
-class wxFBObjectEvent;
 class wxFBEvent;
+class wxFBEventHandlerEvent;
+class wxFBObjectEvent;
+class wxFBPropertyEvent;
 
 enum {
   wxFB_OI_DEFAULT_STYLE,
@@ -74,7 +55,23 @@ enum {
 
 class ObjectInspector : public wxPanel
 {
- private:
+public:
+
+  ObjectInspector(wxWindow *parent, int id, int style = wxFB_OI_DEFAULT_STYLE);
+  ~ObjectInspector();
+
+  void OnObjectSelected( wxFBObjectEvent& event );
+  void OnProjectRefresh( wxFBEvent& event );
+  void OnPropertyModified( wxFBPropertyEvent& event );
+  void OnEventHandlerModified( wxFBEventHandlerEvent& event );
+
+  wxPropertyGridManager* CreatePropertyGridManager(wxWindow *parent, wxWindowID id);
+  void SavePosition();
+
+  DECLARE_EVENT_TABLE()
+
+private:
+
   typedef std::map< wxPGProperty*, PProperty> ObjInspectorPropertyMap;
   typedef std::map< wxPGProperty*, PEvent> ObjInspectorEventMap;
 
@@ -82,7 +79,7 @@ class ObjectInspector : public wxPanel
   ObjInspectorEventMap m_eventMap;
 
   PObjectBase m_currentSel;
-  wxFlatNotebook* m_nb;
+  wxAuiNotebook* m_nb;
   wxPropertyGridManager* m_pg;
   wxPropertyGridManager* m_eg;
   int m_style;
@@ -102,7 +99,7 @@ class ObjectInspector : public wxPanel
 			return;
 		}
 
-		// Prevent page creation if there are no properties
+/** Prevent page creation if there are no properties */
 		if ( 0 == category->GetCategoryCount() && 0 == ( addingEvents ? category->GetEventCount() : category->GetPropertyCount() ) )
 		{
 			return;
@@ -124,7 +121,7 @@ class ObjectInspector : public wxPanel
 		}
 
 		const wxString& catName = category->GetName();
-		wxPGId id = pg->AppendCategory( catName );
+		wxPGProperty* id = pg->Append( new wxPropertyCategory( catName ) );
 		ExpandMap::iterator it = m_isExpanded.find( catName );
 		if ( it != m_isExpanded.end() )
 		{
@@ -153,22 +150,6 @@ class ObjectInspector : public wxPanel
   void OnEventGridChange(wxPropertyGridEvent& event);
   void OnPropertyGridExpand(wxPropertyGridEvent& event);
   void OnReCreateGrid( wxCommandEvent& event );
-
- protected:
-
- public:
-  ObjectInspector(wxWindow *parent, int id, int style = wxFB_OI_DEFAULT_STYLE);
-  ~ObjectInspector();
-
-  void OnObjectSelected( wxFBObjectEvent& event );
-  void OnProjectRefresh( wxFBEvent& event );
-  void OnPropertyModified( wxFBPropertyEvent& event );
-  void OnEventHandlerModified( wxFBEventHandlerEvent& event );
-
-  wxPropertyGridManager* CreatePropertyGridManager(wxWindow *parent, wxWindowID id);
-  void SavePosition();
-
-  DECLARE_EVENT_TABLE()
 };
 
 #endif //__OBJ_INSPECT__

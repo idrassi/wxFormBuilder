@@ -32,8 +32,6 @@
 #include <wx/tokenzr.h>
 #include <wx/regex.h>
 
-#include <wx/wxScintilla/wxscintilla.h>
-
 #include <fstream>
 #include <cstring>
 
@@ -135,12 +133,12 @@ m_tc( 0 )
 {
 }
 
-TCCodeWriter::TCCodeWriter( wxScintilla* tc )
+TCCodeWriter::TCCodeWriter( wxStyledTextCtrl* tc )
 {
 	SetTextCtrl( tc );
 }
 
-void TCCodeWriter::SetTextCtrl( wxScintilla* tc )
+void TCCodeWriter::SetTextCtrl( wxStyledTextCtrl* tc )
 {
 	m_tc = tc;
 }

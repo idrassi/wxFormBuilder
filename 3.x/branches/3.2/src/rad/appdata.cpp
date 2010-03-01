@@ -521,6 +521,7 @@ PObjectBase ApplicationData::GetSelectedObject()
 PObjectBase ApplicationData::GetSelectedForm()
 {		
 	if( ( m_selObj->GetObjectTypeName() == wxT( "form" ) ) ||
+		( m_selObj->GetObjectTypeName() == wxT( "wizard" ) ) ||
 		( m_selObj->GetObjectTypeName() == wxT( "menubar_form" ) ) ||
 		( m_selObj->GetObjectTypeName() == wxT( "toolbar_form" ) ) )
 		return m_selObj;
@@ -700,10 +701,10 @@ void ApplicationData::ExpandObject( PObjectBase obj, bool expand )
 {
 	PCommand command( new ExpandObjectCmd( obj, expand ) );
 	Execute( command );
-	
+
 	// collapse also all children ...
 	PropagateExpansion( obj, expand, !expand );
-	
+
 	NotifyObjectExpanded( obj );
 }
 
@@ -714,21 +715,21 @@ void ApplicationData::PropagateExpansion( PObjectBase obj, bool expand, bool up 
 		if( up )
 		{
 			PObjectBase child;
-			
+
 			for( size_t i = 0; i < obj->GetChildCount(); i++ )
 			{
 				child = obj->GetChild(i);
-				
+
 				PCommand command( new ExpandObjectCmd( child, expand ) );
 				Execute( command );
-				
+
 				PropagateExpansion( child, expand, up );
 			}
 		}
 		else
 		{
 			PropagateExpansion( obj->GetParent(), expand, up );
-			
+
 			PCommand command( new ExpandObjectCmd( obj, expand ) );
 			Execute( command );
 		}
@@ -745,7 +746,7 @@ bool ApplicationData::SelectObject( PObjectBase obj, bool force /*= false*/, boo
 	m_selObj = obj;
 
 	if ( notify )
-	{		
+	{
 		NotifyObjectSelected( obj );
 	}
 	return true;
@@ -755,7 +756,8 @@ void ApplicationData::CreateObject( wxString name )
 {
 	try
 	{
-		Debug::Print( wxT( "[ApplicationData::CreateObject] New %s" ), name.c_str() );
+		wxString msg = wxT( "[ApplicationData::CreateObject] New " ) + name;
+		Debug::Print( msg );
 
 		PObjectBase old_selected = GetSelectedObject();
 		PObjectBase parent = old_selected;
@@ -800,9 +802,9 @@ void ApplicationData::CreateObject( wxString name )
 
 		while ( obj && obj->GetObjectInfo()->GetObjectType()->IsItem() )
 			obj = ( obj->GetChildCount() > 0 ? obj->GetChild( 0 ) : PObjectBase() );
-			
+
 		NotifyObjectCreated( obj );
-			
+
 		if ( obj )
 		{
 			SelectObject( obj, true, true );
@@ -951,8 +953,9 @@ bool ApplicationData::CanPasteObjectFromClipboard()
             return false;
         }
 	}
-
-	bool canPaste = wxTheClipboard->IsSupported( wxFBDataObjectFormat );
+	
+	/** @todo fix this ... seems that this method is doing a segfault */
+	bool canPaste = true;//wxTheClipboard->IsSupported( wxFBDataObjectFormat );
 
 	wxTheClipboard->Close();
 
@@ -1188,6 +1191,7 @@ void ApplicationData::ModifyProperty( PProperty prop, wxString str )
 
 	if ( str != prop->GetValue() )
 	{
+		Debug::Print( wxT("Modify property :") + prop->GetValue() + wxT(" with ") + str );
 		PCommand command( new ModifyPropertyCmd( prop, str ) );
 		Execute( command ); //m_cmdProc.Execute(command);
 
@@ -1579,7 +1583,7 @@ void ApplicationData::ConvertProjectProperties( ticpp::Element* project, const w
 			}
 		}
 	}
-	
+
 	// event_handler moved to the forms in version 1.10
 	if ( fileMajor < 1 || ( 1 == fileMajor && fileMinor < 10 ) )
 	{
@@ -1596,7 +1600,7 @@ void ApplicationData::ConvertProjectProperties( ticpp::Element* project, const w
 			{
 				object->LinkEndChild( ( *newProps.begin() )->Clone().get() );
 			}
-			
+
 			project->RemoveChild( *newProps.begin() );
 		}
 	}
@@ -1765,7 +1769,7 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 		// Remove deprecated 2.6 things
 
 		// wxDialog styles wxTHICK_FRAME and wxNO_3D
-		if ( objClass == "Dialog" )
+		if ( objClass == "Dialog" || objClass == "Wizard" )
 		{
 			oldProps.clear();
 			oldProps.insert( "style" );
@@ -2030,7 +2034,7 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
 		fileProp->SetValue( inherFile.GetName() );
 		genfileProp->SetValue( genFile.GetFullPath() );
 		typeProp->SetValue( form->GetClassName() );
-		
+
 		// Determine if Microsoft BOM should be used
 		bool useMicrosoftBOM = false;
 		PProperty pUseMicrosoftBOM = project->GetProperty( _("use_microsoft_bom") );
@@ -2053,7 +2057,7 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
 		if ( pCodeGen && TypeConv::FlagSet( wxT("C++"), pCodeGen->GetValue() ) )
 		{
 			CppCodeGenerator codegen;
-			
+
 			const wxString& fullPath = inherFile.GetFullPath();
 			PCodeWriter h_cw( new FileCodeWriter( fullPath + wxT(".h"), useMicrosoftBOM, useUtf8 ) );
 			PCodeWriter cpp_cw( new FileCodeWriter( fullPath + wxT(".cpp"), useMicrosoftBOM, useUtf8 ) );
@@ -2066,7 +2070,7 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
 		else if( pCodeGen && TypeConv::FlagSet( wxT("Python"), pCodeGen->GetValue() ) )
 		{
 			PythonCodeGenerator codegen;
-			
+
 			const wxString& fullPath = inherFile.GetFullPath();
 			PCodeWriter python_cw( new FileCodeWriter( fullPath + wxT(".py"), useMicrosoftBOM, useUtf8 ) );
 
@@ -2262,8 +2266,9 @@ void ApplicationData::CheckProjectTree( PObjectBase obj )
 		PObjectBase child = obj->GetChild( i );
 
 		if ( child->GetParent() != obj )
+		{
 			wxLogError( wxString::Format( wxT( "Parent of object \'%s\' is wrong!" ), child->GetPropertyAsString( wxT( "name" ) ).c_str() ) );
-
+		}
 		CheckProjectTree( child );
 	}
 }
@@ -2554,7 +2559,8 @@ void ApplicationData::NotifyEvent( wxFBEvent& event )
 	if ( count == 0 )
 	{
 		count++;
-		Debug::Print( wxT( "event: %s" ), event.GetEventName().c_str() );
+		wxString msg = wxT( "event: ") + event.GetEventName();
+		Debug::Print( msg );
 		std::vector< wxEvtHandler* >::iterator handler;
 
 		for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )
@@ -2564,7 +2570,8 @@ void ApplicationData::NotifyEvent( wxFBEvent& event )
 	}
 	else
 	{
-		Debug::Print( wxT( "Pending event: %s" ), event.GetEventName().c_str() );
+		wxString msg = wxT( "Pending event:  " ) + event.GetEventName();
+		Debug::Print( msg );
 		std::vector< wxEvtHandler* >::iterator handler;
 
 		for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )

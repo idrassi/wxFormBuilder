@@ -175,20 +175,21 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 				wxFontContainer font = TypeConv::StringToFont( value );
 
 				int pointSize = font.GetPointSize();
-				wxString size = pointSize <= 0 ? wxT( "wxNORMAL_FONT->GetPointSize()" ) : wxString::Format( wxT( "%i" ), pointSize ).c_str();
-
-				result	= wxString::Format( wxT( "wxFont( %s, %i, %i, %i, %s, %s )" ),
+				wxString size = pointSize <= 0 ? wxT( "wxNORMAL_FONT->GetPointSize()" ) : wxString::Format( wxT( "%i" ), pointSize );
+				
+				wxString ffname =  ( font.m_faceName.empty() ? wxT( "wxEmptyString" ) : wxT( "wxT(\"" ) + font.m_faceName + wxT("\")") );
+				result	= wxString::Format( "wxFont( %s, %i, %i, %i, %s, %s )",
 				                           size.c_str(),
 				                           font.GetFamily(),
 				                           font.GetStyle(),
 				                           font.GetWeight(),
 				                           ( font.GetUnderlined() ? wxT( "true" ) : wxT( "false" ) ),
-				                           ( font.m_faceName.empty() ? wxT( "wxEmptyString" ) : wxString::Format( wxT( "wxT(\"%s\")" ), font.m_faceName.c_str() ).c_str() )
+				                           ( ffname.c_str() )
 				                         );
 			}
 			else
 			{
-				result = wxT( "*wxNORMAL_FONT" );
+				result = "*wxNORMAL_FONT";
 			}
 			break;
 		}
@@ -199,7 +200,7 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 				if ( value.find_first_of( wxT( "wx" ) ) == 0 )
 				{
 					// System Colour
-					result << wxT( "wxSystemSettings::GetColour( " ) << value << wxT( " )" );
+					result << wxT( "wxSystemSettings::GetColour( " ) << value << " )";
 				}
 				else
 				{
@@ -667,7 +668,7 @@ bool CppCodeGenerator::GenerateCode( PObjectBase project )
 	for ( unsigned int i = 0; i < project->GetChildCount(); i++ )
 	{
 		PObjectBase child = project->GetChild( i );
-		
+
 		EventVector events;
 		FindEventHandlers( child, events );
 		GenClassDeclaration( child, useEnum, classDecoration, events );
@@ -930,7 +931,7 @@ void CppCodeGenerator::GenValVarsBase( PObjectInfo info, PObjectBase obj )
 void CppCodeGenerator::GetGenEventHandlers( PObjectBase obj )
 {
 	GenDefinedEventHandlers( obj->GetObjectInfo(), obj );
-	
+
 	// Process child widgets
 	for ( unsigned int i = 0; i < obj->GetChildCount() ; i++ )
 	{
@@ -1038,11 +1039,11 @@ void CppCodeGenerator::GenClassDeclaration( PObjectBase class_obj, bool use_enum
 		GenEnumIds( class_obj );
 
 	GenAttributeDeclaration( class_obj, P_PROTECTED );
-	
+
 	wxString eventHandlerKind;
 	wxString eventHandlerPrefix;
 	wxString eventHandlerPostfix;
-	
+
 	PProperty eventHandlerKindProp = class_obj->GetProperty( wxT( "event_handler" ) );
 	if ( eventHandlerKindProp )
 	{
@@ -1064,7 +1065,7 @@ void CppCodeGenerator::GenClassDeclaration( PObjectBase class_obj, bool use_enum
 		eventHandlerPrefix = wxT( "virtual " );
 		eventHandlerPostfix = wxT( " { event.Skip(); }" );
 	}
-	
+
 	GenVirtualEventHandlers( events, eventHandlerPrefix, eventHandlerPostfix );
 
 	m_header->Unindent();
@@ -1426,7 +1427,7 @@ void CppCodeGenerator::GenDestructor( PObjectBase class_obj, const EventVector &
 		GenEvents( class_obj, events, true );
 		m_source->WriteLn();
 	}
-	
+
 	// destruct objects
 	GenDestruction( class_obj );
 
@@ -1531,15 +1532,15 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 					break;
 			}
 		}
-		else if ( 	type == wxT( "menubar" )	||
-		           type == wxT( "menu" )		||
-		           type == wxT( "submenu" )	||
-		           type == wxT( "toolbar" )	||
-		           type == wxT( "listbook" )	||
-		           type == wxT( "notebook" )	||
-		           type == wxT( "auinotebook" )	||
-		           type == wxT( "treelistctrl" )	||
-		           type == wxT( "flatnotebook" )
+		else if (   type == wxT( "menubar" )	    ||
+                    type == wxT( "menu" )		    ||
+                    type == wxT( "submenu" )	    ||
+                    type == wxT( "toolbar" )	    ||
+                    type == wxT( "notebook" )	    ||
+                    type == wxT( "listbook" )       ||
+                    type == wxT( "auinotebook" )    ||
+                    type == wxT( "flatnotebook" )   ||
+                    type == wxT( "treelistctrl" )
 		        )
 		{
 			wxString afterAddChild = GetCode( obj, wxT( "after_addchild" ) );
@@ -1578,16 +1579,35 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 
 		m_source->WriteLn( GetCode( obj, temp_name ) );
 	}
-	else if (	type == wxT( "notebookpage" )		||
-	          type == wxT( "flatnotebookpage" )	||
-	          type == wxT( "listbookpage" )		||
-	          type == wxT( "choicebookpage" )	||
-	          type == wxT( "auinotebookpage" )
+	else if (   type == wxT( "notebookpage" )	    ||
+                type == wxT( "listbookpage" )		||
+                type == wxT( "choicebookpage" )     ||
+                type == wxT( "auinotebookpage" )    ||
+                type == wxT( "flatnotebookpage" )
 	        )
 	{
 		GenConstruction( obj->GetChild( 0 ), false );
 		m_source->WriteLn( GetCode( obj, wxT( "page_add" ) ) );
 		GenSettings( obj->GetObjectInfo(), obj );
+	}
+	else if ( type == wxT( "treebookpage" ) )
+	{
+		GenConstruction( obj->GetChild( 0 ), false );
+		if ( obj->GetPropertyAsInteger( _("depth") ) == 0 )
+		{
+		    m_source->WriteLn( GetCode( obj, wxT( "page_add" ) ) );
+		}
+        else if ( obj->GetPropertyAsInteger( _("depth") ) > 0 )
+        {
+            m_source->WriteLn( GetCode( obj, wxT( "subpage_add" ) ) );
+        }
+		GenSettings( obj->GetObjectInfo(), obj );
+	}
+	else if ( type == wxT( "toolbookpage" ) )
+	{
+		GenConstruction( obj->GetChild( 0 ), false );
+		GenSettings( obj->GetObjectInfo(), obj );
+		m_source->WriteLn( GetCode( obj, wxT( "page_add" ) ) );
 	}
 	else if ( type == wxT( "treelistctrlcolumn" ) )
 	{
@@ -1756,7 +1776,7 @@ void CppCodeGenerator::GenDestruction( PObjectBase obj )
 			m_source->WriteLn( code );
 		}
 	}
-	
+
 	// Process child widgets
 	for ( unsigned int i = 0; i < obj->GetChildCount() ; i++ )
 	{

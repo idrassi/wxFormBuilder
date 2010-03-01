@@ -49,20 +49,21 @@ void CustomKeysEvtHandler::OnKeyPress(wxKeyEvent &event)
     Debug::Print( wxT("#### Prueba del parser ####") );
 
     PObjectBase obj = AppData()->GetSelectedObject();
-    PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( wxT("C++") );
+// TODO: Check following changes
+    PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( "C++" );
 
     Debug::Print( wxT("#### Plantillas ####") );
-    Debug::Print((wxChar *)(code_info->GetTemplate( wxT("construction") ).c_str()));
-    Debug::Print((wxChar *)(code_info->GetTemplate( wxT("declaration") ).c_str()));
+    Debug::Print((wxChar *)(code_info->GetTemplate( "construction" ).wchar_str()));
+    Debug::Print((wxChar *)(code_info->GetTemplate( "declaration" ).wchar_str()));
 
     Debug::Print( wxT("#### Código ####") );
     {
-      CppTemplateParser parser(obj,code_info->GetTemplate( wxT("construction") ), false, false, wxEmptyString );
-      Debug::Print((wxChar *)parser.ParseTemplate().c_str());
+      CppTemplateParser parser(obj,code_info->GetTemplate( "construction" ), false, false, wxEmptyString );
+      Debug::Print((wxChar *)parser.ParseTemplate().wchar_str());
     }
     {
-      CppTemplateParser parser(obj,code_info->GetTemplate( wxT("declaration") ), false, false, wxEmptyString );
-      Debug::Print((wxChar *)parser.ParseTemplate().c_str());
+      CppTemplateParser parser(obj,code_info->GetTemplate( "declaration" ), false, false, wxEmptyString );
+      Debug::Print((wxChar *)parser.ParseTemplate().wchar_str());
     }
   }
   else if (event.GetKeyCode() == 'C')

@@ -34,7 +34,7 @@ function ConfigureWxWidgets( package, altTargetName, wxVer, wxVerMinor )
 	
 	-- Set the default values.
 	local targetName = altTargetName or ""
-	local wx_ver = wxVer or "28"
+	local wx_ver = wxVer or "29"
 	local wx_ver_minor = wxVerMinor or "0"
 	
 	-- Set object output directory.
@@ -197,12 +197,12 @@ function ConfigureWxWidgets( package, altTargetName, wxVer, wxVerMinor )
 		table.insert( package.excludes, matchrecursive( "*.rc" ) )
 		
 		-- Set wxWidgets build options.
-		table.insert( package.config["Debug"].buildoptions, "`wx-config "..debug_option.." --cflags`" )
-		table.insert( package.config["Release"].buildoptions, "`wx-config --debug=no --cflags`" )
-		
+		table.insert( package.config["Debug"].buildoptions, "`$(291Debug)/wx-config "..debug_option.." --cflags`" )
+		table.insert( package.config["Release"].buildoptions, "`$(291Release)/wx-config --debug=no --cflags`" )
+
 		-- Set the wxWidgets link options.
-		table.insert( package.config["Debug"].linkoptions, "`wx-config "..debug_option.." --libs`" )
-		table.insert( package.config["Release"].linkoptions, "`wx-config --libs`" )
+		table.insert( package.config["Debug"].linkoptions, "`$(291Debug)/wx-config "..debug_option.." --libs all`" )
+		table.insert( package.config["Release"].linkoptions, "`$(291Release)/wx-config --libs all`" )
 		
 		-- Set the Linux defines.
 		table.insert( package.defines, "__WXGTK__" )
@@ -212,8 +212,10 @@ function ConfigureWxWidgets( package, altTargetName, wxVer, wxVerMinor )
 			package.config["Release"].target = targetName
 			package.config["Debug"].target = targetName.."d"
 		else
-			package.config["Debug"].target = "`wx-config "..debug_option.." --basename`_"..targetName.."-`wx-config --release`"
-			package.config["Release"].target = "`wx-config --basename`_"..targetName.."-`wx-config --release`"
+			package.config["Debug"].target = "`wx-config "..debug_option.." --basename`_"..targetName.."-`$(291Release)/wx-config`"
+			package.config["Release"].target = "`wx-config --basename`_"..targetName.."-`$(291Release)/wx-config`"
+--			package.config["Debug"].target = "`wx-config "..debug_option.." --basename`_"..targetName.."-`wx-config --release`"
+--			package.config["Release"].target = "`wx-config --basename`_"..targetName.."-`wx-config --release`"
 		end
 	end
 end

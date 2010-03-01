@@ -27,25 +27,23 @@
 #define __PALETTE__
 
 #include <wx/wx.h>
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
-#include <wx/spinbutt.h>
+#include <wx/aui/aui.h>
+//#include <wx/spinbutt.h>
 #include <vector>
-#include <utils/wxfbdefs.h>
-#include <model/database.h>
+#include "utils/wxfbdefs.h"
+#include "model/database.h"
 
-typedef std::vector<wxToolBar*> ToolbarVector;
+typedef std::vector<wxAuiToolBar*> ToolbarVector;
 
 class wxFbPalette : public wxPanel
 {
  private:
   ToolbarVector m_tv;
-  wxFlatNotebook *m_notebook;
+  wxAuiNotebook *m_notebook;
   static wxWindowID nextId;
   std::vector<int> m_posVector;
-  wxFlatNotebookImageList m_icons;
 
-
-  void PopulateToolbar(PObjectPackage pkg, wxToolBar *toolbar);
+  void PopulateToolbar(PObjectPackage pkg, wxAuiToolBar *toolbar);
 
   DECLARE_EVENT_TABLE()
 
@@ -58,8 +56,8 @@ class wxFbPalette : public wxPanel
    * DataObservable.
    */
   void Create();
-  void OnSpinUp(wxSpinEvent& e);
-  void OnSpinDown(wxSpinEvent& e);
+//  void OnSpinUp(wxSpinEvent& e);
+//  void OnSpinDown(wxSpinEvent& e);
   void OnButtonClick(wxCommandEvent &event);
 };
 /*

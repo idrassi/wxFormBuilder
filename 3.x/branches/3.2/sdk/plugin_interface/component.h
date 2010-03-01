@@ -64,21 +64,22 @@ enum
 // from the plugin itself, in a safe way.
 class IObject
 {
- public:
-  virtual bool     IsNull (const wxString& pname) = 0;
-  virtual int      GetPropertyAsInteger (const wxString& pname) = 0;
-  virtual wxFontContainer   GetPropertyAsFont    (const wxString& pname) = 0;
-  virtual wxColour GetPropertyAsColour  (const wxString& pname) = 0;
-  virtual wxString GetPropertyAsString  (const wxString& pname) = 0;
-  virtual wxPoint  GetPropertyAsPoint   (const wxString& pname) = 0;
-  virtual wxSize   GetPropertyAsSize    (const wxString& pname) = 0;
-  virtual wxBitmap GetPropertyAsBitmap  (const wxString& pname) = 0;
-  virtual wxArrayInt GetPropertyAsArrayInt(const wxString& pname) = 0;
-  virtual wxArrayString GetPropertyAsArrayString(const wxString& pname) = 0;
-  virtual double GetPropertyAsFloat(const wxString& pname) = 0;
-  virtual wxString GetChildFromParentProperty( const wxString& parentName, const wxString& childName ) = 0;
-  virtual wxString GetClassName() = 0;
-  virtual ~IObject(){}
+public:
+	virtual bool 			IsNull 					(const wxString& pname) = 0;
+	virtual int 			GetPropertyAsInteger 	(const wxString& pname) = 0;
+//	virtual wxAlignment 	GetPropertyAsAlignment 	(const wxString& pname) = 0; TODO
+	virtual wxFontContainer GetPropertyAsFont    	(const wxString& pname) = 0;
+	virtual wxColour 		GetPropertyAsColour  	(const wxString& pname) = 0;
+	virtual wxString 		GetPropertyAsString  	(const wxString& pname) = 0;
+	virtual wxPoint  		GetPropertyAsPoint   	(const wxString& pname) = 0;
+	virtual wxSize   		GetPropertyAsSize    	(const wxString& pname) = 0;
+	virtual wxBitmap 		GetPropertyAsBitmap  	(const wxString& pname) = 0;
+	virtual wxArrayInt 		GetPropertyAsArrayInt	(const wxString& pname) = 0;
+	virtual wxArrayString 	GetPropertyAsArrayString(const wxString& pname) = 0;
+	virtual double 			GetPropertyAsFloat		(const wxString& pname) = 0;
+	virtual wxString 		GetChildFromParentProperty( const wxString& parentName, const wxString& childName ) = 0;
+	virtual wxString 		GetClassName() = 0;
+	virtual ~IObject(){}
 };
 
 // Interface which intends to contain all the components for a plugin

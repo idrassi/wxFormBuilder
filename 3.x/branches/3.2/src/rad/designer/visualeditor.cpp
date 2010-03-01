@@ -24,18 +24,17 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "visualeditor.h"
-
-#include "visualeditor.h"
 #include "visualobj.h"
 #include "utils/typeconv.h"
 #include "utils/debug.h"
 #include "menubar.h"
-#include "wx/statline.h"
+//#include <wx/statline.h>
 #include "rad/designer/resizablepanel.h"
 #include "rad/wxfbevent.h"
-#include <rad/appdata.h>
+#include "rad/appdata.h"
 #include "utils/wxfbexception.h"
 #include "model/objectbase.h"
+#include "wiz_bitmap.xpm"
 
 #ifdef __WX24__
 #define wxFULL_REPAINT_ON_RESIZE 0
@@ -103,7 +102,9 @@ VisualEditor::~VisualEditor()
 {
 	AppData()->RemoveHandler( this->GetEventHandler() );
 	DeleteAbstractObjects();
+	
 	ClearComponents( m_back->GetFrameContentPanel() );
+	//m_back->Destroy();
 }
 
 void VisualEditor::UpdateVirtualSize()
@@ -216,9 +217,13 @@ void VisualEditor::Create()
 	{
 		Freeze(); // Prevent flickering
 	}
-	
+
 	// Delete objects which had no parent
 	DeleteAbstractObjects();
+	
+	/*m_back->Destroy();
+	m_back = new DesignerWindow( this, wxID_ANY, wxPoint(10,10) );
+	m_back->GetEventHandler()->Connect( wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler( VisualEditor::OnClickBackPanel ), NULL, this );*/
 
 	// Clear selections, delete objects
 	m_back->SetSelectedItem(NULL);
@@ -236,7 +241,7 @@ void VisualEditor::Create()
 	if ( m_form )
 	{
 		m_back->Show(true);
-		
+
 		// --- [1] Configure the size of the form ---------------------------
 
 		// Get size properties
@@ -295,9 +300,10 @@ void VisualEditor::Create()
 			}
 		}
 
-
 		// --- [3] Title bar Setup
-		if (  m_form->GetClassName() == wxT("Frame") || m_form->GetClassName() == wxT("Dialog") )
+		if (m_form->GetClassName() == wxT("Frame")  ||
+        m_form->GetClassName() == wxT("Dialog") ||
+        m_form->GetClassName() == wxT("Wizard"))
 		{
 			m_back->SetTitle( m_form->GetPropertyAsString( wxT("title") ) );
 			long style = m_form->GetPropertyAsInteger( wxT("style") );
@@ -313,6 +319,7 @@ void VisualEditor::Create()
 		PObjectBase menubar;
 		wxWindow* statusbar = NULL;
 		wxWindow* toolbar = NULL;
+		DesignerWindow::Wizard* wiz = NULL;
 
 		for ( unsigned int i = 0; i < m_form->GetChildCount(); i++ )
 		{
@@ -354,7 +361,7 @@ void VisualEditor::Create()
 			if( !toolbar && (m_form->GetObjectTypeName() == wxT("toolbar_form")) )
 			{
 				Generate( m_form, m_back->GetFrameContentPanel(), m_back->GetFrameContentPanel() );
-				
+
 				ObjectBaseMap::iterator it = m_baseobjects.find( m_form.get() );
 				toolbar = wxDynamicCast( it->second, wxToolBar );
 			}
@@ -370,14 +377,20 @@ void VisualEditor::Create()
 			m_back->SetFrameWidgets( menubar, toolbar, statusbar );
 		}
 
+		// --- Wizard needs some other controls...
+		if (m_form->GetClassName() == wxT("Wizard"))
+		{
+			wxWindow *contentPanel = m_back->GetFrameContentPanel();
+			wiz = new DesignerWindow::Wizard( contentPanel, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+			wiz->Fit();
+		}
 		m_back->Layout();
 
 		if ( backSize.GetHeight() == wxDefaultCoord || backSize.GetWidth() == wxDefaultCoord )
 		{
-		    m_back->GetSizer()->Fit( m_back );
+			m_back->GetSizer()->Fit( m_back );
 			m_back->SetSize( m_back->GetBestSize() );
 		}
-
 		// Set size after fitting so if only one dimesion is -1, it still fits that dimension
 		m_back->SetSize( backSize );
 
@@ -973,7 +986,6 @@ void DesignerWindow::SetFrameWidgets(PObjectBase menubar, wxWindow *toolbar, wxW
 	wxWindow *contentPanel = GetFrameContentPanel();
 	Menubar *mbWidget = NULL;
 
-
 	if ( menubar )
 	{
 		mbWidget = new Menubar(contentPanel, -1);
@@ -986,7 +998,6 @@ void DesignerWindow::SetFrameWidgets(PObjectBase menubar, wxWindow *toolbar, wxW
 	}
 
 	wxSizer *mainSizer = contentPanel->GetSizer();
-
 	contentPanel->SetSizer( NULL, false );
 
 	wxSizer *dummySizer = new wxBoxSizer( wxVERTICAL );
@@ -1034,11 +1045,9 @@ void DesignerWindow::SetFrameWidgets(PObjectBase menubar, wxWindow *toolbar, wxW
 		contentSizer->Add(statusbar, 0, wxEXPAND | wxALL, 0);
 	}
 
-
 	contentPanel->SetSizer(dummySizer, false);
 	contentPanel->Layout();
 }
-
 
 BEGIN_EVENT_TABLE(DesignerWindow::HighlightPaintHandler,wxEvtHandler)
   EVT_PAINT(DesignerWindow::HighlightPaintHandler::OnPaint)
@@ -1080,3 +1089,84 @@ void DesignerWindow::HighlightPaintHandler::OnPaint(wxPaintEvent &event)
 	event.Skip();
 }
 
+DesignerWindow::Wizard::Wizard( wxWindow* parent,
+                               wxWindowID id,
+                               const wxPoint& pos,
+                               const wxSize& size,
+                               long style )
+: wxPanel( parent, id, pos, size, style )
+{
+	this->SetMinSize( wxSize( 420,350 ) );
+
+	wxFlexGridSizer* m_fgsWizard;
+	m_fgsWizard = new wxFlexGridSizer( 3, 1, 0, 0 );
+	m_fgsWizard->AddGrowableCol( 0 );
+	m_fgsWizard->SetFlexibleDirection( wxBOTH );
+	m_fgsWizard->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_fgsWizard->SetMinSize( wxSize( 420,350 ) );
+	wxFlexGridSizer* m_fgsPage;
+	m_fgsPage = new wxFlexGridSizer( 1, 2, 0, 0 );
+	m_fgsPage->AddGrowableCol( 1 );
+	m_fgsPage->AddGrowableRow( 0 );
+	m_fgsPage->SetFlexibleDirection( wxBOTH );
+	m_fgsPage->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_bmpPage = new wxStaticBitmap( this, ID_WIZ_BITMAP, wxBitmap( wiz_bitmap_xpm ), wxDefaultPosition, wxDefaultSize, 0 );
+	m_fgsPage->Add( m_bmpPage, 0, wxALL, 5 );
+
+	m_pnlPage = new wxPanel( this, ID_WIZ_PAGE, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_fgsPage->Add( m_pnlPage, 0, wxALL|wxEXPAND, 5 );
+
+	m_fgsWizard->Add( m_fgsPage, 0, wxALL|wxEXPAND, 5 );
+
+
+	m_fgsWizard->Add( 0, 10, 1, wxEXPAND, 5 );
+
+	m_lneSep = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_fgsWizard->Add( m_lneSep, 0, wxALL|wxEXPAND, 5 );
+
+	wxGridBagSizer* m_gbsButtons;
+	m_gbsButtons = new wxGridBagSizer( 0, 0 );
+	m_gbsButtons->AddGrowableCol( 0 );
+	m_gbsButtons->SetFlexibleDirection( wxBOTH );
+	m_gbsButtons->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_btnBack = new wxButton( this, wxID_ANY, _("< Back"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnBack->Enable( false );
+
+	m_gbsButtons->Add( m_btnBack, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_RIGHT|wxBOTTOM|wxTOP, 5 );
+
+	m_btnNext = new wxButton( this, wxID_ANY, _("Next >"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnNext->Enable( false );
+
+	m_gbsButtons->Add( m_btnNext, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxTOP, 5 );
+
+	m_btnCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_gbsButtons->Add( m_btnCancel, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+
+	m_fgsWizard->Add( m_gbsButtons, 1, wxALL|wxEXPAND, 5 );
+
+	this->SetSizer( m_fgsWizard );
+	this->Layout();
+
+	/* Connect Events
+	m_btnBack->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Wizard::OnWizardBack ), NULL, this );
+	m_btnNext->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Wizard::OnWizardNext ), NULL, this );
+	m_btnCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Wizard::OnWizardCancel ), NULL, this );
+
+}
+
+DesignerWindow::Wizard::~Wizard()
+{
+	// Disconnect Events
+	m_btnBack->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Wizard::OnWizardBack ), NULL, this );
+	m_btnNext->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Wizard::OnWizardNext ), NULL, this );
+	m_btnCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Wizard::OnWizardCancel ), NULL, this );
+*/
+}
+
+DesignerWindow::Wizard::~Wizard()
+{
+
+}

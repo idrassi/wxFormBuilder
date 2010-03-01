@@ -34,7 +34,7 @@
 #include "rad/appdata.h"
 #include <clocale>
 #include <wx/propgrid/propgrid.h>
-#include <wx/propgrid/propdev.h>
+//#include <wx/propgrid/propdev.h>
 #include <wx/filesys.h>
 
 ////////////////////////////////////

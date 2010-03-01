@@ -23,12 +23,13 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "about.h"
 #include <wx/html/htmlwin.h>
 #include <wx/mimetype.h>
 #include <wx/filename.h>
-#include "rad/appdata.h"
 #include <wx/utils.h>
+
+#include "about.h"
+#include "rad/appdata.h"
 
 #define ID_DEFAULT -1 // Default
 #define ID_OK 1000

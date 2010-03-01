@@ -40,9 +40,6 @@
 
 #include <wx/fdrepdlg.h>
 
-#include <wx/wxScintilla/wxscintilla.h>
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
-
 BEGIN_EVENT_TABLE( XrcPanel,  wxPanel )
 	EVT_FB_CODE_GENERATION( XrcPanel::OnCodeGeneration )
 	EVT_FB_PROJECT_REFRESH( XrcPanel::OnProjectRefresh )
@@ -80,9 +77,9 @@ XrcPanel::~XrcPanel()
 	AppData()->RemoveHandler( this->GetEventHandler() );
 }
 
-void XrcPanel::InitStyledTextCtrl( wxScintilla *stc )
+void XrcPanel::InitStyledTextCtrl( wxStyledTextCtrl *stc )
 {
-	stc->SetLexer( wxSCI_LEX_XML );
+	stc->SetLexer( wxSTC_LEX_XML );
 
 #ifdef __WXGTK__
 	// Debe haber un bug en wxGTK ya que la familia wxMODERN no es de ancho fijo.
@@ -92,11 +89,11 @@ void XrcPanel::InitStyledTextCtrl( wxScintilla *stc )
 	wxFont font( 10, wxMODERN, wxNORMAL, wxNORMAL );
 #endif
 
-	stc->StyleSetFont( wxSCI_STYLE_DEFAULT, font );
+	stc->StyleSetFont( wxSTC_STYLE_DEFAULT, font );
 	stc->StyleClearAll();
-	stc->StyleSetForeground( wxSCI_H_DOUBLESTRING, *wxRED );
-	stc->StyleSetForeground( wxSCI_H_TAG, wxColour( 0, 0, 128 ) );
-	stc->StyleSetForeground( wxSCI_H_ATTRIBUTE, wxColour( 128, 0, 128 ) );
+	stc->StyleSetForeground( wxSTC_H_DOUBLESTRING, *wxRED );
+	stc->StyleSetForeground( wxSTC_H_TAG, wxColour( 0, 0, 128 ) );
+	stc->StyleSetForeground( wxSTC_H_ATTRIBUTE, wxColour( 128, 0, 128 ) );
 	stc->SetUseTabs( false );
 	stc->SetTabWidth( 4 );
 	stc->SetTabIndents( true );
@@ -111,7 +108,7 @@ void XrcPanel::InitStyledTextCtrl( wxScintilla *stc )
 
 void XrcPanel::OnFind( wxFindDialogEvent& event )
 {
-	wxFlatNotebook* notebook = wxDynamicCast( this->GetParent(), wxFlatNotebook );
+	wxAuiNotebook* notebook = wxDynamicCast( this->GetParent(), wxAuiNotebook );
 	if ( NULL == notebook )
 	{
 		return;
@@ -122,12 +119,13 @@ void XrcPanel::OnFind( wxFindDialogEvent& event )
 	{
 		return;
 	}
-
+/* TODO: Fix this
 	wxString text = notebook->GetPageText( selection );
 	if ( wxT("XRC") == text )
 	{
 		m_xrcPanel->ProcessEvent( event );
 	}
+*/
 }
 
 void XrcPanel::OnPropertyModified( wxFBPropertyEvent& event )
@@ -186,7 +184,7 @@ void XrcPanel::OnCodeGeneration( wxFBEvent& event )
 	if ( IsShown() )
 	{		
 		Freeze();
-		wxScintilla* editor = m_xrcPanel->GetTextCtrl();
+		wxStyledTextCtrl* editor = m_xrcPanel->GetTextCtrl();
 		editor->SetReadOnly( false );
 		int line = editor->GetFirstVisibleLine() + editor->LinesOnScreen() - 1;
 		int xOffset = editor->GetXOffset();
