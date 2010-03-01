@@ -150,7 +150,7 @@ bool wxFBIPC::VerifySingleInstance( const wxString& file, bool switchTo )
 				if ( NULL != connection.get() )
 				{
 					connected = true;
-					wxChar* pid = connection->Request( wxT("PID"), NULL );
+					wxChar* pid = (wxChar*)connection->Request( wxT("PID"), NULL ); // TODO: fix this
 					if ( NULL != pid )
 					{
 						wxLogStatus( wxT("%s already open in process %s"), file.c_str(), pid );
@@ -204,7 +204,7 @@ bool wxFBIPC::CreateServer( const wxString& name )
 			}
 			else
 			{
-				Debug::Print( wxT("Server Creation Failed. %s"), nameWithPort.c_str() );
+//				Debug::Print( wxT("Server Creation Failed. %s"), nameWithPort.c_str() ); TODO: Fix This
 			}
 		}
 	}
@@ -267,6 +267,7 @@ wxChar* AppConnection::OnRequest( const wxString& /*topic*/, const wxString& /*i
 		{
 			*size = (length + 1) * sizeof(wxChar);
 		}
-		return const_cast< wxChar* >( m_data.c_str() );
+		//TODO: Check this change
+		return m_data.wchar_str();
 	}
 }

@@ -23,17 +23,25 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <wx/wx.h>
+#include <wx/tokenzr.h>
+
+#include <ticpp.h>
+
 #include "objectbase.h"
-#include "wx/wx.h"
+
 #include "utils/debug.h"
 #include "utils/typeconv.h"
 #include "utils/stringutils.h"
 #include "rad/appdata.h"
-#include <ticpp.h>
-#include <wx/tokenzr.h>
 
-PropertyInfo::PropertyInfo(wxString name, PropertyType type, wxString def_value, wxString description, wxString customEditor,
-						   POptionList opt_list, const std::list< PropertyChild >& children )
+PropertyInfo::PropertyInfo( wxString 							name,
+							PropertyType 						type,
+							wxString 							def_value,
+							wxString 							description,
+							wxString 							customEditor,
+							POptionList 						opt_list,
+							const std::list< PropertyChild >& 	children )
 {
 	m_name = name;
 	m_type = type;
@@ -48,10 +56,14 @@ PropertyInfo::~PropertyInfo()
 {
 }
 
-EventInfo::EventInfo(const wxString &name, const wxString &eventClass,
-  const wxString &defValue,  const wxString &description)
-  : m_name(name), m_eventClass(eventClass), m_defaultValue(defValue),
-    m_description(description)
+EventInfo::EventInfo(	const wxString &name,
+						const wxString &eventClass,
+						const wxString &defValue,
+						const wxString &description)
+: 	m_name(name),
+	m_eventClass(eventClass),
+	m_defaultValue(defValue),
+	m_description(description)
 {
 }
 
@@ -99,10 +111,12 @@ void Property::SetValue(const wxFontContainer &font)
 {
 	m_value = TypeConv::FontToString( font );
 }
+
 void Property::SetValue(const wxColour &colour)
 {
 	m_value = TypeConv::ColourToString( colour );
 }
+
 void Property::SetValue(const wxString &str, bool format)
 {
 	m_value = (format ? TypeConv::TextToString(str) : str );
@@ -122,7 +136,12 @@ void Property::SetValue(const int integer)
 {
 	m_value = StringUtils::IntToStr(integer);
 }
-
+/* TODO
+void Property::SetValue(const wxAlignment alignment)
+{
+	m_value = TypeConv::AlignmentToString(alignment);
+}
+*/
 void Property::SetValue(const double val )
 {
 	m_value = TypeConv::FloatToString( val );
@@ -170,7 +189,12 @@ int Property::GetValueAsInteger()
 	}
 	return result;
 }
-
+/* TODO
+wxAlignment Property::GetValueAsAlignment()
+{
+	return TypeConv::StringToAlignment(m_value);
+}
+*/
 wxString Property::GetValueAsString()
 {
 	return m_value;
@@ -309,8 +333,9 @@ PEvent ObjectBase::GetEvent (wxString name)
 	EventMap::iterator it = m_events.find( name );
 	if ( it != m_events.end() )
 		return it->second;
-
-	Debug::Print(wxT("[ObjectBase::GetEvent] Event %s not found!"),name.c_str());
+// TODO: Check these changes
+	wxString msg =wxT( "[ObjectBase::GetEvent] Event ") + name + wxT(" not found!");
+	Debug::Print( msg );
 	return PEvent();
 }
 
@@ -616,7 +641,16 @@ int ObjectBase::GetPropertyAsInteger (const wxString& pname)
 	else
 		return 0;
 }
-
+/*
+wxAlignment ObjectBase::GetPropertyAsAlignment (const wxString& pname)
+{
+	PProperty property = GetProperty( pname );
+	if (property)
+		return property->GetValueAsAlignment();
+	else
+		return 0;
+}
+*/
 wxFontContainer ObjectBase::GetPropertyAsFont(const wxString& pname)
 {
 	PProperty property = GetProperty( pname );
@@ -714,13 +748,13 @@ wxString ObjectBase::GetChildFromParentProperty( const wxString& parentName, con
 
 ObjectInfo::ObjectInfo(wxString class_name, PObjectType type, WPObjectPackage package, bool startGroup )
 {
-	m_class = class_name;
-	m_type = type;
-	m_numIns = 0;
-	m_component = NULL;
-	m_package = package;
-	m_category = PPropertyCategory( new PropertyCategory( m_class ) );
-	m_startGroup = startGroup;
+	m_class = 		class_name;
+	m_type = 		type;
+	m_numIns = 		0;
+	m_component = 	NULL;
+	m_package = 	package;
+	m_category = 	PPropertyCategory( new PropertyCategory( m_class ) );
+	m_startGroup = 	startGroup;
 }
 
 PObjectPackage ObjectInfo::GetPackage()

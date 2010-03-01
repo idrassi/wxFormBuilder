@@ -27,14 +27,12 @@
 #define __CPP_PANEL__
 
 #include <wx/panel.h>
+#include <wx/stc/stc.h>
+#include <wx/aui/auibook.h>
 
 #include "utils/wxfbdefs.h"
 
 class CodeEditor;
-
-class wxScintilla;
-class wxFlatNotebook;
-class wxFlatNotebookImageList;
 
 class wxFindDialogEvent;
 
@@ -50,10 +48,9 @@ private:
 	CodeEditor* m_hPanel;
 	PTCCodeWriter m_hCW;
 	PTCCodeWriter m_cppCW;
-	wxFlatNotebookImageList* m_icons;
-	wxFlatNotebook* m_notebook;
+	wxAuiNotebook* m_notebook;
 
-	void InitStyledTextCtrl( wxScintilla* stc );
+	void InitStyledTextCtrl( wxStyledTextCtrl* stc );
 
 public:
 	CppPanel( wxWindow *parent, int id );

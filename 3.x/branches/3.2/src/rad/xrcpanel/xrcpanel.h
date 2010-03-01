@@ -27,6 +27,8 @@
 #define __XRC_PANEL__
 
 #include <wx/panel.h>
+#include <wx/stc/stc.h>
+#include <wx/aui/auibook.h>
 
 #include "utils/wxfbdefs.h"
 
@@ -36,8 +38,6 @@ class wxFBEvent;
 class wxFBPropertyEvent;
 class wxFBObjectEvent;
 
-class wxScintilla;
-
 class wxFindDialogEvent;
 
 class XrcPanel : public wxPanel
@@ -46,7 +46,7 @@ private:
 	CodeEditor* m_xrcPanel;
 	PTCCodeWriter m_cw;
 
-	void InitStyledTextCtrl( wxScintilla* stc );
+	void InitStyledTextCtrl( wxStyledTextCtrl* stc );
 
 public:
 	XrcPanel( wxWindow *parent, int id );

@@ -286,13 +286,15 @@ PObjectBase TemplateParser::GetWxParent()
 
 	std::vector< PObjectBase > candidates;
 	candidates.push_back( m_obj->FindNearAncestor( wxT("container") ) );
-	candidates.push_back( m_obj->FindNearAncestor( wxT("notebook") ) );
+	candidates.push_back( m_obj->FindNearAncestor( wxT("toolbar") ) );
 	candidates.push_back( m_obj->FindNearAncestor( wxT("splitter") ) );
-	candidates.push_back( m_obj->FindNearAncestor( wxT("flatnotebook") ) );
+	candidates.push_back( m_obj->FindNearAncestor( wxT("notebook") ) );
 	candidates.push_back( m_obj->FindNearAncestor( wxT("listbook") ) );
 	candidates.push_back( m_obj->FindNearAncestor( wxT("choicebook") ) );
+	candidates.push_back( m_obj->FindNearAncestor( wxT("treebook") ) );
+	candidates.push_back( m_obj->FindNearAncestor( wxT("toolbook") ) );
 	candidates.push_back( m_obj->FindNearAncestor( wxT("auinotebook") ) );
-	candidates.push_back( m_obj->FindNearAncestor( wxT("toolbar") ) );
+	candidates.push_back( m_obj->FindNearAncestor( wxT("flatnotebook") ) );
 
 	for ( size_t i = 0; i < candidates.size(); i++ )
 	{
@@ -817,7 +819,7 @@ wxString TemplateParser::ParseTemplate()
     {
         wxLogError( ex.what() );
     }
-	
+
 	return m_out;
 }
 
@@ -907,7 +909,7 @@ bool TemplateParser::ParseNewLine()
 	m_out << wxT('\n');
 	// append custom indentation define in code templates (will be replace by '\t' in code writer)
 	for( int i = 0; i < m_indent; i++ ) m_out << wxT("%TAB%");
-	
+
 	return true;
 }
 
@@ -940,7 +942,7 @@ void TemplateParser::ParseIndent()
 void TemplateParser::ParseUnindent()
 {
 	m_indent--;
-	
+
 	if( m_indent < 0 ) m_indent = 0;
 }
 

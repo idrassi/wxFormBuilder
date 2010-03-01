@@ -26,23 +26,22 @@
 #ifndef __CODE_EDITOR__
 #define __CODE_EDITOR__
 
+#include <wx/sizer.h>
 #include <wx/panel.h>
-
-class wxScintilla;
-class wxScintillaEvent;
+#include <wx/stc/stc.h>
 
 class wxFindDialogEvent;
 
 class CodeEditor : public wxPanel
 {
 private:
-	wxScintilla* m_code;
-	void OnMarginClick( wxScintillaEvent& event );
+	wxStyledTextCtrl* m_code;
+	void OnMarginClick( wxStyledTextEvent& event );
 	DECLARE_EVENT_TABLE()
 
 public:
 	CodeEditor( wxWindow *parent, int id );
-	wxScintilla* GetTextCtrl();
+	wxStyledTextCtrl* GetTextCtrl();
 
 	void OnFind( wxFindDialogEvent& event );
 };

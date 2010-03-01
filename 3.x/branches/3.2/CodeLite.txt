@@ -1,0 +1,11 @@
+Linux
+-----
+
+Once created files:
+
+- Settings -> Environment Variables: create a new set (mine is called wx291) and add something like:
+
+	291Release=/path/to/local/wx291/buildgtk
+	291Debug=/path/to/local/wx291/buildgtkd
+
+- Settings -> Tags Settings -> Include Files tab: remove system installed wx include path if any

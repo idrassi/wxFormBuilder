@@ -24,7 +24,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "mainframe.h"
 
-#include "wx/config.h"
+#include <wx/config.h>
+#include <wx/filename.h>
+#include <wx/stc/stc.h>
+
 #include "utils/debug.h"
 #include "utils/typeconv.h"
 #include "rad/title.h"
@@ -35,8 +38,9 @@
 #include "rad/geninheritclass/geninhertclass.h"
 #include "inspector/objinspect.h"
 #include "objecttree/objecttree.h"
-#include "palette.h"
+#include "wxfbpalette.h"
 #include "rad/designer/visualeditor.h"
+#include "settingspanel.h"
 
 #include "model/xrcfilter.h"
 #include "rad/about.h"
@@ -45,12 +49,9 @@
 #include "utils/wxfbexception.h"
 #include "utils/stringutils.h"
 #include "utils/wxfbdefs.h"
-#include <wx/filename.h>
 
-#include <rad/appdata.h>
+#include "rad/appdata.h"
 #include "model/objectbase.h"
-
-#include <wx/wxScintilla/wxscintilla.h>
 
 #define ID_SAVE_PRJ      102
 #define ID_OPEN_PRJ      103
@@ -141,6 +142,7 @@ EVT_MENU( ID_GEN_INHERIT_CLS, MainFrame::OnGenInhertedClass )
 EVT_MENU( ID_CLIPBOARD_COPY, MainFrame::OnClipboardCopy )
 EVT_MENU( ID_CLIPBOARD_PASTE, MainFrame::OnClipboardPaste )
 EVT_UPDATE_UI( ID_CLIPBOARD_PASTE, MainFrame::OnClipboardPasteUpdateUI )
+EVT_MENU( ID_AUI_SETTINGS, MainFrame::OnAuiSettings )
 EVT_CLOSE( MainFrame::OnClose )
 
 EVT_FB_CODE_GENERATION( MainFrame::OnCodeGeneration )
@@ -178,7 +180,7 @@ public:
 			if ( propgrid != NULL )
 			{
 				wxFocusEvent focusEvent( wxEVT_KILL_FOCUS );
-				propgrid->ProcessEvent( focusEvent );
+				propgrid->GetEventHandler()->ProcessEvent( focusEvent );
 				break;
 			}
 			windowWithFocus = windowWithFocus->GetParent();
@@ -199,19 +201,11 @@ END_EVENT_TABLE()
 MainFrame::MainFrame( wxWindow *parent, int id, int style, wxPoint pos, wxSize size )
 :
 wxFrame( parent, id, wxEmptyString, pos, size, wxDEFAULT_FRAME_STYLE ),
-m_leftSplitterWidth( 300 ),
-m_rightSplitterWidth( -300 ),
 m_style( style ),
 m_page_selection( 0 ),
-m_rightSplitter_sash_pos( 300 ),
-m_autoSash( false ), // autosash function is temporarily disabled due to possible bug(?) in wxMSW event system (workaround is needed)
 m_findData( wxFR_DOWN ),
 m_findDialog( NULL )
 {
-	
-	// initialize the splitters, wxAUI doesn't use them
-	m_leftSplitter = m_rightSplitter = NULL;
-
 	/////////////////////////////////////////////////////////////////////////////
 	// Setup frame icons, title bar, status bar, menubar and toolbar
 	/////////////////////////////////////////////////////////////////////////////
@@ -235,48 +229,75 @@ m_findDialog( NULL )
 	SetStatusBarPane( 0 );
 	int widths[3] = { -1, -1, 300 };
 	SetStatusWidths( sizeof( widths ) / sizeof( int ), widths );
-	CreateFBToolBar();
+//	CreateFBToolBar();
 
 	/////////////////////////////////////////////////////////////////////////////
 	// Create the gui
 	/////////////////////////////////////////////////////////////////////////////
 
-	/*
-	//  --- wxAUI version --
 	wxWindow *objectTree      = CreateObjectTree(this);
 	wxWindow *objectInspector = CreateObjectInspector(this);
 	wxWindow *palette         = CreateComponentPalette(this);
 	wxWindow *designer        = CreateDesignerWindow(this);
 
 
-	m_mgr.SetFrame(this);
-	m_mgr.AddPane(objectTree,
-	             wxPaneInfo().Name(wxT("tree")).
-	                          Caption(wxT("Object Tree")).
-	                           Left().Layer(1).
-	                           BestSize(wxSize(300,400)).
-	                           CloseButton(false));
-	m_mgr.AddPane(objectInspector,
-	             wxPaneInfo().Name(wxT("inspector")).
-	                          Caption(wxT("Object Properties")).
-	                           Right().BestSize(wxSize(300,400)).
-	                           CloseButton(false));
+	m_mgr.SetManagedWindow(this);
+	
+	wxAuiToolBar* mainbar = CreateFBAuiToolBar();
 
-	m_mgr.AddPane(designer,
-	             wxPaneInfo().Name(wxT("editor")).
-	                          Caption(wxT("Editor")).
-	                           Center().
-	                           CloseButton(false));
+	// TODO: Remove ICON_SIZE and TOOL_SIZE, use stock icons and add a function to resize bundled icons with system icons sizes
 
-	m_mgr.AddPane(palette,
-	             wxPaneInfo().Name(wxT("palette")).
-	             Caption(wxT("Component Palette")).
-	             Top().
-	             RightDockable(false).
-	             LeftDockable(false).
-	             CloseButton(false));
+	m_mgr.AddPane(mainbar, wxAuiPaneInfo().
+								Name(_("mainbar")).Caption(_("Toolbar")).
+								ToolbarPane().Top().
+								Direction(1).Layer(10).
+								BestSize(750, 33).
+								LeftDockable(false).RightDockable(false).
+								CloseButton(false));
 
-	m_mgr.Update();*/
+	m_mgr.AddPane(objectTree, wxAuiPaneInfo().
+								Name(wxT("tree")).Caption(wxT("Object Tree")).
+								Direction(4).Layer(1).			// Left().
+								MinSize(210, 60).
+								FloatingSize(210, 420).
+								CloseButton(false));
+
+	m_mgr.AddPane(objectInspector, wxAuiPaneInfo().
+								Name(wxT("inspector")).Caption(wxT("Object Properties")).
+								Direction(2).Layer(1).			// Right().
+								MinSize(240, 300).
+								FloatingSize(270, 420).
+								CloseButton(false));
+
+	m_mgr.AddPane(designer, wxAuiPaneInfo().
+								Name(wxT("editor")).Caption(wxT("Editor")).
+								Direction(5).Layer(0).			// Center().
+								CloseButton(false));
+
+	m_mgr.AddPane(palette, wxAuiPaneInfo().
+								Name(wxT("palette")).Caption(wxT("Component Palette")).
+								Direction(1).Layer(0).Row(1).	// Top().
+								MinSize(-1, 72).
+								MaxSize(-1, 72).
+								FloatingSize(609, 120).
+								RightDockable(false).LeftDockable(false).
+								CloseButton(false));
+
+    m_mgr.AddPane(new AuiSettingsPanel( this, this ), wxAuiPaneInfo().
+								Name(wxT("settings")).Caption( _("Dock Manager Settings") ).
+								Dockable(false).
+								Float().
+								Hide());
+
+	m_mgr.SetFlags(wxAUI_MGR_DEFAULT | wxAUI_MGR_ALLOW_ACTIVE_PANE | wxAUI_MGR_TRANSPARENT_DRAG);
+
+	m_mgr.Update();
+
+	wxConfigBase *config = wxConfigBase::Get();
+
+	wxString Perspective;
+	if ( config->Read( wxT("/mainframe/aui/perspective"), &Perspective ) )
+		m_mgr.LoadPerspective(Perspective);
 
 	RestorePosition( wxT( "mainframe" ) );
 	Layout();
@@ -286,58 +307,6 @@ m_findDialog( NULL )
 	m_xrc = NULL;
 	m_python = NULL;
 
-	switch ( style )
-	{
-
-		case wxFB_DOCKABLE_GUI:
-			// TO-DO
-			CreateWideGui();
-
-			break;
-
-		case wxFB_CLASSIC_GUI:
-
-			/*  //  --- Classic style Gui --
-			     //
-			     //  +------++-----------------------+
-			     //  | Obj. ||  Palette              |
-			     //  | Tree ++-----------------------+
-			     //  |      ||  Editor               |
-			     //  |______||                       |
-			     //  |------||                       |
-			     //  | Obj. ||                       |
-			     //  | Insp.||                       |
-			     //  |      ||                       |
-			     //  |      ||                       |
-			     //  +------++-----------------------+ 	*/
-
-			CreateClassicGui();
-
-			break;
-
-		case wxFB_DEFAULT_GUI:
-
-		case wxFB_WIDE_GUI:
-
-		default:
-
-			/*  //  --- Wide style Gui --
-			      //
-			      //  +------++-----------------------+
-			      //  | Obj. ||  Palette              |
-			      //  | Tree ++-------------++--------+
-			      //  |      ||  Editor     || Obj.   |
-			      //  |      ||             || Insp.  |
-			      //  |      ||             ||        |
-			      //  |      ||             ||        |
-			      //  |      ||             ||        |
-			      //  |      ||             ||        |
-			      //  |      ||             ||        |
-			      //  +------++-------------++--------+ 	*/
-
-			CreateWideGui();
-	}
-
 	AppData()->AddHandler( this->GetEventHandler() );
 
 	wxTheApp->SetTopWindow( this );
@@ -345,25 +314,25 @@ m_findDialog( NULL )
 	m_focusKillEvtHandler = new FocusKillerEvtHandler;
 	PushEventHandler( m_focusKillEvtHandler );
 
-	// So splitter windows can be restored correctly
-	Connect( wxEVT_IDLE, wxIdleEventHandler( MainFrame::OnIdle ) );
-
-	// So we don't respond to a FlatNoteBookPageChanged event during construction
-	m_notebook->Connect( wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CHANGED, wxFlatNotebookEventHandler( MainFrame::OnFlatNotebookPageChanged ), 0, this );
+	// So we don't respond to a AuiNoteBookPageChanged event during construction
+	m_notebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::OnAuiNotebookPageChanged ), 0, this );
+	m_notebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, wxAuiNotebookEventHandler( MainFrame::OnAuiNotebookPageChanged ), 0, this );
 };
 
 
 MainFrame::~MainFrame()
 {
-	m_notebook->Disconnect( wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CHANGED, wxFlatNotebookEventHandler( MainFrame::OnFlatNotebookPageChanged ), 0, this );
+	m_notebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::OnAuiNotebookPageChanged ), 0, this );
+	m_notebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, wxAuiNotebookEventHandler( MainFrame::OnAuiNotebookPageChanged ), 0, this );
 
 #ifdef __WXMAC__
     // work around problem on wxMac
-    m_rightSplitter->GetWindow1()->GetSizer()->Detach(m_notebook);
+// TODO: Mac still need this?
+	m_mgr.Detach( m_notebook )
     m_notebook->Destroy();
 #endif
 
-	/*m_mgr.UnInit();*/
+	m_mgr.UnInit();
 
 	// the focus killer event handler
 	RemoveEventHandler( m_focusKillEvtHandler );
@@ -397,10 +366,6 @@ void MainFrame::RestorePosition( const wxString &name )
 			Iconize( iconized );
 		}
 	}
-
-	config->Read( wxT( "LeftSplitterWidth" ), &m_leftSplitterWidth, 300 );
-	config->Read( wxT( "RightSplitterWidth" ), &m_rightSplitterWidth, -300 );
-	config->Read( wxT( "AutoSash" ), &m_autoSash, false ); // disabled in default due to possible bug(?) in wxMSW
 
 	config->Read( wxT( "CurrentDirectory" ), &m_currentDir );
 
@@ -441,38 +406,11 @@ void MainFrame::SavePosition( const wxString &name )
 	config->Write( wxT( "RecentFile2" ), m_recentProjects[2] );
 	config->Write( wxT( "RecentFile3" ), m_recentProjects[3] );
 
-	if ( m_leftSplitter )
-	{
-		int leftSashWidth = m_leftSplitter->GetSashPosition();
-		config->Write( wxT( "LeftSplitterWidth" ), leftSashWidth );
-	}
-
-	if ( m_rightSplitter )
-	{
-		switch ( m_style )
-		{
-
-			case wxFB_WIDE_GUI:
-				{
-					int rightSash = -1 * ( m_rightSplitter->GetSize().GetWidth() - m_rightSplitter->GetSashPosition() );
-					config->Write( wxT( "RightSplitterWidth" ), rightSash );
-					break;
-				}
-
-			case wxFB_CLASSIC_GUI:
-				{
-					int rightSash = -1 * ( m_rightSplitter->GetSize().GetHeight() - m_rightSplitter->GetSashPosition() );
-					config->Write( wxT( "RightSplitterWidth" ), rightSash );
-					break;
-				}
-
-			default:
-				break;
-		}
-	}
-
 	config->SetPath( wxT( ".." ) );
 	config->Write( wxT("/mainframe/editor/notebook_style"), m_notebook->GetWindowStyleFlag() );
+
+	wxString Perspective = m_mgr.SavePerspective();
+	config->Write( wxT("/mainframe/aui/perspective"), Perspective );
 }
 
 void MainFrame::OnSaveProject( wxCommandEvent &event )
@@ -658,7 +596,7 @@ void MainFrame::OnClose( wxCloseEvent &event )
 		return;
 
 	SavePosition( wxT( "mainframe" ) );
-    m_rightSplitter->Disconnect( wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED, wxSplitterEventHandler( MainFrame::OnSplitterChanged ) );
+ 
 	event.Skip();
 }
 
@@ -692,55 +630,6 @@ void MainFrame::OnObjectSelected( wxFBObjectEvent& event )
 	PObjectBase obj = event.GetFBObject();
 
 	Debug::Print( wxT("MainFrame::OnObjectSelected") );
-
-    // resize sash position if necessary
-    if ( m_autoSash )
-    {
-		wxSize      panel_size;
-		int         sash_pos;
-
-		if ( m_style != wxFB_CLASSIC_GUI )
-		{
-			switch(m_page_selection)
-			{
-			case 1: // CPP panel
-				break;
-
-			case 2: // Python panel
-			   break;
-			   
-			case 3: // XRC panel
-			   break;
-
-			default:
-				if ( m_visualEdit != NULL )
-				{
-
-					// If selected object is not a Frame or a Panel or a dialog, we won't
-					// adjust the sash position
-					if ( obj->GetObjectTypeName() == wxT("form") ||
-						 obj->GetObjectTypeName() == wxT("menubar_form") ||
-					     obj->GetObjectTypeName() == wxT("toolbar_form") )
-					{
-						sash_pos = m_rightSplitter->GetSashPosition();
-						panel_size = m_visualEdit->GetVirtualSize();
-
-						Debug::Print(wxT("MainFrame::OnObjectSelected > sash pos = %d"), sash_pos);
-						Debug::Print(wxT("MainFrame::OnObjectSelected > virtual width = %d"), panel_size.GetWidth());
-
-						if ( panel_size.GetWidth() > sash_pos )
-						{
-							//set the sash position
-							Debug::Print(wxT("MainFrame::OnObjectSelected > set sash position"));
-							m_rightSplitter_sash_pos = panel_size.GetWidth();
-							m_rightSplitter->SetSashPosition(m_rightSplitter_sash_pos);
-						}
-					}
-				}
-				break;
-			}
-		}
-    }
 
 	wxString name;
 	PProperty prop( obj->GetProperty( wxT( "name" ) ) );
@@ -776,7 +665,7 @@ void MainFrame::OnObjectCreated( wxFBObjectEvent& event )
 		message = wxT( "Impossible to create the object. Did you forget to add a sizer/parent object?" );
 		wxMessageBox( message, wxT("wxFormBuilder"), wxICON_WARNING | wxOK );
 	}
-	
+
 	GetStatusBar()->SetStatusText( message );
 
 	UpdateFrame();
@@ -875,50 +764,52 @@ void MainFrame::UpdateLayoutTools()
 	int orient = 0;
 
 	bool gotLayoutSettings = AppData()->GetLayoutSettings( AppData()->GetSelectedObject(), &flag, &option, &border, &orient );
-	wxToolBar* toolbar = GetToolBar();
+	wxAuiToolBar* mainbar = this->GetToolBar();
 	wxMenu* menuEdit = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu( wxT( "Edit" ) ) );
 
 	// Enable the layout tools if there are layout settings, else disable the tools
 	menuEdit->Enable( ID_EXPAND, gotLayoutSettings );
-	toolbar->EnableTool( ID_EXPAND, gotLayoutSettings );
+	mainbar->EnableTool( ID_EXPAND, gotLayoutSettings );
 	menuEdit->Enable( ID_STRETCH, option >= 0 );
-	toolbar->EnableTool( ID_STRETCH, option >= 0 );
+	mainbar->EnableTool( ID_STRETCH, option >= 0 );
 
 	bool enableHorizontalTools = ( orient != wxHORIZONTAL ) && gotLayoutSettings;
 	menuEdit->Enable( ID_ALIGN_LEFT, enableHorizontalTools );
-	toolbar->EnableTool( ID_ALIGN_LEFT, enableHorizontalTools );
+	mainbar->EnableTool( ID_ALIGN_LEFT, enableHorizontalTools );
 	menuEdit->Enable( ID_ALIGN_CENTER_H, enableHorizontalTools );
-	toolbar->EnableTool( ID_ALIGN_CENTER_H, enableHorizontalTools );
+	mainbar->EnableTool( ID_ALIGN_CENTER_H, enableHorizontalTools );
 	menuEdit->Enable( ID_ALIGN_RIGHT, enableHorizontalTools );
-	toolbar->EnableTool( ID_ALIGN_RIGHT, enableHorizontalTools );
+	mainbar->EnableTool( ID_ALIGN_RIGHT, enableHorizontalTools );
 
 	bool enableVerticalTools = ( orient != wxVERTICAL ) && gotLayoutSettings;
 	menuEdit->Enable( ID_ALIGN_TOP, enableVerticalTools );
-	toolbar->EnableTool( ID_ALIGN_TOP, enableVerticalTools );
+	mainbar->EnableTool( ID_ALIGN_TOP, enableVerticalTools );
 	menuEdit->Enable( ID_ALIGN_CENTER_V, enableVerticalTools );
-	toolbar->EnableTool( ID_ALIGN_CENTER_V, enableVerticalTools );
+	mainbar->EnableTool( ID_ALIGN_CENTER_V, enableVerticalTools );
 	menuEdit->Enable( ID_ALIGN_BOTTOM, enableVerticalTools );
-	toolbar->EnableTool( ID_ALIGN_BOTTOM, enableVerticalTools );
+	mainbar->EnableTool( ID_ALIGN_BOTTOM, enableVerticalTools );
 
-	toolbar->EnableTool( ID_BORDER_TOP, gotLayoutSettings );
-	toolbar->EnableTool( ID_BORDER_RIGHT, gotLayoutSettings );
-	toolbar->EnableTool( ID_BORDER_LEFT, gotLayoutSettings );
-	toolbar->EnableTool( ID_BORDER_BOTTOM, gotLayoutSettings );
+	mainbar->EnableTool( ID_BORDER_TOP, gotLayoutSettings );
+	mainbar->EnableTool( ID_BORDER_RIGHT, gotLayoutSettings );
+	mainbar->EnableTool( ID_BORDER_LEFT, gotLayoutSettings );
+	mainbar->EnableTool( ID_BORDER_BOTTOM, gotLayoutSettings );
 
 	// Toggle the toolbar buttons according to the properties, if there are layout settings
-	toolbar->ToggleTool( ID_EXPAND,         ( ( flag & wxEXPAND ) != 0 ) && gotLayoutSettings );
-	toolbar->ToggleTool( ID_STRETCH,        ( option > 0 ) && gotLayoutSettings );
-	toolbar->ToggleTool( ID_ALIGN_LEFT,     !( ( flag & ( wxALIGN_RIGHT | wxALIGN_CENTER_HORIZONTAL ) ) != 0 ) && enableHorizontalTools );
-	toolbar->ToggleTool( ID_ALIGN_CENTER_H, ( ( flag & wxALIGN_CENTER_HORIZONTAL ) != 0 ) && enableHorizontalTools );
-	toolbar->ToggleTool( ID_ALIGN_RIGHT,    ( ( flag & wxALIGN_RIGHT ) != 0 ) && enableHorizontalTools );
-	toolbar->ToggleTool( ID_ALIGN_TOP,      !( ( flag & ( wxALIGN_BOTTOM | wxALIGN_CENTER_VERTICAL ) ) != 0 ) && enableVerticalTools );
-	toolbar->ToggleTool( ID_ALIGN_CENTER_V, ( ( flag & wxALIGN_CENTER_VERTICAL ) != 0 ) && enableVerticalTools );
-	toolbar->ToggleTool( ID_ALIGN_BOTTOM,   ( ( flag & wxALIGN_BOTTOM ) != 0 ) && enableVerticalTools );
+	mainbar->ToggleTool( ID_EXPAND,         ( ( flag & wxEXPAND ) != 0 ) && gotLayoutSettings );
+	mainbar->ToggleTool( ID_STRETCH,        ( option > 0 ) && gotLayoutSettings );
+	mainbar->ToggleTool( ID_ALIGN_LEFT,     !( ( flag & ( wxALIGN_RIGHT | wxALIGN_CENTER_HORIZONTAL ) ) != 0 ) && enableHorizontalTools );
+	mainbar->ToggleTool( ID_ALIGN_CENTER_H, ( ( flag & wxALIGN_CENTER_HORIZONTAL ) != 0 ) && enableHorizontalTools );
+	mainbar->ToggleTool( ID_ALIGN_RIGHT,    ( ( flag & wxALIGN_RIGHT ) != 0 ) && enableHorizontalTools );
+	mainbar->ToggleTool( ID_ALIGN_TOP,      !( ( flag & ( wxALIGN_BOTTOM | wxALIGN_CENTER_VERTICAL ) ) != 0 ) && enableVerticalTools );
+	mainbar->ToggleTool( ID_ALIGN_CENTER_V, ( ( flag & wxALIGN_CENTER_VERTICAL ) != 0 ) && enableVerticalTools );
+	mainbar->ToggleTool( ID_ALIGN_BOTTOM,   ( ( flag & wxALIGN_BOTTOM ) != 0 ) && enableVerticalTools );
 
-	toolbar->ToggleTool( ID_BORDER_TOP,      ( ( flag & wxTOP ) != 0 ) && gotLayoutSettings );
-	toolbar->ToggleTool( ID_BORDER_RIGHT,    ( ( flag & wxRIGHT ) != 0 ) && gotLayoutSettings );
-	toolbar->ToggleTool( ID_BORDER_LEFT,     ( ( flag & wxLEFT ) != 0 ) && gotLayoutSettings );
-	toolbar->ToggleTool( ID_BORDER_BOTTOM,   ( ( flag & wxBOTTOM ) != 0 ) && gotLayoutSettings );
+	mainbar->ToggleTool( ID_BORDER_TOP,      ( ( flag & wxTOP ) != 0 ) && gotLayoutSettings );
+	mainbar->ToggleTool( ID_BORDER_RIGHT,    ( ( flag & wxRIGHT ) != 0 ) && gotLayoutSettings );
+	mainbar->ToggleTool( ID_BORDER_LEFT,     ( ( flag & wxLEFT ) != 0 ) && gotLayoutSettings );
+	mainbar->ToggleTool( ID_BORDER_BOTTOM,   ( ( flag & wxBOTTOM ) != 0 ) && gotLayoutSettings );
+
+	m_mgr.Update();
 }
 
 void MainFrame::UpdateFrame()
@@ -942,15 +833,14 @@ void MainFrame::UpdateFrame()
 
 	// Enable/Disable toolbar and menu entries
 	wxMenu* menuEdit = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu( wxT( "Edit" ) ) );
-	wxToolBar* toolbar = GetToolBar();
 
 	bool redo = AppData()->CanRedo();
 	menuEdit->Enable( ID_REDO, redo );
-	toolbar->EnableTool( ID_REDO, redo );
+	mainbar->EnableTool( ID_REDO, redo );
 
 	bool undo = AppData()->CanUndo();
 	menuEdit->Enable( ID_UNDO, undo );
-	toolbar->EnableTool( ID_UNDO, undo );
+	mainbar->EnableTool( ID_UNDO, undo );
 
 	bool copy = AppData()->CanCopyObject();
 	bool isEditor = ( _("Designer") != m_notebook->GetPageText( m_notebook->GetSelection() ) );
@@ -959,13 +849,13 @@ void MainFrame::UpdateFrame()
 	menuEdit->Enable( ID_CLIPBOARD_COPY, copy );
 
 	menuEdit->Enable( ID_COPY, copy || isEditor );
-	toolbar->EnableTool( ID_COPY, copy || isEditor );
+	mainbar->EnableTool( ID_COPY, copy || isEditor );
 
 	menuEdit->Enable( ID_CUT, copy );
-	toolbar->EnableTool( ID_CUT, copy );
+	mainbar->EnableTool( ID_CUT, copy );
 
 	menuEdit->Enable( ID_DELETE, copy );
-	toolbar->EnableTool( ID_DELETE, copy );
+	mainbar->EnableTool( ID_DELETE, copy );
 
 	menuEdit->Enable( ID_MOVE_UP, copy );
 	menuEdit->Enable( ID_MOVE_DOWN, copy );
@@ -974,7 +864,7 @@ void MainFrame::UpdateFrame()
 
 	bool paste = AppData()->CanPasteObject();
 	menuEdit->Enable( ID_PASTE, paste );
-	toolbar->EnableTool( ID_PASTE, paste );
+	mainbar->EnableTool( ID_PASTE, paste );
 
 	menuEdit->Enable( ID_CLIPBOARD_PASTE, AppData()->CanPasteObjectFromClipboard() );
 
@@ -1051,8 +941,8 @@ void MainFrame::OnCopy( wxCommandEvent &)
 {
 	wxWindow *focusedWindow = wxWindow::FindFocus();
 
-	if ( focusedWindow != NULL && focusedWindow->IsKindOf( CLASSINFO( wxScintilla ) ) )
-		( ( wxScintilla* )focusedWindow )->Copy();
+	if ( focusedWindow != NULL && focusedWindow->IsKindOf( CLASSINFO( wxStyledTextCtrl ) ) )
+		( ( wxStyledTextCtrl* )focusedWindow )->Copy();
 	else
 	{
 		AppData()->CopyObject( AppData()->GetSelectedObject() );
@@ -1064,8 +954,8 @@ void MainFrame::OnCut ( wxCommandEvent &)
 {
 	wxWindow *focusedWindow = wxWindow::FindFocus();
 
-	if ( focusedWindow != NULL && focusedWindow->IsKindOf( CLASSINFO( wxScintilla ) ) )
-		( ( wxScintilla* )focusedWindow )->Cut();
+	if ( focusedWindow != NULL && focusedWindow->IsKindOf( CLASSINFO( wxStyledTextCtrl ) ) )
+		( ( wxStyledTextCtrl* )focusedWindow )->Cut();
 	else
 	{
 		AppData()->CutObject( AppData()->GetSelectedObject() );
@@ -1083,8 +973,8 @@ void MainFrame::OnPaste ( wxCommandEvent &)
 {
 	wxWindow *focusedWindow = wxWindow::FindFocus();
 
-	if ( focusedWindow != NULL && focusedWindow->IsKindOf( CLASSINFO( wxScintilla ) ) )
-		( ( wxScintilla* )focusedWindow )->Paste();
+	if ( focusedWindow != NULL && focusedWindow->IsKindOf( CLASSINFO( wxStyledTextCtrl ) ) )
+		( ( wxStyledTextCtrl* )focusedWindow )->Paste();
 	else
 	{
 		AppData()->PasteObject( AppData()->GetSelectedObject() );
@@ -1211,11 +1101,11 @@ void MainFrame::OnXrcPreview( wxCommandEvent& WXUNUSED( e ) )
 {
 	AppData()->ShowXrcPreview();
 
-	/*wxPaneInfoArray& all_panes = m_mgr.GetAllPanes();
+	wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
 	for ( int i = 0, count = all_panes.GetCount(); i < count; ++i )
 	{
-		wxPaneInfo info = all_panes.Item( i );
-	}*/
+		wxAuiPaneInfo info = all_panes.Item( i );
+	}
 
 }
 
@@ -1283,96 +1173,11 @@ bool MainFrame::SaveWarning()
 	return ( result != wxCANCEL );
 }
 
-void MainFrame::OnFlatNotebookPageChanged( wxFlatNotebookEvent& event )
+void MainFrame::OnAuiNotebookPageChanged( wxAuiNotebookEvent& event )
 {
-	UpdateFrame();
-
-	if ( m_autoSash )
-	{
-		m_page_selection = event.GetSelection();
-		Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > selection = %d"), m_page_selection);
-
-		wxSize panel_size;
-		int sash_pos;
-
-		if(m_style != wxFB_CLASSIC_GUI)
-		{
-			switch( m_page_selection )
-			{
-			case 1: // CPP panel
-				if( (m_cpp != NULL) && (m_rightSplitter != NULL) )
-				{
-					panel_size = m_cpp->GetClientSize();
-					sash_pos = m_rightSplitter->GetSashPosition();
-
-					Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > CPP panel: width = %d sash pos = %d"), panel_size.GetWidth(), sash_pos);
-
-					if(panel_size.GetWidth() > sash_pos)
-					{
-						// set the sash position
-						Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > reset sash position"));
-						m_rightSplitter->SetSashPosition(panel_size.GetWidth());
-					}
-				}
-				break;
-				
-			case 2: // Python panel
-				if( (m_python != NULL) && (m_rightSplitter != NULL) )
-				{
-					panel_size = m_python->GetClientSize();
-					sash_pos = m_rightSplitter->GetSashPosition();
-
-					Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > Python panel: width = %d sash pos = %d"), panel_size.GetWidth(), sash_pos);
-
-					if(panel_size.GetWidth() > sash_pos)
-					{
-						// set the sash position
-						Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > reset sash position"));
-						m_rightSplitter->SetSashPosition(panel_size.GetWidth());
-					}
-				}
-				break;
-
-			case 3: // XRC panel
-				if((m_xrc != NULL) && (m_rightSplitter != NULL))
-				{
-					panel_size = m_xrc->GetClientSize();
-					sash_pos = m_rightSplitter->GetSashPosition();
-
-					Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > XRC panel: width = %d sash pos = %d"), panel_size.GetWidth(), sash_pos);
-
-					if(panel_size.GetWidth() > sash_pos)
-					{
-						// set the sash position
-						Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > reset sash position"));
-						m_rightSplitter->SetSashPosition(panel_size.GetWidth());
-					}
-				}
-				break;
-
-			default:
-				if(m_visualEdit != NULL)
-				{
-					sash_pos = m_rightSplitter->GetSashPosition();
-					
-					if(m_rightSplitter_sash_pos < sash_pos)
-					{
-						//restore the sash position
-						Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > restore sash position: sash pos = %d"), m_rightSplitter_sash_pos);
-						m_rightSplitter->SetSashPosition(m_rightSplitter_sash_pos);
-					}
-					else
-					{
-						// update position
-						m_rightSplitter_sash_pos = sash_pos;
-					}
-				}
-				break;
-			}
-		}
-	}
-
+	UpdateFrame(); // TODO: before GenerateCode?
 	AppData()->GenerateCode( true );
+	event.Skip();
 }
 
 void MainFrame::OnFindDialog( wxCommandEvent& )
@@ -1393,7 +1198,7 @@ void MainFrame::OnFindClose( wxFindDialogEvent& )
 
 void MainFrame::OnFind( wxFindDialogEvent& event )
 {
-	for ( int page = 0; page < m_notebook->GetPageCount(); ++page )
+	for ( unsigned int page = 0; page < m_notebook->GetPageCount(); ++page )
 	{
 		event.StopPropagation();
 		event.SetClientData( m_findDialog );
@@ -1467,74 +1272,76 @@ wxMenuBar * MainFrame::CreateFBMenuBar()
 	return menuBar;
 }
 
-wxToolBar * MainFrame::CreateFBToolBar()
+wxAuiToolBar * MainFrame::CreateFBAuiToolBar()
 {
-	wxToolBar* toolbar = CreateToolBar();
-	toolbar->SetToolBitmapSize( wxSize( TOOL_SIZE, TOOL_SIZE ) );
-	toolbar->AddTool( ID_NEW_PRJ, wxT( "New Project" ), AppBitmaps::GetBitmap( wxT( "new" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, wxT( "New Project (Ctrl+N)" ), wxT( "Start a new project." ) );
-	toolbar->AddTool( ID_OPEN_PRJ, wxT( "Open Project" ), AppBitmaps::GetBitmap( wxT( "open" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, wxT( "Open Project (Ctrl+O)" ), wxT( "Open an existing project." ) );
-	toolbar->AddTool( ID_SAVE_PRJ, wxT( "Save Project" ), AppBitmaps::GetBitmap( wxT( "save" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, wxT( "Save Project (Ctrl+S)" ), wxT( "Save the current project." ) );
-	toolbar->AddSeparator();
-	toolbar->AddTool( ID_UNDO, wxT( "Undo" ), AppBitmaps::GetBitmap( wxT( "undo" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, wxT( "Undo (Ctrl+Z)" ), wxT( "Undo the last action." ) );
-	toolbar->AddTool( ID_REDO, wxT( "Redo" ), AppBitmaps::GetBitmap( wxT( "redo" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, wxT( "Redo (Ctrl+Y)" ), wxT( "Redo the last action that was undone." ) );
-	toolbar->AddSeparator();
-	toolbar->AddTool( ID_CUT, wxT( "Cut" ), AppBitmaps::GetBitmap( wxT( "cut" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, wxT( "Cut (Ctrl+X)" ), wxT( "Remove the selected object and place it on the clipboard." ) );
-	toolbar->AddTool( ID_COPY, wxT( "Copy" ), AppBitmaps::GetBitmap( wxT( "copy" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, wxT( "Copy (Ctrl+C)" ), wxT( "Copy the selected object to the clipboard." ) );
-	toolbar->AddTool( ID_PASTE, wxT( "Paste" ), AppBitmaps::GetBitmap( wxT( "paste" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, wxT( "Paste (Ctrl+V)" ), wxT( "Insert an object from the clipboard." ) );
-	toolbar->AddTool( ID_DELETE, wxT( "Delete" ), AppBitmaps::GetBitmap( wxT( "delete" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, wxT( "Delete (Ctrl+D)" ), wxT( "Remove the selected object." ) );
-	toolbar->AddSeparator();
-	toolbar->AddTool( ID_GENERATE_CODE, wxT( "Generate Code" ), AppBitmaps::GetBitmap( wxT( "generate" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, wxT( "Generate Code (F8)" ), wxT( "Create code from the current project." ) );
-	toolbar->AddSeparator();
-	toolbar->AddTool( ID_ALIGN_LEFT, wxT( "" ), AppBitmaps::GetBitmap( wxT( "lalign" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, wxT( "Align Left" ), wxT( "The item will be aligned to the left of the space alotted to it by the sizer." ) );
-	toolbar->AddTool( ID_ALIGN_CENTER_H, wxT( "" ), AppBitmaps::GetBitmap( wxT( "chalign" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, wxT( "Align Center Horizontally" ), wxT( "The item will be centered horizontally in the space alotted to it by the sizer." ) );
-	toolbar->AddTool( ID_ALIGN_RIGHT, wxT( "" ), AppBitmaps::GetBitmap( wxT( "ralign" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, wxT( "Align Right" ), wxT( "The item will be aligned to the right of the space alotted to it by the sizer." ) );
-	toolbar->AddSeparator();
-	toolbar->AddTool( ID_ALIGN_TOP, wxT( "" ), AppBitmaps::GetBitmap( wxT( "talign" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, wxT( "Align Top" ), wxT( "The item will be aligned to the top of the space alotted to it by the sizer." ) );
-	toolbar->AddTool( ID_ALIGN_CENTER_V, wxT( "" ), AppBitmaps::GetBitmap( wxT( "cvalign" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, wxT( "Align Center Vertically" ), wxT( "The item will be centered vertically within space alotted to it by the sizer." ) );
-	toolbar->AddTool( ID_ALIGN_BOTTOM, wxT( "" ), AppBitmaps::GetBitmap( wxT( "balign" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, wxT( "Align Bottom" ), wxT( "The item will be aligned to the bottom of the space alotted to it by the sizer." ) );
-	toolbar->AddSeparator();
-	toolbar->AddTool( ID_EXPAND, wxT( "" ), AppBitmaps::GetBitmap( wxT( "expand" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, wxT( "Expand (Alt+W)" ), wxT( "The item will be expanded to fill the space assigned to the item." ) );
-	toolbar->AddTool( ID_STRETCH, wxT( "" ), AppBitmaps::GetBitmap( wxT( "stretch" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, wxT( "Stretch (Alt+S)" ), wxT( "The item will grow and shrink with the sizer." ) );
-	toolbar->AddSeparator();
-	toolbar->AddTool( ID_BORDER_LEFT, wxT( "" ), AppBitmaps::GetBitmap( wxT( "left" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, wxT( "Left Border" ), wxT( "A border will be added on the left side of the item." ) );
-	toolbar->AddTool( ID_BORDER_RIGHT, wxT( "" ), AppBitmaps::GetBitmap( wxT( "right" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, wxT( "Right Border" ), wxT( "A border will be  added on the right side of the item." ) );
-	toolbar->AddTool( ID_BORDER_TOP, wxT( "" ), AppBitmaps::GetBitmap( wxT( "top" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, wxT( "Top Border" ), wxT( "A border will be  added on the top of the item." ) );
-	toolbar->AddTool( ID_BORDER_BOTTOM, wxT( "" ), AppBitmaps::GetBitmap( wxT( "bottom" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, wxT( "Bottom Border" ), wxT( "A border will be  added on the bottom of the item." ) );
+	wxAuiToolBarItemArray prepend_items;
+	wxAuiToolBarItemArray append_items;
+	wxAuiToolBarItem item;
 
-	toolbar->Realize();
+	item.SetKind( wxITEM_NORMAL );
+	item.SetId( ID_AUI_SETTINGS );
+	item.SetLabel( _("Customize...") );
+	item.SetBitmap( AppBitmaps::GetBitmap( wxT( "generate" ), 16 ) );
+	append_items.Add( item );
 
-	return toolbar;
+	mainbar = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
+	mainbar->SetToolBitmapSize( wxSize( TOOL_SIZE, TOOL_SIZE ) );
+	mainbar->AddTool( ID_NEW_PRJ, _( "New Project" ), AppBitmaps::GetBitmap( wxT( "new" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "New Project (Ctrl+N)" ), _( "Start a new project." ), NULL );
+	mainbar->AddTool( ID_OPEN_PRJ, _( "Open Project" ), AppBitmaps::GetBitmap( wxT( "open" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "Open Project (Ctrl+O)" ), _( "Open an existing project." ), NULL );
+	mainbar->AddTool( ID_SAVE_PRJ, _( "Save Project" ), AppBitmaps::GetBitmap( wxT( "save" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "Save Project (Ctrl+S)" ), _( "Save the current project." ), NULL );
+	mainbar->AddSeparator();
+	mainbar->AddTool( ID_UNDO, _( "Undo" ), AppBitmaps::GetBitmap( wxT( "undo" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "Undo (Ctrl+Z)" ), _( "Undo the last action." ), NULL );
+	mainbar->AddTool( ID_REDO, _( "Redo" ), AppBitmaps::GetBitmap( wxT( "redo" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "Redo (Ctrl+Y)" ), _( "Redo the last action that was undone." ), NULL );
+	mainbar->AddSeparator();
+	mainbar->AddTool( ID_CUT, _( "Cut" ), AppBitmaps::GetBitmap( wxT( "cut" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "Cut (Ctrl+X)" ), _( "Remove the selected object and place it on the clipboard." ), NULL );
+	mainbar->AddTool( ID_COPY, _( "Copy" ), AppBitmaps::GetBitmap( wxT( "copy" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "Copy (Ctrl+C)" ), _( "Copy the selected object to the clipboard." ), NULL );
+	mainbar->AddTool( ID_PASTE, _( "Paste" ), AppBitmaps::GetBitmap( wxT( "paste" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "Paste (Ctrl+V)" ), _( "Insert an object from the clipboard." ), NULL );
+	mainbar->AddTool( ID_DELETE, _( "Delete" ), AppBitmaps::GetBitmap( wxT( "delete" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "Delete (Ctrl+D)" ), _( "Remove the selected object." ), NULL );
+	mainbar->AddSeparator();
+	mainbar->AddTool( ID_GENERATE_CODE, _( "Generate Code" ), AppBitmaps::GetBitmap( wxT( "generate" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "Generate Code (F8)" ), _( "Create code from the current project." ), NULL );
+	mainbar->AddSeparator();
+	mainbar->AddTool( ID_ALIGN_LEFT, wxEmptyString, AppBitmaps::GetBitmap( wxT( "lalign" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Align Left" ), _( "The item will be aligned to the left of the space alotted to it by the sizer." ), NULL );
+	mainbar->AddTool( ID_ALIGN_CENTER_H, wxEmptyString, AppBitmaps::GetBitmap( wxT( "chalign" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Align Center Horizontally" ), _( "The item will be centered horizontally in the space alotted to it by the sizer." ), NULL );
+	mainbar->AddTool( ID_ALIGN_RIGHT, wxEmptyString, AppBitmaps::GetBitmap( wxT( "ralign" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Align Right" ), _( "The item will be aligned to the right of the space alotted to it by the sizer." ), NULL );
+	mainbar->AddSeparator();
+	mainbar->AddTool( ID_ALIGN_TOP, wxEmptyString, AppBitmaps::GetBitmap( wxT( "talign" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Align Top" ), _( "The item will be aligned to the top of the space alotted to it by the sizer." ), NULL );
+	mainbar->AddTool( ID_ALIGN_CENTER_V, wxEmptyString, AppBitmaps::GetBitmap( wxT( "cvalign" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Align Center Vertically" ), _( "The item will be centered vertically within space alotted to it by the sizer." ), NULL );
+	mainbar->AddTool( ID_ALIGN_BOTTOM, wxEmptyString, AppBitmaps::GetBitmap( wxT( "balign" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Align Bottom" ), _( "The item will be aligned to the bottom of the space alotted to it by the sizer." ), NULL );
+	mainbar->AddSeparator();
+	mainbar->AddTool( ID_EXPAND, wxEmptyString, AppBitmaps::GetBitmap( wxT( "expand" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Expand (Alt+W)" ), _( "The item will be expanded to fill the space assigned to the item." ), NULL );
+	mainbar->AddTool( ID_STRETCH, wxEmptyString, AppBitmaps::GetBitmap( wxT( "stretch" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Stretch (Alt+S)" ), _( "The item will grow and shrink with the sizer." ), NULL );
+	mainbar->AddSeparator();
+	mainbar->AddTool( ID_BORDER_LEFT, wxEmptyString, AppBitmaps::GetBitmap( wxT( "left" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Left Border" ), _( "A border will be added on the left side of the item." ), NULL );
+	mainbar->AddTool( ID_BORDER_RIGHT, wxEmptyString, AppBitmaps::GetBitmap( wxT( "right" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Right Border" ), _( "A border will be  added on the right side of the item." ), NULL );
+	mainbar->AddTool( ID_BORDER_TOP, wxEmptyString, AppBitmaps::GetBitmap( wxT( "top" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Top Border" ), _( "A border will be  added on the top of the item." ), NULL );
+	mainbar->AddTool( ID_BORDER_BOTTOM, wxEmptyString, AppBitmaps::GetBitmap( wxT( "bottom" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Bottom Border" ), _( "A border will be  added on the bottom of the item." ), NULL );
+	mainbar->SetCustomOverflowItems( prepend_items, append_items );
+	mainbar->Realize();
+
+	return mainbar;
 }
 
 wxWindow * MainFrame::CreateDesignerWindow( wxWindow *parent )
 {
-	long nbStyle;
+	long nbStyle = 0;
 	wxConfigBase* config = wxConfigBase::Get();
-	config->Read( wxT("/mainframe/editor/notebook_style"), &nbStyle, wxFNB_BOTTOM | wxFNB_NO_X_BUTTON | wxFNB_NO_NAV_BUTTONS | wxFNB_NODRAG  | wxFNB_FF2 | wxFNB_CUSTOM_DLG );
+	config->Read( wxT("/mainframe/editor/notebook_style"), &nbStyle, wxAUI_NB_TAB_MOVE | wxAUI_NB_WINDOWLIST_BUTTON | wxAUI_NB_SCROLL_BUTTONS );
 
-	m_notebook = new wxFlatNotebook( parent, ID_EDITOR_FNB, wxDefaultPosition, wxDefaultSize, FNB_STYLE_OVERRIDES( nbStyle ) );
-	m_notebook->SetCustomizeOptions( wxFNB_CUSTOM_TAB_LOOK | wxFNB_CUSTOM_ORIENTATION | wxFNB_CUSTOM_LOCAL_DRAG );
-
-	// Set notebook icons
-	m_icons.Add( AppBitmaps::GetBitmap( wxT( "designer" ), 16 ) );
-	m_icons.Add( AppBitmaps::GetBitmap( wxT( "c++" ), 16 ) );
-	m_icons.Add( AppBitmaps::GetBitmap( wxT( "c++" ), 16 ) );
-	m_icons.Add( AppBitmaps::GetBitmap( wxT( "xrc" ), 16 ) );
-	m_notebook->SetImageList( &m_icons );
+	m_notebook = new wxAuiNotebook( parent, ID_EDITOR_FNB, wxDefaultPosition, wxDefaultSize, nbStyle );
 
 	m_visualEdit = new VisualEditor( m_notebook );
 	AppData()->GetManager()->SetVisualEditor( m_visualEdit );
 
-	m_notebook->AddPage( m_visualEdit, wxT( "Designer" ), false, 0 );
+	m_notebook->AddPage( m_visualEdit, wxT( "Designer" ), false, AppBitmaps::GetBitmap( wxT( "designer" ), 16 ) );
 
 	m_cpp = new CppPanel( m_notebook, -1 );
-	m_notebook->AddPage( m_cpp, wxT( "C++" ), false, 1 );
-	
+	m_notebook->AddPage( m_cpp, wxT( "C++" ), false, AppBitmaps::GetBitmap( wxT( "c++" ), 16 ) );
+
 	m_python = new PythonPanel( m_notebook, -1 );
-	m_notebook->AddPage( m_python, wxT( "Python" ), false, 2 );
+	m_notebook->AddPage( m_python, wxT( "Python" ), false, AppBitmaps::GetBitmap( wxT( "c++" ), 16 ) );
 
 	m_xrc = new XrcPanel( m_notebook, -1 );
-	m_notebook->AddPage( m_xrc, wxT( "XRC" ), false, 3 );
+	m_notebook->AddPage( m_xrc, wxT( "XRC" ), false, AppBitmaps::GetBitmap( wxT( "xrc" ), 16 ) );
 
 	return m_notebook;
 }
@@ -1560,110 +1367,39 @@ wxWindow * MainFrame::CreateObjectTree( wxWindow *parent )
 
 wxWindow * MainFrame::CreateObjectInspector( wxWindow *parent )
 {
-	//TO-DO: make object inspector style selectable.
-	int style = ( m_style == wxFB_CLASSIC_GUI ? wxFB_OI_MULTIPAGE_STYLE : wxFB_OI_SINGLE_PAGE_STYLE );
+	// TODO: make object inspector style selectable.
+//	int style = ( m_style == wxFB_CLASSIC_GUI ? wxFB_OI_MULTIPAGE_STYLE : wxFB_OI_SINGLE_PAGE_STYLE );
+	int style = wxFB_OI_SINGLE_PAGE_STYLE;
 	m_objInsp = new ObjectInspector( parent, -1, style );
+
 	return m_objInsp;
 }
 
-void MainFrame::CreateWideGui()
+void MainFrame::OnAuiSettings(wxCommandEvent& WXUNUSED(evt))
 {
-	// MainFrame only contains m_leftSplitter window
-	m_leftSplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE );
+    // show the settings pane, and float it
+    wxAuiPaneInfo& floating_pane = m_mgr.GetPane( _("settings") ).Float().Show();
 
-	wxWindow *objectTree = Title::CreateTitle( CreateObjectTree( m_leftSplitter ), wxT( "Object Tree" ) );
+    if (floating_pane.floating_pos == wxDefaultPosition)
+        floating_pane.FloatingPosition(GetStartPosition());
 
-	// panel1 contains Palette and splitter2 (m_rightSplitter)
-	wxPanel *panel1 = new wxPanel( m_leftSplitter, -1 );
-
-	wxWindow *palette = Title::CreateTitle( CreateComponentPalette( panel1 ), wxT( "Component Palette" ) );
-	m_rightSplitter   =  new wxSplitterWindow( panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE );
-
-	wxBoxSizer *panel1_sizer = new wxBoxSizer( wxVERTICAL );
-	panel1_sizer->Add( palette, 0, wxEXPAND );
-	panel1_sizer->Add( m_rightSplitter, 1, wxEXPAND );
-	panel1->SetSizer( panel1_sizer );
-
-	// splitter2 contains the editor and the object inspector
-	wxWindow *designer        = Title::CreateTitle( CreateDesignerWindow( m_rightSplitter ), wxT( "Editor" ) );
-	wxWindow *objectInspector = Title::CreateTitle( CreateObjectInspector( m_rightSplitter ), wxT( "Object Properties" ) );
-
-	m_leftSplitter->SplitVertically( objectTree, panel1, m_leftSplitterWidth );
-
-	// Need to update the left splitter so the right one is drawn correctly
-	wxSizeEvent update( GetSize(), GetId() );
-	ProcessEvent( update );
-	m_leftSplitter->UpdateSize();
-	m_leftSplitter->SetMinimumPaneSize( 2 );
-
-	m_rightSplitter->SplitVertically( designer, objectInspector, m_rightSplitterWidth );
-	m_rightSplitter->SetSashGravity( 1 );
-	m_rightSplitter->SetMinimumPaneSize( 2 );
-
-	m_style = wxFB_WIDE_GUI;
-
-	SetMinSize( wxSize( 700, 380 ) );
+    m_mgr.Update();
 }
 
-void MainFrame::CreateClassicGui()
+wxAuiDockArt* MainFrame::GetDockArt()
 {
-	// Give ID to left splitter
-	//m_leftSplitter = new wxSplitterWindow( this, -1, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE );
-	m_leftSplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE );
-	m_rightSplitter =  new wxSplitterWindow( m_leftSplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE );
-	wxWindow *objectTree      = Title::CreateTitle( CreateObjectTree( m_rightSplitter ), wxT( "Object Tree" ) );
-	wxWindow *objectInspector = Title::CreateTitle( CreateObjectInspector( m_rightSplitter ), wxT( "Object Properties" ) );
-
-	// panel1 contains palette and designer
-	wxPanel *panel1 = new wxPanel( m_leftSplitter, -1 );
-
-	wxWindow *palette = Title::CreateTitle( CreateComponentPalette( panel1 ), wxT( "Component Palette" ) );
-	wxWindow *designer = Title::CreateTitle( CreateDesignerWindow( panel1 ), wxT( "Editor" ) );
-
-	wxBoxSizer *panel1_sizer = new wxBoxSizer( wxVERTICAL );
-	panel1_sizer->Add( palette, 0, wxEXPAND );
-	panel1_sizer->Add( designer, 1, wxEXPAND );
-	panel1->SetSizer( panel1_sizer );
-
-	m_leftSplitter->SplitVertically( m_rightSplitter, panel1, m_leftSplitterWidth );
-
-	// Need to update the left splitter so the right one is drawn correctly
-	wxSizeEvent update( GetSize(), GetId() );
-	ProcessEvent( update );
-	m_leftSplitter->UpdateSize();
-
-	m_rightSplitter->SplitHorizontally( objectTree, objectInspector, m_rightSplitterWidth );
-	m_rightSplitter->SetMinimumPaneSize( 2 );
-
-	SetMinSize( wxSize( 700, 465 ) );
+    return m_mgr.GetArtProvider();
 }
 
-void MainFrame::OnIdle( wxIdleEvent& )
+void MainFrame::DoUpdate()
 {
-	if ( m_leftSplitter )
-	{
-		m_leftSplitter->SetSashPosition( m_leftSplitterWidth );
-	}
-
-	if ( m_rightSplitter )
-	{
-		m_rightSplitter->SetSashPosition( m_rightSplitterWidth );
-	}
-
-	Disconnect( wxEVT_IDLE, wxIdleEventHandler( MainFrame::OnIdle ) );
-
-	if ( m_autoSash )
-	{
-		// Init. m_rightSplitter_sash_pos
-		m_rightSplitter_sash_pos = m_rightSplitter->GetSashPosition();
-		m_rightSplitter->Connect( wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED, wxSplitterEventHandler( MainFrame::OnSplitterChanged ) );
-	}
+    m_mgr.Update();
 }
 
-void MainFrame::OnSplitterChanged( wxSplitterEvent &event )
+wxPoint MainFrame::GetStartPosition()
 {
-	Debug::Print(wxT("MainFrame::OnSplitterChanged > pos = %d"), event.GetSashPosition());
-
-	// update position
-	m_rightSplitter_sash_pos = event.GetSashPosition();
+    static int x = 0;
+    x += 20;
+    wxPoint pt = ClientToScreen(wxPoint(0,0));
+    return wxPoint(pt.x + x, pt.y + x);
 }

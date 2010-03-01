@@ -27,7 +27,7 @@
 #define __PLUGIN_H__
 
 #include "component.h"
-#include "wx/wx.h"
+#include <wx/wx.h>
 #include <vector>
 #include <map>
 

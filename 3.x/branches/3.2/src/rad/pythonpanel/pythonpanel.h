@@ -36,12 +36,10 @@
 #define __PYTHON_PANEL__
 
 #include <wx/panel.h>
-
+#include <wx/stc/stc.h>
 #include "utils/wxfbdefs.h"
 
 class CodeEditor;
-
-class wxScintilla;
 
 class wxFindDialogEvent;
 
@@ -56,7 +54,7 @@ private:
 	CodeEditor* m_pythonPanel;
 	PTCCodeWriter m_pythonCW;
 
-	void InitStyledTextCtrl( wxScintilla* stc );
+	void InitStyledTextCtrl( wxStyledTextCtrl* stc );
 
 public:
 	PythonPanel( wxWindow *parent, int id );

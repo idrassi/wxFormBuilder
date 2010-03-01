@@ -25,9 +25,9 @@
 -- wxWidgets version
 local wx_ver = ""
 if( windows ) then
-	wx_ver = "28"
+	wx_ver = "29"
 else
-	wx_ver = "2.8"
+	wx_ver = "2.9"
 end
 
 --******* Initial Setup ************
@@ -48,17 +48,15 @@ end
 package.kind = "winexe"
 -- Set the files to include.
 package.files = { matchrecursive( "*.cpp", "*.hpp", "*.h", "*.cc", "*.hh", "*.rc" ) }
--- Set the files to exclude.
-package.excludes = { matchrecursive( "controls/*.cpp", "controls/*.h" ) }
 -- Set the include paths.
-package.includepaths = { "controls/include", "boost", "../src", "../sdk/tinyxml", "../sdk/plugin_interface" }
+package.includepaths = { "boost", "../src", "../sdk/tinyxml", "../sdk/plugin_interface" }
 if ( windows ) then
 	package.libpaths = { "../output", "../sdk/lib" }
 else
 	package.libpaths = { "../output/lib/wxformbuilder", "../sdk/lib" }
 end
 -- Set the libraries it links to.
-package.links = { "wxFlatNotebook", "wxPropGrid", "wxScintilla", "TiCPP", "plugin-interface" }
+package.links = {  "TiCPP", "plugin-interface" }
 
 -- Add libraries and build options for stack trace in MinGW
 if ( windows and ( (string.find( target or "", ".*-gcc" )) or (target == "gnu") ) ) then
@@ -67,7 +65,7 @@ if ( windows and ( (string.find( target or "", ".*-gcc" )) or (target == "gnu") 
 end
 
 -- Set the packages dependancies. NOT implimented in the official Premake build for Code::Blocks
-package.depends = { "additional-components-plugin", "common-components-plugin", "containers-components-plugin", "layout-components-plugin", "wxadditions-mini-plugin" }
+package.depends = { "additional-components-plugin", "common-components-plugin", "containers-components-plugin", "layout-components-plugin" }
 -- Set the pre-compiled header
 package.pchheader = "pch.h"
 -- Setup the output directory options.
@@ -79,7 +77,7 @@ else
 end
 --package.libdir = "../../lib"
 -- Set the defines.
-package.defines = { "WXUSINGDLL_FNB", "TIXML_USE_TICPP", "NO_GCC_PRAGMA", "SCI_NAMESPACE" }
+package.defines = { "TIXML_USE_TICPP", "NO_GCC_PRAGMA", "SCI_NAMESPACE" }
 -- Load the shlibs from the 'lib/wxformbuilder' subdirectory.
 if ( macosx ) then
 	table.insert( package.linkoptions, "-Wl,-L../output/lib/wxformbuilder" )
@@ -269,12 +267,12 @@ else
 	table.insert( package.excludes, matchrecursive( "*.rc" ) )
 
 	-- Set wxWidgets build options.
-	table.insert( package.config["Debug"].buildoptions, "`wx-config "..debug_option.." --cflags`" )
-	table.insert( package.config["Release"].buildoptions, "`wx-config --debug=no --cflags`" )
+	table.insert( package.config["Debug"].buildoptions, "`$(291Debug)/wx-config "..debug_option.." --cflags`" )
+	table.insert( package.config["Release"].buildoptions, "`$(291Release)/wx-config --debug=no --cflags`" )
 
 	-- Set the wxWidgets link options.
-	table.insert( package.config["Debug"].linkoptions, "`wx-config "..debug_option.." --libs`" )
-	table.insert( package.config["Release"].linkoptions, "`wx-config --libs`" )
+	table.insert( package.config["Debug"].linkoptions, "`$(291Debug)/wx-config "..debug_option.." --libs all`" )
+	table.insert( package.config["Release"].linkoptions, "`$(291Release)/wx-config --libs all`" )
 end
 
 if ( macosx ) then

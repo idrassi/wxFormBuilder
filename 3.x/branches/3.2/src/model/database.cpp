@@ -272,7 +272,8 @@ PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase par
 		// de forms (como childType de project), pero hay mucho código no válido
 		// para forms que no sean de tipo "form". Dicho de otra manera, hay
 		// código que dependen del nombre del tipo, cosa que hay que evitar.
-		if (parentType->GetName() == wxT("form") && parent->GetClassName() != wxT("Frame") &&
+		if (parentType->GetName() == wxT("form") &&
+			parent->GetClassName() != wxT("Frame") &&
 			(objType->GetName() == wxT("statusbar") ||
 			objType->GetName() == wxT("menubar") ||
 			objType->GetName() == wxT("toolbar") ))
@@ -438,13 +439,16 @@ void ObjectDatabase::SetDefaultLayoutProperties(PObjectBase sizeritem)
 		}
 		sizeritem->GetProperty( wxT("flag") )->SetValue( wxT("wxALL") );
 	}
-	else if (	obj_type == wxT("notebook")			||
-				obj_type == wxT("flatnotebook")		||
+	else if (	obj_type == wxT("expanded_widget")	||
+                obj_type == wxT("dataview")			||
+                obj_type == wxT("notebook")			||
 				obj_type == wxT("listbook")			||
 				obj_type == wxT("choicebook")		||
+				obj_type == wxT("treebook")			||
+				obj_type == wxT("toolbook")		    ||
 				obj_type == wxT("auinotebook")		||
+				obj_type == wxT("flatnotebook")		||
 				obj_type == wxT("treelistctrl")		||
-				obj_type == wxT("expanded_widget")	||
 				obj_type == wxT("container")
 				)
 	{
@@ -654,16 +658,17 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 							// Load the C++ code tempates
 							xmlFileName.SetExt( wxT("cppcode") );
 							LoadCodeGen( xmlFileName.GetFullPath() );
-							
+
 							// Load the Python code tempates
 							xmlFileName.SetExt( wxT("pythoncode") );
 							LoadCodeGen( xmlFileName.GetFullPath() );
-							
+
 							std::pair< PackageMap::iterator, bool > addedPackage = packages.insert( PackageMap::value_type( packageIt->second->GetPackageName(), packageIt->second ) );
 							if ( !addedPackage.second )
 							{
 								addedPackage.first->second->AppendPackage( packageIt->second );
-								Debug::Print( _("Merged plugins named \"%s\""), packageIt->second->GetPackageName().c_str() );
+								wxString msg = wxT( "Merged plugins named \"") + packageIt->second->GetPackageName() +wxT("\"");
+								Debug::Print( msg );
 							}
 
 						}
@@ -681,7 +686,7 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 
     // Get previous plugin order
 	wxConfigBase* config = wxConfigBase::Get();
-	wxString pages = config->Read( wxT("/palette/pageOrder"), wxT("Common,Additional,Containers,Menu/Toolbar,Layout,Forms,") );
+	wxString pages = config->Read( wxT("/palette/pageOrder"), wxT("Forms,Layout,Menu/Toolbar,Containers,Common,Additional,") );
 
 	// Add packages to the vector in the correct order
 	wxStringTokenizer packageList( pages, wxT(",") );
@@ -810,12 +815,7 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
 
 bool ObjectDatabase::HasCppProperties(wxString type)
 {
-	return (type == wxT("notebook")			||
-			type == wxT("flatnotebook")		||
-			type == wxT("listbook")			||
-			type == wxT("choicebook")		||
-			type == wxT("auinotebook")		||
-			type == wxT("widget")			||
+	return (type == wxT("widget")			||
 			type == wxT("expanded_widget")	||
 			type == wxT("statusbar")		||
 			type == wxT("component")		||
@@ -825,10 +825,17 @@ bool ObjectDatabase::HasCppProperties(wxString type)
 			type == wxT("menuitem")			||
 			type == wxT("submenu")			||
 			type == wxT("toolbar")			||
+			type == wxT("gbsizer")          ||
 			type == wxT("splitter")			||
-			type == wxT("sizer")			||
-			type == wxT("treelistctrl")		||
-			type == wxT("gbsizer")
+            type == wxT("dataview")			||
+            type == wxT("notebook")			||
+			type == wxT("listbook")			||
+			type == wxT("choicebook")		||
+            type == wxT("treebook")			||
+			type == wxT("toolbook")		    ||
+			type == wxT("auinotebook")		||
+			type == wxT("flatnotebook")		||
+			type == wxT("treelistctrl")
 			);
 }
 
@@ -1212,28 +1219,34 @@ void ObjectDatabase::ParseEvents( ticpp::Element* elem_obj, PObjectInfo obj_info
 bool ObjectDatabase::ShowInPalette(wxString type)
 {
 	return (type == wxT("form")					||
+			type == wxT("wizard") 				||
+			type == wxT("wizardpage")       	||
 			type == wxT("menubar_form")			||
 			type == wxT("toolbar_form")			||
 			type == wxT("sizer")				||
 			type == wxT("gbsizer")				||
+			type == wxT("menubar")				||
 			type == wxT("menu")					||
 			type == wxT("menuitem")				||
 			type == wxT("submenu")				||
+			type == wxT("toolbar")				||
 			type == wxT("tool")					||
-			type == wxT("notebook")				||
-			type == wxT("flatnotebook")			||
-			type == wxT("listbook")				||
-			type == wxT("choicebook")			||
-			type == wxT("auinotebook")			||
 			type == wxT("widget")				||
 			type == wxT("expanded_widget")		||
+			type == wxT("dataview")				||
+			type == wxT("dataviewcolumn")		||
+			type == wxT("notebook")				||
+			type == wxT("listbook")				||
+			type == wxT("choicebook")			||
+			type == wxT("treebook")			    ||
+            type == wxT("toolbook")				||
+			type == wxT("auinotebook")			||
+			type == wxT("flatnotebook")			||
 			type == wxT("statusbar")			||
 			type == wxT("component")			||
 			type == wxT("container")			||
-			type == wxT("menubar")				||
 			type == wxT("treelistctrl")			||
 			type == wxT("treelistctrlcolumn")	||
-			type == wxT("toolbar")				||
 			type == wxT("splitter")
 			);
 }
@@ -1301,8 +1314,9 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		}
 
 #endif
-
-		Debug::Print( wxT("[Database::ImportComponentLibrary] Importing %s library"), path.c_str() );
+// TODO: Check these changes
+		wxString msg = wxT( "[Database::ImportComponentLibrary] Importing ") + path +wxT(" library");
+		Debug::Print( msg );
 
 	// Get the component library
 	IComponentLibrary* comp_lib = GetComponentLibrary( (IManager*)manager.get() );
@@ -1324,7 +1338,8 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		}
 		else
 		{
-			Debug::Print( wxT("ObjectInfo for <%s> not found while loading library <%s>"), class_name.c_str(), path.c_str() );
+			wxString msg = wxT( "ObjectInfo for <") + class_name + wxT("> not found while loading library <") + path + wxT(">");
+			Debug::Print( msg );
 		}
 	}
 

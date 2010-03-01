@@ -23,7 +23,7 @@
 --*****************************************************************************
 
 -- wxWidgets version
-local wx_ver = "28"
+local wx_ver = "29"
 
 --******* Initial Setup ************
 --*	Most of the setting are set here.
@@ -216,10 +216,10 @@ else
 	table.insert( package.buildoptions, "-fPIC" )
 
 	-- Set wxWidgets build options.
-	table.insert( package.config["Debug"].buildoptions, "`wx-config "..debug_option.." --cflags`" )
-	table.insert( package.config["Release"].buildoptions, "`wx-config --debug=no --cflags`" )
+	table.insert( package.config["Debug"].buildoptions, "`$(291Debug)/wx-config "..debug_option.." --cflags`" )
+	table.insert( package.config["Release"].buildoptions, "`$(291Release)/wx-config --debug=no --cflags`" )
 
 	-- Set the wxWidgets link options.
-	table.insert( package.config["Debug"].linkoptions, "`wx-config "..debug_option.." --libs`" )
-	table.insert( package.config["Release"].linkoptions, "`wx-config --libs`" )
+	table.insert( package.config["Debug"].linkoptions, "`$(291Debug)/wx-config "..debug_option.." --libs all`" )
+	table.insert( package.config["Release"].linkoptions, "`$(291Release)/wx-config --libs all`" )
 end

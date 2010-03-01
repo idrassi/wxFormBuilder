@@ -28,10 +28,8 @@
 #include <wx/fdrepdlg.h>
 #include <wx/msgdlg.h>
 
-#include <wx/wxScintilla/wxscintilla.h>
-
 BEGIN_EVENT_TABLE ( CodeEditor,  wxPanel )
-	EVT_SCI_MARGINCLICK( wxID_ANY, CodeEditor::OnMarginClick )
+	EVT_STC_MARGINCLICK( wxID_ANY, CodeEditor::OnMarginClick )
 	EVT_FIND( wxID_ANY, CodeEditor::OnFind )
 	EVT_FIND_NEXT( wxID_ANY, CodeEditor::OnFind )
 END_EVENT_TABLE()
@@ -41,32 +39,32 @@ CodeEditor::CodeEditor( wxWindow *parent, int id )
 wxPanel( parent, id )
 {
 	wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
-	m_code = new wxScintilla( this, -1 );
+	m_code = new wxStyledTextCtrl( this, -1 );
 
 	// Line Numbers
-	m_code->SetMarginType( 0, wxSCI_MARGIN_NUMBER );
-	m_code->SetMarginWidth( 0, m_code->TextWidth ( wxSCI_STYLE_LINENUMBER, wxT( "_99999" ) )  );
+	m_code->SetMarginType( 0, wxSTC_MARGIN_NUMBER );
+	m_code->SetMarginWidth( 0, m_code->TextWidth ( wxSTC_STYLE_LINENUMBER, wxT( "_99999" ) )  );
 
 	// markers
-	m_code->MarkerDefine ( wxSCI_MARKNUM_FOLDER, wxSCI_MARK_BOXPLUS );
-	m_code->MarkerSetBackground ( wxSCI_MARKNUM_FOLDER, wxColour ( wxT( "BLACK" ) ) );
-	m_code->MarkerSetForeground ( wxSCI_MARKNUM_FOLDER, wxColour ( wxT( "WHITE" ) ) );
-	m_code->MarkerDefine ( wxSCI_MARKNUM_FOLDEROPEN, wxSCI_MARK_BOXMINUS );
-	m_code->MarkerSetBackground ( wxSCI_MARKNUM_FOLDEROPEN, wxColour ( wxT( "BLACK" ) ) );
-	m_code->MarkerSetForeground ( wxSCI_MARKNUM_FOLDEROPEN, wxColour ( wxT( "WHITE" ) ) );
-	m_code->MarkerDefine ( wxSCI_MARKNUM_FOLDERSUB, wxSCI_MARK_EMPTY );
-	m_code->MarkerDefine ( wxSCI_MARKNUM_FOLDEREND, wxSCI_MARK_BOXPLUS );
-	m_code->MarkerSetBackground ( wxSCI_MARKNUM_FOLDEREND, wxColour ( wxT( "BLACK" ) ) );
-	m_code->MarkerSetForeground ( wxSCI_MARKNUM_FOLDEREND, wxColour ( wxT( "WHITE" ) ) );
-	m_code->MarkerDefine ( wxSCI_MARKNUM_FOLDEROPENMID, wxSCI_MARK_BOXMINUS );
-	m_code->MarkerSetBackground ( wxSCI_MARKNUM_FOLDEROPENMID, wxColour ( wxT( "BLACK" ) ) );
-	m_code->MarkerSetForeground ( wxSCI_MARKNUM_FOLDEROPENMID, wxColour ( wxT( "WHITE" ) ) );
-	m_code->MarkerDefine ( wxSCI_MARKNUM_FOLDERMIDTAIL, wxSCI_MARK_EMPTY );
-	m_code->MarkerDefine ( wxSCI_MARKNUM_FOLDERTAIL, wxSCI_MARK_EMPTY );
+	m_code->MarkerDefine ( wxSTC_MARKNUM_FOLDER, wxSTC_MARK_BOXPLUS );
+	m_code->MarkerSetBackground ( wxSTC_MARKNUM_FOLDER, wxColour ( wxT( "BLACK" ) ) );
+	m_code->MarkerSetForeground ( wxSTC_MARKNUM_FOLDER, wxColour ( wxT( "WHITE" ) ) );
+	m_code->MarkerDefine ( wxSTC_MARKNUM_FOLDEROPEN, wxSTC_MARK_BOXMINUS );
+	m_code->MarkerSetBackground ( wxSTC_MARKNUM_FOLDEROPEN, wxColour ( wxT( "BLACK" ) ) );
+	m_code->MarkerSetForeground ( wxSTC_MARKNUM_FOLDEROPEN, wxColour ( wxT( "WHITE" ) ) );
+	m_code->MarkerDefine ( wxSTC_MARKNUM_FOLDERSUB, wxSTC_MARK_EMPTY );
+	m_code->MarkerDefine ( wxSTC_MARKNUM_FOLDEREND, wxSTC_MARK_BOXPLUS );
+	m_code->MarkerSetBackground ( wxSTC_MARKNUM_FOLDEREND, wxColour ( wxT( "BLACK" ) ) );
+	m_code->MarkerSetForeground ( wxSTC_MARKNUM_FOLDEREND, wxColour ( wxT( "WHITE" ) ) );
+	m_code->MarkerDefine ( wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_BOXMINUS );
+	m_code->MarkerSetBackground ( wxSTC_MARKNUM_FOLDEROPENMID, wxColour ( wxT( "BLACK" ) ) );
+	m_code->MarkerSetForeground ( wxSTC_MARKNUM_FOLDEROPENMID, wxColour ( wxT( "WHITE" ) ) );
+	m_code->MarkerDefine ( wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY );
+	m_code->MarkerDefine ( wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_EMPTY );
 
 	// folding
-	m_code->SetMarginType ( 1, wxSCI_MARGIN_SYMBOL );
-	m_code->SetMarginMask ( 1, wxSCI_MASK_FOLDERS );
+	m_code->SetMarginType ( 1, wxSTC_MARGIN_SYMBOL );
+	m_code->SetMarginMask ( 1, wxSTC_MASK_FOLDERS );
 	m_code->SetMarginWidth ( 1, 16 );
 	m_code->SetMarginSensitive ( 1, true );
 
@@ -76,7 +74,7 @@ wxPanel( parent, id )
 	m_code->SetProperty( wxT( "fold.preprocessor" ),		wxT( "1" ) );
 	m_code->SetProperty( wxT( "fold.html" ),				wxT( "1" ) );
 	m_code->SetProperty( wxT( "fold.html.preprocessor" ),	wxT( "1" ) );
-	m_code->SetFoldFlags( wxSCI_FOLDFLAG_LINEBEFORE_CONTRACTED | wxSCI_FOLDFLAG_LINEAFTER_CONTRACTED );
+	m_code->SetFoldFlags( wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED | wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED );
 
 	m_code->SetIndentationGuides( true );
 
@@ -85,21 +83,21 @@ wxPanel( parent, id )
 	SetSizer( sizer );
 }
 
-void CodeEditor::OnMarginClick ( wxScintillaEvent &event )
+void CodeEditor::OnMarginClick ( wxStyledTextEvent &event )
 {
 	if ( event.GetMargin() == 1 )
 	{
 		int lineClick = m_code->LineFromPosition ( event.GetPosition() );
 		int levelClick = m_code->GetFoldLevel ( lineClick );
 
-		if ( ( levelClick & wxSCI_FOLDLEVELHEADERFLAG ) > 0 )
+		if ( ( levelClick & wxSTC_FOLDLEVELHEADERFLAG ) > 0 )
 		{
 			m_code->ToggleFold ( lineClick );
 		}
 	}
 }
 
-wxScintilla* CodeEditor::GetTextCtrl()
+wxStyledTextCtrl* CodeEditor::GetTextCtrl()
 {
 	return m_code;
 }
@@ -110,11 +108,11 @@ void CodeEditor::OnFind( wxFindDialogEvent& event )
 	int sciflags = 0;
 	if ( (wxflags & wxFR_WHOLEWORD) != 0 )
 	{
-		sciflags |= wxSCI_FIND_WHOLEWORD;
+		sciflags |= wxSTC_FIND_WHOLEWORD;
 	}
 	if ( (wxflags & wxFR_MATCHCASE) != 0 )
 	{
-		sciflags |= wxSCI_FIND_MATCHCASE;
+		sciflags |= wxSTC_FIND_MATCHCASE;
 	}
 	int result;
 	if ( (wxflags & wxFR_DOWN) != 0 )
@@ -129,7 +127,7 @@ void CodeEditor::OnFind( wxFindDialogEvent& event )
 		m_code->SearchAnchor();
 		result = m_code->SearchPrev( sciflags, event.GetFindString() );
 	}
-	if ( wxSCI_INVALID_POSITION == result )
+	if ( wxSTC_INVALID_POSITION == result )
 	{
 		wxMessageBox( wxString::Format( _("\"%s\" not found!"), event.GetFindString().c_str() ), _("Not Found!"), wxICON_ERROR, (wxWindow*)event.GetClientData() );
 	}

@@ -27,6 +27,7 @@
 #define __CODE_WRITER__
 
 #include <wx/string.h>
+#include <wx/stc/stc.h>
 
 /** Abstracts the code generation from the target.
 Because, in some cases the target is a file, sometimes a TextCtrl, and sometimes both.
@@ -76,20 +77,18 @@ public:
 	virtual void Clear() = 0;
 };
 
-class wxScintilla;
-
 class TCCodeWriter : public CodeWriter
 {
 private:
-	wxScintilla *m_tc;
+	wxStyledTextCtrl *m_tc;
 
 protected:
 	void DoWrite( wxString code );
 
 public:
 	TCCodeWriter();
-	TCCodeWriter( wxScintilla *tc );
-	void SetTextCtrl( wxScintilla* tc );
+	TCCodeWriter( wxStyledTextCtrl *tc );
+	void SetTextCtrl( wxStyledTextCtrl* tc );
 	void Clear();
 };
 

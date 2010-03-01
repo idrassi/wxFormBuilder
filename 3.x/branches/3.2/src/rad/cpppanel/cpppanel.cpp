@@ -45,9 +45,6 @@
 #include <wx/fdrepdlg.h>
 #include <wx/config.h>
 
-#include <wx/wxScintilla/wxscintilla.h>
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
-
 BEGIN_EVENT_TABLE ( CppPanel,  wxPanel )
 	EVT_FB_CODE_GENERATION( CppPanel::OnCodeGeneration )
 	EVT_FB_PROJECT_REFRESH( CppPanel::OnProjectRefresh )
@@ -63,31 +60,26 @@ END_EVENT_TABLE()
 
 CppPanel::CppPanel( wxWindow *parent, int id )
 :
-wxPanel( parent, id ),
-m_icons( new wxFlatNotebookImageList )
+wxPanel( parent, id )
 {
 	AppData()->AddHandler( this->GetEventHandler() );
 	wxBoxSizer *top_sizer = new wxBoxSizer( wxVERTICAL );
 
-	long nbStyle;
+	long nbStyle = 0;
 	wxConfigBase* config = wxConfigBase::Get();
-	config->Read( wxT("/mainframe/editor/cpp/notebook_style"), &nbStyle, wxFNB_NO_X_BUTTON | wxFNB_NO_NAV_BUTTONS | wxFNB_NODRAG | wxFNB_FF2 | wxFNB_CUSTOM_DLG );
+	config->Read( wxT("/mainframe/editor/cpp/notebook_style"), &nbStyle, 0 );
 
-	m_notebook = new wxFlatNotebook( this, -1, wxDefaultPosition, wxDefaultSize, FNB_STYLE_OVERRIDES( nbStyle ) );
-	m_notebook->SetCustomizeOptions( wxFNB_CUSTOM_TAB_LOOK | wxFNB_CUSTOM_ORIENTATION | wxFNB_CUSTOM_LOCAL_DRAG );
-
-	// Set notebook icons
-	m_icons->Add( AppBitmaps::GetBitmap( wxT( "cpp" ), 16 ) );
-	m_icons->Add( AppBitmaps::GetBitmap( wxT( "h" ), 16 ) );
-	m_notebook->SetImageList( m_icons );
+	m_notebook = new wxAuiNotebook( this, -1, wxDefaultPosition, wxDefaultSize, nbStyle );
 
 	m_cppPanel = new CodeEditor( m_notebook, -1 );
 	InitStyledTextCtrl( m_cppPanel->GetTextCtrl() );
-	m_notebook->AddPage( m_cppPanel, wxT( "cpp" ), false, 0 );
+
+	m_notebook->AddPage( m_cppPanel, wxT( "cpp" ), false, AppBitmaps::GetBitmap( wxT( "cpp" ), 16 ) );
 
 	m_hPanel = new CodeEditor( m_notebook, -1 );
 	InitStyledTextCtrl( m_hPanel->GetTextCtrl() );
-	m_notebook->AddPage( m_hPanel, wxT( "h" ), false, 1 );
+
+	m_notebook->AddPage( m_hPanel, wxT( "h" ), false, AppBitmaps::GetBitmap( wxT( "h" ), 16 ) );
 
 	top_sizer->Add( m_notebook, 1, wxEXPAND, 0 );
 
@@ -103,15 +95,14 @@ m_icons( new wxFlatNotebookImageList )
 
 CppPanel::~CppPanel()
 {
-	delete m_icons;
 	AppData()->RemoveHandler( this->GetEventHandler() );
 	wxConfigBase *config = wxConfigBase::Get();
 	config->Write( wxT("/mainframe/editor/cpp/notebook_style"), m_notebook->GetWindowStyleFlag() );
 }
 
-void CppPanel::InitStyledTextCtrl( wxScintilla *stc )
+void CppPanel::InitStyledTextCtrl( wxStyledTextCtrl *stc )
 {
-	stc->SetLexer( wxSCI_LEX_CPP );
+	stc->SetLexer( wxSTC_LEX_CPP );
 	stc->SetKeyWords( 0, wxT( "asm auto bool break case catch char class const const_cast \
 	                          continue default delete do double dynamic_cast else enum explicit \
 	                          export extern false float for friend goto if inline int long \
@@ -128,18 +119,18 @@ void CppPanel::InitStyledTextCtrl( wxScintilla *stc )
 #else
 	wxFont font( 10, wxMODERN, wxNORMAL, wxNORMAL );
 #endif
-	stc->StyleSetFont( wxSCI_STYLE_DEFAULT, font );
+	stc->StyleSetFont( wxSTC_STYLE_DEFAULT, font );
 	stc->StyleClearAll();
-	stc->StyleSetBold( wxSCI_C_WORD, true );
-	stc->StyleSetForeground( wxSCI_C_WORD, *wxBLUE );
-	stc->StyleSetForeground( wxSCI_C_STRING, *wxRED );
-	stc->StyleSetForeground( wxSCI_C_STRINGEOL, *wxRED );
-	stc->StyleSetForeground( wxSCI_C_PREPROCESSOR, wxColour( 49, 106, 197 ) );
-	stc->StyleSetForeground( wxSCI_C_COMMENT, wxColour( 0, 128, 0 ) );
-	stc->StyleSetForeground( wxSCI_C_COMMENTLINE, wxColour( 0, 128, 0 ) );
-	stc->StyleSetForeground( wxSCI_C_COMMENTDOC, wxColour( 0, 128, 0 ) );
-	stc->StyleSetForeground( wxSCI_C_COMMENTLINEDOC, wxColour( 0, 128, 0 ) );
-	stc->StyleSetForeground( wxSCI_C_NUMBER, *wxBLUE );
+	stc->StyleSetBold( wxSTC_C_WORD, true );
+	stc->StyleSetForeground( wxSTC_C_WORD, *wxBLUE );
+	stc->StyleSetForeground( wxSTC_C_STRING, *wxRED );
+	stc->StyleSetForeground( wxSTC_C_STRINGEOL, *wxRED );
+	stc->StyleSetForeground( wxSTC_C_PREPROCESSOR, wxColour( 49, 106, 197 ) );
+	stc->StyleSetForeground( wxSTC_C_COMMENT, wxColour( 0, 128, 0 ) );
+	stc->StyleSetForeground( wxSTC_C_COMMENTLINE, wxColour( 0, 128, 0 ) );
+	stc->StyleSetForeground( wxSTC_C_COMMENTDOC, wxColour( 0, 128, 0 ) );
+	stc->StyleSetForeground( wxSTC_C_COMMENTLINEDOC, wxColour( 0, 128, 0 ) );
+	stc->StyleSetForeground( wxSTC_C_NUMBER, *wxBLUE );
 	stc->SetUseTabs( true );
 	stc->SetTabWidth( 4 );
 	stc->SetTabIndents( true );
@@ -154,7 +145,7 @@ void CppPanel::InitStyledTextCtrl( wxScintilla *stc )
 
 void CppPanel::OnFind( wxFindDialogEvent& event )
 {
-	wxFlatNotebook* languageBook = wxDynamicCast( this->GetParent(), wxFlatNotebook );
+	wxAuiNotebook* languageBook = wxDynamicCast( this->GetParent(), wxAuiNotebook );
 	if ( NULL == languageBook )
 	{
 		return;
@@ -171,8 +162,8 @@ void CppPanel::OnFind( wxFindDialogEvent& event )
 	{
 		return;
 	}
-
-	wxFlatNotebook* notebook = wxDynamicCast( m_cppPanel->GetParent(), wxFlatNotebook );
+/* TODO: Fix this
+	wxAuiNotebook* notebook = wxDynamicCast( m_cppPanel->GetParent(), wxAuiNotebook );
 	if ( NULL == notebook )
 	{
 		return;
@@ -193,6 +184,7 @@ void CppPanel::OnFind( wxFindDialogEvent& event )
 	{
 		m_hPanel->ProcessEvent( event );
 	}
+*/
 }
 
 void CppPanel::OnPropertyModified( wxFBPropertyEvent& event )
@@ -351,12 +343,12 @@ void CppPanel::OnCodeGeneration( wxFBEvent& event )
 
 		Freeze();
 
-		wxScintilla* cppEditor = m_cppPanel->GetTextCtrl();
+		wxStyledTextCtrl* cppEditor = m_cppPanel->GetTextCtrl();
 		cppEditor->SetReadOnly( false );
 		int cppLine = cppEditor->GetFirstVisibleLine() + cppEditor->LinesOnScreen() - 1;
 		int cppXOffset = cppEditor->GetXOffset();
 
-		wxScintilla* hEditor = m_hPanel->GetTextCtrl();
+		wxStyledTextCtrl* hEditor = m_hPanel->GetTextCtrl();
 		hEditor->SetReadOnly( false );
 		int hLine = hEditor->GetFirstVisibleLine() + hEditor->LinesOnScreen() - 1;
 		int hXOffset = hEditor->GetXOffset();
