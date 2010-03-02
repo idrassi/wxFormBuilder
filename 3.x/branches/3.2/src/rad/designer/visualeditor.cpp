@@ -801,7 +801,7 @@ DesignerWindow::DesignerWindow( wxWindow *parent, int id, const wxPoint& pos, co
 :
 wxInnerFrame(parent, id, pos, size, style)
 {
-  ShowTitleBar(false);
+	ShowTitleBar(false);
 	SetGrid( 10, 10 );
 	m_selSizer = NULL;
 	m_selItem = NULL;

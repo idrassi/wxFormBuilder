@@ -1973,7 +1973,7 @@ void ApplicationData::NewProject()
 
 void ApplicationData::GenerateCode( bool panelOnly )
 {
-	NotifyCodeGeneration( panelOnly );
+	NotifyCodeGeneration( panelOnly, true );
 }
 
 void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString className, wxString path, wxString file )
@@ -2552,11 +2552,11 @@ void ApplicationData::RemoveHandler( wxEvtHandler* handler )
 	}
 }
 
-void ApplicationData::NotifyEvent( wxFBEvent& event )
+void ApplicationData::NotifyEvent( wxFBEvent& event, bool delayed )
 {
 	static int count = 0;
 
-	if ( count == 0 )
+	if ( !delayed && (count == 0) )
 	{
 		count++;
 		wxString msg = wxT( "event: ") + event.GetEventName();
@@ -2627,14 +2627,14 @@ void ApplicationData::NotifyEventHandlerModified( PEvent evtHandler )
 	NotifyEvent( event );
 }
 
-void ApplicationData::NotifyCodeGeneration( bool panelOnly )
+void ApplicationData::NotifyCodeGeneration( bool panelOnly, bool delayed )
 {
 	wxFBEvent event( wxEVT_FB_CODE_GENERATION );
 
 	// Using the previously unused Id field in the event to carry a boolean
 	event.SetId( ( panelOnly ? 1 : 0 ) );
 
-	NotifyEvent( event );
+	NotifyEvent( event, delayed );
 }
 
 void ApplicationData::NotifyProjectRefresh()

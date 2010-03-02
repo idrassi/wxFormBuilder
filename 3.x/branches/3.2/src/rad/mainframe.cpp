@@ -291,8 +291,6 @@ m_findDialog( NULL )
 
 	m_mgr.SetFlags(wxAUI_MGR_DEFAULT | wxAUI_MGR_ALLOW_ACTIVE_PANE | wxAUI_MGR_TRANSPARENT_DRAG);
 
-	m_mgr.Update();
-
 	wxConfigBase *config = wxConfigBase::Get();
 
 	wxString Perspective;
@@ -301,6 +299,8 @@ m_findDialog( NULL )
 
 	RestorePosition( wxT( "mainframe" ) );
 	Layout();
+	
+	m_mgr.Update();
 
 	// Init. m_cpp and m_xrc first
 	m_cpp = NULL;
@@ -316,14 +316,12 @@ m_findDialog( NULL )
 
 	// So we don't respond to a AuiNoteBookPageChanged event during construction
 	m_notebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::OnAuiNotebookPageChanged ), 0, this );
-	m_notebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, wxAuiNotebookEventHandler( MainFrame::OnAuiNotebookPageChanged ), 0, this );
 };
 
 
 MainFrame::~MainFrame()
 {
 	m_notebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::OnAuiNotebookPageChanged ), 0, this );
-	m_notebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, wxAuiNotebookEventHandler( MainFrame::OnAuiNotebookPageChanged ), 0, this );
 
 #ifdef __WXMAC__
     // work around problem on wxMac
@@ -808,7 +806,7 @@ void MainFrame::UpdateLayoutTools()
 	mainbar->ToggleTool( ID_BORDER_RIGHT,    ( ( flag & wxRIGHT ) != 0 ) && gotLayoutSettings );
 	mainbar->ToggleTool( ID_BORDER_LEFT,     ( ( flag & wxLEFT ) != 0 ) && gotLayoutSettings );
 	mainbar->ToggleTool( ID_BORDER_BOTTOM,   ( ( flag & wxBOTTOM ) != 0 ) && gotLayoutSettings );
-
+	
 	m_mgr.Update();
 }
 
@@ -1175,7 +1173,6 @@ bool MainFrame::SaveWarning()
 
 void MainFrame::OnAuiNotebookPageChanged( wxAuiNotebookEvent& event )
 {
-	UpdateFrame(); // TODO: before GenerateCode?
 	AppData()->GenerateCode( true );
 	event.Skip();
 }
