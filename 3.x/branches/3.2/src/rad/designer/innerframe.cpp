@@ -70,8 +70,8 @@ public:
 
 BEGIN_EVENT_TABLE( wxInnerFrame::TitleBar, wxPanel )
 EVT_LEFT_DOWN( wxInnerFrame::TitleBar::OnLeftClick )
-/*EVT_PAINT( wxInnerFrame::TitleBar::OnPaint )
-EVT_SIZE( wxInnerFrame::TitleBar::OnSize )*/
+EVT_PAINT( wxInnerFrame::TitleBar::OnPaint )
+/*EVT_SIZE( wxInnerFrame::TitleBar::OnSize )*/
 END_EVENT_TABLE()
 
 wxInnerFrame::TitleBar::TitleBar ( wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style )
@@ -317,7 +317,6 @@ wxInnerFrame::wxInnerFrame( wxWindow *parent, wxWindowID id,
 	
 	// Connect Title bar events which cannot be set statically
 	m_titleBar->Connect( wxEVT_SIZE, wxSizeEventHandler(wxInnerFrame::TitleBar::OnSize), NULL, m_titleBar );
-	m_titleBar->Connect( wxEVT_PAINT, wxPaintEventHandler(wxInnerFrame::TitleBar::OnPaint), NULL, m_titleBar );
 }
 
 wxSize wxInnerFrame::DoGetBestSize() const
