@@ -25,10 +25,10 @@
 
 #include "xrccg.h"
 #include "codewriter.h"
-#include "utils/typeconv.h"
-#include "utils/debug.h"
 #include "model/objectbase.h"
 #include "model/xrcfilter.h"
+#include "utils/typeconv.h"
+#include "utils/debug.h"
 
 #include <ticpp.h>
 
@@ -46,12 +46,12 @@ bool XrcCodeGenerator::GenerateCode( PObjectBase project )
 	ticpp::Declaration decl( "1.0", "UTF-8", "yes" );
 	doc.LinkEndChild( &decl );
 
-	ticpp::Element element( "resource" );
+	ticpp::Element element("resource");
 	element.SetAttribute( "xmlns", "http://www.wxwindows.org/wxxrc" );
 	element.SetAttribute( "version", "2.3.0.1" );
 
 	// If project is not actually a "Project", generate it
-	if ( project->GetClassName() == wxT("Project") )
+	if ( project->GetClassName() == "Project" )
 	{
 		for( unsigned int i = 0; i < project->GetChildCount(); i++ )
 		{
@@ -72,25 +72,23 @@ bool XrcCodeGenerator::GenerateCode( PObjectBase project )
             delete child;
 		}
 	}
-	
 	// generate context menus as top-level menus
 	for( std::vector<ticpp::Element*>::iterator it = m_contextMenus.begin(); it != m_contextMenus.end(); ++it )
 	{
 		element.LinkEndChild( *it );
 		delete *it;
 	}
-
 	doc.LinkEndChild( &element );
 
     TiXmlPrinter printer;
-	printer.SetIndent( "\t" );
+	printer.SetIndent("\t");
 
     #if defined( __WXMSW__ )
-        printer.SetLineBreak( "\r\n" );
+        printer.SetLineBreak("\r\n");
     #elif defined( __WXMAC__ )
-        printer.SetLineBreak( "\r" );
+        printer.SetLineBreak("\r");
     #else
-        printer.SetLineBreak( "\n" );
+        printer.SetLineBreak("\n");
     #endif
 
     doc.Accept( &printer );
@@ -99,7 +97,6 @@ bool XrcCodeGenerator::GenerateCode( PObjectBase project )
 	m_cw->Write( _WXSTR( xrcFile ) );
 
 	return true;
-
 }
 
 
@@ -145,7 +142,7 @@ ticpp::Element* XrcCodeGenerator::GetElement( PObjectBase obj, ticpp::Element* p
 			// Dirty hack to prevent sizer generation directly under a wxFrame
 			// If there is a sizer, the size property of the wxFrame is ignored
 			// when loading the xrc file at runtime
-			if ( obj->GetPropertyAsInteger( _("xrc_skip_sizer") ) )
+			if ( obj->GetPropertyAsInteger("xrc_skip_sizer") )
 			{
 				for ( unsigned int i = 0; i < obj->GetChildCount(); i++ )
 				{
@@ -163,12 +160,10 @@ ticpp::Element* XrcCodeGenerator::GetElement( PObjectBase obj, ticpp::Element* p
 							}
 						}
 					}
-
 					if ( !aux )
 					{
 						aux = GetElement( child, element );
 					}
-
 					if ( aux )
 					{
 						element->LinkEndChild( aux );
@@ -182,7 +177,7 @@ ticpp::Element* XrcCodeGenerator::GetElement( PObjectBase obj, ticpp::Element* p
 		{
 			// Do not generate context menus assigned to forms or widgets
 			std::string parent_name = parent->GetAttribute( "class" );
-			if( (parent_name != "wxMenuBar") && (parent_name != "wxMenu") )
+			if( ( parent_name != "wxMenuBar" ) && ( parent_name != "wxMenu" ) )
 			{
 				// insert context menu into vector for delayed processing (context menus will be generated as top-level menus)
 				for ( unsigned int i = 0; i < obj->GetChildCount(); i++ )
@@ -199,7 +194,6 @@ ticpp::Element* XrcCodeGenerator::GetElement( PObjectBase obj, ticpp::Element* p
 				return NULL;
 			}
 		}
-
 		for ( unsigned int i = 0; i < obj->GetChildCount(); i++ )
 		{
 			ticpp::Element *aux = GetElement( obj->GetChild( i ), element );
@@ -215,10 +209,7 @@ ticpp::Element* XrcCodeGenerator::GetElement( PObjectBase obj, ticpp::Element* p
 		// The componenet does not XRC
 		element = new ticpp::Element( "object" );
 		element->SetAttribute( "class", "unknown" );
-		element->SetAttribute( "name", _STDSTR( obj->GetPropertyAsString( _( "name" ) ) ) );
+		element->SetAttribute( "name", _STDSTR( obj->GetPropertyAsString("name") ) );
 	}
-
 	return element;
 }
-
-

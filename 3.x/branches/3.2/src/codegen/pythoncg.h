@@ -228,5 +228,4 @@ public:
 	void GenerateInheritedClass( PObjectBase userClasses, PObjectBase form );
 };
 
-
 #endif //_PYTHON_CODE_GEN_

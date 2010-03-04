@@ -34,8 +34,8 @@
 
 #include <wx/sstream.h>
 #include <map>
-#include "utils/wxfbdefs.h"
 #include "model/types.h"
+#include "utils/wxfbdefs.h"
 
 /**
 * Template notes
@@ -92,11 +92,11 @@
 class TemplateParser
 {
 private:
-	PObjectBase m_obj;
+	PObjectBase 		m_obj;
 	wxStringInputStream m_in;
-	wxString m_out;
-	wxString m_pred;
-	wxString m_npred;
+	wxString 			m_out;
+	wxString 			m_pred;
+	wxString 			m_npred;
 	void ignore_whitespaces();
 	
 	// Current indentation level in the file
@@ -119,8 +119,8 @@ protected:
 		ID_IFNOTNULL,
 		ID_IFNULL,
 		ID_FOREACH,
-		ID_PREDEFINED,  // predefined symbol '#pred'
-		ID_PREDEFINED_INDEX, // #npred
+		ID_PREDEFINED, 			// predefined symbol '#pred'
+		ID_PREDEFINED_INDEX, 	// #npred
 		ID_NEWLINE,
 		ID_IFEQUAL,
 		ID_IFNOTEQUAL,
@@ -154,7 +154,6 @@ protected:
 	*         TOK_TEXT when it's followed by normal text.
 	*/
 	Token GetNextToken();
-
 
 	bool ParseInnerTemplate();
 	bool ParseWxParent();
@@ -197,7 +196,7 @@ protected:
 	bool ParseNPred();
 
 public:
-	TemplateParser( PObjectBase obj, wxString _template);
+	TemplateParser( PObjectBase obj, wxString _template );
 	TemplateParser( const TemplateParser & that, wxString _template );
 	/**
 	* Returns the code for a property value in the language format.
@@ -223,7 +222,7 @@ public:
 	/**
 	* Generates the code from a property value.
 	*/
-	virtual wxString ValueToCode(PropertyType type, wxString value) = 0;
+	virtual wxString ValueToCode( PropertyType type, wxString value ) = 0;
 
 	/**
 	* The "star" function for this class. Analyzes a template, returning the code.
@@ -269,6 +268,5 @@ public:
 	*/
 	virtual bool GenerateCode( PObjectBase project ) = 0;
 };
-
 
 #endif //__CODEGEN__
