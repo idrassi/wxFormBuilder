@@ -501,7 +501,7 @@ public:
 */
 		wxLog::EnableLogging(false);
 		int style = obj->GetPropertyAsInteger("style");
-		
+
 		wxDataViewTreeCtrl* tc =
 				new wxDataViewTreeCtrl( (wxWindow *) parent, wxID_ANY,
 										obj->GetPropertyAsPoint("pos"),
