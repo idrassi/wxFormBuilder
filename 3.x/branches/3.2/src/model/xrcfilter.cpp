@@ -36,7 +36,7 @@
 PObjectBase XrcLoader::GetProject( ticpp::Document* xrcDoc )
 {
 	assert( m_objDb );
-	Debug::Print( wxT( "[XrcFilter::GetProject]" ) );
+	Debug::Print( _("[XrcFilter::GetProject]") );
 
 	PObjectBase project( m_objDb->CreateObject( "Project" ) );
 
@@ -62,18 +62,18 @@ PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 {
 	// First, create the object by the name, the modify the properties
 
-	std::string className = xrcObj->GetAttribute( "class" );
-	if ( parent->GetObjectTypeName() == wxT( "project" ) )
+	std::string className = xrcObj->GetAttribute("class");
+	if ( parent->GetObjectTypeName() == "project" )
 	{
 		if ( className == "wxBitmap" )
 		{
-			PProperty bitmapsProp = parent->GetProperty( _( "bitmaps" ) );
+			PProperty bitmapsProp = parent->GetProperty("bitmaps");
 			if ( bitmapsProp )
 			{
 				wxString value = bitmapsProp->GetValue();
 				wxString text = _WXSTR( xrcObj->GetText() );
-				text.Replace( wxT( "\'" ), wxT( "\'\'" ), true );
-				value << wxT( "\'" ) << text << wxT( "\' " );
+				text.Replace( "\'", "\'\'", true );
+				value << "\'" << text << "\' ";
 				bitmapsProp->SetValue( value );
 				return PObjectBase();
 			}
@@ -85,8 +85,8 @@ PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 			{
 				wxString value = iconsProp->GetValue();
 				wxString text = _WXSTR( xrcObj->GetText() );
-				text.Replace( wxT( "\'" ), wxT( "\'\'" ), true );
-				value << wxT( "\'" ) << text << wxT( "\' " );
+				text.Replace( "\'", "\'\'", true );
+				value << "\'" << text << "\' ";
 				iconsProp->SetValue( value );
 				return PObjectBase();
 			}
@@ -100,7 +100,7 @@ PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 	// Well, this is not nice. wxMenu class name is ambiguous, so we'll get the
 	// correct class by the context. If the parent of a wxMenu is another wxMenu
 	// then the class name will be "submenu"
-	else if ( className == "wxMenu" && ( parent->GetClassName() == wxT( "wxMenu" ) || parent->GetClassName() == wxT( "submenu" ) ) )
+	else if ( className == "wxMenu" && ( parent->GetClassName() == "wxMenu" || parent->GetClassName() == "submenu" ) )
 	{
 		className = "submenu";
 	}
@@ -108,7 +108,7 @@ PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 	// "separator" is also ambiguous - could be a toolbar separator or a menu separator
 	else if ( className == "separator" )
 	{
-		if ( parent->GetClassName() == wxT( "wxToolBar" ) ||  parent->GetClassName() == wxT( "ToolBar" ) )
+		if ( parent->GetClassName() == "wxToolBar" ||  parent->GetClassName() == "ToolBar" )
 		{
 			className = "toolSeparator";
 		}
@@ -118,7 +118,7 @@ PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 	// "sizeritem" is ambiguous - could also be a grid bag sizeritem
 	else if ( className == "spacer" || className == "sizeritem" )
 	{
-		if ( parent->GetClassName() == wxT( "wxGridBagSizer" ) )
+		if ( parent->GetClassName() == "wxGridBagSizer" )
 		{
 			className = "gbsizeritem";
 		}
@@ -175,7 +175,7 @@ PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 
 				if ( !object )
 				{
-					wxLogError( wxT( "CreateObject failed for class \"%s\", with parent \"%s\", found on line %i" ), _WXSTR( className ).c_str(), parent->GetClassName().c_str(), xrcObj->Row() );
+					wxLogError( _( "CreateObject failed for class \"%s\", with parent \"%s\", found on line %i" ), _WXSTR( className ).c_str(), parent->GetClassName().c_str(), xrcObj->Row() );
 				}
 				else
 				{
@@ -206,17 +206,16 @@ PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 		{
 			parent->AddChild( object );
 			object->SetParent( parent );
-			wxLogError( wxT( "Unknown class \"%s\" found on line %i, replaced with a wxPanel" ), _WXSTR( className ).c_str(), xrcObj->Row() );
+			wxLogError( _( "Unknown class \"%s\" found on line %i, replaced with a wxPanel" ), _WXSTR( className ).c_str(), xrcObj->Row() );
 		}
 		else
 		{
 			wxString msg( wxString::Format(
-			                  wxT( "Unknown class \"%s\" found on line %i, and could not replace with a wxPanel as child of \"%s:%s\"" ),
+			                  _( "Unknown class \"%s\" found on line %i, and could not replace with a wxPanel as child of \"%s:%s\"" ),
 			                  _WXSTR( className ).c_str(), xrcObj->Row(), parent->GetPropertyAsString( wxT( "name" ) ).c_str(), parent->GetClassName().c_str() ) );
 
 			wxLogError( msg );
 		}
 	}
-
 	return object;
 }
