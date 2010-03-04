@@ -330,7 +330,7 @@ public:
 		}
 		if ( !obj->IsNull("separation") )
 		{
-			tb->SetToolSeparation(obj->GetPropertyAsInteger(_("separation")));
+			tb->SetToolSeparation(obj->GetPropertyAsInteger("separation") );
 		}
 		tb->PushEventHandler( new ComponentEvtHandler( tb, GetManager() ) );
 		return tb;
@@ -477,7 +477,7 @@ public:
 
 	ticpp::Element* ExportToXrc( IObject *obj )
 	{
-		ObjectToXrcFilter xrc( obj, _("wxBitmapButton"), obj->GetPropertyAsString("name") );
+		ObjectToXrcFilter xrc( obj, "wxBitmapButton", obj->GetPropertyAsString("name") );
 		xrc.AddWindowProperties();
 		xrc.AddProperty("bitmap","bitmap", XRC_TYPE_BITMAP );
 		if ( !obj->IsNull("disabled") )
@@ -535,7 +535,7 @@ public:
 
 	ticpp::Element* ExportToXrc( IObject *obj )
 	{
-		ObjectToXrcFilter xrc( obj, _("wxTextCtrl"), obj->GetPropertyAsString("name") );
+		ObjectToXrcFilter xrc( obj, "wxTextCtrl", obj->GetPropertyAsString("name") );
 		xrc.AddWindowProperties();
 		xrc.AddProperty( "value", "value", XRC_TYPE_TEXT );
         if ( !obj->IsNull("maxlength") )
