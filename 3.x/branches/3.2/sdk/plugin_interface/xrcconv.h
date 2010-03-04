@@ -23,7 +23,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "wx/wx.h"
+#include <wx/wx.h>
 #include "component.h"
 
 #define XRC_TYPE_TEXT    0
@@ -66,8 +66,8 @@ class ObjectToXrcFilter
  public:
   ObjectToXrcFilter(IObject *obj,
                     const wxString &classname,
-                    const wxString &objname = wxT(""),
-                    const wxString &base = wxT(""));
+                    const wxString &objname = "",
+                    const wxString &base = "");
 
   ~ObjectToXrcFilter();
 
@@ -147,5 +147,3 @@ class XrcToXfbFilter
 
   ticpp::Element *GetXrcProperty(const wxString &name);
 };
-
-

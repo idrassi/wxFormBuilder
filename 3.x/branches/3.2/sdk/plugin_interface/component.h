@@ -27,7 +27,7 @@
 #define __COMPONENT_H__
 
 
-#include "wx/wx.h"
+#include <wx/wx.h>
 #include <wx/dynarray.h>
 #include <wx/string.h>
 #include "fontcontainer.h"
