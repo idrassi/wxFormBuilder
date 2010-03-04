@@ -67,9 +67,9 @@ namespace BookUtils
 	template < class T >
 		void AddImageList( IObject* obj, T* book )
 	{
-		if ( !obj->GetPropertyAsString( _("bitmapsize") ).empty() )
+		if ( !obj->GetPropertyAsString("bitmapsize").empty() )
 		{
-			wxSize imageSize = obj->GetPropertyAsSize(_("bitmapsize"));
+			wxSize imageSize = obj->GetPropertyAsSize("bitmapsize");
 			wxImageList* images = new wxImageList( imageSize.GetWidth(), imageSize.GetHeight() );
 			wxImage image = wxBitmap( default_xpm ).ConvertToImage();
 			images->Add( image.Scale( imageSize.GetWidth(), imageSize.GetHeight() ) );
@@ -108,7 +108,7 @@ namespace BookUtils
 
 		// Save selection
 		int selection = book->GetSelection();
-		book->AddPage( page, obj->GetPropertyAsString( _("label") ) );
+		book->AddPage( page, obj->GetPropertyAsString("label") );
 
 		// Apply image to page
 		IObject* parentObj = manager->GetIObject( wxparent );
@@ -118,11 +118,11 @@ namespace BookUtils
 			return;
 		}
 
-		if ( !parentObj->GetPropertyAsString( _("bitmapsize") ).empty() )
+		if ( !parentObj->GetPropertyAsString("bitmapsize").empty() )
 		{
-			if ( !obj->GetPropertyAsString( _("bitmap") ).empty() )
+			if ( !obj->GetPropertyAsString("bitmap").empty() )
 			{
-				wxSize imageSize = parentObj->GetPropertyAsSize( _("bitmapsize") );
+				wxSize imageSize = parentObj->GetPropertyAsSize("bitmapsize");
 				int width = imageSize.GetWidth();
 				int height = imageSize.GetHeight();
 				if ( width > 0 && height > 0 )
@@ -130,7 +130,7 @@ namespace BookUtils
 					wxImageList* imageList = book->GetImageList();
 					if ( imageList != NULL )
 					{
-						wxImage image = obj->GetPropertyAsBitmap( _("bitmap") ).ConvertToImage();
+						wxImage image = obj->GetPropertyAsBitmap("bitmap").ConvertToImage();
 						imageList->Add( image.Scale( width, height ) );
 						book->SetPageImage( book->GetPageCount() - 1, imageList->GetImageCount() - 1 );
 					}
@@ -138,7 +138,7 @@ namespace BookUtils
 			}
 		}
 
-		if ( obj->GetPropertyAsString( _("select") ) == wxT("0") && selection >= 0 )
+		if ( obj->GetPropertyAsString("select" ) == "0" && selection >= 0 )
 		{
 			book->SetSelection(selection);
 		}
