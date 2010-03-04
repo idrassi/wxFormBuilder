@@ -45,9 +45,9 @@ The value of all properties that are file or a directory paths must be absolute,
 class CppTemplateParser : public TemplateParser
 {
 private:
-	bool m_i18n;
-	bool m_useRelativePath;
-	wxString m_basePath;
+	bool 		m_i18n;
+	bool 		m_useRelativePath;
+	wxString 	m_basePath;
 
 public:
 	CppTemplateParser( PObjectBase obj, wxString _template, bool useI18N, bool useRelativePath, wxString basePath );
@@ -55,9 +55,8 @@ public:
 
 	// overrides for C++
 	PTemplateParser CreateParser( const TemplateParser* oldparser, wxString _template );
-	wxString RootWxParentToCode();
-	wxString ValueToCode( PropertyType type, wxString value);
-
+	wxString 		RootWxParentToCode();
+	wxString 		ValueToCode( PropertyType type, wxString value);
 };
 
 /**
@@ -73,15 +72,14 @@ private:
 		P_PUBLIC
 	} Permission;
 
-	PCodeWriter m_header;
-	PCodeWriter m_source;
-
-	bool m_useRelativePath;
-	bool m_i18n;
-	wxString m_basePath;
-	unsigned int m_firstID;
-	bool m_useConnect;
-	bool m_disconnectEvents;
+	PCodeWriter 	m_header;
+	PCodeWriter 	m_source;
+	bool 			m_useRelativePath;
+	bool 			m_i18n;
+	wxString 		m_basePath;
+	unsigned int 	m_firstID;
+	bool 			m_useConnect;
+	bool 			m_disconnectEvents;
 
 	/**
 	* Predefined macros won't generate defines.
@@ -255,7 +253,6 @@ public:
 		m_source = cw;
 	}
 
-
 	/**
 	* Configures the reference path for generating relative paths to
 	* that passed as parameter.
@@ -280,6 +277,5 @@ public:
 	*/
 	void GenerateInheritedClass( PObjectBase userClasses, PObjectBase form );
 };
-
 
 #endif //_CPP_CODE_GEN_

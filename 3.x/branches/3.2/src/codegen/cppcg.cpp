@@ -25,20 +25,21 @@
 
 #include "cppcg.h"
 #include "codewriter.h"
-#include "utils/typeconv.h"
-#include "utils/debug.h"
-#include "rad/appdata.h"
-#include "model/objectbase.h"
 #include "model/database.h"
+#include "model/objectbase.h"
+#include "rad/appdata.h"
+#include "utils/debug.h"
+#include "utils/typeconv.h"
 #include "utils/wxfbexception.h"
 
 #include <algorithm>
 
+#include <wx/defs.h>
 #include <wx/filename.h>
 #include <wx/tokenzr.h>
-#include <wx/defs.h>
 
-CppTemplateParser::CppTemplateParser( PObjectBase obj, wxString _template, bool useI18N, bool useRelativePath, wxString basePath )
+CppTemplateParser::CppTemplateParser( PObjectBase obj, wxString _template,
+									bool useI18N, bool useRelativePath, wxString basePath )
 		:
 		TemplateParser( obj, _template ),
 		m_i18n( useI18N ),
@@ -62,7 +63,7 @@ CppTemplateParser::CppTemplateParser( const CppTemplateParser & that, wxString _
 
 wxString CppTemplateParser::RootWxParentToCode()
 {
-	return wxT( "this" );
+	return "this";
 }
 
 PTemplateParser CppTemplateParser::CreateParser( const TemplateParser* oldparser, wxString _template )
@@ -85,22 +86,22 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 
 	switch ( type )
 	{
-	case PT_WXPARENT:
+		case PT_WXPARENT:
 		{
 			result = value;
 			break;
 		}
-	case PT_WXSTRING:
-	case PT_FILE:
-	case PT_PATH:
+		case PT_WXSTRING:
+		case PT_FILE:
+		case PT_PATH:
 		{
 			if ( value.empty() )
 			{
-				result << wxT( "wxEmptyString" );
+				result << "wxEmptyString";
 			}
 			else
 			{
-				result << wxT( "wxT(\"" ) << CppCodeGenerator::ConvertCppString( value ) << wxT( "\")" );
+				result << "\"" << CppCodeGenerator::ConvertCppString( value ) << "\")";
 			}
 			break;
 		}
@@ -108,46 +109,46 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 		{
 			if ( value.empty() )
 			{
-				result << wxT( "wxEmptyString" );
+				result << "wxEmptyString";
 			}
 			else
 			{
 				if ( m_i18n )
 				{
-					result << wxT( "_(\"" ) << CppCodeGenerator::ConvertCppString( value ) << wxT( "\")" );
+					result << "_(\"" << CppCodeGenerator::ConvertCppString( value ) << "\")";
 				}
 				else
 				{
-					result << wxT( "wxT(\"" ) << CppCodeGenerator::ConvertCppString( value ) << wxT( "\")" );
+					result << "\"" << CppCodeGenerator::ConvertCppString( value ) << "\")";
 				}
 			}
 			break;
 		}
-	case PT_CLASS:
-	case PT_MACRO:
-	case PT_TEXT:
-	case PT_OPTION:
-	case PT_FLOAT:
-	case PT_INT:
-	case PT_UINT:
+		case PT_CLASS:
+		case PT_MACRO:
+		case PT_TEXT:
+		case PT_OPTION:
+		case PT_FLOAT:
+		case PT_INT:
+		case PT_UINT:
 		{
 			result = value;
 			break;
 		}
 		case PT_BITLIST:
 		{
-			result = ( value.empty() ? wxT( "0" ) : value );
+			result = ( value.empty() ? "0" : value );
 			break;
 		}
 		case PT_WXPOINT:
 		{
 			if ( value.empty() )
 			{
-				result = wxT( "wxDefaultPosition" );
+				result = "wxDefaultPosition";
 			}
 			else
 			{
-				result << wxT( "wxPoint( " ) << value << wxT( " )" );
+				result << "wxPoint( " << value << " )";
 			}
 			break;
 		}
@@ -155,17 +156,17 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 		{
 			if ( value.empty() )
 			{
-				result = wxT( "wxDefaultSize" );
+				result = "wxDefaultSize";
 			}
 			else
 			{
-				result << wxT( "wxSize( " ) << value << wxT( " )" );
+				result << "wxSize( " << value << " )";
 			}
 			break;
 		}
 		case PT_BOOL:
 		{
-			result = ( value == wxT( "0" ) ? wxT( "false" ) : wxT( "true" ) );
+			result = ( value == "0" ? "false" : "true" );
 			break;
 		}
 		case PT_WXFONT:
@@ -175,17 +176,16 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 				wxFontContainer font = TypeConv::StringToFont( value );
 
 				int pointSize = font.GetPointSize();
-				wxString size = pointSize <= 0 ? wxT( "wxNORMAL_FONT->GetPointSize()" ) : wxString::Format( wxT( "%i" ), pointSize );
+				wxString size = pointSize <= 0 ? "wxNORMAL_FONT->GetPointSize()" : wxString::Format( "%i", pointSize );
 				
-				wxString ffname =  ( font.m_faceName.empty() ? wxT( "wxEmptyString" ) : wxT( "wxT(\"" ) + font.m_faceName + wxT("\")") );
-				result	= wxString::Format( "wxFont( %s, %i, %i, %i, %s, %s )",
+				wxString ffname =  ( font.m_faceName.empty() ? "wxEmptyString" : "\"" + font.m_faceName + "\")" );
+				result	= wxString::Format("wxFont( %s, %i, %i, %i, %s, %s )",
 				                           size.c_str(),
 				                           font.GetFamily(),
 				                           font.GetStyle(),
 				                           font.GetWeight(),
-				                           ( font.GetUnderlined() ? wxT( "true" ) : wxT( "false" ) ),
-				                           ( ffname.c_str() )
-				                         );
+				                           ( font.GetUnderlined() ? "true" : "false" ),
+				                           ( ffname.c_str() ) );
 			}
 			else
 			{
@@ -197,45 +197,46 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 		{
 			if ( !value.empty() )
 			{
-				if ( value.find_first_of( wxT( "wx" ) ) == 0 )
+				if ( value.find_first_of( "wx" ) == 0 )
 				{
 					// System Colour
-					result << wxT( "wxSystemSettings::GetColour( " ) << value << " )";
+					result << "wxSystemSettings::GetColour( " << value << " )";
 				}
 				else
 				{
 					wxColour colour = TypeConv::StringToColour( value );
-					result = wxString::Format( wxT( "wxColour( %i, %i, %i )" ), colour.Red(), colour.Green(), colour.Blue() );
+					result = wxString::Format( "wxColour( %i, %i, %i )", colour.Red(), colour.Green(), colour.Blue() );
 				}
 			}
 			else
 			{
-				result = wxT( "wxColour()" );
+				result = "wxColour()";
 			}
 			break;
 		}
 		case PT_BITMAP:
 		{
-			wxString path;
-			wxString source;
-			wxSize icoSize;
+			wxString 	path;
+			wxString 	source;
+			wxSize 		icoSize;
+
 			TypeConv::ParseBitmapWithResource( value, &path, &source, &icoSize );
 
 			if ( path.empty() )
 			{
 				// Empty path, generate Null Bitmap
-				result = wxT( "wxNullBitmap" );
+				result = "wxNullBitmap";
 				break;
 			}
 
-			if ( path.StartsWith( wxT( "file:" ) ) )
+			if ( path.StartsWith( "file:" ) )
 			{
-				wxLogWarning( wxT( "C++ code generation does not support using URLs for bitmap properties:\n%s" ), path.c_str() );
-				result = wxT( "wxNullBitmap" );
+				wxLogWarning( _("C++ code generation does not support using URLs for bitmap properties:\n%s"), path.c_str() );
+				result = "wxNullBitmap";
 				break;
 			}
 
-			if ( source == wxT( "Load From File" ) )
+			if ( source == "Load From File" )
 			{
 				wxString absPath;
 				try
@@ -245,39 +246,39 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 				catch ( wxFBException& ex )
 				{
 					wxLogError( ex.what() );
-					result = wxT( "wxNullBitmap" );
+					result = "wxNullBitmap";
 					break;
 				}
 
 				wxString file = ( m_useRelativePath ? TypeConv::MakeRelativePath( absPath, m_basePath ) : absPath );
 
 				wxFileName bmpFileName( path );
-				if ( bmpFileName.GetExt().Upper() == wxT( "XPM" ) )
+				if ( bmpFileName.GetExt().Upper() == "XPM" )
 				{
-					// If the bitmap is an XPM we will embed it in the code, otherwise it will be loaded from the file at run time.
-					result << wxT( "wxBitmap( " ) << CppCodeGenerator::ConvertXpmName( path ) << wxT( " )" );
+					// If the bitmap is an XPM we will embed it in the code,
+					// otherwise it will be loaded from the file at run time.
+					result << "wxBitmap( " << CppCodeGenerator::ConvertXpmName( path ) << " )";
 				}
 				else
 				{
-					result << wxT( "wxBitmap( wxT(\"" ) << CppCodeGenerator::ConvertCppString( file ) << wxT( "\"), wxBITMAP_TYPE_ANY )" );
+					result << "wxBitmap( \"" << CppCodeGenerator::ConvertCppString( file ) << "\", wxBITMAP_TYPE_ANY )";
 				}
 			}
-			else if ( source == wxT( "Load From Resource" ) )
+			else if ( source == "Load From Resource" )
 			{
-				result << wxT( "wxBitmap( wxT(\"" ) << path << wxT( "\"), wxBITMAP_TYPE_RESOURCE )" );
+				result << "wxBitmap( \"" << path << "\", wxBITMAP_TYPE_RESOURCE )";
 			}
-			else if ( source == wxT( "Load From Icon Resource" ) )
+			else if ( source == "Load From Icon Resource" )
 			{
 				if ( wxDefaultSize == icoSize )
 				{
-					result << wxT( "wxICON( " ) << path << wxT( " )" );
+					result << "wxICON( " << path << " )";
 				}
 				else
 				{
-					result.Printf( wxT( "wxIcon( wxT(\"%s\"), wxBITMAP_TYPE_ICO_RESOURCE, %i, %i )" ), path.c_str(), icoSize.GetWidth(), icoSize.GetHeight() );
+					result.Printf( "wxIcon( \"%s\", wxBITMAP_TYPE_ICO_RESOURCE, %i, %i )", path.c_str(), icoSize.GetWidth(), icoSize.GetHeight() );
 				}
 			}
-
 			break;
 		}
 		case PT_STRINGLIST:
@@ -291,14 +292,13 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 
 			for ( size_t i = 1; i < array.Count(); i++ )
 			{
-				result << wxT( ", " ) << ValueToCode( PT_WXSTRING_I18N, array[i] );
+				result << ", " << ValueToCode( PT_WXSTRING_I18N, array[i] );
 			}
 			break;
 		}
 		default:
 			break;
 	}
-
 	return result;
 }
 
@@ -322,24 +322,24 @@ wxString CppCodeGenerator::ConvertCppString( wxString text )
 
 		switch ( c )
 		{
-			case wxT( '"' ):
-							result += wxT( "\\\"" );
+			case '"':
+							result += "\\\"";
 				break;
 
-			case wxT( '\\' ):
-							result += wxT( "\\\\" );
+			case '\\':
+							result += "\\\\" ;
 				break;
 
-			case wxT( '\t' ):
-							result += wxT( "\\t" );
+			case '\t':
+							result += "\\t";
 				break;
 
-			case wxT( '\n' ):
-							result += wxT( "\\n" );
+			case '\n':
+							result += "\\n";
 				break;
 
-			case wxT( '\r' ):
-							result += wxT( "\\r" );
+			case '\r':
+							result += "\\r";
 				break;
 
 			default:
@@ -356,14 +356,13 @@ wxString CppCodeGenerator::ConvertXpmName( const wxString& text )
 	// the name consists of extracting the name of the file (without the directory)
 	// and replacing the character '.' by ' _ '.
 
-	size_t last_slash = name.find_last_of( wxT("\\/") );
+	size_t last_slash = name.find_last_of("\\/");
 	if ( last_slash != name.npos )
 	{
 		name = name.substr( last_slash + 1 );
 	}
 
-	name.replace( name.rfind( wxT(".") ), 1, wxT("_") );
-
+	name.replace( name.rfind("."), 1, "_" );
 	return name;
 }
 
@@ -371,45 +370,45 @@ void CppCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectB
 {
 	if (!userClasses)
 	{
-		wxLogError(wxT("There is no object to generate inherited class"));
+		wxLogError( _("There is no object to generate inherited class") );
 		return;
 	}
 
-	if ( wxT("UserClasses") != userClasses->GetClassName() )
+	if ( "UserClasses" != userClasses->GetClassName() )
 	{
-		wxLogError(wxT("This not a UserClasses object"));
+		wxLogError( _("This not a UserClasses object") );
 		return;
 	}
 
-	wxString type = userClasses->GetPropertyAsString( wxT("type") );
+	wxString type = userClasses->GetPropertyAsString("type");
 
 	// Start header file
-	wxString code = GetCode( userClasses, wxT("guard_macro_open") );
+	wxString code = GetCode( userClasses, "guard_macro_open" );
 	m_header->WriteLn( code );
 	m_header->WriteLn( wxEmptyString );
 
-	code = GetCode( userClasses, wxT("header_comment") );
+	code = GetCode( userClasses, "header_comment" );
 	m_header->WriteLn( code );
 	m_header->WriteLn( wxEmptyString );
 
-	code = GetCode( userClasses, wxT("header_include") );
+	code = GetCode( userClasses, "header_include" );
 	m_header->WriteLn( code );
 	m_header->WriteLn( wxEmptyString );
 
-	code = GetCode( userClasses, wxT("class_decl") );
+	code = GetCode( userClasses, "class_decl" );
 	m_header->WriteLn( code );
-	m_header->WriteLn( wxT("{") );
+	m_header->WriteLn("{");
 
 	// Start source file
-	code = GetCode( userClasses, wxT("source_include") );
+	code = GetCode( userClasses, "source_include" );
 	m_source->WriteLn( code );
 	m_source->WriteLn( wxEmptyString );
 
-	code = GetCode( userClasses, type + wxT("_cons_def") );
+	code = GetCode( userClasses, type + "_cons_def" );
 	m_source->WriteLn( code );
-	m_source->WriteLn( wxT("{") );
+	m_source->WriteLn("{");
 	m_source->WriteLn( wxEmptyString );
-	m_source->WriteLn( wxT("}") );
+	m_source->WriteLn("}");
 
 	// Do events in both files
 	EventVector events;
@@ -417,12 +416,12 @@ void CppCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectB
 
 	if ( events.size() > 0 )
 	{
-		m_header->WriteLn( wxT("protected:") );
+		m_header->WriteLn("protected:");
 		m_header->Indent();
-		code = GetCode( userClasses, wxT("event_handler_comment") );
+		code = GetCode( userClasses, "event_handler_comment" );
 		m_header->WriteLn( code );
 
-		wxString className = userClasses->GetPropertyAsString( _("name") );
+		wxString className = userClasses->GetPropertyAsString("name");
 		std::set<wxString> generatedHandlers;
 		for ( size_t i = 0; i < events.size(); i++ )
 		{
@@ -430,15 +429,18 @@ void CppCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectB
 			wxString prototype;
 			if ( generatedHandlers.find( event->GetValue() ) == generatedHandlers.end() )
 			{
-				prototype = wxString::Format( wxT("%s( %s& event )"), event->GetValue().c_str(), event->GetEventInfo()->GetEventClassName().c_str() );
-				m_header->WriteLn( wxString::Format( wxT("void %s;"), prototype.c_str() ) );
+				prototype = wxString::Format( "%s( %s& event )", event->GetValue().c_str(),
+							event->GetEventInfo()->GetEventClassName().c_str() );
+
+				m_header->WriteLn( wxString::Format( "void %s;", prototype.c_str() ) );
 				m_source->WriteLn();
-				m_source->WriteLn( wxString::Format( wxT("void %s::%s"), className.c_str(), prototype.c_str() ) );
-				m_source->WriteLn( wxT("{") );
+				m_source->WriteLn( wxString::Format( "void %s::%s", className.c_str(), prototype.c_str() ) );
+				m_source->WriteLn("{");
 				m_source->Indent();
-				m_source->WriteLn( wxString::Format( wxT("// TODO: Implement %s"), event->GetValue().c_str() ) );
+				m_source->WriteLn( wxString::Format( _("// TODO: Implement %s"), event->GetValue().c_str() ) );
 				m_source->Unindent();
-				m_source->WriteLn( wxT("}") );
+				m_source->WriteLn("}");
+
 				generatedHandlers.insert(event->GetValue());
 			}
 		}
@@ -448,16 +450,16 @@ void CppCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectB
 	}
 
 	// Finish header file
-	m_header->WriteLn( wxT("public:") );
+	m_header->WriteLn("public:");
 
 	m_header->Indent();
-	code = GetCode( userClasses, type + wxT("_cons_decl") );
+	code = GetCode( userClasses, type + "_cons_decl" );
 	m_header->WriteLn( code );
 	m_header->Unindent();
 
-	m_header->WriteLn( wxT( "};" ) );
+	m_header->WriteLn("};");
 	m_header->WriteLn( wxEmptyString );
-	code = GetCode( userClasses, wxT( "guard_macro_close" ) );
+	code = GetCode( userClasses, "guard_macro_close" );
 	m_header->WriteLn( code );
 }
 
@@ -465,58 +467,58 @@ bool CppCodeGenerator::GenerateCode( PObjectBase project )
 {
 	if ( !project )
 	{
-		wxLogError( wxT( "There is no project to generate code" ) );
+		wxLogError( _("There is no project to generate code") );
 		return false;
 	}
 
 	bool useEnum = false;
 
-	PProperty useEnumProperty = project->GetProperty( wxT( "use_enum" ) );
+	PProperty useEnumProperty = project->GetProperty("use_enum");
 	if ( useEnumProperty && useEnumProperty->GetValueAsInteger() )
 		useEnum = true;
 
 	m_i18n = false;
-	PProperty i18nProperty = project->GetProperty( wxT( "internationalize" ) );
+	PProperty i18nProperty = project->GetProperty("internationalize");
 	if ( i18nProperty && i18nProperty->GetValueAsInteger() )
 		m_i18n = true;
 
-	m_useConnect = !( _( "table" ) == project->GetPropertyAsString( _( "event_generation" ) ) );
-	m_disconnectEvents = ( project->GetPropertyAsInteger( _( "disconnect_events" ) ) != 0 );
+	m_useConnect = !( "table" == project->GetPropertyAsString("event_generation") );
+	m_disconnectEvents = ( project->GetPropertyAsInteger("disconnect_events") != 0 );
 
 	m_header->Clear();
 	m_source->Clear();
 	wxString code (
-	    wxT( "///////////////////////////////////////////////////////////////////////////\n" )
-	    wxT( "// C++ code generated with wxFormBuilder (version " ) wxT( __DATE__ ) wxT( ")\n" )
-	    wxT( "// http://www.wxformbuilder.org/\n" )
-	    wxT( "//\n" )
-	    wxT( "// PLEASE DO \"NOT\" EDIT THIS FILE!\n" )
-	    wxT( "///////////////////////////////////////////////////////////////////////////\n" ) );
+	    "///////////////////////////////////////////////////////////////////////////\n"
+	    "// C++ code generated with wxFormBuilder (version " __DATE__ ")\n"
+	    "// http://www.wxformbuilder.org/\n"
+	    "//\n"
+	    "// PLEASE DO \"NOT\" EDIT THIS FILE!\n"
+	    "///////////////////////////////////////////////////////////////////////////\n" );
 
 	m_header->WriteLn( code );
 	m_source->WriteLn( code );
 
-	PProperty propFile = project->GetProperty( wxT( "file" ) );
+	PProperty propFile = project->GetProperty("file");
 	if ( !propFile )
 	{
-		wxLogError( wxT( "Missing \"file\" property on Project Object" ) );
+		wxLogError( _("Missing \"file\" property on Project Object") );
 		return false;
 	}
 
 	wxString file = propFile->GetValue();
 	if ( file.empty() )
 	{
-		file = wxT( "noname" );
+		file = "noname";
 	}
 
 	wxString guardMacro;
 	wxFileName::SplitPath( file, 0, &guardMacro, 0 );
-	guardMacro.Replace( wxT( " " ), wxT( "_" ) );
-	m_header->WriteLn( wxT( "#ifndef __" ) + guardMacro + wxT( "__" ) );
-	m_header->WriteLn( wxT( "#define __" ) + guardMacro + wxT( "__" ) );
-	m_header->WriteLn( wxT( "" ) );
+	guardMacro.Replace( " ", "_" );
+	m_header->WriteLn( "#ifndef __" + guardMacro + "__" );
+	m_header->WriteLn( "#define __" + guardMacro + "__" );
+	m_header->WriteLn( "" );
 
-	code = GetCode( project, wxT( "header_preamble" ) );
+	code = GetCode( project, "header_preamble" );
 	if ( !code.empty() )
 	{
 		m_header->WriteLn( code );
@@ -537,7 +539,7 @@ bool CppCodeGenerator::GenerateCode( PObjectBase project )
 	}
 	if ( !subclasses.empty() )
 	{
-		m_header->WriteLn( wxT( "" ) );
+		m_header->WriteLn("");
 	}
 
 	// Generating in the .h header file those include from components dependencies.
@@ -552,11 +554,11 @@ bool CppCodeGenerator::GenerateCode( PObjectBase project )
 	}
 	if ( !headerIncludes.empty() )
 	{
-		m_header->WriteLn( wxT( "" ) );
+		m_header->WriteLn("");
 	}
 
 	// class decoration
-	PProperty propClassDecoration = project->GetProperty( wxT( "class_decoration" ) );
+	PProperty propClassDecoration = project->GetProperty("class_decoration");
 	wxString classDecoration;
 	if ( propClassDecoration )
 	{
@@ -565,28 +567,28 @@ bool CppCodeGenerator::GenerateCode( PObjectBase project )
 		propClassDecoration->SplitParentProperty( &children );
 
 		std::map< wxString, wxString >::iterator decoration;
-		decoration = children.find( wxT( "decoration" ) );
+		decoration = children.find("decoration");
 
 		if ( decoration != children.end() )
 		{
 			classDecoration = decoration->second;
 			if ( !classDecoration.empty() )
 			{
-				classDecoration += wxT( " " );
+				classDecoration += " ";
 			}
 		}
-
 		// Now get the header
 		std::map< wxString, wxString >::iterator header;
-		header = children.find( wxT( "header" ) );
+		header = children.find("header");
 
 		if ( header != children.end() )
 		{
 			wxString headerVal = header->second;
 			if ( !headerVal.empty() )
 			{
-				wxString include = wxT( "#include \"" ) + headerVal + wxT( "\"" );
-				std::vector< wxString >::iterator findInclude = std::find( headerIncludes.begin(), headerIncludes.end(), include );
+				wxString include = "#include \"" + headerVal + "\"";
+				std::vector< wxString >::iterator findInclude = std::find( headerIncludes.begin(),
+																headerIncludes.end(), include );
 				if ( findInclude == headerIncludes.end() )
 				{
 					m_header->WriteLn( include );
@@ -595,14 +597,13 @@ bool CppCodeGenerator::GenerateCode( PObjectBase project )
 			}
 		}
 	}
-
-	code = GetCode( project, wxT( "header_epilogue" ) );
+	code = GetCode( project, "header_epilogue" );
 	m_header->WriteLn( code );
 	m_header->WriteLn( wxEmptyString );
 
 	// Inserting in the .cpp source file the include corresponding to the
 	// generated .h header file and the related xpm includes
-	code = GetCode( project, wxT( "cpp_preamble" ) );
+	code = GetCode( project, "cpp_preamble" );
 	if ( !code.empty() )
 	{
 		m_source->WriteLn( code );
@@ -620,16 +621,16 @@ bool CppCodeGenerator::GenerateCode( PObjectBase project )
 	}
 
 	// Generated header
-	m_source->WriteLn( wxT( "#include \"" ) + file + wxT( ".h\"" ) );
+	m_source->WriteLn( "#include \"" + file + ".h\"" );
 
 	m_source->WriteLn( wxEmptyString );
 	GenXpmIncludes( project );
 
-	code = GetCode( project, wxT( "cpp_epilogue" ) );
+	code = GetCode( project, "cpp_epilogue" );
 	m_source->WriteLn( code );
 
 	// namespace
-	PProperty propNamespace = project->GetProperty( wxT( "namespace" ) );
+	PProperty propNamespace = project->GetProperty("namespace");
 	wxArrayString namespaceArray;
 	if ( propNamespace )
 	{
@@ -637,24 +638,24 @@ bool CppCodeGenerator::GenerateCode( PObjectBase project )
 		wxString usingNamespaceStr;
 		for ( unsigned int i = 0; i < namespaceArray.Count(); ++i )
 		{
-			m_header->WriteLn( wxT( "namespace " ) + namespaceArray[i] );
-			m_header->WriteLn( wxT( "{" ) );
+			m_header->WriteLn( "namespace " + namespaceArray[i] );
+			m_header->WriteLn("{");
 			m_header->Indent();
 
 			if ( usingNamespaceStr.empty() )
 			{
-				usingNamespaceStr = wxT( "using namespace " );
+				usingNamespaceStr = "using namespace ";
 			}
 			else
 			{
-				usingNamespaceStr += wxT( "::" );
+				usingNamespaceStr += "::";
 			}
 			usingNamespaceStr += namespaceArray[i];
 		}
 
 		if ( namespaceArray.Count() && !usingNamespaceStr.empty() )
 		{
-			usingNamespaceStr += wxT( ";" );
+			usingNamespaceStr += ";";
 			m_source->WriteLn( usingNamespaceStr );
 		}
 	}
@@ -686,12 +687,12 @@ bool CppCodeGenerator::GenerateCode( PObjectBase project )
 		for ( size_t i = namespaceArray.Count(); i > 0; --i )
 		{
 			m_header->Unindent();
-			m_header->WriteLn( wxT( "} // namespace " ) + namespaceArray[ i - 1 ] );
+			m_header->WriteLn( "} // namespace " + namespaceArray[ i - 1 ] );
 		}
 		m_header->WriteLn( wxEmptyString );
 	}
 
-	m_header->WriteLn( wxT( "#endif //__" ) + guardMacro + wxT( "__" ) );
+	m_header->WriteLn( "#endif //__" + guardMacro + "__" );
 
 	return true;
 }
@@ -703,10 +704,10 @@ void CppCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &even
 		return;
 	}
 
-	PProperty propName = class_obj->GetProperty( wxT( "name" ) );
+	PProperty propName = class_obj->GetProperty("name");
 	if ( !propName )
 	{
-		wxLogError( wxT( "Missing \"name\" property on \"%s\" class. Review your XML object description" ),
+		wxLogError( _("Missing \"name\" property on \"%s\" class. Review your XML object description"),
 		            class_obj->GetClassName().c_str() );
 		return;
 	}
@@ -714,15 +715,15 @@ void CppCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &even
 	wxString class_name = propName->GetValue();
 	if ( class_name.empty() )
 	{
-		wxLogError( wxT( "Object name cannot be null" ) );
+		wxLogError( _("Object name cannot be null") );
 		return;
 	}
 
 	wxString base_class;
-	PProperty propSubclass = class_obj->GetProperty( wxT( "subclass" ) );
+	PProperty propSubclass = class_obj->GetProperty("subclass");
 	if ( propSubclass )
 	{
-		wxString subclass = propSubclass->GetChildFromParent( wxT( "name" ) );
+		wxString subclass = propSubclass->GetChildFromParent("name");
 		if ( !subclass.empty() )
 		{
 			base_class = subclass;
@@ -730,14 +731,14 @@ void CppCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &even
 	}
 
 	if ( base_class.empty() )
-		base_class = wxT( "wx" ) + class_obj->GetClassName();
+		base_class = "wx" + class_obj->GetClassName();
 
 	if ( events.size() > 0 )
 	{
 		if ( !m_useConnect )
 		{
 			m_source->WriteLn();
-			m_source->WriteLn( wxT( "BEGIN_EVENT_TABLE( " ) + class_name + wxT( ", " ) + base_class + wxT( " )" ) );
+			m_source->WriteLn( "BEGIN_EVENT_TABLE( " + class_name + ", " + base_class + " )" );
 			m_source->Indent();
 		}
 
@@ -747,18 +748,19 @@ void CppCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &even
 			wxString handlerName;
 			if ( m_useConnect )
 			{
-				handlerName.Printf( wxT( "%sHandler( %s::%s )" ), event->GetEventInfo()->GetEventClassName().c_str(), class_name.c_str(), event->GetValue().c_str() );
+				handlerName.Printf( "%sHandler( %s::%s )", event->GetEventInfo()->GetEventClassName().c_str(),
+									class_name.c_str(), event->GetValue().c_str() );
 			}
 			else
 			{
-				handlerName.Printf( wxT( "%s::_wxFB_%s" ), class_name.c_str(), event->GetValue().c_str() );
+				handlerName.Printf( "%s::_wxFB_%s", class_name.c_str(), event->GetValue().c_str() );
 			}
-			wxString templateName = wxString::Format( wxT( "%s_%s" ), m_useConnect ? wxT( "connect" ) : wxT( "entry" ), event->GetName().c_str() );
+			wxString templateName = wxString::Format( "%s_%s", m_useConnect ? "connect" : "entry", event->GetName().c_str() );
 
 			PObjectBase obj = event->GetObject();
 			if ( !GenEventEntry( obj, obj->GetObjectInfo(), templateName, handlerName, disconnect ) )
 			{
-				wxLogError( wxT( "Missing \"evt_%s\" template for \"%s\" class. Review your XML object description" ),
+				wxLogError( _("Missing \"evt_%s\" template for \"%s\" class. Review your XML object description"),
 				            templateName.c_str(), class_name.c_str() );
 			}
 		}
@@ -766,7 +768,7 @@ void CppCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &even
 		if ( !m_useConnect )
 		{
 			m_source->Unindent();
-			m_source->WriteLn( wxT( "END_EVENT_TABLE()" ) );
+			m_source->WriteLn( "END_EVENT_TABLE()" );
 		}
 	}
 }
@@ -774,19 +776,19 @@ void CppCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &even
 bool CppCodeGenerator::GenEventEntry( PObjectBase obj, PObjectInfo obj_info, const wxString& templateName, const wxString& handlerName, bool disconnect )
 {
 	wxString _template;
-	PCodeInfo code_info = obj_info->GetCodeInfo( wxT( "C++" ) );
+	PCodeInfo code_info = obj_info->GetCodeInfo("C++");
 	if ( code_info )
 	{
-		_template = code_info->GetTemplate( wxString::Format( wxT( "evt_%s%s" ), disconnect ? wxT( "dis" ) : wxT( "" ), templateName.c_str() ) );
+		_template = code_info->GetTemplate( wxString::Format( "evt_%s%s", disconnect ? "dis" : "", templateName.c_str() ) );
 		if ( disconnect && _template.empty() )
 		{
-			_template = code_info->GetTemplate( wxT( "evt_" ) + templateName );
-			_template.Replace( wxT( "Connect" ), wxT( "Disconnect" ), true );
+			_template = code_info->GetTemplate( "evt_" + templateName );
+			_template.Replace( "Connect", "Disconnect", true );
 		}
 
 		if ( !_template.empty() )
 		{
-			_template.Replace( wxT( "#handler" ), handlerName.c_str() ); // Ugly patch!
+			_template.Replace( "#handler", handlerName.c_str() ); // TODO: Ugly patch!
 			CppTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 			m_source->WriteLn( parser.ParseTemplate() );
 			return true;
@@ -801,7 +803,6 @@ bool CppCodeGenerator::GenEventEntry( PObjectBase obj, PObjectInfo obj_info, con
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -810,7 +811,7 @@ void CppCodeGenerator::GenPrivateEventHandlers( const EventVector& events )
 	if ( events.size() > 0 )
 	{
 		m_header->WriteLn( wxEmptyString );
-		m_header->WriteLn( wxT( "// Private event handlers" ) );
+		m_header->WriteLn("// Private event handlers");
 
 		std::set<wxString> generatedHandlers;
 
@@ -821,9 +822,9 @@ void CppCodeGenerator::GenPrivateEventHandlers( const EventVector& events )
 
 			if ( generatedHandlers.find( event->GetValue() ) == generatedHandlers.end() )
 			{
-				aux = wxT( "void _wxFB_" ) + event->GetValue() + wxT( "( " ) +
-				      event->GetEventInfo()->GetEventClassName() + wxT( "& event ){ " ) +
-				      event->GetValue() + wxT( "( event ); }" );
+				aux = "void _wxFB_" + event->GetValue() + "( " +
+				      event->GetEventInfo()->GetEventClassName() + "& event ){ " +
+				      event->GetValue() + "( event ); }";
 
 				m_header->WriteLn( aux );
 				generatedHandlers.insert( event->GetValue() );
@@ -842,14 +843,14 @@ void CppCodeGenerator::GenVirtualEventHandlers( const EventVector& events, const
 		// execute properly.
 		// So we create a default handler which will skip the event.
 		m_header->WriteLn( wxEmptyString );
-		m_header->WriteLn( wxT( "// Virtual event handlers, overide them in your derived class" ) );
+		m_header->WriteLn( _("// Virtual event handlers, override them in your derived class") );
 
 		std::set<wxString> generatedHandlers;
 		for ( size_t i = 0; i < events.size(); i++ )
 		{
 			PEvent event = events[i];
-			wxString aux = eventHandlerPrefix + wxT( "void " ) + event->GetValue() + wxT( "( " ) +
-			               event->GetEventInfo()->GetEventClassName() + wxT( "& event )" ) + eventHandlerPostfix;
+			wxString aux = eventHandlerPrefix + "void " + event->GetValue() + "( " +
+			               event->GetEventInfo()->GetEventClassName() + "& event )" + eventHandlerPostfix;
 
 			if ( generatedHandlers.find( aux ) == generatedHandlers.end() )
 			{
@@ -866,18 +867,17 @@ void CppCodeGenerator::GenAttributeDeclaration( PObjectBase obj, Permission perm
 	wxString typeName = obj->GetObjectTypeName();
 	if ( ObjectDatabase::HasCppProperties( typeName ) )
 	{
-		wxString perm_str = obj->GetProperty( wxT( "permission" ) )->GetValue();
+		wxString perm_str = obj->GetProperty("permission")->GetValue();
 
-		if ( ( perm == P_PUBLIC && perm_str == wxT( "public" ) ) ||
-		        ( perm == P_PROTECTED && perm_str == wxT( "protected" ) ) ||
-		        ( perm == P_PRIVATE && perm_str == wxT( "private" ) ) )
+		if (( perm == P_PUBLIC 		&& perm_str == "public" ) 		||
+			( perm == P_PROTECTED 	&& perm_str == "protected" ) 	||
+			( perm == P_PRIVATE 	&& perm_str == "private" ))
 		{
 			// Generate the declaration
-			wxString code = GetCode( obj, wxT( "declaration" ) );
+			wxString code = GetCode( obj, "declaration" );
 			m_header->WriteLn( code );
 		}
 	}
-
 	// Generate recursively the rest of the attributes
 	for ( unsigned int i = 0; i < obj->GetChildCount() ; i++ )
 	{
@@ -901,14 +901,13 @@ void CppCodeGenerator::GenValidatorVariables( PObjectBase obj )
 void CppCodeGenerator::GenValVarsBase( PObjectInfo info, PObjectBase obj )
 {
 	wxString _template;
-	PCodeInfo code_info = info->GetCodeInfo( wxT( "C++" ) );
+	PCodeInfo code_info = info->GetCodeInfo("C++");
 
 	if ( !code_info )
 	{
 		return;
 	}
-
-	_template = code_info->GetTemplate( wxT( "valvar_declaration" ) );
+	_template = code_info->GetTemplate("valvar_declaration");
 
 	if ( !_template.empty() )
 	{
@@ -919,7 +918,6 @@ void CppCodeGenerator::GenValVarsBase( PObjectInfo info, PObjectBase obj )
 			m_header->WriteLn( code );
 		}
 	}
-
 	// Proceeding recursively with the base classes
 	for ( unsigned int i = 0; i < info->GetBaseClassCount(); i++ )
 	{
@@ -942,10 +940,10 @@ void CppCodeGenerator::GetGenEventHandlers( PObjectBase obj )
 
 void CppCodeGenerator::GenDefinedEventHandlers( PObjectInfo info, PObjectBase obj )
 {
-	PCodeInfo code_info = info->GetCodeInfo( wxT( "C++" ) );
+	PCodeInfo code_info = info->GetCodeInfo("C++");
 	if ( code_info )
 	{
-		wxString _template = code_info->GetTemplate( wxT( "generated_event_handlers" ) );
+		wxString _template = code_info->GetTemplate("generated_event_handlers");
 		if ( !_template.empty() )
 		{
 			CppTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
@@ -957,7 +955,6 @@ void CppCodeGenerator::GenDefinedEventHandlers( PObjectInfo info, PObjectBase ob
 			}
 		}
 	}
-
 	// Proceeding recursively with the base classes
 	for ( unsigned int i = 0; i < info->GetBaseClassCount(); i++ )
 	{
@@ -969,14 +966,14 @@ void CppCodeGenerator::GenDefinedEventHandlers( PObjectInfo info, PObjectBase ob
 wxString CppCodeGenerator::GetCode( PObjectBase obj, wxString name )
 {
 	wxString _template;
-	PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( wxT( "C++" ) );
+	PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo("C++");
 
 	if ( !code_info )
 	{
-		wxString msg( wxString::Format( wxT( "Missing \"%s\" template for \"%s\" class. Review your XML object description" ),
+		wxString msg( wxString::Format( _("Missing \"%s\" template for \"%s\" class. Review your XML object description"),
 		                                name.c_str(), obj->GetClassName().c_str() ) );
 		wxLogError( msg );
-		return wxT( "" );
+		return "";
 	}
 
 	_template = code_info->GetTemplate( name );
@@ -989,10 +986,10 @@ wxString CppCodeGenerator::GetCode( PObjectBase obj, wxString name )
 
 void CppCodeGenerator::GenClassDeclaration( PObjectBase class_obj, bool use_enum, const wxString& classDecoration, const EventVector &events )
 {
-	PProperty propName = class_obj->GetProperty( wxT( "name" ) );
+	PProperty propName = class_obj->GetProperty("name");
 	if ( !propName )
 	{
-		wxLogError( wxT( "Missing \"name\" property on \"%s\" class. Review your XML object description" ),
+		wxLogError( _("Missing \"name\" property on \"%s\" class. Review your XML object description"),
 		            class_obj->GetClassName().c_str() );
 		return;
 	}
@@ -1000,26 +997,25 @@ void CppCodeGenerator::GenClassDeclaration( PObjectBase class_obj, bool use_enum
 	wxString class_name = propName->GetValue();
 	if ( class_name.empty() )
 	{
-		wxLogError( wxT( "Object name can not be null" ) );
+		wxLogError( _("Object name can not be null") );
 		return;
 	}
 
-	m_header->WriteLn( wxT( "///////////////////////////////////////////////////////////////////////////////" ) );
-	m_header->WriteLn( wxT( "/// Class " ) + class_name );
-	m_header->WriteLn( wxT( "///////////////////////////////////////////////////////////////////////////////" ) );
+	m_header->WriteLn( "///////////////////////////////////////////////////////////////////////////////" );
+	m_header->WriteLn( "/// Class " + class_name );
+	m_header->WriteLn( "///////////////////////////////////////////////////////////////////////////////" );
 
-	m_header->WriteLn( wxT( "class " ) + classDecoration + class_name + wxT( " : " ) + GetCode( class_obj, wxT( "base" ) ) );
-	m_header->WriteLn( wxT( "{" ) );
+	m_header->WriteLn( "class " + classDecoration + class_name + " : " + GetCode( class_obj, "base" ) );
+	m_header->WriteLn("{");
 	m_header->Indent();
 
-	// are there event handlers?
+	// Are there event handlers?
 	if ( !m_useConnect && events.size() > 0 )
 	{
-		m_header->WriteLn( wxT( "DECLARE_EVENT_TABLE()" ) );
+		m_header->WriteLn( "DECLARE_EVENT_TABLE()" );
 	}
-
 	// private
-	m_header->WriteLn( wxT( "private:" ) );
+	m_header->WriteLn("private:");
 	m_header->Indent();
 	GenAttributeDeclaration( class_obj, P_PRIVATE );
 
@@ -1029,10 +1025,10 @@ void CppCodeGenerator::GenClassDeclaration( PObjectBase class_obj, bool use_enum
 	}
 
 	m_header->Unindent();
-	m_header->WriteLn( wxT( "" ) );
+	m_header->WriteLn("");
 
 	// protected
-	m_header->WriteLn( wxT( "protected:" ) );
+	m_header->WriteLn("protected:");
 	m_header->Indent();
 
 	if ( use_enum )
@@ -1044,55 +1040,55 @@ void CppCodeGenerator::GenClassDeclaration( PObjectBase class_obj, bool use_enum
 	wxString eventHandlerPrefix;
 	wxString eventHandlerPostfix;
 
-	PProperty eventHandlerKindProp = class_obj->GetProperty( wxT( "event_handler" ) );
+	PProperty eventHandlerKindProp = class_obj->GetProperty("event_handler");
 	if ( eventHandlerKindProp )
 	{
 		eventHandlerKind = eventHandlerKindProp->GetValueAsString();
 	}
 
-	if ( 0 == eventHandlerKind.compare( wxT( "decl_pure_virtual" ) ) )
+	if ( 0 == eventHandlerKind.compare("decl_pure_virtual") )
 	{
-		eventHandlerPrefix = wxT( "virtual " );
-		eventHandlerPostfix = wxT( " = 0;" );
+		eventHandlerPrefix = "virtual ";
+		eventHandlerPostfix = " = 0;";
 	}
-	else if ( 0 == eventHandlerKind.compare( wxT( "decl" ) ) )
+	else if ( 0 == eventHandlerKind.compare("decl") )
 	{
-		eventHandlerPrefix = wxT( "" );
-		eventHandlerPostfix = wxT( ";" );
+		eventHandlerPrefix = "";
+		eventHandlerPostfix = ";";
 	}
 	else // Default: impl_virtual
 	{
-		eventHandlerPrefix = wxT( "virtual " );
-		eventHandlerPostfix = wxT( " { event.Skip(); }" );
+		eventHandlerPrefix = "virtual ";
+		eventHandlerPostfix = " { event.Skip(); }";
 	}
 
 	GenVirtualEventHandlers( events, eventHandlerPrefix, eventHandlerPostfix );
 
 	m_header->Unindent();
-	m_header->WriteLn( wxT( "" ) );
+	m_header->WriteLn("");
 
 	// public
-	m_header->WriteLn( wxT( "public:" ) );
+	m_header->WriteLn("public:");
 	m_header->Indent();
 	GenAttributeDeclaration( class_obj, P_PUBLIC );
 
 	// Validators' variables
 	GenValidatorVariables( class_obj );
-	m_header->WriteLn( wxT( "" ) );
+	m_header->WriteLn("");
 
 	// The constructor is also included within public
-	m_header->WriteLn( GetCode( class_obj, wxT( "cons_decl" ) ) );
+	m_header->WriteLn( GetCode( class_obj, "cons_decl" ) );
 
 	// Destructor
-	m_header->WriteLn( wxString::Format( wxT( "~%s();" ), class_name.c_str() ) );
+	m_header->WriteLn( wxString::Format( "~%s();", class_name.c_str() ) );
 
 	GetGenEventHandlers( class_obj );
 	m_header->Unindent();
-	m_header->WriteLn( wxT( "" ) );
+	m_header->WriteLn("");
 
 	m_header->Unindent();
-	m_header->WriteLn( wxT( "};" ) );
-	m_header->WriteLn( wxT( "" ) );
+	m_header->WriteLn("};");
+	m_header->WriteLn("");
 }
 
 void CppCodeGenerator::GenEnumIds( PObjectBase class_obj )
@@ -1103,34 +1099,34 @@ void CppCodeGenerator::GenEnumIds( PObjectBase class_obj )
 	std::vector< wxString >::iterator it = macros.begin();
 	if ( it != macros.end() )
 	{
-		m_header->WriteLn( wxT( "enum" ) );
-		m_header->WriteLn( wxT( "{" ) );
+		m_header->WriteLn("enum");
+		m_header->WriteLn("{");
 		m_header->Indent();
 
 		// Remove the default macro from the set, for backward compatiblity
-		it = std::find( macros.begin(), macros.end(), wxT( "ID_DEFAULT" ) );
+		it = std::find( macros.begin(), macros.end(), "ID_DEFAULT" );
 		if ( it != macros.end() )
 		{
 			// The default macro is defined to wxID_ANY
-			m_header->WriteLn( wxT( "ID_DEFAULT = wxID_ANY, // Default" ) );
+			m_header->WriteLn("ID_DEFAULT = wxID_ANY, // Default");
 			macros.erase( it );
 		}
 
 		it = macros.begin();
 		if ( it != macros.end() )
 		{
-			m_header->WriteLn( wxString::Format( wxT( "%s = %i," ), it->c_str(), m_firstID ) );
+			m_header->WriteLn( wxString::Format( "%s = %i,", it->c_str(), m_firstID ) );
 			it++;
 			while ( it != macros.end() )
 			{
-				m_header->WriteLn( *it + wxT( "," ) );
+				m_header->WriteLn( *it + "," );
 				it++;
 			}
 		}
 
 		//m_header->WriteLn(id);
 		m_header->Unindent();
-		m_header->WriteLn( wxT( "};" ) );
+		m_header->WriteLn("};");
 		m_header->WriteLn( wxEmptyString );
 	}
 }
@@ -1144,14 +1140,14 @@ void CppCodeGenerator::GenSubclassSets( PObjectBase obj, std::set< wxString >* s
 	}
 
 	// Fill the set
-	PProperty subclass = obj->GetProperty( wxT( "subclass" ) );
+	PProperty subclass = obj->GetProperty("subclass");
 	if ( subclass )
 	{
 		std::map< wxString, wxString > children;
 		subclass->SplitParentProperty( &children );
 
 		std::map< wxString, wxString >::iterator name;
-		name = children.find( wxT( "name" ) );
+		name = children.find("name");
 
 		if ( children.end() == name )
 		{
@@ -1168,11 +1164,11 @@ void CppCodeGenerator::GenSubclassSets( PObjectBase obj, std::set< wxString >* s
 
 		//get namespaces
 		wxString originalValue = nameVal;
-		int delimiter = nameVal.Find( wxT( "::" ) ) ;
+		int delimiter = nameVal.Find("::") ;
 		if ( wxNOT_FOUND == delimiter )
 		{
 			// Got a subclass
-			subclasses->insert( wxT( "class " ) + nameVal + wxT( ";" ) );
+			subclasses->insert( "class " + nameVal + ";" );
 		}
 		else
 		{
@@ -1185,26 +1181,25 @@ void CppCodeGenerator::GenSubclassSets( PObjectBase obj, std::set< wxString >* s
 				{
 					break;
 				}
-				subClassPrefix += wxT( "namespace " ) + namespaceStr + wxT( "{ " );
-				subClassSuffix += wxT( " }" );
+				subClassPrefix += "namespace " + namespaceStr + "{ ";
+				subClassSuffix += " }";
 
 				nameVal = nameVal.Mid( delimiter + 2 );
-				delimiter = nameVal.Find( wxT( "::" ) );
+				delimiter = nameVal.Find("::");
 
             } while ( delimiter != wxNOT_FOUND );
 
 			if ( delimiter != wxNOT_FOUND || nameVal.empty() )
 			{
-				wxLogError	( 	_( "Invalid Value for Property\n\tObject: %s\n\tProperty: %s\n\tValue: %s" ),
-				              obj->GetPropertyAsString( _( "name" ) ).c_str(),
-				              _( "subclass" ),
-				              originalValue.c_str()
-				           );
+				wxLogError	( _("Invalid Value for Property\n\tObject: %s\n\tProperty: %s\n\tValue: %s"),
+				              obj->GetPropertyAsString("name").c_str(),
+				              "subclass",
+				              originalValue.c_str() );
 				return;
 			}
 
 			wxString subClassDeclar;
-			subClassDeclar += subClassPrefix + wxT( "class " ) + nameVal + wxT( ";" ) + subClassSuffix;
+			subClassDeclar += subClassPrefix + "class " + nameVal + ";" + subClassSuffix;
 
 			// Got a subclass
 			subclasses->insert( subClassDeclar );
@@ -1212,7 +1207,7 @@ void CppCodeGenerator::GenSubclassSets( PObjectBase obj, std::set< wxString >* s
 
 		// Now get the header
 		std::map< wxString, wxString >::iterator header;
-		header = children.find( wxT( "header" ) );
+		header = children.find("header");
 
 		if ( children.end() == header )
 		{
@@ -1240,8 +1235,8 @@ void CppCodeGenerator::GenSubclassSets( PObjectBase obj, std::set< wxString >* s
 			return;
 		}
 
-		wxString include = wxT( "#include \"" ) + headerVal + wxT( "\"" );
-		if ( pkg->GetPackageName() == wxT( "Forms" ) )
+		wxString include = "#include \"" + headerVal + "\"";
+		if ( pkg->GetPackageName() == "Forms" )
 		{
 			std::vector< wxString >::iterator it = std::find( headerIncludes->begin(), headerIncludes->end(), include );
 			if ( headerIncludes->end() == it )
@@ -1270,10 +1265,10 @@ void CppCodeGenerator::GenObjectIncludes( PObjectBase project, std::vector< wxSt
 	}
 
 	// Fill the set
-	PCodeInfo code_info = project->GetObjectInfo()->GetCodeInfo( wxT( "C++" ) );
+	PCodeInfo code_info = project->GetObjectInfo()->GetCodeInfo("C++");
 	if ( code_info )
 	{
-		CppTemplateParser parser( project, code_info->GetTemplate( wxT( "include" ) ), m_i18n, m_useRelativePath, m_basePath );
+		CppTemplateParser parser( project, code_info->GetTemplate("include"), m_i18n, m_useRelativePath, m_basePath );
 		wxString include = parser.ParseTemplate();
 		if ( !include.empty() )
 		{
@@ -1302,10 +1297,10 @@ void CppCodeGenerator::GenBaseIncludes( PObjectInfo info, PObjectBase obj, std::
 		GenBaseIncludes( base_info, obj, includes, templates );
 	}
 
-	PCodeInfo code_info = info->GetCodeInfo( wxT( "C++" ) );
+	PCodeInfo code_info = info->GetCodeInfo("C++");
 	if ( code_info )
 	{
-		CppTemplateParser parser( obj, code_info->GetTemplate( wxT( "include" ) ), m_i18n, m_useRelativePath, m_basePath );
+		CppTemplateParser parser( obj, code_info->GetTemplate("include"), m_i18n, m_useRelativePath, m_basePath );
 		wxString include = parser.ParseTemplate();
 		if ( !include.empty() )
 		{
@@ -1321,7 +1316,7 @@ void CppCodeGenerator::AddUniqueIncludes( const wxString& include, std::vector< 
 {
 	// Split on newlines to only generate unique include lines
 	// This strips blank lines and trims
-	wxStringTokenizer tkz( include, wxT( "\n" ), wxTOKEN_STRTOK );
+	wxStringTokenizer tkz( include, "\n", wxTOKEN_STRTOK );
 
 	bool inPreproc = false;
 
@@ -1332,11 +1327,11 @@ void CppCodeGenerator::AddUniqueIncludes( const wxString& include, std::vector< 
 		line.Trim( true );
 
 		// Anything within a #if preprocessor block will be written
-		if ( line.StartsWith( wxT( "#if" ) ) )
+		if ( line.StartsWith("#if") )
 		{
 			inPreproc = true;
 		}
-		else if ( line.StartsWith( wxT( "#endif" ) ) )
+		else if ( line.StartsWith("#endif") )
 		{
 			inPreproc = false;
 		}
@@ -1348,7 +1343,7 @@ void CppCodeGenerator::AddUniqueIncludes( const wxString& include, std::vector< 
 		}
 
 		// If it is not an include line, it will be written
-		if ( !line.StartsWith( wxT( "#include" ) ) )
+		if ( !line.StartsWith("#include") )
 		{
 			includes->push_back( line );
 			continue;
@@ -1381,11 +1376,11 @@ void CppCodeGenerator::FindDependencies( PObjectBase obj, std::set< PObjectInfo 
 void CppCodeGenerator::GenConstructor( PObjectBase class_obj, const EventVector &events )
 {
 	m_source->WriteLn();
-	m_source->WriteLn( GetCode( class_obj, wxT( "cons_def" ) ) );
-	m_source->WriteLn( wxT( "{" ) );
+	m_source->WriteLn( GetCode( class_obj, "cons_def" ) );
+	m_source->WriteLn("{");
 	m_source->Indent();
 
-	wxString settings = GetCode( class_obj, wxT( "settings" ) );
+	wxString settings = GetCode( class_obj, "settings" );
 	if ( !settings.empty() )
 	{
 		m_source->WriteLn( settings );
@@ -1396,7 +1391,7 @@ void CppCodeGenerator::GenConstructor( PObjectBase class_obj, const EventVector 
 		GenConstruction( class_obj->GetChild( i ), true );
 	}
 
-	wxString afterAddChild = GetCode( class_obj, wxT( "after_addchild" ) );
+	wxString afterAddChild = GetCode( class_obj, "after_addchild" );
 	if ( !afterAddChild.empty() )
 	{
 		m_source->WriteLn( afterAddChild );
@@ -1405,25 +1400,25 @@ void CppCodeGenerator::GenConstructor( PObjectBase class_obj, const EventVector 
 	if ( m_useConnect && !events.empty() )
 	{
 		m_source->WriteLn();
-		m_source->WriteLn( wxT( "// Connect Events" ) );
+		m_source->WriteLn("// Connect Events");
 		GenEvents( class_obj, events );
 	}
 
 	m_source->Unindent();
-	m_source->WriteLn( wxT( "}" ) );
+	m_source->WriteLn( "}" );
 }
 
 void CppCodeGenerator::GenDestructor( PObjectBase class_obj, const EventVector &events )
 {
 	m_source->WriteLn();
-	wxString className = class_obj->GetPropertyAsString( wxT( "name" ) );
-	m_source->WriteLn( wxString::Format( wxT( "%s::~%s()" ), className.c_str(), className.c_str() ) );
-	m_source->WriteLn( wxT( "{" ) );
+	wxString className = class_obj->GetPropertyAsString("name");
+	m_source->WriteLn( wxString::Format( "%s::~%s()", className.c_str(), className.c_str() ) );
+	m_source->WriteLn("{");
 	m_source->Indent();
 
 	if ( m_disconnectEvents && m_useConnect && !events.empty() )
 	{
-		m_source->WriteLn( wxT( "// Disconnect Events" ) );
+		m_source->WriteLn("// Disconnect Events");
 		GenEvents( class_obj, events, true );
 		m_source->WriteLn();
 	}
@@ -1432,7 +1427,7 @@ void CppCodeGenerator::GenDestructor( PObjectBase class_obj, const EventVector &
 	GenDestruction( class_obj );
 
 	m_source->Unindent();
-	m_source->WriteLn( wxT( "}" ) );
+	m_source->WriteLn("}");
 }
 
 void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
@@ -1445,27 +1440,27 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 		// Checking if it has not been declared as class attribute
 		// so that, we will declare it inside the constructor
 
-		wxString perm_str = obj->GetProperty( wxT( "permission" ) )->GetValue();
-		if ( perm_str == wxT( "none" ) )
+		wxString perm_str = obj->GetProperty("permission")->GetValue();
+		if ( perm_str == "none" )
 		{
-			const wxString& decl = GetCode( obj, wxT( "declaration" ) );
+			const wxString& decl = GetCode( obj, "declaration" );
 			if ( !decl.empty() )
 			{
 				m_source->WriteLn( decl );
 			}
 		}
 
-		m_source->WriteLn( GetCode( obj, wxT( "construction" ) ) );
+		m_source->WriteLn( GetCode( obj, "construction" ) );
 		GenSettings( obj->GetObjectInfo(), obj );
 
-		bool isWidget = !info->IsSubclassOf( wxT( "sizer" ) );
+		bool isWidget = !info->IsSubclassOf("sizer");
 
 		for ( unsigned int i = 0; i < obj->GetChildCount(); i++ )
 		{
 			PObjectBase child = obj->GetChild( i );
 			GenConstruction( child, isWidget );
 
-			if ( type == wxT( "toolbar" ) )
+			if ( type == "toolbar" )
 			{
 				GenAddToolbar( child->GetObjectInfo(), child );
 			}
@@ -1480,16 +1475,16 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 				// It's not a good practice to embed templates into the source code,
 				// because you will need to recompile...
 
-				wxString _template =	wxT( "#wxparent $name->SetSizer( $name ); #nl" )
-				                     wxT( "#wxparent $name->Layout();" )
-				                     wxT( "#ifnull #parent $size" )
-				                     wxT( "@{ #nl $name->Fit( #wxparent $name ); @}" );
+				wxString _template = "#wxparent $name->SetSizer( $name; #nl"
+				                     "#wxparent $name->Layout();"
+				                     "#ifnull #parent $size"
+				                     "@{ #nl $name->Fit( #wxparent $name; @}";
 
 				CppTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 				m_source->WriteLn( parser.ParseTemplate() );
 			}
 		}
-		else if ( type == wxT( "splitter" ) )
+		else if ( type == "splitter" )
 		{
 			// Generating the split
 			switch ( obj->GetChildCount() )
@@ -1497,8 +1492,8 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 				case 1:
 				{
 					PObjectBase sub1 = obj->GetChild( 0 )->GetChild( 0 );
-					wxString _template = wxT( "$name->Initialize( " );
-					_template = _template + sub1->GetProperty( wxT( "name" ) )->GetValue() + wxT( " );" );
+					wxString _template = "$name->Initialize( ";
+					_template = _template + sub1->GetProperty("name")->GetValue() + " );";
 
 					CppTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 					m_source->WriteLn( parser.ParseTemplate() );
@@ -1511,39 +1506,39 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 					sub2 = obj->GetChild( 1 )->GetChild( 0 );
 
 					wxString _template;
-					if ( obj->GetProperty( wxT( "splitmode" ) )->GetValue() == wxT( "wxSPLIT_VERTICAL" ) )
+					if ( obj->GetProperty("splitmode")->GetValue() == "wxSPLIT_VERTICAL" )
 					{
-						_template = wxT( "$name->SplitVertically( " );
+						_template = "$name->SplitVertically( ";
 					}
 					else
 					{
-						_template = wxT( "$name->SplitHorizontally( " );
+						_template = "$name->SplitHorizontally( ";
 					}
 
-					_template = _template + sub1->GetProperty( wxT( "name" ) )->GetValue() +
-					            wxT( ", " ) + sub2->GetProperty( wxT( "name" ) )->GetValue() + wxT( ", $sashpos );" );
+					_template = _template + sub1->GetProperty("name")->GetValue() +
+					            ", " + sub2->GetProperty("name")->GetValue() + ", $sashpos );";
 
 					CppTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 					m_source->WriteLn( parser.ParseTemplate() );
 					break;
 				}
 				default:
-					wxLogError( wxT( "Missing subwindows for wxSplitterWindow widget." ) );
+					wxLogError( _("Missing subwindows for wxSplitterWindow widget.") );
 					break;
 			}
 		}
-		else if (   type == wxT( "menubar" )	    ||
-                    type == wxT( "menu" )		    ||
-                    type == wxT( "submenu" )	    ||
-                    type == wxT( "toolbar" )	    ||
-                    type == wxT( "notebook" )	    ||
-                    type == wxT( "listbook" )       ||
-                    type == wxT( "auinotebook" )    ||
-                    type == wxT( "flatnotebook" )   ||
-                    type == wxT( "treelistctrl" )
+		else if (   type == "menubar"	    ||
+                    type == "menu"		    ||
+                    type == "submenu"	    ||
+                    type == "toolbar"	    ||
+                    type == "notebook"	    ||
+                    type == "listbook" 		||
+                    type == "auinotebook" 	||
+                    type == "flatnotebook" 	||
+                    type == "treelistctrl"
 		        )
 		{
-			wxString afterAddChild = GetCode( obj, wxT( "after_addchild" ) );
+			wxString afterAddChild = GetCode( obj, "after_addchild" );
 			if ( !afterAddChild.empty() )
 			{
 				m_source->WriteLn( afterAddChild );
@@ -1551,7 +1546,7 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 			m_source->WriteLn();
 		}
 	}
-	else if ( info->IsSubclassOf( wxT( "sizeritembase" ) ) )
+	else if ( info->IsSubclassOf("sizeritembase") )
 	{
 		// The child must be added to the sizer having in mind the
 		// child object type (there are 3 different routines)
@@ -1559,85 +1554,85 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 
 		PObjectInfo childInfo = obj->GetChild( 0 )->GetObjectInfo();
 		wxString temp_name;
-		if ( childInfo->IsSubclassOf( wxT( "wxWindow" ) ) || wxT( "CustomControl" ) == childInfo->GetClassName() )
+		if ( childInfo->IsSubclassOf("wxWindow") || "CustomControl" == childInfo->GetClassName() )
 		{
-			temp_name = wxT( "window_add" );
+			temp_name = "window_add";
 		}
-		else if ( childInfo->IsSubclassOf( wxT( "sizer" ) ) )
+		else if ( childInfo->IsSubclassOf("sizer") )
 		{
-			temp_name = wxT( "sizer_add" );
+			temp_name = "sizer_add";
 		}
-		else if ( childInfo->GetClassName() == wxT( "spacer" ) )
+		else if ( childInfo->GetClassName() == "spacer" )
 		{
-			temp_name = wxT( "spacer_add" );
+			temp_name = "spacer_add";
 		}
 		else
 		{
-			Debug::Print( wxT( "SizerItem child is not a Spacer and is not a subclass of wxWindow or of sizer." ) );
+			Debug::Print( _("SizerItem child is not a Spacer and is not a subclass of wxWindow or of sizer.") );
 			return;
 		}
 
 		m_source->WriteLn( GetCode( obj, temp_name ) );
 	}
-	else if (   type == wxT( "notebookpage" )	    ||
-                type == wxT( "listbookpage" )		||
-                type == wxT( "choicebookpage" )     ||
-                type == wxT( "auinotebookpage" )    ||
-                type == wxT( "flatnotebookpage" )
+	else if (   type == "notebookpage" 		||
+                type == "listbookpage"		||
+                type == "choicebookpage" 	||
+                type == "auinotebookpage" 	||
+                type == "flatnotebookpage"
 	        )
 	{
 		GenConstruction( obj->GetChild( 0 ), false );
-		m_source->WriteLn( GetCode( obj, wxT( "page_add" ) ) );
+		m_source->WriteLn( GetCode( obj, "page_add" ) );
 		GenSettings( obj->GetObjectInfo(), obj );
 	}
-	else if ( type == wxT( "treebookpage" ) )
+	else if ( type == "treebookpage" )
 	{
 		GenConstruction( obj->GetChild( 0 ), false );
-		if ( obj->GetPropertyAsInteger( _("depth") ) == 0 )
+		if ( obj->GetPropertyAsInteger("depth") == 0 )
 		{
-		    m_source->WriteLn( GetCode( obj, wxT( "page_add" ) ) );
+		    m_source->WriteLn( GetCode( obj, "page_add" ) );
 		}
-        else if ( obj->GetPropertyAsInteger( _("depth") ) > 0 )
+        else if ( obj->GetPropertyAsInteger("depth") > 0 )
         {
-            m_source->WriteLn( GetCode( obj, wxT( "subpage_add" ) ) );
+            m_source->WriteLn( GetCode( obj, "subpage_add" ) );
         }
 		GenSettings( obj->GetObjectInfo(), obj );
 	}
-	else if ( type == wxT( "toolbookpage" ) )
+	else if ( type == "toolbookpage" )
 	{
 		GenConstruction( obj->GetChild( 0 ), false );
 		GenSettings( obj->GetObjectInfo(), obj );
-		m_source->WriteLn( GetCode( obj, wxT( "page_add" ) ) );
+		m_source->WriteLn( GetCode( obj, "page_add" ) );
 	}
-	else if ( type == wxT( "treelistctrlcolumn" ) )
+	else if ( type == "treelistctrlcolumn" )
 	{
-		m_source->WriteLn( GetCode( obj, wxT( "column_add" ) ) );
+		m_source->WriteLn( GetCode( obj, "column_add" ) );
 		GenSettings( obj->GetObjectInfo(), obj );
 	}
-	else if ( type == wxT( "tool" ) )
+	else if ( type == "tool" )
 	{
 		// If loading bitmap from ICON resource, and size is not set, set size to toolbars bitmapsize
 		// So hacky, yet so useful ...
-		wxSize toolbarsize = obj->GetParent()->GetPropertyAsSize( _( "bitmapsize" ) );
+		wxSize toolbarsize = obj->GetParent()->GetPropertyAsSize("bitmapsize");
 		if ( wxDefaultSize != toolbarsize )
 		{
-			PProperty prop = obj->GetProperty( _( "bitmap" ) );
+			PProperty prop = obj->GetProperty("bitmap");
 			if ( prop )
 			{
-				wxString oldVal = prop->GetValueAsString();
-				wxString path, source;
-				wxSize toolsize;
+				wxString 	oldVal = prop->GetValueAsString();
+				wxString 	path, source;
+				wxSize 		toolsize;
 				TypeConv::ParseBitmapWithResource( oldVal, &path, &source, &toolsize );
-				if ( wxT( "Load From Icon Resource" ) == source && wxDefaultSize == toolsize )
+				if ( "Load From Icon Resource" == source && wxDefaultSize == toolsize )
 				{
-					prop->SetValue( wxString::Format( wxT( "%s; %s [%i; %i]" ), path.c_str(), source.c_str(), toolbarsize.GetWidth(), toolbarsize.GetHeight() ) );
-					m_source->WriteLn( GetCode( obj, wxT( "construction" ) ) );
+					prop->SetValue( wxString::Format( "%s; %s [%i; %i]", path.c_str(), source.c_str(), toolbarsize.GetWidth(), toolbarsize.GetHeight() ) );
+					m_source->WriteLn( GetCode( obj, "construction" ) );
 					prop->SetValue( oldVal );
 					return;
 				}
 			}
 		}
-		m_source->WriteLn( GetCode( obj, wxT( "construction" ) ) );
+		m_source->WriteLn( GetCode( obj, "construction" ) );
 	}
 	else
 	{
@@ -1702,40 +1697,40 @@ void CppCodeGenerator::GenDefines( PObjectBase project )
 
 	// Remove the default macro from the set, for backward compatiblity
 	std::vector< wxString >::iterator it;
-	it = std::find( macros.begin(), macros.end(), wxT( "ID_DEFAULT" ) );
+	it = std::find( macros.begin(), macros.end(), "ID_DEFAULT" );
 	if ( it != macros.end() )
 	{
 		// The default macro is defined to wxID_ANY
-		m_header->WriteLn( wxT( "#define ID_DEFAULT wxID_ANY // Default" ) );
+		m_header->WriteLn("#define ID_DEFAULT wxID_ANY // Default");
 		macros.erase( it );
 	}
 
 	unsigned int id = m_firstID;
 	if ( id < 1000 )
 	{
-		wxLogWarning( wxT( "First ID is Less than 1000" ) );
+		wxLogWarning( _("First ID is Less than 1000") );
 	}
 	for ( it = macros.begin() ; it != macros.end(); it++ )
 	{
 		// Don't redefine wx IDs
-		m_header->WriteLn( wxString::Format( wxT( "#define %s %i" ), it->c_str(), id ) );
+		m_header->WriteLn( wxString::Format( "#define %s %i", it->c_str(), id ) );
 		id++;
 	}
 
-	m_header->WriteLn( wxT( "" ) );
+	m_header->WriteLn("");
 }
 
 void CppCodeGenerator::GenSettings( PObjectInfo info, PObjectBase obj )
 {
 	wxString _template;
-	PCodeInfo code_info = info->GetCodeInfo( wxT( "C++" ) );
+	PCodeInfo code_info = info->GetCodeInfo("C++");
 
 	if ( !code_info )
 	{
 		return;
 	}
 
-	_template = code_info->GetTemplate( wxT( "settings" ) );
+	_template = code_info->GetTemplate("settings");
 
 	if ( !_template.empty() )
 	{
@@ -1758,14 +1753,14 @@ void CppCodeGenerator::GenSettings( PObjectInfo info, PObjectBase obj )
 void CppCodeGenerator::GenDestruction( PObjectBase obj )
 {
 	wxString _template;
-	PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( wxT( "C++" ) );
+	PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo("C++");
 
 	if ( !code_info )
 	{
 		return;
 	}
 
-	_template = code_info->GetTemplate( wxT( "destruction" ) );
+	_template = code_info->GetTemplate("destruction");
 
 	if ( !_template.empty() )
 	{
@@ -1788,12 +1783,12 @@ void CppCodeGenerator::GenDestruction( PObjectBase obj )
 void CppCodeGenerator::GenAddToolbar( PObjectInfo info, PObjectBase obj )
 {
 	wxString _template;
-	PCodeInfo code_info = info->GetCodeInfo( wxT( "C++" ) );
+	PCodeInfo code_info = info->GetCodeInfo("C++");
 
 	if ( !code_info )
 		return;
 
-	_template = code_info->GetTemplate( wxT( "toolbar_add" ) );
+	_template = code_info->GetTemplate("toolbar_add");
 
 	if ( !_template.empty() )
 	{
@@ -1828,7 +1823,6 @@ void CppCodeGenerator::GenXpmIncludes( PObjectBase project )
 	{
 		return;
 	}
-
 	// and then, we generate them
 	std::set<wxString>::iterator it;
 	for ( it = include_set.begin() ; it != include_set.end(); it++ )
@@ -1838,7 +1832,6 @@ void CppCodeGenerator::GenXpmIncludes( PObjectBase project )
 			m_source->WriteLn( *it );
 		}
 	}
-
 	m_source->WriteLn();
 }
 
@@ -1857,14 +1850,14 @@ void CppCodeGenerator::FindXpmProperties( PObjectBase obj, std::set<wxString>& x
 		if ( property->GetType() == PT_BITMAP )
 		{
 			wxString path = property->GetValue();
-			size_t semicolonindex = path.find_first_of( wxT( ";" ) );
+			size_t semicolonindex = path.find_first_of(";");
 			if ( semicolonindex != path.npos )
 			{
 				path = path.substr( 0, semicolonindex );
 			}
 
 			wxFileName bmpFileName( path );
-			if ( bmpFileName.GetExt().Upper() == wxT( "XPM" ) )
+			if ( bmpFileName.GetExt().Upper() == "XPM" )
 			{
 				wxString absPath = TypeConv::MakeAbsolutePath( path, AppData()->GetProjectPath() );
 
@@ -1873,7 +1866,7 @@ void CppCodeGenerator::FindXpmProperties( PObjectBase obj, std::set<wxString>& x
 				wxString relPath = ( m_useRelativePath ? TypeConv::MakeRelativePath( absPath, m_basePath ) : absPath );
 
 				wxString inc;
-				inc << wxT( "#include \"" ) << relPath << wxT( "\"" );
+				inc << "#include \"" << relPath << "\"";
 				xpmset.insert( inc );
 			}
 		}
@@ -1895,7 +1888,7 @@ void CppCodeGenerator::UseRelativePath( bool relative, wxString basePath )
 	if ( m_useRelativePath )
 	{
 		result = wxFileName::DirExists( basePath );
-		m_basePath = ( result ? basePath : wxT( "" ) );
+		m_basePath = ( result ? basePath : "" );
 	}
 }
 /*
@@ -1911,7 +1904,8 @@ auxPath = _STDSTR(filename.GetFullPath());
 return auxPath;
 }*/
 
-#define ADD_PREDEFINED_MACRO(x) m_predMacros.insert( wxT(#x) )
+// TODO: Check this
+#define ADD_PREDEFINED_MACRO(x) m_predMacros.insert(#x)
 void CppCodeGenerator::SetupPredefinedMacros()
 {
 	/* no id matches this one when compared to it */
@@ -2043,5 +2037,4 @@ void CppCodeGenerator::SetupPredefinedMacros()
 	ADD_PREDEFINED_MACRO( wxID_FILEDLGG );
 
 	ADD_PREDEFINED_MACRO( wxID_HIGHEST );
-
 }

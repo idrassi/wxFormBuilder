@@ -29,11 +29,11 @@
 #include "utils/typeconv.h"
 
 #include <wx/file.h>
-#include <wx/tokenzr.h>
 #include <wx/regex.h>
+#include <wx/tokenzr.h>
 
-#include <fstream>
 #include <cstring>
+#include <fstream>
 
 CodeWriter::CodeWriter()
 :
@@ -79,11 +79,11 @@ void CodeWriter::WriteLn( wxString code )
 	{
 		Write( code );
 		#if defined( __WXMSW__ )
-			Write( wxT("\r\n") );
+			Write( "\r\n" );
 		#elif defined( __WXMAC__ )
-			Write( wxT("\r") );
+			Write( "\r" );
 		#else
-			Write( wxT("\n") );
+			Write( "\n" );
 		#endif
 		m_cols = 0;
 	}
@@ -96,16 +96,18 @@ bool CodeWriter::StringOk( wxString s )
 
 void CodeWriter::FixWrite( wxString s )
 {
-	wxRegEx reIndent( wxT("%TAB%\\s*"), wxRE_ADVANCED );
-	wxStringTokenizer tkz( s, wxT("\n"), wxTOKEN_RET_EMPTY_ALL );
+	wxRegEx reIndent( "%TAB%\\s*", wxRE_ADVANCED );
+	wxStringTokenizer tkz( s, "\n", wxTOKEN_RET_EMPTY_ALL );
 
 	while ( tkz.HasMoreTokens() )
 	{
 		wxString line = tkz.GetNextToken();
+
 		line.Trim( false );
 		line.Trim( true );
+
 		// replace indentations defined in code templates by #indent and #unindent macros...
-		reIndent.Replace( &line, wxT("\t") );
+		reIndent.Replace( &line, "\t" );
 		WriteLn( line );
 	}
 }
@@ -118,12 +120,10 @@ void CodeWriter::Write( wxString code )
 		// Inserting indents
 		for ( int i = 0; i < m_indent; i++ )
 		{
-			DoWrite( wxT("\t") );
+			DoWrite( "\t" );
 		}
-
 		m_cols = m_indent;
 	}
-
 	DoWrite( code );
 }
 
@@ -197,6 +197,7 @@ void FileCodeWriter::WriteBuffer()
 	// Compare buffer with existing file (if any) to determine if
 	// writing the file is necessary
 	bool shouldWrite = true;
+
 	std::ifstream file( m_filename.mb_str( wxConvFile ), std::ios::binary | std::ios::in );
 
 	std::string buf;

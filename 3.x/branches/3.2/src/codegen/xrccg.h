@@ -36,7 +36,6 @@ namespace ticpp
 }
 
 /// XRC code generator.
-
 class XrcCodeGenerator : public CodeGenerator
 {
 private:
@@ -52,6 +51,5 @@ public:
 	/// Generates the XRC code for the project.
 	bool GenerateCode( PObjectBase project );
 };
-
 
 #endif //_XRC_CODE_GEN_

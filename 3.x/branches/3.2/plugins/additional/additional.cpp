@@ -214,12 +214,12 @@ public:
 		r.BeginBold();
 
 		r.BeginFontSize(14);
-		r.WriteText(_("Welcome to wxRichTextCtrl, a wxWidgets control for editing and presenting styled text and images"));
+		r.WriteText( _("Welcome to wxRichTextCtrl, a wxWidgets control for editing and presenting styled text and images") );
 		r.EndFontSize();
 		r.Newline();
 
 		r.BeginItalic();
-		r.WriteText(_("by Julian Smart"));
+		r.WriteText( _("by Julian Smart") );
 		r.EndItalic();
 
 		r.EndBold();
@@ -231,75 +231,75 @@ public:
 
 		r.Newline();
 
-		r.WriteText(_("What can you do with this thing? "));
+		r.WriteText( _("What can you do with this thing? ") );
 		r.WriteImage(wxBitmap(smiley_xpm));
-		r.WriteText(_(" Well, you can change text "));
+		r.WriteText( _(" Well, you can change text ") );
 
 		r.BeginTextColour(wxColour(255, 0, 0));
-		r.WriteText(_("colour, like this red bit."));
+		r.WriteText( _("colour, like this red bit.") );
 		r.EndTextColour();
 
 		r.BeginTextColour(wxColour(0, 0, 255));
-		r.WriteText(_(" And this blue bit."));
+		r.WriteText( _(" And this blue bit.") );
 		r.EndTextColour();
 
-		r.WriteText(_(" Naturally you can make things "));
+		r.WriteText( _(" Naturally you can make things ") );
 		r.BeginBold();
-		r.WriteText(_("bold "));
+		r.WriteText( _("bold ") );
 		r.EndBold();
 		r.BeginItalic();
-		r.WriteText(_("or italic "));
+		r.WriteText( _("or italic ") );
 		r.EndItalic();
 		r.BeginUnderline();
-		r.WriteText(_("or underlined."));
+		r.WriteText( _("or underlined.") );
 		r.EndUnderline();
 
 		r.BeginFontSize(14);
-		r.WriteText(_(" Different font sizes on the same line is allowed, too."));
+		r.WriteText( _(" Different font sizes on the same line is allowed, too.") );
 		r.EndFontSize();
 
-		r.WriteText(_(" Next we'll show an indented paragraph."));
+		r.WriteText( _(" Next we'll show an indented paragraph.") );
 
 		r.BeginLeftIndent(60);
 		r.Newline();
 
-		r.WriteText(_("Indented paragraph."));
+		r.WriteText( _("Indented paragraph.") );
 		r.EndLeftIndent();
 
 		r.Newline();
 
-		r.WriteText(_("Next, we'll show a first-line indent, achieved using BeginLeftIndent(100, -40)."));
+		r.WriteText( _("Next, we'll show a first-line indent, achieved using BeginLeftIndent(100, -40).") );
 
 		r.BeginLeftIndent(100, -40);
 		r.Newline();
 
-		r.WriteText(_("It was in January, the most down-trodden month of an Edinburgh winter."));
+		r.WriteText( _("It was in January, the most down-trodden month of an Edinburgh winter.") );
 		r.EndLeftIndent();
 
 		r.Newline();
 
-		r.WriteText(_("Numbered bullets are possible, again using subindents:"));
+		r.WriteText( _("Numbered bullets are possible, again using subindents:") );
 
 		r.BeginNumberedBullet(1, 100, 60);
 		r.Newline();
 
-		r.WriteText(_("This is my first item. Note that wxRichTextCtrl doesn't automatically do numbering, but this will be added later."));
+		r.WriteText( _("This is my first item. Note that wxRichTextCtrl doesn't automatically do numbering, but this will be added later.") );
 		r.EndNumberedBullet();
 
 		r.BeginNumberedBullet(2, 100, 60);
 		r.Newline();
 
-		r.WriteText(_("This is my second item."));
+		r.WriteText( _("This is my second item.") );
 		r.EndNumberedBullet();
 
 		r.Newline();
 
-		r.WriteText(_("The following paragraph is right-indented:"));
+		r.WriteText( _("The following paragraph is right-indented:") );
 
 		r.BeginRightIndent(200);
 		r.Newline();
 
-		r.WriteText(_("It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable."));
+		r.WriteText( _("It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable.") );
 		r.EndRightIndent();
 
 		r.Newline();
@@ -314,17 +314,17 @@ public:
 		attr.SetTabs(tabs);
 		r.SetDefaultStyle(attr);
 
-		r.WriteText(_("This line contains tabs:\tFirst tab\tSecond tab\tThird tab"));
+		r.WriteText( _("This line contains tabs:\tFirst tab\tSecond tab\tThird tab") );
 
 		r.Newline();
-		r.WriteText(_("Other notable features of wxRichTextCtrl include:"));
+		r.WriteText( _("Other notable features of wxRichTextCtrl include:") );
 
 		r.BeginSymbolBullet(_('*'), 100, 60);
 		r.Newline();
-		r.WriteText(_("Compatibility with wxTextCtrl API"));
+		r.WriteText( _("Compatibility with wxTextCtrl API") );
 		r.EndSymbolBullet();
 
-		r.WriteText(_("\nNote: this content was generated programmatically and copied from the sample. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!"));
+		r.WriteText( _("\nNote: this content was generated programmatically and copied from the sample. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!") );
 
 		r.EndSuppressUndo();
 
@@ -380,8 +380,6 @@ public:
 		return filter.GetXfbObject();
 	}
 };
-
-
 
 class ToggleButtonComponent : public ComponentBase, public wxEvtHandler
 {
