@@ -29,25 +29,27 @@
 
 #include <wx/bitmap.h>
 #include <wx/dc.h>
-#include <wx/timer.h>
 #include <wx/frame.h>
+#include <wx/timer.h>
 
 class cbSplashScreen : public wxFrame
 {
-  private:
-    wxBitmap m_label;
-    wxTimer m_timer;
-    wxRegion r;
-  public:
+public:
     // A value of -1 for timeout makes it stay forever (you need to close it manually)
 #ifdef __WXMAC__
-    cbSplashScreen(wxBitmap &label, long timeout, wxWindow *parent, wxWindowID id, long style = wxSTAY_ON_TOP | wxNO_BORDER | wxFRAME_TOOL_WINDOW);
+	cbSplashScreen( wxBitmap &label, long timeout, wxWindow *parent, wxWindowID id,
+					long style = wxSTAY_ON_TOP | wxNO_BORDER | wxFRAME_TOOL_WINDOW );
 #else
-    cbSplashScreen(wxBitmap &label, long timeout, wxWindow *parent, wxWindowID id, long style = wxSTAY_ON_TOP | wxNO_BORDER | wxFRAME_NO_TASKBAR | wxFRAME_SHAPED);
+    cbSplashScreen( wxBitmap &label, long timeout, wxWindow *parent, wxWindowID id,
+					long style = wxSTAY_ON_TOP | wxNO_BORDER | wxFRAME_NO_TASKBAR | wxFRAME_SHAPED );
 #endif
     ~cbSplashScreen();
 
-  private:
+private:
+	wxBitmap 	m_label;
+	wxTimer 	m_timer;
+	wxRegion 	r;
+
     void DoPaint(wxDC &dc);
     void OnPaint(wxPaintEvent &);
     void OnEraseBackground(wxEraseEvent &);
@@ -56,8 +58,7 @@ class cbSplashScreen : public wxFrame
     void OnChar(wxKeyEvent &);
     void OnMouseEvent(wxMouseEvent &event);
 
-  DECLARE_EVENT_TABLE()
+	DECLARE_EVENT_TABLE()
 };
 
 #endif // CBSPLASH_SCREEN_H
-
