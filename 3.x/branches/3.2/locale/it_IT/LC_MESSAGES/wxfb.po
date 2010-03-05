@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxFormBuilder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-05 09:36+0100\n"
+"POT-Creation-Date: 2010-03-05 20:03+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Andrea Zanellato <xvirc.client@gmail.com>\n"
 "Language-Team: \n"
@@ -974,38 +974,202 @@ msgstr ""
 msgid "\"%s\" not found!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/codeeditor/codeeditor.cpp:132
+#: wxformbuilder32/src/rad/codeeditor/codeeditor.cpp:133
 msgid "Not Found!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/inspector/objinspect.cpp:524
+#: wxformbuilder32/src/rad/pythonpanel/pythonpanel.cpp:88
+msgid "and assert break class continue def del elif else \t\t\t\t\t\t\t   except exec finally for from global if import in \t\t\t\t\t\t\t   is lambda not or pass print raise return try while"
+msgstr ""
+
+#: wxformbuilder32/src/rad/pythonpanel/pythonpanel.cpp:335
+#: wxformbuilder32/src/rad/cpppanel/cpppanel.cpp:408
+#, c-format
+msgid "Code generated on '%s'."
+msgstr ""
+
+#: wxformbuilder32/src/rad/geninheritclass/geninhertclass_gui.cpp:38
+msgid "Instructions"
+msgstr ""
+
+#: wxformbuilder32/src/rad/geninheritclass/geninhertclass_gui.cpp:40
+msgid ""
+"1. Check the forms you would like to create the inherited class for.\n"
+"2. You can edit individual class details by clicking on their names in the list\n"
+"and then:\n"
+"\t2a. Edit the 'Class Name:' as required.\n"
+"\t2b. Edit the 'File Names: (.h/.cpp/.py)' as required.\n"
+"3. Click 'OK'."
+msgstr ""
+
+#: wxformbuilder32/src/rad/geninheritclass/geninhertclass_gui.cpp:53
+msgid "Class Details"
+msgstr ""
+
+#: wxformbuilder32/src/rad/geninheritclass/geninhertclass_gui.cpp:55
+msgid "Class Name:"
+msgstr ""
+
+#: wxformbuilder32/src/rad/geninheritclass/geninhertclass_gui.cpp:62
+msgid "File Names: (.cpp/.h/.py)"
+msgstr ""
+
+#: wxformbuilder32/src/rad/inspector/objinspect.cpp:232
+msgid "Properties"
+msgstr ""
+
+#: wxformbuilder32/src/rad/inspector/objinspect.cpp:233
+msgid "Events"
+msgstr ""
+
+#: wxformbuilder32/src/rad/inspector/objinspect.cpp:550
 msgid "Property type Unknown"
 msgstr ""
 
-#: wxformbuilder32/src/rad/designer/visualeditor.cpp:154
+#: wxformbuilder32/src/rad/inspector/objinspect.cpp:710
+msgid "Property Changed"
+msgstr ""
+
+#: wxformbuilder32/src/rad/inspector/objinspect.cpp:718
+msgid "Property Changed [PT_FLOAT]"
+msgstr ""
+
+#: wxformbuilder32/src/rad/inspector/objinspect.cpp:728
+msgid "Property Changed [PT_UINT]"
+msgstr ""
+
+#: wxformbuilder32/src/rad/inspector/objinspect.cpp:732
+msgid "Property Changed [PT_OPTION]"
+msgstr ""
+
+#: wxformbuilder32/src/rad/inspector/objinspect.cpp:762
+msgid "Property Changed [PT_PARENT]"
+msgstr ""
+
+#: wxformbuilder32/src/rad/inspector/objinspect.cpp:769
+msgid "Property Changed [PT_WXSTRING]"
+msgstr ""
+
+#: wxformbuilder32/src/rad/inspector/objinspect.cpp:775
+msgid "Property Changed [PT_BOOL]"
+msgstr ""
+
+#: wxformbuilder32/src/rad/inspector/objinspect.cpp:780
+msgid "Property Changed [PT_BITLIST]"
+msgstr ""
+
+#: wxformbuilder32/src/rad/inspector/objinspect.cpp:789
+msgid "Property Changed [PT_WXPOINT]"
+msgstr ""
+
+#: wxformbuilder32/src/rad/inspector/objinspect.cpp:795
+msgid "Property Changed [PT_WXSIZE]"
+msgstr ""
+
+#: wxformbuilder32/src/rad/inspector/objinspect.cpp:801
+msgid "Property Changed [PT_WXFONT]"
+msgstr ""
+
+#: wxformbuilder32/src/rad/inspector/objinspect.cpp:814
+msgid "Property Changed [PT_WXCOLOUR]"
+msgstr ""
+
+#: wxformbuilder32/src/rad/inspector/objinspect.cpp:831
+msgid "Property Changed [PT_UINTLIST]"
+msgstr ""
+
+#: wxformbuilder32/src/rad/inspector/objinspect.cpp:837
+msgid "Property Changed [PT_BITMAP]"
+msgstr ""
+
+#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:257
+#, c-format
+msgid "Item without object as child of '%s:%s'"
+msgstr ""
+
+#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:463
+#, c-format
+msgid ""
+"There is no tree item associated with this object.\n"
+"\tClass: %s\n"
+"\tName: %s"
+msgstr ""
+
+#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:526
+msgid "Cut\tCtrl+X"
+msgstr ""
+
+#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:527
+msgid "Copy\tCtrl+C"
+msgstr ""
+
+#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:528
+msgid "Paste\tCtrl+V"
+msgstr ""
+
+#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:530
+msgid "Delete\tCtrl+D"
+msgstr ""
+
+#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:532
+msgid "Move Up\tAlt+Up"
+msgstr ""
+
+#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:533
+msgid "Move Down\tAlt+Down"
+msgstr ""
+
+#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:534
+msgid "Move Left\tAlt+Left"
+msgstr ""
+
+#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:535
+msgid "Move Right\tAlt+Right"
+msgstr ""
+
+#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:537
+msgid "Move into a new wxBoxSizer"
+msgstr ""
+
+#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:539
+msgid "Menu Editor..."
+msgstr ""
+
+#: wxformbuilder32/src/rad/designer/visualeditor.cpp:155
 msgid "wxObject was NULL!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/designer/visualeditor.cpp:165
+#: wxformbuilder32/src/rad/designer/visualeditor.cpp:166
 #, c-format
 msgid "No corresponding ObjectBase for wxObject. Name: %s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/designer/visualeditor.cpp:174
+#: wxformbuilder32/src/rad/designer/visualeditor.cpp:175
 msgid "baseobject was NULL!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/designer/visualeditor.cpp:185
+#: wxformbuilder32/src/rad/designer/visualeditor.cpp:186
 #, c-format
 msgid "No corresponding wxObject for ObjectBase. Name: %s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/designer/visualeditor.cpp:1135
-msgid "< Back"
+#: wxformbuilder32/src/rad/designer/visualeditor.cpp:440
+#, c-format
+msgid "Component for %s not found!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/designer/visualeditor.cpp:1140
-msgid "Next >"
+#: wxformbuilder32/src/rad/designer/visualeditor.cpp:453
+#, c-format
+msgid "Component for %s was registered as a window component, but this is not a wxWindow!"
+msgstr ""
+
+#: wxformbuilder32/src/rad/designer/visualeditor.cpp:465
+#, c-format
+msgid "Component for %s was registered as a sizer component, but this is not a wxSizer!"
+msgstr ""
+
+#: wxformbuilder32/src/rad/designer/visualeditor.cpp:634
+msgid "The event object is NULL - why?"
 msgstr ""
 
 #: wxformbuilder32/src/rad/xrcpreview/xrcpreview.cpp:51
@@ -1016,7 +1180,7 @@ msgstr ""
 msgid "WARNING - For XRC Developers ONLY!!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/dataobject/dataobject.cpp:153
+#: wxformbuilder32/src/rad/dataobject/dataobject.cpp:154
 msgid "This object cannot be pasted because it is from a newer version of wxFormBuilder"
 msgstr ""
 
