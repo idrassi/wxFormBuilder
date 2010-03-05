@@ -26,7 +26,7 @@
 #ifndef __VISUAL_OBJS__
 #define __VISUAL_OBJS__
 
-#include "wx/wx.h"
+#include <wx/wx.h>
 #include "utils/wxfbdefs.h"
 
 /**
@@ -34,26 +34,20 @@
  */
 class VObjEvtHandler : public wxEvtHandler
 {
- private:
-   WPObjectBase m_object;
-   wxWindow *m_window;
+private:
+	WPObjectBase m_object;
+	wxWindow *m_window;
 
-   VObjEvtHandler() {};
+	VObjEvtHandler() {};
 
- protected:
-  DECLARE_EVENT_TABLE()
+protected:
+	DECLARE_EVENT_TABLE()
 
- public:
-   VObjEvtHandler(wxWindow *win, PObjectBase obj);
-   void OnLeftClick(wxMouseEvent &event);
-   void OnPaint(wxPaintEvent &event);
-   void OnSetCursor(wxSetCursorEvent &event);
+public:
+	VObjEvtHandler( wxWindow *win, PObjectBase obj );
+	void OnLeftClick( wxMouseEvent &event );
+	void OnPaint( wxPaintEvent &event );
+	void OnSetCursor( wxSetCursorEvent &event );
 };
 
-
-///////////////////////////////////////////////////////////////////////////////
-
-
-#endif //__VISUAL_OBJS__
-
-
+#endif // __VISUAL_OBJS__

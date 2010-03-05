@@ -22,27 +22,26 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 #ifndef __MENUBAR__
 #define __MENUBAR__
 
-#include "wx/wx.h"
+#include <wx/wx.h>
 #include <vector>
 
-typedef std::vector<wxMenu*> MenuVector;
+typedef std::vector< wxMenu* > MenuVector;
 
 class Menubar : public wxPanel
 {
     public:
         Menubar();
-        Menubar(wxWindow *parent, int id, const wxPoint& pos = wxDefaultPosition,
-            const wxSize &size = wxDefaultSize,
-            long style = 0, const wxString &name = wxT("fbmenubar"));
+        Menubar( wxWindow *parent, int id, const wxPoint& pos = wxDefaultPosition,
+				const wxSize &size = wxDefaultSize,
+				long style = 0, const wxString &name = "fbmenubar" );
         ~Menubar();
-        void AppendMenu(const wxString& name, wxMenu *menu);
-        wxMenu* GetMenu(int i);
+        void AppendMenu( const wxString& name, wxMenu *menu );
+        wxMenu* GetMenu( int i );
         int GetMenuCount();
-        wxMenu* Remove(int i);
+        wxMenu* Remove( int i );
 
     private:
         MenuVector m_menus;
@@ -52,8 +51,8 @@ class Menubar : public wxPanel
 class MenuEvtHandler : public wxEvtHandler
 {
     public:
-        MenuEvtHandler(wxStaticText *st, wxMenu *menu);
-        void OnMouseEvent(wxMouseEvent& event);
+        MenuEvtHandler( wxStaticText *st, wxMenu *menu );
+        void OnMouseEvent( wxMouseEvent& event );
 
         DECLARE_EVENT_TABLE()
     private:
@@ -61,4 +60,4 @@ class MenuEvtHandler : public wxEvtHandler
         wxMenu *m_menu;
 };
 
-#endif
+#endif // __MENUBAR__

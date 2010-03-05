@@ -26,11 +26,11 @@
 #include "visualobj.h"
 #include "visualeditor.h"
 
+#include "model/objectbase.h"
+#include "rad/appdata.h"
+#include "rad/genericpanel.h"
 #include "utils/typeconv.h"
 #include "utils/debug.h"
-#include "rad/genericpanel.h"
-#include "model/objectbase.h"
-#include <rad/appdata.h>
 
 using namespace TypeConv;
 
@@ -42,21 +42,21 @@ BEGIN_EVENT_TABLE( VObjEvtHandler, wxEvtHandler )
 	EVT_SET_CURSOR( VObjEvtHandler::OnSetCursor )
 END_EVENT_TABLE()
 
-VObjEvtHandler::VObjEvtHandler(wxWindow *win, PObjectBase obj)
+VObjEvtHandler::VObjEvtHandler( wxWindow *win, PObjectBase obj )
 {
 	m_window = win;
 	m_object = obj;
 };
 
-void VObjEvtHandler::OnLeftClick(wxMouseEvent &event)
+void VObjEvtHandler::OnLeftClick( wxMouseEvent &event )
 {
 	PObjectBase obj = m_object.lock();
 
-	if (obj)
+	if ( obj )
 	{
-		if (AppData()->GetSelectedObject() != obj)
+		if ( AppData()->GetSelectedObject() != obj )
 		{
-			AppData()->SelectObject(obj);
+			AppData()->SelectObject( obj );
 		}
 		else
 		{
@@ -67,33 +67,33 @@ void VObjEvtHandler::OnLeftClick(wxMouseEvent &event)
 		}
 	}
 
-	m_window->ClientToScreen(&event.m_x, &event.m_y);
-	m_window->GetParent()->ScreenToClient(&event.m_x, &event.m_y);
-	::wxPostEvent(m_window->GetParent(), event);
+	m_window->ClientToScreen( &event.m_x, &event.m_y );
+	m_window->GetParent()->ScreenToClient( &event.m_x, &event.m_y );
+	::wxPostEvent( m_window->GetParent(), event );
 }
 
-void VObjEvtHandler::OnPaint(wxPaintEvent &event)
+void VObjEvtHandler::OnPaint( wxPaintEvent &event )
 {
-	PObjectBase wo = boost::shared_dynamic_cast<ObjectBase>(m_object.lock());
-	if (wo->IsContainer() || wo->IsWizardPage())
+	PObjectBase wo = boost::shared_dynamic_cast< ObjectBase >( m_object.lock() );
+	if ( wo->IsContainer() || wo->IsWizardPage() )
 	{
 		wxWindow *aux = m_window;
-		while (!aux->IsKindOf(CLASSINFO(DesignerWindow))) aux = aux->GetParent();
-		DesignerWindow *dsgnWin = (DesignerWindow*) aux;
-		if (dsgnWin->GetActivePanel() == m_window)
+		while ( !aux->IsKindOf( CLASSINFO( DesignerWindow ) ) ) aux = aux->GetParent();
+		DesignerWindow *dsgnWin = ( DesignerWindow* ) aux;
+		if ( dsgnWin->GetActivePanel() == m_window )
 		{
-			wxPaintDC dc(m_window);
-			dsgnWin->HighlightSelection(dc);
+			wxPaintDC dc( m_window );
+			dsgnWin->HighlightSelection( dc );
 		}
 	}
 	event.Skip();
 }
 
-void VObjEvtHandler::OnSetCursor(wxSetCursorEvent &event)
+void VObjEvtHandler::OnSetCursor( wxSetCursorEvent &event )
 {
 	wxCoord x = event.GetX(), y = event.GetY();
-	m_window->ClientToScreen(&x, &y);
-	m_window->GetParent()->ScreenToClient(&x, &y);
-	wxSetCursorEvent sce(x, y);
-	::wxPostEvent(m_window->GetParent(), sce);
+	m_window->ClientToScreen( &x, &y );
+	m_window->GetParent()->ScreenToClient( &x, &y );
+	wxSetCursorEvent sce( x, y );
+	::wxPostEvent( m_window->GetParent(), sce );
 }
