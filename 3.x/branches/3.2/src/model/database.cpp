@@ -25,20 +25,22 @@
 
 #include "objectbase.h"
 #include "database.h"
+#include "rad/appdata.h"
 #include "rad/bitmaps.h"
+#include "utils/debug.h"
 #include "utils/stringutils.h"
 #include "utils/typeconv.h"
-#include "utils/debug.h"
 #include "utils/wxfbexception.h"
-#include "rad/appdata.h"
+
+#include <ticpp.h>
+
+#include <wx/app.h>
+#include <wx/config.h>
+#include <wx/dir.h>
 #include <wx/filename.h>
 #include <wx/image.h>
-#include <wx/dir.h>
-#include <ticpp.h>
-#include <wx/config.h>
-#include <wx/tokenzr.h>
 #include <wx/stdpaths.h>
-#include <wx/app.h>
+#include <wx/tokenzr.h>
 
 //#define DEBUG_PRINT(x) cout << x
 
@@ -62,9 +64,8 @@
 #define SMALL_ICON_TAG "smallIcon"
 #define EXPANDED_TAG "expanded"
 
-
 #ifdef __WXMAC__
-#include <dlfcn.h>
+	#include <dlfcn.h>
 #endif
 
 ObjectPackage::ObjectPackage(wxString name, wxString desc, wxBitmap icon)
@@ -84,7 +85,6 @@ void ObjectPackage::AppendPackage( PObjectPackage package )
 {
 	m_objs.insert( m_objs.end(), package->m_objs.begin(), package->m_objs.end() );
 }
-
 ///////////////////////////////////////////////////////////////////////////////
 
 ObjectDatabase::ObjectDatabase()
@@ -127,7 +127,6 @@ PObjectInfo ObjectDatabase::GetObjectInfo(wxString class_name)
 	{
 		info = it->second;
 	}
-
 	return info;
 }
 
@@ -137,7 +136,6 @@ PObjectPackage ObjectDatabase::GetPackage(unsigned int idx)
 
 	return m_pkgs[idx];
 }
-
 
 /**
 * @todo La herencia de propiedades ha de ser de forma recursiva.
@@ -164,9 +162,9 @@ PObjectBase ObjectDatabase::NewObject(PObjectInfo obj_info)
 		unsigned int i;
 		for (i = 0; i < class_info->GetPropertyCount(); i++)
 		{
-			prop_info = class_info->GetPropertyInfo(i);
+			prop_info = class_info->GetPropertyInfo( i );
 
-			PProperty property(new Property(prop_info, object));
+			PProperty property( new Property( prop_info, object ) );
 
 			// Set the default value, either from the property info, or an override from this class
 			wxString defaultValue = prop_info->GetDefaultValue();
@@ -187,49 +185,43 @@ PObjectBase ObjectDatabase::NewObject(PObjectInfo obj_info)
 			// Otra cosa importante, es que el orden en que se insertan
 			// las propiedades, de abajo-arriba, esto permite que se pueda redefir
 			// alguna propiedad.
-			object->AddProperty (property);
+			object->AddProperty( property );
 		}
-
-		for (i=0; i < class_info->GetEventCount(); i++)
+		for ( i=0; i < class_info->GetEventCount(); i++ )
 		{
-		  event_info = class_info->GetEventInfo(i);
-		  PEvent event(new Event(event_info,object));
-		  // notice that for event there isn't a default value on its creation
-		  // because there is not handler at the moment
-		  object->AddEvent(event);
+			event_info = class_info->GetEventInfo( i );
+			PEvent event( new Event( event_info, object ) );
+			// notice that for event there isn't a default value on its creation
+			// because there is not handler at the moment
+			object->AddEvent( event );
 		}
-
 		class_info = ( base < obj_info->GetBaseClassCount() ?
-			obj_info->GetBaseClass(base++) : PObjectInfo());
+			obj_info->GetBaseClass( base++ ) : PObjectInfo() );
 	}
-
 	// si el objeto tiene la propiedad name (reservada para el nombre del
 	// objeto) le añadimos el contador para no repetir nombres.
 
 	obj_info->IncrementInstanceCount();
 
 	unsigned int ins = obj_info->GetInstanceCount();
-	PProperty pname = object->GetProperty( wxT(NAME_TAG) );
-	if (pname)
-		pname->SetValue(pname->GetValue() + StringUtils::IntToStr(ins));
+	PProperty pname = object->GetProperty( NAME_TAG );
+	if ( pname )
+		pname->SetValue( pname->GetValue() + StringUtils::IntToStr( ins ) );
 
 	return object;
 }
 
-
-int ObjectDatabase::CountChildrenWithSameType(PObjectBase parent,PObjectType type)
+int ObjectDatabase::CountChildrenWithSameType( PObjectBase parent, PObjectType type )
 {
 	unsigned int count = 0;
 	unsigned int numChildren = parent->GetChildCount();
-	for (unsigned int i=0; i < numChildren ; i++)
+	for ( unsigned int i=0; i < numChildren ; i++ )
 	{
-		if (type == parent->GetChild(i)->GetObjectInfo()->GetObjectType())
+		if ( type == parent->GetChild( i )->GetObjectInfo()->GetObjectType() )
 			count++;
 	}
-
 	return count;
 }
-
 /**
 * Crea una instancia de classname por debajo de parent.
 * La función realiza la comprobación de tipos para crear el objeto:
@@ -246,21 +238,21 @@ el máximo definido. El objeto no se crea si supera el máximo permitido.
 * Nota: quizá sea conveniente que el método cree el objeto sin enlazarlo
 *       en el árbol, para facilitar el undo-redo.
 */
-PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase parent)
+PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase parent )
 {
 	PObjectBase object;
-	PObjectInfo objInfo = GetObjectInfo( _WXSTR(classname) );
+	PObjectInfo objInfo = GetObjectInfo( _WXSTR( classname ) );
 
-	if (!objInfo)
+	if ( !objInfo )
 	{
-		THROW_WXFBEX( 	wxT("Unknown Object Type: ") << _WXSTR(classname) << wxT("\n")
-						wxT("The most likely causes are that this copy of wxFormBuilder is out of date, or that there is a plugin missing.\n")
-						wxT("Please check at http://www.wxFormBuilder.org") << wxT("\n") )
+		THROW_WXFBEX( _("Unknown Object Type: ") << _WXSTR( classname )
+			<< _("\nThe most likely causes are that this copy of wxFormBuilder is out of date, or that there is a plugin missing.\n")
+			<< _("Please check at http://www.wxFormBuilder.org\n") );
 	}
 
 	PObjectType objType = objInfo->GetObjectType();
 
-	if (parent)
+	if ( parent )
 	{
 		// Comprobamos si el tipo es válido
 		PObjectType parentType = parent->GetObjectInfo()->GetObjectType();
@@ -272,68 +264,68 @@ PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase par
 		// de forms (como childType de project), pero hay mucho código no válido
 		// para forms que no sean de tipo "form". Dicho de otra manera, hay
 		// código que dependen del nombre del tipo, cosa que hay que evitar.
-		if (parentType->GetName() == wxT("form") &&
-			parent->GetClassName() != wxT("Frame") &&
-			(objType->GetName() == wxT("statusbar") ||
-			objType->GetName() == wxT("menubar") ||
-			objType->GetName() == wxT("toolbar") ))
-			return PObjectBase(); // tipo no válido
+		if (parentType->GetName() 	== "form" 		&&
+			parent->GetClassName() 	!= "Frame" 		&&
+			(objType->GetName() 	== "statusbar" 	||
+			objType->GetName() 		== "menubar" 	||
+			objType->GetName() 		== "toolbar" 	))
+			return PObjectBase(); // Invalid type
 
-		if (max != 0) // tipo válido
+		if ( max != 0 ) // Valid type
 		{
 			bool create = true;
 
 			// comprobamos el número de instancias
-			if (max > 0 && CountChildrenWithSameType(parent, objType) >= max)
+			if ( max > 0 && CountChildrenWithSameType( parent, objType ) >= max )
 				create = false;
 
-			if (create)
-				object = NewObject(objInfo);
+			if ( create )
+				object = NewObject( objInfo );
 		}
 		else // max == 0
 		{
 			// el tipo no es válido, vamos a comprobar si podemos insertarlo
 			// como hijo de un "item"
 			bool created = false;
-			for (unsigned int i=0; !created && i < parentType->GetChildTypeCount(); i++)
+			for ( unsigned int i=0; !created && i < parentType->GetChildTypeCount(); i++ )
 			{
-				PObjectType childType = parentType->GetChildType(i);
-				int max = childType->FindChildType(objType);
+				PObjectType childType = parentType->GetChildType( i );
+				int max = childType->FindChildType( objType );
 
-				if (childType->IsItem() && max != 0)
+				if ( childType->IsItem() && max != 0 )
 				{
-					max = parentType->FindChildType(childType);
+					max = parentType->FindChildType( childType );
 
 					// si el tipo es un item y además el tipo del objeto a crear
 					// puede ser hijo del tipo del item vamos a intentar crear la
 					// instancia del item para crear el objeto como hijo de este
-					if (max < 0 || CountChildrenWithSameType(parent, childType) < max)
+					if ( max < 0 || CountChildrenWithSameType( parent, childType ) < max )
 					{
 						// No hay problemas para crear el item debajo de parent
-						PObjectBase item = NewObject(GetObjectInfo(childType->GetName()));
+						PObjectBase item = NewObject( GetObjectInfo( childType->GetName() ) );
 
 						//PObjectBase obj = CreateObject(classname,item);
-						PObjectBase obj = NewObject(objInfo);
+						PObjectBase obj = NewObject( objInfo );
 
 						// la siguiente condición debe cumplirse siempre
 						// ya que un item debe siempre contener a otro objeto
-						if (obj)
+						if ( obj )
 						{
 							// enlazamos item y obj
-							item->AddChild(obj);
-							obj->SetParent(item);
+							item->AddChild( obj );
+							obj->SetParent( item );
 
 							// sizeritem es un tipo de objeto reservado, para que el uso sea
 							// más práctico se asignan unos valores por defecto en función
 							// del tipo de objeto creado
-							if ( item->GetObjectInfo()->IsSubclassOf( wxT("sizeritembase") ) )
-								SetDefaultLayoutProperties(item);
+							if ( item->GetObjectInfo()->IsSubclassOf("sizeritembase") )
+								SetDefaultLayoutProperties( item );
 
 							object = item;
 							created = true;
 						}
 						else
-							wxLogError(wxT("Review your definitions file (objtypes.xml)"));
+							wxLogError( _("Review your definitions file (objtypes.xml)") );
 					}
 				}
 			}
@@ -342,60 +334,59 @@ PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase par
 		// Nota: provisionalmente vamos a enlazar el objeto al padre pero
 		//       esto debería hacerse fuera para poder implementar el Undo-Redo
 		///////////////////////////////////////////////////////////////////////
-		//if (object)
+		//if ( object )
 		//{
-		//  parent->AddChild(object);
-		//  object->SetParent(parent);
+		//  parent->AddChild( object );
+		//  object->SetParent( parent );
 		//}
 	}
 	else // parent == NULL;
 	{
-		object = NewObject(objInfo);
+		object = NewObject( objInfo );
 	}
-
 	return object;
 }
 
-PObjectBase ObjectDatabase::CopyObject(PObjectBase obj)
+PObjectBase ObjectDatabase::CopyObject( PObjectBase obj )
 {
-	assert(obj);
+	assert( obj );
 
 	PObjectInfo objInfo = obj->GetObjectInfo();
 
-	PObjectBase copyObj = NewObject(objInfo); // creamos la copia
-	assert(copyObj);
+	PObjectBase copyObj = NewObject( objInfo ); // Create copy
+	assert( copyObj );
 
-	// copiamos las propiedades
+	// Copy properties
 	unsigned int i;
 	unsigned int count = obj->GetPropertyCount();
-	for (i = 0; i < count; i++)
+	for ( i = 0; i < count; i++ )
 	{
-		PProperty objProp = obj->GetProperty(i);
-		assert(objProp);
+		PProperty objProp = obj->GetProperty( i );
+		assert( objProp );
 
-		PProperty copyProp = copyObj->GetProperty(objProp->GetName());
-		assert(copyProp);
+		PProperty copyProp = copyObj->GetProperty( objProp->GetName() );
+		assert( copyProp );
 
 		wxString propValue = objProp->GetValue();
-		copyProp->SetValue(propValue);
+		copyProp->SetValue( propValue );
 	}
 
 	// ...and the event handlers
 	count = obj->GetEventCount();
-	for (i = 0; i < count; i++)
+	for ( i = 0; i < count; i++ )
 	{
-	  PEvent event = obj->GetEvent(i);
-	  PEvent copyEvent = copyObj->GetEvent(event->GetName());
-	  copyEvent->SetValue(event->GetValue());
+		PEvent event = obj->GetEvent( i );
+		PEvent copyEvent = copyObj->GetEvent( event->GetName() );
+		copyEvent->SetValue( event->GetValue() );
 	}
 
 	// creamos recursivamente los hijos
 	count = obj->GetChildCount();
-	for (i = 0; i<count; i++)
+	for ( i = 0; i<count; i++ )
 	{
-		PObjectBase childCopy = CopyObject(obj->GetChild(i));
-		copyObj->AddChild(childCopy);
-		childCopy->SetParent(copyObj);
+		PObjectBase childCopy = CopyObject( obj->GetChild( i ) );
+		copyObj->AddChild( childCopy );
+		childCopy->SetParent( copyObj );
 	}
 
 	return copyObj;
@@ -403,9 +394,9 @@ PObjectBase ObjectDatabase::CopyObject(PObjectBase obj)
 
 void ObjectDatabase::SetDefaultLayoutProperties(PObjectBase sizeritem)
 {
-	if ( !sizeritem->GetObjectInfo()->IsSubclassOf( wxT("sizeritembase") ) )
+	if ( !sizeritem->GetObjectInfo()->IsSubclassOf("sizeritembase") )
 	{
-		Debug::Print( wxT("SetDefaultLayoutProperties expects a subclass of sizeritembase") );
+		Debug::Print( _("SetDefaultLayoutProperties expects a subclass of sizeritembase") );
 		return;
 	}
 
@@ -413,62 +404,60 @@ void ObjectDatabase::SetDefaultLayoutProperties(PObjectBase sizeritem)
 	PObjectInfo childInfo = child->GetObjectInfo();
 	wxString obj_type = child->GetObjectTypeName();
 
-	PProperty proportion = sizeritem->GetProperty( wxT("proportion") );
+	PProperty proportion = sizeritem->GetProperty("proportion");
 
-	if ( childInfo->IsSubclassOf( wxT("sizer") ) || obj_type == wxT("splitter") || childInfo->GetClassName() == wxT("spacer") )
+	if ( childInfo->IsSubclassOf("sizer") || obj_type == "splitter" || childInfo->GetClassName() == "spacer" )
 	{
 		if ( proportion )
 		{
-			proportion->SetValue( wxT("1") );
+			proportion->SetValue( wxString("1") );
 		}
-		sizeritem->GetProperty( wxT("flag") )->SetValue( wxT("wxEXPAND") );
+		sizeritem->GetProperty("flag")->SetValue( wxString("wxEXPAND") );
 	}
-	else if ( childInfo->GetClassName() == wxT("wxStaticLine") )
+	else if ( childInfo->GetClassName() == "wxStaticLine" )
 	{
-		sizeritem->GetProperty( wxT("flag") )->SetValue( wxT("wxEXPAND | wxALL") );
+		sizeritem->GetProperty("flag")->SetValue( wxString("wxEXPAND | wxALL") );
 	}
-	else if ( childInfo->GetClassName() == wxT("wxToolBar") )
+	else if ( childInfo->GetClassName() == "wxToolBar" )
 	{
-		sizeritem->GetProperty( wxT("flag") )->SetValue( wxT("wxEXPAND") );
+		sizeritem->GetProperty("flag")->SetValue( wxString("wxEXPAND") );
 	}
-	else if ( obj_type == wxT("widget") || obj_type == wxT("statusbar") )
+	else if ( obj_type == "widget" || obj_type == "statusbar" )
 	{
 		if ( proportion )
 		{
-			proportion->SetValue( wxT("0") );
+			proportion->SetValue( wxString("0") );
 		}
-		sizeritem->GetProperty( wxT("flag") )->SetValue( wxT("wxALL") );
+		sizeritem->GetProperty("flag")->SetValue( wxString("wxALL") );
 	}
-	else if (	obj_type == wxT("expanded_widget")	||
-                obj_type == wxT("dataview")			||
-                obj_type == wxT("notebook")			||
-				obj_type == wxT("listbook")			||
-				obj_type == wxT("choicebook")		||
-				obj_type == wxT("treebook")			||
-				obj_type == wxT("toolbook")		    ||
-				obj_type == wxT("auinotebook")		||
-				obj_type == wxT("flatnotebook")		||
-				obj_type == wxT("treelistctrl")		||
-				obj_type == wxT("container")
-				)
+	else if (	obj_type == "expanded_widget" 	||
+                obj_type == "dataview" 			||
+                obj_type == "notebook"			||
+				obj_type == "listbook"			||
+				obj_type == "choicebook"		||
+				obj_type == "treebook"			||
+				obj_type == "toolbook"		    ||
+				obj_type == "auinotebook"		||
+				obj_type == "flatnotebook"		||
+				obj_type == "treelistctrl"		||
+				obj_type == "container" )
 	{
 		if ( proportion )
 		{
-			proportion->SetValue( wxT("1") );
+			proportion->SetValue( wxString("1") );
 		}
-		sizeritem->GetProperty( wxT("flag") )->SetValue( wxT("wxEXPAND | wxALL") );
+		sizeritem->GetProperty("flag")->SetValue( wxString("wxEXPAND | wxALL") );
 	}
 }
 
 void ObjectDatabase::ResetObjectCounters()
 {
 	ObjectInfoMap::iterator it;
-	for (it = m_objs.begin() ; it != m_objs.end() ; it++)
+	for ( it = m_objs.begin() ; it != m_objs.end() ; it++ )
 	{
 		it->second->ResetInstanceCount();
 	}
 }
-
 ///////////////////////////////////////////////////////////////////////
 
 PObjectBase ObjectDatabase::CreateObject( ticpp::Element* xml_obj, PObjectBase parent )
@@ -487,7 +476,6 @@ PObjectBase ObjectDatabase::CreateObject( ticpp::Element* xml_obj, PObjectBase p
 		{
 			object = object->GetChild( 0 );
 		}
-
 		if ( object )
 		{
 			// Get the state of expansion in the object tree
@@ -501,7 +489,7 @@ PObjectBase ObjectDatabase::CreateObject( ticpp::Element* xml_obj, PObjectBase p
 			{
 				std::string prop_name;
 				xml_prop->GetAttribute( NAME_TAG, &prop_name, false );
-				PProperty prop = object->GetProperty( _WXSTR(prop_name) );
+				PProperty prop = object->GetProperty( _WXSTR( prop_name ) );
 
 				if ( prop ) // does the property exist
 				{
@@ -513,40 +501,31 @@ PObjectBase ObjectDatabase::CreateObject( ticpp::Element* xml_obj, PObjectBase p
 					std::string value = xml_prop->GetText( false );
 					if ( !value.empty() )
 					{
-						wxLogError( wxT("The property named \"%s\" of class \"%s\" is not supported by this version of wxFormBuilder.\n")
-									wxT("If your project file was just converted from an older version, then the conversion was not complete.\n")
-									wxT("Otherwise, this project is from a newer version of wxFormBuilder.\n\n")
-									wxT("The property's value is: %s\n")
-									wxT("If you save this project, YOU WILL LOSE DATA"), _WXSTR(prop_name).c_str(), _WXSTR(class_name).c_str(), _WXSTR(value).c_str() );
+						wxLogError( _("The property named \"%s\" of class \"%s\" is not supported by this version of wxFormBuilder.\nIf your project file was just converted from an older version, then the conversion was not complete.\nOtherwise, this project is from a newer version of wxFormBuilder.\n\nThe property's value is: %s\nIf you save this project, YOU WILL LOSE DATA"),
+									_WXSTR(prop_name).c_str(), _WXSTR(class_name).c_str(), _WXSTR(value).c_str() );
 					}
 				}
-
 				xml_prop = xml_prop->NextSiblingElement( PROPERTY_TAG, false );
 			}
-
 			// load the event handlers
 			ticpp::Element* xml_event = xml_obj->FirstChildElement( EVENT_TAG, false );
 			while ( xml_event )
 			{
 				std::string event_name;
 				xml_event->GetAttribute( NAME_TAG, &event_name, false );
-				PEvent event = object->GetEvent( _WXSTR(event_name) );
+				PEvent event = object->GetEvent( _WXSTR( event_name ) );
 				if ( event )
 				{
 					event->SetValue( _WXSTR( xml_event->GetText( false ) ) );
 				}
-
 				xml_event = xml_event->NextSiblingElement( EVENT_TAG, false );
 			}
-
-
 			if ( parent )
 			{
 				// set up parent/child relationship
 				parent->AddChild( newobject );
 				newobject->SetParent( parent );
 			}
-
 			// create the children
 			ticpp::Element* child = xml_obj->FirstChildElement( OBJECT_TAG, false );
 			while ( child )
@@ -555,7 +534,6 @@ PObjectBase ObjectDatabase::CreateObject( ticpp::Element* xml_obj, PObjectBase p
 				child = child->NextSiblingElement( OBJECT_TAG, false );
 			}
 		}
-
 		return newobject;
 	}
 	catch( ticpp::Exception& )
@@ -563,10 +541,9 @@ PObjectBase ObjectDatabase::CreateObject( ticpp::Element* xml_obj, PObjectBase p
 		return PObjectBase();
 	}
 }
-
 //////////////////////////////
 
-bool IncludeInPalette(wxString type)
+bool IncludeInPalette( wxString type )
 {
 	return true;
 }
@@ -574,11 +551,11 @@ bool IncludeInPalette(wxString type)
 void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 {
 	// Load some default templates
-	LoadCodeGen( m_xmlPath + wxT("properties.cppcode") );
-	LoadCodeGen( m_xmlPath + wxT("properties.pythoncode") );
-	LoadPackage( m_xmlPath + wxT("default.xml"), m_iconPath );
-	LoadCodeGen( m_xmlPath + wxT("default.cppcode") );
-	LoadCodeGen( m_xmlPath + wxT("default.pythoncode") );
+	LoadCodeGen( m_xmlPath + "properties.cppcode" );
+	LoadCodeGen( m_xmlPath + "properties.pythoncode" );
+	LoadPackage( m_xmlPath + "default.xml", m_iconPath );
+	LoadCodeGen( m_xmlPath + "default.cppcode" );
+	LoadCodeGen( m_xmlPath + "default.pythoncode" );
 
 	// Map to temporarily hold plugins.
 	// Used to both set page order and to prevent two plugins with the same name.
@@ -590,13 +567,11 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 	{
 		return;
 	}
-
 	wxDir pluginsDir( m_pluginPath );
 	if ( !pluginsDir.IsOpened() )
 	{
 		return;
 	}
-
 	// Iterate through plugin directories and load the package from the xml subdirectory
 	wxString pluginDirName;
 	bool moreDirectories = pluginsDir.GetFirst( &pluginDirName, wxEmptyString, wxDIR_DIRS | wxDIR_HIDDEN );
@@ -604,8 +579,8 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
     {
     	// Iterate through .xml files in the xml directory
     	wxString nextPluginPath = m_pluginPath + pluginDirName;
-    	wxString nextPluginXmlPath = nextPluginPath + wxFILE_SEP_PATH + wxT("xml");
-    	wxString nextPluginIconPath = nextPluginPath + wxFILE_SEP_PATH + wxT("icons");
+    	wxString nextPluginXmlPath = nextPluginPath + wxFILE_SEP_PATH + "xml";
+    	wxString nextPluginIconPath = nextPluginPath + wxFILE_SEP_PATH + "icons";
     	if ( wxDir::Exists( nextPluginPath ) )
     	{
     		if ( wxDir::Exists( nextPluginXmlPath ) )
@@ -615,7 +590,7 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 				{
 					std::map< wxString, PObjectPackage > packagesToSetup;
 					wxString packageXmlFile;
-					bool moreXmlFiles = pluginXmlDir.GetFirst( &packageXmlFile, wxT("*.xml"), wxDIR_FILES | wxDIR_HIDDEN );
+					bool moreXmlFiles = pluginXmlDir.GetFirst( &packageXmlFile, "*.xml", wxDIR_FILES | wxDIR_HIDDEN );
 					while ( moreXmlFiles )
 					{
 						try
@@ -625,7 +600,6 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 							{
 								nextXmlFile.MakeAbsolute();
 							}
-
 							PObjectPackage package = LoadPackage( nextXmlFile.GetFullPath(), nextPluginIconPath );
 							if ( package )
 							{
@@ -640,7 +614,6 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 						}
 						moreXmlFiles = pluginXmlDir.GetNext( &packageXmlFile );
 					}
-
 					std::map< wxString, PObjectPackage >::iterator packageIt;
 					for ( packageIt = packagesToSetup.begin(); packageIt != packagesToSetup.end(); ++packageIt )
 					{
@@ -656,21 +629,22 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 							SetupPackage( xmlFileName.GetFullPath(), fullNextPluginPath.GetFullPath(), manager );
 
 							// Load the C++ code tempates
-							xmlFileName.SetExt( wxT("cppcode") );
+							xmlFileName.SetExt("cppcode");
 							LoadCodeGen( xmlFileName.GetFullPath() );
 
 							// Load the Python code tempates
-							xmlFileName.SetExt( wxT("pythoncode") );
+							xmlFileName.SetExt("pythoncode");
 							LoadCodeGen( xmlFileName.GetFullPath() );
 
-							std::pair< PackageMap::iterator, bool > addedPackage = packages.insert( PackageMap::value_type( packageIt->second->GetPackageName(), packageIt->second ) );
+							std::pair< PackageMap::iterator, bool > addedPackage =
+									packages.insert( PackageMap::value_type( packageIt->second->GetPackageName(),
+									packageIt->second ) );
 							if ( !addedPackage.second )
 							{
 								addedPackage.first->second->AppendPackage( packageIt->second );
-								wxString msg = wxT( "Merged plugins named \"") + packageIt->second->GetPackageName() +wxT("\"");
+								wxString msg = _( "Merged plugins named \"") + packageIt->second->GetPackageName() + "\"";
 								Debug::Print( msg );
 							}
-
 						}
 						catch ( wxFBException& ex )
 						{
@@ -680,16 +654,14 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 				}
     		}
     	}
-
         moreDirectories = pluginsDir.GetNext( &pluginDirName );
     }
-
     // Get previous plugin order
 	wxConfigBase* config = wxConfigBase::Get();
-	wxString pages = config->Read( wxT("/palette/pageOrder"), wxT("Forms,Layout,Menu/Toolbar,Containers,Common,Additional,") );
+	wxString pages = config->Read( "/palette/pageOrder", "Forms,Layout,Menu/Toolbar,Containers,Common,Additional," );
 
 	// Add packages to the vector in the correct order
-	wxStringTokenizer packageList( pages, wxT(",") );
+	wxStringTokenizer packageList( pages, "," );
 	while ( packageList.HasMoreTokens() )
 	{
 		wxString packageName = packageList.GetNextToken();
@@ -702,7 +674,6 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 		m_pkgs.push_back( packageIt->second );
 		packages.erase( packageIt );
 	}
-
     // If any packages remain in the map, they are new plugins and must still be added
     for ( PackageMap::iterator packageIt = packages.begin(); packageIt != packages.end(); ++packageIt )
     {
@@ -717,7 +688,7 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
 	#else
 		wxStandardPathsBase& stdpaths = wxStandardPaths::Get();
 		wxString libPath = stdpaths.GetPluginsDir();
-		libPath.Replace( wxTheApp->GetAppName().c_str(), wxT("wxformbuilder") );
+		libPath.Replace( wxTheApp->GetAppName().c_str(), "wxformbuilder" );
 	#endif
 
 	try
@@ -737,7 +708,7 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
 			wxFileName::SetCwd( libPath );
 			try
 			{
-				wxString fullLibPath = libPath + wxFILE_SEP_PATH + _WXSTR(lib);
+				wxString fullLibPath = libPath + wxFILE_SEP_PATH + _WXSTR( lib );
 				if ( m_importedLibraries.insert( fullLibPath ).second )
 				{
 					ImportComponentLibrary( fullLibPath, manager );
@@ -749,18 +720,16 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
 				wxFileName::SetCwd( workingDir );
 				throw;
 			}
-
 			// Put Cwd back
 			wxFileName::SetCwd( workingDir );
 		}
-
 		ticpp::Element* elem_obj = root->FirstChildElement( OBJINFO_TAG, false );
 		while ( elem_obj )
 		{
 			std::string class_name;
 			elem_obj->GetAttribute( CLASS_TAG, &class_name );
 
-			PObjectInfo class_info = GetObjectInfo( _WXSTR(class_name) );
+			PObjectInfo class_info = GetObjectInfo( _WXSTR( class_name ) );
 
 			ticpp::Element* elem_base = elem_obj->FirstChildElement( "inherits", false );
 			while ( elem_base )
@@ -769,7 +738,7 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
 				elem_base->GetAttribute( CLASS_TAG, &base_name );
 
 				// Add a reference to its base class
-				PObjectInfo base_info  = GetObjectInfo( _WXSTR(base_name) );
+				PObjectInfo base_info  = GetObjectInfo( _WXSTR( base_name ) );
 				if ( class_info && base_info )
 				{
 					size_t baseIndex = class_info->AddBaseClass( base_info );
@@ -780,30 +749,28 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
 					{
 						inheritedProperty->GetAttribute( NAME_TAG, &prop_name );
 						value = inheritedProperty->GetText();
-						class_info->AddBaseClassDefaultPropertyValue( baseIndex, _WXSTR(prop_name), _WXSTR(value) );
+						class_info->AddBaseClassDefaultPropertyValue( baseIndex, _WXSTR( prop_name ), _WXSTR( value ) );
 						inheritedProperty = inheritedProperty->NextSiblingElement( "property", false );
 					}
 				}
 				elem_base = elem_base->NextSiblingElement( "inherits", false );
 			}
-
 			// Add the "C++" base class, predefined for the components and widgets
 			wxString typeName = class_info->GetObjectTypeName();
 			if ( HasCppProperties( typeName ) )
 			{
-				PObjectInfo cpp_interface = GetObjectInfo( wxT("C++") );
+				PObjectInfo cpp_interface = GetObjectInfo("C++");
 				if ( cpp_interface )
 				{
 					size_t baseIndex = class_info->AddBaseClass( cpp_interface );
-					if (    typeName == wxT("sizer")    ||
-                            typeName == wxT("gbsizer")  ||
-                            typeName == wxT("menuitem")  )
+					if (    typeName == "sizer"    ||
+                            typeName == "gbsizer"  ||
+                            typeName == "menuitem"  )
 					{
-						class_info->AddBaseClassDefaultPropertyValue( baseIndex, _("permission"), _("none") );
+						class_info->AddBaseClassDefaultPropertyValue( baseIndex, "permission", "none" );
 					}
 				}
 			}
-
 			elem_obj = elem_obj->NextSiblingElement( OBJINFO_TAG, false );
 		}
 	}
@@ -815,28 +782,27 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
 
 bool ObjectDatabase::HasCppProperties(wxString type)
 {
-	return (type == wxT("widget")			||
-			type == wxT("expanded_widget")	||
-			type == wxT("statusbar")		||
-			type == wxT("component")		||
-			type == wxT("container")		||
-			type == wxT("menubar")			||
-			type == wxT("menu")				||
-			type == wxT("menuitem")			||
-			type == wxT("submenu")			||
-			type == wxT("toolbar")			||
-			type == wxT("gbsizer")          ||
-			type == wxT("splitter")			||
-            type == wxT("dataview")			||
-            type == wxT("notebook")			||
-			type == wxT("listbook")			||
-			type == wxT("choicebook")		||
-            type == wxT("treebook")			||
-			type == wxT("toolbook")		    ||
-			type == wxT("auinotebook")		||
-			type == wxT("flatnotebook")		||
-			type == wxT("treelistctrl")
-			);
+	return (type == "widget" 			||
+			type == "expanded_widget" 	||
+			type == "statusbar"			||
+			type == "component"			||
+			type == "container"			||
+			type == "menubar"			||
+			type == "menu"				||
+			type == "menuitem"			||
+			type == "submenu"			||
+			type == "toolbar"			||
+			type == "gbsizer"          	||
+			type == "splitter"			||
+            type == "dataview"			||
+            type == "notebook"			||
+			type == "listbook"			||
+			type == "choicebook"		||
+            type == "treebook"			||
+			type == "toolbook"		    ||
+			type == "auinotebook"		||
+			type == "flatnotebook"		||
+			type == "treelistctrl" );
 }
 
 void ObjectDatabase::LoadCodeGen( const wxString& file )
@@ -850,13 +816,12 @@ void ObjectDatabase::LoadCodeGen( const wxString& file )
 		ticpp::Element* elem_codegen = doc.FirstChildElement("codegen");
 		std::string language;
 		elem_codegen->GetAttribute( "language", &language );
-		wxString lang = _WXSTR(language);
+		wxString lang = _WXSTR( language );
 
 		// read the templates
 		ticpp::Element* elem_templates = elem_codegen->FirstChildElement( "templates", false );
 		while ( elem_templates  )
 		{
-
 			std::string prop_name;
 			elem_templates->GetAttribute( "property", &prop_name, false );
 			bool hasProp = !prop_name.empty();
@@ -878,31 +843,30 @@ void ObjectDatabase::LoadCodeGen( const wxString& file )
 
 				elem_template = elem_template->NextSiblingElement( "template", false );
 			}
-
 			if ( hasProp )
 			{
-				// store code info for properties
+				// Store code info for properties
 				if ( !m_propertyTypeTemplates[ ParsePropertyType( _WXSTR(prop_name) ) ].insert( LangTemplateMap::value_type( lang, code_info ) ).second )
 				{
-					wxLogError( _("Found second template definition for property \"%s\" for language \"%s\""), _WXSTR(prop_name).c_str(), lang.c_str() );
+					wxLogError( _("Found second template definition for property \"%s\" for language \"%s\""),
+								_WXSTR(prop_name).c_str(), lang.c_str() );
 				}
 			}
 			else
 			{
-				// store code info for objects
-				PObjectInfo obj_info = GetObjectInfo( _WXSTR(class_name) );
+				// Store code info for objects
+				PObjectInfo obj_info = GetObjectInfo( _WXSTR( class_name ) );
 				if ( obj_info )
 				{
 					obj_info->AddCodeInfo( lang, code_info );
 				}
 			}
-
 			elem_templates = elem_templates->NextSiblingElement( "templates", false );
 		}
 	}
 	catch( ticpp::Exception& ex )
 	{
-		wxLogError( _WXSTR(ex.m_details) );
+		wxLogError( _WXSTR( ex.m_details ) );
 	}
 	catch( wxFBException& ex )
 	{
@@ -913,7 +877,6 @@ void ObjectDatabase::LoadCodeGen( const wxString& file )
 PObjectPackage ObjectDatabase::LoadPackage( const wxString& file, const wxString& iconPath )
 {
 	PObjectPackage package;
-
 	try
 	{
 		ticpp::Document doc;
@@ -932,7 +895,7 @@ PObjectPackage ObjectDatabase::LoadPackage( const wxString& file, const wxString
 		// Icon Path Attribute
 		std::string pkgIconName;
 		root->GetAttributeOrDefault( ICON_TAG, &pkgIconName, "" );
-		wxString pkgIconPath = iconPath + wxFILE_SEP_PATH +  _WXSTR(pkgIconName);
+		wxString pkgIconPath = iconPath + wxFILE_SEP_PATH + _WXSTR( pkgIconName );
 
 		wxBitmap pkg_icon;
 		if ( !pkgIconName.empty() && wxFileName::FileExists( pkgIconPath ) )
@@ -942,15 +905,13 @@ PObjectPackage ObjectDatabase::LoadPackage( const wxString& file, const wxString
 		}
 		else
 		{
-			pkg_icon = AppBitmaps::GetBitmap( wxT("unknown"), 16 );
+			pkg_icon = AppBitmaps::GetBitmap( "unknown", 16 );
 		}
-
-		package = PObjectPackage ( new ObjectPackage( _WXSTR(pkg_name), _WXSTR(pkg_desc), pkg_icon ) );
-
+		package = PObjectPackage ( new ObjectPackage( _WXSTR( pkg_name ), _WXSTR( pkg_desc ), pkg_icon ) );
 
 		ticpp::Element* elem_obj = root->FirstChildElement( OBJINFO_TAG, false );
 
-		while (elem_obj)
+		while ( elem_obj )
 		{
 			std::string class_name;
 			elem_obj->GetAttribute( CLASS_TAG, &class_name );
@@ -969,7 +930,7 @@ PObjectPackage ObjectDatabase::LoadPackage( const wxString& file, const wxString
 			bool startGroup;
 			elem_obj->GetAttributeOrDefault( "startgroup", &startGroup, false );
 
-			PObjectInfo obj_info( new ObjectInfo( _WXSTR(class_name), GetObjectType( _WXSTR(type) ), package, startGroup ) );
+			PObjectInfo obj_info( new ObjectInfo( _WXSTR( class_name ), GetObjectType( _WXSTR( type ) ), package, startGroup ) );
 
 			if ( !icon.empty() && wxFileName::FileExists( iconFullPath ) )
 			{
@@ -978,7 +939,7 @@ PObjectPackage ObjectDatabase::LoadPackage( const wxString& file, const wxString
 			}
 			else
 			{
-				obj_info->SetIconFile( AppBitmaps::GetBitmap( wxT("unknown"), ICON_SIZE ) );
+				obj_info->SetIconFile( AppBitmaps::GetBitmap( "unknown", ICON_SIZE ) );
 			}
 
 			if ( !smallIcon.empty() && wxFileName::FileExists( smallIconFullPath ) )
@@ -991,33 +952,31 @@ PObjectPackage ObjectDatabase::LoadPackage( const wxString& file, const wxString
 				wxImage img = obj_info->GetIconFile().ConvertToImage();
 				obj_info->SetSmallIconFile( wxBitmap( img.Scale( SMALL_ICON_SIZE, SMALL_ICON_SIZE ) ) );
 			}
-
 			// Parse the Properties
 			std::set< PropertyType > types;
 			ParseProperties( elem_obj, obj_info, obj_info->GetCategory(), &types );
 			ParseEvents    ( elem_obj, obj_info, obj_info->GetCategory() );
 
 			// Add the ObjectInfo to the map
-			m_objs.insert(ObjectInfoMap::value_type( _WXSTR(class_name), obj_info ) );
+			m_objs.insert(ObjectInfoMap::value_type( _WXSTR( class_name ), obj_info ) );
 
 			// Add the object to the palette
 			if ( ShowInPalette( obj_info->GetObjectTypeName() ) )
 			{
 				package->Add( obj_info );
 			}
-
 			elem_obj = elem_obj->NextSiblingElement( OBJINFO_TAG, false );
 		}
 	}
 	catch ( ticpp::Exception& ex )
 	{
-		THROW_WXFBEX( _WXSTR(ex.m_details) );
+		THROW_WXFBEX( _WXSTR( ex.m_details ) );
 	}
-
 	return package;
 }
 
-void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_info, PPropertyCategory category, std::set< PropertyType >* types )
+void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_info,
+									PPropertyCategory category, std::set< PropertyType >* types )
 {
 	ticpp::Element* elem_category = elem_obj->FirstChildElement( CATEGORY_TAG, false );
 	while ( elem_category )
@@ -1042,7 +1001,7 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 		// Property Name Attribute
 		std::string pname;
 		elem_prop->GetAttribute( NAME_TAG, &pname );
-		category->AddProperty( _WXSTR(pname) );
+		category->AddProperty( _WXSTR( pname ) );
 
 		std::string description;
 		elem_prop->GetAttributeOrDefault( DESCRIPTION_TAG, &description, "" );
@@ -1059,11 +1018,12 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 		}
 		catch( wxFBException& ex )
 		{
-			wxLogError( wxT("Error: %s\nWhile parsing property \"%s\" of class \"%s\""), ex.what(), _WXSTR(pname).c_str(), obj_info->GetClassName().c_str() );
+			wxLogError( _("Error: %s\nWhile parsing property \"%s\" of class \"%s\""),
+						ex.what(), _WXSTR( pname ).c_str(), obj_info->GetClassName().c_str() );
+
 			elem_prop = elem_prop->NextSiblingElement( PROPERTY_TAG, false );
 			continue;
 		}
-
 		// Get default value
 		std::string def_value;
 		try
@@ -1089,9 +1049,9 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 				std::string macro_description;
 				elem_opt->GetAttributeOrDefault( DESCRIPTION_TAG, &macro_description, "" );
 
-				opt_list->AddOption( _WXSTR(macro_name), _WXSTR(macro_description) );
+				opt_list->AddOption( _WXSTR( macro_name ), _WXSTR(macro_description) );
 
-				m_macroSet.insert( _WXSTR(macro_name) );
+				m_macroSet.insert( _WXSTR( macro_name ) );
 
 				elem_opt = elem_opt->NextSiblingElement( "option", false );
 			}
@@ -1134,10 +1094,9 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 				elem_child = elem_child->NextSiblingElement( "child", false );
 			}
 		}
-
 		// create an instance of PropertyInfo
-		PPropertyInfo prop_info( new PropertyInfo( _WXSTR(pname), ptype, _WXSTR(def_value), _WXSTR(description), _WXSTR(customEditor), opt_list, children ) );
-
+		PPropertyInfo prop_info( new PropertyInfo( _WXSTR( pname ), ptype, _WXSTR( def_value ),
+													_WXSTR( description ), _WXSTR( customEditor ), opt_list, children ) );
 		// add the PropertyInfo to the property
 		obj_info->AddPropertyInfo( prop_info );
 
@@ -1154,7 +1113,6 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 				}
 			}
 		}
-
 		elem_prop = elem_prop->NextSiblingElement( PROPERTY_TAG, false );
 	}
 }
@@ -1184,7 +1142,7 @@ void ObjectDatabase::ParseEvents( ticpp::Element* elem_obj, PObjectInfo obj_info
 		// Event Name Attribute
 		std::string evt_name;
 		elem_evt->GetAttribute( NAME_TAG, &evt_name );
-		category->AddEvent( _WXSTR(evt_name) );
+		category->AddEvent( _WXSTR( evt_name ) );
 
 		// Event class
 		std::string evt_class;
@@ -1207,50 +1165,48 @@ void ObjectDatabase::ParseEvents( ticpp::Element* elem_obj, PObjectInfo obj_info
 
 		// create an instance of EventInfo
 		PEventInfo evt_info(
-		  new EventInfo( _WXSTR(evt_name),  _WXSTR(evt_class), _WXSTR(def_value), _WXSTR(description)));
+			new EventInfo( _WXSTR( evt_name ), _WXSTR( evt_class ), _WXSTR( def_value ), _WXSTR( description ) ) );
 
 		// add the EventInfo to the event
-		obj_info->AddEventInfo(evt_info);
+		obj_info->AddEventInfo( evt_info );
 
 		elem_evt = elem_evt->NextSiblingElement( EVENT_TAG, false );
 	}
 }
 
-bool ObjectDatabase::ShowInPalette(wxString type)
+bool ObjectDatabase::ShowInPalette( wxString type )
 {
-	return (type == wxT("form")					||
-			type == wxT("wizard") 				||
-			type == wxT("wizardpage")       	||
-			type == wxT("menubar_form")			||
-			type == wxT("toolbar_form")			||
-			type == wxT("sizer")				||
-			type == wxT("gbsizer")				||
-			type == wxT("menubar")				||
-			type == wxT("menu")					||
-			type == wxT("menuitem")				||
-			type == wxT("submenu")				||
-			type == wxT("toolbar")				||
-			type == wxT("tool")					||
-			type == wxT("widget")				||
-			type == wxT("expanded_widget")		||
-			type == wxT("dataview")				||
-			type == wxT("dataviewcolumn")		||
-			type == wxT("notebook")				||
-			type == wxT("listbook")				||
-			type == wxT("choicebook")			||
-			type == wxT("treebook")			    ||
-            type == wxT("toolbook")				||
-			type == wxT("auinotebook")			||
-			type == wxT("flatnotebook")			||
-			type == wxT("statusbar")			||
-			type == wxT("component")			||
-			type == wxT("container")			||
-			type == wxT("treelistctrl")			||
-			type == wxT("treelistctrlcolumn")	||
-			type == wxT("splitter")
-			);
+	return (type == "form"					||
+			type == "wizard" 				||
+			type == "wizardpage"       		||
+			type == "menubar_form"			||
+			type == "toolbar_form"			||
+			type == "sizer"					||
+			type == "gbsizer"				||
+			type == "menubar"				||
+			type == "menu"					||
+			type == "menuitem"				||
+			type == "submenu"				||
+			type == "toolbar"				||
+			type == "tool"					||
+			type == "widget"				||
+			type == "expanded_widget"		||
+			type == "dataview"				||
+			type == "dataviewcolumn"		||
+			type == "notebook"				||
+			type == "listbook"				||
+			type == "choicebook"			||
+			type == "treebook"			    ||
+            type == "toolbook"				||
+			type == "auinotebook"			||
+			type == "flatnotebook"			||
+			type == "statusbar"				||
+			type == "component"				||
+			type == "container"				||
+			type == "treelistctrl"			||
+			type == "treelistctrlcolumn" 	||
+			type == "splitter" );
 }
-
 
 void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager manager )
 {
@@ -1259,14 +1215,14 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 	// This will prevent loading debug libraries in release and vice versa
 	// That used to cause crashes when trying to debug
 	#ifdef __WXFB_DEBUG__
-		path += wxT("d");
+		path += "d";
 	#endif
 
 	// Find the GetComponentLibrary function - all plugins must implement this
 	typedef IComponentLibrary* (*PFGetComponentLibrary)( IManager* manager );
 
 	#ifdef __WXMAC__
-		path += wxT(".dylib");
+		path += ".dylib";
 
 		// open the library
 		void* handle = dlopen( path.mb_str(), RTLD_LAZY );
@@ -1274,20 +1230,19 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		if ( !handle )
 		{
 			wxString error = wxString( dlerror(), wxConvUTF8 );
-			THROW_WXFBEX( wxT("Error loading library ") << path << wxT(" ") << error )
+			THROW_WXFBEX( _("Error loading library ") << path << " " << error )
 		}
-		dlerror(); // reset errors
+		dlerror(); // Reset errors
 
-		// load the symbol
-
-		PFGetComponentLibrary GetComponentLibrary = (PFGetComponentLibrary) dlsym(handle, "GetComponentLibrary");
-		PFFreeComponentLibrary FreeComponentLibrary = (PFFreeComponentLibrary) dlsym(handle, "FreeComponentLibrary");
+		// Load the symbol
+		PFGetComponentLibrary GetComponentLibrary = (PFGetComponentLibrary) dlsym( handle, "GetComponentLibrary" );
+		PFFreeComponentLibrary FreeComponentLibrary = (PFFreeComponentLibrary) dlsym( handle, "FreeComponentLibrary" );
 
 		const char *dlsym_error = dlerror();
 		if (dlsym_error)
 		{
 			wxString error = wxString( dlsym_error, wxConvUTF8 );
-			THROW_WXFBEX( path << wxT(" is not a valid component library: ") << error )
+			THROW_WXFBEX( path << _(" is not a valid component library: ") << error )
 			dlclose( handle );
 		}
 		else
@@ -1295,27 +1250,26 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 			m_libs.push_back( handle );
 		}
 	#else
-
 		// Attempt to load the DLL
 		wxDynamicLibrary* library = new wxDynamicLibrary( path );
 		if ( !library->IsLoaded() )
 		{
-			THROW_WXFBEX( wxT("Error loading library ") << path )
+			THROW_WXFBEX( _("Error loading library ") << path )
 		}
 
 		m_libs.push_back( library );
 
-		PFGetComponentLibrary GetComponentLibrary =	(PFGetComponentLibrary)library->GetSymbol( wxT("GetComponentLibrary") );
-		PFFreeComponentLibrary FreeComponentLibrary =	(PFFreeComponentLibrary)library->GetSymbol( wxT("FreeComponentLibrary") );
+		PFGetComponentLibrary GetComponentLibrary =		( PFGetComponentLibrary )library->GetSymbol("GetComponentLibrary");
+		PFFreeComponentLibrary FreeComponentLibrary = 	( PFFreeComponentLibrary )library->GetSymbol("FreeComponentLibrary");
 
 		if ( !(GetComponentLibrary && FreeComponentLibrary) )
 		{
-			THROW_WXFBEX( path << wxT(" is not a valid component library") )
+			THROW_WXFBEX( path << _(" is not a valid component library") )
 		}
 
 #endif
 // TODO: Check these changes
-		wxString msg = wxT( "[Database::ImportComponentLibrary] Importing ") + path +wxT(" library");
+		wxString msg = _("[Database::ImportComponentLibrary] Importing ") + path + _(" library");
 		Debug::Print( msg );
 
 	// Get the component library
@@ -1334,15 +1288,14 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		PObjectInfo class_info = GetObjectInfo( class_name );
 		if ( class_info )
 		{
-			class_info->SetComponent(comp);
+			class_info->SetComponent( comp );
 		}
 		else
 		{
-			wxString msg = wxT( "ObjectInfo for <") + class_name + wxT("> not found while loading library <") + path + wxT(">");
+			wxString msg = _( "ObjectInfo for <") + class_name + _("> not found while loading library <") + path + ">";
 			Debug::Print( msg );
 		}
 	}
-
 	// Add all of the macros in the library to the macro dictionary
 	PMacroDictionary dic = MacroDictionary::GetInstance();
 	for ( unsigned int i = 0; i < comp_lib->GetMacroCount(); i++ )
@@ -1357,15 +1310,14 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 PropertyType ObjectDatabase::ParsePropertyType( wxString str )
 {
 	PropertyType result;
-	PTMap::iterator it = m_propTypes.find(str);
+	PTMap::iterator it = m_propTypes.find( str );
 	if (it != m_propTypes.end())
 		result = it->second;
 	else
 	{
 		result = PT_ERROR;
-		THROW_WXFBEX( wxString::Format( wxT("Unknown property type \"%s\""), str.c_str() ) );
+		THROW_WXFBEX( wxString::Format( _("Unknown property type \"%s\""), str.c_str() ) );
 	}
-
 	return result;
 }
 
@@ -1374,44 +1326,43 @@ wxString  ObjectDatabase::ParseObjectType( wxString str )
 	return str;
 }
 
-
 #define PT(x,y) m_propTypes.insert(PTMap::value_type(x,y))
 void ObjectDatabase::InitPropertyTypes()
 {
-	PT( wxT("bool"),			PT_BOOL		);
-	PT( wxT("text"),			PT_TEXT		);
-	PT( wxT("int"),				PT_INT		);
-	PT( wxT("uint"),			PT_UINT		);
-	PT( wxT("bitlist"),		PT_BITLIST		);
-	PT( wxT("intlist"),		PT_INTLIST		);
-	PT( wxT("uintlist"),	PT_UINTLIST		);
-	PT( wxT("option"),		PT_OPTION		);
-	PT( wxT("macro"),		PT_MACRO		);
-	PT( wxT("path"),		PT_PATH			);
-	PT( wxT("file"),		PT_FILE			);
-	PT( wxT("wxString"), 	PT_WXSTRING		);
-	PT( wxT("wxPoint"),		PT_WXPOINT		);
-	PT( wxT("wxSize"),		PT_WXSIZE		);
-	PT( wxT("wxFont"),		PT_WXFONT		);
-	PT( wxT("wxColour"),	PT_WXCOLOUR		);
-	PT( wxT("bitmap"),		PT_BITMAP		);
-	PT( wxT("wxString_i18n"),PT_WXSTRING_I18N);
-	PT( wxT("stringlist"),	PT_STRINGLIST	);
-	PT( wxT("float"),		PT_FLOAT		);
-	PT( wxT("parent"),		PT_PARENT		);
+	PT( "bool",				PT_BOOL				);
+	PT( "text",				PT_TEXT				);
+	PT( "int",				PT_INT				);
+	PT( "uint",				PT_UINT				);
+	PT( "bitlist",			PT_BITLIST			);
+	PT( "intlist",			PT_INTLIST			);
+	PT( "uintlist",			PT_UINTLIST			);
+	PT( "option",			PT_OPTION			);
+	PT( "macro",			PT_MACRO			);
+	PT( "path",				PT_PATH				);
+	PT( "file",				PT_FILE				);
+	PT( "wxString", 		PT_WXSTRING			);
+	PT( "wxPoint",			PT_WXPOINT			);
+	PT( "wxSize",			PT_WXSIZE			);
+	PT( "wxFont",			PT_WXFONT			);
+	PT( "wxColour",			PT_WXCOLOUR			);
+	PT( "bitmap",			PT_BITMAP			);
+	PT( "wxString_i18n", 	PT_WXSTRING_I18N 	);
+	PT( "stringlist",		PT_STRINGLIST		);
+	PT( "float",			PT_FLOAT			);
+	PT( "parent",			PT_PARENT			);
 }
 
 bool ObjectDatabase::LoadObjectTypes()
 {
 	ticpp::Document doc;
-	wxString xmlPath = m_xmlPath + wxT("objtypes.xml");
+	wxString xmlPath = m_xmlPath + "objtypes.xml";
 	XMLUtils::LoadXMLFile( doc, true, xmlPath );
 
 	// First load the object types, then the children
 	try
 	{
 		ticpp::Element* root = doc.FirstChildElement("definitions");
-		ticpp::Element* elem = root->FirstChildElement( "objtype" );
+		ticpp::Element* elem = root->FirstChildElement("objtype");
 		while ( elem )
 		{
 			bool hidden;
@@ -1427,7 +1378,6 @@ bool ObjectDatabase::LoadObjectTypes()
 
 			elem = elem->NextSiblingElement( "objtype", false );
 		}
-
 		// now load the children
 		elem = root->FirstChildElement("objtype");
 		while (elem)
@@ -1450,7 +1400,6 @@ bool ObjectDatabase::LoadObjectTypes()
 					wxLogError( _("No Object Type found for \"%s\""), childname.c_str() );
 					continue;
 				}
-
 				objType->AddChildType( childType, nmax );
 
 				child = child->NextSiblingElement( "childtype", false );
@@ -1463,18 +1412,15 @@ bool ObjectDatabase::LoadObjectTypes()
 		wxLogError( _WXSTR( ex.m_details ) );
 		return false;
 	}
-
 	return true;
 }
 
-PObjectType ObjectDatabase::GetObjectType(wxString name)
+PObjectType ObjectDatabase::GetObjectType( wxString name )
 {
 	PObjectType type;
-	ObjectTypeMap::iterator it = m_types.find(name);
+	ObjectTypeMap::iterator it = m_types.find( name );
 	if (it != m_types.end())
 		type = it->second;
 
 	return type;
 }
-
-

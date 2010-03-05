@@ -40,10 +40,9 @@
 #include <list>
 
 #include <component.h>
-
-#include "types.h"
 #include <ticpp.h>
 
+#include "types.h"
 #include "utils/wxfbdefs.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -147,7 +146,7 @@ private:
 	wxString m_value;
 
 public:
-	Property(PPropertyInfo info, PObjectBase obj = PObjectBase())
+	Property( PPropertyInfo info, PObjectBase obj = PObjectBase() )
 	{
 		m_object = obj;
 		m_info = info;
@@ -157,7 +156,7 @@ public:
 	wxString GetName() 					{ return m_info->GetName(); }
 	wxString GetValue() 				{ return m_value; }
 	void SetValue( wxString& val ) 		{ m_value = val; }
-	void SetValue( const wxChar* val ) 	{ m_value = val;	}
+	void SetValue( const wxChar* val ) 	{ m_value = val; }
 
 	PPropertyInfo GetPropertyInfo() { return m_info; }
 	PropertyType  GetType()         { return m_info->GetType();  }
@@ -171,24 +170,24 @@ public:
 	}
 
 	////////////////////
-	void SetValue(const wxFontContainer &font);
-	void SetValue(const wxColour &colour);
-	void SetValue(const wxString &str, bool format = false);
-	void SetValue(const wxPoint &point);
-	void SetValue(const wxSize &size);
-	void SetValue(const int integer);
-//	void SetValue(const wxAlignment alignment); TODO
-	void SetValue(const double val );
+	void SetValue( const wxFontContainer &font );
+	void SetValue( const wxColour &colour );
+	void SetValue( const wxString &str, bool format = false );
+	void SetValue( const wxPoint &point );
+	void SetValue( const wxSize &size );
+	void SetValue( const int integer );
+//	void SetValue( const wxAlignment alignment ); TODO
+	void SetValue( const double val );
 
 	wxFontContainer GetValueAsFont();
 	wxColour 		GetValueAsColour();
 	wxPoint  		GetValueAsPoint();
 	wxSize   		GetValueAsSize();
 	int      		GetValueAsInteger();
-//	wxAlignment 	GetValueAsAlignment(); 	TODO
+//	wxAlignment 	GetValueAsAlignment(); TODO
 	wxString 		GetValueAsString();
 	wxBitmap 		GetValueAsBitmap();
-	wxString 		GetValueAsText();   	// sustituye los ('\n',...) por ("\\n",...)
+	wxString 		GetValueAsText(); 		// sustituye los ('\n',...) por ("\\n",...)
 
 	wxArrayString 	GetValueAsArrayString();
 	double 			GetValueAsFloat();
@@ -346,9 +345,9 @@ public:
 	* @note Notar que no existe el método SetProperty, ya que la modificación
 	*       se hace a través de la referencia.
 	*/
-	PProperty GetProperty (wxString name);
+	PProperty GetProperty( wxString name );
 
-	PEvent GetEvent(wxString name);
+	PEvent GetEvent( wxString name );
 
 	/**
 	* Añade una propiedad al objeto.
@@ -357,9 +356,9 @@ public:
 	* instancia del objeto.
 	* Los objetos siempre se crearán a través del registro de descriptores.
 	*/
-	void AddProperty (PProperty value);
+	void AddProperty( PProperty value );
 
-	void AddEvent(PEvent event);
+	void AddEvent( PEvent event );
 
 	/**
 	* Obtiene el número de propiedades del objeto.
@@ -427,8 +426,8 @@ public:
 	*
 	* Será útil para encontrar el widget padre.
 	*/
-	PObjectBase FindNearAncestor(wxString type);
-	PObjectBase FindNearAncestorByBaseClass(wxString type);
+	PObjectBase FindNearAncestor( wxString type );
+	PObjectBase FindNearAncestorByBaseClass( wxString type );
 	PObjectBase FindParentForm();
 
 	/**
@@ -443,49 +442,48 @@ public:
 	*
 	* @return true si se añadió el hijo con éxito y false en caso contrario.
 	*/
-	virtual bool AddChild    (PObjectBase);
-	virtual bool AddChild    (unsigned int idx, PObjectBase obj);
+	virtual bool AddChild    ( PObjectBase );
+	virtual bool AddChild    ( unsigned int idx, PObjectBase obj );
 
 	/**
 	* Devuelve la posicion del hijo o GetChildCount() en caso de no encontrarlo
 	*/
-	unsigned int GetChildPosition(PObjectBase obj);
-	bool ChangeChildPosition(PObjectBase obj, unsigned int pos);
+	unsigned int GetChildPosition( PObjectBase obj );
+	bool ChangeChildPosition( PObjectBase obj, unsigned int pos );
 
 	/**
 	* devuelve la posición entre sus hermanos
 	*/
-	/*  unsigned int GetPosition();
-	bool ChangePosition(unsigned int pos);*/
-
+/*  unsigned int GetPosition();
+	bool ChangePosition( unsigned int pos );*/
 
 	/**
 	* Elimina un hijo del objeto.
 	*/
-	void RemoveChild (PObjectBase obj);
-	void RemoveChild (unsigned int idx);
+	void RemoveChild( PObjectBase obj );
+	void RemoveChild( unsigned int idx );
 	void RemoveAllChildren(){ m_children.clear(); }
 
 	/**
 	* Obtiene un hijo del objeto.
 	*/
-	PObjectBase GetChild (unsigned int idx);
+	PObjectBase GetChild( unsigned int idx );
 
 	/**
 	* Obtiene el número de hijos del objeto.
 	*/
-	unsigned int  GetChildCount()    { return (unsigned int)m_children.size(); }
+	unsigned int  GetChildCount() { return (unsigned int)m_children.size(); }
 
 	/**
 	* Comprueba si el tipo de objeto pasado es válido como hijo del objeto.
 	* Esta rutina es importante, ya que define las restricciónes de ubicación.
 	*/
-	//bool ChildTypeOk (wxString type);
-	bool ChildTypeOk (PObjectType type);
+	//bool ChildTypeOk( wxString type );
+	bool ChildTypeOk( PObjectType type );
 
-	bool IsContainer() { return (GetObjectTypeName() == wxT("container") ); }
+	bool IsContainer() 	{ return ( GetObjectTypeName() == "container" ); }
 
-	bool IsWizardPage() { return (GetObjectTypeName() == wxT("wizardpage") ); }
+	bool IsWizardPage() { return ( GetObjectTypeName() == "wizardpage" ); }
 
 	PObjectBase GetLayout();
 
@@ -495,13 +493,13 @@ public:
 	* Deberá ser redefinida en cada clase derivada.
 	*/
 	wxString GetObjectTypeName() { return m_type; }
-	void SetObjectTypeName(wxString type) { m_type = type; }
+	void SetObjectTypeName( wxString type ) { m_type = type; }
 
 	/**
 	* Devuelve el descriptor del objeto.
 	*/
 	PObjectInfo GetObjectInfo() { return m_info; };
-	void SetObjectInfo(PObjectInfo info) { m_info = info; };
+	void SetObjectInfo( PObjectInfo info ) { m_info = info; };
 
 	/**
 	* Devuelve la profundidad  del objeto en el arbol.
@@ -545,11 +543,11 @@ public:
 class CodeInfo
 {
 private:
-	typedef std::map<wxString,wxString> TemplateMap;
+	typedef std::map< wxString, wxString > TemplateMap;
 	TemplateMap m_templates;
 public:
-	wxString 	GetTemplate(wxString name);
-	void 		AddTemplate(wxString name, wxString _template);
+	wxString 	GetTemplate( wxString name );
+	void 		AddTemplate( wxString name, wxString _template );
 	void 		Merge( PCodeInfo merger );
 };
 
@@ -576,21 +574,21 @@ public:
 	/**
 	* Obtiene el descriptor de la propiedad.
 	*/
-	PPropertyInfo GetPropertyInfo(wxString name);
-	PPropertyInfo GetPropertyInfo(unsigned int idx);
+	PPropertyInfo GetPropertyInfo( wxString name );
+	PPropertyInfo GetPropertyInfo( unsigned int idx );
 
-	PEventInfo GetEventInfo(wxString name);
-	PEventInfo GetEventInfo(unsigned int idx);
+	PEventInfo GetEventInfo( wxString name );
+	PEventInfo GetEventInfo( unsigned int idx );
 
 	/**
 	* Añade un descriptor de propiedad al descriptor de objeto.
 	*/
-	void AddPropertyInfo(PPropertyInfo pinfo);
+	void AddPropertyInfo( PPropertyInfo pinfo );
 
 	/**
 	 * Adds a event descriptor.
 	 */
-	void AddEventInfo(PEventInfo evtInfo);
+	void AddEventInfo( PEventInfo evtInfo );
 
 	/**
 	* Add a default value for an inherited property.
@@ -624,21 +622,20 @@ public:
 	*/
 	//virtual void PrintOut(ostream &s, int indent);
 
-
 	/**
 	* Sobrecarga del operador inserción.
 	*/
-	friend std::ostream& operator << (std::ostream &s, PObjectInfo obj);
+	friend std::ostream& operator << ( std::ostream &s, PObjectInfo obj );
 
 	// nos serán utiles para generar el nombre del objeto
 	unsigned int GetInstanceCount() { return m_numIns; }
 	void IncrementInstanceCount()   { m_numIns++; }
-	void ResetInstanceCount() { m_numIns = 0; }
+	void ResetInstanceCount() 		{ m_numIns = 0; }
 
 	/**
 	* Añade la información de un objeto al conjunto de clases base.
 	*/
-	size_t AddBaseClass(PObjectInfo base)
+	size_t AddBaseClass( PObjectInfo base )
 	{
 		m_base.push_back(base);
 		return m_base.size() - 1;
@@ -647,21 +644,20 @@ public:
 	/**
 	* Comprueba si el tipo es derivado del que se pasa como parámetro.
 	*/
-	bool IsSubclassOf(wxString classname);
+	bool IsSubclassOf( wxString classname );
 
-	PObjectInfo GetBaseClass(unsigned int idx);
+	PObjectInfo GetBaseClass( unsigned int idx );
 	unsigned int GetBaseClassCount();
 
-
 	//
-	void SetIconFile(wxBitmap icon) { m_icon = icon; };
+	void SetIconFile( wxBitmap icon ) { m_icon = icon; };
 	wxBitmap GetIconFile() { return m_icon; }
 
-	void SetSmallIconFile(wxBitmap icon) { m_smallIcon = icon; };
+	void SetSmallIconFile( wxBitmap icon ) { m_smallIcon = icon; };
 	wxBitmap GetSmallIconFile() { return m_smallIcon; }
 
-	void AddCodeInfo(wxString lang, PCodeInfo codeinfo);
-	PCodeInfo GetCodeInfo(wxString lang);
+	void AddCodeInfo( wxString lang, PCodeInfo codeinfo );
+	PCodeInfo GetCodeInfo( wxString lang );
 
 	PObjectPackage GetPackage();
 
@@ -670,20 +666,20 @@ public:
 	/**
 	* Le asigna un componente a la clase.
 	*/
-	void SetComponent(IComponent *c) { m_component = c; };
-	IComponent* GetComponent() { return m_component; };
+	void SetComponent( IComponent *c ) 	{ m_component = c; };
+	IComponent* GetComponent() 			{ return m_component; };
 
 private:
-	wxString m_class;         // nombre de la clase (tipo de objeto)
+	wxString m_class;         	// nombre de la clase (tipo de objeto)
 
-	PObjectType m_type;     // tipo del objeto
+	PObjectType m_type;     	// tipo del objeto
 	WPObjectPackage m_package; 	// Package that the object comes from
 
 	PPropertyCategory m_category;
 
 	wxBitmap m_icon;
-	wxBitmap m_smallIcon; // The icon for the property grid toolbar
-	bool m_startGroup; // Place a separator in the palette toolbar just before this widget
+	wxBitmap m_smallIcon; 	// The icon for the property grid toolbar
+	bool m_startGroup; 		// Place a separator in the palette toolbar just before this widget
 
 	std::map< wxString, PCodeInfo > m_codeTemp;  // plantillas de codigo K=language_name T=PCodeInfo
 

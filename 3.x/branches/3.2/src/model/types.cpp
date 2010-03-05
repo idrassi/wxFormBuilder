@@ -24,120 +24,117 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "model/types.h"
-#include <wx/tokenzr.h>
-#include "utils/stringutils.h"
 #include "utils/debug.h"
+#include "utils/stringutils.h"
 #include "utils/typeconv.h"
 
 #include <cstdlib>
 
-ObjectType::ObjectType(wxString name, int id, bool hidden, bool item)
+#include <wx/tokenzr.h>
+
+ObjectType::ObjectType( wxString name, int id, bool hidden, bool item )
 {
-  m_id = id;
-  m_name = name;
-  m_hidden = hidden;
-  m_item = item;
+	m_id = 		id;
+	m_name = 	name;
+	m_hidden = 	hidden;
+	m_item = 	item;
 }
 
-void ObjectType::AddChildType(PObjectType type, int max)
+void ObjectType::AddChildType( PObjectType type, int max )
 {
-  assert(max != 0);
-  m_childTypes.insert(ChildTypeMap::value_type(type,max));
+	assert( max != 0 );
+	m_childTypes.insert( ChildTypeMap::value_type( type,max ) );
 }
 
-int ObjectType::FindChildType(int type_id)
+int ObjectType::FindChildType( int type_id )
 {
-  int max = 0;
-  ChildTypeMap::iterator it;
-  for (it = m_childTypes.begin(); it != m_childTypes.end() && max == 0; it++)
-  {
-    PObjectType type(it->first);
-    if (type && type_id == type->GetId())
-      max = it->second;
-  }
-  return max;
+	int max = 0;
+	ChildTypeMap::iterator it;
+	for ( it = m_childTypes.begin(); it != m_childTypes.end() && max == 0; it++ )
+	{
+		PObjectType type( it->first );
+		if ( type && type_id == type->GetId() )
+			max = it->second;
+	}
+	return max;
 }
 
-int ObjectType::FindChildType(PObjectType type)
+int ObjectType::FindChildType( PObjectType type )
 {
-  int type_id = type->GetId();
-  return FindChildType(type_id);
+	int type_id = type->GetId();
+	return FindChildType( type_id );
 }
 
 unsigned int ObjectType::GetChildTypeCount()
 {
-  return (unsigned int)m_childTypes.size();
+	return (unsigned int)m_childTypes.size();
 }
 
-PObjectType ObjectType::GetChildType(unsigned int idx)
+PObjectType ObjectType::GetChildType( unsigned int idx )
 {
-  PObjectType result;
+	PObjectType result;
 
-  assert (idx < GetChildTypeCount());
+	assert ( idx < GetChildTypeCount() );
 
-  unsigned int i = 0;
-  ChildTypeMap::iterator it = m_childTypes.begin();
+	unsigned int i = 0;
+	ChildTypeMap::iterator it = m_childTypes.begin();
 
-  while (i < idx && it != m_childTypes.end())
-  {
-    i++;
-    it++;
-  }
+	while ( i < idx && it != m_childTypes.end() )
+	{
+		i++;
+		it++;
+	}
+	if ( i == idx )
+		result = PObjectType( it->first );
 
-  if (i == idx)
-    result = PObjectType(it->first);
-
-
-  return result;
+	return result;
 }
-
 ///////////////////////////////////////////////////////////////////////////////
 
-IntList::IntList(wxString value, bool absolute_value )
+IntList::IntList( wxString value, bool absolute_value )
 :
 m_abs( absolute_value )
 {
-  SetList(value);
+	SetList( value );
 }
 
-void IntList::Add(int value)
+void IntList::Add( int value )
 {
-	m_ints.push_back( m_abs ? std::abs(value) : value );
+	m_ints.push_back( m_abs ? std::abs( value ) : value );
 }
 
 void IntList::DeleteList()
 {
-  m_ints.erase(m_ints.begin(), m_ints.end());
+	m_ints.erase( m_ints.begin(), m_ints.end() );
 }
 
-void IntList::SetList(wxString str)
+void IntList::SetList( wxString str )
 {
-  DeleteList();
-  wxStringTokenizer tkz(str, wxT(","));
-  while (tkz.HasMoreTokens())
-  {
-    long value;
-    wxString token;
-    token = tkz.GetNextToken();
-    token.Trim(true);
-    token.Trim(false);
+	DeleteList();
+	wxStringTokenizer tkz( str, "," );
+	while (tkz.HasMoreTokens())
+	{
+		long value;
+		wxString token;
+		token = tkz.GetNextToken();
+		token.Trim( true );
+		token.Trim( false );
 
-    if (token.ToLong(&value))
-      Add((int)value);
-  }
+		if ( token.ToLong( &value ) )
+		Add( (int)value );
+	}
 }
 
 wxString IntList::ToString()
 {
-  wxString result;
+	wxString result;
 
-  if (m_ints.size() > 0)
-  {
-    result = StringUtils::IntToStr(m_ints[0]);
+	if (m_ints.size() > 0)
+	{
+		result = StringUtils::IntToStr(m_ints[0]);
 
-    for (unsigned int i=1; i< m_ints.size() ; i++)
-      result = result + wxT(",") + StringUtils::IntToStr(m_ints[i]);
-}
-
-  return result;
+		for ( unsigned int i=1; i< m_ints.size() ; i++ )
+			result = result + "," + StringUtils::IntToStr( m_ints[i] );
+	}
+	return result;
 }
