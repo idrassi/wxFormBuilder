@@ -26,9 +26,9 @@
 #ifndef __XRC_PANEL__
 #define __XRC_PANEL__
 
+#include <wx/aui/auibook.h>
 #include <wx/panel.h>
 #include <wx/stc/stc.h>
-#include <wx/aui/auibook.h>
 
 #include "utils/wxfbdefs.h"
 
@@ -61,6 +61,5 @@ public:
 
 	DECLARE_EVENT_TABLE()
 };
-
 
 #endif //__XRC_PANEL__

@@ -26,24 +26,20 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "pythonpanel.h"
-
+#include "codegen/codewriter.h"
+#include "codegen/pythoncg.h"
+#include "model/objectbase.h"
 #include "rad/codeeditor/codeeditor.h"
 #include "rad/wxfbevent.h"
 #include "rad/bitmaps.h"
 #include "rad/appdata.h"
-#include "utils/wxfbdefs.h"
-
-#include "utils/typeconv.h"
 #include "utils/encodingutils.h"
+#include "utils/typeconv.h"
+#include "utils/wxfbdefs.h"
 #include "utils/wxfbexception.h"
 
-#include "model/objectbase.h"
-
-#include "codegen/codewriter.h"
-#include "codegen/pythoncg.h"
-
-#include <wx/fdrepdlg.h>
 #include <wx/config.h>
+#include <wx/fdrepdlg.h>
 #include <wx/stc/stc.h>
 
 BEGIN_EVENT_TABLE ( PythonPanel,  wxPanel )
@@ -73,7 +69,7 @@ wxPanel( parent, id )
 
 	SetSizer( top_sizer );
 	SetAutoLayout( true );
-	//top_sizer->SetSizeHints( this );
+// 	top_sizer->SetSizeHints( this );
 	top_sizer->Fit( this );
 	top_sizer->Layout();
 
@@ -82,20 +78,20 @@ wxPanel( parent, id )
 
 PythonPanel::~PythonPanel()
 {
-	//delete m_icons;
+	// Delete m_icons;
 	AppData()->RemoveHandler( this->GetEventHandler() );
 }
 
 void PythonPanel::InitStyledTextCtrl( wxStyledTextCtrl *stc )
 {
 	stc->SetLexer( wxSTC_LEX_PYTHON );
-	stc->SetKeyWords( 0, wxT( "and assert break class continue def del elif else \
+	stc->SetKeyWords( 0, _( "and assert break class continue def del elif else \
 							   except exec finally for from global if import in \
 							   is lambda not or pass print raise return try while" ) );
 
 #ifdef __WXGTK__
 	wxFont font( 8, wxMODERN, wxNORMAL, wxNORMAL );
-	font.SetFaceName( wxT( "Monospace" ) );
+	font.SetFaceName("Monospace");
 #else
 	wxFont font( 10, wxMODERN, wxNORMAL, wxNORMAL );
 #endif
@@ -178,12 +174,12 @@ void PythonPanel::OnCodeGeneration( wxFBEvent& event )
 	// Create copy of the original project due to possible temporary modifications
 	PObjectBase project = PObjectBase(new ObjectBase(*AppData()->GetProjectData()));
 
-	if(panelOnly)
+	if( panelOnly )
 	{
 	    objectToGenerate = AppData()->GetSelectedForm();
 	}
 
-	if(!panelOnly || !objectToGenerate)
+	if( !panelOnly || !objectToGenerate )
 	{
 	    objectToGenerate = project;
 	}
@@ -207,17 +203,17 @@ void PythonPanel::OnCodeGeneration( wxFBEvent& event )
 	    }
 	}
 
-    if(!project || !objectToGenerate)return;
+    if( !project || !objectToGenerate ) return;
 
     // Get Python properties from the project
 
 	// If Python generation is not enabled, do not generate the file
 	bool doFile = false;
-	PProperty pCodeGen = project->GetProperty( wxT( "code_generation" ) );
+	PProperty pCodeGen = project->GetProperty( "code_generation");
 	if ( pCodeGen )
 	{
 		//doFile = TypeConv::FlagSet( wxT("C++"), pCodeGen->GetValue() ) && !panelOnly;
-		doFile = TypeConv::FlagSet( wxT("Python"), pCodeGen->GetValue() ) && !panelOnly;
+		doFile = TypeConv::FlagSet( "Python", pCodeGen->GetValue() ) && !panelOnly;
 	}
 
 	if ( !(doPanel || doFile ) )
@@ -227,7 +223,7 @@ void PythonPanel::OnCodeGeneration( wxFBEvent& event )
 
 	// Get First ID from Project File
 	unsigned int firstID = 1000;
-	PProperty pFirstID = project->GetProperty( wxT("first_id") );
+	PProperty pFirstID = project->GetProperty("first_id");
 	if ( pFirstID )
 	{
 		firstID = pFirstID->GetValueAsInteger();
@@ -235,19 +231,19 @@ void PythonPanel::OnCodeGeneration( wxFBEvent& event )
 
 	// Get the file name
 	wxString file;
-	PProperty pfile = project->GetProperty( wxT( "file" ) );
+	PProperty pfile = project->GetProperty("file" );
 	if ( pfile )
 	{
 		file = pfile->GetValue();
 	}
 	if ( file.empty() )
 	{
-		file = wxT("noname");
+		file = "noname";
 	}
 
 	// Determine if the path is absolute or relative
 	bool useRelativePath = false;
-	PProperty pRelPath = project->GetProperty( wxT( "relative_path" ) );
+	PProperty pRelPath = project->GetProperty("relative_path");
 	if ( pRelPath )
 	{
 		useRelativePath = ( pRelPath->GetValueAsInteger() ? true : false );
@@ -316,7 +312,7 @@ void PythonPanel::OnCodeGeneration( wxFBEvent& event )
 			// Determin if Microsoft BOM should be used
 			bool useMicrosoftBOM = false;
 
-			PProperty pUseMicrosoftBOM = project->GetProperty( wxT( "use_microsoft_bom" ) );
+			PProperty pUseMicrosoftBOM = project->GetProperty("use_microsoft_bom");
 
 			if ( pUseMicrosoftBOM )
 			{
@@ -325,23 +321,23 @@ void PythonPanel::OnCodeGeneration( wxFBEvent& event )
 
 			// Determine if Utf8 or Ansi is to be created
 			bool useUtf8 = false;
-			PProperty pUseUtf8 = project->GetProperty( _("encoding") );
+			PProperty pUseUtf8 = project->GetProperty("encoding");
 
 			if ( pUseUtf8 )
 			{
-				useUtf8 = ( pUseUtf8->GetValueAsString() != wxT("ANSI") );
+				useUtf8 = ( pUseUtf8->GetValueAsString() != "ANSI" );
 			}
 
-			PCodeWriter python_cw( new FileCodeWriter( path + file + wxT( ".py" ), useMicrosoftBOM, useUtf8 ) );
+			PCodeWriter python_cw( new FileCodeWriter( path + file + ".py", useMicrosoftBOM, useUtf8 ) );
 
 			codegen.SetSourceWriter( python_cw );
 			codegen.GenerateCode( project );
-			wxLogStatus( wxT( "Code generated on \'%s\'." ), path.c_str() );
+			wxLogStatus( _("Code generated on \'%s\'."), path.c_str() );
 
 			// check if we have to convert to ANSI encoding
-			if (project->GetPropertyAsString(wxT("encoding")) == wxT("ANSI"))
+			if ( project->GetPropertyAsString("encoding") == "ANSI" )
 			{
-				UTF8ToAnsi(path + file + wxT( ".py" ));
+				UTF8ToAnsi( path + file + ".py" );
 			}
 		}
 		catch ( wxFBException& ex )

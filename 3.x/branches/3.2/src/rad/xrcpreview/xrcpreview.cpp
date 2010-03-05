@@ -21,17 +21,17 @@
 //   Ryan Mulder - rjmyst3@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-#include "rad/xrcpreview/xrcpreview.h"
-#include "model/objectbase.h"
-#include "codegen/xrccg.h"
+#include "xrcpreview.h"
 #include "codegen/codewriter.h"
+#include "codegen/xrccg.h"
+#include "model/objectbase.h"
 #include "utils/annoyingdialog.h"
-#include "utils/wxfbexception.h"
 #include "utils/typeconv.h"
+#include "utils/wxfbexception.h"
 
 #include <wx/fs_mem.h>
-#include <wx/xrc/xmlres.h>
 #include <wx/wizard.h>
+#include <wx/xrc/xmlres.h>
 
 #define MENU_DELETE 109
 
@@ -131,18 +131,18 @@ END_EVENT_TABLE()
 void XRCPreview::Show( PObjectBase form, const wxString& projectPath )
 {
 
-	AnnoyingDialog dlg(_("WARNING - For XRC Developers ONLY!!"),
-						wxGetTranslation(	wxT("The XRC language is not as powerful as C++.\n")
-											wxT("It has limitations that will affect the GUI\n")
-											wxT("layout. This preview will ONLY show how the\n")
-											wxT("generated XRC will look, and it will probably\n")
-											wxT("be different from the Designer.\n\n")
-											wxT("If you are not using XRC, do NOT use the XRC\n")
-											wxT("preview, it will only confuse you.")
+	AnnoyingDialog dlg( _("WARNING - For XRC Developers ONLY!!"),
+						wxGetTranslation(	"The XRC language is not as powerful as C++.\n"
+											"It has limitations that will affect the GUI\n"
+											"layout. This preview will ONLY show how the\n"
+											"generated XRC will look, and it will probably\n"
+											"be different from the Designer.\n\n"
+											"If you are not using XRC, do NOT use the XRC\n"
+											"preview, it will only confuse you."
 										),
-								wxART_WARNING,
-								AnnoyingDialog::OK_CANCEL,
-								wxID_CANCEL);
+										wxART_WARNING,
+										AnnoyingDialog::OK_CANCEL,
+										wxID_CANCEL);
 
 	if ( wxID_CANCEL == dlg.ShowModal() )
 	{
@@ -171,69 +171,69 @@ void XRCPreview::Show( PObjectBase form, const wxString& projectPath )
 	res->InitAllHandlers();
 
 	const std::string& data = _STDSTR( cw->GetString() );
-	wxMemoryFSHandler::AddFile(wxT("xrcpreview.xrc"), data.c_str(), data.size() );
-	res->Load( wxT("memory:xrcpreview.xrc") );
+	wxMemoryFSHandler::AddFile( "xrcpreview.xrc", data.c_str(), data.size() );
+	res->Load("memory:xrcpreview.xrc");
 
 	wxWindow* window = NULL;
-	if ( className == wxT( "Frame" ) )
+	if ( className == "Frame" )
 	{
 		wxFrame* frame = new wxFrame();
-		res->LoadFrame( frame, wxTheApp->GetTopWindow(), form->GetPropertyAsString( wxT( "name" ) ) );
+		res->LoadFrame( frame, wxTheApp->GetTopWindow(), form->GetPropertyAsString("name") );
 		// Prevent events from propagating up to wxFB's frame
 		frame->SetExtraStyle( frame->GetExtraStyle() | wxWS_EX_BLOCK_EVENTS );
 		frame->Show();
 		window = frame;
 	}
-	else if ( className == wxT( "Dialog" ) )
+	else if ( className == "Dialog" )
 	{
 		wxDialog* dialog = new wxDialog;
-		res->LoadDialog( dialog, wxTheApp->GetTopWindow(), form->GetPropertyAsString( wxT( "name" ) ) );
+		res->LoadDialog( dialog, wxTheApp->GetTopWindow(), form->GetPropertyAsString("name") );
 		// Prevent events from propagating up to wxFB's frame
 		dialog->SetExtraStyle( dialog->GetExtraStyle() | wxWS_EX_BLOCK_EVENTS );
 		dialog->Show();
 		window = dialog;
 	}
-	else if ( className == wxT( "Wizard" ) )
+	else if ( className == "Wizard" )
 	{
-		wxObject* wizobj = res->LoadObject( NULL, form->GetPropertyAsString( wxT( "name" ) ), wxT( "wxWizard" ) );
+		wxObject* wizobj = res->LoadObject( NULL, form->GetPropertyAsString("name"), "wxWizard" );
 		wxWizard* wizard = wxDynamicCast( wizobj, wxWizard );
-		//wxObject* pageobj = res->LoadObject( NULL, form->GetPropertyAsString( wxT( "name" ) ), wxT( "wxWizardPageSimple" ) );
+		//wxObject* pageobj = res->LoadObject( NULL, form->GetPropertyAsString("name"), "wxWizardPageSimple" );
 		//wxWizardPageSimple* wiz_page = wxDynamicCast( pageobj, wxWizardPageSimple );
-		wxWizardPageSimple* wiz_page = new wxWizardPageSimple(wizard);
-		wizard->RunWizard(wiz_page);
+		wxWizardPageSimple* wiz_page = new wxWizardPageSimple( wizard );
+		wizard->RunWizard( wiz_page );
 		window = wizard;
 		wizard->Destroy();
 	}
-	else if ( className == wxT( "Panel" ) )
+	else if ( className == "Panel" )
 	{
-		wxDialog* dialog = new wxDialog( wxTheApp->GetTopWindow(), -1, wxT( "Dialog" ), wxDefaultPosition,
-		                 wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER );
+		wxDialog* dialog = new wxDialog( wxTheApp->GetTopWindow(), wxID_ANY, "Dialog", wxDefaultPosition,
+										wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER );
 		// Prevent events from propagating up to wxFB's frame
 		dialog->SetExtraStyle( wxWS_EX_BLOCK_EVENTS );
 		wxPanel *panel = new wxPanel();
-		res->LoadPanel( panel, dialog, form->GetPropertyAsString( wxT( "name" ) ) );
+		res->LoadPanel( panel, dialog, form->GetPropertyAsString("name") );
 		dialog->SetClientSize( panel->GetSize() );
-		dialog->SetSize( form->GetPropertyAsSize( wxT( "size" ) ) );
+		dialog->SetSize( form->GetPropertyAsSize("size") );
 		dialog->CenterOnScreen();
 		dialog->Show();
 		window = dialog;
 	}
-	else if ( className == wxT( "MenuBar" ) )
+	else if ( className == "MenuBar" )
 	{
-		wxFrame* frame = new wxFrame( NULL, wxID_ANY, form->GetPropertyAsString( wxT( "name" ) ) );
+		wxFrame* frame = new wxFrame( NULL, wxID_ANY, form->GetPropertyAsString("name") );
 		// Prevent events from propagating up to wxFB's frame
 		frame->SetExtraStyle( frame->GetExtraStyle() | wxWS_EX_BLOCK_EVENTS );
-		frame->SetMenuBar( res->LoadMenuBar( form->GetPropertyAsString( wxT( "name" ) ) ) );
+		frame->SetMenuBar( res->LoadMenuBar( form->GetPropertyAsString("name") ) );
 		frame->CenterOnScreen();
 		frame->Show();
 		window = frame;
 	}
-	else if ( className == wxT( "ToolBar" ) )
+	else if ( className == "ToolBar" )
 	{
-		wxFrame* frame = new wxFrame( NULL, wxID_ANY, form->GetPropertyAsString( wxT( "name" ) ) );
+		wxFrame* frame = new wxFrame( NULL, wxID_ANY, form->GetPropertyAsString("name") );
 		// Prevent events from propagating up to wxFB's frame
 		frame->SetExtraStyle( frame->GetExtraStyle() | wxWS_EX_BLOCK_EVENTS );
-		frame->SetToolBar( res->LoadToolBar( frame, form->GetPropertyAsString( wxT( "name" ) ) ) );
+		frame->SetToolBar( res->LoadToolBar( frame, form->GetPropertyAsString("name") ) );
 		frame->CenterOnScreen();
 		frame->Show();
 		window = frame;
@@ -247,10 +247,10 @@ void XRCPreview::Show( PObjectBase form, const wxString& projectPath )
 	::wxSetWorkingDirectory( workingDir );
 
 	#if wxCHECK_VERSION( 2, 6, 3 )
-	res->Unload( wxT("memory:xrcpreview.xrc") );
+	res->Unload("memory:xrcpreview.xrc");
 	#endif
 
-	wxMemoryFSHandler::RemoveFile( wxT("xrcpreview.xrc") );
+	wxMemoryFSHandler::RemoveFile("xrcpreview.xrc");
 }
 
 void XRCPreview::AddEventHandler( wxWindow* window, wxWindow* form )

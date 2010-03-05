@@ -26,15 +26,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "xrcpanel.h"
-
 #include "codegen/xrccg.h"
 #include "codegen/codewriter.h"
-
-#include "rad/codeeditor/codeeditor.h"
-#include "rad/bitmaps.h"
-#include "rad/wxfbevent.h"
-#include "rad/appdata.h"
 #include "model/objectbase.h"
+#include "rad/appdata.h"
+#include "rad/bitmaps.h"
+#include "rad/codeeditor/codeeditor.h"
+#include "rad/wxfbevent.h"
 #include "utils/typeconv.h"
 #include "utils/wxfbexception.h"
 
@@ -84,7 +82,7 @@ void XrcPanel::InitStyledTextCtrl( wxStyledTextCtrl *stc )
 #ifdef __WXGTK__
 	// Debe haber un bug en wxGTK ya que la familia wxMODERN no es de ancho fijo.
 	wxFont font( 8, wxMODERN, wxNORMAL, wxNORMAL );
-	font.SetFaceName( wxT( "Monospace" ) );
+	font.SetFaceName("Monospace");
 #else
 	wxFont font( 10, wxMODERN, wxNORMAL, wxNORMAL );
 #endif
@@ -167,12 +165,12 @@ void XrcPanel::OnCodeGeneration( wxFBEvent& event )
 
 	// For code preview generate only code relevant to selected form,
 	//  otherwise generate full project code.
-	if(panelOnly)
+	if( panelOnly )
 	{
 	    project = AppData()->GetSelectedForm();
 	}
 
-	if(!panelOnly || !project)
+	if( !panelOnly || !project )
 	{
 	    project = AppData()->GetProjectData();
 	}
@@ -205,10 +203,10 @@ void XrcPanel::OnCodeGeneration( wxFBEvent& event )
 		return;
 	}
 
-	PProperty pCodeGen = project->GetProperty( wxT("code_generation") );
+	PProperty pCodeGen = project->GetProperty("code_generation");
 	if ( pCodeGen )
 	{
-		if ( !TypeConv::FlagSet ( wxT("XRC"), pCodeGen->GetValue() ) )
+		if ( !TypeConv::FlagSet ( "XRC", pCodeGen->GetValue() ) )
 		{
 			return;
 		}
@@ -222,7 +220,7 @@ void XrcPanel::OnCodeGeneration( wxFBEvent& event )
 		bool useRelativePath = false;
 
 		// Determine if the path is absolute or relative
-		PProperty pRelPath = project->GetProperty( wxT( "relative_path" ) );
+		PProperty pRelPath = project->GetProperty("relative_path");
 
 		if ( pRelPath )
 			useRelativePath = ( pRelPath->GetValueAsInteger() ? true : false );
@@ -234,24 +232,24 @@ void XrcPanel::OnCodeGeneration( wxFBEvent& event )
 			// Get the output path
 			path = AppData()->GetOutputPath();
 
-			PProperty pfile = project->GetProperty( wxT( "file" ) );
+			PProperty pfile = project->GetProperty("file");
 
 			if ( pfile )
 				file = pfile->GetValue();
 
 			if ( file.empty() )
 			{
-				file = wxT( "noname" );
+				file = "noname";
 			}
 
 			wxString filePath;
 
-			filePath << path << file << wxT( ".xrc" );
+			filePath << path << file << ".xrc";
 			PCodeWriter cw( new FileCodeWriter( filePath ) );
 
 			codegen.SetWriter( cw );
 			codegen.GenerateCode( project );
-			wxLogStatus( wxT( "Code generated on \'%s\'." ), path.c_str() );
+			wxLogStatus( _("Code generated on \'%s\'."), path.c_str() );
 		}
 		catch ( wxFBException& ex )
 		{
