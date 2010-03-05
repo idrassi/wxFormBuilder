@@ -26,9 +26,10 @@
 #ifndef __OBJECT_TREE__
 #define __OBJECT_TREE__
 
-#include "utils/wxfbdefs.h"
-#include <map>
 #include "rad/customkeys.h"
+#include "utils/wxfbdefs.h"
+
+#include <map>
 
 #include <wx/treectrl.h>
 
@@ -39,56 +40,56 @@ class wxFBObjectEvent;
 class ObjectTree : public wxPanel
 {
 private:
-   typedef std::map< PObjectBase, wxTreeItemId> ObjectItemMap;
-   typedef std::map<wxString, int> IconIndexMap;
+	typedef std::map< PObjectBase, wxTreeItemId> ObjectItemMap;
+	typedef std::map< wxString, int > IconIndexMap;
 
-   ObjectItemMap m_map;
+	ObjectItemMap m_map;
 
-   wxImageList *m_iconList;
-   IconIndexMap m_iconIdx;
+	wxImageList *m_iconList;
+	IconIndexMap m_iconIdx;
 
-   wxTextCtrl* m_txtSelected;
-   wxTreeCtrl* m_tcObjects;
+	wxTextCtrl* m_txtSelected;
+	wxTreeCtrl* m_tcObjects;
 
-   wxTreeItemId m_draggedItem;
+	wxTreeItemId m_draggedItem;
 
-   /**
-    * Crea el arbol completamente.
-    */
-   void RebuildTree();
-   void AddChildren(PObjectBase child, wxTreeItemId &parent, bool is_root = false);
-   int GetImageIndex (wxString type);
-   void UpdateItem(wxTreeItemId id, PObjectBase obj);
-   void RestoreItemStatus(PObjectBase obj);
-   void AddItem(PObjectBase item, PObjectBase parent);
-   void RemoveItem(PObjectBase item);
-   void ClearMap(PObjectBase obj);
+	/**
+	* Crea el arbol completamente.
+	*/
+	void RebuildTree();
+	void AddChildren( PObjectBase child, wxTreeItemId &parent, bool is_root = false );
+	int GetImageIndex( wxString type );
+	void UpdateItem( wxTreeItemId id, PObjectBase obj );
+	void RestoreItemStatus( PObjectBase obj );
+	void AddItem( PObjectBase item, PObjectBase parent );
+	void RemoveItem( PObjectBase item );
+	void ClearMap( PObjectBase obj );
 
-   PObjectBase GetObjectFromTreeItem( wxTreeItemId item );
+	PObjectBase GetObjectFromTreeItem( wxTreeItemId item );
 
-   DECLARE_EVENT_TABLE()
+	DECLARE_EVENT_TABLE()
 
 public:
-  ObjectTree(wxWindow *parent, int id);
-  ~ObjectTree();
-  void Create();
+	ObjectTree( wxWindow *parent, int id );
+	~ObjectTree();
+	void Create();
 
-  void OnSelChanged(wxTreeEvent &event);
-  void OnRightClick(wxTreeEvent &event);
-  void OnBeginDrag(wxTreeEvent &event);
-  void OnEndDrag(wxTreeEvent &event);
-  void OnExpansionChange(wxTreeEvent &event);
+	void OnSelChanged( wxTreeEvent &event );
+	void OnRightClick( wxTreeEvent &event );
+	void OnBeginDrag( wxTreeEvent &event );
+	void OnEndDrag( wxTreeEvent &event );
+	void OnExpansionChange( wxTreeEvent &event );
 
-  void OnProjectLoaded ( wxFBEvent &event );
-  void OnProjectSaved  ( wxFBEvent &event );
-  void OnObjectExpanded( wxFBObjectEvent& event );
-  void OnObjectSelected( wxFBObjectEvent &event );
-  void OnObjectCreated ( wxFBObjectEvent &event );
-  void OnObjectRemoved ( wxFBObjectEvent &event );
-  void OnPropertyModified ( wxFBPropertyEvent &event );
-  void OnProjectRefresh ( wxFBEvent &event);
+	void OnProjectLoaded ( wxFBEvent &event );
+	void OnProjectSaved  ( wxFBEvent &event );
+	void OnObjectExpanded( wxFBObjectEvent& event );
+	void OnObjectSelected( wxFBObjectEvent &event );
+	void OnObjectCreated ( wxFBObjectEvent &event );
+	void OnObjectRemoved ( wxFBObjectEvent &event );
+	void OnPropertyModified ( wxFBPropertyEvent &event );
+	void OnProjectRefresh ( wxFBEvent &event);
 
-  void AddCustomKeysHandler(CustomKeysEvtHandler *h) { m_tcObjects->PushEventHandler(h); };
+	void AddCustomKeysHandler( CustomKeysEvtHandler *h ) { m_tcObjects->PushEventHandler( h ); };
 };
 
 /**
@@ -98,11 +99,11 @@ public:
  */
 class ObjectTreeItemData : public wxTreeItemData
 {
- private:
-  PObjectBase m_object;
- public:
-  ObjectTreeItemData(PObjectBase obj);
-  PObjectBase GetObject() { return m_object; }
+private:
+	PObjectBase m_object;
+public:
+	ObjectTreeItemData( PObjectBase obj );
+	PObjectBase GetObject() { return m_object; }
 };
 
 /**
@@ -113,15 +114,15 @@ class ObjectTreeItemData : public wxTreeItemData
  */
 class ItemPopupMenu : public wxMenu
 {
- private:
-  PObjectBase m_object;
+private:
+	PObjectBase m_object;
 
-  DECLARE_EVENT_TABLE()
+	DECLARE_EVENT_TABLE()
 
- public:
-  void OnUpdateEvent(wxUpdateUIEvent& e);
-  ItemPopupMenu(PObjectBase obj);
-  void OnMenuEvent (wxCommandEvent & event);
+public:
+	void OnUpdateEvent( wxUpdateUIEvent& e );
+	ItemPopupMenu( PObjectBase obj );
+	void OnMenuEvent( wxCommandEvent & event );
 };
 
 #endif //__OBJECT_TREE__

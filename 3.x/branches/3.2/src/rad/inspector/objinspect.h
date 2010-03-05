@@ -30,12 +30,11 @@
     #error "Please set wxUSE_PROPGRID to 1 and rebuild the library."
 #endif
 
-#include <wx/config.h>
-#include <wx/tokenzr.h>
 #include <wx/aui/auibook.h>
-
+#include <wx/config.h>
 #include <wx/propgrid/property.h>
 #include <wx/propgrid/manager.h>
+#include <wx/tokenzr.h>
 
 #include "model/objectbase.h"
 #include "rad/appdata.h"
@@ -48,32 +47,31 @@ class wxFBObjectEvent;
 class wxFBPropertyEvent;
 
 enum {
-  wxFB_OI_DEFAULT_STYLE,
-  wxFB_OI_MULTIPAGE_STYLE,
-  wxFB_OI_SINGLE_PAGE_STYLE
+	wxFB_OI_DEFAULT_STYLE,
+	wxFB_OI_MULTIPAGE_STYLE,
+	wxFB_OI_SINGLE_PAGE_STYLE
 };
 
 class ObjectInspector : public wxPanel
 {
 public:
 
-  ObjectInspector(wxWindow *parent, int id, int style = wxFB_OI_DEFAULT_STYLE);
-  ~ObjectInspector();
+	ObjectInspector( wxWindow *parent, int id, int style = wxFB_OI_DEFAULT_STYLE );
+	~ObjectInspector();
 
-  void OnObjectSelected( wxFBObjectEvent& event );
-  void OnProjectRefresh( wxFBEvent& event );
-  void OnPropertyModified( wxFBPropertyEvent& event );
-  void OnEventHandlerModified( wxFBEventHandlerEvent& event );
+	void OnObjectSelected( wxFBObjectEvent& event );
+	void OnProjectRefresh( wxFBEvent& event );
+	void OnPropertyModified( wxFBPropertyEvent& event );
+	void OnEventHandlerModified( wxFBEventHandlerEvent& event );
 
-  wxPropertyGridManager* CreatePropertyGridManager(wxWindow *parent, wxWindowID id);
-  void SavePosition();
+	wxPropertyGridManager* CreatePropertyGridManager( wxWindow *parent, wxWindowID id );
+	void SavePosition();
 
-  DECLARE_EVENT_TABLE()
+	DECLARE_EVENT_TABLE()
 
 private:
-
-  typedef std::map< wxPGProperty*, PProperty> ObjInspectorPropertyMap;
-  typedef std::map< wxPGProperty*, PEvent> ObjInspectorEventMap;
+  typedef std::map< wxPGProperty*, PProperty > ObjInspectorPropertyMap;
+  typedef std::map< wxPGProperty*, PEvent > ObjInspectorEventMap;
 
   ObjInspectorPropertyMap m_propMap;
   ObjInspectorEventMap m_eventMap;
@@ -84,13 +82,14 @@ private:
   wxPropertyGridManager* m_eg;
   int m_style;
 
-  int StringToBits(const wxString& strVal, wxPGChoices& constants);
+  int StringToBits( const wxString& strVal, wxPGChoices& constants );
 
   typedef std::map< wxString, bool > ExpandMap;
   ExpandMap m_isExpanded;
 
 	template < class ValueT >
-		void CreateCategory( const wxString& name, PObjectBase obj, PObjectInfo obj_info, std::map< wxString, ValueT >& itemMap, bool addingEvents )
+		void CreateCategory( const wxString& name, PObjectBase obj, PObjectInfo obj_info,
+								std::map< wxString, ValueT >& itemMap, bool addingEvents )
 	{
 		// Get Category
 		PPropertyCategory category = obj_info->GetCategory();
@@ -107,10 +106,10 @@ private:
 
 		wxString pageName;
 
-		if (m_style == wxFB_OI_MULTIPAGE_STYLE)
+		if ( m_style == wxFB_OI_MULTIPAGE_STYLE )
 			pageName = name;
 		else
-			pageName = wxT("default");
+			pageName = "default";
 
 
 		wxPropertyGridManager* pg = ( addingEvents ? m_eg : m_pg );
@@ -142,13 +141,13 @@ private:
 
   void AddItems( const wxString& name, PObjectBase obj, PObjectInfo obj_info, PPropertyCategory category, PropertyMap& map );
   void AddItems( const wxString& name, PObjectBase obj, PObjectInfo obj_info, PPropertyCategory category, EventMap& map );
-  wxPGProperty* GetProperty(PProperty prop);
+  wxPGProperty* GetProperty( PProperty prop );
 
-  void Create(bool force = false);
+  void Create( bool force = false );
 
-  void OnPropertyGridChange(wxPropertyGridEvent& event);
-  void OnEventGridChange(wxPropertyGridEvent& event);
-  void OnPropertyGridExpand(wxPropertyGridEvent& event);
+  void OnPropertyGridChange( wxPropertyGridEvent& event );
+  void OnEventGridChange( wxPropertyGridEvent& event );
+  void OnPropertyGridExpand( wxPropertyGridEvent& event );
   void OnReCreateGrid( wxCommandEvent& event );
 };
 
