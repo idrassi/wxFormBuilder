@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxFormBuilder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-05 01:14+0100\n"
+"POT-Creation-Date: 2010-03-05 09:36+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Andrea Zanellato <xvirc.client@gmail.com>\n"
 "Language-Team: \n"
@@ -328,23 +328,36 @@ msgstr ""
 msgid "StringCol"
 msgstr ""
 
-#: wxformbuilder32/src/maingui.cpp:130
+#: wxformbuilder32/src/maingui.cpp:135
 msgid "You must pass a path to a project file. Nothing to generate."
 msgstr ""
 
-#: wxformbuilder32/src/maingui.cpp:138
+#: wxformbuilder32/src/maingui.cpp:143
 msgid "Empty language option. Nothing generated."
 msgstr ""
 
-#: wxformbuilder32/src/maingui.cpp:205
+#: wxformbuilder32/src/maingui.cpp:169
+msgid "This path is invalid: "
+msgstr ""
+
+#: wxformbuilder32/src/maingui.cpp:176
+msgid "Could not make path absolute: "
+msgstr ""
+
+#: wxformbuilder32/src/maingui.cpp:210
 #, c-format
 msgid ""
 "Error loading application: %s\n"
 "wxFormBuilder cannot continue."
 msgstr ""
 
-#: wxformbuilder32/src/maingui.cpp:283
-msgid "code_generation"
+#: wxformbuilder32/src/maingui.cpp:305
+#, c-format
+msgid "Unable to load project: %s"
+msgstr ""
+
+#: wxformbuilder32/src/maingui.cpp:465
+msgid "A Fatal Error Occurred. Click Details for a backtrace."
 msgstr ""
 
 #: wxformbuilder32/src/utils/stringutils.cpp:86
