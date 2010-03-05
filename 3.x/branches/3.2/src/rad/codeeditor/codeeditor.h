@@ -26,8 +26,8 @@
 #ifndef __CODE_EDITOR__
 #define __CODE_EDITOR__
 
-#include <wx/sizer.h>
 #include <wx/panel.h>
+#include <wx/sizer.h>
 #include <wx/stc/stc.h>
 
 class wxFindDialogEvent;

@@ -21,15 +21,16 @@
 //   Ryan Mulder - rjmyst3@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-#include "dataobject.h"
-#include "model/objectbase.h"
-#include "utils/typeconv.h"
-#include <ticpp.h>
-#include <string>
-#include "rad/appdata.h"
+
 #include <wx/utils.h>
 
+#include <string>
+
 #include <ticpp.h>
+#include "dataobject.h"
+#include "model/objectbase.h"
+#include "rad/appdata.h"
+#include "utils/typeconv.h"
 
 wxFBDataObject::wxFBDataObject( PObjectBase obj )
 :
@@ -48,14 +49,14 @@ wxDataObject()
 		ticpp::Document doc;
 		doc.LinkEndChild( &element );
 		TiXmlPrinter printer;
-        printer.SetIndent( "\t" );
+        printer.SetIndent("\t");
 
         #if defined( __WXMSW__ )
-            printer.SetLineBreak( "\r\n" );
+            printer.SetLineBreak("\r\n");
         #elif defined( __WXMAC__ )
-            printer.SetLineBreak( "\r" );
+            printer.SetLineBreak("\r");
         #else
-            printer.SetLineBreak( "\n" );
+            printer.SetLineBreak("\n");
         #endif
 
         doc.Accept( &printer );

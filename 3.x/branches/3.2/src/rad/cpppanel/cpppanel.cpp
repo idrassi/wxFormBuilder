@@ -27,20 +27,17 @@
 
 #include "cpppanel.h"
 
-#include "rad/codeeditor/codeeditor.h"
-#include "rad/wxfbevent.h"
-#include "rad/bitmaps.h"
-#include "rad/appdata.h"
-#include "utils/wxfbdefs.h"
-
-#include "utils/typeconv.h"
-#include "utils/encodingutils.h"
-#include "utils/wxfbexception.h"
-
-#include "model/objectbase.h"
-
 #include "codegen/codewriter.h"
 #include "codegen/cppcg.h"
+#include "model/objectbase.h"
+#include "rad/codeeditor/codeeditor.h"
+#include "rad/appdata.h"
+#include "rad/bitmaps.h"
+#include "rad/wxfbevent.h"
+#include "utils/encodingutils.h"
+#include "utils/typeconv.h"
+#include "utils/wxfbdefs.h"
+#include "utils/wxfbexception.h"
 
 #include <wx/fdrepdlg.h>
 #include <wx/config.h>
@@ -67,19 +64,19 @@ wxPanel( parent, id )
 
 	long nbStyle = 0;
 	wxConfigBase* config = wxConfigBase::Get();
-	config->Read( wxT("/mainframe/editor/cpp/notebook_style"), &nbStyle, 0 );
+	config->Read( "/mainframe/editor/cpp/notebook_style", &nbStyle, 0 );
 
 	m_notebook = new wxAuiNotebook( this, -1, wxDefaultPosition, wxDefaultSize, nbStyle );
 
 	m_cppPanel = new CodeEditor( m_notebook, -1 );
 	InitStyledTextCtrl( m_cppPanel->GetTextCtrl() );
 
-	m_notebook->AddPage( m_cppPanel, wxT( "cpp" ), false, AppBitmaps::GetBitmap( wxT( "cpp" ), 16 ) );
+	m_notebook->AddPage( m_cppPanel, "cpp", false, AppBitmaps::GetBitmap("h") );
 
 	m_hPanel = new CodeEditor( m_notebook, -1 );
 	InitStyledTextCtrl( m_hPanel->GetTextCtrl() );
 
-	m_notebook->AddPage( m_hPanel, wxT( "h" ), false, AppBitmaps::GetBitmap( wxT( "h" ), 16 ) );
+	m_notebook->AddPage( m_hPanel, "h", false, AppBitmaps::GetBitmap("h") );
 
 	top_sizer->Add( m_notebook, 1, wxEXPAND, 0 );
 
@@ -97,25 +94,24 @@ CppPanel::~CppPanel()
 {
 	AppData()->RemoveHandler( this->GetEventHandler() );
 	wxConfigBase *config = wxConfigBase::Get();
-	config->Write( wxT("/mainframe/editor/cpp/notebook_style"), m_notebook->GetWindowStyleFlag() );
+	config->Write( "/mainframe/editor/cpp/notebook_style", m_notebook->GetWindowStyleFlag() );
 }
 
 void CppPanel::InitStyledTextCtrl( wxStyledTextCtrl *stc )
 {
 	stc->SetLexer( wxSTC_LEX_CPP );
-	stc->SetKeyWords( 0, wxT( "asm auto bool break case catch char class const const_cast \
-	                          continue default delete do double dynamic_cast else enum explicit \
-	                          export extern false float for friend goto if inline int long \
-	                          mutable namespace new operator private protected public register \
-	                          reinterpret_cast return short signed sizeof static static_cast \
-	                          struct switch template this throw true try typedef typeid \
-	                          typename union unsigned using virtual void volatile wchar_t \
-	                          while" ) );
-
+	stc->SetKeyWords( 0, "asm auto bool break case catch char class const const_cast \
+						continue default delete do double dynamic_cast else enum explicit \
+						export extern false float for friend goto if inline int long \
+						mutable namespace new operator private protected public register \
+						reinterpret_cast return short signed sizeof static static_cast \
+						struct switch template this throw true try typedef typeid \
+						typename union unsigned using virtual void volatile wchar_t \
+						while" );
 #ifdef __WXGTK__
 	// Debe haber un bug en wxGTK ya que la familia wxMODERN no es de ancho fijo.
 	wxFont font( 8, wxMODERN, wxNORMAL, wxNORMAL );
-	font.SetFaceName( wxT( "Monospace" ) );
+	font.SetFaceName("Monospace");
 #else
 	wxFont font( 10, wxMODERN, wxNORMAL, wxNORMAL );
 #endif
@@ -158,7 +154,7 @@ void CppPanel::OnFind( wxFindDialogEvent& event )
 	}
 
 	wxString languageText = languageBook->GetPageText( languageSelection );
-	if ( wxT("C++") != languageText )
+	if ( "C++" != languageText )
 	{
 		return;
 	}
@@ -176,11 +172,11 @@ void CppPanel::OnFind( wxFindDialogEvent& event )
 	}
 
 	wxString text = notebook->GetPageText( selection );
-	if ( wxT("cpp") == text )
+	if ( "cpp" == text )
 	{
 		m_cppPanel->ProcessEvent( event );
 	}
-	else if ( wxT("h") == text )
+	else if ( "h" == text )
 	{
 		m_hPanel->ProcessEvent( event );
 	}
@@ -272,10 +268,10 @@ void CppPanel::OnCodeGeneration( wxFBEvent& event )
 
 	// If C++ generation is not enabled, do not generate the file
 	bool doFile = false;
-	PProperty pCodeGen = project->GetProperty( wxT( "code_generation" ) );
+	PProperty pCodeGen = project->GetProperty("code_generation");
 	if ( pCodeGen )
 	{
-		doFile = TypeConv::FlagSet( wxT("C++"), pCodeGen->GetValue() ) && !panelOnly;
+		doFile = TypeConv::FlagSet( "C++", pCodeGen->GetValue() ) && !panelOnly;
 	}
 
 	if ( !(doPanel || doFile ) )
@@ -285,7 +281,7 @@ void CppPanel::OnCodeGeneration( wxFBEvent& event )
 
 	// Get First ID from Project File
 	unsigned int firstID = 1000;
-	PProperty pFirstID = project->GetProperty( wxT("first_id") );
+	PProperty pFirstID = project->GetProperty("first_id");
 	if ( pFirstID )
 	{
 		firstID = pFirstID->GetValueAsInteger();
@@ -293,19 +289,19 @@ void CppPanel::OnCodeGeneration( wxFBEvent& event )
 
 	// Get the file name
 	wxString file;
-	PProperty pfile = project->GetProperty( wxT( "file" ) );
+	PProperty pfile = project->GetProperty("file");
 	if ( pfile )
 	{
 		file = pfile->GetValue();
 	}
 	if ( file.empty() )
 	{
-		file = wxT("noname");
+		file = "noname";
 	}
 
 	// Determine if the path is absolute or relative
 	bool useRelativePath = false;
-	PProperty pRelPath = project->GetProperty( wxT( "relative_path" ) );
+	PProperty pRelPath = project->GetProperty("relative_path");
 	if ( pRelPath )
 	{
 		useRelativePath = ( pRelPath->GetValueAsInteger() ? true : false );
@@ -386,7 +382,7 @@ void CppPanel::OnCodeGeneration( wxFBEvent& event )
 			// Determin if Microsoft BOM should be used
 			bool useMicrosoftBOM = false;
 
-			PProperty pUseMicrosoftBOM = project->GetProperty( wxT( "use_microsoft_bom" ) );
+			PProperty pUseMicrosoftBOM = project->GetProperty("use_microsoft_bom");
 
 			if ( pUseMicrosoftBOM )
 			{
@@ -395,27 +391,27 @@ void CppPanel::OnCodeGeneration( wxFBEvent& event )
 
 			// Determine if Utf8 or Ansi is to be created
 			bool useUtf8 = false;
-			PProperty pUseUtf8 = project->GetProperty( _("encoding") );
+			PProperty pUseUtf8 = project->GetProperty("encoding");
 
 			if ( pUseUtf8 )
 			{
-				useUtf8 = ( pUseUtf8->GetValueAsString() != wxT("ANSI") );
+				useUtf8 = ( pUseUtf8->GetValueAsString() != "ANSI" );
 			}
 
-			PCodeWriter h_cw( new FileCodeWriter( path + file + wxT( ".h" ), useMicrosoftBOM, useUtf8 ) );
+			PCodeWriter h_cw( new FileCodeWriter( path + file + ".h", useMicrosoftBOM, useUtf8 ) );
 
-			PCodeWriter cpp_cw( new FileCodeWriter( path + file + wxT( ".cpp" ), useMicrosoftBOM, useUtf8 ) );
+			PCodeWriter cpp_cw( new FileCodeWriter( path + file + ".cpp", useMicrosoftBOM, useUtf8 ) );
 
 			codegen.SetHeaderWriter( h_cw );
 			codegen.SetSourceWriter( cpp_cw );
 			codegen.GenerateCode( project );
-			wxLogStatus( wxT( "Code generated on \'%s\'." ), path.c_str() );
+			wxLogStatus( _( "Code generated on \'%s\'." ), path.c_str() );
 
 			// check if we have to convert to ANSI encoding
-			if (project->GetPropertyAsString(wxT("encoding")) == wxT("ANSI"))
+			if ( project->GetPropertyAsString("encoding") == "ANSI" )
 			{
-				UTF8ToAnsi(path + file + wxT( ".h" ));
-				UTF8ToAnsi(path + file + wxT( ".cpp" ));
+				UTF8ToAnsi( path + file + ".h" );
+				UTF8ToAnsi( path + file + ".cpp" );
 			}
 		}
 		catch ( wxFBException& ex )
