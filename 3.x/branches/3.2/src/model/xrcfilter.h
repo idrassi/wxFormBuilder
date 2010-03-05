@@ -26,8 +26,9 @@
 #ifndef __XRC_FILTER__
 #define __XRC_FILTER__
 
-#include "utils/wxfbdefs.h"
 #include "model/database.h"
+#include "utils/wxfbdefs.h"
+
 #include <ticpp.h>
 
 /**
@@ -35,19 +36,20 @@
  */
 class XrcLoader
 {
- private:
-  PObjectDatabase m_objDb;
+private:
 
-  PObjectBase GetObject(ticpp::Element *xrcObj, PObjectBase parent);
+	PObjectDatabase m_objDb;
 
- public:
+	PObjectBase GetObject(ticpp::Element *xrcObj, PObjectBase parent );
 
-  void SetObjectDatabase(PObjectDatabase db) { m_objDb = db; }
+public:
 
-  /**
-   * Dado un árbol XML en formato XRC, crea el arbol de objetos asociado.
-   */
-  PObjectBase GetProject(ticpp::Document* xrcDoc);
+	void SetObjectDatabase( PObjectDatabase db ) { m_objDb = db; }
+
+	/**
+	* Dado un árbol XML en formato XRC, crea el arbol de objetos asociado.
+	*/
+	PObjectBase GetProject( ticpp::Document* xrcDoc );
 };
 
 #endif //__XRC_FILTER__

@@ -330,7 +330,7 @@ public:
 
 		return richText;
 	}
-
+/*
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		ObjectToXrcFilter xrc( obj, "wxRichTextCtrl", obj->GetPropertyAsString("name") );
@@ -344,6 +344,7 @@ public:
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
+*/
 };
 
 class HtmlWindowComponent : public ComponentBase
@@ -439,7 +440,6 @@ public:
 		filter.AddProperty( "checked", "value", XRC_TYPE_BOOL );
 		return filter.GetXfbObject();
 	}
-
 };
 
 class TreeCtrlComponent : public ComponentBase

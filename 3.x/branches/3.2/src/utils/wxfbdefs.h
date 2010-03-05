@@ -48,37 +48,38 @@ class StringCodeWriter;
 // Let's go with a few typedefs for frequently used types,
 // please use it, code will be cleaner and easier to read.
 
-typedef boost::shared_ptr<OptionList> POptionList;
-typedef boost::shared_ptr<ObjectBase> PObjectBase;
-typedef boost::weak_ptr<ObjectBase>   WPObjectBase;
-typedef boost::shared_ptr<ObjectPackage>   PObjectPackage;
-typedef boost::weak_ptr<ObjectPackage>   WPObjectPackage;
+typedef boost::shared_ptr< OptionList > 		POptionList;
+typedef boost::shared_ptr< ObjectBase > 		PObjectBase;
+typedef boost::weak_ptr< ObjectBase >   		WPObjectBase;
+typedef boost::shared_ptr< ObjectPackage >   	PObjectPackage;
+typedef boost::weak_ptr< ObjectPackage >   		WPObjectPackage;
 
-typedef boost::shared_ptr<CodeInfo>     PCodeInfo;
-typedef boost::shared_ptr<ObjectInfo>   PObjectInfo;
-typedef boost::shared_ptr<Property>     PProperty;
-typedef boost::shared_ptr<PropertyInfo> PPropertyInfo;
-typedef boost::shared_ptr<EventInfo>    PEventInfo;
-typedef boost::shared_ptr<Event>        PEvent;
-typedef boost::shared_ptr<PropertyCategory> PPropertyCategory;
+typedef boost::shared_ptr< CodeInfo >     		PCodeInfo;
+typedef boost::shared_ptr< ObjectInfo >   		PObjectInfo;
+typedef boost::shared_ptr< Property >     		PProperty;
+typedef boost::shared_ptr< PropertyInfo > 		PPropertyInfo;
+typedef boost::shared_ptr< EventInfo >    		PEventInfo;
+typedef boost::shared_ptr< Event >        		PEvent;
+typedef boost::shared_ptr< PropertyCategory > 	PPropertyCategory;
 
-typedef std::map<wxString, PPropertyInfo> PropertyInfoMap;
-typedef std::map<wxString, PObjectInfo>   ObjectInfoMap;
-typedef std::map<wxString, PEventInfo>    EventInfoMap;
-typedef std::map<wxString, PProperty>     PropertyMap;
-typedef std::map<wxString, PEvent>        EventMap;
+typedef std::map< wxString, PPropertyInfo > 	PropertyInfoMap;
+typedef std::map< wxString, PObjectInfo >   	ObjectInfoMap;
+typedef std::map< wxString, PEventInfo >    	EventInfoMap;
+typedef std::map< wxString, PProperty >     	PropertyMap;
+typedef std::map< wxString, PEvent >        	EventMap;
 
+typedef std::vector< PObjectBase > 				ObjectBaseVector;
+typedef std::vector< PEvent >      				EventVector;
 
-typedef std::vector<PObjectBase> ObjectBaseVector;
-typedef std::vector<PEvent>      EventVector;
+typedef boost::shared_ptr< wxFBManager > 		PwxFBManager;
+typedef boost::shared_ptr< CodeWriter > 		PCodeWriter;
+typedef boost::shared_ptr< TemplateParser > 	PTemplateParser;
+typedef boost::shared_ptr< TCCodeWriter > 		PTCCodeWriter;
+typedef boost::shared_ptr< StringCodeWriter > 	PStringCodeWriter;
 
-typedef boost::shared_ptr<wxFBManager> PwxFBManager;
-typedef boost::shared_ptr<CodeWriter> PCodeWriter;
-typedef boost::shared_ptr<TemplateParser> PTemplateParser;
-typedef boost::shared_ptr<TCCodeWriter> PTCCodeWriter;
-typedef boost::shared_ptr<StringCodeWriter> PStringCodeWriter;
-
-// Flatnotebook styles are stored in config, if style #defines change, or config is manually modified, these style overrides still apply
+// Flatnotebook styles are stored in config, if style #defines change, or config is manually modified,
+// these style overrides still apply
+// TODO: Change this for wxAuiNotebook
 #define FNB_STYLE_OVERRIDES( x ) ( x | wxFNB_CUSTOM_DLG | wxFNB_NO_X_BUTTON ) & ( ~wxFNB_X_ON_TAB & ~wxFNB_MOUSE_MIDDLE_CLOSES_TABS & ~wxFNB_DCLICK_CLOSES_TABS & ~wxFNB_ALLOW_FOREIGN_DND )
 
 #endif //WXFBDEFS_H

@@ -23,17 +23,16 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <wx/wx.h>
-#include <wx/tokenzr.h>
-
-#include <ticpp.h>
-
 #include "objectbase.h"
-
+#include "rad/appdata.h"
 #include "utils/debug.h"
 #include "utils/typeconv.h"
 #include "utils/stringutils.h"
-#include "rad/appdata.h"
+
+#include <ticpp.h>
+
+#include <wx/wx.h>
+#include <wx/tokenzr.h>
 
 PropertyInfo::PropertyInfo( wxString 							name,
 							PropertyType 						type,
@@ -79,7 +78,7 @@ bool Property::IsNull()
 		case PT_BITMAP:
 		{
 			wxString path;
-			size_t semicolonIndex = m_value.find_first_of( wxT(";") );
+			size_t semicolonIndex = m_value.find_first_of(";");
 			if ( semicolonIndex != m_value.npos )
 			{
 				path = m_value.substr( 0, semicolonIndex );
@@ -88,7 +87,6 @@ bool Property::IsNull()
 			{
 				path = m_value;
 			}
-
 			return path.empty();
 		}
 		case PT_WXSIZE:
@@ -107,34 +105,34 @@ void Property::SetDefaultValue()
 	m_value = m_info->GetDefaultValue();
 }
 
-void Property::SetValue(const wxFontContainer &font)
+void Property::SetValue( const wxFontContainer &font )
 {
 	m_value = TypeConv::FontToString( font );
 }
 
-void Property::SetValue(const wxColour &colour)
+void Property::SetValue( const wxColour &colour )
 {
 	m_value = TypeConv::ColourToString( colour );
 }
 
-void Property::SetValue(const wxString &str, bool format)
+void Property::SetValue( const wxString &str, bool format )
 {
-	m_value = (format ? TypeConv::TextToString(str) : str );
+	m_value = ( format ? TypeConv::TextToString( str ) : str );
 }
 
-void Property::SetValue(const wxPoint &point)
+void Property::SetValue( const wxPoint &point )
 {
-	m_value = TypeConv::PointToString(point);
+	m_value = TypeConv::PointToString( point );
 }
 
-void Property::SetValue(const wxSize &size)
+void Property::SetValue( const wxSize &size )
 {
-	m_value = TypeConv::SizeToString(size);
+	m_value = TypeConv::SizeToString( size );
 }
 
-void Property::SetValue(const int integer)
+void Property::SetValue( const int integer )
 {
-	m_value = StringUtils::IntToStr(integer);
+	m_value = StringUtils::IntToStr( integer );
 }
 /* TODO
 void Property::SetValue(const wxAlignment alignment)
@@ -142,7 +140,7 @@ void Property::SetValue(const wxAlignment alignment)
 	m_value = TypeConv::AlignmentToString(alignment);
 }
 */
-void Property::SetValue(const double val )
+void Property::SetValue( const double val )
 {
 	m_value = TypeConv::FloatToString( val );
 }
@@ -178,13 +176,13 @@ int Property::GetValueAsInteger()
 	{
 	case PT_OPTION:
 	case PT_MACRO:
-		result = TypeConv::GetMacroValue(m_value);
+		result = TypeConv::GetMacroValue( m_value );
 		break;
 	case PT_BITLIST:
-		result = TypeConv::BitlistToInt(m_value);
+		result = TypeConv::BitlistToInt( m_value );
 		break;
 	default:
-		result = TypeConv::StringToInt(m_value);
+		result = TypeConv::StringToInt( m_value );
 		break;
 	}
 	return result;
@@ -192,7 +190,7 @@ int Property::GetValueAsInteger()
 /* TODO
 wxAlignment Property::GetValueAsAlignment()
 {
-	return TypeConv::StringToAlignment(m_value);
+	return TypeConv::StringToAlignment( m_value );
 }
 */
 wxString Property::GetValueAsString()
@@ -202,13 +200,13 @@ wxString Property::GetValueAsString()
 
 wxString Property::GetValueAsText()
 {
-	return TypeConv::StringToText(m_value);
+	return TypeConv::StringToText( m_value );
 }
 
 
 wxArrayString Property::GetValueAsArrayString()
 {
-	return TypeConv::StringToArrayString(m_value);
+	return TypeConv::StringToArrayString( m_value );
 }
 
 double Property::GetValueAsFloat()
@@ -259,7 +257,6 @@ wxString Property::GetChildFromParent( const wxString& childName )
 		return child->second;
 	}
 }
-
 ///////////////////////////////////////////////////////////////////////////////
 const int ObjectBase::INDENT = 2;
 
@@ -269,7 +266,7 @@ m_expanded( true )
 {
 	m_class = class_name;
 
-	Debug::Print(wxT("new ObjectBase"));
+	Debug::Print( _("new ObjectBase") );
 }
 
 ObjectBase::~ObjectBase()
@@ -277,13 +274,13 @@ ObjectBase::~ObjectBase()
 	// remove the reference in the parent
 	PObjectBase parent = m_parent.lock();
 
-	if (parent)
+	if ( parent )
 	{
-		PObjectBase pobj(GetThis());
-		parent->RemoveChild(pobj);
+		PObjectBase pobj( GetThis() );
+		parent->RemoveChild( pobj );
 	}
 
-	Debug::Print(wxT("delete ObjectBase"));
+	Debug::Print( _("delete ObjectBase") );
 }
 
 wxString ObjectBase::GetIndentString(int indent)
@@ -292,7 +289,7 @@ wxString ObjectBase::GetIndentString(int indent)
 	wxString s;
 
 	for (i=0;i<indent;i++)
-		s += wxT(" ");
+		s += " ";
 
 	return s;
 }
@@ -304,37 +301,36 @@ PProperty ObjectBase::GetProperty (wxString name)
 	if ( it != m_properties.end() )
 		return it->second;
 
-  //Debug::Print(wxT("[ObjectBase::GetProperty] Property %s not found!"),name.c_str());
+  //Debug::Print( _("[ObjectBase::GetProperty] Property %s not found!"),name.c_str() );
 	// este aserto falla siempre que se crea un sizeritem
-	// assert(false);
+	// assert( false );
 	return PProperty();
 }
 
-PProperty ObjectBase::GetProperty (unsigned int idx)
+PProperty ObjectBase::GetProperty ( unsigned int idx )
 {
-	assert (idx < m_properties.size());
+	assert ( idx < m_properties.size() );
 
 	PropertyMap::iterator it = m_properties.begin();
 	unsigned int i = 0;
-	while (i < idx && it != m_properties.end())
+	while ( i < idx && it != m_properties.end() )
 	{
 		i++;
 		it++;
 	}
-
 	if (it != m_properties.end())
 		return it->second;
 
 	return PProperty();
 }
 
-PEvent ObjectBase::GetEvent (wxString name)
+PEvent ObjectBase::GetEvent ( wxString name )
 {
 	EventMap::iterator it = m_events.find( name );
 	if ( it != m_events.end() )
 		return it->second;
-// TODO: Check these changes
-	wxString msg =wxT( "[ObjectBase::GetEvent] Event ") + name + wxT(" not found!");
+
+	wxString msg = _("[ObjectBase::GetEvent] Event ") + name + _(" not found!");
 	Debug::Print( msg );
 	return PEvent();
 }
