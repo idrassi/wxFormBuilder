@@ -33,7 +33,6 @@ the wxFormBuilder GUI code.
 @date	01/14/2007
 */
 
-
 #include "geninhertclass_gui.h"
 #include <vector>
 #include "utils/wxfbdefs.h"

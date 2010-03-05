@@ -22,10 +22,11 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-#include "innerframe.h"
-#include "window_buttons.h"
 #include <wx/dcbuffer.h>
 #include <wx/settings.h>
+
+#include "innerframe.h"
+#include "window_buttons.h"
 
 DEFINE_EVENT_TYPE( wxEVT_INNER_FRAME_RESIZED )
 
@@ -67,7 +68,6 @@ public:
 
 };
 
-
 BEGIN_EVENT_TABLE( wxInnerFrame::TitleBar, wxPanel )
 EVT_LEFT_DOWN( wxInnerFrame::TitleBar::OnLeftClick )
 EVT_PAINT( wxInnerFrame::TitleBar::OnPaint )
@@ -97,7 +97,7 @@ m_style( style )
 	b = wxMin( 255, m_colour1.Blue() + 30 );
 
 	m_colour2 = wxColour( r, g, b );
-	m_titleText = wxT( "wxFormBuilder rocks!" );
+	m_titleText = "wxFormBuilder rocks!";
 	SetMinSize( wxSize( 100, 19 ) );
 }
 
@@ -175,10 +175,10 @@ void wxInnerFrame::TitleBar::DrawTitleBar( wxDC &dc )
 		colourB += incB;
 	}
 
-	// Draw title background with horizontal gradient.
-	/*float incR = (float)(m_colour2.Red() - m_colour1.Red()) / tbHeight;
-	float incG = (float)(m_colour2.Green() - m_colour1.Green()) / tbHeight;
-	float incB = (float)(m_colour2.Blue() - m_colour1.Blue()) / tbHeight;
+/* Draw title background with horizontal gradient.
+	float incR = (float)( m_colour2.Red() - m_colour1.Red() ) / tbHeight;
+	float incG = (float)( m_colour2.Green() - m_colour1.Green() ) / tbHeight;
+	float incB = (float)( m_colour2.Blue() - m_colour1.Blue() ) / tbHeight;
 
 	float colourR = m_colour1.Red();
 	float colourG = m_colour1.Green();
@@ -186,18 +186,18 @@ void wxInnerFrame::TitleBar::DrawTitleBar( wxDC &dc )
 
 	wxColour colour;
 	wxPen pen;
-	for (int i=0; i<tbHeight; i++)
+	for ( int i=0; i<tbHeight; i++ )
 	{
-	  colour.Set((unsigned char)colourR, (unsigned char)colourG, (unsigned char)colourB);
-	pen.SetColour(colour);
-	dc.SetPen(pen);
-	dc.DrawLine(tbPosX, tbPosY + i, tbPosX + tbWidth, tbPosY + i);
+		colour.Set( (unsigned char)colourR, (unsigned char)colourG, ( unsigned char)colourB );
+		pen.SetColour( colour );
+		dc.SetPen( pen );
+		dc.DrawLine( tbPosX, tbPosY + i, tbPosX + tbWidth, tbPosY + i );
 
-	colourR += incR;
-	colourG += incG;
-	colourB += incB;
-	}*/
-
+		colourR += incR;
+		colourG += incG;
+		colourB += incB;
+	}
+*/
 	// Draw title text
 	wxFont font = dc.GetFont();
 	wxSize ppi = dc.GetPPI();
@@ -223,55 +223,54 @@ void wxInnerFrame::TitleBar::DrawTitleBar( wxDC &dc )
 	bool hasMinimize = ( m_style & wxMINIMIZE_BOX ) != 0;
 	bool hasMaximize = ( m_style & wxMAXIMIZE_BOX ) != 0;
 
-	#ifdef __WXMSW__
-		if ( ( m_style & wxSYSTEM_MENU ) == 0 )
-		{
-			// On Windows, no buttons are drawn without System Menu
-			return;
-		}
+#ifdef __WXMSW__
+	if ( ( m_style & wxSYSTEM_MENU ) == 0 )
+	{
+		// On Windows, no buttons are drawn without System Menu
+		return;
+	}
 
-		dc.DrawBitmap( hasClose ? m_close : m_closeDisabled, wbPosX, wbPosY, true );
+	dc.DrawBitmap( hasClose ? m_close : m_closeDisabled, wbPosX, wbPosY, true );
+	wbPosX -= m_close.GetWidth();
+
+	if ( hasMaximize )
+	{
+		dc.DrawBitmap( m_maximize, wbPosX, wbPosY, true );
+	}
+	else if ( hasMinimize )
+	{
+		dc.DrawBitmap( m_maximizeDisabled, wbPosX, wbPosY, true );
+	}
+	wbPosX -= m_maximize.GetWidth();
+
+	if ( hasMinimize )
+	{
+		dc.DrawBitmap( m_minimize, wbPosX, wbPosY, true );
+	}
+	else if ( hasMaximize )
+	{
+		dc.DrawBitmap( m_minimizeDisabled, wbPosX, wbPosY, true );
+	}
+#else // GTK
+	if ( hasClose )
+	{
+		dc.DrawBitmap( m_close, wbPosX, wbPosY, true );
 		wbPosX -= m_close.GetWidth();
+	}
 
-		if ( hasMaximize )
-		{
-			dc.DrawBitmap( m_maximize, wbPosX, wbPosY, true );
-		}
-		else if ( hasMinimize )
-		{
-			dc.DrawBitmap( m_maximizeDisabled, wbPosX, wbPosY, true );
-		}
+	bool hasResizeBorder = ( m_style & wxRESIZE_BORDER ) != 0;
+	if ( hasMaximize && hasResizeBorder )
+	{
+		dc.DrawBitmap( m_maximize, wbPosX, wbPosY, true );
 		wbPosX -= m_maximize.GetWidth();
+	}
 
-		if ( hasMinimize )
-		{
-			dc.DrawBitmap( m_minimize, wbPosX, wbPosY, true );
-		}
-		else if ( hasMaximize )
-		{
-			dc.DrawBitmap( m_minimizeDisabled, wbPosX, wbPosY, true );
-		}
-	#else // GTK
-		if ( hasClose )
-		{
-			dc.DrawBitmap( m_close, wbPosX, wbPosY, true );
-			wbPosX -= m_close.GetWidth();
-		}
-
-		bool hasResizeBorder = ( m_style & wxRESIZE_BORDER ) != 0;
-		if ( hasMaximize && hasResizeBorder )
-		{
-			dc.DrawBitmap( m_maximize, wbPosX, wbPosY, true );
-			wbPosX -= m_maximize.GetWidth();
-		}
-
-		if ( hasMinimize )
-		{
-			dc.DrawBitmap( m_minimize, wbPosX, wbPosY, true );
-		}
-	#endif
+	if ( hasMinimize )
+	{
+		dc.DrawBitmap( m_minimize, wbPosX, wbPosY, true );
+	}
+#endif
 }
-
 //////////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE( wxInnerFrame, wxPanel )
@@ -380,14 +379,13 @@ void wxInnerFrame::OnMouseMotion( wxMouseEvent& e )
 		dc.SetPen( wxNullPen );
 		dc.SetBrush( wxNullBrush );
 	}
-
 	else
 	{
 		int x, y;
 		GetClientSize( &x, &y );
 
 		if ( ( e.GetX() >= x - m_resizeBorder && e.GetY() >= y - m_resizeBorder ) ||
-		        ( e.GetX() < m_resizeBorder && e.GetY() < m_resizeBorder ) )
+				( e.GetX() < m_resizeBorder && e.GetY() < m_resizeBorder ) )
 		{
 			SetCursor( wxCursor( wxCURSOR_SIZENWSE ) );
 		}
@@ -449,7 +447,7 @@ void wxInnerFrame::OnLeftUp( wxMouseEvent& )
 		dc.SetBrush( *wxTRANSPARENT_BRUSH );
 		dc.SetLogicalFunction( wxINVERT );
 
-		//wxPoint pos = ClientToScreen(wxPoint(0, 0));
+		//wxPoint pos = ClientToScreen( wxPoint( 0, 0 ) );
 		wxPoint pos = GetParent()->ClientToScreen( GetPosition() );
 
 		dc.DrawRectangle( pos.x, pos.y, m_curX, m_curY );
@@ -467,7 +465,6 @@ void wxInnerFrame::OnLeftUp( wxMouseEvent& )
 		m_curX = m_curY = -1;
 	}
 }
-
 
 void wxInnerFrame::ShowTitleBar( bool show )
 {
@@ -507,4 +504,3 @@ void wxInnerFrame::SetTitleStyle( long style )
 {
 	m_titleBar->SetStyle( style );
 }
-
