@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxFormBuilder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-03 10:38+0100\n"
+"POT-Creation-Date: 2010-03-05 01:14+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: RedTide <circle.irc@gmail.com>\n"
+"Last-Translator: Andrea Zanellato <xvirc.client@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,295 +13,47 @@ msgstr ""
 "X-Poedit-Basepath: /media/WD1TB/CodeLiteProjects/\n"
 "X-Poedit-SearchPath-0: wxformbuilder32\n"
 
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:90
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:92
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:94
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:96
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:419
-msgid "select"
+#: wxformbuilder32/plugins/containers/containers.cpp:105
+msgid ""
+"wxAuiNotebook pages can normally be closed.\n"
+"However, it is difficult to design a page that has been closed, so this action has been vetoed."
 msgstr ""
 
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:133
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:222
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:335
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:495
-msgid "pos"
+#: wxformbuilder32/plugins/containers/containers.cpp:106
+msgid "Page Close Vetoed!"
 msgstr ""
 
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:134
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:223
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:336
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:496
-msgid "size"
+#: wxformbuilder32/plugins/containers/containers.cpp:112
+msgid ""
+"wxAuiNotebook pages can be dragged to other wxAuiNotebooks if the wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND event is caught and allowed.\n"
+"However, it is difficult to design a page that has been moved, so this action was not allowed."
 msgstr ""
 
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:135
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:224
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:337
-msgid "style"
+#: wxformbuilder32/plugins/containers/containers.cpp:113
+msgid "Page Move Not Allowed!"
 msgstr ""
 
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:135
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:224
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:337
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:497
-msgid "window_style"
+#: wxformbuilder32/plugins/containers/containers.cpp:175
+msgid ""
+"Double-clicking a wxSplitterWindow sash with the minimum pane size set to 0 would normally unsplit it.\n"
+"However, it is difficult to design a pane that has been closed, so this action has been vetoed."
 msgstr ""
 
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:137
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:139
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:226
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:228
-msgid "extra_style"
+#: wxformbuilder32/plugins/containers/containers.cpp:176
+msgid "Unsplit Vetoed!"
 msgstr ""
 
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:339
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:393
-msgid "has_images"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:345
-msgid "customize_options"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:354
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:361
-msgid "wxFlatNotebook"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:354
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:498
-msgid "name"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:380
-#, c-format
-msgid "FlatNotebookPageComponent is missing its wxFormBuilder object(%i), its parent(%i), or its child(%i)"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:395
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:400
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:405
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:469
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:471
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:482
-msgid "bitmap"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:398
-msgid "auto_scale_images"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:407
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:411
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:416
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:467
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:481
-msgid "label"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:466
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:478
-msgid "notebookpage"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:468
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:480
-msgid "selected"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:502
-msgid "line_numbers"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:530
-msgid "folding"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:544
-msgid "indentation_guides"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:559
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:561
-msgid "font"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:577
-msgid "use_tabs"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:578
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:581
-msgid "tab_width"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:579
-msgid "tab_indents"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:580
-msgid "backspace_unindents"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:584
-msgid "view_eol"
-msgstr ""
-
-#: wxformbuilder32/plugins/wxAdditions/wxAdditions_mini.cpp:585
-msgid "view_whitespace"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:224
-#: wxformbuilder32/plugins/containers/containers.cpp:231
-#: wxformbuilder32/plugins/common/common.cpp:171
-msgid "wxPanel"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:248
-#: wxformbuilder32/plugins/containers/containers.cpp:250
-#: wxformbuilder32/plugins/containers/containers.cpp:284
-#: wxformbuilder32/plugins/containers/containers.cpp:299
-msgid "sashgravity"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:256
-#: wxformbuilder32/plugins/containers/containers.cpp:258
-msgid "sashsize"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:261
-#: wxformbuilder32/plugins/containers/containers.cpp:263
-#: wxformbuilder32/plugins/containers/containers.cpp:285
-#: wxformbuilder32/plugins/containers/containers.cpp:300
-msgid "min_pane_size"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:273
-#: wxformbuilder32/plugins/containers/containers.cpp:283
-#: wxformbuilder32/plugins/containers/containers.cpp:298
-#: wxformbuilder32/plugins/containers/containers.cpp:380
-#: wxformbuilder32/plugins/containers/containers.cpp:414
-msgid "sashpos"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:281
-#: wxformbuilder32/plugins/containers/containers.cpp:296
-msgid "wxSplitterWindow"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:284
-#: wxformbuilder32/plugins/containers/containers.cpp:299
-msgid "gravity"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:285
-#: wxformbuilder32/plugins/containers/containers.cpp:300
-#: wxformbuilder32/plugins/layout/layout.cpp:193
-#: wxformbuilder32/plugins/layout/layout.cpp:201
-#: wxformbuilder32/plugins/layout/layout.cpp:232
-#: wxformbuilder32/plugins/layout/layout.cpp:241
-#: wxformbuilder32/plugins/layout/layout.cpp:267
-#: wxformbuilder32/plugins/layout/layout.cpp:278
-#: wxformbuilder32/plugins/layout/layout.cpp:310
-#: wxformbuilder32/plugins/layout/layout.cpp:319
-#: wxformbuilder32/plugins/layout/layout.cpp:611
-#: wxformbuilder32/plugins/layout/layout.cpp:662
-msgid "minsize"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:286
-#: wxformbuilder32/plugins/containers/containers.cpp:381
-msgid "splitmode"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:287
-#: wxformbuilder32/plugins/containers/containers.cpp:289
-msgid "orientation"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:322
+#: wxformbuilder32/plugins/containers/containers.cpp:327
 msgid "This should be a wxSplitterWindow"
 msgstr ""
 
-#: wxformbuilder32/plugins/containers/containers.cpp:341
-#: wxformbuilder32/plugins/containers/containers.cpp:369
+#: wxformbuilder32/plugins/containers/containers.cpp:346
+#: wxformbuilder32/plugins/containers/containers.cpp:373
 msgid "A SplitterItem is abstract and must have a child!"
 msgstr ""
 
-#: wxformbuilder32/plugins/containers/containers.cpp:424
-msgid "__dummyitem__"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:441
-msgid "scroll_rate_x"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:442
-msgid "scroll_rate_y"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:448
-#: wxformbuilder32/plugins/containers/containers.cpp:455
-msgid "wxScrolledWindow"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:481
-#: wxformbuilder32/plugins/containers/containers.cpp:488
-msgid "wxNotebook"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:505
-msgid "NotebookPageComponent"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:564
-#: wxformbuilder32/plugins/containers/containers.cpp:776
-#: wxformbuilder32/plugins/containers/containers.cpp:780
-#: wxformbuilder32/plugins/containers/containers.cpp:915
-#: wxformbuilder32/plugins/containers/containers.cpp:919
-#: wxformbuilder32/plugins/common/common.cpp:317
-#: wxformbuilder32/plugins/common/common.cpp:318
-#: wxformbuilder32/plugins/common/common.cpp:381
-#: wxformbuilder32/plugins/common/common.cpp:392
-#: wxformbuilder32/plugins/common/common.cpp:1161
-#: wxformbuilder32/plugins/common/common.cpp:1162
-#: wxformbuilder32/plugins/common/common.cpp:1225
-#: wxformbuilder32/plugins/common/common.cpp:1236
-msgid "bitmapsize"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:577
-#: wxformbuilder32/plugins/containers/containers.cpp:584
-msgid "wxListbook"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:601
-msgid "ListbookPageComponent"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:611
 #: wxformbuilder32/plugins/containers/containers.cpp:624
 msgid "listbookpage"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:651
-#: wxformbuilder32/plugins/containers/containers.cpp:658
-msgid "wxChoicebook"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:675
-msgid "ChoicebookPageComponent"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:685
-#: wxformbuilder32/plugins/containers/containers.cpp:693
-msgid "choicebookpage"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:720
-#: wxformbuilder32/plugins/containers/containers.cpp:727
-msgid "wxTreebook"
 msgstr ""
 
 #: wxformbuilder32/plugins/containers/containers.cpp:752
@@ -309,1173 +61,271 @@ msgstr ""
 msgid "TreebookPageComponent is missing its wxFormBuilder object(%i), its parent(%i), or its child(%i)"
 msgstr ""
 
-#: wxformbuilder32/plugins/containers/containers.cpp:757
-#: wxformbuilder32/plugins/containers/containers.cpp:828
-#: wxformbuilder32/plugins/containers/containers.cpp:840
-msgid "depth"
-msgstr ""
-
 #: wxformbuilder32/plugins/containers/containers.cpp:761
 msgid "TreebookPageComponent has an invalid depth."
 msgstr ""
 
-#: wxformbuilder32/plugins/containers/containers.cpp:827
-#: wxformbuilder32/plugins/containers/containers.cpp:838
-msgid "treebookpage"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:901
+#: wxformbuilder32/plugins/containers/containers.cpp:899
 #, c-format
 msgid "ToolbookPageComponent is missing its wxFormBuilder object(%i), its parent(%i), or its child(%i)"
 msgstr ""
 
-#: wxformbuilder32/plugins/containers/containers.cpp:991
-msgid "tab_ctrl_height"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:992
-msgid "uniform_bitmap_size"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:1045
+#: wxformbuilder32/plugins/containers/containers.cpp:1042
 #, c-format
 msgid "AuiNotebookPageComponent is missing its wxFormBuilder object(%i), its parent(%i), or its child(%i)"
 msgstr ""
 
-#: wxformbuilder32/plugins/common/common.cpp:140
-msgid "wxFrame"
+#: wxformbuilder32/plugins/common/common.cpp:774
+#, c-format
+msgid "Cell (0,%d)"
 msgstr ""
 
-#: wxformbuilder32/plugins/common/common.cpp:142
-#: wxformbuilder32/plugins/common/common.cpp:154
-#: wxformbuilder32/plugins/common/common.cpp:197
-#: wxformbuilder32/plugins/common/common.cpp:209
-#: wxformbuilder32/plugins/common/common.cpp:228
-#: wxformbuilder32/plugins/common/common.cpp:244
-msgid "title"
+#: wxformbuilder32/plugins/common/common.cpp:780
+#, c-format
+msgid "Cell (%d,%d)"
 msgstr ""
 
-#: wxformbuilder32/plugins/common/common.cpp:143
-#: wxformbuilder32/plugins/common/common.cpp:155
-#: wxformbuilder32/plugins/common/common.cpp:198
-#: wxformbuilder32/plugins/common/common.cpp:210
-#: wxformbuilder32/plugins/common/common.cpp:229
-#: wxformbuilder32/plugins/common/common.cpp:245
-msgid "center"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:145
-#: wxformbuilder32/plugins/common/common.cpp:155
-#: wxformbuilder32/plugins/common/common.cpp:200
-#: wxformbuilder32/plugins/common/common.cpp:210
-#: wxformbuilder32/plugins/common/common.cpp:231
-#: wxformbuilder32/plugins/common/common.cpp:245
-msgid "centered"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:145
-#: wxformbuilder32/plugins/common/common.cpp:200
-#: wxformbuilder32/plugins/common/common.cpp:231
-#: wxformbuilder32/plugins/common/common.cpp:1097
-#: wxformbuilder32/plugins/common/common.cpp:1098
-msgid "1"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:152
-msgid "Frame"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:178
-msgid "Panel"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:195
-msgid "wxDialog"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:207
-msgid "Dialog"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:226
-msgid "wxWizard"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:242
-msgid "Wizard"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:262
-msgid "wxWizardPage"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:263
-#: wxformbuilder32/plugins/common/common.cpp:275
-msgid "page_name"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:273
-msgid "wizardpage"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:294
-#: wxformbuilder32/plugins/common/common.cpp:1016
-#: wxformbuilder32/plugins/common/common.cpp:1023
-msgid "wxMenuBar"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:301
-msgid "MenuBar"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:319
-#: wxformbuilder32/plugins/common/common.cpp:321
-#: wxformbuilder32/plugins/common/common.cpp:382
-#: wxformbuilder32/plugins/common/common.cpp:393
-#: wxformbuilder32/plugins/common/common.cpp:1163
-#: wxformbuilder32/plugins/common/common.cpp:1165
-#: wxformbuilder32/plugins/common/common.cpp:1226
-#: wxformbuilder32/plugins/common/common.cpp:1237
-msgid "margins"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:324
-#: wxformbuilder32/plugins/common/common.cpp:325
-#: wxformbuilder32/plugins/common/common.cpp:383
-#: wxformbuilder32/plugins/common/common.cpp:394
-#: wxformbuilder32/plugins/common/common.cpp:1168
-#: wxformbuilder32/plugins/common/common.cpp:1169
-#: wxformbuilder32/plugins/common/common.cpp:1227
-#: wxformbuilder32/plugins/common/common.cpp:1238
-msgid "packing"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:326
-#: wxformbuilder32/plugins/common/common.cpp:327
-#: wxformbuilder32/plugins/common/common.cpp:384
-#: wxformbuilder32/plugins/common/common.cpp:395
-#: wxformbuilder32/plugins/common/common.cpp:1170
-#: wxformbuilder32/plugins/common/common.cpp:1171
-#: wxformbuilder32/plugins/common/common.cpp:1228
-#: wxformbuilder32/plugins/common/common.cpp:1239
-msgid "separation"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:354
-#: wxformbuilder32/plugins/common/common.cpp:1087
-#: wxformbuilder32/plugins/common/common.cpp:1198
-#: wxformbuilder32/plugins/common/common.cpp:1272
-#: wxformbuilder32/plugins/common/common.cpp:1299
-#: wxformbuilder32/plugins/common/common.cpp:1310
-#: wxformbuilder32/plugins/common/common.cpp:1316
-msgid "kind"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:355
-#: wxformbuilder32/plugins/common/common.cpp:1082
-#: wxformbuilder32/plugins/common/common.cpp:1128
-#: wxformbuilder32/plugins/common/common.cpp:1199
-msgid "help"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:379
-#: wxformbuilder32/plugins/common/common.cpp:1223
-#: wxformbuilder32/plugins/common/common.cpp:1234
-msgid "wxToolBar"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:390
-msgid "ToolBar"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:416
-#: wxformbuilder32/plugins/common/common.cpp:429
-#: wxformbuilder32/plugins/common/common.cpp:438
-#: wxformbuilder32/plugins/common/common.cpp:455
-#: wxformbuilder32/plugins/common/common.cpp:503
-#: wxformbuilder32/plugins/common/common.cpp:516
-msgid "default"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:426
-#: wxformbuilder32/plugins/common/common.cpp:435
-msgid "wxButton"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:460
-#: wxformbuilder32/plugins/common/common.cpp:462
-#: wxformbuilder32/plugins/common/common.cpp:487
-#: wxformbuilder32/plugins/common/common.cpp:489
-#: wxformbuilder32/plugins/common/common.cpp:512
-msgid "disabled"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:470
-#: wxformbuilder32/plugins/common/common.cpp:472
-#: wxformbuilder32/plugins/common/common.cpp:495
-#: wxformbuilder32/plugins/common/common.cpp:497
-#: wxformbuilder32/plugins/common/common.cpp:514
-msgid "focus"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:475
-#: wxformbuilder32/plugins/common/common.cpp:477
-#: wxformbuilder32/plugins/common/common.cpp:499
-#: wxformbuilder32/plugins/common/common.cpp:501
-#: wxformbuilder32/plugins/common/common.cpp:515
-msgid "hover"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:484
-#: wxformbuilder32/plugins/common/common.cpp:509
-msgid "wxBitmapButton"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:529
-#: wxformbuilder32/plugins/common/common.cpp:548
-#: wxformbuilder32/plugins/common/common.cpp:558
-#: wxformbuilder32/plugins/common/common.cpp:570
-#: wxformbuilder32/plugins/common/common.cpp:617
-#: wxformbuilder32/plugins/common/common.cpp:636
-#: wxformbuilder32/plugins/common/common.cpp:645
-#: wxformbuilder32/plugins/common/common.cpp:948
-#: wxformbuilder32/plugins/common/common.cpp:957
-#: wxformbuilder32/plugins/common/common.cpp:966
-#: wxformbuilder32/plugins/common/common.cpp:1403
-#: wxformbuilder32/plugins/common/common.cpp:1415
-#: wxformbuilder32/plugins/common/common.cpp:1425
-#: wxformbuilder32/plugins/common/common.cpp:1443
-#: wxformbuilder32/plugins/common/common.cpp:1452
-#: wxformbuilder32/plugins/common/common.cpp:1461
-#: wxformbuilder32/plugins/additional/additional.cpp:400
-#: wxformbuilder32/plugins/additional/additional.cpp:412
-#: wxformbuilder32/plugins/additional/additional.cpp:432
-#: wxformbuilder32/plugins/additional/additional.cpp:441
-#: wxformbuilder32/plugins/additional/additional.cpp:620
-#: wxformbuilder32/plugins/additional/additional.cpp:631
-#: wxformbuilder32/plugins/additional/additional.cpp:645
-#: wxformbuilder32/plugins/additional/additional.cpp:683
-#: wxformbuilder32/plugins/additional/additional.cpp:693
-#: wxformbuilder32/plugins/additional/additional.cpp:694
-#: wxformbuilder32/plugins/additional/additional.cpp:1001
-#: wxformbuilder32/plugins/additional/additional.cpp:1009
-#: wxformbuilder32/plugins/additional/additional.cpp:1033
-#: wxformbuilder32/plugins/additional/additional.cpp:1051
-#: wxformbuilder32/plugins/additional/additional.cpp:1053
-#: wxformbuilder32/plugins/additional/additional.cpp:1062
-#: wxformbuilder32/plugins/additional/additional.cpp:1074
-#: wxformbuilder32/plugins/additional/additional.cpp:1086
-#: wxformbuilder32/plugins/additional/additional.cpp:1101
-#: wxformbuilder32/plugins/additional/additional.cpp:1111
-#: wxformbuilder32/plugins/additional/additional.cpp:1124
-#: wxformbuilder32/plugins/additional/additional.cpp:1136
-#: wxformbuilder32/plugins/additional/additional.cpp:1150
-#: wxformbuilder32/plugins/additional/additional.cpp:1159
-#: wxformbuilder32/plugins/additional/additional.cpp:1171
-#: wxformbuilder32/plugins/additional/additional.cpp:1307
-#: wxformbuilder32/plugins/additional/additional.cpp:1335
-#: wxformbuilder32/plugins/additional/additional.cpp:1344
-#: wxformbuilder32/plugins/additional/additional.cpp:1355
-msgid "value"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:534
-#: wxformbuilder32/plugins/common/common.cpp:536
-#: wxformbuilder32/plugins/common/common.cpp:549
-#: wxformbuilder32/plugins/common/common.cpp:550
-#: wxformbuilder32/plugins/common/common.cpp:559
-msgid "maxlength"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:546
-#: wxformbuilder32/plugins/common/common.cpp:556
-msgid "wxTextCtrl"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:588
-msgid "wrap"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:596
-#: wxformbuilder32/plugins/common/common.cpp:604
-msgid "wxStaticText"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:625
-#: wxformbuilder32/plugins/common/common.cpp:637
-#: wxformbuilder32/plugins/common/common.cpp:646
-#: wxformbuilder32/plugins/common/common.cpp:827
-#: wxformbuilder32/plugins/common/common.cpp:838
-#: wxformbuilder32/plugins/common/common.cpp:846
-#: wxformbuilder32/plugins/common/common.cpp:856
-#: wxformbuilder32/plugins/common/common.cpp:920
-#: wxformbuilder32/plugins/common/common.cpp:931
-#: wxformbuilder32/plugins/common/common.cpp:1344
-#: wxformbuilder32/plugins/common/common.cpp:1370
-#: wxformbuilder32/plugins/common/common.cpp:1379
-#: wxformbuilder32/plugins/additional/additional.cpp:734
-#: wxformbuilder32/plugins/additional/additional.cpp:749
-#: wxformbuilder32/plugins/additional/additional.cpp:757
-msgid "choices"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:634
-#: wxformbuilder32/plugins/common/common.cpp:643
-msgid "wxComboBox"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:637
-#: wxformbuilder32/plugins/common/common.cpp:646
-#: wxformbuilder32/plugins/common/common.cpp:838
-#: wxformbuilder32/plugins/common/common.cpp:846
-#: wxformbuilder32/plugins/common/common.cpp:920
-#: wxformbuilder32/plugins/common/common.cpp:931
-#: wxformbuilder32/plugins/common/common.cpp:1370
-#: wxformbuilder32/plugins/common/common.cpp:1379
-#: wxformbuilder32/plugins/additional/additional.cpp:749
-#: wxformbuilder32/plugins/additional/additional.cpp:757
-msgid "content"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:670
-#: wxformbuilder32/plugins/common/common.cpp:679
-msgid "wxCheckBox"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:673
-#: wxformbuilder32/plugins/common/common.cpp:682
-#: wxformbuilder32/plugins/common/common.cpp:694
-#: wxformbuilder32/plugins/common/common.cpp:1089
-#: wxformbuilder32/plugins/common/common.cpp:1090
-#: wxformbuilder32/plugins/additional/additional.cpp:432
-#: wxformbuilder32/plugins/additional/additional.cpp:441
-msgid "checked"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:713
-#: wxformbuilder32/plugins/common/common.cpp:721
-msgid "wxStaticBitmap"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:745
-#: wxformbuilder32/plugins/common/common.cpp:752
-msgid "wxStaticLine"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:801
-#: wxformbuilder32/plugins/common/common.cpp:808
-msgid "wxListCtrl"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:836
-#: wxformbuilder32/plugins/common/common.cpp:844
-msgid "wxListBox"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:860
+#: wxformbuilder32/plugins/common/common.cpp:849
 msgid "wxRadioBox must have at least one choice"
 msgstr ""
 
-#: wxformbuilder32/plugins/common/common.cpp:864
-#: wxformbuilder32/plugins/common/common.cpp:921
-#: wxformbuilder32/plugins/common/common.cpp:932
-msgid "majorDimension"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:867
+#: wxformbuilder32/plugins/common/common.cpp:855
 msgid "majorDimension must be greater than zero."
 msgstr ""
 
-#: wxformbuilder32/plugins/common/common.cpp:879
-#: wxformbuilder32/plugins/common/common.cpp:897
-#: wxformbuilder32/plugins/common/common.cpp:919
-#: wxformbuilder32/plugins/common/common.cpp:930
-#: wxformbuilder32/plugins/common/common.cpp:1356
-#: wxformbuilder32/plugins/common/common.cpp:1369
-#: wxformbuilder32/plugins/common/common.cpp:1378
-#: wxformbuilder32/plugins/common/common.cpp:1392
-msgid "selection"
+#: wxformbuilder32/plugins/layout/layout.cpp:99
+msgid "The parent of a SizerItem is either missing or not a wxSizer - this should not be possible!"
 msgstr ""
 
-#: wxformbuilder32/plugins/common/common.cpp:916
-#: wxformbuilder32/plugins/common/common.cpp:927
-msgid "wxRadioBox"
+#: wxformbuilder32/plugins/layout/layout.cpp:107
+msgid "The SizerItem component has no child - this should not be possible!"
 msgstr ""
 
-#: wxformbuilder32/plugins/common/common.cpp:921
-#: wxformbuilder32/plugins/common/common.cpp:932
-msgid "dimension"
+#: wxformbuilder32/plugins/layout/layout.cpp:146
+msgid "The SizerItem component's child is not a wxWindow or a wxSizer or a spacer - this should not be possible!"
 msgstr ""
 
-#: wxformbuilder32/plugins/common/common.cpp:954
-#: wxformbuilder32/plugins/common/common.cpp:963
-msgid "wxRadioButton"
+#: wxformbuilder32/plugins/layout/layout.cpp:406
+msgid "The GBSizerItem component's child is not a wxWindow or a wxSizer or a Spacer - this should not be possible!"
 msgstr ""
 
-#: wxformbuilder32/plugins/common/common.cpp:978
-#: wxformbuilder32/plugins/common/common.cpp:990
-#: wxformbuilder32/plugins/common/common.cpp:998
-msgid "fields"
+#: wxformbuilder32/plugins/layout/layout.cpp:435
+msgid "This should be a wxGridBagSizer!"
 msgstr ""
 
-#: wxformbuilder32/plugins/common/common.cpp:988
-#: wxformbuilder32/plugins/common/common.cpp:996
-msgid "wxStatusBar"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1035
-#: wxformbuilder32/plugins/common/common.cpp:1042
-#: wxformbuilder32/plugins/common/common.cpp:1054
-msgid "wxMenu"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1061
-msgid "submenu"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1073
-#: wxformbuilder32/plugins/common/common.cpp:1106
-msgid "wxMenuItem"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1074
-#: wxformbuilder32/plugins/common/common.cpp:1122
-msgid "shortcut"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1092
-#: wxformbuilder32/plugins/common/common.cpp:1093
-msgid "enabled"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1097
-msgid "checkable"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1098
-msgid "radio"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1140
-#: wxformbuilder32/plugins/common/common.cpp:1146
-#: wxformbuilder32/plugins/common/common.cpp:1328
-msgid "separator"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1266
-#: wxformbuilder32/plugins/common/common.cpp:1286
-msgid "tool"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1268
-#: wxformbuilder32/plugins/common/common.cpp:1288
-msgid "tooltip"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1269
-#: wxformbuilder32/plugins/common/common.cpp:1287
-msgid "statusbar"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1269
-#: wxformbuilder32/plugins/common/common.cpp:1287
-msgid "longhelp"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1334
-msgid "toolSeparator"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1367
-#: wxformbuilder32/plugins/common/common.cpp:1376
-msgid "wxChoice"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1404
-#: wxformbuilder32/plugins/common/common.cpp:1416
-#: wxformbuilder32/plugins/common/common.cpp:1426
-msgid "minValue"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1405
-#: wxformbuilder32/plugins/common/common.cpp:1417
-#: wxformbuilder32/plugins/common/common.cpp:1427
-msgid "maxValue"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1413
-#: wxformbuilder32/plugins/common/common.cpp:1423
-msgid "wxSlider"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1416
-#: wxformbuilder32/plugins/common/common.cpp:1426
-#: wxformbuilder32/plugins/additional/additional.cpp:649
-#: wxformbuilder32/plugins/additional/additional.cpp:684
-#: wxformbuilder32/plugins/additional/additional.cpp:695
-msgid "min"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1417
-#: wxformbuilder32/plugins/common/common.cpp:1427
-#: wxformbuilder32/plugins/additional/additional.cpp:650
-#: wxformbuilder32/plugins/additional/additional.cpp:685
-#: wxformbuilder32/plugins/additional/additional.cpp:696
-msgid "max"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1439
-#: wxformbuilder32/plugins/common/common.cpp:1451
-#: wxformbuilder32/plugins/common/common.cpp:1460
-#: wxformbuilder32/plugins/additional/additional.cpp:622
-#: wxformbuilder32/plugins/additional/additional.cpp:633
-msgid "range"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1449
-#: wxformbuilder32/plugins/common/common.cpp:1458
-msgid "wxGauge"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1478
-#: wxformbuilder32/plugins/common/common.cpp:1480
-#: wxformbuilder32/plugins/common/common.cpp:1505
-#: wxformbuilder32/plugins/common/common.cpp:1513
-msgid "animation"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1482
-msgid "play"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1488
-#: wxformbuilder32/plugins/common/common.cpp:1490
-msgid "inactive_bitmap"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1503
-msgid "wxAnimationCtrl"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:1511
-msgid "wxAnimation"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:45
-#: wxformbuilder32/plugins/layout/layout.cpp:79
-#: wxformbuilder32/plugins/layout/layout.cpp:116
-#: wxformbuilder32/plugins/layout/layout.cpp:172
-#: wxformbuilder32/plugins/layout/layout.cpp:369
-msgid "spacer"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:46
-#: wxformbuilder32/plugins/layout/layout.cpp:80
-#: wxformbuilder32/plugins/layout/layout.cpp:118
-#: wxformbuilder32/plugins/layout/layout.cpp:173
-#: wxformbuilder32/plugins/layout/layout.cpp:371
-msgid "width"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:46
-#: wxformbuilder32/plugins/layout/layout.cpp:80
-#: wxformbuilder32/plugins/layout/layout.cpp:119
-#: wxformbuilder32/plugins/layout/layout.cpp:173
-#: wxformbuilder32/plugins/layout/layout.cpp:372
-msgid "height"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:57
-#: wxformbuilder32/plugins/layout/layout.cpp:153
-#: wxformbuilder32/plugins/layout/layout.cpp:162
-msgid "sizeritem"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:58
-#: wxformbuilder32/plugins/layout/layout.cpp:69
-#: wxformbuilder32/plugins/layout/layout.cpp:473
-#: wxformbuilder32/plugins/layout/layout.cpp:504
-msgid "row"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:58
-#: wxformbuilder32/plugins/layout/layout.cpp:69
-#: wxformbuilder32/plugins/layout/layout.cpp:461
-#: wxformbuilder32/plugins/layout/layout.cpp:505
-msgid "column"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:58
-msgid "cellpos"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:59
-#: wxformbuilder32/plugins/layout/layout.cpp:70
-#: wxformbuilder32/plugins/layout/layout.cpp:459
-msgid "rowspan"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:59
-#: wxformbuilder32/plugins/layout/layout.cpp:70
-#: wxformbuilder32/plugins/layout/layout.cpp:459
-msgid "colspan"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:59
-msgid "cellspan"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:60
-#: wxformbuilder32/plugins/layout/layout.cpp:71
-#: wxformbuilder32/plugins/layout/layout.cpp:121
-#: wxformbuilder32/plugins/layout/layout.cpp:135
-#: wxformbuilder32/plugins/layout/layout.cpp:142
-#: wxformbuilder32/plugins/layout/layout.cpp:155
-#: wxformbuilder32/plugins/layout/layout.cpp:164
-#: wxformbuilder32/plugins/layout/layout.cpp:375
-#: wxformbuilder32/plugins/layout/layout.cpp:390
-#: wxformbuilder32/plugins/layout/layout.cpp:400
-msgid "flag"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:61
-#: wxformbuilder32/plugins/layout/layout.cpp:72
-#: wxformbuilder32/plugins/layout/layout.cpp:122
-#: wxformbuilder32/plugins/layout/layout.cpp:136
-#: wxformbuilder32/plugins/layout/layout.cpp:143
-#: wxformbuilder32/plugins/layout/layout.cpp:156
-#: wxformbuilder32/plugins/layout/layout.cpp:165
-#: wxformbuilder32/plugins/layout/layout.cpp:376
-#: wxformbuilder32/plugins/layout/layout.cpp:391
-#: wxformbuilder32/plugins/layout/layout.cpp:401
-msgid "border"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:68
-msgid "gbsizeritem"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:120
-#: wxformbuilder32/plugins/layout/layout.cpp:134
-#: wxformbuilder32/plugins/layout/layout.cpp:141
-#: wxformbuilder32/plugins/layout/layout.cpp:154
-#: wxformbuilder32/plugins/layout/layout.cpp:163
-msgid "proportion"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:154
-#: wxformbuilder32/plugins/layout/layout.cpp:163
-msgid "option"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:185
-#: wxformbuilder32/plugins/layout/layout.cpp:194
-#: wxformbuilder32/plugins/layout/layout.cpp:202
-#: wxformbuilder32/plugins/layout/layout.cpp:222
-#: wxformbuilder32/plugins/layout/layout.cpp:233
-#: wxformbuilder32/plugins/layout/layout.cpp:242
-msgid "orient"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:186
-#: wxformbuilder32/plugins/layout/layout.cpp:193
-#: wxformbuilder32/plugins/layout/layout.cpp:224
-#: wxformbuilder32/plugins/layout/layout.cpp:232
-#: wxformbuilder32/plugins/layout/layout.cpp:259
-#: wxformbuilder32/plugins/layout/layout.cpp:267
-#: wxformbuilder32/plugins/layout/layout.cpp:303
-#: wxformbuilder32/plugins/layout/layout.cpp:310
-#: wxformbuilder32/plugins/layout/layout.cpp:565
-#: wxformbuilder32/plugins/layout/layout.cpp:609
-#: wxformbuilder32/plugins/layout/layout.cpp:611
-msgid "minimum_size"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:192
-#: wxformbuilder32/plugins/layout/layout.cpp:200
-msgid "wxBoxSizer"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:231
-#: wxformbuilder32/plugins/layout/layout.cpp:240
-msgid "wxStaticBoxSizer"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:254
-#: wxformbuilder32/plugins/layout/layout.cpp:268
-#: wxformbuilder32/plugins/layout/layout.cpp:279
-#: wxformbuilder32/plugins/layout/layout.cpp:333
-#: wxformbuilder32/plugins/layout/layout.cpp:346
-#: wxformbuilder32/plugins/layout/layout.cpp:355
-#: wxformbuilder32/plugins/additional/additional.cpp:774
-msgid "rows"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:255
-#: wxformbuilder32/plugins/layout/layout.cpp:269
-#: wxformbuilder32/plugins/layout/layout.cpp:280
-#: wxformbuilder32/plugins/layout/layout.cpp:334
-#: wxformbuilder32/plugins/layout/layout.cpp:347
-#: wxformbuilder32/plugins/layout/layout.cpp:356
-#: wxformbuilder32/plugins/additional/additional.cpp:775
-msgid "cols"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:256
-#: wxformbuilder32/plugins/layout/layout.cpp:270
-#: wxformbuilder32/plugins/layout/layout.cpp:281
-#: wxformbuilder32/plugins/layout/layout.cpp:311
-#: wxformbuilder32/plugins/layout/layout.cpp:320
-#: wxformbuilder32/plugins/layout/layout.cpp:335
-#: wxformbuilder32/plugins/layout/layout.cpp:416
-msgid "vgap"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:257
-#: wxformbuilder32/plugins/layout/layout.cpp:271
-#: wxformbuilder32/plugins/layout/layout.cpp:282
-#: wxformbuilder32/plugins/layout/layout.cpp:312
-#: wxformbuilder32/plugins/layout/layout.cpp:321
-#: wxformbuilder32/plugins/layout/layout.cpp:336
-#: wxformbuilder32/plugins/layout/layout.cpp:417
-msgid "hgap"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:266
-#: wxformbuilder32/plugins/layout/layout.cpp:277
-msgid "wxGridSizer"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:293
-#: wxformbuilder32/plugins/layout/layout.cpp:313
-#: wxformbuilder32/plugins/layout/layout.cpp:322
-msgid "growablecols"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:294
-#: wxformbuilder32/plugins/layout/layout.cpp:314
-#: wxformbuilder32/plugins/layout/layout.cpp:323
-msgid "growablerows"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:304
-msgid "flexible_direction"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:305
-msgid "non_flexible_grow_mode"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:345
-#: wxformbuilder32/plugins/layout/layout.cpp:354
-msgid "wxFlexGridSizer"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:421
-#: wxformbuilder32/plugins/layout/layout.cpp:423
-msgid "empty_cell_size"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:511
-#: wxformbuilder32/plugins/layout/layout.cpp:518
-msgid "wxGridBagSizer"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:567
-#: wxformbuilder32/plugins/layout/layout.cpp:613
-#: wxformbuilder32/plugins/layout/layout.cpp:652
-#: wxformbuilder32/plugins/layout/layout.cpp:689
+#: wxformbuilder32/plugins/layout/layout.cpp:562
+#: wxformbuilder32/plugins/layout/layout.cpp:607
+#: wxformbuilder32/plugins/layout/layout.cpp:645
+#: wxformbuilder32/plugins/layout/layout.cpp:682
 msgid "OK"
 msgstr ""
 
-#: wxformbuilder32/plugins/layout/layout.cpp:571
-#: wxformbuilder32/plugins/layout/layout.cpp:617
-#: wxformbuilder32/plugins/layout/layout.cpp:653
-#: wxformbuilder32/plugins/layout/layout.cpp:693
+#: wxformbuilder32/plugins/layout/layout.cpp:566
+#: wxformbuilder32/plugins/layout/layout.cpp:611
+#: wxformbuilder32/plugins/layout/layout.cpp:646
+#: wxformbuilder32/plugins/layout/layout.cpp:686
 msgid "Yes"
 msgstr ""
 
-#: wxformbuilder32/plugins/layout/layout.cpp:575
-#: wxformbuilder32/plugins/layout/layout.cpp:621
-#: wxformbuilder32/plugins/layout/layout.cpp:654
-#: wxformbuilder32/plugins/layout/layout.cpp:697
+#: wxformbuilder32/plugins/layout/layout.cpp:570
+#: wxformbuilder32/plugins/layout/layout.cpp:615
+#: wxformbuilder32/plugins/layout/layout.cpp:647
+#: wxformbuilder32/plugins/layout/layout.cpp:690
 msgid "Save"
 msgstr ""
 
-#: wxformbuilder32/plugins/layout/layout.cpp:579
-#: wxformbuilder32/plugins/layout/layout.cpp:625
-#: wxformbuilder32/plugins/layout/layout.cpp:655
-#: wxformbuilder32/plugins/layout/layout.cpp:701
+#: wxformbuilder32/plugins/layout/layout.cpp:574
+#: wxformbuilder32/plugins/layout/layout.cpp:619
+#: wxformbuilder32/plugins/layout/layout.cpp:648
+#: wxformbuilder32/plugins/layout/layout.cpp:694
 msgid "Apply"
 msgstr ""
 
-#: wxformbuilder32/plugins/layout/layout.cpp:583
-#: wxformbuilder32/plugins/layout/layout.cpp:629
-#: wxformbuilder32/plugins/layout/layout.cpp:656
-#: wxformbuilder32/plugins/layout/layout.cpp:705
+#: wxformbuilder32/plugins/layout/layout.cpp:578
+#: wxformbuilder32/plugins/layout/layout.cpp:623
+#: wxformbuilder32/plugins/layout/layout.cpp:649
+#: wxformbuilder32/plugins/layout/layout.cpp:698
 msgid "No"
 msgstr ""
 
-#: wxformbuilder32/plugins/layout/layout.cpp:587
-#: wxformbuilder32/plugins/layout/layout.cpp:633
-#: wxformbuilder32/plugins/layout/layout.cpp:657
-#: wxformbuilder32/plugins/layout/layout.cpp:709
+#: wxformbuilder32/plugins/layout/layout.cpp:582
+#: wxformbuilder32/plugins/layout/layout.cpp:627
+#: wxformbuilder32/plugins/layout/layout.cpp:650
+#: wxformbuilder32/plugins/layout/layout.cpp:702
 msgid "Cancel"
 msgstr ""
 
-#: wxformbuilder32/plugins/layout/layout.cpp:591
-#: wxformbuilder32/plugins/layout/layout.cpp:637
-#: wxformbuilder32/plugins/layout/layout.cpp:658
-#: wxformbuilder32/plugins/layout/layout.cpp:713
+#: wxformbuilder32/plugins/layout/layout.cpp:586
+#: wxformbuilder32/plugins/layout/layout.cpp:631
+#: wxformbuilder32/plugins/layout/layout.cpp:651
+#: wxformbuilder32/plugins/layout/layout.cpp:706
 msgid "Help"
 msgstr ""
 
-#: wxformbuilder32/plugins/layout/layout.cpp:595
-#: wxformbuilder32/plugins/layout/layout.cpp:641
-#: wxformbuilder32/plugins/layout/layout.cpp:659
-#: wxformbuilder32/plugins/layout/layout.cpp:717
+#: wxformbuilder32/plugins/layout/layout.cpp:590
+#: wxformbuilder32/plugins/layout/layout.cpp:635
+#: wxformbuilder32/plugins/layout/layout.cpp:652
+#: wxformbuilder32/plugins/layout/layout.cpp:710
 msgid "ContextHelp"
 msgstr ""
 
-#: wxformbuilder32/plugins/layout/layout.cpp:606
-#: wxformbuilder32/plugins/layout/layout.cpp:661
-msgid "wxStdDialogButtonSizer"
+#: wxformbuilder32/plugins/additional/additional.cpp:217
+msgid "Welcome to wxRichTextCtrl, a wxWidgets control for editing and presenting styled text and images"
 msgstr ""
 
-#: wxformbuilder32/plugins/additional/additional.cpp:153
-#: wxformbuilder32/plugins/additional/additional.cpp:160
-msgid "wxCalendarCtrl"
+#: wxformbuilder32/plugins/additional/additional.cpp:222
+msgid "by Julian Smart"
 msgstr ""
 
-#: wxformbuilder32/plugins/additional/additional.cpp:180
-#: wxformbuilder32/plugins/additional/additional.cpp:187
-msgid "wxDatePickerCtrl"
+#: wxformbuilder32/plugins/additional/additional.cpp:234
+msgid "What can you do with this thing? "
 msgstr ""
 
-#: wxformbuilder32/plugins/additional/additional.cpp:340
-#: wxformbuilder32/plugins/additional/additional.cpp:1330
-msgid "unknown"
+#: wxformbuilder32/plugins/additional/additional.cpp:236
+msgid " Well, you can change text "
 msgstr ""
 
-#: wxformbuilder32/plugins/additional/additional.cpp:347
-msgid "wxRichTextCtrl"
+#: wxformbuilder32/plugins/additional/additional.cpp:239
+msgid "colour, like this red bit."
 msgstr ""
 
-#: wxformbuilder32/plugins/additional/additional.cpp:374
-#: wxformbuilder32/plugins/additional/additional.cpp:381
-msgid "wxHtmlWindow"
+#: wxformbuilder32/plugins/additional/additional.cpp:243
+msgid " And this blue bit."
 msgstr ""
 
-#: wxformbuilder32/plugins/additional/additional.cpp:429
-#: wxformbuilder32/plugins/additional/additional.cpp:438
-msgid "wxToggleButton"
+#: wxformbuilder32/plugins/additional/additional.cpp:246
+msgid " Naturally you can make things "
 msgstr ""
 
-#: wxformbuilder32/plugins/additional/additional.cpp:476
-#: wxformbuilder32/plugins/additional/additional.cpp:483
-msgid "wxTreeCtrl"
+#: wxformbuilder32/plugins/additional/additional.cpp:248
+msgid "bold "
 msgstr ""
 
-#: wxformbuilder32/plugins/additional/additional.cpp:557
+#: wxformbuilder32/plugins/additional/additional.cpp:251
+msgid "or italic "
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:254
+msgid "or underlined."
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:258
+msgid " Different font sizes on the same line is allowed, too."
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:261
+msgid " Next we'll show an indented paragraph."
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:266
+msgid "Indented paragraph."
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:271
+msgid "Next, we'll show a first-line indent, achieved using BeginLeftIndent(100, -40)."
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:276
+msgid "It was in January, the most down-trodden month of an Edinburgh winter."
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:281
+msgid "Numbered bullets are possible, again using subindents:"
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:286
+msgid "This is my first item. Note that wxRichTextCtrl doesn't automatically do numbering, but this will be added later."
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:292
+msgid "This is my second item."
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:297
+msgid "The following paragraph is right-indented:"
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:302
+msgid "It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable."
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:317
+msgid "This line contains tabs:\tFirst tab\tSecond tab\tThird tab"
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:320
+msgid "Other notable features of wxRichTextCtrl include:"
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:324
+msgid "Compatibility with wxTextCtrl API"
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:327
+msgid ""
+"\n"
+"Note: this content was generated programmatically and copied from the sample. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!"
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:362
+msgid "This is a dummy page."
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:513
+msgid "The Root"
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:514
+msgid "Child 1"
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:515
+msgid "Child 2"
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:516
+msgid "Child 3, very long, long, long, long"
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:520
+msgid "Child 4"
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:521
+msgid "Child 5"
+msgstr ""
+
+#: wxformbuilder32/plugins/additional/additional.cpp:556
 #, c-format
 msgid "DataViewColumnComponent is missing its wxFormBuilder object(%i) or its parent(%i)"
 msgstr ""
 
-#: wxformbuilder32/plugins/additional/additional.cpp:561
-msgid "flags"
+#: wxformbuilder32/plugins/additional/additional.cpp:564
+msgid "Column with strings"
 msgstr ""
 
-#: wxformbuilder32/plugins/additional/additional.cpp:618
-#: wxformbuilder32/plugins/additional/additional.cpp:629
-msgid "wxScrollBar"
+#: wxformbuilder32/plugins/additional/additional.cpp:568
+msgid "Column with icons"
 msgstr ""
 
-#: wxformbuilder32/plugins/additional/additional.cpp:621
-#: wxformbuilder32/plugins/additional/additional.cpp:632
-msgid "thumbsize"
+#: wxformbuilder32/plugins/additional/additional.cpp:572
+msgid "ToggleCol"
 msgstr ""
 
-#: wxformbuilder32/plugins/additional/additional.cpp:623
-#: wxformbuilder32/plugins/additional/additional.cpp:634
-msgid "pagesize"
+#: wxformbuilder32/plugins/additional/additional.cpp:576
+msgid "ProgressCol"
 msgstr ""
 
-#: wxformbuilder32/plugins/additional/additional.cpp:651
-#: wxformbuilder32/plugins/additional/additional.cpp:664
-#: wxformbuilder32/plugins/additional/additional.cpp:683
-#: wxformbuilder32/plugins/additional/additional.cpp:694
-msgid "initial"
+#: wxformbuilder32/plugins/additional/additional.cpp:580
+msgid "BitmapCol"
 msgstr ""
 
-#: wxformbuilder32/plugins/additional/additional.cpp:681
-#: wxformbuilder32/plugins/additional/additional.cpp:691
-msgid "wxSpinCtrl"
+#: wxformbuilder32/plugins/additional/additional.cpp:584
+msgid "DateCol"
 msgstr ""
 
-#: wxformbuilder32/plugins/additional/additional.cpp:715
-#: wxformbuilder32/plugins/additional/additional.cpp:722
-msgid "wxSpinButton"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:747
-#: wxformbuilder32/plugins/additional/additional.cpp:755
-msgid "wxCheckListBox"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:777
-msgid "drag_col_move"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:778
-msgid "drag_col_size"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:779
-msgid "drag_grid_size"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:780
-msgid "drag_row_size"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:781
-msgid "editing"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:782
-msgid "grid_lines"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:783
-#: wxformbuilder32/plugins/additional/additional.cpp:785
-msgid "grid_line_color"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:787
-msgid "margin_width"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:787
-msgid "margin_height"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:790
-msgid "col_label_horiz_alignment"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:790
-msgid "col_label_vert_alignment"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:791
-msgid "col_label_size"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:793
-msgid "col_label_values"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:799
-#: wxformbuilder32/plugins/additional/additional.cpp:908
-msgid "column_sizes"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:805
-msgid "row_label_horiz_alignment"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:805
-msgid "row_label_vert_alignment"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:806
-msgid "row_label_size"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:808
-msgid "row_label_values"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:814
-#: wxformbuilder32/plugins/additional/additional.cpp:926
-msgid "row_sizes"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:820
-#: wxformbuilder32/plugins/additional/additional.cpp:822
-msgid "label_bg"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:824
-#: wxformbuilder32/plugins/additional/additional.cpp:826
-msgid "label_text"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:828
-#: wxformbuilder32/plugins/additional/additional.cpp:830
-msgid "label_font"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:834
-msgid "cell_horiz_alignment"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:834
-msgid "cell_vert_alignment"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:836
-#: wxformbuilder32/plugins/additional/additional.cpp:838
-msgid "cell_bg"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:840
-#: wxformbuilder32/plugins/additional/additional.cpp:842
-msgid "cell_text"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:844
-#: wxformbuilder32/plugins/additional/additional.cpp:846
-msgid "cell_font"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:858
-msgid "autosize_rows"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:862
-msgid "autosize_cols"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:874
-#: wxformbuilder32/plugins/additional/additional.cpp:881
-msgid "wxGrid"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:987
-#: wxformbuilder32/plugins/additional/additional.cpp:1032
-#: wxformbuilder32/plugins/additional/additional.cpp:1085
-#: wxformbuilder32/plugins/additional/additional.cpp:1135
-msgid "id"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:988
-#: wxformbuilder32/plugins/additional/additional.cpp:1001
-#: wxformbuilder32/plugins/additional/additional.cpp:1009
-#: wxformbuilder32/plugins/additional/additional.cpp:1021
-msgid "colour"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1000
-#: wxformbuilder32/plugins/additional/additional.cpp:1008
-msgid "wxColourPickerCtrl"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1039
-#: wxformbuilder32/plugins/additional/additional.cpp:1041
-msgid "max_point_size"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1050
-#: wxformbuilder32/plugins/additional/additional.cpp:1061
-msgid "wxFontPickerCtrl"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1087
-#: wxformbuilder32/plugins/additional/additional.cpp:1102
-#: wxformbuilder32/plugins/additional/additional.cpp:1112
-#: wxformbuilder32/plugins/additional/additional.cpp:1137
-#: wxformbuilder32/plugins/additional/additional.cpp:1151
-#: wxformbuilder32/plugins/additional/additional.cpp:1160
-msgid "message"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1088
-#: wxformbuilder32/plugins/additional/additional.cpp:1103
-#: wxformbuilder32/plugins/additional/additional.cpp:1113
-msgid "wildcard"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1100
-#: wxformbuilder32/plugins/additional/additional.cpp:1110
-msgid "wxFilePickerCtrl"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1149
-#: wxformbuilder32/plugins/additional/additional.cpp:1158
-msgid "wxDirPickerCtrl"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1183
-#: wxformbuilder32/plugins/additional/additional.cpp:1209
-#: wxformbuilder32/plugins/additional/additional.cpp:1224
-msgid "url"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1189
-#: wxformbuilder32/plugins/additional/additional.cpp:1191
-msgid "hover_color"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1193
-#: wxformbuilder32/plugins/additional/additional.cpp:1195
-msgid "normal_color"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1197
-#: wxformbuilder32/plugins/additional/additional.cpp:1199
-msgid "visited_color"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1207
-#: wxformbuilder32/plugins/additional/additional.cpp:1216
-msgid "wxHyperlinkCtrl"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1245
-#: wxformbuilder32/plugins/additional/additional.cpp:1261
-#: wxformbuilder32/plugins/additional/additional.cpp:1271
-msgid "defaultfolder"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1249
-#: wxformbuilder32/plugins/additional/additional.cpp:1262
-#: wxformbuilder32/plugins/additional/additional.cpp:1272
-msgid "filter"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1250
-#: wxformbuilder32/plugins/additional/additional.cpp:1263
-#: wxformbuilder32/plugins/additional/additional.cpp:1273
-msgid "defaultfilter"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1253
-msgid "show_hidden"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1260
-#: wxformbuilder32/plugins/additional/additional.cpp:1270
-msgid "wxGenericDirCtrl"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1295
-msgid "class"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1312
-#: wxformbuilder32/plugins/additional/additional.cpp:1314
-msgid "search_button"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1317
-#: wxformbuilder32/plugins/additional/additional.cpp:1319
-msgid "cancel_button"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:1333
-#: wxformbuilder32/plugins/additional/additional.cpp:1342
-msgid "wxSearchCtrl"
+#: wxformbuilder32/plugins/additional/additional.cpp:588
+msgid "StringCol"
 msgstr ""
 
 #: wxformbuilder32/src/maingui.cpp:130
@@ -1817,6 +667,10 @@ msgstr ""
 msgid "Unable to make \"%s\" relative to \"%s\""
 msgstr ""
 
+#: wxformbuilder32/src/rad/appdata.cpp:2032
+msgid "name"
+msgstr ""
+
 #: wxformbuilder32/src/rad/appdata.cpp:2040
 msgid "use_microsoft_bom"
 msgstr ""
@@ -2153,51 +1007,258 @@ msgstr ""
 msgid "This object cannot be pasted because it is from a newer version of wxFormBuilder"
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:802
-msgid "permission"
+#: wxformbuilder32/src/model/database.cpp:248
+msgid "Unknown Object Type: "
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:802
-msgid "none"
+#: wxformbuilder32/src/model/database.cpp:249
+msgid ""
+"\n"
+"The most likely causes are that this copy of wxFormBuilder is out of date, or that there is a plugin missing.\n"
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:887
+#: wxformbuilder32/src/model/database.cpp:250
+msgid "Please check at http://www.wxFormBuilder.org\n"
+msgstr ""
+
+#: wxformbuilder32/src/model/database.cpp:328
+msgid "Review your definitions file (objtypes.xml)"
+msgstr ""
+
+#: wxformbuilder32/src/model/database.cpp:399
+msgid "SetDefaultLayoutProperties expects a subclass of sizeritembase"
+msgstr ""
+
+#: wxformbuilder32/src/model/database.cpp:504
+#, c-format
+msgid ""
+"The property named \"%s\" of class \"%s\" is not supported by this version of wxFormBuilder.\n"
+"If your project file was just converted from an older version, then the conversion was not complete.\n"
+"Otherwise, this project is from a newer version of wxFormBuilder.\n"
+"\n"
+"The property's value is: %s\n"
+"If you save this project, YOU WILL LOSE DATA"
+msgstr ""
+
+#: wxformbuilder32/src/model/database.cpp:645
+msgid "Merged plugins named \""
+msgstr ""
+
+#: wxformbuilder32/src/model/database.cpp:851
 #, c-format
 msgid "Found second template definition for property \"%s\" for language \"%s\""
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:1450
+#: wxformbuilder32/src/model/database.cpp:1021
+#, c-format
+msgid ""
+"Error: %s\n"
+"While parsing property \"%s\" of class \"%s\""
+msgstr ""
+
+#: wxformbuilder32/src/model/database.cpp:1233
+#: wxformbuilder32/src/model/database.cpp:1257
+msgid "Error loading library "
+msgstr ""
+
+#: wxformbuilder32/src/model/database.cpp:1245
+msgid " is not a valid component library: "
+msgstr ""
+
+#: wxformbuilder32/src/model/database.cpp:1267
+msgid " is not a valid component library"
+msgstr ""
+
+#: wxformbuilder32/src/model/database.cpp:1272
+msgid "[Database::ImportComponentLibrary] Importing "
+msgstr ""
+
+#: wxformbuilder32/src/model/database.cpp:1272
+msgid " library"
+msgstr ""
+
+#: wxformbuilder32/src/model/database.cpp:1295
+msgid "ObjectInfo for <"
+msgstr ""
+
+#: wxformbuilder32/src/model/database.cpp:1295
+msgid "> not found while loading library <"
+msgstr ""
+
+#: wxformbuilder32/src/model/database.cpp:1319
+#, c-format
+msgid "Unknown property type \"%s\""
+msgstr ""
+
+#: wxformbuilder32/src/model/database.cpp:1400
 #, c-format
 msgid "No Object Type found for \"%s\""
 msgstr ""
 
-#: wxformbuilder32/src/model/xrcfilter.cpp:47
+#: wxformbuilder32/src/model/xrcfilter.cpp:42
+msgid "[XrcFilter::GetProject]"
+msgstr ""
+
+#: wxformbuilder32/src/model/xrcfilter.cpp:50
 msgid "Missing root element \"resource\""
 msgstr ""
 
-#: wxformbuilder32/src/model/xrcfilter.cpp:138
+#: wxformbuilder32/src/model/xrcfilter.cpp:134
 #, c-format
 msgid "No component found for class \"%s\", found on line %i."
 msgstr ""
 
-#: wxformbuilder32/src/model/xrcfilter.cpp:145
+#: wxformbuilder32/src/model/xrcfilter.cpp:142
 #, c-format
 msgid "ImportFromXrc returned NULL for class \"%s\", found on line %i."
 msgstr ""
 
-#: wxformbuilder32/src/codegen/cppcg.cpp:483
-msgid "table"
+#: wxformbuilder32/src/model/xrcfilter.cpp:175
+#, c-format
+msgid "CreateObject failed for class \"%s\", with parent \"%s\", found on line %i"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/cppcg.cpp:483
-msgid "event_generation"
+#: wxformbuilder32/src/model/xrcfilter.cpp:208
+#, c-format
+msgid "Unknown class \"%s\" found on line %i, replaced with a wxPanel"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/cppcg.cpp:484
-msgid "disconnect_events"
+#: wxformbuilder32/src/model/xrcfilter.cpp:214
+#, c-format
+msgid "Unknown class \"%s\" found on line %i, and could not replace with a wxPanel as child of \"%s:%s\""
 msgstr ""
 
-#: wxformbuilder32/src/codegen/cppcg.cpp:1198
+#: wxformbuilder32/src/model/objectbase.cpp:269
+msgid "new ObjectBase"
+msgstr ""
+
+#: wxformbuilder32/src/model/objectbase.cpp:283
+msgid "delete ObjectBase"
+msgstr ""
+
+#: wxformbuilder32/src/model/objectbase.cpp:333
+msgid "[ObjectBase::GetEvent] Event "
+msgstr ""
+
+#: wxformbuilder32/src/model/objectbase.cpp:333
+msgid " not found!"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/codegen.cpp:134
+msgid "Invalid Macro Type"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/codegen.cpp:216
+#, c-format
+msgid "The property '%s' does not exist for objects of class '%s'"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/codegen.cpp:361
+msgid "ERROR"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/codegen.cpp:442
+msgid "Property type not compatible with \"foreach\" macro"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/codegen.cpp:766
+#, c-format
+msgid "Unknown macro: \"%s\""
+msgstr ""
+
+#: wxformbuilder32/src/codegen/pythoncg.cpp:263
+#, c-format
+msgid ""
+"Python code generation does not support using URLs for bitmap properties:\n"
+"%s"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/pythoncg.cpp:378
+#: wxformbuilder32/src/codegen/cppcg.cpp:373
+msgid "There is no object to generate inherited class"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/pythoncg.cpp:384
+#: wxformbuilder32/src/codegen/cppcg.cpp:379
+msgid "This not a UserClasses object"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/pythoncg.cpp:440
+#: wxformbuilder32/src/codegen/cppcg.cpp:470
+msgid "There is no project to generate code"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/pythoncg.cpp:475
+#: wxformbuilder32/src/codegen/cppcg.cpp:504
+msgid "Missing \"file\" property on Project Object"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/pythoncg.cpp:555
+#: wxformbuilder32/src/codegen/pythoncg.cpp:741
+#: wxformbuilder32/src/codegen/cppcg.cpp:710
+#: wxformbuilder32/src/codegen/cppcg.cpp:992
+#, c-format
+msgid "Missing \"name\" property on \"%s\" class. Review your XML object description"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/pythoncg.cpp:563
+#: wxformbuilder32/src/codegen/cppcg.cpp:718
+msgid "Object name cannot be null"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/pythoncg.cpp:596
+#: wxformbuilder32/src/codegen/cppcg.cpp:763
+#, c-format
+msgid "Missing \"evt_%s\" template for \"%s\" class. Review your XML object description"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/pythoncg.cpp:650
+msgid "# Virtual event handlers, overide them in your derived class"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/pythoncg.cpp:719
+#: wxformbuilder32/src/codegen/cppcg.cpp:973
+#, c-format
+msgid "Missing \"%s\" template for \"%s\" class. Review your XML object description"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/pythoncg.cpp:748
+#: wxformbuilder32/src/codegen/cppcg.cpp:1000
+msgid "Object name can not be null"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/pythoncg.cpp:1064
+#: wxformbuilder32/src/codegen/cppcg.cpp:1526
+msgid "Missing subwindows for wxSplitterWindow widget."
+msgstr ""
+
+#: wxformbuilder32/src/codegen/pythoncg.cpp:1109
+#: wxformbuilder32/src/codegen/cppcg.cpp:1571
+msgid "SizerItem child is not a Spacer and is not a subclass of wxWindow or of sizer."
+msgstr ""
+
+#: wxformbuilder32/src/codegen/pythoncg.cpp:1251
+#: wxformbuilder32/src/codegen/cppcg.cpp:1711
+msgid "First ID is Less than 1000"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/cppcg.cpp:234
+#, c-format
+msgid ""
+"C++ code generation does not support using URLs for bitmap properties:\n"
+"%s"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/cppcg.cpp:440
+#, c-format
+msgid "// TODO: Implement %s"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/cppcg.cpp:846
+msgid "// Virtual event handlers, override them in your derived class"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/cppcg.cpp:1194
 #, c-format
 msgid ""
 "Invalid Value for Property\n"
@@ -2206,101 +1267,17 @@ msgid ""
 "\tValue: %s"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/cppcg.cpp:1200
-msgid "subclass"
-msgstr ""
-
-#: wxformbuilder32/src/codegen/codewriter.cpp:238
+#: wxformbuilder32/src/codegen/codewriter.cpp:239
 #, c-format
 msgid "Unable to create file: %s"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/codewriter.cpp:265
+#: wxformbuilder32/src/codegen/codewriter.cpp:266
 msgid "Unable to write file: "
 msgstr ""
 
-#: wxformbuilder32/src/codegen/codewriter.cpp:273
+#: wxformbuilder32/src/codegen/codewriter.cpp:274
 msgid "Unable to create file: "
-msgstr ""
-
-#: wxformbuilder32/src/codegen/xrccg.cpp:148
-msgid "xrc_skip_sizer"
-msgstr ""
-
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:249
-#, c-format
-msgid "%d,%d"
-msgstr ""
-
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:389
-msgid "window_extra_style"
-msgstr ""
-
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:401
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:402
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:975
-msgid "bg"
-msgstr ""
-
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:404
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:405
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:976
-msgid "fg"
-msgstr ""
-
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:410
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:411
-msgid "focused"
-msgstr ""
-
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:411
-msgid "0"
-msgstr ""
-
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:413
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:414
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:982
-msgid "hidden"
-msgstr ""
-
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:787
-msgid "decorative"
-msgstr ""
-
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:789
-msgid "roman"
-msgstr ""
-
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:791
-msgid "swiss"
-msgstr ""
-
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:793
-msgid "script"
-msgstr ""
-
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:795
-msgid "modern"
-msgstr ""
-
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:797
-msgid "teletype"
-msgstr ""
-
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:813
-msgid "slant"
-msgstr ""
-
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:815
-msgid "italic"
-msgstr ""
-
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:832
-msgid "light"
-msgstr ""
-
-#: wxformbuilder32/sdk/plugin_interface/xrcconv.cpp:834
-msgid "bold"
 msgstr ""
 
 #: wxformbuilder32/plugins/containers/bookutils.h:102
