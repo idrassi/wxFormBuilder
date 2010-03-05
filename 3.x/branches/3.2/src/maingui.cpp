@@ -22,29 +22,31 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-#include "splashscreen.h"
-//#include <wx/splash.h>
-#include <wx/filename.h>
-#include <wx/image.h>
-#include <wx/sysopt.h>
-#include <wx/cmdline.h>
-#include <wx/config.h>
-#include <wx/stdpaths.h>
-#include <wx/xrc/xmlres.h>
-#include <wx/clipbrd.h>
-#include <wx/msgout.h>
-#include <wx/aui/auibook.h>
-#include <memory>
 
 #include "maingui.h"
+#include "splashscreen.h"
+//#include <wx/splash.h>
 #include "rad/mainframe.h"
 #include "rad/appdata.h"
+
+#include "model/objectbase.h"
 
 #include "utils/debug.h"
 #include "utils/typeconv.h"
 #include "utils/wxfbexception.h"
 
-#include "model/objectbase.h"
+#include <memory>
+
+#include <wx/aui/auibook.h>
+#include <wx/clipbrd.h>
+#include <wx/config.h>
+#include <wx/cmdline.h>
+#include <wx/filename.h>
+#include <wx/image.h>
+#include <wx/msgout.h>
+#include <wx/stdpaths.h>
+#include <wx/sysopt.h>
+#include <wx/xrc/xmlres.h>
 
 // Abnormal Termination Handling
 #if wxUSE_ON_FATAL_EXCEPTION && wxUSE_STACKWALKER
@@ -52,8 +54,8 @@
 	#include <wx/utils.h>
 #elif defined(_WIN32) && defined(__MINGW32__)
 	#include "dbg_stack_trace/stack.hpp"
-	#include <sstream>
 	#include <excpt.h>
+	#include <sstream>
 
 	EXCEPTION_DISPOSITION StructuredExceptionHandler(	struct _EXCEPTION_RECORD *ExceptionRecord,
 																void * EstablisherFrame,
@@ -77,28 +79,31 @@ IMPLEMENT_APP( MyApp )
 int MyApp::OnRun()
 {
 	// Abnormal Termination Handling
-	#if wxUSE_ON_FATAL_EXCEPTION && wxUSE_STACKWALKER
+#if wxUSE_ON_FATAL_EXCEPTION && wxUSE_STACKWALKER
 		::wxHandleFatalExceptions( true );
-	#elif defined(_WIN32) && defined(__MINGW32__)
+#elif defined(_WIN32) && defined(__MINGW32__)
 		// Structured Exception handlers are stored in a linked list at FS:[0]
 		// THIS MUST BE A LOCAL VARIABLE - windows won't use an object outside of the thread's stack frame
 		EXCEPTION_REGISTRATION ex;
 		ex.handler = StructuredExceptionHandler;
-		asm volatile ("movl %%fs:0, %0" : "=r" (ex.prev));
-		asm volatile ("movl %0, %%fs:0" : : "r" (&ex));
-	#endif
+		asm volatile ( "movl %%fs:0, %0" : "=r" ( ex.prev ) );
+		asm volatile ( "movl %0, %%fs:0" : : "r" ( &ex ) );
+#endif
 
 	// Using a space so the initial 'w' will not be capitalized in wxLogGUI dialogs
-	wxApp::SetAppName( wxT( " wxFormBuilder" ) );
+	wxApp::SetAppName(" wxFormBuilder");
 
 	// Creating the wxConfig manually so there will be no space
 	// The old config (if any) is returned, delete it
-	delete wxConfigBase::Set( new wxConfig( wxT("wxFormBuilder") ) );
+	// TODO: make a new wxFormBuilder.layout config file to differ from older versions
+	//       and put it in a wxFormBuilder folder to let add different config files (future use)
+	//       using wxFileConfig (Windows version will use Documents & Settings instead of registry
+	delete wxConfigBase::Set( new wxConfig("wxFormBuilder") );
 
 	// Get the data directory
 	wxStandardPathsBase& stdPaths = wxStandardPaths::Get();
 	wxString dataDir = stdPaths.GetDataDir();
-	dataDir.Replace( GetAppName().c_str(), wxT("wxformbuilder") );
+	dataDir.Replace( GetAppName().c_str(), "wxformbuilder" );
 
 	// Log to stderr while working on the command line
 	delete wxLog::SetActiveTarget( new wxLogStderr );
@@ -122,8 +127,8 @@ int MyApp::OnRun()
 
 	bool justGenerate = false;
 	wxString language;
-	bool hasLanguage = parser.Found( wxT("l"), &language );
-	if ( parser.Found( wxT("g") ) )
+	bool hasLanguage = parser.Found( "l", &language );
+	if ( parser.Found("g") )
 	{
 		if ( projectToLoad.empty() )
 		{
@@ -138,7 +143,7 @@ int MyApp::OnRun()
 				wxLogError( _("Empty language option. Nothing generated.") );
 				return 3;
 			}
-			language.Replace( wxT(","), wxT("|"), true );
+			language.Replace( ",", "|", true );
 		}
 
 		// generate code
@@ -161,14 +166,14 @@ int MyApp::OnRun()
 			wxFileName projectPath( projectToLoad );
 			if ( !projectPath.IsOk() )
 			{
-				THROW_WXFBEX( wxT("This path is invalid: ") << projectToLoad );
+				THROW_WXFBEX( _("This path is invalid: ") << projectToLoad );
 			}
 
 			if ( !projectPath.IsAbsolute() )
 			{
 				if ( !projectPath.MakeAbsolute() )
 				{
-					THROW_WXFBEX( wxT("Could not make path absolute: ") << projectToLoad );
+					THROW_WXFBEX( _("Could not make path absolute: ") << projectToLoad );
 				}
 			}
 			projectToLoad = projectPath.GetFullPath();
@@ -207,18 +212,19 @@ int MyApp::OnRun()
 		return 5;
 	}
 
-	wxSystemOptions::SetOption( wxT( "msw.remap" ), 0 );
-	wxSystemOptions::SetOption( wxT( "msw.staticbox.optimized-paint" ), 0 );
+	wxSystemOptions::SetOption( "msw.remap", 0 );
+	wxSystemOptions::SetOption( "msw.staticbox.optimized-paint", 0 );
 
 	m_frame = NULL;
 
-	#ifndef __WXFB_DEBUG__
+// 	TODO: Check new Code::Blocks splashscreen code ( if any ), this seems to not appear ( at least in wxGTK )
+#ifndef __WXFB_DEBUG__
 	wxBitmap bitmap;
 //	wxSplashScreen* splash;
 	std::auto_ptr< cbSplashScreen > splash;
 	if ( !justGenerate )
 	{
-		if ( bitmap.LoadFile( dataDir + wxFILE_SEP_PATH + wxT( "resources" ) + wxFILE_SEP_PATH + wxT( "splash.png" ), wxBITMAP_TYPE_PNG ) )
+		if ( bitmap.LoadFile( dataDir + wxFILE_SEP_PATH + "resources" + wxFILE_SEP_PATH + "splash.png", wxBITMAP_TYPE_PNG ) )
 		{
 			splash = std::auto_ptr< cbSplashScreen >( new cbSplashScreen( bitmap, -1, 0, wxNewId() ) );
 /*			splash = new wxSplashScreen(bitmap,
@@ -227,23 +233,23 @@ int MyApp::OnRun()
 										wxNO_BORDER | wxFRAME_NO_TASKBAR | wxSTAY_ON_TOP); */
 		}
 	}
-	#endif
+#endif
 
 	wxYield();
 
 	// Read size and position from config file
 	wxConfigBase *config = wxConfigBase::Get();
-	config->SetPath( wxT("/mainframe") );
+	config->SetPath("/mainframe");
 	int x, y, w, h;
-	x = y = w = h = -1;
-	config->Read( wxT( "PosX" ), &x );
-	config->Read( wxT( "PosY" ), &y );
-	config->Read( wxT( "SizeW" ), &w );
-	config->Read( wxT( "SizeH" ), &h );
+	// x = y = w = h = -1;
+	config->Read( "PosX", &x );
+	config->Read( "PosY", &y );
+	config->Read( "SizeW", &w );
+	config->Read( "SizeH", &h );
 
-	config->SetPath( wxT("/") );
+	config->SetPath("/");
 
-	m_frame = new MainFrame( NULL ,-1, 0, wxPoint( x, y ), wxSize( w, h ) );
+	m_frame = new MainFrame( NULL, wxID_ANY, 0, wxPoint( x, y ), wxSize( w, h ) );
 	if ( !justGenerate )
 	{
 		m_frame->Show( TRUE );
@@ -262,7 +268,6 @@ int MyApp::OnRun()
 			}
 		#endif //__WXFB_DEBUG__
 	}
-
 	// This is not necessary for wxFB to work. However, Windows sets the Current Working Directory
 	// to the directory from which a .fbp file was opened, if opened from Windows Explorer.
 	// This puts an unneccessary lock on the directory.
@@ -280,7 +285,7 @@ int MyApp::OnRun()
 				if ( hasLanguage )
 				{
 					PObjectBase project = AppData()->GetProjectData();
-					PProperty codeGen = project->GetProperty( _("code_generation") );
+					PProperty codeGen = project->GetProperty("code_generation");
 					if ( codeGen )
 					{
 						codeGen->SetValue( language );
@@ -297,10 +302,9 @@ int MyApp::OnRun()
 		}
 		else
 		{
-			wxLogError( wxT("Unable to load project: %s"), projectToLoad.c_str() );
+			wxLogError( _("Unable to load project: %s"), projectToLoad.c_str() );
 		}
 	}
-
 	if ( justGenerate )
 	{
 		return 6;
@@ -338,7 +342,6 @@ int MyApp::OnExit()
             return wxApp::OnExit();
         }
 	}
-
     // Allow clipboard data to persist after close
     wxTheClipboard->Flush();
     wxTheClipboard->Close();
@@ -375,33 +378,33 @@ void MyApp::MacOpenFile(const wxString &fileName)
 			size_t paramCount = frame.GetParamCount();
 			if ( paramCount > 0 )
 			{
-				params << wxT("( ");
+				params << "( ";
 
 				for ( size_t i = 0; i < paramCount; ++i )
 				{
 					wxString type, name, value;
 					if ( frame.GetParam( i, &type, &name, &value) )
 					{
-						params << type << wxT(" ") << name << wxT(" = ") << value << wxT(", ");
+						params << type << " " << name << wxT(" = ") << value << ", ";
 					}
 				}
 
-				params << wxT(")");
+				params << ")";
 			}
 
 			wxString source;
 			if ( frame.HasSourceLocation() )
 			{
-				source.Printf( wxT("%s@%i"), frame.GetFileName().c_str(), frame.GetLine() );
+				source.Printf( "%s@%i", frame.GetFileName().c_str(), frame.GetLine() );
 			}
 
-			wxLogError( wxT("%03i %i %s %s %s %s"),
-							frame.GetLevel(),
-							frame.GetAddress(),
-							frame.GetModule().c_str(),
-							frame.GetName().c_str(),
-							params.c_str(),
-							source.c_str() );
+			wxLogError( "%03i %i %s %s %s %s",
+						frame.GetLevel(),
+						frame.GetAddress(),
+						frame.GetModule().c_str(),
+						frame.GetName().c_str(),
+						params.c_str(),
+						source.c_str() );
 		}
 	};
 
@@ -459,7 +462,7 @@ public:
 
     ~LoggingStackWalker()
     {
-        wxLogError( wxT("A Fatal Error Occurred. Click Details for a backtrace.") );
+        wxLogError( _("A Fatal Error Occurred. Click Details for a backtrace.") );
         wxLog::Resume();
         wxLog* logger = wxLog::GetActiveTarget();
         if ( 0 != logger )
