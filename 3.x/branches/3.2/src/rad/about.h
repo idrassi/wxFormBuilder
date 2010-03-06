@@ -22,12 +22,12 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef __ABOUT__
+#define __ABOUT__
 
-#ifndef __about__
-#define __about__
 #include <wx/wx.h>
-#include <wx/panel.h>
 #include <wx/button.h>
+#include <wx/panel.h>
 #include <wx/statline.h>
 
 /**
@@ -35,28 +35,23 @@
  */
 class AboutDialog : public wxDialog
 {
-  private:
-  
-  protected:
-    wxStaticText *m_staticText2;
-    wxStaticText *m_staticText3;
-    wxStaticText *m_staticText6;
-    wxStaticLine *window1;
-    wxPanel *m_panel1;
-    wxStaticText *m_staticText8;
-    wxStaticText *m_staticText9;
-    wxStaticText *m_staticText10;
-    wxStaticLine *window2;
-    wxButton *m_button1;
+protected:
+    wxStaticText*	m_staticText2;
+    wxStaticText* 	m_staticText3;
+    wxStaticText* 	m_staticText6;
+    wxStaticLine* 	window1;
+    wxPanel* 		m_panel1;
+    wxStaticText* 	m_staticText8;
+    wxStaticText* 	m_staticText9;
+    wxStaticText* 	m_staticText10;
+    wxStaticLine* 	window2;
+    wxButton* 		m_button1;
     
     DECLARE_EVENT_TABLE()
-  
-  public:
-    
-    AboutDialog(wxWindow *parent, int id = -1);
-    void OnButtonEvent (wxCommandEvent &event);
-  
+
+public:
+    AboutDialog( wxWindow *parent, int id = wxID_ANY );
+    void OnButtonEvent( wxCommandEvent &event );
 };
 
-#endif //__about__
-
+#endif // __ABOUT__

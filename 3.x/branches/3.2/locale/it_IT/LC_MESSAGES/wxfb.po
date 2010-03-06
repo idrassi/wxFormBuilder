@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxFormBuilder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-05 20:03+0100\n"
+"POT-Creation-Date: 2010-03-06 04:40+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Andrea Zanellato <xvirc.client@gmail.com>\n"
 "Language-Team: \n"
@@ -588,67 +588,125 @@ msgstr ""
 msgid "Don't annoy me again!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1168
-#: wxformbuilder32/src/rad/appdata.cpp:1173
-msgid "bitmaps"
+#: wxformbuilder32/src/rad/appdata.cpp:464
+msgid "Logging"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1176
-#: wxformbuilder32/src/rad/appdata.cpp:1181
+#: wxformbuilder32/src/rad/appdata.cpp:653
+#, c-format
+msgid "Empty item removed under %s"
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:740
+msgid "[ApplicationData::CreateObject] New "
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:1153
 msgid "icons"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1317
+#: wxformbuilder32/src/rad/appdata.cpp:1170
+msgid "Modify property :"
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:1170
+msgid " with "
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:1196
+msgid ""
+"You cannot save over a file that is currently open in another instance.\n"
+"Would you like to switch to that instance?"
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:1197
+msgid "Open in Another Instance"
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:1232
+msgid "LOADING"
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:1236
+#, c-format
+msgid "This file does not exist: %s"
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:1289
+msgid ""
+"This project file is newer than this version of wxFormBuilder.\n"
+"It cannot be opened.\n"
+"\n"
+"Please download an updated version from http://www.wxFormBuilder.org"
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:1290
 msgid "New Version"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1325
+#: wxformbuilder32/src/rad/appdata.cpp:1296
+msgid ""
+"This project file is not of the current version.\n"
+"Would you to attempt automatic conversion?\n"
+"\n"
+"NOTE: This will modify your project file on disk!"
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:1297
 msgid "Old Version"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1472
+#: wxformbuilder32/src/rad/appdata.cpp:1304
+msgid "Unable to convert project"
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:1441
 msgid "The \"user_headers\" property has been removed.\n"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1473
+#: wxformbuilder32/src/rad/appdata.cpp:1442
 msgid "Its purpose was to provide a place to include precompiled headers or\n"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1474
+#: wxformbuilder32/src/rad/appdata.cpp:1443
 msgid "headers for subclasses.\n"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1475
+#: wxformbuilder32/src/rad/appdata.cpp:1444
 msgid "There is now a \"precompiled_header\" property and a \"header\" subitem\n"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1476
+#: wxformbuilder32/src/rad/appdata.cpp:1445
 msgid ""
 "on the subclass property.\n"
 "\n"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1477
+#: wxformbuilder32/src/rad/appdata.cpp:1446
 msgid "Would you like the current value of the \"user_headers\" property to be saved\n"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1478
+#: wxformbuilder32/src/rad/appdata.cpp:1447
 msgid "to a file so that you can distribute the headers among the \"precompiled_header\"\n"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1479
+#: wxformbuilder32/src/rad/appdata.cpp:1448
 msgid "and \"subclass\" properties?"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1481
+#: wxformbuilder32/src/rad/appdata.cpp:1450
 msgid "The \"user_headers\" property has been removed"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1485
+#: wxformbuilder32/src/rad/appdata.cpp:1455
 msgid "Save \"user_headers\""
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1506
+#: wxformbuilder32/src/rad/appdata.cpp:1456
+msgid "All files (*.*)|*.*"
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:1476
 #, c-format
 msgid ""
 "Unable to open %s for writing.\n"
@@ -656,40 +714,106 @@ msgid ""
 "%s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1986
+#: wxformbuilder32/src/rad/appdata.cpp:1934
 msgid "No Project?!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1992
+#: wxformbuilder32/src/rad/appdata.cpp:1940
 #, c-format
 msgid "Invalid Path: %s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:2013
-#: wxformbuilder32/src/rad/appdata.cpp:2021
+#: wxformbuilder32/src/rad/appdata.cpp:1954
+msgid "Missing Property"
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:1961
+#: wxformbuilder32/src/rad/appdata.cpp:1969
 #, c-format
 msgid "Unable to make \"%s\" absolute to \"%s\""
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:2017
-msgid "file"
-msgstr ""
-
-#: wxformbuilder32/src/rad/appdata.cpp:2028
+#: wxformbuilder32/src/rad/appdata.cpp:1976
 #, c-format
 msgid "Unable to make \"%s\" relative to \"%s\""
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:2032
+#: wxformbuilder32/src/rad/appdata.cpp:1981
 msgid "name"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:2040
-msgid "use_microsoft_bom"
+#: wxformbuilder32/src/rad/appdata.cpp:2031
+#, c-format
+msgid "Class generated at '%s'."
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:2049
-msgid "encoding"
+#: wxformbuilder32/src/rad/appdata.cpp:2212
+#, c-format
+msgid "Parent of object '%s' is wrong!"
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:2435
+msgid "Please select a form and try again."
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:2435
+msgid "No Form Selected"
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:2496
+msgid "event: "
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:2507
+msgid "Pending event:  "
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:2599
+msgid "You must set the \"path\" property of the project to a valid path for output files"
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:2610
+msgid "You must save the project when using a relative path for output files"
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:2619
+msgid "Invalid Path: "
+msgstr ""
+
+#: wxformbuilder32/src/rad/appdata.cpp:2619
+msgid ""
+"\n"
+"You must set the \"path\" property of the project to a valid path for output files"
+msgstr ""
+
+#: wxformbuilder32/src/rad/about.cpp:52
+msgid ""
+"Impossible to determine the file type for extension html.\n"
+"Please edit your MIME types."
+msgstr ""
+
+#: wxformbuilder32/src/rad/about.cpp:75
+msgid "About..."
+msgstr ""
+
+#: wxformbuilder32/src/rad/about.cpp:82
+msgid "a RAD tool for wxWidgets framework"
+msgstr ""
+
+#: wxformbuilder32/src/rad/about.cpp:84
+msgid "(C) 2005 Jose' Antonio Hurtado"
+msgstr ""
+
+#: wxformbuilder32/src/rad/about.cpp:91
+msgid "Developed by:"
+msgstr ""
+
+#: wxformbuilder32/src/rad/about.cpp:93
+msgid "- Jose' Antonio Hurtado"
+msgstr ""
+
+#: wxformbuilder32/src/rad/about.cpp:95
+msgid "- Juan Antonio Ortega"
 msgstr ""
 
 #: wxformbuilder32/src/rad/bitmaps.cpp:85
@@ -717,6 +841,10 @@ msgstr ""
 
 #: wxformbuilder32/src/rad/mainframe.cpp:844
 msgid "Designer"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1126
+msgid "file"
 msgstr ""
 
 #: wxformbuilder32/src/rad/mainframe.cpp:1128
@@ -1178,6 +1306,18 @@ msgstr ""
 
 #: wxformbuilder32/src/rad/xrcpreview/xrcpreview.cpp:134
 msgid "WARNING - For XRC Developers ONLY!!"
+msgstr ""
+
+#: wxformbuilder32/src/rad/xrcpreview/xrcpreview.cpp:135
+msgid ""
+"The XRC language is not as powerful as C++.\n"
+"It has limitations that will affect the GUI\n"
+"layout. This preview will ONLY show how the\n"
+"generated XRC will look, and it will probably\n"
+"be different from the Designer.\n"
+"\n"
+"If you are not using XRC, do NOT use the XRC\n"
+"preview, it will only confuse you."
 msgstr ""
 
 #: wxformbuilder32/src/rad/dataobject/dataobject.cpp:154

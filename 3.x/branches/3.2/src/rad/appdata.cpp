@@ -55,7 +55,6 @@
 
 using namespace TypeConv;
 
-
 ///////////////////////////////////////////////////////////////////////////////
 // Comandos
 ///////////////////////////////////////////////////////////////////////////////
@@ -64,17 +63,16 @@ using namespace TypeConv;
 
 class ExpandObjectCmd : public Command
 {
+private:
+	PObjectBase m_object;
+	bool m_expand;
 
-	private:
-		PObjectBase m_object;
-		bool m_expand;
+protected:
+	void DoExecute();
+	void DoRestore();
 
-	protected:
-		void DoExecute();
-		void DoRestore();
-
-	public:
-		ExpandObjectCmd( PObjectBase object, bool expand );
+public:
+	ExpandObjectCmd( PObjectBase object, bool expand );
 };
 
 /**
@@ -83,21 +81,19 @@ class ExpandObjectCmd : public Command
 
 class InsertObjectCmd : public Command
 {
+private:
+	ApplicationData *m_data;
+	PObjectBase m_parent;
+	PObjectBase m_object;
+	int m_pos;
+	PObjectBase m_oldSelected;
 
-	private:
-		ApplicationData *m_data;
-		PObjectBase m_parent;
-		PObjectBase m_object;
-		int m_pos;
-		PObjectBase m_oldSelected;
+protected:
+	void DoExecute();
+	void DoRestore();
 
-
-	protected:
-		void DoExecute();
-		void DoRestore();
-
-	public:
-		InsertObjectCmd( ApplicationData *data, PObjectBase object, PObjectBase parent, int pos = -1 );
+public:
+	InsertObjectCmd( ApplicationData *data, PObjectBase object, PObjectBase parent, int pos = -1 );
 };
 
 /**
@@ -106,20 +102,19 @@ class InsertObjectCmd : public Command
 
 class RemoveObjectCmd : public Command
 {
+private:
+	ApplicationData *m_data;
+	PObjectBase m_parent;
+	PObjectBase m_object;
+	int m_oldPos;
+	PObjectBase m_oldSelected;
 
-	private:
-		ApplicationData *m_data;
-		PObjectBase m_parent;
-		PObjectBase m_object;
-		int m_oldPos;
-		PObjectBase m_oldSelected;
+protected:
+	void DoExecute();
+	void DoRestore();
 
-	protected:
-		void DoExecute();
-		void DoRestore();
-
-	public:
-		RemoveObjectCmd( ApplicationData *data, PObjectBase object );
+public:
+	RemoveObjectCmd( ApplicationData *data, PObjectBase object );
 };
 
 /**
@@ -128,17 +123,16 @@ class RemoveObjectCmd : public Command
 
 class ModifyPropertyCmd : public Command
 {
+private:
+	PProperty m_property;
+	wxString m_oldValue, m_newValue;
 
-	private:
-		PProperty m_property;
-		wxString m_oldValue, m_newValue;
+protected:
+	void DoExecute();
+	void DoRestore();
 
-	protected:
-		void DoExecute();
-		void DoRestore();
-
-	public:
-		ModifyPropertyCmd( PProperty prop, wxString value );
+public:
+	ModifyPropertyCmd( PProperty prop, wxString value );
 };
 
 /**
@@ -147,17 +141,16 @@ class ModifyPropertyCmd : public Command
 
 class ModifyEventHandlerCmd : public Command
 {
+private:
+	PEvent m_event;
+	wxString m_oldValue, m_newValue;
 
-	private:
-		PEvent m_event;
-		wxString m_oldValue, m_newValue;
+protected:
+	void DoExecute();
+	void DoRestore();
 
-	protected:
-		void DoExecute();
-		void DoRestore();
-
-	public:
-		ModifyEventHandlerCmd( PEvent event, wxString value );
+public:
+	ModifyEventHandlerCmd( PEvent event, wxString value );
 };
 
 /**
@@ -166,18 +159,16 @@ class ModifyEventHandlerCmd : public Command
 
 class ShiftChildCmd : public Command
 {
+private:
+	PObjectBase m_object;
+	int m_oldPos, m_newPos;
 
-	private:
-		PObjectBase m_object;
-		int m_oldPos, m_newPos;
+protected:
+	void DoExecute();
+	void DoRestore();
 
-	protected:
-		void DoExecute();
-		void DoRestore();
-
-	public:
-		ShiftChildCmd( PObjectBase object, int pos );
-
+public:
+	ShiftChildCmd( PObjectBase object, int pos );
 };
 
 /**
@@ -187,22 +178,21 @@ class ShiftChildCmd : public Command
 
 class CutObjectCmd : public Command
 {
+private:
+	// Necessary to consult / modify the "clipboard" object
+	ApplicationData *m_data;
+	// PObjectBase m_clipboard;
+	PObjectBase 	m_parent;
+	PObjectBase 	m_object;
+	int 			m_oldPos;
+	PObjectBase 	m_oldSelected;
 
-	private:
-		// necesario para consultar/modificar el objeto "clipboard"
-		ApplicationData *m_data;
-		//PObjectBase m_clipboard;
-		PObjectBase m_parent;
-		PObjectBase m_object;
-		int m_oldPos;
-		PObjectBase m_oldSelected;
+protected:
+	void DoExecute();
+	void DoRestore();
 
-	protected:
-		void DoExecute();
-		void DoRestore();
-
-	public:
-		CutObjectCmd( ApplicationData *data, PObjectBase object );
+public:
+	CutObjectCmd( ApplicationData *data, PObjectBase object );
 };
 
 /**
@@ -211,19 +201,18 @@ class CutObjectCmd : public Command
 
 class ReparentObjectCmd : public Command
 {
+private:
+	PObjectBase m_sizeritem;
+	PObjectBase m_sizer;
+	PObjectBase m_oldSizer;
+	int 		m_oldPosition;
 
-	private:
-		PObjectBase m_sizeritem;
-		PObjectBase m_sizer;
-		PObjectBase m_oldSizer;
-		int m_oldPosition;
+protected:
+	void DoExecute();
+	void DoRestore();
 
-	protected:
-		void DoExecute();
-		void DoRestore();
-
-	public:
-		ReparentObjectCmd ( PObjectBase sizeritem, PObjectBase sizer );
+public:
+	ReparentObjectCmd ( PObjectBase sizeritem, PObjectBase sizer );
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -386,7 +375,7 @@ CutObjectCmd::CutObjectCmd( ApplicationData *data, PObjectBase object )
 void CutObjectCmd::DoExecute()
 {
 	// guardamos el clipboard ???
-	//m_clipboard = m_data->GetClipboardObject();
+	// m_clipboard = m_data->GetClipboardObject();
 
 	m_data->SetClipboardObject( m_object );
 	m_parent->RemoveChild( m_object );
@@ -400,8 +389,6 @@ void CutObjectCmd::DoRestore()
 	m_parent->AddChild( m_object );
 	m_object->SetParent( m_parent );
 	m_parent->ChangeChildPosition( m_object, m_oldPos );
-
-
 
 	// restauramos el clipboard
 	//m_data->SetClipboardObject(m_clipboard);
@@ -449,7 +436,6 @@ ApplicationData* ApplicationData::Get( const wxString &rootdir )
 }
 
 void ApplicationData::Destroy()
-
 {
 	if ( s_instance )
 		delete s_instance;
@@ -473,14 +459,14 @@ ApplicationData::ApplicationData( const wxString &rootdir )
 		m_fbpVerMajor( 1 ),
 		m_fbpVerMinor( 10 )
 {
-	#ifdef __WXFB_DEBUG__
+#ifdef __WXFB_DEBUG__
 	wxLog* log = wxLog::SetActiveTarget( NULL );
-	m_debugLogTarget = new wxLogWindow( NULL, wxT( "Logging" ) );
+	m_debugLogTarget = new wxLogWindow( NULL, _("Logging") );
 	wxLog::SetActiveTarget( log );
-	#endif
-	m_objDb->SetXmlPath( m_rootDir + wxFILE_SEP_PATH + wxT( "xml" ) + wxFILE_SEP_PATH ) ;
-	m_objDb->SetIconPath( m_rootDir + wxFILE_SEP_PATH + wxT( "resources" ) + wxFILE_SEP_PATH + wxT( "icons" ) + wxFILE_SEP_PATH );
-	m_objDb->SetPluginPath( m_rootDir + wxFILE_SEP_PATH + wxT( "plugins" ) + wxFILE_SEP_PATH ) ;
+#endif
+	m_objDb->SetXmlPath( m_rootDir + wxFILE_SEP_PATH + "xml" + wxFILE_SEP_PATH ) ;
+	m_objDb->SetIconPath( m_rootDir + wxFILE_SEP_PATH + "resources" + wxFILE_SEP_PATH + "icons" + wxFILE_SEP_PATH );
+	m_objDb->SetPluginPath( m_rootDir + wxFILE_SEP_PATH + "plugins" + wxFILE_SEP_PATH ) ;
 
 	// Support loading files from memory
 	// Used to load the XRC preview, but could be useful elsewhere
@@ -493,16 +479,15 @@ ApplicationData::ApplicationData( const wxString &rootdir )
 
 ApplicationData::~ApplicationData()
 {
-	#ifdef __WXFB_DEBUG__
-        delete m_debugLogTarget;
-        m_debugLogTarget = 0;
-	#endif
+#ifdef __WXFB_DEBUG__
+	delete m_debugLogTarget;
+	m_debugLogTarget = 0;
+#endif
 }
 
 void ApplicationData::LoadApp()
-
 {
-	wxString bitmapPath = m_objDb->GetXmlPath() + wxT( "icons.xml" );
+	wxString bitmapPath = m_objDb->GetXmlPath() + "icons.xml";
 	AppBitmaps::LoadBitmaps( bitmapPath, m_objDb->GetIconPath() );
 	m_objDb->LoadObjectTypes();
 	m_objDb->LoadPlugins( m_manager );
@@ -520,15 +505,14 @@ PObjectBase ApplicationData::GetSelectedObject()
 
 PObjectBase ApplicationData::GetSelectedForm()
 {		
-	if( ( m_selObj->GetObjectTypeName() == wxT( "form" ) ) ||
-		( m_selObj->GetObjectTypeName() == wxT( "wizard" ) ) ||
-		( m_selObj->GetObjectTypeName() == wxT( "menubar_form" ) ) ||
-		( m_selObj->GetObjectTypeName() == wxT( "toolbar_form" ) ) )
+	if( ( m_selObj->GetObjectTypeName() == "form" ) 		||
+		( m_selObj->GetObjectTypeName() == "wizard" ) 		||
+		( m_selObj->GetObjectTypeName() == "menubar_form" ) ||
+		( m_selObj->GetObjectTypeName() == "toolbar_form" ) )
 		return m_selObj;
 	else
 		return m_selObj->FindParentForm();
 }
-
 
 PObjectBase ApplicationData::GetProjectData()
 {
@@ -539,7 +523,7 @@ void ApplicationData::BuildNameSet( PObjectBase obj, PObjectBase top, std::set< 
 {
 	if ( obj != top )
 	{
-		PProperty nameProp = top->GetProperty( wxT( "name" ) );
+		PProperty nameProp = top->GetProperty("name");
 
 		if ( nameProp )
 			name_set.insert( nameProp->GetValue() );
@@ -559,7 +543,7 @@ void ApplicationData::ResolveNameConflict( PObjectBase obj )
 			return;
 	}
 
-	PProperty nameProp = obj->GetProperty( wxT( "name" ) );
+	PProperty nameProp = obj->GetProperty("name");
 
 	if ( !nameProp )
 		return;
@@ -568,19 +552,19 @@ void ApplicationData::ResolveNameConflict( PObjectBase obj )
 	wxString originalName = nameProp->GetValue();
 
 	// el nombre no puede estar repetido dentro del mismo form
-	/*PObjectBase top = obj->FindNearAncestor( wxT( "form" ) );*/
+	/*PObjectBase top = obj->FindNearAncestor("form");*/
 	PObjectBase top = obj->FindParentForm();
 
 	if ( !top )
 		top = m_project; // el objeto es un form.
 
 	// construimos el conjunto de nombres
-	std::set<wxString> name_set;
+	std::set< wxString > name_set;
 
 	BuildNameSet( obj, top, name_set );
 
 	// comprobamos si hay conflicto
-	std::set<wxString>::iterator it = name_set.find( originalName );
+	std::set< wxString >::iterator it = name_set.find( originalName );
 
 	int i = 0;
 
@@ -589,10 +573,9 @@ void ApplicationData::ResolveNameConflict( PObjectBase obj )
 	while ( it != name_set.end() )
 	{
 		i++;
-		name = wxString::Format( wxT( "%s%i" ), originalName.c_str(), i );
+		name = wxString::Format( "%s%i", originalName.c_str(), i );
 		it = name_set.find( name );
 	}
-
 	nameProp->SetValue( name );
 }
 
@@ -600,7 +583,7 @@ void ApplicationData::ResolveSubtreeNameConflicts( PObjectBase obj, PObjectBase 
 {
 	if ( !topObj )
 	{
-		/*topObj = obj->FindNearAncestor( wxT( "form" ) );*/
+		/*topObj = obj->FindNearAncestor("form");*/
 		topObj = obj->FindParentForm();
 
 		if ( !topObj )
@@ -641,7 +624,6 @@ int ApplicationData::CalcPositionOfInsertion( PObjectBase selected, PObjectBase 
 		if ( parentSelected && parentSelected == parent )
 			pos = parent->GetChildPosition( selected ) + 1;
 	}
-
 	return pos;
 }
 
@@ -661,15 +643,14 @@ void ApplicationData::RemoveEmptyItems( PObjectBase obj )
 			{
 				PObjectBase child = obj->GetChild( i );
 
-				if ( child->GetObjectInfo()->GetObjectType()->IsItem() &&
-				        child->GetChildCount() == 0 )
+				if ( child->GetObjectInfo()->GetObjectType()->IsItem() && child->GetChildCount() == 0 )
 				{
 					obj->RemoveChild( child ); // borramos el item
 					child->SetParent( PObjectBase() );
 
 					emptyItem = true;        // volvemos a recorrer
 					wxString msg;
-					msg.Printf( wxT( "Empty item removed under %s" ), obj->GetPropertyAsString( wxT( "name" ) ).c_str() );
+					msg.Printf( _( "Empty item removed under %s" ), obj->GetPropertyAsString("name").c_str() );
 					wxLogWarning( msg );
 				}
 			}
@@ -684,7 +665,7 @@ PObjectBase  ApplicationData::SearchSizerInto( PObjectBase obj )
 {
 	PObjectBase theSizer;
 
-	if ( obj->GetObjectInfo()->IsSubclassOf( wxT("sizer") ) )
+	if ( obj->GetObjectInfo()->IsSubclassOf("sizer") )
 		theSizer = obj;
 	else
 	{
@@ -702,7 +683,7 @@ void ApplicationData::ExpandObject( PObjectBase obj, bool expand )
 	PCommand command( new ExpandObjectCmd( obj, expand ) );
 	Execute( command );
 
-	// collapse also all children ...
+	// Collapse also all children ...
 	PropagateExpansion( obj, expand, !expand );
 
 	NotifyObjectExpanded( obj );
@@ -756,7 +737,7 @@ void ApplicationData::CreateObject( wxString name )
 {
 	try
 	{
-		wxString msg = wxT( "[ApplicationData::CreateObject] New " ) + name;
+		wxString msg = _("[ApplicationData::CreateObject] New ") + name;
 		Debug::Print( msg );
 
 		PObjectBase old_selected = GetSelectedObject();
@@ -781,7 +762,7 @@ void ApplicationData::CreateObject( wxString name )
 					int pos = CalcPositionOfInsertion( GetSelectedObject(), parent );
 
 					PCommand command( new InsertObjectCmd( this, obj, parent, pos ) );
-					Execute( command ); //m_cmdProc.Execute(command);
+					Execute( command ); // m_cmdProc.Execute( command );
 					created = true;
 					ResolveNameConflict( obj );
 				}
@@ -864,10 +845,9 @@ void ApplicationData::DoRemoveObject( PObjectBase obj, bool cutObject )
 	}
 	else
 	{
-		if ( obj->GetObjectTypeName() != wxT( "project" ) )
+		if ( obj->GetObjectTypeName() != "project" )
 			assert( false );
 	}
-
 	CheckProjectTree( m_project );
 }
 
@@ -890,7 +870,6 @@ void ApplicationData::DetermineObjectToSelect( PObjectBase parent, unsigned int 
 	{
 		objToSelect = objToSelect->GetChild( 0 );
 	}
-
 	SelectObject( objToSelect );
 }
 
@@ -1132,7 +1111,6 @@ bool ApplicationData::PasteObject( PObjectBase parent, PObjectBase objToPaste )
 		wxLogError( ex.what() );
 		return false;
 	}
-
 	return true;
 }
 
@@ -1143,7 +1121,7 @@ void ApplicationData::InsertObject( PObjectBase obj, PObjectBase parent )
 	//    obj->GetObjectInfo()->GetObjectType()))
 	//  {
 	PCommand command( new InsertObjectCmd( this, obj, parent ) );
-	Execute( command ); //m_cmdProc.Execute(command);
+	Execute( command ); // m_cmdProc.Execute(command);
 	NotifyProjectRefresh();
 	//  }
 }
@@ -1151,11 +1129,10 @@ void ApplicationData::InsertObject( PObjectBase obj, PObjectBase parent )
 void ApplicationData::MergeProject( PObjectBase project )
 {
 	// FIXME! comprobar obj se puede colgar de parent
-
 	for ( unsigned int i = 0; i < project->GetChildCount(); i++ )
 	{
-		//m_project->AddChild(project->GetChild(i));
-		//project->GetChild(i)->SetParent(m_project);
+		// m_project->AddChild( project->GetChild( i ) );
+		// project->GetChild( i )->SetParent( m_project );
 
 		PObjectBase child = project->GetChild( i );
 		RemoveEmptyItems( child );
@@ -1165,12 +1142,12 @@ void ApplicationData::MergeProject( PObjectBase project )
 
 	// Merge bitmaps and icons properties
 	PObjectBase thisProject = GetProjectData();
-	PProperty prop = thisProject->GetProperty( _("bitmaps") );
+	PProperty prop = thisProject->GetProperty("bitmaps");
 	if ( prop )
 	{
 		wxString value = prop->GetValue();
 		value.Trim();
-		value << wxT(" ") << project->GetPropertyAsString( _("bitmaps") );
+		value << wxT(" ") << project->GetPropertyAsString("bitmaps");
 		prop->SetValue( value );
 	}
 	prop = thisProject->GetProperty( _("icons") );
@@ -1178,10 +1155,9 @@ void ApplicationData::MergeProject( PObjectBase project )
 	{
 		wxString value = prop->GetValue();
 		value.Trim();
-		value << wxT(" ") << project->GetPropertyAsString( _("icons") );
+		value << wxT(" ") << project->GetPropertyAsString("icons");
 		prop->SetValue( value );
 	}
-
 	NotifyProjectRefresh();
 }
 
@@ -1191,7 +1167,7 @@ void ApplicationData::ModifyProperty( PProperty prop, wxString str )
 
 	if ( str != prop->GetValue() )
 	{
-		Debug::Print( wxT("Modify property :") + prop->GetValue() + wxT(" with ") + str );
+		Debug::Print( _("Modify property :") + prop->GetValue() + _(" with ") + str );
 		PCommand command( new ModifyPropertyCmd( prop, str ) );
 		Execute( command ); //m_cmdProc.Execute(command);
 
@@ -1206,7 +1182,7 @@ void ApplicationData::ModifyEventHandler( PEvent evt, wxString value )
 	if ( value != evt->GetValue() )
 	{
 		PCommand command( new ModifyEventHandlerCmd( evt, value ) );
-		Execute( command ); //m_cmdProc.Execute(command);
+		Execute( command ); // m_cmdProc.Execute(command);
 
 		NotifyEventHandlerModified( evt );
 	}
@@ -1215,15 +1191,13 @@ void ApplicationData::ModifyEventHandler( PEvent evt, wxString value )
 void ApplicationData::SaveProject( const wxString& filename )
 {
 	// Make sure this file is not already open
-
 	if ( !m_ipc->VerifySingleInstance( filename, false ) )
 	{
-		if ( wxYES == wxMessageBox( wxT( "You cannot save over a file that is currently open in another instance.\nWould you like to switch to that instance?" ),
-		                            wxT( "Open in Another Instance" ), wxICON_QUESTION | wxYES_NO, wxTheApp->GetTopWindow() ) )
+		if ( wxYES == wxMessageBox( _( "You cannot save over a file that is currently open in another instance.\nWould you like to switch to that instance?" ),
+		                            _( "Open in Another Instance" ), wxICON_QUESTION | wxYES_NO, wxTheApp->GetTopWindow() ) )
 		{
 			m_ipc->VerifySingleInstance( filename, true );
 		}
-
 		return;
 	}
 
@@ -1255,11 +1229,11 @@ void ApplicationData::SaveProject( const wxString& filename )
 bool ApplicationData::LoadProject( const wxString &file, bool checkSingleInstance )
 
 {
-	Debug::Print( wxT( "LOADING" ) );
+	Debug::Print( _("LOADING") );
 
 	if ( !wxFileName::FileExists( file ) )
 	{
-		wxLogError( wxT( "This file does not exist: %s" ), file.c_str() );
+		wxLogError( _("This file does not exist: %s"), file.c_str() );
 		return false;
 	}
 
@@ -1283,7 +1257,7 @@ bool ApplicationData::LoadProject( const wxString &file, bool checkSingleInstanc
 		int fbpVerMajor = 0;
 		int fbpVerMinor = 0;
 
-		if ( root->Value() != std::string( "object" ) )
+		if ( root->Value() != std::string("object") )
 		{
 			try
 			{
@@ -1312,27 +1286,24 @@ bool ApplicationData::LoadProject( const wxString &file, bool checkSingleInstanc
 
 		if ( newer )
 		{
-			wxMessageBox( wxT( "This project file is newer than this version of wxFormBuilder.\n" )
-			              wxT( "It cannot be opened.\n\n" )
-			              wxT( "Please download an updated version from http://www.wxFormBuilder.org" ), _( "New Version" ), wxICON_ERROR );
+			wxMessageBox( _("This project file is newer than this version of wxFormBuilder.\nIt cannot be opened.\n\nPlease download an updated version from http://www.wxFormBuilder.org"),
+						  _("New Version"), wxICON_ERROR );
 			return false;
 		}
 
 		if ( older )
 		{
-			if ( wxYES == wxMessageBox( wxT( "This project file is not of the current version.\n" )
-			                            wxT( "Would you to attempt automatic conversion?\n\n" )
-			                            wxT( "NOTE: This will modify your project file on disk!" ), _( "Old Version" ), wxYES_NO ) )
+			if ( wxYES == wxMessageBox( _("This project file is not of the current version.\nWould you to attempt automatic conversion?\n\nNOTE: This will modify your project file on disk!"),
+										_("Old Version"), wxYES_NO ) )
 			{
 				// we make a backup of the project
-				::wxCopyFile( file, file + wxT( ".bak" ) );
+				::wxCopyFile( file, file + ".bak" );
 
 				if ( !ConvertProject( file, fbpVerMajor, fbpVerMinor ) )
 				{
-					wxLogError( wxT( "Unable to convert project" ) );
+					wxLogError( _("Unable to convert project") );
 					return false;
 				}
-
 				XMLUtils::LoadXMLFile( doc, false, file );
 				root = doc.FirstChildElement();
 			}
@@ -1355,7 +1326,7 @@ bool ApplicationData::LoadProject( const wxString &file, bool checkSingleInstanc
 			return false;
 		}
 
-		if ( proj && proj->GetObjectTypeName() == wxT( "project" ) )
+		if ( proj && proj->GetObjectTypeName() == "project" )
 		{
 			PObjectBase old_proj = m_project;
 			m_project = proj;
@@ -1373,7 +1344,6 @@ bool ApplicationData::LoadProject( const wxString &file, bool checkSingleInstanc
 		wxLogError( _WXSTR( ex.m_details ) );
 		return false;
 	}
-
 	return true;
 }
 
@@ -1386,7 +1356,7 @@ bool ApplicationData::ConvertProject( const wxString& path, int fileMajor, int f
 
 		ticpp::Element* root = doc.FirstChildElement();
 
-		if ( root->Value() == std::string( "object" ) )
+		if ( root->Value() == std::string("object") )
 		{
 			ConvertProjectProperties( root, path, fileMajor, fileMinor );
 			ConvertObject( root, fileMajor, fileMinor );
@@ -1402,9 +1372,9 @@ bool ApplicationData::ConvertProject( const wxString& path, int fileMajor, int f
 			doc.LinkEndChild( new ticpp::Declaration( "1.0", "UTF-8", "yes" ) );
 
 			// Add the root element, with file version
-			ticpp::Element* newRoot = new ticpp::Element( "wxFormBuilder_Project" );
+			ticpp::Element* newRoot = new ticpp::Element("wxFormBuilder_Project");
 
-			ticpp::Element* fileVersion = new ticpp::Element( "FileVersion" );
+			ticpp::Element* fileVersion = new ticpp::Element("FileVersion");
 			fileVersion->SetAttribute( "major", m_fbpVerMajor );
 			fileVersion->SetAttribute( "minor", m_fbpVerMinor );
 
@@ -1418,10 +1388,10 @@ bool ApplicationData::ConvertProject( const wxString& path, int fileMajor, int f
 		else
 		{
 			// Handle project separately because it only occurs once
-			ticpp::Element* project = root->FirstChildElement( "object" );
+			ticpp::Element* project = root->FirstChildElement("object");
 			ConvertProjectProperties( project, path, fileMajor, fileMinor );
 			ConvertObject( project, fileMajor, fileMinor );
-			ticpp::Element* fileVersion = root->FirstChildElement( "FileVersion" );
+			ticpp::Element* fileVersion = root->FirstChildElement("FileVersion");
 			fileVersion->SetAttribute( "major", m_fbpVerMajor );
 			fileVersion->SetAttribute( "minor", m_fbpVerMinor );
 		}
@@ -1433,12 +1403,11 @@ bool ApplicationData::ConvertProject( const wxString& path, int fileMajor, int f
 		wxLogError( _WXSTR( ex.m_details ) );
 		return false;
 	}
-
 	return true;
 }
 
-void ApplicationData::ConvertProjectProperties( ticpp::Element* project, const wxString& path, int fileMajor, int fileMinor )
-
+void ApplicationData::ConvertProjectProperties( ticpp::Element* project, const wxString& path,
+												int fileMajor, int fileMinor )
 {
 	// Ensure that this is the "project" element
 	std::string objClass;
@@ -1457,7 +1426,7 @@ void ApplicationData::ConvertProjectProperties( ticpp::Element* project, const w
 	{
 		// Find the user_headers property
 
-		oldProps.insert( "user_headers" );
+		oldProps.insert("user_headers");
 		GetPropertiesToConvert( project, oldProps, &newProps );
 
 		std::string user_headers;
@@ -1478,19 +1447,20 @@ void ApplicationData::ConvertProjectProperties( ticpp::Element* project, const w
 			msg += _( "to a file so that you can distribute the headers among the \"precompiled_header\"\n" );
 			msg += _( "and \"subclass\" properties\?" );
 
-			if ( wxYES == wxMessageBox( msg, _( "The \"user_headers\" property has been removed" ), wxICON_QUESTION | wxYES_NO | wxYES_DEFAULT, wxTheApp->GetTopWindow() ) )
+			if ( wxYES == wxMessageBox( msg, _("The \"user_headers\" property has been removed"),
+										wxICON_QUESTION | wxYES_NO | wxYES_DEFAULT, wxTheApp->GetTopWindow() ) )
 			{
 				wxString name;
 				wxFileName::SplitPath( path, NULL, NULL, &name, NULL );
-				wxFileDialog dialog( wxTheApp->GetTopWindow(), _( "Save \"user_headers\"" ), ::wxPathOnly( path ),
-				                     name + wxT( "_user_headers.txt" ), wxT( "All files (*.*)|*.*" ), wxFD_SAVE );
+				wxFileDialog dialog( wxTheApp->GetTopWindow(), _("Save \"user_headers\""), ::wxPathOnly( path ),
+				                     name + "_user_headers.txt", _( "All files (*.*)|*.*"), wxFD_SAVE );
 
 				if ( dialog.ShowModal() == wxID_OK )
 				{
 					wxString wxuser_headers = _WXSTR( user_headers );
 					wxString filename = dialog.GetPath();
 					bool success = false;
-					wxFFile output( filename, wxT( "w" ) );
+					wxFFile output( filename, "w" );
 
 					if ( output.IsOpened() )
 					{
@@ -1503,14 +1473,13 @@ void ApplicationData::ConvertProjectProperties( ticpp::Element* project, const w
 
 					if ( !success )
 					{
-						wxLogError( _( "Unable to open %s for writing.\nUser Headers:\n%s" ), filename.c_str(), wxuser_headers.c_str() );
+						wxLogError( _( "Unable to open %s for writing.\nUser Headers:\n%s"),
+									filename.c_str(), wxuser_headers.c_str() );
 					}
 				}
 			}
 		}
 	}
-
-
 	// The pch property is now the exact code to be generated, not just the header filename
 	// The goal of this conversion block is to determine which of two possible pch blocks to use
 	// The pch block that wxFB generated changed in version 1.6
@@ -1518,7 +1487,7 @@ void ApplicationData::ConvertProjectProperties( ticpp::Element* project, const w
 	{
 		oldProps.clear();
 		newProps.clear();
-		oldProps.insert( "precompiled_header" );
+		oldProps.insert("precompiled_header");
 		GetPropertiesToConvert( project, oldProps, &newProps );
 
 		if ( !newProps.empty() )
@@ -1528,48 +1497,43 @@ void ApplicationData::ConvertProjectProperties( ticpp::Element* project, const w
 			{
 				if ( fileMajor < 1 || ( 1 == fileMajor && fileMinor < 6 ) )
 				{
-					// use the older block
-					( *newProps.begin() )->SetText(
-														  "#include \"" + pch + "\""
-														"\n"
-														"\n#ifdef __BORLANDC__"
-														"\n#pragma hdrstop"
-														"\n#endif //__BORLANDC__"
-														"\n"
-														"\n#ifndef WX_PRECOMP"
-														"\n#include <wx/wx.h>"
-														"\n#endif //WX_PRECOMP"
-													);
+					// Use the older block
+					( *newProps.begin() )->SetText( "#include \"" + pch + "\""
+													"\n"
+													"\n#ifdef __BORLANDC__"
+													"\n#pragma hdrstop"
+													"\n#endif //__BORLANDC__"
+													"\n"
+													"\n#ifndef WX_PRECOMP"
+													"\n#include <wx/wx.h>"
+													"\n#endif //WX_PRECOMP" );
 				}
 				else
 				{
-					// use the newer block
-					( *newProps.begin() )->SetText(
-														  "#ifdef WX_PRECOMP"
-														"\n"
-														"\n#include \"" + pch + "\""
-														"\n"
-														"\n#ifdef __BORLANDC__"
-														"\n#pragma hdrstop"
-														"\n#endif //__BORLANDC__"
-														"\n"
-														"\n#else"
-														"\n#include <wx/wx.h>"
-														"\n#endif //WX_PRECOMP"
-													);
+					// Use the newer block
+					( *newProps.begin() )->SetText( "#ifdef WX_PRECOMP"
+													"\n"
+													"\n#include \"" + pch + "\""
+													"\n"
+													"\n#ifdef __BORLANDC__"
+													"\n#pragma hdrstop"
+													"\n#endif //__BORLANDC__"
+													"\n"
+													"\n#else"
+													"\n#include <wx/wx.h>"
+													"\n#endif //WX_PRECOMP" );
 				}
 			}
 		}
 	}
-
 	// The format of string list properties changed in version 1.9
 	if ( fileMajor < 1 || ( 1 == fileMajor && fileMinor < 9 ) )
 	{
 		oldProps.clear();
 		newProps.clear();
-		oldProps.insert( "namespace" );
-		oldProps.insert( "bitmaps" );
-		oldProps.insert( "icons" );
+		oldProps.insert("namespace");
+		oldProps.insert("bitmaps");
+		oldProps.insert("icons");
 		GetPropertiesToConvert( project, oldProps, &newProps );
 
 		std::set< ticpp::Element* >::iterator prop;
@@ -1583,24 +1547,21 @@ void ApplicationData::ConvertProjectProperties( ticpp::Element* project, const w
 			}
 		}
 	}
-
 	// event_handler moved to the forms in version 1.10
 	if ( fileMajor < 1 || ( 1 == fileMajor && fileMinor < 10 ) )
 	{
 		oldProps.clear();
 		newProps.clear();
-		oldProps.insert( "event_handler" );
+		oldProps.insert("event_handler");
 		GetPropertiesToConvert( project, oldProps, &newProps );
-
 
 		if ( !newProps.empty() )
 		{
-			ticpp::Iterator< ticpp::Element > object( "object" );
+			ticpp::Iterator< ticpp::Element > object("object");
 			for ( object = project->FirstChildElement( "object", false ); object != object.end(); ++object )
 			{
 				object->LinkEndChild( ( *newProps.begin() )->Clone().get() );
 			}
-
 			project->RemoveChild( *newProps.begin() );
 		}
 	}
@@ -1608,7 +1569,7 @@ void ApplicationData::ConvertProjectProperties( ticpp::Element* project, const w
 
 void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int fileMinor )
 {
-	ticpp::Iterator< ticpp::Element > object( "object" );
+	ticpp::Iterator< ticpp::Element > object("object");
 
 	for ( object = parent->FirstChildElement( "object", false ); object != object.end(); ++object )
 	{
@@ -1628,15 +1589,13 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 	parent->GetAttribute( "class", &objClass );
 
 	/* The changes below will convert an unversioned file to version 1.3 */
-
 	if ( fileMajor < 1 || ( 1 == fileMajor && fileMinor < 3 ) )
 	{
 		// The property 'option' became 'proportion'
-
 		if ( objClass == "sizeritem" || objClass == "spacer" )
 		{
 			oldProps.clear();
-			oldProps.insert( "option" );
+			oldProps.insert("option");
 			GetPropertiesToConvert( parent, oldProps, &newProps );
 
 			if ( !newProps.empty() )
@@ -1645,34 +1604,32 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 				( *newProps.begin() )->SetAttribute( "name", "proportion" );
 			}
 		}
-
 		// The 'style' property used to have both wxWindow styles and the styles of the specific controls
 		// now it only has the styles of the specfic controls, and wxWindow styles are saved in window_style
 		// This also applies to 'extra_style', which was once combined with 'style'.
 		// And they were named 'WindowStyle' and one point, too...
-
 		std::set< wxString > windowStyles;
-		windowStyles.insert( wxT( "wxSIMPLE_BORDER" ) );
-		windowStyles.insert( wxT( "wxDOUBLE_BORDER" ) );
-		windowStyles.insert( wxT( "wxSUNKEN_BORDER" ) );
-		windowStyles.insert( wxT( "wxRAISED_BORDER" ) );
-		windowStyles.insert( wxT( "wxSTATIC_BORDER" ) );
-		windowStyles.insert( wxT( "wxNO_BORDER" ) );
-		windowStyles.insert( wxT( "wxTRANSPARENT_WINDOW" ) );
-		windowStyles.insert( wxT( "wxTAB_TRAVERSAL" ) );
-		windowStyles.insert( wxT( "wxWANTS_CHARS" ) );
-		windowStyles.insert( wxT( "wxVSCROLL" ) );
-		windowStyles.insert( wxT( "wxHSCROLL" ) );
-		windowStyles.insert( wxT( "wxALWAYS_SHOW_SB" ) );
-		windowStyles.insert( wxT( "wxCLIP_CHILDREN" ) );
-		windowStyles.insert( wxT( "wxFULL_REPAINT_ON_RESIZE" ) );
+		windowStyles.insert("wxSIMPLE_BORDER");
+		windowStyles.insert("wxDOUBLE_BORDER");
+		windowStyles.insert("wxSUNKEN_BORDER");
+		windowStyles.insert("wxRAISED_BORDER");
+		windowStyles.insert("wxSTATIC_BORDER");
+		windowStyles.insert("wxNO_BORDER");
+		windowStyles.insert("wxTRANSPARENT_WINDOW");
+		windowStyles.insert("wxTAB_TRAVERSAL");
+		windowStyles.insert("wxWANTS_CHARS");
+		windowStyles.insert("wxVSCROLL");
+		windowStyles.insert("wxHSCROLL");
+		windowStyles.insert("wxALWAYS_SHOW_SB");
+		windowStyles.insert("wxCLIP_CHILDREN");
+		windowStyles.insert("wxFULL_REPAINT_ON_RESIZE");
 
 		// Transfer the window styles
 		oldProps.clear();
 
-		oldProps.insert( "style" );
+		oldProps.insert("style");
 
-		oldProps.insert( "WindowStyle" );
+		oldProps.insert("WindowStyle");
 
 		GetPropertiesToConvert( parent, oldProps, &newProps );
 
@@ -1683,20 +1640,20 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 
 
 		std::set< wxString > extraWindowStyles;
-		extraWindowStyles.insert( wxT( "wxWS_EX_VALIDATE_RECURSIVELY" ) );
-		extraWindowStyles.insert( wxT( "wxWS_EX_BLOCK_EVENTS" ) );
-		extraWindowStyles.insert( wxT( "wxWS_EX_TRANSIENT" ) );
-		extraWindowStyles.insert( wxT( "wxWS_EX_PROCESS_IDLE" ) );
-		extraWindowStyles.insert( wxT( "wxWS_EX_PROCESS_UI_UPDATES" ) );
+		extraWindowStyles.insert("wxWS_EX_VALIDATE_RECURSIVELY");
+		extraWindowStyles.insert("wxWS_EX_BLOCK_EVENTS");
+		extraWindowStyles.insert("wxWS_EX_TRANSIENT");
+		extraWindowStyles.insert("wxWS_EX_PROCESS_IDLE");
+		extraWindowStyles.insert("wxWS_EX_PROCESS_UI_UPDATES");
 
 		// Transfer the window extra styles
 		oldProps.clear();
 
-		oldProps.insert( "style" );
+		oldProps.insert("style");
 
-		oldProps.insert( "extra_style" );
+		oldProps.insert("extra_style");
 
-		oldProps.insert( "WindowStyle" );
+		oldProps.insert("WindowStyle");
 
 		GetPropertiesToConvert( parent, oldProps, &newProps );
 
@@ -1729,11 +1686,11 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 
 			// the goal is to change the class to sizeritem, then create a spacer child, then move "width" and "height" to the spacer
 			parent->SetAttribute( "class", "sizeritem" );
-			ticpp::Element spacer( "object" );
+			ticpp::Element spacer("object");
 			spacer.SetAttribute( "class", "spacer" );
 
 			oldProps.clear();
-			oldProps.insert( "width" );
+			oldProps.insert("width");
 			GetPropertiesToConvert( parent, oldProps, &newProps );
 
 			if ( !newProps.empty() )
@@ -1745,7 +1702,7 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 			}
 
 			oldProps.clear();
-			oldProps.insert( "height" );
+			oldProps.insert("height");
 			GetPropertiesToConvert( parent, oldProps, &newProps );
 
 			if ( !newProps.empty() )
@@ -1758,16 +1715,13 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 			parent->LinkEndChild( &spacer );
 		}
 	}
-
 	/* The file is now at at least version 1.6 */
 
 	// Version 1.7 now stores all font properties.
 	// The font property conversion is automatic because it is just an extension of the old values.
-
 	if ( fileMajor < 1 || ( 1 == fileMajor && fileMinor < 7 ) )
 	{
 		// Remove deprecated 2.6 things
-
 		// wxDialog styles wxTHICK_FRAME and wxNO_3D
 		if ( objClass == "Dialog" || objClass == "Wizard" )
 		{
@@ -1781,19 +1735,18 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 				wxString styles = _WXSTR( style->GetText( false ) );
 				if ( !styles.empty() )
 				{
-					if ( TypeConv::FlagSet( wxT("wxTHICK_FRAME"), styles ) )
+					if ( TypeConv::FlagSet("wxTHICK_FRAME", styles ) )
 					{
-						styles = TypeConv::ClearFlag( wxT("wxTHICK_FRAME"), styles );
-						styles = TypeConv::SetFlag( wxT("wxRESIZE_BORDER"), styles );
+						styles = TypeConv::ClearFlag( "wxTHICK_FRAME", styles );
+						styles = TypeConv::SetFlag( "wxRESIZE_BORDER", styles );
 					}
 
-					styles = TypeConv::ClearFlag( wxT("wxNO_3D"), styles );
+					styles = TypeConv::ClearFlag( "wxNO_3D", styles );
 					style->SetText( _STDSTR( styles ) );
 				}
 			}
 		}
 	}
-
 	/* The file is now at at least version 1.7 */
 
 	// The update to 1.8 only affected project properties
@@ -1801,7 +1754,7 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 
 	/* The file is now at at least version 1.8 */
 
-	// stringlist properties are stored in a different format as of version 1.9
+	// Stringlist properties are stored in a different format as of version 1.9
 	if ( fileMajor < 1 || ( 1 == fileMajor && fileMinor < 9 ) )
 	{
 		oldProps.clear();
@@ -1814,12 +1767,12 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 				objClass == "wxCheckListBox"
 			)
 		{
-			oldProps.insert( "choices" );
+			oldProps.insert("choices");
 		}
 		else if ( objClass == "wxGrid" )
 		{
-			oldProps.insert( "col_label_values" );
-			oldProps.insert( "row_label_values" );
+			oldProps.insert("col_label_values");
+			oldProps.insert("row_label_values");
 		}
 
 		if ( !oldProps.empty() )
@@ -1838,31 +1791,30 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 			}
 		}
 	}
-
 	/* The file is now at at least version 1.9 */
 }
 
 void ApplicationData::GetPropertiesToConvert( ticpp::Node* parent, const std::set< std::string >& names, std::set< ticpp::Element* >* properties )
+{
+	// Clear result set
+	properties->clear();
+
+	ticpp::Iterator< ticpp::Element > prop("property");
+
+	for ( prop = parent->FirstChildElement( "property", false ); prop != prop.end(); ++prop )
 	{
-		// Clear result set
-		properties->clear();
+		std::string name;
+		prop->GetAttribute( "name", &name );
 
-		ticpp::Iterator< ticpp::Element > prop( "property" );
-
-		for ( prop = parent->FirstChildElement( "property", false ); prop != prop.end(); ++prop )
+		if ( names.find( name ) != names.end() )
 		{
-			std::string name;
-			prop->GetAttribute( "name", &name );
-
-			if ( names.find( name ) != names.end() )
-			{
-				properties->insert( prop.Get() );
-			}
+			properties->insert( prop.Get() );
 		}
 	}
+}
 
-void ApplicationData::TransferOptionList( ticpp::Element* prop, std::set< wxString >* options, const std::string& newPropName )
-
+void ApplicationData::TransferOptionList( ticpp::Element* prop, std::set< wxString >* options,
+											const std::string& newPropName )
 {
 	wxString value = _WXSTR( prop->GetText( false ) );
 
@@ -1872,7 +1824,7 @@ void ApplicationData::TransferOptionList( ticpp::Element* prop, std::set< wxStri
 
 	// Sort options - if in the 'options' set, they should be transferred to a property named 'newPropName'
 	// otherwise, they should stay
-	wxStringTokenizer tkz( value, wxT( "|" ), wxTOKEN_RET_EMPTY_ALL );
+	wxStringTokenizer tkz( value, "|", wxTOKEN_RET_EMPTY_ALL );
 
 	while ( tkz.HasMoreTokens() )
 	{
@@ -1913,11 +1865,11 @@ void ApplicationData::TransferOptionList( ticpp::Element* prop, std::set< wxStri
 		if ( !newProps.empty() )
 		{
 			newProp = *newProps.begin();
-			newOptionList << wxT( "|" ) << _WXSTR( newProp->GetText( false ) );
+			newOptionList << "|" << _WXSTR( newProp->GetText( false ) );
 		}
 		else
 		{
-			newProp = new ticpp::Element( "property" );
+			newProp = new ticpp::Element("property");
 			newProp->SetAttribute( "name", newPropName );
 		}
 
@@ -1925,9 +1877,8 @@ void ApplicationData::TransferOptionList( ticpp::Element* prop, std::set< wxStri
 
 		for ( option = transfer.begin(); option != transfer.end(); ++option )
 		{
-			newOptionList << wxT( "|" ) << *option;
+			newOptionList << "|" << *option;
 		}
-
 		newProp->SetText( _STDSTR( newOptionList.substr( 1 ) ) );
 
 		if ( newProps.empty() )
@@ -1936,7 +1887,6 @@ void ApplicationData::TransferOptionList( ticpp::Element* prop, std::set< wxStri
 			delete newProp;
 		}
 	}
-
 	// Set the value of the property to whatever is left
 	if ( keep.empty() )
 	{
@@ -1944,16 +1894,14 @@ void ApplicationData::TransferOptionList( ticpp::Element* prop, std::set< wxStri
 	}
 	else
 	{
-
 		std::set< wxString >::iterator option;
 
 		wxString newOptionList;
 
 		for ( option = keep.begin(); option != keep.end(); ++option )
 		{
-			newOptionList << wxT( "|" ) << *option;
+			newOptionList << "|" << *option;
 		}
-
 		prop->SetText( _STDSTR( newOptionList.substr( 1 ) ) );
 	}
 }
@@ -1961,12 +1909,12 @@ void ApplicationData::TransferOptionList( ticpp::Element* prop, std::set< wxStri
 void ApplicationData::NewProject()
 
 {
-	m_project = m_objDb->CreateObject( "Project" );
+	m_project = m_objDb->CreateObject("Project");
 	m_selObj = m_project;
 	m_modFlag = false;
 	m_cmdProc.Reset();
-	m_projectFile = wxT( "" );
-	SetProjectPath( wxT( "" ) );
+	m_projectFile = "";
+	SetProjectPath("");
 	m_ipc->Reset();
 	NotifyProjectRefresh();
 }
@@ -1995,15 +1943,15 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
 
 		PObjectBase obj = m_objDb->CreateObject( "UserClasses", PObjectBase() );
 
-		PProperty baseNameProp = obj->GetProperty( wxT( "basename" ) );
-		PProperty nameProp = obj->GetProperty( wxT( "name" ) );
-		PProperty fileProp = obj->GetProperty( wxT( "file" ) );
-		PProperty genfileProp = obj->GetProperty( wxT( "gen_file" ) );
-		PProperty typeProp = obj->GetProperty( wxT( "type" ) );
+		PProperty baseNameProp = obj->GetProperty("basename");
+		PProperty nameProp = obj->GetProperty("name");
+		PProperty fileProp = obj->GetProperty("file");
+		PProperty genfileProp = obj->GetProperty("gen_file");
+		PProperty typeProp = obj->GetProperty("type");
 
 		if ( !( baseNameProp && nameProp && fileProp && typeProp && genfileProp ) )
 		{
-			wxLogWarning( wxT("Missing Property") );
+			wxLogWarning( _("Missing Property") );
 			return;
 		}
 
@@ -2014,7 +1962,7 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
             return;
         }
 
-        const wxString& genFileValue = project->GetPropertyAsString( _("file") );
+        const wxString& genFileValue = project->GetPropertyAsString("file");
         wxFileName genFile( genFileValue );
         if ( !genFile.MakeAbsolute( path ) )
         {
@@ -2025,7 +1973,8 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
         const wxString& genFileFullPath = genFile.GetFullPath();
         if ( !genFile.MakeRelativeTo( inherFile.GetPath( wxPATH_GET_VOLUME ) ) )
         {
-            wxLogWarning( _("Unable to make \"%s\" relative to \"%s\""), genFileFullPath.c_str(), inherFile.GetPath( wxPATH_GET_VOLUME ).c_str() );
+            wxLogWarning( _("Unable to make \"%s\" relative to \"%s\""),
+							genFileFullPath.c_str(), inherFile.GetPath( wxPATH_GET_VOLUME ).c_str() );
             return;
         }
 
@@ -2037,7 +1986,7 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
 
 		// Determine if Microsoft BOM should be used
 		bool useMicrosoftBOM = false;
-		PProperty pUseMicrosoftBOM = project->GetProperty( _("use_microsoft_bom") );
+		PProperty pUseMicrosoftBOM = project->GetProperty("use_microsoft_bom");
 
 		if ( pUseMicrosoftBOM )
 		{
@@ -2046,40 +1995,40 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
 
 		// Determine if Utf8 or Ansi is to be created
 		bool useUtf8 = false;
-		PProperty pUseUtf8 = project->GetProperty( _("encoding") );
+		PProperty pUseUtf8 = project->GetProperty("encoding");
 
 		if ( pUseUtf8 )
 		{
-			useUtf8 = ( pUseUtf8->GetValueAsString() != wxT("ANSI") );
+			useUtf8 = ( pUseUtf8->GetValueAsString() != "ANSI" );
 		}
 
-		PProperty pCodeGen = project->GetProperty( wxT( "code_generation" ) );
-		if ( pCodeGen && TypeConv::FlagSet( wxT("C++"), pCodeGen->GetValue() ) )
+		PProperty pCodeGen = project->GetProperty("code_generation" );
+		if ( pCodeGen && TypeConv::FlagSet( "C++", pCodeGen->GetValue() ) )
 		{
 			CppCodeGenerator codegen;
 
 			const wxString& fullPath = inherFile.GetFullPath();
-			PCodeWriter h_cw( new FileCodeWriter( fullPath + wxT(".h"), useMicrosoftBOM, useUtf8 ) );
-			PCodeWriter cpp_cw( new FileCodeWriter( fullPath + wxT(".cpp"), useMicrosoftBOM, useUtf8 ) );
+			PCodeWriter h_cw( new FileCodeWriter( fullPath + ".h", useMicrosoftBOM, useUtf8 ) );
+			PCodeWriter cpp_cw( new FileCodeWriter( fullPath + ".cpp", useMicrosoftBOM, useUtf8 ) );
 
 			codegen.SetHeaderWriter( h_cw );
 			codegen.SetSourceWriter( cpp_cw );
 
 			codegen.GenerateInheritedClass( obj, form );
 		}
-		else if( pCodeGen && TypeConv::FlagSet( wxT("Python"), pCodeGen->GetValue() ) )
+		else if( pCodeGen && TypeConv::FlagSet( "Python", pCodeGen->GetValue() ) )
 		{
 			PythonCodeGenerator codegen;
 
 			const wxString& fullPath = inherFile.GetFullPath();
-			PCodeWriter python_cw( new FileCodeWriter( fullPath + wxT(".py"), useMicrosoftBOM, useUtf8 ) );
+			PCodeWriter python_cw( new FileCodeWriter( fullPath + ".py", useMicrosoftBOM, useUtf8 ) );
 
 			codegen.SetSourceWriter( python_cw );
 
 			codegen.GenerateInheritedClass( obj, form );
 		}
 
-		wxLogStatus( wxT( "Class generated at \'%s\'." ), path.c_str() );
+		wxLogStatus( _("Class generated at \'%s\'."), path.c_str() );
 	}
 	catch( wxFBException& ex )
 	{
@@ -2095,9 +2044,7 @@ void ApplicationData::MovePosition( PObjectBase obj, bool right, unsigned int nu
 
 	if ( parent )
 	{
-		// Si el objeto está incluido dentro de un item hay que desplazar
-		// el item
-
+		// Si el objeto está incluido dentro de un item hay que desplazar el item
 		while ( parent && parent->GetObjectInfo()->GetObjectType()->IsItem() )
 		{
 			obj = parent;
@@ -2107,19 +2054,17 @@ void ApplicationData::MovePosition( PObjectBase obj, bool right, unsigned int nu
 		unsigned int pos = parent->GetChildPosition( obj );
 
 		// nos aseguramos de que los límites son correctos
-
 		unsigned int children_count = parent->GetChildCount();
 
 		if ( ( right && num + pos < children_count ) ||
-		        ( !right  && ( num <= pos ) ) )
+			( !right && ( num <= pos ) ) )
 		{
 			pos = ( right ? pos + num : pos - num );
 
 			PCommand command( new ShiftChildCmd( obj, pos ) );
-			Execute( command ); //m_cmdProc.Execute(command);
+			Execute( command ); // m_cmdProc.Execute( command );
 			NotifyProjectRefresh();
 			SelectObject( noItemObj, true );
-
 		}
 	}
 }
@@ -2127,7 +2072,7 @@ void ApplicationData::MovePosition( PObjectBase obj, bool right, unsigned int nu
 void ApplicationData::MoveHierarchy( PObjectBase obj, bool up )
 {
 	PObjectBase sizeritem = obj->GetParent();
-	if ( !( sizeritem && sizeritem->GetObjectInfo()->IsSubclassOf( wxT("sizeritembase") ) ) )
+	if ( !( sizeritem && sizeritem->GetObjectInfo()->IsSubclassOf("sizeritembase") ) )
 	{
 		return;
 	}
@@ -2141,9 +2086,9 @@ void ApplicationData::MoveHierarchy( PObjectBase obj, bool up )
 			{
 				nextSizer = nextSizer->GetParent();
 			}
-			while ( nextSizer && !nextSizer->GetObjectInfo()->IsSubclassOf( wxT("sizer") ) );
+			while ( nextSizer && !nextSizer->GetObjectInfo()->IsSubclassOf("sizer") );
 
-			if ( nextSizer && nextSizer->GetObjectInfo()->IsSubclassOf( wxT("sizer") ) )
+			if ( nextSizer && nextSizer->GetObjectInfo()->IsSubclassOf("sizer") )
 			{
 				PCommand cmdReparent( new ReparentObjectCmd( sizeritem, nextSizer ) );
 				Execute( cmdReparent );
@@ -2153,8 +2098,7 @@ void ApplicationData::MoveHierarchy( PObjectBase obj, bool up )
 		}
 		else
 		{
-			// object will be move to the top sizer of the next sibling object
-			// subtree.
+			// object will be move to the top sizer of the next sibling object subtree.
 			unsigned int pos = nextSizer->GetChildPosition( sizeritem ) + 1;
 
 			if ( pos < nextSizer->GetChildCount() )
@@ -2172,7 +2116,6 @@ void ApplicationData::MoveHierarchy( PObjectBase obj, bool up )
 		}
 	}
 }
-
 
 void ApplicationData::Undo()
 {
@@ -2192,7 +2135,6 @@ void ApplicationData::Redo()
 	NotifyObjectSelected( GetSelectedObject() );
 }
 
-
 void ApplicationData::ToggleExpandLayout( PObjectBase obj )
 {
 	if ( !obj )
@@ -2206,12 +2148,12 @@ void ApplicationData::ToggleExpandLayout( PObjectBase obj )
 		return;
 	}
 
-	if ( !parent->GetObjectInfo()->IsSubclassOf( wxT("sizeritembase") ) )
+	if ( !parent->GetObjectInfo()->IsSubclassOf("sizeritembase") )
 	{
 		return;
 	}
 
-	PProperty propFlag = parent->GetProperty( wxT("flag") );
+	PProperty propFlag = parent->GetProperty("flag");
 
 	if( !propFlag )
 	{
@@ -2222,9 +2164,9 @@ void ApplicationData::ToggleExpandLayout( PObjectBase obj )
 	wxString currentValue = propFlag->GetValueAsString();
 
 	value =
-	    ( TypeConv::FlagSet( wxT("wxEXPAND"), currentValue ) ?
-	      TypeConv::ClearFlag( wxT("wxEXPAND"), currentValue ) :
-	      TypeConv::SetFlag( wxT("wxEXPAND"), currentValue ) );
+	    ( TypeConv::FlagSet( "wxEXPAND", currentValue ) ?
+	      TypeConv::ClearFlag( "wxEXPAND", currentValue ) :
+	      TypeConv::SetFlag( "wxEXPAND", currentValue ) );
 
 	ModifyProperty( propFlag, value );
 }
@@ -2242,18 +2184,18 @@ void ApplicationData::ToggleStretchLayout( PObjectBase obj )
 		return;
 	}
 
-	if ( parent->GetObjectTypeName() != wxT("sizeritem") )
+	if ( parent->GetObjectTypeName() != "sizeritem" )
 	{
 		return;
 	}
 
-	PProperty proportion = parent->GetProperty( wxT("proportion") );
+	PProperty proportion = parent->GetProperty("proportion");
 	if ( !proportion )
 	{
 		return;
 	}
 
-	wxString value = ( proportion->GetValue() != wxT("0") ? wxT( "0" ) : wxT( "1" ) );
+	wxString value = ( proportion->GetValue() != "0" ?  "0" : "1" );
 	ModifyProperty( proportion, value );
 }
 
@@ -2267,7 +2209,8 @@ void ApplicationData::CheckProjectTree( PObjectBase obj )
 
 		if ( child->GetParent() != obj )
 		{
-			wxLogError( wxString::Format( wxT( "Parent of object \'%s\' is wrong!" ), child->GetPropertyAsString( wxT( "name" ) ).c_str() ) );
+			wxLogError( wxString::Format( _("Parent of object \'%s\' is wrong!"),
+			child->GetPropertyAsString("name").c_str() ) );
 		}
 		CheckProjectTree( child );
 	}
@@ -2286,24 +2229,24 @@ bool ApplicationData::GetLayoutSettings( PObjectBase obj, int *flag, int *option
 		return false;
 	}
 
-	if ( parent->GetObjectInfo()->IsSubclassOf( wxT("sizeritembase") ) )
+	if ( parent->GetObjectInfo()->IsSubclassOf("sizeritembase") )
 	{
-		PProperty propOption = parent->GetProperty( wxT("proportion") );
+		PProperty propOption = parent->GetProperty("proportion");
 		if ( propOption )
 		{
 			*option = propOption->GetValueAsInteger();
 		}
 
-		*flag = parent->GetPropertyAsInteger( wxT("flag") );
-		*border = parent->GetPropertyAsInteger( wxT("border") );
+		*flag = parent->GetPropertyAsInteger("flag");
+		*border = parent->GetPropertyAsInteger("border");
 
 		PObjectBase sizer = parent->GetParent();
 		if ( sizer )
 		{
 			wxString parentName = sizer->GetClassName();
-			if ( wxT("wxBoxSizer") == parentName || wxT("wxStaticBoxSizer") == parentName )
+			if ( ( "wxBoxSizer" == parentName ) || ( "wxStaticBoxSizer" == parentName ) )
 			{
-				PProperty propOrient = sizer->GetProperty( wxT("orient") );
+				PProperty propOrient = sizer->GetProperty("orient");
 				if ( propOrient )
 				{
 					*orient = propOrient->GetValueAsInteger();
@@ -2312,7 +2255,6 @@ bool ApplicationData::GetLayoutSettings( PObjectBase obj, int *flag, int *option
 		}
 		return true;
 	}
-
 	return false;
 }
 
@@ -2329,12 +2271,12 @@ void ApplicationData::ChangeAlignment ( PObjectBase obj, int align, bool vertica
 		return;
 	}
 
-	if ( !parent->GetObjectInfo()->IsSubclassOf( wxT("sizeritembase") ) )
+	if ( !parent->GetObjectInfo()->IsSubclassOf("sizeritembase") )
 	{
 		return;
 	}
 
-	PProperty propFlag = parent->GetProperty( wxT( "flag" ) );
+	PProperty propFlag = parent->GetProperty("flag");
 
 	if ( !propFlag )
 	{
@@ -2348,43 +2290,37 @@ void ApplicationData::ChangeAlignment ( PObjectBase obj, int align, bool vertica
 
 	if ( vertical )
 	{
-		value = TypeConv::ClearFlag( wxT( "wxALIGN_TOP" ), value );
-		value = TypeConv::ClearFlag( wxT( "wxALIGN_BOTTOM" ), value );
-		value = TypeConv::ClearFlag( wxT( "wxALIGN_CENTER_VERTICAL" ), value );
+		value = TypeConv::ClearFlag( "wxALIGN_TOP", value );
+		value = TypeConv::ClearFlag( "wxALIGN_BOTTOM", value );
+		value = TypeConv::ClearFlag( "wxALIGN_CENTER_VERTICAL", value );
 	}
 	else
 	{
-		value = TypeConv::ClearFlag( wxT( "wxALIGN_LEFT" ), value );
-		value = TypeConv::ClearFlag( wxT( "wxALIGN_RIGHT" ), value );
-		value = TypeConv::ClearFlag( wxT( "wxALIGN_CENTER_HORIZONTAL" ), value );
+		value = TypeConv::ClearFlag( "wxALIGN_LEFT", value );
+		value = TypeConv::ClearFlag( "wxALIGN_RIGHT", value );
+		value = TypeConv::ClearFlag( "wxALIGN_CENTER_HORIZONTAL", value );
 	}
 
 	wxString alignStr;
 
 	switch ( align )
 	{
+	case wxALIGN_RIGHT:
+		alignStr = "wxALIGN_RIGHT";
+		break;
 
-		case wxALIGN_RIGHT:
-			alignStr = wxT( "wxALIGN_RIGHT" );
+	case wxALIGN_CENTER_HORIZONTAL:
+		alignStr = "wxALIGN_CENTER_HORIZONTAL";
+		break;
 
-			break;
+	case wxALIGN_BOTTOM:
+		alignStr = "wxALIGN_BOTTOM";
+		break;
 
-		case wxALIGN_CENTER_HORIZONTAL:
-			alignStr = wxT( "wxALIGN_CENTER_HORIZONTAL" );
-
-			break;
-
-		case wxALIGN_BOTTOM:
-			alignStr = wxT( "wxALIGN_BOTTOM" );
-
-			break;
-
-		case wxALIGN_CENTER_VERTICAL:
-			alignStr = wxT( "wxALIGN_CENTER_VERTICAL" );
-
-			break;
+	case wxALIGN_CENTER_VERTICAL:
+		alignStr = "wxALIGN_CENTER_VERTICAL";
+		break;
 	}
-
 	value = TypeConv::SetFlag( alignStr, value );
 
 	ModifyProperty( propFlag, value );
@@ -2403,12 +2339,12 @@ void ApplicationData::ToggleBorderFlag( PObjectBase obj, int border )
 		return;
 	}
 
-	if ( !parent->GetObjectInfo()->IsSubclassOf( wxT("sizeritembase") ) )
+	if ( !parent->GetObjectInfo()->IsSubclassOf("sizeritembase") )
 	{
 		return;
 	}
 
-	PProperty propFlag = parent->GetProperty( wxT( "flag" ) );
+	PProperty propFlag = parent->GetProperty("flag");
 
 	if ( !propFlag )
 	{
@@ -2417,26 +2353,26 @@ void ApplicationData::ToggleBorderFlag( PObjectBase obj, int border )
 
 	wxString value = propFlag->GetValueAsString();
 
-	value = TypeConv::ClearFlag( wxT( "wxALL" ), value );
-	value = TypeConv::ClearFlag( wxT( "wxTOP" ), value );
-	value = TypeConv::ClearFlag( wxT( "wxBOTTOM" ), value );
-	value = TypeConv::ClearFlag( wxT( "wxRIGHT" ), value );
-	value = TypeConv::ClearFlag( wxT( "wxLEFT" ), value );
+	value = TypeConv::ClearFlag( "wxALL", value );
+	value = TypeConv::ClearFlag( "wxTOP", value );
+	value = TypeConv::ClearFlag( "wxBOTTOM", value );
+	value = TypeConv::ClearFlag( "wxRIGHT", value );
+	value = TypeConv::ClearFlag( "wxLEFT", value );
 
 	int intVal = propFlag->GetValueAsInteger();
 	intVal ^= border;
 
 	if ( ( intVal & wxALL ) == wxALL )
-		value = TypeConv::SetFlag( wxT( "wxALL" ), value );
+		value = TypeConv::SetFlag( "wxALL", value );
 	else
 	{
-		if ( ( intVal & wxTOP ) != 0 ) value = TypeConv::SetFlag( wxT( "wxTOP" ), value );
+		if ( ( intVal & wxTOP ) != 0 ) value = TypeConv::SetFlag( "wxTOP", value );
 
-		if ( ( intVal & wxBOTTOM ) != 0 ) value = TypeConv::SetFlag( wxT( "wxBOTTOM" ), value );
+		if ( ( intVal & wxBOTTOM ) != 0 ) value = TypeConv::SetFlag( "wxBOTTOM", value );
 
-		if ( ( intVal & wxRIGHT ) != 0 ) value = TypeConv::SetFlag( wxT( "wxRIGHT" ), value );
+		if ( ( intVal & wxRIGHT ) != 0 ) value = TypeConv::SetFlag( "wxRIGHT", value );
 
-		if ( ( intVal & wxLEFT ) != 0 ) value = TypeConv::SetFlag( wxT( "wxLEFT" ), value );
+		if ( ( intVal & wxLEFT ) != 0 ) value = TypeConv::SetFlag( "wxLEFT", value );
 	}
 
 	ModifyProperty( propFlag, value );
@@ -2457,7 +2393,7 @@ void ApplicationData::CreateBoxSizerWithObject( PObjectBase obj )
 	}
 
 	int childPos = -1;
-	if ( parent->GetObjectInfo()->IsSubclassOf( wxT("sizeritembase") ) )
+	if ( parent->GetObjectInfo()->IsSubclassOf("sizeritembase") )
 	{
 		childPos = (int)grandParent->GetChildPosition( parent );
 		parent = grandParent;
@@ -2475,7 +2411,7 @@ void ApplicationData::CreateBoxSizerWithObject( PObjectBase obj )
 		PCommand cmd( new InsertObjectCmd( this, newSizer, parent, childPos ) );
 		Execute( cmd );
 
-		if ( newSizer->GetObjectTypeName() == wxT("sizeritem") )
+		if ( newSizer->GetObjectTypeName() == "sizeritem" )
 			newSizer = newSizer->GetChild( 0 );
 
 		PasteObject( newSizer );
@@ -2496,10 +2432,9 @@ void ApplicationData::ShowXrcPreview()
 
 	if ( form == NULL )
 	{
-		wxMessageBox( wxT( "Please select a form and try again." ), wxT( "No Form Selected" ), wxICON_ERROR );
+		wxMessageBox( _("Please select a form and try again."), _("No Form Selected"), wxICON_ERROR );
 		return;
 	}
-
 	XRCPreview::Show( form, GetProjectPath() );
 }
 
@@ -2507,7 +2442,7 @@ bool ApplicationData::CanPasteObject()
 {
 	PObjectBase obj = GetSelectedObject();
 
-	if ( obj && obj->GetObjectTypeName() != wxT( "project" ) )
+	if ( obj && obj->GetObjectTypeName() != "project" )
 		return ( m_clipboard != NULL );
 
 	return false;
@@ -2517,7 +2452,7 @@ bool ApplicationData::CanCopyObject()
 {
 	PObjectBase obj = GetSelectedObject();
 
-	if ( obj && obj->GetObjectTypeName() != wxT( "project" ) )
+	if ( obj && obj->GetObjectTypeName() != "project" )
 		return true;
 
 	return false;
@@ -2533,7 +2468,6 @@ void ApplicationData::Execute( PCommand cmd )
 	m_modFlag = true;
 	m_cmdProc.Execute( cmd );
 }
-
 //////////////////////////////////////////////////////////////////////////////
 void ApplicationData::AddHandler( wxEvtHandler* handler )
 {
@@ -2559,7 +2493,7 @@ void ApplicationData::NotifyEvent( wxFBEvent& event, bool delayed )
 	if ( !delayed && (count == 0) )
 	{
 		count++;
-		wxString msg = wxT( "event: ") + event.GetEventName();
+		wxString msg = _("event: ") + event.GetEventName();
 		Debug::Print( msg );
 		std::vector< wxEvtHandler* >::iterator handler;
 
@@ -2570,7 +2504,7 @@ void ApplicationData::NotifyEvent( wxFBEvent& event, bool delayed )
 	}
 	else
 	{
-		wxString msg = wxT( "Pending event:  " ) + event.GetEventName();
+		wxString msg = _("Pending event:  ") + event.GetEventName();
 		Debug::Print( msg );
 		std::vector< wxEvtHandler* >::iterator handler;
 
@@ -2654,7 +2588,7 @@ wxString ApplicationData::GetOutputPath()
 	PObjectBase project = GetProjectData();
 	wxFileName path;
 	// Get the output path
-	PProperty ppath = project->GetProperty( wxT( "path" ) );
+	PProperty ppath = project->GetProperty("path");
 
 	if ( ppath )
 	{
@@ -2662,7 +2596,7 @@ wxString ApplicationData::GetOutputPath()
 
 		if ( pathEntry.empty() )
 		{
-			THROW_WXFBEX( wxT( "You must set the \"path\" property of the project to a valid path for output files" ) );
+			THROW_WXFBEX( _("You must set the \"path\" property of the project to a valid path for output files") );
 		}
 
 		path = wxFileName::DirName( pathEntry );
@@ -2673,19 +2607,16 @@ wxString ApplicationData::GetOutputPath()
 
 			if ( projectPath.empty() )
 			{
-				THROW_WXFBEX( wxT( "You must save the project when using a relative path for output files" ) );
+				THROW_WXFBEX( _("You must save the project when using a relative path for output files") );
 			}
-
 			path.SetCwd( projectPath );
-
 			path.MakeAbsolute();
 		}
 	}
 
 	if ( !path.DirExists() )
 	{
-		THROW_WXFBEX( wxT( "Invalid Path: " ) << path.GetPath() << wxT( "\nYou must set the \"path\" property of the project to a valid path for output files" ) );
+		THROW_WXFBEX( _("Invalid Path: ") << path.GetPath() << _("\nYou must set the \"path\" property of the project to a valid path for output files") );
 	}
-
 	return path.GetPath( wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR );
 }
