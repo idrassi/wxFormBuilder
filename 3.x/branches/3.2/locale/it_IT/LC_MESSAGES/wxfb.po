@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxFormBuilder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-06 04:40+0100\n"
+"POT-Creation-Date: 2010-03-06 15:20+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Andrea Zanellato <xvirc.client@gmail.com>\n"
 "Language-Team: \n"
@@ -816,263 +816,652 @@ msgstr ""
 msgid "- Juan Antonio Ortega"
 msgstr ""
 
-#: wxformbuilder32/src/rad/bitmaps.cpp:85
-#: wxformbuilder32/src/rad/bitmaps.cpp:89
+#: wxformbuilder32/src/rad/bitmaps.cpp:86
+#: wxformbuilder32/src/rad/bitmaps.cpp:90
 #, c-format
 msgid "Error loading images: %s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:251
-msgid "mainbar"
-msgstr ""
-
-#: wxformbuilder32/src/rad/mainframe.cpp:251
+#: wxformbuilder32/src/rad/mainframe.cpp:247
 msgid "Toolbar"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:287
+#: wxformbuilder32/src/rad/mainframe.cpp:255
+msgid "Object Tree"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:262
+msgid "Object Properties"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:269
+msgid "Editor"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:274
+msgid "Component Palette"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:283
 msgid "Dock Manager Settings"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:558
+#: wxformbuilder32/src/rad/mainframe.cpp:426
+#: wxformbuilder32/src/rad/mainframe.cpp:1258
+msgid "Save Project"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:427
+#: wxformbuilder32/src/rad/mainframe.cpp:476
+msgid "wxFormBuilder Project File (*.fbp)|*.fbp|All files (*.*)|*.*"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:446
+msgid "The file already exists. Do you want to replace it?"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:447
+msgid "Overwrite the file"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:475
+#: wxformbuilder32/src/rad/mainframe.cpp:1257
+msgid "Open Project"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:509
+#, c-format
+msgid "The project file '%s' doesn't exist. Would you like to remove it from the recent files list?"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:511
+msgid "Open recent project"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:521
+#: wxformbuilder32/src/rad/mainframe.cpp:1187
+msgid "Import XRC file"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:544
+msgid "Error while loading XRC"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:549
 #, c-format
 msgid "Error Loading XRC: %s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:844
-msgid "Designer"
+#: wxformbuilder32/src/rad/mainframe.cpp:592
+msgid "Project Loaded!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1126
-msgid "file"
+#: wxformbuilder32/src/rad/mainframe.cpp:597
+#: wxformbuilder32/src/rad/mainframe.cpp:633
+#: wxformbuilder32/src/rad/mainframe.cpp:729
+#, c-format
+msgid "Name: %s | Class: %s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1128
+#: wxformbuilder32/src/rad/mainframe.cpp:608
+msgid "Project Saved!"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:629
+msgid "\"Unknown\""
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:648
+#, c-format
+msgid "Object '%s' of class '%s' created."
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:654
+msgid "Impossible to create the object. Did you forget to add a sizer/parent object?"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:665
+#, c-format
+msgid "Object '%s' removed."
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:687
+#, c-format
+msgid "Name: %s %s"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:692
+msgid "Property Modified!"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:704
+#, c-format
+msgid "Event handler '%s' of object '%s' modified."
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:719
+msgid "Code Generated!"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:757
+#: wxformbuilder32/src/rad/mainframe.cpp:822
+msgid "Edit"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:811
+msgid "untitled"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1107
 msgid "You must set the \"file\" property of the project before generating inherited classes."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1280
-msgid "Customize..."
+#: wxformbuilder32/src/rad/mainframe.cpp:1126
+#, c-format
+msgid "Class(es) generated to '%s'."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1286
-msgid "New Project"
+#: wxformbuilder32/src/rad/mainframe.cpp:1135
+msgid ""
+"Current project file has been modified...\n"
+"Do you want to save the changes?"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1286
-msgid "New Project (Ctrl+N)"
+#: wxformbuilder32/src/rad/mainframe.cpp:1136
+msgid "Save project"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1286
-msgid "Start a new project."
+#: wxformbuilder32/src/rad/mainframe.cpp:1156
+msgid "Find"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1287
-msgid "Open Project"
+#: wxformbuilder32/src/rad/mainframe.cpp:1181
+msgid "&New Project\tCtrl+N"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1287
-msgid "Open Project (Ctrl+O)"
+#: wxformbuilder32/src/rad/mainframe.cpp:1181
+msgid "Create an empty project"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1287
-msgid "Open an existing project."
+#: wxformbuilder32/src/rad/mainframe.cpp:1182
+msgid "&Open...\tCtrl+O"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1288
-msgid "Save Project"
+#: wxformbuilder32/src/rad/mainframe.cpp:1182
+msgid "Open a project"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1288
-msgid "Save Project (Ctrl+S)"
+#: wxformbuilder32/src/rad/mainframe.cpp:1184
+msgid "&Save\tCtrl+S"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1288
-msgid "Save the current project."
+#: wxformbuilder32/src/rad/mainframe.cpp:1184
+msgid "Save current project"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1290
-msgid "Undo"
+#: wxformbuilder32/src/rad/mainframe.cpp:1185
+msgid "Save &As...\tCtrl-Shift+S"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1290
-msgid "Undo (Ctrl+Z)"
+#: wxformbuilder32/src/rad/mainframe.cpp:1185
+msgid "Save current project as..."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1290
-msgid "Undo the last action."
+#: wxformbuilder32/src/rad/mainframe.cpp:1187
+msgid "&Import XRC..."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1291
-msgid "Redo"
+#: wxformbuilder32/src/rad/mainframe.cpp:1189
+msgid "&Generate Code\tF8"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1291
-msgid "Redo (Ctrl+Y)"
-msgstr ""
-
-#: wxformbuilder32/src/rad/mainframe.cpp:1291
-msgid "Redo the last action that was undone."
-msgstr ""
-
-#: wxformbuilder32/src/rad/mainframe.cpp:1293
-msgid "Cut"
-msgstr ""
-
-#: wxformbuilder32/src/rad/mainframe.cpp:1293
-msgid "Cut (Ctrl+X)"
-msgstr ""
-
-#: wxformbuilder32/src/rad/mainframe.cpp:1293
-msgid "Remove the selected object and place it on the clipboard."
-msgstr ""
-
-#: wxformbuilder32/src/rad/mainframe.cpp:1294
-msgid "Copy"
-msgstr ""
-
-#: wxformbuilder32/src/rad/mainframe.cpp:1294
-msgid "Copy (Ctrl+C)"
-msgstr ""
-
-#: wxformbuilder32/src/rad/mainframe.cpp:1294
-msgid "Copy the selected object to the clipboard."
-msgstr ""
-
-#: wxformbuilder32/src/rad/mainframe.cpp:1295
-msgid "Paste"
-msgstr ""
-
-#: wxformbuilder32/src/rad/mainframe.cpp:1295
-msgid "Paste (Ctrl+V)"
-msgstr ""
-
-#: wxformbuilder32/src/rad/mainframe.cpp:1295
-msgid "Insert an object from the clipboard."
-msgstr ""
-
-#: wxformbuilder32/src/rad/mainframe.cpp:1296
-msgid "Delete"
-msgstr ""
-
-#: wxformbuilder32/src/rad/mainframe.cpp:1296
-msgid "Delete (Ctrl+D)"
-msgstr ""
-
-#: wxformbuilder32/src/rad/mainframe.cpp:1296
-msgid "Remove the selected object."
-msgstr ""
-
-#: wxformbuilder32/src/rad/mainframe.cpp:1298
+#: wxformbuilder32/src/rad/mainframe.cpp:1189
+#: wxformbuilder32/src/rad/mainframe.cpp:1268
 msgid "Generate Code"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1298
+#: wxformbuilder32/src/rad/mainframe.cpp:1191
+msgid "E&xit\tAlt-F4"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1191
+msgid "Quit wxFormBuilder"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1194
+msgid "&Undo \tCtrl+Z"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1194
+msgid "Undo changes"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1195
+msgid "&Redo \tCtrl+Y"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1195
+msgid "Redo changes"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1197
+msgid "&Copy \tCtrl+C"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1197
+msgid "Copy selected object"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1198
+msgid "Cut \tCtrl+X"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1198
+msgid "Cut selected object"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1199
+msgid "&Paste \tCtrl+V"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1199
+msgid "Paste on selected object"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1200
+msgid "&Delete \tCtrl+D"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1200
+msgid "Delete selected object"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1202
+msgid "Copy Object To Clipboard\tCtrl+Shift+C"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1202
+msgid "Copy Object to Clipboard"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1203
+msgid "Paste Object From Clipboard\tCtrl+Shift+V"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1203
+msgid "Paste Object from Clipboard"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1205
+msgid "Toggle &Expand\tAlt+W"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1205
+msgid "Toggle wxEXPAND flag of sizeritem properties"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1206
+msgid "Toggle &Stretch\tAlt+S"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1206
+msgid "Toggle option property of sizeritem properties"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1207
+#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:532
+msgid "Move Up\tAlt+Up"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1207
+msgid "Move Up selected object"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1208
+#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:533
+msgid "Move Down\tAlt+Down"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1208
+msgid "Move Down selected object"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1209
+#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:534
+msgid "Move Left\tAlt+Left"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1209
+msgid "Move Left selected object"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1210
+#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:535
+msgid "Move Right\tAlt+Right"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1210
+msgid "Move Right selected object"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1212
+msgid "&Find\tCtrl+F"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1212
+msgid "Find text in the active code viewer"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1214
+msgid "&Align &Left\tAlt+Shift+Left"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1214
+msgid "Align item to the left"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1215
+msgid "&Align Center &Horizontal\tAlt+Shift+H"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1215
+msgid "Align item to the center horizontally"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1216
+msgid "&Align &Right\tAlt+Shift+Right"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1216
+msgid "Align item to the right"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1217
+msgid "&Align &Top\tAlt+Shift+Up"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1217
+msgid "Align item to the top"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1218
+msgid "&Align Center &Vertical\tAlt+Shift+V"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1218
+msgid "Align item to the center vertically"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1219
+msgid "&Align &Bottom\tAlt+Shift+Down"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1219
+msgid "Align item to the bottom"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1222
+msgid "&XRC Window\tF5"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1222
+msgid "Show a preview of the XRC window"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1225
+msgid "&Generate Inherited Class\tF6"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1225
+msgid "Creates the needed files and class for proper inheritance of your designed GUI"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1228
+msgid "&About...\tF1"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1228
+msgid "Show about dialog"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1233
+msgid "&File"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1234
+msgid "&Edit"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1235
+msgid "&View"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1236
+msgid "&Tools"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1237
+msgid "&Help"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1250
+msgid "Customize..."
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1256
+msgid "New Project"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1256
+msgid "New Project (Ctrl+N)"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1256
+msgid "Start a new project."
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1257
+msgid "Open Project (Ctrl+O)"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1257
+msgid "Open an existing project."
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1258
+msgid "Save Project (Ctrl+S)"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1258
+msgid "Save the current project."
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1260
+msgid "Undo"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1260
+msgid "Undo (Ctrl+Z)"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1260
+msgid "Undo the last action."
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1261
+msgid "Redo"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1261
+msgid "Redo (Ctrl+Y)"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1261
+msgid "Redo the last action that was undone."
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1263
+msgid "Cut"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1263
+msgid "Cut (Ctrl+X)"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1263
+msgid "Remove the selected object and place it on the clipboard."
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1264
+msgid "Copy"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1264
+msgid "Copy (Ctrl+C)"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1264
+msgid "Copy the selected object to the clipboard."
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1265
+msgid "Paste"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1265
+msgid "Paste (Ctrl+V)"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1265
+msgid "Insert an object from the clipboard."
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1266
+msgid "Delete"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1266
+msgid "Delete (Ctrl+D)"
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1266
+msgid "Remove the selected object."
+msgstr ""
+
+#: wxformbuilder32/src/rad/mainframe.cpp:1268
 msgid "Generate Code (F8)"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1298
+#: wxformbuilder32/src/rad/mainframe.cpp:1268
 msgid "Create code from the current project."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1300
+#: wxformbuilder32/src/rad/mainframe.cpp:1270
 msgid "Align Left"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1300
+#: wxformbuilder32/src/rad/mainframe.cpp:1270
 msgid "The item will be aligned to the left of the space alotted to it by the sizer."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1301
+#: wxformbuilder32/src/rad/mainframe.cpp:1271
 msgid "Align Center Horizontally"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1301
+#: wxformbuilder32/src/rad/mainframe.cpp:1271
 msgid "The item will be centered horizontally in the space alotted to it by the sizer."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1302
+#: wxformbuilder32/src/rad/mainframe.cpp:1272
 msgid "Align Right"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1302
+#: wxformbuilder32/src/rad/mainframe.cpp:1272
 msgid "The item will be aligned to the right of the space alotted to it by the sizer."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1304
+#: wxformbuilder32/src/rad/mainframe.cpp:1274
 msgid "Align Top"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1304
+#: wxformbuilder32/src/rad/mainframe.cpp:1274
 msgid "The item will be aligned to the top of the space alotted to it by the sizer."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1305
+#: wxformbuilder32/src/rad/mainframe.cpp:1275
 msgid "Align Center Vertically"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1305
+#: wxformbuilder32/src/rad/mainframe.cpp:1275
 msgid "The item will be centered vertically within space alotted to it by the sizer."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1306
+#: wxformbuilder32/src/rad/mainframe.cpp:1276
 msgid "Align Bottom"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1306
+#: wxformbuilder32/src/rad/mainframe.cpp:1276
 msgid "The item will be aligned to the bottom of the space alotted to it by the sizer."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1308
+#: wxformbuilder32/src/rad/mainframe.cpp:1278
 msgid "Expand (Alt+W)"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1308
+#: wxformbuilder32/src/rad/mainframe.cpp:1278
 msgid "The item will be expanded to fill the space assigned to the item."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1309
+#: wxformbuilder32/src/rad/mainframe.cpp:1279
 msgid "Stretch (Alt+S)"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1309
+#: wxformbuilder32/src/rad/mainframe.cpp:1279
 msgid "The item will grow and shrink with the sizer."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1311
+#: wxformbuilder32/src/rad/mainframe.cpp:1281
 msgid "Left Border"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1311
+#: wxformbuilder32/src/rad/mainframe.cpp:1281
 msgid "A border will be added on the left side of the item."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1312
+#: wxformbuilder32/src/rad/mainframe.cpp:1282
 msgid "Right Border"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1312
+#: wxformbuilder32/src/rad/mainframe.cpp:1282
 msgid "A border will be  added on the right side of the item."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1313
+#: wxformbuilder32/src/rad/mainframe.cpp:1283
 msgid "Top Border"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1313
+#: wxformbuilder32/src/rad/mainframe.cpp:1283
 msgid "A border will be  added on the top of the item."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1314
+#: wxformbuilder32/src/rad/mainframe.cpp:1284
 msgid "Bottom Border"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1314
+#: wxformbuilder32/src/rad/mainframe.cpp:1284
 msgid "A border will be  added on the bottom of the item."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1378
-msgid "settings"
+#: wxformbuilder32/src/rad/customkeys.cpp:46
+msgid "#### Parser test ####"
+msgstr ""
+
+#: wxformbuilder32/src/rad/customkeys.cpp:51
+msgid "#### Templates ####"
+msgstr ""
+
+#: wxformbuilder32/src/rad/customkeys.cpp:55
+msgid "#### Code ####"
 msgstr ""
 
 #: wxformbuilder32/src/rad/wxfbmanager.cpp:32
@@ -1237,22 +1626,6 @@ msgstr ""
 
 #: wxformbuilder32/src/rad/objecttree/objecttree.cpp:530
 msgid "Delete\tCtrl+D"
-msgstr ""
-
-#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:532
-msgid "Move Up\tAlt+Up"
-msgstr ""
-
-#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:533
-msgid "Move Down\tAlt+Down"
-msgstr ""
-
-#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:534
-msgid "Move Left\tAlt+Left"
-msgstr ""
-
-#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:535
-msgid "Move Right\tAlt+Right"
 msgstr ""
 
 #: wxformbuilder32/src/rad/objecttree/objecttree.cpp:537

@@ -22,22 +22,22 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 #ifndef __KEYS_HANDLER__
 #define __KEYS_HANDLER__
 
-#include "wx/wx.h"
+#include <wx/wx.h>
 
 // This class is not needed because shorcuts are made through acceletors
 // of the MainFrame menubar.
 class CustomKeysEvtHandler : public wxEvtHandler
 {
- private:
-  CustomKeysEvtHandler() {}
+private:
+	CustomKeysEvtHandler() {}
 
-  DECLARE_EVENT_TABLE()
- public:
-  void OnKeyPress(wxKeyEvent &event);
+	DECLARE_EVENT_TABLE()
+
+public:
+	void OnKeyPress( wxKeyEvent &event );
 };
 
 #endif //__KEYS_HANDLER__

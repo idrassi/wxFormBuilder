@@ -22,20 +22,19 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 #ifndef __GENERIC_PANEL__
 #define __GENERIC_PANEL__
 
-#include "wx/wx.h"
+#include <wx/wx.h>
 
 class GenericWindow : public wxPanel
 {
- private:
-  DECLARE_EVENT_TABLE()   
- public:
-  GenericWindow(wxWindow *parent);   
-  void OnPaint(wxPaintEvent &event);
-};
+private:
+	DECLARE_EVENT_TABLE()
 
+public:
+	GenericWindow( wxWindow *parent);
+	void OnPaint( wxPaintEvent &event );
+};
 
 #endif //__GENERIC_PANEL__
