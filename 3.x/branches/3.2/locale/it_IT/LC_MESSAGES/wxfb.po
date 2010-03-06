@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxFormBuilder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-06 15:20+0100\n"
+"POT-Creation-Date: 2010-03-07 00:34+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Andrea Zanellato <xvirc.client@gmail.com>\n"
 "Language-Team: \n"
@@ -588,6 +588,10 @@ msgstr ""
 msgid "Don't annoy me again!"
 msgstr ""
 
+#: wxformbuilder32/src/rad/wxfbevent.cpp:81
+msgid "Unknown Type"
+msgstr ""
+
 #: wxformbuilder32/src/rad/appdata.cpp:464
 msgid "Logging"
 msgstr ""
@@ -814,6 +818,92 @@ msgstr ""
 
 #: wxformbuilder32/src/rad/about.cpp:95
 msgid "- Juan Antonio Ortega"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:57
+msgid "Menu Editor"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:65
+#: wxformbuilder32/src/rad/menueditor.cpp:83
+msgid "Label"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:66
+#: wxformbuilder32/src/rad/menueditor.cpp:88
+msgid "Shortcut"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:67
+#: wxformbuilder32/src/rad/menueditor.cpp:93
+msgid "Id"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:68
+#: wxformbuilder32/src/rad/menueditor.cpp:98
+msgid "Name"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:69
+#: wxformbuilder32/src/rad/menueditor.cpp:103
+msgid "Help String"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:70
+#: wxformbuilder32/src/rad/menueditor.cpp:111
+msgid "Kind"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:79
+msgid "Menu item"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:110
+msgid "Normal"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:110
+msgid "Check"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:110
+msgid "Radio"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:118
+msgid "&Add"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:121
+msgid "&Modify"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:124
+msgid "&Remove"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:129
+msgid "Add &Separator"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:138
+msgid "&Up"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:141
+msgid "&Down"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:144
+msgid "<"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:147
+msgid ">"
+msgstr ""
+
+#: wxformbuilder32/src/rad/menueditor.cpp:479
+msgid "The children of the selected item will be eliminated too. Are you sure you want to continue?"
 msgstr ""
 
 #: wxformbuilder32/src/rad/bitmaps.cpp:86
@@ -1473,17 +1563,22 @@ msgstr ""
 msgid "Visual Editor"
 msgstr ""
 
-#: wxformbuilder32/src/rad/wxfbmanager.cpp:40
-msgid "wxObject"
-msgstr ""
-
-#: wxformbuilder32/src/rad/wxfbmanager.cpp:43
-msgid "ObjectBase"
-msgstr ""
-
 #: wxformbuilder32/src/rad/wxfbmanager.cpp:173
 #, c-format
 msgid "%s has no property named %s"
+msgstr ""
+
+#: wxformbuilder32/src/rad/wxfbpalette.cpp:75
+msgid "Missing Component for Class \""
+msgstr ""
+
+#: wxformbuilder32/src/rad/wxfbpalette.cpp:75
+msgid "\" of Package \""
+msgstr ""
+
+#: wxformbuilder32/src/rad/wxfbpalette.cpp:110
+#, c-format
+msgid "[Palette] Pages %d"
 msgstr ""
 
 #: wxformbuilder32/src/rad/codeeditor/codeeditor.cpp:132
@@ -1980,59 +2075,63 @@ msgstr ""
 msgid "%s's parent is missing its wxFormBuilder object"
 msgstr ""
 
-#: wxformbuilder32/src/rad/settingspanel.h:50
+#: wxformbuilder32/src/rad/settingspanel.h:42
 msgid "Pane Border Size:"
 msgstr ""
 
-#: wxformbuilder32/src/rad/settingspanel.h:59
+#: wxformbuilder32/src/rad/settingspanel.h:53
 msgid "Sash Size:"
 msgstr ""
 
-#: wxformbuilder32/src/rad/settingspanel.h:68
+#: wxformbuilder32/src/rad/settingspanel.h:63
 msgid "Caption Size:"
 msgstr ""
 
-#: wxformbuilder32/src/rad/settingspanel.h:81
+#: wxformbuilder32/src/rad/settingspanel.h:73
 msgid "Background Color:"
 msgstr ""
 
-#: wxformbuilder32/src/rad/settingspanel.h:89
+#: wxformbuilder32/src/rad/settingspanel.h:81
 msgid "Sash Color:"
 msgstr ""
 
-#: wxformbuilder32/src/rad/settingspanel.h:97
+#: wxformbuilder32/src/rad/settingspanel.h:89
 msgid "Normal Caption:"
 msgstr ""
 
-#: wxformbuilder32/src/rad/settingspanel.h:105
+#: wxformbuilder32/src/rad/settingspanel.h:97
 msgid "Normal Caption Gradient:"
 msgstr ""
 
-#: wxformbuilder32/src/rad/settingspanel.h:113
+#: wxformbuilder32/src/rad/settingspanel.h:105
 msgid "Normal Caption Text:"
 msgstr ""
 
-#: wxformbuilder32/src/rad/settingspanel.h:121
+#: wxformbuilder32/src/rad/settingspanel.h:113
 msgid "Active Caption:"
 msgstr ""
 
-#: wxformbuilder32/src/rad/settingspanel.h:129
+#: wxformbuilder32/src/rad/settingspanel.h:121
 msgid "Active Caption Gradient:"
 msgstr ""
 
-#: wxformbuilder32/src/rad/settingspanel.h:137
+#: wxformbuilder32/src/rad/settingspanel.h:129
 msgid "Active Caption Text:"
 msgstr ""
 
-#: wxformbuilder32/src/rad/settingspanel.h:145
+#: wxformbuilder32/src/rad/settingspanel.h:137
 msgid "Border Color:"
 msgstr ""
 
-#: wxformbuilder32/src/rad/settingspanel.h:153
+#: wxformbuilder32/src/rad/settingspanel.h:145
 msgid "Gripper Color:"
 msgstr ""
 
-#: wxformbuilder32/src/rad/settingspanel.h:254
+#: wxformbuilder32/src/rad/settingspanel.h:242
 msgid "Color Picker"
+msgstr ""
+
+#: wxformbuilder32/src/rad/title.h:36
+msgid "No title"
 msgstr ""
 

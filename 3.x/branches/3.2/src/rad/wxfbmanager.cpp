@@ -22,9 +22,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 #include "wxfbmanager.h"
+#include "appdata.h"
 #include "designer/visualeditor.h"
 #include "model/objectbase.h"
-#include "rad/appdata.h"
 
 #define CHECK_NULL( THING, THING_NAME, RETURN ) 									\
 	if ( !THING )																	\
@@ -37,10 +37,10 @@
 	CHECK_NULL( m_visualEdit, _("Visual Editor"), RETURN )
 
 #define CHECK_WX_OBJECT( RETURN ) \
-	CHECK_NULL( wxobject, _("wxObject"), RETURN )
+	CHECK_NULL( wxobject, "wxObject", RETURN )
 
 #define CHECK_OBJECT_BASE( RETURN ) \
-	CHECK_NULL( obj, _("ObjectBase"), RETURN )
+	CHECK_NULL( obj, "ObjectBase", RETURN )
 
 // Classes to unset flags in VisualEditor during the destructor - this prevents
 // forgetting to unset the flag
@@ -52,9 +52,9 @@ private:
 
 public:
 	FlagFlipper( VisualEditor* visualEdit, void (VisualEditor::*flagFunction)( bool ) )
-	:
-	m_visualEditor( visualEdit ),
-	m_flagFunction( flagFunction )
+		:
+		m_visualEditor( visualEdit ),
+		m_flagFunction( flagFunction )
 	{
 		( m_visualEditor->*m_flagFunction )( true );
 	}
@@ -66,8 +66,8 @@ public:
 };
 
 wxFBManager::wxFBManager()
-:
-m_visualEdit( NULL )
+	:
+	m_visualEdit( NULL )
 {
 }
 
