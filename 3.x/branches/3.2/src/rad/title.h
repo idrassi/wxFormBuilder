@@ -22,7 +22,6 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 #ifndef __TITLE__
 #define __TITLE__
 
@@ -30,14 +29,12 @@
 
 class Title : public wxPanel
 {
- private:
+private:
 //  DECLARE_EVENT_TABLE()
- public:
-  Title(wxWindow *parent,const wxString &title=wxT("No title"));
 
-  static wxWindow* CreateTitle (wxWindow *inner, const wxString &title);
+public:
+	Title( wxWindow* parent, const wxString& title = _("No title") );
+	static wxWindow* CreateTitle ( wxWindow* inner, const wxString& title );
 };
-
-
 
 #endif //__TITLE__

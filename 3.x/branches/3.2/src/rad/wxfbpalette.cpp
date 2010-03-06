@@ -24,12 +24,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "wxfbpalette.h"
-#include "model/objectbase.h"
+#include "appdata.h"
 #include "bitmaps.h"
+#include "model/objectbase.h"
 #include "utils/debug.h"
 #include "utils/wxfbdefs.h"
 #include "utils/typeconv.h"
-#include "rad/appdata.h"
+
 #include <wx/config.h>
 
 #ifdef __WXMAC__
@@ -46,7 +47,7 @@ BEGIN_EVENT_TABLE( wxFbPalette, wxPanel )
 		EVT_BUTTON( -1, wxFbPalette::OnButtonClick )
 	#else
 */
-		EVT_TOOL(-1, wxFbPalette::OnButtonClick)
+	EVT_TOOL( wxID_ANY, wxFbPalette::OnButtonClick )
 /*
 	#endif
 	EVT_SPIN_UP( -1, wxFbPalette::OnSpinUp )
@@ -55,7 +56,7 @@ BEGIN_EVENT_TABLE( wxFbPalette, wxPanel )
 END_EVENT_TABLE()
 
 wxFbPalette::wxFbPalette( wxWindow *parent, int id )
-		: wxPanel( parent, id ), m_notebook( NULL )
+	: wxPanel( parent, id ), m_notebook( NULL )
 {
 }
 
@@ -71,8 +72,7 @@ void wxFbPalette::PopulateToolbar( PObjectPackage pkg, wxAuiToolBar *toolbar )
 		}
 		if ( NULL == info->GetComponent() )
 		{
-// TODO: Check these changes
-			wxString msg = wxT("Missing Component for Class \"") + info->GetClassName() + wxT("\" of Package \"") + pkg->GetPackageName() + wxT("\"");
+			wxString msg = _("Missing Component for Class \"") + info->GetClassName() + _("\" of Package \"") + pkg->GetPackageName() + "\"";
 			Debug::Print( msg );
 		}
 		else
@@ -86,9 +86,8 @@ void wxFbPalette::PopulateToolbar( PObjectPackage pkg, wxAuiToolBar *toolbar )
 				button->SetToolTip( widget );
 				toolbar->AddControl( button );
 			#else */
-				toolbar->AddTool(tid, widget, icon, widget);
+				toolbar->AddTool( tid, widget, icon, widget );
 //			#endif
-
 			toolbar->Realize();
 		}
 		j++;
@@ -101,13 +100,14 @@ void wxFbPalette::Create()
 
 	long nbStyle = 0;
 	wxConfigBase* config = wxConfigBase::Get();
-	config->Read( wxT( "/palette/notebook_style" ), &nbStyle, wxAUI_NB_TAB_MOVE | wxAUI_NB_WINDOWLIST_BUTTON | wxAUI_NB_SCROLL_BUTTONS );
+	config->Read( "/palette/notebook_style", &nbStyle,
+				wxAUI_NB_TAB_MOVE | wxAUI_NB_WINDOWLIST_BUTTON | wxAUI_NB_SCROLL_BUTTONS );
 
-	m_notebook = new wxAuiNotebook( this, -1, wxDefaultPosition, wxDefaultSize, nbStyle );
+	m_notebook = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, nbStyle );
 
 	unsigned int pkg_count = AppData()->GetPackageCount();
 
-	Debug::Print( wxT( "[Palette] Pages %d" ), pkg_count );
+	Debug::Print( _("[Palette] Pages %d"), pkg_count );
 
 	// Populate icon vector
 	for ( unsigned int j = 0; j < pkg_count;j++ )
@@ -120,19 +120,19 @@ void wxFbPalette::Create()
 		PObjectPackage pkg = AppData()->GetPackage( i );
 		wxString pkg_name = pkg->GetPackageName();
 /*
-		wxPanel *panel = new wxPanel( m_notebook, -1 );
+		wxPanel *panel = new wxPanel( m_notebook, wxID_ANY );
 		panel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) );
 		wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
 */
-		wxPanel *tbPanel = new wxPanel( m_notebook, -1 );
+		wxPanel* tbPanel = new wxPanel( m_notebook, wxID_ANY );
 //		tbPanel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) );
-		wxBoxSizer *tbSizer = new wxBoxSizer( wxHORIZONTAL );
+		wxBoxSizer* tbSizer = new wxBoxSizer( wxHORIZONTAL );
 /*
-		wxPanel *sbPanel = new wxPanel( panel, -1 );
+		wxPanel *sbPanel = new wxPanel( panel, wxID_ANY );
 		sbPanel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) );
 		wxBoxSizer *sbSizer = new wxBoxSizer( wxHORIZONTAL );
 */
-		wxAuiToolBar *toolbar = new wxAuiToolBar( tbPanel, -1, wxDefaultPosition, wxDefaultSize, wxAUI_TB_OVERFLOW );
+		wxAuiToolBar* toolbar = new wxAuiToolBar( tbPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_OVERFLOW );
 		toolbar->SetToolBitmapSize( wxSize( 22, 22 ) );
 //		toolbar->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) );
 		PopulateToolbar( pkg, toolbar );
@@ -143,7 +143,7 @@ void wxFbPalette::Create()
 		tbPanel->Layout();
 		tbSizer->Fit( tbPanel );
 /*
-		wxSpinButton *sb = new wxSpinButton( sbPanel, -1, wxDefaultPosition, wxDefaultSize, wxSP_HORIZONTAL );
+		wxSpinButton *sb = new wxSpinButton( sbPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_HORIZONTAL );
 		sb->SetRange( 0, ( int )pkg->GetObjectCount() - 1 );
 		sb->SetValue( 0 );
 		m_posVector.push_back( 0 );
@@ -231,6 +231,6 @@ wxFbPalette::~wxFbPalette()
 	{
 		pages << m_notebook->GetPageText( i ) << wxT( "," );
 	}
-	config->Write( wxT( "/palette/pageOrder" ), pages );
-	config->Write( wxT( "/palette/notebook_style" ), m_notebook->GetWindowStyleFlag() );
+	config->Write( "/palette/pageOrder", pages );
+	config->Write( "/palette/notebook_style", m_notebook->GetWindowStyleFlag() );
 }
