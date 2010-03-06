@@ -22,26 +22,23 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
+#include "genericpanel.h"
 
-#include "rad/genericpanel.h"
-
-BEGIN_EVENT_TABLE(GenericWindow,wxPanel)
-  EVT_PAINT(GenericWindow::OnPaint)
+BEGIN_EVENT_TABLE( GenericWindow,wxPanel )
+	EVT_PAINT( GenericWindow::OnPaint )
 END_EVENT_TABLE()
 
-GenericWindow::GenericWindow(wxWindow *parent)
-  : wxPanel (parent, -1,wxDefaultPosition,wxSize(30,30))
+GenericWindow::GenericWindow( wxWindow *parent )
+	: wxPanel ( parent, wxID_ANY, wxDefaultPosition, wxSize( 30, 30 ) )
 {
 }
 
-
-void GenericWindow::OnPaint(wxPaintEvent &)
+void GenericWindow::OnPaint( wxPaintEvent & )
 {  
-  wxPaintDC dc(this);
-  wxSize size = GetSize();
-  dc.SetPen(*wxBLACK_PEN);
-  for (int i=0;i<size.GetWidth();i += 2)
-    for (int j=0;j<size.GetHeight();j += 2)
-      dc.DrawPoint(i-1,j-1);
+	wxPaintDC dc( this );
+	wxSize size = GetSize();
+	dc.SetPen( *wxBLACK_PEN );
+	for ( int i=0; i<size.GetWidth(); i+=2 )
+		for ( int j=0; j<size.GetHeight(); j+=2 )
+			dc.DrawPoint( i-1, j-1 );
 }
-

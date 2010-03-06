@@ -22,145 +22,144 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-#include "mainframe.h"
-
 #include <wx/config.h>
 #include <wx/filename.h>
 #include <wx/stc/stc.h>
 
-#include "utils/debug.h"
-#include "utils/typeconv.h"
-#include "rad/title.h"
-#include "rad/bitmaps.h"
-#include "rad/cpppanel/cpppanel.h"
-#include "rad/pythonpanel/pythonpanel.h"
-#include "rad/xrcpanel/xrcpanel.h"
-#include "rad/geninheritclass/geninhertclass.h"
+#include "mainframe.h"
+
+#include "about.h"
+#include "appdata.h"
+#include "bitmaps.h"
+#include "settingspanel.h"
+#include "title.h"
+#include "wxfbevent.h"
+#include "wxfbmanager.h"
+#include "wxfbpalette.h"
+
+#include "cpppanel/cpppanel.h"
+#include "designer/visualeditor.h"
+#include "geninheritclass/geninhertclass.h"
 #include "inspector/objinspect.h"
 #include "objecttree/objecttree.h"
-#include "wxfbpalette.h"
-#include "rad/designer/visualeditor.h"
-#include "settingspanel.h"
+#include "pythonpanel/pythonpanel.h"
+#include "xrcpanel/xrcpanel.h"
 
+#include "model/objectbase.h"
 #include "model/xrcfilter.h"
-#include "rad/about.h"
-#include "rad/wxfbevent.h"
-#include "wxfbmanager.h"
+#include "utils/debug.h"
+#include "utils/typeconv.h"
 #include "utils/wxfbexception.h"
 #include "utils/stringutils.h"
 #include "utils/wxfbdefs.h"
 
-#include "rad/appdata.h"
-#include "model/objectbase.h"
+#define ID_SAVE_PRJ 		102
+#define ID_OPEN_PRJ 		103
+#define ID_NEW_PRJ 			104
+#define ID_GENERATE_CODE 	105
+#define ID_IMPORT_XRC 		106
+#define ID_UNDO 			107
+#define ID_REDO 			108
+#define ID_SAVE_AS_PRJ 		109
+#define ID_CUT 				110
+#define ID_DELETE 			111
+#define ID_COPY 			112
+#define ID_PASTE 			113
+#define ID_EXPAND 			114
+#define ID_STRETCH 			115
+#define ID_MOVE_UP 			116
+#define ID_MOVE_DOWN 		117
+#define ID_RECENT_0 		118 // Tienen que tener ids consecutivos
+#define ID_RECENT_1 		119 // ID_RECENT_n+1 == ID_RECENT_n + 1
+#define ID_RECENT_2 		120 //
+#define ID_RECENT_3 		121 //
+#define ID_RECENT_SEP 		122
 
-#define ID_SAVE_PRJ      102
-#define ID_OPEN_PRJ      103
-#define ID_NEW_PRJ       104
-#define ID_GENERATE_CODE 105
-#define ID_IMPORT_XRC    106
-#define ID_UNDO          107
-#define ID_REDO          108
-#define ID_SAVE_AS_PRJ   109
-#define ID_CUT           110
-#define ID_DELETE        111
-#define ID_COPY          112
-#define ID_PASTE         113
-#define ID_EXPAND        114
-#define ID_STRETCH       115
-#define ID_MOVE_UP       116
-#define ID_MOVE_DOWN     117
-#define ID_RECENT_0      118 // Tienen que tener ids consecutivos
-#define ID_RECENT_1      119 // ID_RECENT_n+1 == ID_RECENT_n + 1
-#define ID_RECENT_2      120 //
-#define ID_RECENT_3      121 //
-#define ID_RECENT_SEP    122
+#define ID_ALIGN_LEFT 		123
+#define ID_ALIGN_CENTER_H 	124
+#define ID_ALIGN_RIGHT 		125
+#define ID_ALIGN_TOP 		126
+#define ID_ALIGN_CENTER_V 	127
+#define ID_ALIGN_BOTTOM 	128
 
-#define ID_ALIGN_LEFT     123
-#define ID_ALIGN_CENTER_H 124
-#define ID_ALIGN_RIGHT    125
-#define ID_ALIGN_TOP      126
-#define ID_ALIGN_CENTER_V 127
-#define ID_ALIGN_BOTTOM   128
+#define ID_BORDER_LEFT 		129
+#define ID_BORDER_RIGHT 	130
+#define ID_BORDER_TOP 		131
+#define ID_BORDER_BOTTOM 	132
+#define ID_EDITOR_FNB 		133
+#define ID_MOVE_LEFT 		134
+#define ID_MOVE_RIGHT 		135
 
-#define ID_BORDER_LEFT    129
-#define ID_BORDER_RIGHT   130
-#define ID_BORDER_TOP     131
-#define ID_BORDER_BOTTOM  132
-#define ID_EDITOR_FNB	  133
-#define ID_MOVE_LEFT	  134
-#define ID_MOVE_RIGHT     135
-
-#define ID_PREVIEW_XRC     136
-#define ID_GEN_INHERIT_CLS 137
+#define ID_PREVIEW_XRC 		136
+#define ID_GEN_INHERIT_CLS 	137
 
 // The preference dialog must use wxID_PREFERENCES for wxMAC
-//#define ID_SETTINGS_GLOBAL 138	// For the future preference dialogs
-#define ID_SETTINGS_PROJ   139	// For the future preference dialogs
+//#define ID_SETTINGS_GLOBAL 138 // For the future preference dialogs
+#define ID_SETTINGS_PROJ 	139	// For the future preference dialogs
 
-#define ID_FIND 142
+#define ID_FIND 			142
 
-#define ID_CLIPBOARD_COPY 143
-#define ID_CLIPBOARD_PASTE 144
+#define ID_CLIPBOARD_COPY 	143
+#define ID_CLIPBOARD_PASTE 	144
 
 #define STATUS_FIELD_OBJECT 2
-#define STATUS_FIELD_PATH 1
+#define STATUS_FIELD_PATH 	1
 
 BEGIN_EVENT_TABLE( MainFrame, wxFrame )
-EVT_MENU( ID_NEW_PRJ, MainFrame::OnNewProject )
-EVT_MENU( ID_SAVE_PRJ, MainFrame::OnSaveProject )
-EVT_MENU( ID_SAVE_AS_PRJ, MainFrame::OnSaveAsProject )
-EVT_MENU( ID_OPEN_PRJ, MainFrame::OnOpenProject )
-EVT_MENU( wxID_ABOUT, MainFrame::OnAbout )
-EVT_MENU( wxID_EXIT, MainFrame::OnExit )
-EVT_MENU( ID_IMPORT_XRC, MainFrame::OnImportXrc )
-EVT_MENU( ID_GENERATE_CODE, MainFrame::OnGenerateCode )
-EVT_MENU( ID_UNDO, MainFrame::OnUndo )
-EVT_MENU( ID_REDO, MainFrame::OnRedo )
-EVT_MENU( ID_DELETE, MainFrame::OnDelete )
-EVT_MENU( ID_CUT, MainFrame::OnCut )
-EVT_MENU( ID_COPY, MainFrame::OnCopy )
-EVT_MENU( ID_PASTE, MainFrame::OnPaste )
-EVT_MENU( ID_EXPAND, MainFrame::OnToggleExpand )
-EVT_MENU( ID_STRETCH, MainFrame::OnToggleStretch )
-EVT_MENU( ID_MOVE_UP, MainFrame::OnMoveUp )
-EVT_MENU( ID_MOVE_DOWN, MainFrame::OnMoveDown )
-EVT_MENU( ID_MOVE_LEFT, MainFrame::OnMoveLeft )
-EVT_MENU( ID_MOVE_RIGHT, MainFrame::OnMoveRight )
-EVT_MENU( ID_RECENT_0, MainFrame::OnOpenRecent )
-EVT_MENU( ID_RECENT_1, MainFrame::OnOpenRecent )
-EVT_MENU( ID_RECENT_2, MainFrame::OnOpenRecent )
-EVT_MENU( ID_RECENT_3, MainFrame::OnOpenRecent )
-EVT_MENU( ID_ALIGN_RIGHT, MainFrame::OnChangeAlignment )
-EVT_MENU( ID_ALIGN_LEFT, MainFrame::OnChangeAlignment )
-EVT_MENU( ID_ALIGN_CENTER_H, MainFrame::OnChangeAlignment )
-EVT_MENU( ID_ALIGN_TOP, MainFrame::OnChangeAlignment )
-EVT_MENU( ID_ALIGN_BOTTOM, MainFrame::OnChangeAlignment )
-EVT_MENU( ID_ALIGN_CENTER_V, MainFrame::OnChangeAlignment )
-EVT_MENU_RANGE( ID_BORDER_LEFT, ID_BORDER_BOTTOM, MainFrame::OnChangeBorder )
-EVT_MENU( ID_PREVIEW_XRC, MainFrame::OnXrcPreview )
-EVT_MENU( ID_GEN_INHERIT_CLS, MainFrame::OnGenInhertedClass )
-EVT_MENU( ID_CLIPBOARD_COPY, MainFrame::OnClipboardCopy )
-EVT_MENU( ID_CLIPBOARD_PASTE, MainFrame::OnClipboardPaste )
-EVT_UPDATE_UI( ID_CLIPBOARD_PASTE, MainFrame::OnClipboardPasteUpdateUI )
-EVT_MENU( ID_AUI_SETTINGS, MainFrame::OnAuiSettings )
-EVT_CLOSE( MainFrame::OnClose )
+	EVT_MENU( 		ID_NEW_PRJ, 						MainFrame::OnNewProject )
+	EVT_MENU( 		ID_SAVE_PRJ, 						MainFrame::OnSaveProject )
+	EVT_MENU( 		ID_SAVE_AS_PRJ, 					MainFrame::OnSaveAsProject )
+	EVT_MENU( 		ID_OPEN_PRJ, 						MainFrame::OnOpenProject )
+	EVT_MENU( 		wxID_ABOUT, 						MainFrame::OnAbout )
+	EVT_MENU( 		wxID_EXIT, 							MainFrame::OnExit )
+	EVT_MENU( 		ID_IMPORT_XRC, 						MainFrame::OnImportXrc )
+	EVT_MENU( 		ID_GENERATE_CODE, 					MainFrame::OnGenerateCode )
+	EVT_MENU( 		ID_UNDO, 							MainFrame::OnUndo )
+	EVT_MENU( 		ID_REDO, 							MainFrame::OnRedo )
+	EVT_MENU( 		ID_DELETE, 							MainFrame::OnDelete )
+	EVT_MENU( 		ID_CUT, 							MainFrame::OnCut )
+	EVT_MENU( 		ID_COPY, 							MainFrame::OnCopy )
+	EVT_MENU( 		ID_PASTE, 							MainFrame::OnPaste )
+	EVT_MENU( 		ID_EXPAND, 							MainFrame::OnToggleExpand )
+	EVT_MENU( 		ID_STRETCH, 						MainFrame::OnToggleStretch )
+	EVT_MENU( 		ID_MOVE_UP, 						MainFrame::OnMoveUp )
+	EVT_MENU( 		ID_MOVE_DOWN, 						MainFrame::OnMoveDown )
+	EVT_MENU( 		ID_MOVE_LEFT, 						MainFrame::OnMoveLeft )
+	EVT_MENU( 		ID_MOVE_RIGHT, 						MainFrame::OnMoveRight )
+	EVT_MENU( 		ID_RECENT_0, 						MainFrame::OnOpenRecent )
+	EVT_MENU( 		ID_RECENT_1, 						MainFrame::OnOpenRecent )
+	EVT_MENU( 		ID_RECENT_2, 						MainFrame::OnOpenRecent )
+	EVT_MENU( 		ID_RECENT_3, 						MainFrame::OnOpenRecent )
+	EVT_MENU( 		ID_ALIGN_RIGHT, 					MainFrame::OnChangeAlignment )
+	EVT_MENU( 		ID_ALIGN_LEFT, 						MainFrame::OnChangeAlignment )
+	EVT_MENU( 		ID_ALIGN_CENTER_H, 					MainFrame::OnChangeAlignment )
+	EVT_MENU( 		ID_ALIGN_TOP, 						MainFrame::OnChangeAlignment )
+	EVT_MENU( 		ID_ALIGN_BOTTOM, 					MainFrame::OnChangeAlignment )
+	EVT_MENU( 		ID_ALIGN_CENTER_V, 					MainFrame::OnChangeAlignment )
+	EVT_MENU_RANGE( ID_BORDER_LEFT, ID_BORDER_BOTTOM, 	MainFrame::OnChangeBorder )
+	EVT_MENU( 		ID_PREVIEW_XRC, 					MainFrame::OnXrcPreview )
+	EVT_MENU( 		ID_GEN_INHERIT_CLS, 				MainFrame::OnGenInhertedClass )
+	EVT_MENU( 		ID_CLIPBOARD_COPY, 					MainFrame::OnClipboardCopy )
+	EVT_MENU( 		ID_CLIPBOARD_PASTE, 				MainFrame::OnClipboardPaste )
+	EVT_UPDATE_UI( 	ID_CLIPBOARD_PASTE, 				MainFrame::OnClipboardPasteUpdateUI )
+	EVT_MENU( 		ID_AUI_SETTINGS, 					MainFrame::OnAuiSettings )
+	EVT_CLOSE( 											MainFrame::OnClose )
 
-EVT_FB_CODE_GENERATION( MainFrame::OnCodeGeneration )
-EVT_FB_OBJECT_CREATED( MainFrame::OnObjectCreated )
-EVT_FB_OBJECT_REMOVED( MainFrame::OnObjectRemoved )
-EVT_FB_OBJECT_EXPANDED( MainFrame::OnObjectExpanded )
-EVT_FB_OBJECT_SELECTED( MainFrame::OnObjectSelected )
-EVT_FB_PROJECT_LOADED( MainFrame::OnProjectLoaded )
-EVT_FB_PROJECT_REFRESH( MainFrame::OnProjectRefresh )
-EVT_FB_PROJECT_SAVED( MainFrame::OnProjectSaved )
-EVT_FB_PROPERTY_MODIFIED( MainFrame::OnPropertyModified )
-EVT_FB_EVENT_HANDLER_MODIFIED( MainFrame::OnEventHandlerModified )
+	EVT_FB_CODE_GENERATION( 							MainFrame::OnCodeGeneration )
+	EVT_FB_OBJECT_CREATED( 								MainFrame::OnObjectCreated )
+	EVT_FB_OBJECT_REMOVED( 								MainFrame::OnObjectRemoved )
+	EVT_FB_OBJECT_EXPANDED( 							MainFrame::OnObjectExpanded )
+	EVT_FB_OBJECT_SELECTED( 							MainFrame::OnObjectSelected )
+	EVT_FB_PROJECT_LOADED( 								MainFrame::OnProjectLoaded )
+	EVT_FB_PROJECT_REFRESH( 							MainFrame::OnProjectRefresh )
+	EVT_FB_PROJECT_SAVED( 								MainFrame::OnProjectSaved )
+	EVT_FB_PROPERTY_MODIFIED( 							MainFrame::OnPropertyModified )
+	EVT_FB_EVENT_HANDLER_MODIFIED( 						MainFrame::OnEventHandlerModified )
 
-EVT_MENU( ID_FIND, MainFrame::OnFindDialog )
-EVT_FIND( wxID_ANY, MainFrame::OnFind )
-EVT_FIND_NEXT( wxID_ANY, MainFrame::OnFind )
-EVT_FIND_CLOSE( wxID_ANY, MainFrame::OnFindClose )
-
+	EVT_MENU( 		ID_FIND, 							MainFrame::OnFindDialog )
+	EVT_FIND( 		wxID_ANY, 							MainFrame::OnFind )
+	EVT_FIND_NEXT( 	wxID_ANY, 							MainFrame::OnFind )
+	EVT_FIND_CLOSE( wxID_ANY, 							MainFrame::OnFindClose )
 END_EVENT_TABLE()
 
 // Used to kill focus from propgrid when toolbar or menu items are clicked
@@ -190,7 +189,6 @@ public:
 		// Add as pending so propgrid saves the property before the event is processed
 		GetNextHandler()->AddPendingEvent( event );
 	}
-
 	DECLARE_EVENT_TABLE()
 };
 
@@ -199,28 +197,28 @@ BEGIN_EVENT_TABLE( FocusKillerEvtHandler, wxEvtHandler )
 END_EVENT_TABLE()
 
 MainFrame::MainFrame( wxWindow *parent, int id, int style, wxPoint pos, wxSize size )
-:
-wxFrame( parent, id, wxEmptyString, pos, size, wxDEFAULT_FRAME_STYLE ),
-m_style( style ),
-m_page_selection( 0 ),
-m_findData( wxFR_DOWN ),
-m_findDialog( NULL )
+	:
+	wxFrame( parent, id, wxEmptyString, pos, size, wxDEFAULT_FRAME_STYLE ),
+	m_style( style ),
+	m_page_selection( 0 ),
+	m_findData( wxFR_DOWN ),
+	m_findDialog( NULL )
 {
 	/////////////////////////////////////////////////////////////////////////////
 	// Setup frame icons, title bar, status bar, menubar and toolbar
 	/////////////////////////////////////////////////////////////////////////////
 	wxIconBundle bundle;
 	wxIcon ico16;
-	ico16.CopyFromBitmap( AppBitmaps::GetBitmap( wxT( "app16" ), 16 ) );
+	ico16.CopyFromBitmap( AppBitmaps::GetBitmap( "app16", 16 ) );
 	bundle.AddIcon( ico16 );
 
 	wxIcon ico32;
-	ico32.CopyFromBitmap( AppBitmaps::GetBitmap( wxT( "app32" ), 32 ) );
+	ico32.CopyFromBitmap( AppBitmaps::GetBitmap( "app32", 32 ) );
 	bundle.AddIcon( ico32 );
 
 	SetIcons( bundle );
 
-	SetTitle( wxT( "wxFormBuilder" ) );
+	SetTitle("wxFormBuilder");
 
 	SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 
@@ -240,64 +238,62 @@ m_findDialog( NULL )
 	wxWindow *palette         = CreateComponentPalette(this);
 	wxWindow *designer        = CreateDesignerWindow(this);
 
-
 	m_mgr.SetManagedWindow(this);
 	
 	wxAuiToolBar* mainbar = CreateFBAuiToolBar();
 
 	// TODO: Remove ICON_SIZE and TOOL_SIZE, use stock icons and add a function to resize bundled icons with system icons sizes
-
-	m_mgr.AddPane(mainbar, wxAuiPaneInfo().
-								Name(_("mainbar")).Caption(_("Toolbar")).
+	m_mgr.AddPane( mainbar, wxAuiPaneInfo().
+								Name("mainbar").Caption( _("Toolbar") ).
 								ToolbarPane().Top().
-								Direction(1).Layer(10).
-								BestSize(750, 33).
-								LeftDockable(false).RightDockable(false).
-								CloseButton(false));
+								Direction( 1 ).Layer( 10 ).
+								BestSize( 750, 33 ).
+								LeftDockable( false ).RightDockable( false ).
+								CloseButton( false ) );
 
-	m_mgr.AddPane(objectTree, wxAuiPaneInfo().
-								Name(wxT("tree")).Caption(wxT("Object Tree")).
-								Direction(4).Layer(1).			// Left().
-								MinSize(210, 60).
-								FloatingSize(210, 420).
-								CloseButton(false));
+	m_mgr.AddPane( objectTree, wxAuiPaneInfo().
+								Name("tree").Caption( _("Object Tree") ).
+								Direction( 4 ).Layer( 1 ). 			// Left().
+								MinSize( 210, 60 ).
+								FloatingSize( 210, 420 ).
+								CloseButton( false ) );
 
-	m_mgr.AddPane(objectInspector, wxAuiPaneInfo().
-								Name(wxT("inspector")).Caption(wxT("Object Properties")).
-								Direction(2).Layer(1).			// Right().
-								MinSize(240, 300).
-								FloatingSize(270, 420).
-								CloseButton(false));
+	m_mgr.AddPane( objectInspector, wxAuiPaneInfo().
+								Name("inspector").Caption( _("Object Properties") ).
+								Direction( 2 ).Layer( 1 ).			// Right().
+								MinSize( 240, 300 ).
+								FloatingSize( 270, 420 ).
+								CloseButton( false ) );
 
-	m_mgr.AddPane(designer, wxAuiPaneInfo().
-								Name(wxT("editor")).Caption(wxT("Editor")).
-								Direction(5).Layer(0).			// Center().
-								CloseButton(false));
+	m_mgr.AddPane( designer, wxAuiPaneInfo().
+								Name("editor").Caption( _("Editor") ).
+								Direction( 5 ).Layer( 0 ).			// Center().
+								CloseButton( false ) );
 
-	m_mgr.AddPane(palette, wxAuiPaneInfo().
-								Name(wxT("palette")).Caption(wxT("Component Palette")).
-								Direction(1).Layer(0).Row(1).	// Top().
-								MinSize(-1, 72).
-								MaxSize(-1, 72).
-								FloatingSize(609, 120).
-								RightDockable(false).LeftDockable(false).
-								CloseButton(false));
+	m_mgr.AddPane( palette, wxAuiPaneInfo().
+								Name("palette").Caption( _("Component Palette") ).
+								Direction( 1 ).Layer( 0 ).Row( 1 ).	// Top().
+								MinSize( -1, 72 ).
+								MaxSize( -1, 72 ).
+								FloatingSize( 609, 120 ).
+								RightDockable( false ).LeftDockable( false ).
+								CloseButton( false ) );
 
-    m_mgr.AddPane(new AuiSettingsPanel( this, this ), wxAuiPaneInfo().
-								Name(wxT("settings")).Caption( _("Dock Manager Settings") ).
-								Dockable(false).
+    m_mgr.AddPane( new AuiSettingsPanel( this, this ), wxAuiPaneInfo().
+								Name("settings").Caption( _("Dock Manager Settings") ).
+								Dockable( false ).
 								Float().
 								Hide());
 
-	m_mgr.SetFlags(wxAUI_MGR_DEFAULT | wxAUI_MGR_ALLOW_ACTIVE_PANE | wxAUI_MGR_TRANSPARENT_DRAG);
+	m_mgr.SetFlags( wxAUI_MGR_DEFAULT | wxAUI_MGR_ALLOW_ACTIVE_PANE | wxAUI_MGR_TRANSPARENT_DRAG );
 
 	wxConfigBase *config = wxConfigBase::Get();
 
 	wxString Perspective;
-	if ( config->Read( wxT("/mainframe/aui/perspective"), &Perspective ) )
-		m_mgr.LoadPerspective(Perspective);
+	if ( config->Read( "/mainframe/aui/perspective", &Perspective ) )
+		m_mgr.LoadPerspective( Perspective );
 
-	RestorePosition( wxT( "mainframe" ) );
+	RestorePosition("mainframe");
 	Layout();
 	
 	m_mgr.Update();
@@ -324,15 +320,15 @@ MainFrame::~MainFrame()
 	m_notebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::OnAuiNotebookPageChanged ), 0, this );
 
 #ifdef __WXMAC__
-    // work around problem on wxMac
-// TODO: Mac still need this?
+    // Work around problem on wxMac
+	// TODO: Mac still need this?
 	m_mgr.Detach( m_notebook )
     m_notebook->Destroy();
 #endif
 
 	m_mgr.UnInit();
 
-	// the focus killer event handler
+	// The focus killer event handler
 	RemoveEventHandler( m_focusKillEvtHandler );
 	delete m_focusKillEvtHandler;
 
@@ -342,13 +338,13 @@ MainFrame::~MainFrame()
 
 void MainFrame::RestorePosition( const wxString &name )
 {
-	m_currentDir = wxT( "./projects" );
+	m_currentDir = "./projects";
 
 	wxConfigBase *config = wxConfigBase::Get();
 	config->SetPath( name );
 
 	bool maximized;
-	config->Read( wxT( "IsMaximized" ), &maximized, true );
+	config->Read( "IsMaximized", &maximized, true );
 
 	if ( maximized )
 	{
@@ -357,22 +353,19 @@ void MainFrame::RestorePosition( const wxString &name )
 	else
 	{
 		bool iconized;
-		config->Read( wxT( "IsIconized" ), &iconized, false );
+		config->Read( "IsIconized", &iconized, false );
 
 		if ( iconized )
 		{
 			Iconize( iconized );
 		}
 	}
-
-	config->Read( wxT( "CurrentDirectory" ), &m_currentDir );
-
-	config->Read( wxT( "RecentFile0" ), &m_recentProjects[0] );
-	config->Read( wxT( "RecentFile1" ), &m_recentProjects[1] );
-	config->Read( wxT( "RecentFile2" ), &m_recentProjects[2] );
-	config->Read( wxT( "RecentFile3" ), &m_recentProjects[3] );
-
-	config->SetPath( wxT( ".." ) );
+	config->Read( "CurrentDirectory", &m_currentDir );
+	config->Read( "RecentFile0", &m_recentProjects[0] );
+	config->Read( "RecentFile1", &m_recentProjects[1] );
+	config->Read( "RecentFile2", &m_recentProjects[2] );
+	config->Read( "RecentFile3", &m_recentProjects[3] );
+	config->SetPath("..");
 	UpdateRecentProjects();
 }
 
@@ -388,35 +381,31 @@ void MainFrame::SavePosition( const wxString &name )
 
 	if ( !isMaximized )
 	{
-		config->Write( wxT( "PosX" ), isIconized ? -1 : GetPosition().x );
-		config->Write( wxT( "PosY" ), isIconized ? -1 : GetPosition().y );
-		config->Write( wxT( "SizeW" ), isIconized ? -1 : GetSize().GetWidth() );
-		config->Write( wxT( "SizeH" ), isIconized ? -1 : GetSize().GetHeight() );
+		config->Write( "PosX", 	isIconized ? -1 : GetPosition().x );
+		config->Write( "PosY", 	isIconized ? -1 : GetPosition().y );
+		config->Write( "SizeW", isIconized ? -1 : GetSize().GetWidth() );
+		config->Write( "SizeH", isIconized ? -1 : GetSize().GetHeight() );
 	}
+	config->Write( "IsMaximized", 		isMaximized );
+	config->Write( "IsIconized", 		isIconized );
+	config->Write( "CurrentDirectory", 	m_currentDir );
+	config->Write( "RecentFile0", 		m_recentProjects[0] );
+	config->Write( "RecentFile1", 		m_recentProjects[1] );
+	config->Write( "RecentFile2", 		m_recentProjects[2] );
+	config->Write( "RecentFile3", 		m_recentProjects[3] );
 
-	config->Write( wxT( "IsMaximized" ), isMaximized );
-
-	config->Write( wxT( "IsIconized" ), isIconized );
-	config->Write( wxT( "CurrentDirectory" ), m_currentDir );
-
-	config->Write( wxT( "RecentFile0" ), m_recentProjects[0] );
-	config->Write( wxT( "RecentFile1" ), m_recentProjects[1] );
-	config->Write( wxT( "RecentFile2" ), m_recentProjects[2] );
-	config->Write( wxT( "RecentFile3" ), m_recentProjects[3] );
-
-	config->SetPath( wxT( ".." ) );
-	config->Write( wxT("/mainframe/editor/notebook_style"), m_notebook->GetWindowStyleFlag() );
+	config->SetPath("..");
+	config->Write( "/mainframe/editor/notebook_style", m_notebook->GetWindowStyleFlag() );
 
 	wxString Perspective = m_mgr.SavePerspective();
-	config->Write( wxT("/mainframe/aui/perspective"), Perspective );
+	config->Write( "/mainframe/aui/perspective", Perspective );
 }
 
 void MainFrame::OnSaveProject( wxCommandEvent &event )
-
 {
 	wxString filename = AppData()->GetProjectFileName();
 
-	if ( filename == wxT( "" ) )
+	if ( filename == "" )
 		OnSaveAsProject( event );
 	else
 	{
@@ -434,8 +423,8 @@ void MainFrame::OnSaveProject( wxCommandEvent &event )
 
 void MainFrame::OnSaveAsProject( wxCommandEvent & )
 {
-	wxFileDialog *dialog = new wxFileDialog( this, wxT( "Save Project" ), m_currentDir,
-	                       wxT( "" ), wxT( "wxFormBuilder Project File (*.fbp)|*.fbp|All files (*.*)|*.*" ), wxFD_SAVE );
+	wxFileDialog *dialog = new wxFileDialog( this, _("Save Project" ), m_currentDir,
+	                       "", _("wxFormBuilder Project File (*.fbp)|*.fbp|All files (*.*)|*.*"), wxFD_SAVE );
 
 	if ( dialog->ShowModal() == wxID_OK )
 	{
@@ -447,14 +436,17 @@ void MainFrame::OnSaveAsProject( wxCommandEvent & )
 
 		if ( !file.HasExt() )
 		{
-			file.SetExt( wxT( "fbp" ) );
+			file.SetExt("fbp");
 			filename = file.GetFullPath();
 		}
 
 		// Check the file whether exists or not
 		if ( file.FileExists() == true )
 		{
-		    wxMessageDialog msg_box( this, wxT("The file already exists. Do you want to replace it?"), wxT("Overwrite the file"), wxYES_NO|wxICON_INFORMATION|wxNO_DEFAULT );
+		    wxMessageDialog msg_box( this, _("The file already exists. Do you want to replace it?"),
+									_("Overwrite the file"),
+									wxYES_NO|wxICON_INFORMATION|wxNO_DEFAULT );
+
 		    if( msg_box.ShowModal() == wxID_NO )
 			{
 		        dialog->Destroy();
@@ -472,7 +464,6 @@ void MainFrame::OnSaveAsProject( wxCommandEvent & )
 			wxLogError( ex.what() );
 		}
 	};
-
 	dialog->Destroy();
 }
 
@@ -481,9 +472,8 @@ void MainFrame::OnOpenProject( wxCommandEvent &)
 	if ( !SaveWarning() )
 		return;
 
-	wxFileDialog *dialog = new wxFileDialog( this, wxT( "Open Project" ), m_currentDir,
-	                       wxT( "" ), wxT( "wxFormBuilder Project File (*.fbp)|*.fbp|All files (*.*)|*.*" ), wxFD_OPEN );
-
+	wxFileDialog *dialog = new wxFileDialog( this, _("Open Project" ), m_currentDir,
+											"", _("wxFormBuilder Project File (*.fbp)|*.fbp|All files (*.*)|*.*"), wxFD_OPEN );
 	if ( dialog->ShowModal() == wxID_OK )
 	{
 		m_currentDir = dialog->GetDirectory();
@@ -492,7 +482,6 @@ void MainFrame::OnOpenProject( wxCommandEvent &)
 		if ( AppData()->LoadProject( filename ) )
 			InsertRecentProject( filename );
 	};
-
 	dialog->Destroy();
 }
 
@@ -507,7 +496,7 @@ void MainFrame::OnOpenRecent( wxCommandEvent &event )
 
 	wxFileName filename( m_recentProjects[i] );
 
-    if(filename.FileExists())
+    if( filename.FileExists() )
     {
         if ( AppData()->LoadProject( filename.GetFullPath() ) )
         {
@@ -517,9 +506,11 @@ void MainFrame::OnOpenRecent( wxCommandEvent &event )
     }
     else
     {
-        if(wxMessageBox(wxString::Format(wxT("The project file '%s' doesn't exist. Would you like to remove it from the recent files list?"), filename.GetName().GetData()), wxT("Open recent project"), wxICON_WARNING | wxYES_NO) == wxYES)
+        if( wxMessageBox( wxString::Format( _("The project file '%s' doesn't exist. Would you like to remove it from the recent files list?"),
+											filename.GetName().GetData()),
+											_("Open recent project"), wxICON_WARNING | wxYES_NO) == wxYES)
         {
-            m_recentProjects[i] = wxT("");
+            m_recentProjects[i] = "";
             UpdateRecentProjects();
         }
     }
@@ -527,8 +518,8 @@ void MainFrame::OnOpenRecent( wxCommandEvent &event )
 
 void MainFrame::OnImportXrc( wxCommandEvent &)
 {
-	wxFileDialog *dialog = new wxFileDialog( this, wxT( "Import XRC file" ), m_currentDir,
-	                       wxT( "example.xrc" ), wxT( "*.xrc" ), wxFD_OPEN );
+	wxFileDialog *dialog = new wxFileDialog( this, _("Import XRC file"), m_currentDir,
+	                       "example.xrc", "*.xrc", wxFD_OPEN );
 
 	if ( dialog->ShowModal() == wxID_OK )
 	{
@@ -550,18 +541,16 @@ void MainFrame::OnImportXrc( wxCommandEvent &)
 			}
 			else
 			{
-				wxLogError( wxT( "Error while loading XRC" ) );
+				wxLogError( _("Error while loading XRC") );
 			}
 		}
 		catch ( wxFBException& ex )
 		{
-			wxLogError( _( "Error Loading XRC: %s" ), ex.what() );
+			wxLogError( _("Error Loading XRC: %s"), ex.what() );
 		}
 	}
-
 	dialog->Destroy();
 }
-
 
 void MainFrame::OnNewProject( wxCommandEvent &)
 {
@@ -593,28 +582,30 @@ void MainFrame::OnClose( wxCloseEvent &event )
 	if ( !SaveWarning() )
 		return;
 
-	SavePosition( wxT( "mainframe" ) );
+	SavePosition("mainframe");
  
 	event.Skip();
 }
 
 void MainFrame::OnProjectLoaded( wxFBEvent& )
 {
-	GetStatusBar()->SetStatusText( wxT( "Project Loaded!" ) );
+	GetStatusBar()->SetStatusText( _("Project Loaded!") );
 	PObjectBase project = AppData()->GetProjectData();
 
 	if ( project )
 	{
-		wxString objDetails = wxString::Format( wxT( "Name: %s | Class: %s" ), project->GetPropertyAsString( wxT( "name" ) ).c_str(), project->GetClassName().c_str() );
+		wxString objDetails = wxString::Format( _("Name: %s | Class: %s"),
+												project->GetPropertyAsString("name").c_str(),
+												project->GetClassName().c_str() );
+
 		GetStatusBar()->SetStatusText( objDetails, STATUS_FIELD_OBJECT );
 	}
-
 	UpdateFrame();
 }
 
 void MainFrame::OnProjectSaved( wxFBEvent& )
 {
-	GetStatusBar()->SetStatusText( wxT( "Project Saved!" ) );
+	GetStatusBar()->SetStatusText( _("Project Saved!") );
 	UpdateFrame();
 }
 
@@ -627,19 +618,19 @@ void MainFrame::OnObjectSelected( wxFBObjectEvent& event )
 {
 	PObjectBase obj = event.GetFBObject();
 
-	Debug::Print( wxT("MainFrame::OnObjectSelected") );
+	Debug::Print( wxString("MainFrame::OnObjectSelected") );
 
 	wxString name;
-	PProperty prop( obj->GetProperty( wxT( "name" ) ) );
+	PProperty prop( obj->GetProperty("name") );
 
 	if ( prop )
 		name = prop->GetValueAsString();
 	else
-		name = wxT( "\"Unknown\"" );
+		name = _("\"Unknown\"");
 
-	//GetStatusBar()->SetStatusText( wxT( "Object " ) + name + wxT( " Selected!" ) );
+	//GetStatusBar()->SetStatusText( _("Object ") + name + _("Selected!") );
 
-	wxString objDetails = wxString::Format( wxT( "Name: %s | Class: %s" ), name.c_str(), obj->GetClassName().c_str() );
+	wxString objDetails = wxString::Format( _("Name: %s | Class: %s"), name.c_str(), obj->GetClassName().c_str() );
 
 	GetStatusBar()->SetStatusText( objDetails, STATUS_FIELD_OBJECT );
 
@@ -650,20 +641,19 @@ void MainFrame::OnObjectCreated( wxFBObjectEvent& event )
 {
 	wxString message;
 
-	Debug::Print(wxT("MainFrame::OnObjectCreated"));
+	Debug::Print( wxString("MainFrame::OnObjectCreated") );
 
 	if ( event.GetFBObject() )
 	{
-		message.Printf( wxT( "Object '%s' of class '%s' created." ),
-		                event.GetFBObject()->GetPropertyAsString( wxT( "name" ) ).c_str(),
+		message.Printf( _("Object '%s' of class '%s' created."),
+		                event.GetFBObject()->GetPropertyAsString("name").c_str(),
 		                event.GetFBObject()->GetClassName().c_str() );
 	}
 	else
 	{
-		message = wxT( "Impossible to create the object. Did you forget to add a sizer/parent object?" );
-		wxMessageBox( message, wxT("wxFormBuilder"), wxICON_WARNING | wxOK );
+		message = _("Impossible to create the object. Did you forget to add a sizer/parent object?");
+		wxMessageBox( message, "wxFormBuilder", wxICON_WARNING | wxOK );
 	}
-
 	GetStatusBar()->SetStatusText( message );
 
 	UpdateFrame();
@@ -672,8 +662,8 @@ void MainFrame::OnObjectCreated( wxFBObjectEvent& event )
 void MainFrame::OnObjectRemoved( wxFBObjectEvent& event )
 {
 	wxString message;
-	message.Printf( wxT( "Object '%s' removed." ),
-	                event.GetFBObject()->GetPropertyAsString( wxT( "name" ) ).c_str() );
+	message.Printf( _("Object '%s' removed."),
+	                event.GetFBObject()->GetPropertyAsString("name").c_str() );
 	GetStatusBar()->SetStatusText( message );
 	UpdateFrame();
 }
@@ -686,22 +676,21 @@ void MainFrame::OnPropertyModified( wxFBPropertyEvent& event )
 	{
 		if ( prop->GetObject() == AppData()->GetSelectedObject() )
 		{
-			if ( 0 == prop->GetName().CmpNoCase( wxT( "name" ) ) )
+			if ( 0 == prop->GetName().CmpNoCase("name") )
 			{
 				wxString oldDetails = GetStatusBar()->GetStatusText( STATUS_FIELD_OBJECT );
 				wxString newDetails;
-				size_t pipeIdx = oldDetails.find( wxT( "|" ) );
+				size_t pipeIdx = oldDetails.find("|");
 
 				if ( pipeIdx != oldDetails.npos )
 				{
-					newDetails.Printf( wxT( "Name: %s %s" ), prop->GetValueAsString().c_str(), oldDetails.substr( pipeIdx ).c_str() );
+					newDetails.Printf( _("Name: %s %s"), prop->GetValueAsString().c_str(),
+										oldDetails.substr( pipeIdx ).c_str() );
 					GetStatusBar()->SetStatusText( newDetails, STATUS_FIELD_OBJECT );
 				}
 			}
-
-			GetStatusBar()->SetStatusText( wxT( "Property Modified!" ) );
+			GetStatusBar()->SetStatusText( _("Property Modified!") );
 		}
-
 		// When you change the sizeritem properties, the object modified is not
 		// the same that the selected object because is a sizeritem object.
 		// It's necessary to update the frame for the toolbar buttons.
@@ -712,9 +701,9 @@ void MainFrame::OnPropertyModified( wxFBPropertyEvent& event )
 void MainFrame::OnEventHandlerModified( wxFBEventHandlerEvent& event )
 {
 	wxString message;
-	message.Printf( wxT( "Event handler '%s' of object '%s' modified." ),
+	message.Printf( _("Event handler '%s' of object '%s' modified."),
 	                event.GetFBEventHandler()->GetName().c_str(),
-	                event.GetFBEventHandler()->GetObject()->GetPropertyAsString( wxT( "name" ) ).c_str() );
+	                event.GetFBEventHandler()->GetObject()->GetPropertyAsString("name").c_str() );
 
 	GetStatusBar()->SetStatusText( message );
 	UpdateFrame();
@@ -727,7 +716,7 @@ void MainFrame::OnCodeGeneration( wxFBEvent& event )
 
 	if ( panelOnly )
 	{
-		GetStatusBar()->SetStatusText( wxT( "Code Generated!" ) );
+		GetStatusBar()->SetStatusText( _("Code Generated!") );
 	}
 }
 
@@ -737,10 +726,11 @@ void MainFrame::OnProjectRefresh( wxFBEvent& )
 
 	if ( project )
 	{
-		wxString objDetails = wxString::Format( wxT( "Name: %s | Class: %s" ), project->GetPropertyAsString( wxT( "name" ) ).c_str(), project->GetClassName().c_str() );
+		wxString objDetails = wxString::Format( _("Name: %s | Class: %s"),
+												project->GetPropertyAsString("name").c_str(),
+												project->GetClassName().c_str() );
 		GetStatusBar()->SetStatusText( objDetails, STATUS_FIELD_OBJECT );
 	}
-
 	UpdateFrame();
 }
 
@@ -761,51 +751,51 @@ void MainFrame::UpdateLayoutTools()
 	int flag = 0;
 	int orient = 0;
 
-	bool gotLayoutSettings = AppData()->GetLayoutSettings( AppData()->GetSelectedObject(), &flag, &option, &border, &orient );
+	bool gotLayoutSettings = AppData()->GetLayoutSettings( AppData()->GetSelectedObject(),
+															&flag, &option, &border, &orient );
 	wxAuiToolBar* mainbar = this->GetToolBar();
-	wxMenu* menuEdit = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu( wxT( "Edit" ) ) );
+	wxMenu* menuEdit = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu( _("Edit") ) );
 
 	// Enable the layout tools if there are layout settings, else disable the tools
-	menuEdit->Enable( ID_EXPAND, gotLayoutSettings );
-	mainbar->EnableTool( ID_EXPAND, gotLayoutSettings );
-	menuEdit->Enable( ID_STRETCH, option >= 0 );
-	mainbar->EnableTool( ID_STRETCH, option >= 0 );
+	menuEdit->Enable( 		ID_EXPAND, 			gotLayoutSettings );
+	mainbar->EnableTool( 	ID_EXPAND, 			gotLayoutSettings );
+	menuEdit->Enable( 		ID_STRETCH, 		option >= 0 );
+	mainbar->EnableTool( 	ID_STRETCH, 		option >= 0 );
 
 	bool enableHorizontalTools = ( orient != wxHORIZONTAL ) && gotLayoutSettings;
-	menuEdit->Enable( ID_ALIGN_LEFT, enableHorizontalTools );
-	mainbar->EnableTool( ID_ALIGN_LEFT, enableHorizontalTools );
-	menuEdit->Enable( ID_ALIGN_CENTER_H, enableHorizontalTools );
-	mainbar->EnableTool( ID_ALIGN_CENTER_H, enableHorizontalTools );
-	menuEdit->Enable( ID_ALIGN_RIGHT, enableHorizontalTools );
-	mainbar->EnableTool( ID_ALIGN_RIGHT, enableHorizontalTools );
+	menuEdit->Enable( 		ID_ALIGN_LEFT, 		enableHorizontalTools );
+	mainbar->EnableTool( 	ID_ALIGN_LEFT, 		enableHorizontalTools );
+	menuEdit->Enable( 		ID_ALIGN_CENTER_H, 	enableHorizontalTools );
+	mainbar->EnableTool( 	ID_ALIGN_CENTER_H, 	enableHorizontalTools );
+	menuEdit->Enable( 		ID_ALIGN_RIGHT, 	enableHorizontalTools );
+	mainbar->EnableTool( 	ID_ALIGN_RIGHT, 	enableHorizontalTools );
 
 	bool enableVerticalTools = ( orient != wxVERTICAL ) && gotLayoutSettings;
-	menuEdit->Enable( ID_ALIGN_TOP, enableVerticalTools );
-	mainbar->EnableTool( ID_ALIGN_TOP, enableVerticalTools );
-	menuEdit->Enable( ID_ALIGN_CENTER_V, enableVerticalTools );
-	mainbar->EnableTool( ID_ALIGN_CENTER_V, enableVerticalTools );
-	menuEdit->Enable( ID_ALIGN_BOTTOM, enableVerticalTools );
-	mainbar->EnableTool( ID_ALIGN_BOTTOM, enableVerticalTools );
+	menuEdit->Enable( 		ID_ALIGN_TOP, 		enableVerticalTools );
+	mainbar->EnableTool( 	ID_ALIGN_TOP, 		enableVerticalTools );
+	menuEdit->Enable( 		ID_ALIGN_CENTER_V, 	enableVerticalTools );
+	mainbar->EnableTool( 	ID_ALIGN_CENTER_V, 	enableVerticalTools );
+	menuEdit->Enable( 		ID_ALIGN_BOTTOM, 	enableVerticalTools );
+	mainbar->EnableTool( 	ID_ALIGN_BOTTOM, 	enableVerticalTools );
 
-	mainbar->EnableTool( ID_BORDER_TOP, gotLayoutSettings );
-	mainbar->EnableTool( ID_BORDER_RIGHT, gotLayoutSettings );
-	mainbar->EnableTool( ID_BORDER_LEFT, gotLayoutSettings );
-	mainbar->EnableTool( ID_BORDER_BOTTOM, gotLayoutSettings );
+	mainbar->EnableTool( 	ID_BORDER_TOP, 		gotLayoutSettings );
+	mainbar->EnableTool( 	ID_BORDER_RIGHT, 	gotLayoutSettings );
+	mainbar->EnableTool( 	ID_BORDER_LEFT, 	gotLayoutSettings );
+	mainbar->EnableTool( 	ID_BORDER_BOTTOM, 	gotLayoutSettings );
 
 	// Toggle the toolbar buttons according to the properties, if there are layout settings
-	mainbar->ToggleTool( ID_EXPAND,         ( ( flag & wxEXPAND ) != 0 ) && gotLayoutSettings );
-	mainbar->ToggleTool( ID_STRETCH,        ( option > 0 ) && gotLayoutSettings );
-	mainbar->ToggleTool( ID_ALIGN_LEFT,     !( ( flag & ( wxALIGN_RIGHT | wxALIGN_CENTER_HORIZONTAL ) ) != 0 ) && enableHorizontalTools );
-	mainbar->ToggleTool( ID_ALIGN_CENTER_H, ( ( flag & wxALIGN_CENTER_HORIZONTAL ) != 0 ) && enableHorizontalTools );
-	mainbar->ToggleTool( ID_ALIGN_RIGHT,    ( ( flag & wxALIGN_RIGHT ) != 0 ) && enableHorizontalTools );
-	mainbar->ToggleTool( ID_ALIGN_TOP,      !( ( flag & ( wxALIGN_BOTTOM | wxALIGN_CENTER_VERTICAL ) ) != 0 ) && enableVerticalTools );
-	mainbar->ToggleTool( ID_ALIGN_CENTER_V, ( ( flag & wxALIGN_CENTER_VERTICAL ) != 0 ) && enableVerticalTools );
-	mainbar->ToggleTool( ID_ALIGN_BOTTOM,   ( ( flag & wxALIGN_BOTTOM ) != 0 ) && enableVerticalTools );
-
-	mainbar->ToggleTool( ID_BORDER_TOP,      ( ( flag & wxTOP ) != 0 ) && gotLayoutSettings );
-	mainbar->ToggleTool( ID_BORDER_RIGHT,    ( ( flag & wxRIGHT ) != 0 ) && gotLayoutSettings );
-	mainbar->ToggleTool( ID_BORDER_LEFT,     ( ( flag & wxLEFT ) != 0 ) && gotLayoutSettings );
-	mainbar->ToggleTool( ID_BORDER_BOTTOM,   ( ( flag & wxBOTTOM ) != 0 ) && gotLayoutSettings );
+	mainbar->ToggleTool( 	ID_EXPAND, ( 			( flag & wxEXPAND ) 										!= 0 ) && gotLayoutSettings );
+	mainbar->ToggleTool( 	ID_STRETCH, ( 			option 														 > 0 ) && gotLayoutSettings );
+	mainbar->ToggleTool( 	ID_ALIGN_LEFT, !( 		( flag & ( wxALIGN_RIGHT | wxALIGN_CENTER_HORIZONTAL ) ) 	!= 0 ) && enableHorizontalTools );
+	mainbar->ToggleTool( 	ID_ALIGN_CENTER_H, ( 	( flag & wxALIGN_CENTER_HORIZONTAL ) 						!= 0 ) && enableHorizontalTools );
+	mainbar->ToggleTool( 	ID_ALIGN_RIGHT, ( 		( flag & wxALIGN_RIGHT ) 									!= 0 ) && enableHorizontalTools );
+	mainbar->ToggleTool( 	ID_ALIGN_TOP, !( 		( flag & ( wxALIGN_BOTTOM | wxALIGN_CENTER_VERTICAL ) ) 	!= 0 ) && enableVerticalTools );
+	mainbar->ToggleTool( 	ID_ALIGN_CENTER_V, ( 	( flag & wxALIGN_CENTER_VERTICAL ) 							!= 0 ) && enableVerticalTools );
+	mainbar->ToggleTool( 	ID_ALIGN_BOTTOM, ( 		( flag & wxALIGN_BOTTOM ) 									!= 0 ) && enableVerticalTools );
+	mainbar->ToggleTool( 	ID_BORDER_TOP, ( 		( flag & wxTOP ) 											!= 0 ) && gotLayoutSettings );
+	mainbar->ToggleTool( 	ID_BORDER_RIGHT, ( 		( flag & wxRIGHT ) 											!= 0 ) && gotLayoutSettings );
+	mainbar->ToggleTool( 	ID_BORDER_LEFT, ( 		( flag & wxLEFT ) 											!= 0 ) && gotLayoutSettings );
+	mainbar->ToggleTool( 	ID_BORDER_BOTTOM, ( 	( flag & wxBOTTOM ) 										!= 0 ) && gotLayoutSettings );
 	
 	m_mgr.Update();
 }
@@ -818,19 +808,18 @@ void MainFrame::UpdateFrame()
 
 	if ( filename.empty() )
 	{
-		file = wxT("untitled");
+		file = _("untitled");
 	}
 	else
 	{
 		wxFileName fn( filename );
 		file = fn.GetName();
 	}
-
-	SetTitle( wxString::Format( wxT("%s%s - wxFormBuilder v3.1 - Beta"), AppData()->IsModified() ? wxT("*") : wxT(""), file.c_str() ) );
+	SetTitle( wxString::Format( "%s%s - wxFormBuilder v4.0 - Beta", AppData()->IsModified() ? "*" : "", file.c_str() ) );
 	GetStatusBar()->SetStatusText( filename, STATUS_FIELD_PATH );
 
 	// Enable/Disable toolbar and menu entries
-	wxMenu* menuEdit = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu( wxT( "Edit" ) ) );
+	wxMenu* menuEdit = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu( _("Edit") ) );
 
 	bool redo = AppData()->CanRedo();
 	menuEdit->Enable( ID_REDO, redo );
@@ -841,7 +830,8 @@ void MainFrame::UpdateFrame()
 	mainbar->EnableTool( ID_UNDO, undo );
 
 	bool copy = AppData()->CanCopyObject();
-	bool isEditor = ( _("Designer") != m_notebook->GetPageText( m_notebook->GetSelection() ) );
+// 	TODO: Designer or Editor?
+	bool isEditor = ( "Designer" != m_notebook->GetPageText( m_notebook->GetSelection() ) );
 	menuEdit->Enable( ID_FIND, isEditor );
 
 	menuEdit->Enable( ID_CLIPBOARD_COPY, copy );
@@ -872,10 +862,9 @@ void MainFrame::UpdateFrame()
 void MainFrame::UpdateRecentProjects()
 {
 	int i, fi;
-	wxMenu *menuFile = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu( wxT( "File" ) ) );
+	wxMenu *menuFile = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu("File") );
 
-	// borramos los items del menu de los projectos recientes
-
+	// Delete the menu items of the recent projects
 	for ( i = 0 ; i < 4 ; i++ )
 	{
 		if ( menuFile->FindItem( ID_RECENT_0 + i ) )
@@ -888,7 +877,7 @@ void MainFrame::UpdateRecentProjects()
 	    menuFile->Destroy( mruSep );
 	}
 
-	// remove empty filenames and 'compress' the rest
+	// Remove empty filenames and 'compress' the rest
     fi = 0;
 	for ( i = 0 ; i < 4 ; i++ )
 	{
@@ -896,16 +885,16 @@ void MainFrame::UpdateRecentProjects()
 	        m_recentProjects[fi++] = m_recentProjects[i];
 	}
 	for ( i = fi ; i < 4 ; i++ )
-        m_recentProjects[i] = wxT("");
+        m_recentProjects[i] = "";
 
     if ( !m_recentProjects[0].IsEmpty() )
     {
         menuFile->AppendSeparator();
     }
 
-	// creamos los nuevos ficheros recientes
+	// Create new recent project files list
 	for ( unsigned int i = 0 ; i < 4 && !m_recentProjects[i].IsEmpty() ; i++ )
-		menuFile->Append( ID_RECENT_0 + i, m_recentProjects[i], wxT( "" ) );
+		menuFile->Append( ID_RECENT_0 + i, m_recentProjects[i], "" );
 }
 
 void MainFrame::InsertRecentProject( const wxString &file )
@@ -916,10 +905,9 @@ void MainFrame::InsertRecentProject( const wxString &file )
 	for ( i = 0; i < 4 && !found; i++ )
 		found = ( file == m_recentProjects[i] );
 
-	if ( found ) // en i-1 está la posición encontrada (0 < i < 4)
+	if ( found ) // i-1 is the position found (0 < i < 4)
 	{
-		// desplazamos desde 0 hasta i-1 una posición a la derecha
-
+		// Move from 0 to i-1 position to the right (?)
 		for ( i = i - 1; i > 0; i-- )
 			m_recentProjects[i] = m_recentProjects[i-1];
 	}
@@ -928,7 +916,6 @@ void MainFrame::InsertRecentProject( const wxString &file )
 		for ( i = 3; i > 0; i-- )
 			m_recentProjects[i] = m_recentProjects[i-1];
 	}
-
 	m_recentProjects[0] = file;
 
 	UpdateRecentProjects();
@@ -1030,34 +1017,28 @@ void MainFrame::OnMoveRight ( wxCommandEvent & )
 void MainFrame::OnChangeAlignment ( wxCommandEvent &event )
 {
 	int align = 0;
-	bool vertical = ( event.GetId() == ID_ALIGN_TOP ||
-	                  event.GetId() == ID_ALIGN_BOTTOM ||
+	bool vertical = ( event.GetId() == ID_ALIGN_TOP 	||
+	                  event.GetId() == ID_ALIGN_BOTTOM 	||
 	                  event.GetId() == ID_ALIGN_CENTER_V );
 
 	switch ( event.GetId() )
 	{
+	case ID_ALIGN_RIGHT:
+		align = wxALIGN_RIGHT;
+		break;
 
-		case ID_ALIGN_RIGHT:
-			align = wxALIGN_RIGHT;
+	case ID_ALIGN_CENTER_H:
+		align = wxALIGN_CENTER_HORIZONTAL;
+		break;
 
-			break;
+	case ID_ALIGN_BOTTOM:
+		align = wxALIGN_BOTTOM;
+		break;
 
-		case ID_ALIGN_CENTER_H:
-			align = wxALIGN_CENTER_HORIZONTAL;
-
-			break;
-
-		case ID_ALIGN_BOTTOM:
-			align = wxALIGN_BOTTOM;
-
-			break;
-
-		case ID_ALIGN_CENTER_V:
-			align = wxALIGN_CENTER_VERTICAL;
-
-			break;
+	case ID_ALIGN_CENTER_V:
+		align = wxALIGN_CENTER_VERTICAL;
+		break;
 	}
-
 	AppData()->ChangeAlignment( AppData()->GetSelectedObject(), align, vertical );
 
 	UpdateLayoutTools();
@@ -1069,27 +1050,26 @@ void MainFrame::OnChangeBorder( wxCommandEvent& e )
 
 	switch ( e.GetId() )
 	{
-		case ID_BORDER_LEFT:
-			border = wxLEFT;
-			break;
+	case ID_BORDER_LEFT:
+		border = wxLEFT;
+		break;
 
-		case ID_BORDER_RIGHT:
-			border = wxRIGHT;
-			break;
+	case ID_BORDER_RIGHT:
+		border = wxRIGHT;
+		break;
 
-		case ID_BORDER_TOP:
-			border = wxTOP;
-			break;
+	case ID_BORDER_TOP:
+		border = wxTOP;
+		break;
 
-		case ID_BORDER_BOTTOM:
-			border = wxBOTTOM;
-			break;
+	case ID_BORDER_BOTTOM:
+		border = wxBOTTOM;
+		break;
 
-		default:
-			border = 0;
-			break;
+	default:
+		border = 0;
+		break;
 	}
-
 	AppData()->ToggleBorderFlag( AppData()->GetSelectedObject(), border );
 
 	UpdateLayoutTools();
@@ -1104,7 +1084,6 @@ void MainFrame::OnXrcPreview( wxCommandEvent& WXUNUSED( e ) )
 	{
 		wxAuiPaneInfo info = all_panes.Item( i );
 	}
-
 }
 
 void MainFrame::OnGenInhertedClass( wxCommandEvent& WXUNUSED( e ) )
@@ -1123,7 +1102,7 @@ void MainFrame::OnGenInhertedClass( wxCommandEvent& WXUNUSED( e ) )
 
 	// Show the dialog
 	PObjectBase project = AppData()->GetProjectData();
-	if ( project->IsNull( _("file") ) )
+	if ( project->IsNull("file") )
 	{
 		wxLogWarning( _("You must set the \"file\" property of the project before generating inherited classes.") );
 		return;
@@ -1134,7 +1113,6 @@ void MainFrame::OnGenInhertedClass( wxCommandEvent& WXUNUSED( e ) )
 	{
 		return;
 	}
-
 	std::vector< GenClassDetails > selectedForms;
 	dlg.GetFormsSelected( &selectedForms );
 
@@ -1145,8 +1123,7 @@ void MainFrame::OnGenInhertedClass( wxCommandEvent& WXUNUSED( e ) )
 		// Create the class and files.
 		AppData()->GenerateInheritedClass( details.m_form, details.m_className, filePath, details.m_fileName );
 	}
-	
-	wxMessageBox( wxString::Format( wxT( "Class(es) generated to \'%s\'." ), filePath.c_str() ), wxT("wxFormBuilder") );
+	wxMessageBox( wxString::Format( _("Class(es) generated to \'%s\'."), filePath.c_str() ), "wxFormBuilder" );
 }
 
 bool MainFrame::SaveWarning()
@@ -1155,19 +1132,14 @@ bool MainFrame::SaveWarning()
 
 	if ( AppData()->IsModified() )
 	{
-		result = ::wxMessageBox( wxT( "Current project file has been modified...\n" )
-		                         wxT( "Do you want to save the changes?" ),
-		                         wxT( "Save project" ),
-		                         wxYES | wxNO | wxCANCEL,
-		                         this );
-
+		result = ::wxMessageBox( _("Current project file has been modified...\nDo you want to save the changes?"),
+		                         _("Save project"), wxYES | wxNO | wxCANCEL, this );
 		if ( result == wxYES )
 		{
 			wxCommandEvent dummy;
 			OnSaveProject( dummy );
 		}
 	}
-
 	return ( result != wxCANCEL );
 }
 
@@ -1181,7 +1153,7 @@ void MainFrame::OnFindDialog( wxCommandEvent& )
 {
 	if ( NULL == m_findDialog )
 	{
-		m_findDialog = new wxFindReplaceDialog( this, &m_findData, wxT("Find") );
+		m_findDialog = new wxFindReplaceDialog( this, &m_findData, _("Find") );
 		m_findDialog->Centre( wxCENTRE_ON_SCREEN | wxBOTH );
 	}
 	m_findDialog->Show( true );
@@ -1202,69 +1174,67 @@ void MainFrame::OnFind( wxFindDialogEvent& event )
 		m_notebook->GetPage( page )->GetEventHandler()->ProcessEvent( event );
 	}
 }
-
 /////////////////////////////////////////////////////////////////////////////
-
 wxMenuBar * MainFrame::CreateFBMenuBar()
 {
 	wxMenu *menuFile = new wxMenu;
-	menuFile->Append( ID_NEW_PRJ, wxT( "&New Project\tCtrl+N" ), wxT( "Create an empty project" ) );
-	menuFile->Append( ID_OPEN_PRJ, wxT( "&Open...\tCtrl+O" ), wxT( "Open a project" ) );
+	menuFile->Append( ID_NEW_PRJ, 			_("&New Project\tCtrl+N"), 						_("Create an empty project") );
+	menuFile->Append( ID_OPEN_PRJ, 			_("&Open...\tCtrl+O"), 							_("Open a project") );
 
-	menuFile->Append( ID_SAVE_PRJ,          wxT( "&Save\tCtrl+S" ), wxT( "Save current project" ) );
-	menuFile->Append( ID_SAVE_AS_PRJ, wxT( "Save &As...\tCtrl-Shift+S" ), wxT( "Save current project as..." ) );
+	menuFile->Append( ID_SAVE_PRJ, 			_("&Save\tCtrl+S"), 							_("Save current project") );
+	menuFile->Append( ID_SAVE_AS_PRJ, 		_("Save &As...\tCtrl-Shift+S"), 				_("Save current project as...") );
 	menuFile->AppendSeparator();
-	menuFile->Append( ID_IMPORT_XRC, wxT( "&Import XRC..." ), wxT( "Import XRC file" ) );
+	menuFile->Append( ID_IMPORT_XRC, 		_("&Import XRC..."), 							_("Import XRC file") );
 	menuFile->AppendSeparator();
-	menuFile->Append( ID_GENERATE_CODE, wxT( "&Generate Code\tF8" ), wxT( "Generate Code" ) );
+	menuFile->Append( ID_GENERATE_CODE, 	_("&Generate Code\tF8"), 						_("Generate Code") );
 	menuFile->AppendSeparator();
-	menuFile->Append( wxID_EXIT, wxT( "E&xit\tAlt-F4" ), wxT( "Quit wxFormBuilder" ) );
+	menuFile->Append( wxID_EXIT, 			_("E&xit\tAlt-F4"), 							_("Quit wxFormBuilder" ) );
 
 	wxMenu *menuEdit = new wxMenu;
-	menuEdit->Append( ID_UNDO, wxT( "&Undo \tCtrl+Z" ), wxT( "Undo changes" ) );
-	menuEdit->Append( ID_REDO, wxT( "&Redo \tCtrl+Y" ), wxT( "Redo changes" ) );
+	menuEdit->Append( ID_UNDO, 				_("&Undo \tCtrl+Z"), 							_("Undo changes") );
+	menuEdit->Append( ID_REDO, 				_("&Redo \tCtrl+Y"), 							_("Redo changes") );
 	menuEdit->AppendSeparator();
-	menuEdit->Append( ID_COPY, wxT( "&Copy \tCtrl+C" ), wxT( "Copy selected object" ) );
-	menuEdit->Append( ID_CUT, wxT( "Cut \tCtrl+X" ), wxT( "Cut selected object" ) );
-	menuEdit->Append( ID_PASTE, wxT( "&Paste \tCtrl+V" ), wxT( "Paste on selected object" ) );
-	menuEdit->Append( ID_DELETE, wxT( "&Delete \tCtrl+D" ), wxT( "Delete selected object" ) );
+	menuEdit->Append( ID_COPY, 				_("&Copy \tCtrl+C"), 							_("Copy selected object") );
+	menuEdit->Append( ID_CUT, 				_("Cut \tCtrl+X"), 								_("Cut selected object") );
+	menuEdit->Append( ID_PASTE, 			_("&Paste \tCtrl+V"), 							_("Paste on selected object") );
+	menuEdit->Append( ID_DELETE, 			_("&Delete \tCtrl+D"), 							_("Delete selected object") );
 	menuEdit->AppendSeparator();
-	menuEdit->Append( ID_CLIPBOARD_COPY, wxT("Copy Object To Clipboard\tCtrl+Shift+C"), wxT("Copy Object to Clipboard") );
-	menuEdit->Append( ID_CLIPBOARD_PASTE, wxT("Paste Object From Clipboard\tCtrl+Shift+V"), wxT("Paste Object from Clipboard") );
+	menuEdit->Append( ID_CLIPBOARD_COPY, 	_("Copy Object To Clipboard\tCtrl+Shift+C"), 	_("Copy Object to Clipboard") );
+	menuEdit->Append( ID_CLIPBOARD_PASTE, 	_("Paste Object From Clipboard\tCtrl+Shift+V"), _("Paste Object from Clipboard") );
 	menuEdit->AppendSeparator();
-	menuEdit->Append( ID_EXPAND, wxT( "Toggle &Expand\tAlt+W" ), wxT( "Toggle wxEXPAND flag of sizeritem properties" ) );
-	menuEdit->Append( ID_STRETCH, wxT( "Toggle &Stretch\tAlt+S" ), wxT( "Toggle option property of sizeritem properties" ) );
-	menuEdit->Append( ID_MOVE_UP, wxT( "Move Up\tAlt+Up" ), wxT( "Move Up selected object" ) );
-	menuEdit->Append( ID_MOVE_DOWN, wxT( "Move Down\tAlt+Down" ), wxT( "Move Down selected object" ) );
-	menuEdit->Append( ID_MOVE_LEFT, wxT( "Move Left\tAlt+Left" ), wxT( "Move Left selected object" ) );
-	menuEdit->Append( ID_MOVE_RIGHT, wxT( "Move Right\tAlt+Right" ), wxT( "Move Right selected object" ) );
+	menuEdit->Append( ID_EXPAND, 			_("Toggle &Expand\tAlt+W"), 					_("Toggle wxEXPAND flag of sizeritem properties") );
+	menuEdit->Append( ID_STRETCH, 			_("Toggle &Stretch\tAlt+S"), 					_("Toggle option property of sizeritem properties") );
+	menuEdit->Append( ID_MOVE_UP, 			_("Move Up\tAlt+Up"), 							_("Move Up selected object") );
+	menuEdit->Append( ID_MOVE_DOWN, 		_("Move Down\tAlt+Down"), 						_("Move Down selected object") );
+	menuEdit->Append( ID_MOVE_LEFT, 		_("Move Left\tAlt+Left"), 						_("Move Left selected object") );
+	menuEdit->Append( ID_MOVE_RIGHT, 		_("Move Right\tAlt+Right"), 					_("Move Right selected object") );
 	menuEdit->AppendSeparator();
-	menuEdit->Append( ID_FIND, wxT( "&Find\tCtrl+F" ), wxT( "Find text in the active code viewer" ) );
+	menuEdit->Append( ID_FIND, 				_("&Find\tCtrl+F"), 							_("Find text in the active code viewer") );
 	menuEdit->AppendSeparator();
-	menuEdit->Append( ID_ALIGN_LEFT,     wxT( "&Align &Left\tAlt+Shift+Left" ),           wxT( "Align item to the left" ) );
-	menuEdit->Append( ID_ALIGN_CENTER_H, wxT( "&Align Center &Horizontal\tAlt+Shift+H" ), wxT( "Align item to the center horizontally" ) );
-	menuEdit->Append( ID_ALIGN_RIGHT,    wxT( "&Align &Right\tAlt+Shift+Right" ),         wxT( "Align item to the right" ) );
-	menuEdit->Append( ID_ALIGN_TOP,      wxT( "&Align &Top\tAlt+Shift+Up" ),              wxT( "Align item to the top" ) );
-	menuEdit->Append( ID_ALIGN_CENTER_V, wxT( "&Align Center &Vertical\tAlt+Shift+V" ),   wxT( "Align item to the center vertically" ) );
-	menuEdit->Append( ID_ALIGN_BOTTOM,   wxT( "&Align &Bottom\tAlt+Shift+Down" ),         wxT( "Align item to the bottom" ) );
+	menuEdit->Append( ID_ALIGN_LEFT, 		_("&Align &Left\tAlt+Shift+Left"),           	_("Align item to the left") );
+	menuEdit->Append( ID_ALIGN_CENTER_H, 	_("&Align Center &Horizontal\tAlt+Shift+H"), 	_("Align item to the center horizontally") );
+	menuEdit->Append( ID_ALIGN_RIGHT,    	_("&Align &Right\tAlt+Shift+Right"), 			_("Align item to the right") );
+	menuEdit->Append( ID_ALIGN_TOP,      	_("&Align &Top\tAlt+Shift+Up"), 				_("Align item to the top") );
+	menuEdit->Append( ID_ALIGN_CENTER_V, 	_("&Align Center &Vertical\tAlt+Shift+V"), 		_("Align item to the center vertically") );
+	menuEdit->Append( ID_ALIGN_BOTTOM,   	_("&Align &Bottom\tAlt+Shift+Down"), 			_("Align item to the bottom") );
 
 	wxMenu *menuView = new wxMenu;
-	menuView->Append( ID_PREVIEW_XRC, wxT( "&XRC Window\tF5" ), wxT( "Show a preview of the XRC window" ) );
+	menuView->Append( ID_PREVIEW_XRC, 		_("&XRC Window\tF5"), 							_("Show a preview of the XRC window") );
 
 	wxMenu *menuTools = new wxMenu;
-	menuTools->Append( ID_GEN_INHERIT_CLS, wxT( "&Generate Inherited Class\tF6" ), wxT( "Creates the needed files and class for proper inheritance of your designed GUI" ) );
+	menuTools->Append( ID_GEN_INHERIT_CLS, 	_("&Generate Inherited Class\tF6"), 			_("Creates the needed files and class for proper inheritance of your designed GUI") );
 
 	wxMenu *menuHelp = new wxMenu;
-	menuHelp->Append( wxID_ABOUT, wxT( "&About...\tF1" ), wxT( "Show about dialog" ) );
+	menuHelp->Append( wxID_ABOUT, 			_("&About...\tF1"), 							_("Show about dialog") );
 
 
 	// now append the freshly created menu to the menu bar...
 	wxMenuBar *menuBar = new wxMenuBar();
-	menuBar->Append( menuFile, wxT( "&File" ) );
-	menuBar->Append( menuEdit, wxT( "&Edit" ) );
-	menuBar->Append( menuView, wxT( "&View" ) );
-	menuBar->Append( menuTools, wxT( "&Tools" ) );
-	menuBar->Append( menuHelp, wxT( "&Help" ) );
+	menuBar->Append( menuFile, 	_("&File") );
+	menuBar->Append( menuEdit, 	_("&Edit") );
+	menuBar->Append( menuView, 	_("&View") );
+	menuBar->Append( menuTools, _("&Tools") );
+	menuBar->Append( menuHelp, 	_("&Help") );
 
 	return menuBar;
 }
@@ -1278,40 +1248,40 @@ wxAuiToolBar * MainFrame::CreateFBAuiToolBar()
 	item.SetKind( wxITEM_NORMAL );
 	item.SetId( ID_AUI_SETTINGS );
 	item.SetLabel( _("Customize...") );
-	item.SetBitmap( AppBitmaps::GetBitmap( wxT( "generate" ), 16 ) );
+	item.SetBitmap( AppBitmaps::GetBitmap( "generate", 16 ) );
 	append_items.Add( item );
 
 	mainbar = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
 	mainbar->SetToolBitmapSize( wxSize( TOOL_SIZE, TOOL_SIZE ) );
-	mainbar->AddTool( ID_NEW_PRJ, _( "New Project" ), AppBitmaps::GetBitmap( wxT( "new" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "New Project (Ctrl+N)" ), _( "Start a new project." ), NULL );
-	mainbar->AddTool( ID_OPEN_PRJ, _( "Open Project" ), AppBitmaps::GetBitmap( wxT( "open" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "Open Project (Ctrl+O)" ), _( "Open an existing project." ), NULL );
-	mainbar->AddTool( ID_SAVE_PRJ, _( "Save Project" ), AppBitmaps::GetBitmap( wxT( "save" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "Save Project (Ctrl+S)" ), _( "Save the current project." ), NULL );
+	mainbar->AddTool( ID_NEW_PRJ, 		_("New Project"), 	AppBitmaps::GetBitmap( "new", 		TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _("New Project (Ctrl+N)"), 		_("Start a new project."), 																NULL );
+	mainbar->AddTool( ID_OPEN_PRJ, 		_("Open Project"), 	AppBitmaps::GetBitmap( "open", 		TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _("Open Project (Ctrl+O)"), 		_("Open an existing project."), 														NULL );
+	mainbar->AddTool( ID_SAVE_PRJ, 		_("Save Project"), 	AppBitmaps::GetBitmap( "save", 		TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _("Save Project (Ctrl+S)"), 		_("Save the current project."), 														NULL );
 	mainbar->AddSeparator();
-	mainbar->AddTool( ID_UNDO, _( "Undo" ), AppBitmaps::GetBitmap( wxT( "undo" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "Undo (Ctrl+Z)" ), _( "Undo the last action." ), NULL );
-	mainbar->AddTool( ID_REDO, _( "Redo" ), AppBitmaps::GetBitmap( wxT( "redo" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "Redo (Ctrl+Y)" ), _( "Redo the last action that was undone." ), NULL );
+	mainbar->AddTool( ID_UNDO, 			_("Undo"), 			AppBitmaps::GetBitmap( "undo", 		TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _("Undo (Ctrl+Z)"), 				_("Undo the last action."), 															NULL );
+	mainbar->AddTool( ID_REDO, 			_("Redo"), 			AppBitmaps::GetBitmap( "redo", 		TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _("Redo (Ctrl+Y)"), 				_("Redo the last action that was undone."), 											NULL );
 	mainbar->AddSeparator();
-	mainbar->AddTool( ID_CUT, _( "Cut" ), AppBitmaps::GetBitmap( wxT( "cut" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "Cut (Ctrl+X)" ), _( "Remove the selected object and place it on the clipboard." ), NULL );
-	mainbar->AddTool( ID_COPY, _( "Copy" ), AppBitmaps::GetBitmap( wxT( "copy" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "Copy (Ctrl+C)" ), _( "Copy the selected object to the clipboard." ), NULL );
-	mainbar->AddTool( ID_PASTE, _( "Paste" ), AppBitmaps::GetBitmap( wxT( "paste" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "Paste (Ctrl+V)" ), _( "Insert an object from the clipboard." ), NULL );
-	mainbar->AddTool( ID_DELETE, _( "Delete" ), AppBitmaps::GetBitmap( wxT( "delete" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "Delete (Ctrl+D)" ), _( "Remove the selected object." ), NULL );
+	mainbar->AddTool( ID_CUT, 			_("Cut"), 			AppBitmaps::GetBitmap( "cut", 		TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _("Cut (Ctrl+X)"), 				_("Remove the selected object and place it on the clipboard."), 						NULL );
+	mainbar->AddTool( ID_COPY, 			_("Copy"), 			AppBitmaps::GetBitmap( "copy", 		TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _("Copy (Ctrl+C)"), 				_("Copy the selected object to the clipboard."), 										NULL );
+	mainbar->AddTool( ID_PASTE, 		_("Paste"), 		AppBitmaps::GetBitmap( "paste", 	TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _("Paste (Ctrl+V)"), 				_("Insert an object from the clipboard."), 												NULL );
+	mainbar->AddTool( ID_DELETE, 		_("Delete"), 		AppBitmaps::GetBitmap( "delete", 	TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _("Delete (Ctrl+D)"), 			_("Remove the selected object."), 														NULL );
 	mainbar->AddSeparator();
-	mainbar->AddTool( ID_GENERATE_CODE, _( "Generate Code" ), AppBitmaps::GetBitmap( wxT( "generate" ), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _( "Generate Code (F8)" ), _( "Create code from the current project." ), NULL );
+	mainbar->AddTool( ID_GENERATE_CODE, _("Generate Code"), AppBitmaps::GetBitmap( "generate", 	TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _("Generate Code (F8)"), 			_("Create code from the current project."), 											NULL );
 	mainbar->AddSeparator();
-	mainbar->AddTool( ID_ALIGN_LEFT, wxEmptyString, AppBitmaps::GetBitmap( wxT( "lalign" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Align Left" ), _( "The item will be aligned to the left of the space alotted to it by the sizer." ), NULL );
-	mainbar->AddTool( ID_ALIGN_CENTER_H, wxEmptyString, AppBitmaps::GetBitmap( wxT( "chalign" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Align Center Horizontally" ), _( "The item will be centered horizontally in the space alotted to it by the sizer." ), NULL );
-	mainbar->AddTool( ID_ALIGN_RIGHT, wxEmptyString, AppBitmaps::GetBitmap( wxT( "ralign" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Align Right" ), _( "The item will be aligned to the right of the space alotted to it by the sizer." ), NULL );
+	mainbar->AddTool( ID_ALIGN_LEFT, 	 wxEmptyString, 	AppBitmaps::GetBitmap( "lalign", 	TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _("Align Left"), 					_("The item will be aligned to the left of the space alotted to it by the sizer."), 	NULL );
+	mainbar->AddTool( ID_ALIGN_CENTER_H, wxEmptyString, 	AppBitmaps::GetBitmap( "chalign", 	TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _("Align Center Horizontally"), 	_("The item will be centered horizontally in the space alotted to it by the sizer."), 	NULL );
+	mainbar->AddTool( ID_ALIGN_RIGHT, 	 wxEmptyString, 	AppBitmaps::GetBitmap( "ralign", 	TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _("Align Right"), 					_("The item will be aligned to the right of the space alotted to it by the sizer."), 	NULL );
 	mainbar->AddSeparator();
-	mainbar->AddTool( ID_ALIGN_TOP, wxEmptyString, AppBitmaps::GetBitmap( wxT( "talign" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Align Top" ), _( "The item will be aligned to the top of the space alotted to it by the sizer." ), NULL );
-	mainbar->AddTool( ID_ALIGN_CENTER_V, wxEmptyString, AppBitmaps::GetBitmap( wxT( "cvalign" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Align Center Vertically" ), _( "The item will be centered vertically within space alotted to it by the sizer." ), NULL );
-	mainbar->AddTool( ID_ALIGN_BOTTOM, wxEmptyString, AppBitmaps::GetBitmap( wxT( "balign" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Align Bottom" ), _( "The item will be aligned to the bottom of the space alotted to it by the sizer." ), NULL );
+	mainbar->AddTool( ID_ALIGN_TOP, 	 wxEmptyString, 	AppBitmaps::GetBitmap( "talign", 	TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _("Align Top"), 					_("The item will be aligned to the top of the space alotted to it by the sizer."), 		NULL );
+	mainbar->AddTool( ID_ALIGN_CENTER_V, wxEmptyString, 	AppBitmaps::GetBitmap( "cvalign", 	TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _("Align Center Vertically"), 		_("The item will be centered vertically within space alotted to it by the sizer."), 	NULL );
+	mainbar->AddTool( ID_ALIGN_BOTTOM, 	 wxEmptyString, 	AppBitmaps::GetBitmap( "balign", 	TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _("Align Bottom"), 				_("The item will be aligned to the bottom of the space alotted to it by the sizer."), 	NULL );
 	mainbar->AddSeparator();
-	mainbar->AddTool( ID_EXPAND, wxEmptyString, AppBitmaps::GetBitmap( wxT( "expand" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Expand (Alt+W)" ), _( "The item will be expanded to fill the space assigned to the item." ), NULL );
-	mainbar->AddTool( ID_STRETCH, wxEmptyString, AppBitmaps::GetBitmap( wxT( "stretch" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Stretch (Alt+S)" ), _( "The item will grow and shrink with the sizer." ), NULL );
+	mainbar->AddTool( ID_EXPAND, 		 wxEmptyString, 	AppBitmaps::GetBitmap( "expand", 	TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _("Expand (Alt+W)"), 				_("The item will be expanded to fill the space assigned to the item."), 				NULL );
+	mainbar->AddTool( ID_STRETCH, 		 wxEmptyString, 	AppBitmaps::GetBitmap( "stretch", 	TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _("Stretch (Alt+S)"), 				_("The item will grow and shrink with the sizer."), 									NULL );
 	mainbar->AddSeparator();
-	mainbar->AddTool( ID_BORDER_LEFT, wxEmptyString, AppBitmaps::GetBitmap( wxT( "left" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Left Border" ), _( "A border will be added on the left side of the item." ), NULL );
-	mainbar->AddTool( ID_BORDER_RIGHT, wxEmptyString, AppBitmaps::GetBitmap( wxT( "right" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Right Border" ), _( "A border will be  added on the right side of the item." ), NULL );
-	mainbar->AddTool( ID_BORDER_TOP, wxEmptyString, AppBitmaps::GetBitmap( wxT( "top" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Top Border" ), _( "A border will be  added on the top of the item." ), NULL );
-	mainbar->AddTool( ID_BORDER_BOTTOM, wxEmptyString, AppBitmaps::GetBitmap( wxT( "bottom" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _( "Bottom Border" ), _( "A border will be  added on the bottom of the item." ), NULL );
+	mainbar->AddTool( ID_BORDER_LEFT, 	 wxEmptyString, 	AppBitmaps::GetBitmap( "left", 		TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _("Left Border"), 					_("A border will be added on the left side of the item."), 								NULL );
+	mainbar->AddTool( ID_BORDER_RIGHT, 	 wxEmptyString, 	AppBitmaps::GetBitmap( "right", 	TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _("Right Border"), 				_("A border will be  added on the right side of the item."), 							NULL );
+	mainbar->AddTool( ID_BORDER_TOP, 	 wxEmptyString, 	AppBitmaps::GetBitmap( "top", 		TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _("Top Border" ), 					_("A border will be  added on the top of the item."), 									NULL );
+	mainbar->AddTool( ID_BORDER_BOTTOM,  wxEmptyString, 	AppBitmaps::GetBitmap( "bottom", 	TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _("Bottom Border"), 				_("A border will be  added on the bottom of the item."), 								NULL );
 	mainbar->SetCustomOverflowItems( prepend_items, append_items );
 	mainbar->Realize();
 
@@ -1322,23 +1292,24 @@ wxWindow * MainFrame::CreateDesignerWindow( wxWindow *parent )
 {
 	long nbStyle = 0;
 	wxConfigBase* config = wxConfigBase::Get();
-	config->Read( wxT("/mainframe/editor/notebook_style"), &nbStyle, wxAUI_NB_TAB_MOVE | wxAUI_NB_WINDOWLIST_BUTTON | wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_TOP );
+	config->Read( "/mainframe/editor/notebook_style", &nbStyle,
+					wxAUI_NB_TAB_MOVE | wxAUI_NB_WINDOWLIST_BUTTON | wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_TOP );
 
 	m_notebook = new wxAuiNotebook( parent, ID_EDITOR_FNB, wxDefaultPosition, wxDefaultSize, nbStyle );
 
 	m_visualEdit = new VisualEditor( m_notebook );
 	AppData()->GetManager()->SetVisualEditor( m_visualEdit );
 
-	m_notebook->AddPage( m_visualEdit, wxT( "Designer" ), false, AppBitmaps::GetBitmap( wxT( "designer" ), 16 ) );
+	m_notebook->AddPage( m_visualEdit, 	"Designer", false, AppBitmaps::GetBitmap( "designer", 16 ) );
 
-	m_cpp = new CppPanel( m_notebook, -1 );
-	m_notebook->AddPage( m_cpp, wxT( "C++" ), false, AppBitmaps::GetBitmap( wxT( "c++" ), 16 ) );
+	m_cpp = new CppPanel( m_notebook, wxID_ANY );
+	m_notebook->AddPage( m_cpp, 		"C++", 		false, AppBitmaps::GetBitmap( "c++", 16 ) );
 
-	m_python = new PythonPanel( m_notebook, -1 );
-	m_notebook->AddPage( m_python, wxT( "Python" ), false, AppBitmaps::GetBitmap( wxT( "c++" ), 16 ) );
+	m_python = new PythonPanel( m_notebook, wxID_ANY );
+	m_notebook->AddPage( m_python, 		"Python", 	false, AppBitmaps::GetBitmap( "c++", 16 ) );
 
-	m_xrc = new XrcPanel( m_notebook, -1 );
-	m_notebook->AddPage( m_xrc, wxT( "XRC" ), false, AppBitmaps::GetBitmap( wxT( "xrc" ), 16 ) );
+	m_xrc = new XrcPanel( m_notebook, wxID_ANY );
+	m_notebook->AddPage( m_xrc, 		"XRC", 		false, AppBitmaps::GetBitmap( "xrc", 16 ) );
 
 	return m_notebook;
 }
@@ -1347,7 +1318,7 @@ wxWindow * MainFrame::CreateComponentPalette ( wxWindow *parent )
 {
 	// la paleta de componentes, no es un observador propiamente dicho, ya
 	// que no responde ante los eventos de la aplicación
-	m_palette = new wxFbPalette( parent, -1 );
+	m_palette = new wxFbPalette( parent, wxID_ANY );
 	m_palette->Create();
 	m_palette->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) );
 
@@ -1356,7 +1327,7 @@ wxWindow * MainFrame::CreateComponentPalette ( wxWindow *parent )
 
 wxWindow * MainFrame::CreateObjectTree( wxWindow *parent )
 {
-	m_objTree = new ObjectTree( parent, -1 );
+	m_objTree = new ObjectTree( parent, wxID_ANY );
 	m_objTree->Create();
 
 	return m_objTree;
@@ -1364,18 +1335,18 @@ wxWindow * MainFrame::CreateObjectTree( wxWindow *parent )
 
 wxWindow * MainFrame::CreateObjectInspector( wxWindow *parent )
 {
-	// TODO: make object inspector style selectable.
+// TODO: make object inspector style selectable.(?)
 //	int style = ( m_style == wxFB_CLASSIC_GUI ? wxFB_OI_MULTIPAGE_STYLE : wxFB_OI_SINGLE_PAGE_STYLE );
 	int style = wxFB_OI_SINGLE_PAGE_STYLE;
-	m_objInsp = new ObjectInspector( parent, -1, style );
+	m_objInsp = new ObjectInspector( parent, wxID_ANY, style );
 
 	return m_objInsp;
 }
 
 void MainFrame::OnAuiSettings(wxCommandEvent& WXUNUSED(evt))
 {
-    // show the settings pane, and float it
-    wxAuiPaneInfo& floating_pane = m_mgr.GetPane( _("settings") ).Float().Show();
+    // Show the settings pane, and float it
+    wxAuiPaneInfo& floating_pane = m_mgr.GetPane("settings").Float().Show();
 
     if (floating_pane.floating_pos == wxDefaultPosition)
         floating_pane.FloatingPosition(GetStartPosition());

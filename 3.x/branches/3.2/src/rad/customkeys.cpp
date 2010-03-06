@@ -24,53 +24,50 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "customkeys.h"
-#include "utils/debug.h"
+#include "appdata.h"
 #include "codegen/cppcg.h"
 #include "model/objectbase.h"
-
-#include <rad/appdata.h>
+#include "utils/debug.h"
 
 BEGIN_EVENT_TABLE(CustomKeysEvtHandler,wxEvtHandler)
-  EVT_CHAR(CustomKeysEvtHandler::OnKeyPress)
+	EVT_CHAR( CustomKeysEvtHandler::OnKeyPress )
 END_EVENT_TABLE()
 
-void CustomKeysEvtHandler::OnKeyPress(wxKeyEvent &event)
+void CustomKeysEvtHandler::OnKeyPress( wxKeyEvent &event )
 {
-  Debug::Print( wxT("%d"),event.GetKeyCode());
+	Debug::Print( wxString::Format( "%d", event.GetKeyCode() ) );
 
-  if (event.GetKeyCode() == WXK_DELETE)
-    AppData()->RemoveObject(AppData()->GetSelectedObject());
-  else if (event.GetKeyCode() == 'P')
-  {
-    /////
-    // prueba del parser
-    /////
+	if ( event.GetKeyCode() == WXK_DELETE )
+	{
+		AppData()->RemoveObject( AppData()->GetSelectedObject() );
+	}
+	else if ( event.GetKeyCode() == 'P' )
+	{
+		Debug::Print( _("#### Parser test ####") );
 
-    Debug::Print( wxT("#### Prueba del parser ####") );
+		PObjectBase obj = AppData()->GetSelectedObject();
+		PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo("C++");
 
-    PObjectBase obj = AppData()->GetSelectedObject();
-// TODO: Check following changes
-    PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( "C++" );
+		Debug::Print( _("#### Templates ####") );
+		Debug::Print( ( wxChar * )( code_info->GetTemplate("construction").wchar_str() ) );
+		Debug::Print( ( wxChar * )( code_info->GetTemplate("declaration").wchar_str() ) );
 
-    Debug::Print( wxT("#### Plantillas ####") );
-    Debug::Print((wxChar *)(code_info->GetTemplate( "construction" ).wchar_str()));
-    Debug::Print((wxChar *)(code_info->GetTemplate( "declaration" ).wchar_str()));
-
-    Debug::Print( wxT("#### Código ####") );
-    {
-      CppTemplateParser parser(obj,code_info->GetTemplate( "construction" ), false, false, wxEmptyString );
-      Debug::Print((wxChar *)parser.ParseTemplate().wchar_str());
-    }
-    {
-      CppTemplateParser parser(obj,code_info->GetTemplate( "declaration" ), false, false, wxEmptyString );
-      Debug::Print((wxChar *)parser.ParseTemplate().wchar_str());
-    }
-  }
-  else if (event.GetKeyCode() == 'C')
-  {
-    AppData()->GenerateCode();
-  }
-  else
-    event.Skip();
+		Debug::Print( _("#### Code ####") );
+		{
+			CppTemplateParser parser(obj,code_info->GetTemplate("construction"), false, false, wxEmptyString );
+			Debug::Print((wxChar *)parser.ParseTemplate().wchar_str());
+		}
+		{
+			CppTemplateParser parser(obj,code_info->GetTemplate("declaration"), false, false, wxEmptyString );
+			Debug::Print((wxChar *)parser.ParseTemplate().wchar_str());
+		}
+	}
+	else if ( event.GetKeyCode() == 'C' )
+	{
+		AppData()->GenerateCode();
+	}
+	else
+	{
+		event.Skip();
+	}
 }
-
