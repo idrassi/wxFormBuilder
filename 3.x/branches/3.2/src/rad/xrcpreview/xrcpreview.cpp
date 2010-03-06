@@ -132,17 +132,16 @@ void XRCPreview::Show( PObjectBase form, const wxString& projectPath )
 {
 
 	AnnoyingDialog dlg( _("WARNING - For XRC Developers ONLY!!"),
-						wxGetTranslation(	"The XRC language is not as powerful as C++.\n"
-											"It has limitations that will affect the GUI\n"
-											"layout. This preview will ONLY show how the\n"
-											"generated XRC will look, and it will probably\n"
-											"be different from the Designer.\n\n"
-											"If you are not using XRC, do NOT use the XRC\n"
-											"preview, it will only confuse you."
-										),
-										wxART_WARNING,
-										AnnoyingDialog::OK_CANCEL,
-										wxID_CANCEL);
+						_(	"The XRC language is not as powerful as C++.\n"
+							"It has limitations that will affect the GUI\n"
+							"layout. This preview will ONLY show how the\n"
+							"generated XRC will look, and it will probably\n"
+							"be different from the Designer.\n\n"
+							"If you are not using XRC, do NOT use the XRC\n"
+							"preview, it will only confuse you." ),
+							wxART_WARNING,
+							AnnoyingDialog::OK_CANCEL,
+							wxID_CANCEL );
 
 	if ( wxID_CANCEL == dlg.ShowModal() )
 	{

@@ -24,14 +24,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "bitmaps.h"
-#include "tinyxml.h"
-#include <default.xpm>
-#include <wx/image.h>
 #include "utils/typeconv.h"
 #include "utils/stringutils.h"
 #include "utils/wxfbexception.h"
+#include <default.xpm>
 
 #include <ticpp.h>
+#include <tinyxml.h>
+
+#include <wx/image.h>
 
 static std::map< wxString, wxBitmap > m_bitmaps;
 
@@ -46,7 +47,7 @@ wxBitmap AppBitmaps::GetBitmap( wxString iconname, unsigned int size )
 	}
 	else
 	{
-		bmp = m_bitmaps[ wxT("unknown") ];
+		bmp = m_bitmaps[ "unknown" ];
 	}
 	if ( size != 0 )
 	{
@@ -54,7 +55,7 @@ wxBitmap AppBitmaps::GetBitmap( wxString iconname, unsigned int size )
 		if ( bmp.GetWidth() != (int)size || bmp.GetHeight() != (int)size )
 		{
 			wxImage image = bmp.ConvertToImage();
-			bmp = wxBitmap( image.Scale(size, size) );
+			bmp = wxBitmap( image.Scale( size, size ) );
 		}
 	}
 	return bmp;
@@ -64,12 +65,12 @@ void AppBitmaps::LoadBitmaps( wxString filepath, wxString iconpath )
 {
 	try
 	{
-		m_bitmaps[ wxT("unknown") ] = wxBitmap( default_xpm );
+		m_bitmaps[ "unknown" ] = wxBitmap( default_xpm );
 
 		ticpp::Document doc;
 		XMLUtils::LoadXMLFile( doc, true, filepath );
 
-		ticpp::Element* root = doc.FirstChildElement( "icons" );
+		ticpp::Element* root = doc.FirstChildElement("icons");
 		ticpp::Element* elem = root->FirstChildElement( "icon", false );
 		while ( elem )
 		{
