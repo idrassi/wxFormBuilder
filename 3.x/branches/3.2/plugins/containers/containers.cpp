@@ -621,7 +621,7 @@ public:
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("listbookpage"));
+		XrcToXfbFilter filter( xrcObj, "listbookpage" );
 		filter.AddWindowProperties();
 		filter.AddProperty( "selected", "select", XRC_TYPE_BOOL );
 		filter.AddProperty( "bitmap", "bitmap", XRC_TYPE_BITMAP );
