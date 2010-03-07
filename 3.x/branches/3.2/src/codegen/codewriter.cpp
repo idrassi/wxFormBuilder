@@ -91,7 +91,7 @@ void CodeWriter::WriteLn( wxString code )
 
 bool CodeWriter::StringOk( wxString s )
 {
-	return ( s.find( wxT("\n"), 0 ) == wxString::npos );
+	return ( s.find( "\n", 0 ) == wxString::npos );
 }
 
 void CodeWriter::FixWrite( wxString s )

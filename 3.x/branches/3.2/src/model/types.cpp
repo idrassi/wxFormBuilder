@@ -22,7 +22,6 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 #include "model/types.h"
 #include "utils/debug.h"
 #include "utils/stringutils.h"
@@ -112,7 +111,7 @@ void IntList::SetList( wxString str )
 {
 	DeleteList();
 	wxStringTokenizer tkz( str, "," );
-	while (tkz.HasMoreTokens())
+	while ( tkz.HasMoreTokens() )
 	{
 		long value;
 		wxString token;
@@ -121,7 +120,7 @@ void IntList::SetList( wxString str )
 		token.Trim( false );
 
 		if ( token.ToLong( &value ) )
-		Add( (int)value );
+		Add( ( int )value );
 	}
 }
 

@@ -34,7 +34,7 @@ class wxFBException
 public:
 	explicit wxFBException( const wxString& what )
 	:
-	m_what(what)
+	m_what( what )
 	{}
 
 	virtual ~wxFBException() throw() {}
@@ -45,7 +45,7 @@ public:
 	}
 
 private:
-   wxString m_what;
+	wxString m_what;
 };
 
 /**
@@ -56,9 +56,9 @@ It will take care of the conversion	and throwing the exception.
 	{																														\
 	wxString hopefullyThisNameWontConflictWithOtherVariables;																\
 	wxString file( __FILE__, wxConvUTF8 );																					\
-	file = file.substr( file.find_last_of( wxT("\\/") ) + 1 );																\
-	hopefullyThisNameWontConflictWithOtherVariables << message << wxT(" <") << file << wxT("@");							\
-	hopefullyThisNameWontConflictWithOtherVariables << wxString::Format( wxT("%i"), __LINE__ ) << wxT(">");					\
+	file = file.substr( file.find_last_of("\\/") + 1 );																\
+	hopefullyThisNameWontConflictWithOtherVariables << message << " <" << file << "@";							\
+	hopefullyThisNameWontConflictWithOtherVariables << wxString::Format( "%i", __LINE__ ) << ">";					\
 	throw wxFBException( hopefullyThisNameWontConflictWithOtherVariables );													\
 	}
 

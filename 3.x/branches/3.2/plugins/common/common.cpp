@@ -360,7 +360,7 @@ public:
 							wxEmptyString,
 							child );
 			}
-			else if ( wxT("toolSeparator") == childObj->GetClassName() )
+			else if ( "toolSeparator" == childObj->GetClassName() )
 			{
 				tb->AddSeparator();
 			}

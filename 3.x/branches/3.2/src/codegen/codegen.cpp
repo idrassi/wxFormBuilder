@@ -148,9 +148,9 @@ TemplateParser::Ident TemplateParser::ParseIdent()
 
 		wxChar peek( m_in.Peek() );
 		while ( peek != wxChar(EOF) && !m_in.Eof() && peek != '#' && peek != '$'
-				&& ( (peek >= 'a' && peek <= 'z' ) ||
-				(peek >= 'A' && peek <= 'Z' ) ||
-				(peek >= '0' && peek <= '9' ) ))
+				&& ( ( peek >= 'a' && peek <= 'z' ) ||
+				( peek >= 'A' && peek <= 'Z' ) 		||
+				( peek >= '0' && peek <= '9' ) 		))
 		{
 			macro += wxChar( m_in.GetC() );
 			peek = wxChar( m_in.Peek() );
@@ -184,7 +184,7 @@ wxString TemplateParser::ParsePropertyName( wxString* child )
 			{
 				if ( saveChild )
 				{
-					(*child) << wxChar( m_in.GetC() );
+					( *child ) << wxChar( m_in.GetC() );
 				}
 			}
 			else
@@ -226,7 +226,7 @@ bool TemplateParser::ParseProperty()
 	{
 		m_out << property->GetChildFromParent( childName );
 	}
-	//  Debug::Print("parsing property %s",propname.c_str());
+	Debug::Print( wxString::Format( _("parsing property %s"), propname.c_str() ) );
 	return true;
 }
 
@@ -263,7 +263,7 @@ bool TemplateParser::ParseText()
 		    m_out << spaces;
 		}
 	}
-	//Debug::Print( "Parsed Text: %s",text.c_str() );
+	Debug::Print( wxString::Format( _("Parsed Text: %s"), text.c_str() ) );
 	return true;
 }
 
@@ -350,11 +350,11 @@ bool TemplateParser::ParseForm()
 
 bool TemplateParser::ParseParent()
 {
-	PObjectBase parent(m_obj->GetParent());
-	if (parent)
+	PObjectBase parent( m_obj->GetParent() );
+	if ( parent )
 	{
 		PProperty property = GetRelatedProperty( parent );
-		m_out << PropertyToCode(property);
+		m_out << PropertyToCode( property );
 	}
 	else
 	{
@@ -366,9 +366,9 @@ bool TemplateParser::ParseParent()
 bool TemplateParser::ParseChild()
 {
 	// Get the first child
-	PObjectBase child(m_obj->GetChild(0));
+	PObjectBase child( m_obj->GetChild(0) );
 
-	if (child)
+	if ( child )
 	{
 		PProperty property = GetRelatedProperty( child );
 		m_out << PropertyToCode( property );
@@ -397,24 +397,24 @@ bool TemplateParser::ParseForEach()
 		wxString propname = ParsePropertyName();
 		wxString inner_template = ExtractInnerTemplate();
 
-		PProperty property = m_obj->GetProperty(propname);
+		PProperty property = m_obj->GetProperty( propname );
 		wxString propvalue = property->GetValue();
 
 		// Property value must be an string using ',' as separator.
 		// The template will be generated nesting as many times as
 		// tokens were found in the property value.
 
-		if (property->GetType() == PT_INTLIST || property->GetType() == PT_UINTLIST)
+		if ( property->GetType() == PT_INTLIST || property->GetType() == PT_UINTLIST )
 		{
 			// For doing that we will use wxStringTokenizer class from wxWidgets
 			wxStringTokenizer tkz( propvalue, "," );
 			int i = 0;
-			while (tkz.HasMoreTokens())
+			while ( tkz.HasMoreTokens() )
 			{
 				wxString token;
 				token = tkz.GetNextToken();
-				token.Trim(true);
-				token.Trim(false);
+				token.Trim( true );
+				token.Trim( false );
 
 				// Parsing the internal template
 				{

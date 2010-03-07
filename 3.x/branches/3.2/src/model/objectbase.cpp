@@ -55,14 +55,14 @@ PropertyInfo::~PropertyInfo()
 {
 }
 
-EventInfo::EventInfo(	const wxString &name,
-						const wxString &eventClass,
-						const wxString &defValue,
-						const wxString &description)
-: 	m_name(name),
-	m_eventClass(eventClass),
-	m_defaultValue(defValue),
-	m_description(description)
+EventInfo::EventInfo(	const wxString& name,
+						const wxString& eventClass,
+						const wxString& defValue,
+						const wxString& description)
+: 	m_name( name ),
+	m_eventClass( eventClass ),
+	m_defaultValue( defValue ),
+	m_description( description )
 {
 }
 
@@ -105,27 +105,27 @@ void Property::SetDefaultValue()
 	m_value = m_info->GetDefaultValue();
 }
 
-void Property::SetValue( const wxFontContainer &font )
+void Property::SetValue( const wxFontContainer& font )
 {
 	m_value = TypeConv::FontToString( font );
 }
 
-void Property::SetValue( const wxColour &colour )
+void Property::SetValue( const wxColour& colour )
 {
 	m_value = TypeConv::ColourToString( colour );
 }
 
-void Property::SetValue( const wxString &str, bool format )
+void Property::SetValue( const wxString& str, bool format )
 {
 	m_value = ( format ? TypeConv::TextToString( str ) : str );
 }
 
-void Property::SetValue( const wxPoint &point )
+void Property::SetValue( const wxPoint& point )
 {
 	m_value = TypeConv::PointToString( point );
 }
 
-void Property::SetValue( const wxSize &size )
+void Property::SetValue( const wxSize& size )
 {
 	m_value = TypeConv::SizeToString( size );
 }
@@ -135,9 +135,9 @@ void Property::SetValue( const int integer )
 	m_value = StringUtils::IntToStr( integer );
 }
 /* TODO
-void Property::SetValue(const wxAlignment alignment)
+void Property::SetValue( const wxAlignment alignment )
 {
-	m_value = TypeConv::AlignmentToString(alignment);
+	m_value = TypeConv::AlignmentToString( alignment );
 }
 */
 void Property::SetValue( const double val )
@@ -152,15 +152,15 @@ wxFontContainer Property::GetValueAsFont()
 
 wxColour Property::GetValueAsColour()
 {
-	return TypeConv::StringToColour(m_value);
+	return TypeConv::StringToColour( m_value );
 }
 wxPoint Property::GetValueAsPoint()
 {
-	return TypeConv::StringToPoint(m_value);
+	return TypeConv::StringToPoint( m_value );
 }
 wxSize Property::GetValueAsSize()
 {
-	return TypeConv::StringToSize(m_value);
+	return TypeConv::StringToSize( m_value );
 }
 
 wxBitmap Property::GetValueAsBitmap()
@@ -172,7 +172,7 @@ int Property::GetValueAsInteger()
 {
 	int result = 0;
 
-	switch (GetType())
+	switch( GetType() )
 	{
 	case PT_OPTION:
 	case PT_MACRO:
@@ -211,7 +211,7 @@ wxArrayString Property::GetValueAsArrayString()
 
 double Property::GetValueAsFloat()
 {
-	return TypeConv::StringToFloat(m_value);
+	return TypeConv::StringToFloat( m_value );
 }
 
 void Property::SplitParentProperty( std::map< wxString, wxString >* children )
@@ -225,7 +225,7 @@ void Property::SplitParentProperty( std::map< wxString, wxString >* children )
 	std::list< PropertyChild >* myChildren = m_info->GetChildren();
 	std::list< PropertyChild >::iterator it = myChildren->begin();
 
-	wxStringTokenizer tkz( m_value, wxT(";"), wxTOKEN_RET_EMPTY_ALL );
+	wxStringTokenizer tkz( m_value, ";", wxTOKEN_RET_EMPTY_ALL );
 	while ( tkz.HasMoreTokens() )
 	{
 		if ( myChildren->end() == it )
@@ -260,7 +260,7 @@ wxString Property::GetChildFromParent( const wxString& childName )
 ///////////////////////////////////////////////////////////////////////////////
 const int ObjectBase::INDENT = 2;
 
-ObjectBase::ObjectBase (wxString class_name)
+ObjectBase::ObjectBase ( wxString class_name )
 :
 m_expanded( true )
 {
@@ -283,25 +283,25 @@ ObjectBase::~ObjectBase()
 	Debug::Print( _("delete ObjectBase") );
 }
 
-wxString ObjectBase::GetIndentString(int indent)
+wxString ObjectBase::GetIndentString( int indent )
 {
 	int i;
 	wxString s;
 
-	for (i=0;i<indent;i++)
+	for ( i=0; i<indent; i++ )
 		s += " ";
 
 	return s;
 }
 
 
-PProperty ObjectBase::GetProperty (wxString name)
+PProperty ObjectBase::GetProperty( wxString name )
 {
 	PropertyMap::iterator it = m_properties.find( name );
 	if ( it != m_properties.end() )
 		return it->second;
 
-  //Debug::Print( _("[ObjectBase::GetProperty] Property %s not found!"),name.c_str() );
+	Debug::Print( wxString::Format( _("[ObjectBase::GetProperty] Property %s not found!"), name.c_str() ) );
 	// este aserto falla siempre que se crea un sizeritem
 	// assert( false );
 	return PProperty();
@@ -318,7 +318,7 @@ PProperty ObjectBase::GetProperty ( unsigned int idx )
 		i++;
 		it++;
 	}
-	if (it != m_properties.end())
+	if ( it != m_properties.end() )
 		return it->second;
 
 	return PProperty();
@@ -335,120 +335,116 @@ PEvent ObjectBase::GetEvent ( wxString name )
 	return PEvent();
 }
 
-PEvent ObjectBase::GetEvent (unsigned int idx)
+PEvent ObjectBase::GetEvent ( unsigned int idx )
 {
-	assert (idx < m_events.size());
+	assert ( idx < m_events.size() );
 
 	EventMap::iterator it = m_events.begin();
 	unsigned int i = 0;
-	while (i < idx && it != m_events.end())
+	while ( i < idx && it != m_events.end() )
 	{
 		i++;
 		it++;
 	}
 
-	if (it != m_events.end())
+	if ( it != m_events.end() )
 		return it->second;
 
   return PEvent();
 }
 
-void ObjectBase::AddProperty (PProperty prop)
+void ObjectBase::AddProperty( PProperty prop )
 {
 	m_properties.insert( PropertyMap::value_type( prop->GetName(), prop ) );
 }
 
-void ObjectBase::AddEvent(PEvent event)
+void ObjectBase::AddEvent( PEvent event )
 {
 	m_events.insert( EventMap::value_type( event->GetName(), event ) );
 }
 
-PObjectBase ObjectBase::FindNearAncestor(wxString type)
+PObjectBase ObjectBase::FindNearAncestor( wxString type )
 {
 	PObjectBase result;
 	PObjectBase parent = GetParent();
 	if (parent)
 	{
-		if (parent->GetObjectTypeName() == type)
+		if ( parent->GetObjectTypeName() == type )
 			result = parent;
 		else
-			result = parent->FindNearAncestor(type);
+			result = parent->FindNearAncestor( type );
 	}
-
 	return result;
 }
 
-PObjectBase ObjectBase::FindNearAncestorByBaseClass(wxString type)
+PObjectBase ObjectBase::FindNearAncestorByBaseClass( wxString type )
 {
 	PObjectBase result;
 	PObjectBase parent = GetParent();
-	if (parent)
+	if ( parent )
 	{
 		if ( parent->GetObjectInfo()->IsSubclassOf( type ) )
 			result = parent;
 		else
 			result = parent->FindNearAncestorByBaseClass( type );
 	}
-
 	return result;
 }
 
 PObjectBase ObjectBase::FindParentForm()
 {
-	PObjectBase retObj = this->FindNearAncestor( wxT( "form" ) );
-	if( retObj == NULL ) retObj = this->FindNearAncestor( wxT( "menubar_form" ) );
-	if( retObj == NULL ) retObj = this->FindNearAncestor( wxT( "toolbar_form" ) );
+	PObjectBase retObj = this->FindNearAncestor("form");
+	if( retObj == NULL ) retObj = this->FindNearAncestor("menubar_form");
+	if( retObj == NULL ) retObj = this->FindNearAncestor("toolbar_form");
 	
 	return retObj;
 }
 
-bool ObjectBase::AddChild (PObjectBase obj)
+bool ObjectBase::AddChild( PObjectBase obj )
 {
 	bool result = false;
-	if (ChildTypeOk(obj->GetObjectInfo()->GetObjectType()))
-		//if (ChildTypeOk(obj->GetObjectTypeName()))
+	if ( ChildTypeOk( obj->GetObjectInfo()->GetObjectType() ) )
+// 	if ( ChildTypeOk( obj->GetObjectTypeName() ) )
 	{
-		m_children.push_back(obj);
+		m_children.push_back( obj );
 		result = true;
 	}
-
 	return result;
 }
 
-bool ObjectBase::AddChild (unsigned int idx, PObjectBase obj)
+bool ObjectBase::AddChild( unsigned int idx, PObjectBase obj )
 {
 	bool result = false;
-	if (ChildTypeOk(obj->GetObjectInfo()->GetObjectType()) && idx <= m_children.size())
-		//if (ChildTypeOk(obj->GetObjectTypeName()) && idx <= m_children.size())
+	if ( ChildTypeOk( obj->GetObjectInfo()->GetObjectType() ) && idx <= m_children.size() )
+// 	if ( ChildTypeOk( obj->GetObjectTypeName() ) && idx <= m_children.size() )
 	{
 		m_children.insert(m_children.begin() + idx,obj);
 		result = true;
 	}
-
 	return result;
 }
 
-bool ObjectBase::ChildTypeOk (PObjectType type)
+bool ObjectBase::ChildTypeOk( PObjectType type )
 {
 	// buscamos si puede haber objectos del tipo "type" como hijos
 	// del actual objeto tipo.
-	int nmax = GetObjectInfo()->GetObjectType()->FindChildType(type);
+	int nmax = GetObjectInfo()->GetObjectType()->FindChildType( type );
 
-	if (nmax == 0)
+	if ( nmax == 0 )
 		return false;
 
-	if (nmax < 0)
+	if ( nmax < 0 )
 		return true;
 
 	// llegados aquí hay que comprobar el número de hijos del tipo pasado
 	int count = 0;
-	for (unsigned int i=0; i < GetChildCount() && count <= nmax; i++)
+	for ( unsigned int i=0; i < GetChildCount() && count <= nmax; i++ )
 	{
-		if (GetChild(i)->GetObjectInfo()->GetObjectType() == type)
+		if ( GetChild( i )->GetObjectInfo()->GetObjectType() == type )
 			count++;
 	}
 
-	if (count > nmax)
+	if ( count > nmax )
 		return false;
 
 	return true;
@@ -459,47 +455,47 @@ PObjectBase ObjectBase::GetLayout()
 {
 	PObjectBase result;
 
-	if (GetParent() && GetParent()->GetObjectInfo()->IsSubclassOf( wxT("sizeritembase") ))
+	if ( GetParent() && GetParent()->GetObjectInfo()->IsSubclassOf("sizeritembase") )
 		result = GetParent();
 
 	return result;
 }
 
-void ObjectBase::RemoveChild (PObjectBase obj)
+void ObjectBase::RemoveChild( PObjectBase obj )
 {
 	std::vector< PObjectBase >::iterator it = m_children.begin();
-	while (it != m_children.end() && *it != obj)
+	while ( it != m_children.end() && *it != obj )
 		it++;
 
-	if (it != m_children.end())
-		m_children.erase(it);
+	if ( it != m_children.end() )
+		m_children.erase( it );
 }
 
-void ObjectBase::RemoveChild (unsigned int idx)
+void ObjectBase::RemoveChild( unsigned int idx )
 {
-	assert (idx < m_children.size());
+	assert ( idx < m_children.size() );
 
 	std::vector< PObjectBase >::iterator it =  m_children.begin() + idx;
-	m_children.erase(it);
+	m_children.erase( it );
 }
 
-PObjectBase ObjectBase::GetChild (unsigned int idx)
+PObjectBase ObjectBase::GetChild ( unsigned int idx )
 {
-	assert (idx < m_children.size());
+	assert ( idx < m_children.size() );
 
-	return m_children[idx];
+	return m_children[ idx ];
 }
 
 int ObjectBase::Deep()
 {
 	int deep = 0;
-	PObjectBase obj(GetParent());
+	PObjectBase obj( GetParent() );
 	while (obj)
 	{
 		obj = obj->GetParent();
 		deep++;
 
-		if (deep > 1000)
+		if ( deep > 1000 )
 			assert(false);
 	}
 	return deep;
@@ -532,14 +528,14 @@ int ObjectBase::Deep()
 
 void ObjectBase::SerializeObject( ticpp::Element* serializedElement )
 {
-	ticpp::Element element( "object" );
+	ticpp::Element element("object");
 	element.SetAttribute( "class", _STDSTR( GetClassName() ) );
 	element.SetAttribute( "expanded", GetExpanded() );
 
 	for ( unsigned int i = 0; i < GetPropertyCount(); i++ )
 	{
 		PProperty prop = GetProperty( i );
-		ticpp::Element prop_element( "property" );
+		ticpp::Element prop_element("property");
 		prop_element.SetAttribute( "name", _STDSTR( prop->GetName() ) );
 		prop_element.SetText( _STDSTR( prop->GetValue() ) );
 		element.LinkEndChild( &prop_element );
@@ -548,7 +544,7 @@ void ObjectBase::SerializeObject( ticpp::Element* serializedElement )
 	for ( unsigned int i = 0; i < GetEventCount(); i++ )
 	{
 		PEvent event = GetEvent( i );
-		ticpp::Element event_element( "event" );
+		ticpp::Element event_element("event");
 		event_element.SetAttribute( "name", _STDSTR( event->GetName() ) );
 		event_element.SetText( _STDSTR( event->GetValue() ) );
 		element.LinkEndChild( &event_element );
@@ -561,24 +557,23 @@ void ObjectBase::SerializeObject( ticpp::Element* serializedElement )
 		child->SerializeObject( &child_element );
 		element.LinkEndChild( &child_element );
 	}
-
 	*serializedElement = element;
 }
 
 void ObjectBase::Serialize( ticpp::Document* serializedDocument )
 {
-	ticpp::Document document( "document" );
+	ticpp::Document document("document");
 
-  #if wxUSE_UNICODE
+#if wxUSE_UNICODE
 	ticpp::Declaration dec( "1.0", "UTF-8", "yes" );
-	#else
+#else
 	ticpp::Declaration dec( "1.0", "ISO-8859-13", "yes" );
-	#endif
+#endif
 	document.LinkEndChild( &dec );
 
-	ticpp::Element root( "wxFormBuilder_Project" );
+	ticpp::Element root("wxFormBuilder_Project");
 
-	ticpp::Element fileVersion( "FileVersion" );
+	ticpp::Element fileVersion("FileVersion");
 	fileVersion.SetAttribute( "major", AppData()->m_fbpVerMajor );
 	fileVersion.SetAttribute( "minor", AppData()->m_fbpVerMinor );
 
@@ -593,109 +588,109 @@ void ObjectBase::Serialize( ticpp::Document* serializedDocument )
 	*serializedDocument = document;
 }
 
-unsigned int ObjectBase::GetChildPosition(PObjectBase obj)
+unsigned int ObjectBase::GetChildPosition( PObjectBase obj )
 {
 	unsigned int pos = 0;
-	while (pos < GetChildCount() && m_children[pos] != obj)
+	while ( pos < GetChildCount() && m_children[ pos ] != obj )
 		pos++;
 
 	return pos;
 }
 
-bool ObjectBase::ChangeChildPosition( PObjectBase obj, unsigned int pos)
+bool ObjectBase::ChangeChildPosition( PObjectBase obj, unsigned int pos )
 {
-	unsigned int obj_pos = GetChildPosition(obj);
+	unsigned int obj_pos = GetChildPosition( obj );
 
-	if (obj_pos == GetChildCount() || pos >= GetChildCount())
+	if ( obj_pos == GetChildCount() || pos >= GetChildCount() )
 		return false;
 
-	if (pos == obj_pos)
+	if ( pos == obj_pos )
 		return true;
 
 	// Procesamos el cambio de posición
-	RemoveChild(obj);
-	AddChild(pos,obj);
+	RemoveChild( obj );
+	AddChild( pos, obj );
 	return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool ObjectBase::IsNull (const wxString& pname)
+bool ObjectBase::IsNull( const wxString& pname )
 {
 	PProperty property = GetProperty( pname );
-	if (property)
+	if ( property )
 		return property->IsNull();
 	else
 		return true;
 }
 
-int ObjectBase::GetPropertyAsInteger (const wxString& pname)
+int ObjectBase::GetPropertyAsInteger ( const wxString& pname )
 {
 	PProperty property = GetProperty( pname );
-	if (property)
+	if ( property )
 		return property->GetValueAsInteger();
 	else
 		return 0;
 }
 /*
-wxAlignment ObjectBase::GetPropertyAsAlignment (const wxString& pname)
+wxAlignment ObjectBase::GetPropertyAsAlignment( const wxString& pname )
 {
 	PProperty property = GetProperty( pname );
-	if (property)
+	if ( property )
 		return property->GetValueAsAlignment();
 	else
 		return 0;
 }
 */
-wxFontContainer ObjectBase::GetPropertyAsFont(const wxString& pname)
+wxFontContainer ObjectBase::GetPropertyAsFont( const wxString& pname )
 {
 	PProperty property = GetProperty( pname );
-	if (property)
+	if ( property )
 		return property->GetValueAsFont();
 	else
 		return wxFontContainer();
 }
 
-wxColour ObjectBase::GetPropertyAsColour  (const wxString& pname)
+wxColour ObjectBase::GetPropertyAsColour( const wxString& pname )
 {
 	PProperty property = GetProperty( pname );
-	if (property)
+	if ( property )
 		return property->GetValueAsColour();
 	else
 		return wxColour();
 }
 
-wxString ObjectBase::GetPropertyAsString  (const wxString& pname)
+wxString ObjectBase::GetPropertyAsString( const wxString& pname )
 {
 	PProperty property = GetProperty( pname );
-	if (property)
+	if ( property )
 		return property->GetValueAsString();
 	else
 		return wxString();
 }
 
-wxPoint  ObjectBase::GetPropertyAsPoint   (const wxString& pname)
+wxPoint  ObjectBase::GetPropertyAsPoint( const wxString& pname )
 {
 	PProperty property = GetProperty( pname );
-	if (property)
+	if ( property )
 		return property->GetValueAsPoint();
 	else
 		return wxPoint();
 }
 
-wxSize   ObjectBase::GetPropertyAsSize    (const wxString& pname)
+wxSize   ObjectBase::GetPropertyAsSize( const wxString& pname )
 {
 	PProperty property = GetProperty( pname );
-	if (property)
+	if ( property )
 		return property->GetValueAsSize();
 	else
 		return wxDefaultSize;
 }
 
-wxBitmap ObjectBase::GetPropertyAsBitmap  (const wxString& pname)
+wxBitmap ObjectBase::GetPropertyAsBitmap( const wxString& pname )
 {
 	PProperty property = GetProperty( pname );
-	if (property)
+	if ( property )
 		return property->GetValueAsBitmap();
 	else
 		return wxBitmap();
@@ -703,29 +698,29 @@ wxBitmap ObjectBase::GetPropertyAsBitmap  (const wxString& pname)
 double ObjectBase::GetPropertyAsFloat( const wxString& pname )
 {
 	PProperty property = GetProperty( pname );
-	if (property)
+	if ( property )
 		return property->GetValueAsFloat();
 	else
 		return 0;
 }
-wxArrayInt ObjectBase::GetPropertyAsArrayInt(const wxString& pname)
+wxArrayInt ObjectBase::GetPropertyAsArrayInt( const wxString& pname )
 {
 	wxArrayInt array;
 	PProperty property = GetProperty( pname );
-	if (property)
+	if ( property )
 	{
 		IntList il( property->GetValue(), property->GetType() == PT_UINTLIST );
-		for (unsigned int i=0; i < il.GetSize() ; i++)
-			array.Add(il.GetValue(i));
+		for ( unsigned int i=0; i < il.GetSize() ; i++ )
+			array.Add( il.GetValue( i ) );
 	}
 
 	return array;
 }
 
-wxArrayString ObjectBase::GetPropertyAsArrayString(const wxString& pname)
+wxArrayString ObjectBase::GetPropertyAsArrayString( const wxString& pname )
 {
 	PProperty property = GetProperty( pname );
-	if (property)
+	if ( property )
 		return property->GetValueAsArrayString();
 	else
 		return wxArrayString();
@@ -734,7 +729,7 @@ wxArrayString ObjectBase::GetPropertyAsArrayString(const wxString& pname)
 wxString ObjectBase::GetChildFromParentProperty( const wxString& parentName, const wxString& childName )
 {
 	PProperty property = GetProperty( parentName );
-	if (property)
+	if ( property )
 		return property->GetChildFromParent( childName );
 	else
 		return wxEmptyString;
@@ -742,7 +737,7 @@ wxString ObjectBase::GetChildFromParentProperty( const wxString& parentName, con
 
 ///////////////////////////////////////////////////////////////////////////////
 
-ObjectInfo::ObjectInfo(wxString class_name, PObjectType type, WPObjectPackage package, bool startGroup )
+ObjectInfo::ObjectInfo( wxString class_name, PObjectType type, WPObjectPackage package, bool startGroup )
 {
 	m_class = 		class_name;
 	m_type = 		type;
@@ -758,63 +753,63 @@ PObjectPackage ObjectInfo::GetPackage()
 	return m_package.lock();
 }
 
-PPropertyInfo ObjectInfo::GetPropertyInfo(wxString name)
+PPropertyInfo ObjectInfo::GetPropertyInfo( wxString name )
 {
 	PPropertyInfo result;
 
-	std::map< wxString, PPropertyInfo >::iterator it = m_properties.find(name);
-	if (it != m_properties.end())
+	std::map< wxString, PPropertyInfo >::iterator it = m_properties.find( name );
+	if ( it != m_properties.end() )
 		result = it->second;
 
 	return result;
 }
 
-PPropertyInfo ObjectInfo::GetPropertyInfo(unsigned int idx)
+PPropertyInfo ObjectInfo::GetPropertyInfo( unsigned int idx )
 {
 	PPropertyInfo result;
 
-	assert (idx < m_properties.size());
+	assert ( idx < m_properties.size() );
 
 	std::map< wxString, PPropertyInfo >::iterator it = m_properties.begin();
 	unsigned int i = 0;
-	while (i < idx && it != m_properties.end())
+	while ( i < idx && it != m_properties.end() )
 	{
 		i++;
 		it++;
 	}
 
-	if (it != m_properties.end())
+	if ( it != m_properties.end() )
 		result = it->second;
 
 	return result;
 }
 
-PEventInfo ObjectInfo::GetEventInfo(wxString name)
+PEventInfo ObjectInfo::GetEventInfo( wxString name )
 {
 	PEventInfo result;
 
-	EventInfoMap::iterator it = m_events.find(name);
-	if (it != m_events.end())
+	EventInfoMap::iterator it = m_events.find( name );
+	if ( it != m_events.end() )
 		result = it->second;
 
 	return result;
 }
 
-PEventInfo ObjectInfo::GetEventInfo(unsigned int idx)
+PEventInfo ObjectInfo::GetEventInfo( unsigned int idx )
 {
 	PEventInfo result;
 
-	assert (idx < m_events.size());
+	assert ( idx < m_events.size() );
 
 	EventInfoMap::iterator it = m_events.begin();
 	unsigned int i = 0;
-	while (i < idx && it != m_events.end())
+	while ( i < idx && it != m_events.end() )
 	{
 		i++;
 		it++;
 	}
 
-	if (it != m_events.end())
+	if ( it != m_events.end() )
 		result = it->second;
 
 	return result;
@@ -822,12 +817,12 @@ PEventInfo ObjectInfo::GetEventInfo(unsigned int idx)
 
 void ObjectInfo::AddPropertyInfo( PPropertyInfo prop )
 {
-	m_properties.insert( PropertyInfoMap::value_type(prop->GetName(), prop) );
+	m_properties.insert( PropertyInfoMap::value_type( prop->GetName(), prop ) );
 }
 
-void ObjectInfo::AddEventInfo(PEventInfo evtInfo)
+void ObjectInfo::AddEventInfo( PEventInfo evtInfo )
 {
-  m_events.insert( EventInfoMap::value_type(evtInfo->GetName(), evtInfo) );
+  m_events.insert( EventInfoMap::value_type( evtInfo->GetName(), evtInfo) );
 }
 
 void ObjectInfo::AddBaseClassDefaultPropertyValue( size_t baseIndex, const wxString& propertyName, const wxString& defaultValue )
@@ -859,32 +854,34 @@ wxString ObjectInfo::GetBaseClassDefaultPropertyValue( size_t baseIndex, const w
 	return wxString();
 }
 
-PObjectInfo ObjectInfo::GetBaseClass(unsigned int idx)
+PObjectInfo ObjectInfo::GetBaseClass( unsigned int idx )
 {
-	assert (idx < m_base.size());
-	return m_base[idx];
+	assert ( idx < m_base.size() );
+	return m_base[ idx ];
 }
 
 unsigned int ObjectInfo::GetBaseClassCount()
 {
-	return (unsigned int)m_base.size();
+	return ( unsigned int )m_base.size();
 }
 
-bool ObjectInfo::IsSubclassOf(wxString classname)
+bool ObjectInfo::IsSubclassOf( wxString classname )
 {
 	bool found = false;
 
-	if (GetClassName() == classname)
+	if ( GetClassName() == classname )
+	{
 		found = true;
+	}
 	else
-
-		for (unsigned int i=0; !found && i < GetBaseClassCount() ; i++)
+	{
+		for ( unsigned int i=0; !found && i < GetBaseClassCount() ; i++ )
 		{
-			PObjectInfo base = GetBaseClass(i);
-			found = base->IsSubclassOf(classname);
+			PObjectInfo base = GetBaseClass( i );
+			found = base->IsSubclassOf( classname );
 		}
-
-		return found;
+	}
+	return found;
 }
 
 //
@@ -904,7 +901,7 @@ bool ObjectInfo::IsSubclassOf(wxString classname)
 //  }
 //}
 
-void ObjectInfo::AddCodeInfo(wxString lang, PCodeInfo codeinfo)
+void ObjectInfo::AddCodeInfo( wxString lang, PCodeInfo codeinfo )
 {
 	std::map< wxString, PCodeInfo >::iterator templates = m_codeTemp.find( lang );
 	if ( templates == m_codeTemp.end() )
@@ -919,11 +916,11 @@ void ObjectInfo::AddCodeInfo(wxString lang, PCodeInfo codeinfo)
 	}
 }
 
-PCodeInfo ObjectInfo::GetCodeInfo(wxString lang)
+PCodeInfo ObjectInfo::GetCodeInfo( wxString lang )
 {
 	PCodeInfo result;
-	std::map< wxString, PCodeInfo >::iterator it = m_codeTemp.find(lang);
-	if (it != m_codeTemp.end())
+	std::map< wxString, PCodeInfo >::iterator it = m_codeTemp.find( lang );
+	if ( it != m_codeTemp.end() )
 		result = it->second;
 
 	return result;
@@ -936,20 +933,20 @@ PCodeInfo ObjectInfo::GetCodeInfo(wxString lang)
 //}
 
 ///////////////////////////////////////////////////////////////////////////////
-wxString CodeInfo::GetTemplate(wxString name)
+wxString CodeInfo::GetTemplate( wxString name )
 {
 	wxString result;
 
-	TemplateMap::iterator it = m_templates.find(name);
+	TemplateMap::iterator it = m_templates.find( name );
 	if (it != m_templates.end())
 		result = it->second;
 
 	return result;
 }
 
-void CodeInfo::AddTemplate(wxString name, wxString _template)
+void CodeInfo::AddTemplate( wxString name, wxString _template )
 {
-	m_templates.insert(TemplateMap::value_type(name,_template));
+	m_templates.insert( TemplateMap::value_type( name,_template ) );
 }
 
 void CodeInfo::Merge( PCodeInfo merger )
@@ -964,4 +961,3 @@ void CodeInfo::Merge( PCodeInfo merger )
 		}
 	}
 }
-

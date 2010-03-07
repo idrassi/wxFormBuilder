@@ -119,7 +119,7 @@ void XrcPanel::OnFind( wxFindDialogEvent& event )
 	}
 /* TODO: Fix this
 	wxString text = notebook->GetPageText( selection );
-	if ( wxT("XRC") == text )
+	if ( "XRC" == text )
 	{
 		m_xrcPanel->ProcessEvent( event );
 	}

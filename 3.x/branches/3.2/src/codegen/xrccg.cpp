@@ -149,7 +149,7 @@ ticpp::Element* XrcCodeGenerator::GetElement( PObjectBase obj, ticpp::Element* p
 					ticpp::Element* aux = NULL;
 
 					PObjectBase child = obj->GetChild( i );
-					if ( child->GetObjectInfo()->IsSubclassOf( wxT("sizer") ) )
+					if ( child->GetObjectInfo()->IsSubclassOf("sizer") )
 					{
 						if ( child->GetChildCount() == 1 )
 						{

@@ -753,7 +753,7 @@ public:
 			return;
 		}
 
-        // TODO : size_t depth = GetLong( wxT("depth") ); GetPropertyAsLong needed?
+        // TODO : size_t depth = GetLong( "depth" ); GetPropertyAsLong needed?
         size_t depth = obj->GetPropertyAsInteger("depth");
 
         if( depth > book->GetPageCount() )

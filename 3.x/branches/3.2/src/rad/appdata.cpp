@@ -1147,7 +1147,7 @@ void ApplicationData::MergeProject( PObjectBase project )
 	{
 		wxString value = prop->GetValue();
 		value.Trim();
-		value << wxT(" ") << project->GetPropertyAsString("bitmaps");
+		value << " " << project->GetPropertyAsString("bitmaps");
 		prop->SetValue( value );
 	}
 	prop = thisProject->GetProperty( _("icons") );
@@ -1155,7 +1155,7 @@ void ApplicationData::MergeProject( PObjectBase project )
 	{
 		wxString value = prop->GetValue();
 		value.Trim();
-		value << wxT(" ") << project->GetPropertyAsString("icons");
+		value << " " << project->GetPropertyAsString("icons");
 		prop->SetValue( value );
 	}
 	NotifyProjectRefresh();

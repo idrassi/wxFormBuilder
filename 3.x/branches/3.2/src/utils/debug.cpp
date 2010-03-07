@@ -22,30 +22,29 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 #include "debug.h"
 #include "rad/appdata.h"
-#include <stdarg.h>
 
-#include "wx/wx.h"
+#include <wx/wx.h>
+#include <stdarg.h>
 
 void Debug::Print( const wxChar* format, ... )
 {
-	#ifdef __WXFB_DEBUG__
-        wxLog* target = AppData()->GetDebugLogTarget();
-        if ( target != 0 )
-        {
-            wxLog* oldTarget = wxLog::SetActiveTarget( target );
-            va_list argptr;
-            va_start(argptr, format);
+#ifdef __WXFB_DEBUG__
+	wxLog* target = AppData()->GetDebugLogTarget();
+	if ( target != 0 )
+	{
+		wxLog* oldTarget = wxLog::SetActiveTarget( target );
+		va_list argptr;
+		va_start( argptr, format );
 
-            wxString s;
-            s.PrintfV(format, argptr);
+		wxString s;
+		s.PrintfV( format, argptr );
 
-            wxLogMessage(s);
+		wxLogMessage( s );
 
-            va_end(argptr);
-            wxLog::SetActiveTarget( oldTarget );
-        }
-	#endif //__WXFB_DEBUG__
+		va_end( argptr );
+		wxLog::SetActiveTarget( oldTarget );
+	}
+#endif //__WXFB_DEBUG__
 }

@@ -25,24 +25,26 @@
 
 #include "stringutils.h"
 #include "typeconv.h"
+
 #include <sstream>
 #include <ticpp.h>
+
 #include "wxfbexception.h"
 
-#include <wx/ffile.h>
-#include <wx/fontmap.h>
-#include <wx/choicdlg.h>
 #include <wx/arrstr.h>
+#include <wx/choicdlg.h>
+#include <wx/ffile.h>
 #include <wx/filefn.h>
+#include <wx/fontmap.h>
 
 wxString StringUtils::IntToStr(int num)
 {
-  //wxString stream;
-  //stream << num;
-  //return stream;
-  wxString result;
-  result.Printf(wxT("%d"),num);
-  return result;
+// 	wxString stream;
+// 	stream << num;
+// 	return stream;
+	wxString result;
+	result.Printf( "%d", num );
+	return result;
 }
 
 wxString StringUtils::GetSupportedEncodings( bool columnateWithTab, wxArrayString* array )
@@ -61,7 +63,7 @@ wxString StringUtils::GetSupportedEncodings( bool columnateWithTab, wxArrayStrin
 		}
 		if ( columnateWithTab )
 		{
-			name = name.Pad( (size_t)((max - length)/8 + 1), wxT('\t') );
+			name = name.Pad( ( size_t )( ( max - length ) / 8 + 1 ), '\t' );
 		}
 		else
 		{
@@ -73,9 +75,8 @@ wxString StringUtils::GetSupportedEncodings( bool columnateWithTab, wxArrayStrin
 			array->Add( name );
 		}
 		result += name;
-		result += wxT("\n");
+		result += "\n";
 	}
-
 	return result;
 }
 
@@ -90,7 +91,6 @@ wxFontEncoding StringUtils::GetEncodingFromUser( const wxString& message )
 	}
 	return wxFontMapper::GetEncoding( selection );
 }
-
 
 namespace XMLUtils
 {
@@ -130,13 +130,13 @@ namespace XMLUtils
 		wxString version = _WXSTR( declaration->Version() );
 		if ( version.empty() )
 		{
-			version = wxT("1.0");
+			version = "1.0";
 		}
 
 		wxString standalone = _WXSTR( declaration->Standalone() );
 		if ( standalone.empty() )
 		{
-			standalone = wxT("yes");
+			standalone = "yes";
 		}
 
 		wxString encodingName = _WXSTR( declaration->Encoding() );
@@ -317,7 +317,7 @@ void XMLUtils::LoadXMLFile( TiXmlDocument& doc, bool condenseWhiteSpace, const w
 
 void XMLUtils::ConvertAndAddDeclaration( const wxString& path, wxFontEncoding encoding, bool backup )
 {
-	ConvertAndChangeDeclaration( path, wxT("1.0"), wxT("yes"), encoding, backup );
+	ConvertAndChangeDeclaration( path, "1.0", "yes", encoding, backup );
 }
 
 void XMLUtils::ConvertAndChangeDeclaration( const wxString& path, const wxString& version, const wxString& standalone, wxFontEncoding encoding, bool backup )
@@ -325,7 +325,7 @@ void XMLUtils::ConvertAndChangeDeclaration( const wxString& path, const wxString
 	// Backup the file
 	if ( backup )
 	{
-		if ( !::wxCopyFile( path, path + wxT(".bak") ) )
+		if ( !::wxCopyFile( path, path + ".bak" ) )
 		{
 			wxString msg = wxString::Format( _("Unable to backup file.\nFile: %s\nBackup: %s.bak"), path.c_str(), path.c_str() );
 			THROW_WXFBEX( msg )
@@ -333,7 +333,7 @@ void XMLUtils::ConvertAndChangeDeclaration( const wxString& path, const wxString
 	}
 
 	// Read the entire contents into a string
-	wxFFile oldEncoding( path.c_str(), wxT("r") );
+	wxFFile oldEncoding( path.c_str(), "r" );
 	wxString contents;
 	wxCSConv encodingConv( encoding );
 	if ( !oldEncoding.ReadAll( &contents, encodingConv ) )
@@ -355,16 +355,16 @@ void XMLUtils::ConvertAndChangeDeclaration( const wxString& path, const wxString
 	}
 
 	// Modify the declaration, so TinyXML correctly determines the new encoding
-	int declStart = contents.Find( wxT("<\?") );
-	int declEnd = contents.Find( wxT("\?>") );
+	int declStart = contents.Find("<\?");
+	int declEnd = contents.Find("\?>");
 	if ( wxNOT_FOUND == declStart && wxNOT_FOUND == declEnd )
 	{
-		int firstElement = contents.Find( wxT("<") );
+		int firstElement = contents.Find("<");
 		if ( wxNOT_FOUND == firstElement )
 		{
 			firstElement = 0;
 		}
-		contents.insert( firstElement, wxString::Format( wxT("<\?xml version=\"%s\" encoding=\"UTF-8\" standalone=\"%s\" \?>\n"), version.c_str(), standalone.c_str() ) );
+		contents.insert( firstElement, wxString::Format( wxString("<\?xml version=\"%s\" encoding=\"UTF-8\" standalone=\"%s\" \?>\n"), version.c_str(), standalone.c_str() ) );
 	}
 	else
 	{
@@ -381,7 +381,7 @@ void XMLUtils::ConvertAndChangeDeclaration( const wxString& path, const wxString
 		}
 
 		// declStart and declEnd are both valid, replace that section with a new declaration
-//		contents.replace( declStart, declEnd - declStart + 2, wxString::Format( wxT("<\?xml version=\"%s\" encoding=\"UTF-8\" standalone=\"%s\" \?>"), version.c_str(), standalone.c_str() ).c_str() ); TODO: Fix This
+		contents.replace( declStart, declEnd - declStart + 2, wxString::Format( wxString("<\?xml version=\"%s\" encoding=\"UTF-8\" standalone=\"%s\" \?>"), version.c_str(), standalone.c_str() ) );
 	}
 
 	// Remove the old file
@@ -392,7 +392,7 @@ void XMLUtils::ConvertAndChangeDeclaration( const wxString& path, const wxString
 	}
 
 	// Write the new file
-	wxFFile newEncoding( path.c_str(), wxT("w") );
+	wxFFile newEncoding( path.c_str(), "w" );
 	if ( !newEncoding.Write( contents, wxConvUTF8 ) )
 	{
 		wxString msg = wxString::Format( _("Unable to write file in its new encoding.\nFile: %s\nEncoding: %s"), path.c_str(), wxFontMapper::GetEncodingDescription( wxFONTENCODING_UTF8 ).c_str() );

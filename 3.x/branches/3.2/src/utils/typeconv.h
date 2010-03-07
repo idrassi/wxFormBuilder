@@ -22,59 +22,60 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 #ifndef __TYPE_UTILS__
 #define __TYPE_UTILS__
 
-#include "wx/wx.h"
+#include <wx/wx.h>
 #include <wx/string.h>
+
 #include <vector>
 #include <map>
-#include "model/types.h"
-#include "fontcontainer.h"
 
-// macros para la conversión entre wxString <-> wxString
+#include "fontcontainer.h"
+#include "model/types.h"
+
+// Macros for converting between wxString <-> wxString
 #define _WXSTR(x)  TypeConv::_StringToWxString(x)
 #define _STDSTR(x) TypeConv::_WxStringToString(x)
 #define _ANSISTR(x) TypeConv::_WxStringToAnsiString(x)
 
 namespace TypeConv
 {
-	wxString _StringToWxString( const std::string &str );
-	wxString _StringToWxString( const char *str );
-	std::string _WxStringToString( const wxString &str );
-	std::string _WxStringToAnsiString( const wxString & str );
+	wxString _StringToWxString( const std::string& str );
+	wxString _StringToWxString( const char* str );
+	std::string _WxStringToString( const wxString& str );
+	std::string _WxStringToAnsiString( const wxString& str );
 
-	wxPoint StringToPoint( const wxString &str );
-	bool    StringToPoint( const wxString &str, wxPoint *point );
-	wxSize  StringToSize( const wxString &str );
+	wxPoint StringToPoint( const wxString& str );
+	bool    StringToPoint( const wxString& str, wxPoint* point );
+	wxSize  StringToSize( const wxString& str );
 
-	wxString PointToString( const wxPoint &point );
-	wxString SizeToString( const wxSize &size );
+	wxString PointToString( const wxPoint& point );
+	wxString SizeToString( const wxSize& size );
 
-	int     BitlistToInt( const wxString &str );
-	int     GetMacroValue( const wxString &str );
-	int     StringToInt( const wxString &str );
+	int     BitlistToInt( const wxString& str );
+	int     GetMacroValue( const wxString& str );
+	int     StringToInt( const wxString& str );
 
-	bool     FlagSet( const wxString &flag, const wxString &currentValue );
-	wxString ClearFlag( const wxString &flag, const wxString &currentValue );
-	wxString SetFlag( const wxString &flag, const wxString &currentValue );
+	bool     FlagSet( const wxString& flag, const wxString& currentValue );
+	wxString ClearFlag( const wxString& flag, const wxString& currentValue );
+	wxString SetFlag( const wxString& flag, const wxString& currentValue );
 
 	wxBitmap StringToBitmap( const wxString& filename );
 
-	wxFontContainer StringToFont( const wxString &str );
-	wxString FontToString( const wxFontContainer &font );
+	wxFontContainer StringToFont( const wxString& str );
+	wxString FontToString( const wxFontContainer& font );
 
-	wxColour StringToColour( const wxString &str );
+	wxColour StringToColour( const wxString& str );
 	wxSystemColour StringToSystemColour( const wxString& str );
-	wxString ColourToString( const wxColour &colour );
+	wxString ColourToString( const wxColour& colour );
 	wxString SystemColourToString( long colour );
 
-	bool StringToBool( const wxString &str );
+	bool StringToBool( const wxString& str );
 	wxString BoolToString( bool val );
 
-	wxArrayString StringToArrayString( const wxString &str );
-	wxString ArrayStringToString( const wxArrayString &arrayStr );
+	wxArrayString StringToArrayString( const wxString& str );
+	wxString ArrayStringToString( const wxArrayString& arrayStr );
 
 	void ParseBitmapWithResource( const wxString& value, wxString* image, wxString* source, wxSize* icoSize );
 
@@ -84,7 +85,7 @@ namespace TypeConv
 	*/
 	wxArrayString OldStringToArrayString( const wxString& str );
 
-	wxString ReplaceSynonymous( const wxString &bitlist );
+	wxString ReplaceSynonymous( const wxString& bitlist );
 
     void SplitFileSystemURL( const wxString& url, wxString* protocol, wxString* path, wxString* anchor );
 
@@ -98,13 +99,12 @@ namespace TypeConv
 
 	// dada una cadena de caracteres obtiene otra transformando los caracteres
 	// especiales denotados al estilo C ('\n' '\\' '\t')
-	wxString StringToText( const wxString &str );
-	wxString TextToString( const wxString &str );
+	wxString StringToText( const wxString& str );
+	wxString TextToString( const wxString& str );
 
 	double StringToFloat( const wxString& str );
 	wxString FloatToString( const double& val );
 };
-
 
 // No me gusta nada tener que usar variables globales o singletons
 // pero hasta no dar con otro diseño más elegante seguiremos con este...
@@ -115,10 +115,10 @@ typedef MacroDictionary* PMacroDictionary;
 class MacroDictionary
 {
 private:
-	typedef std::map<wxString, int> MacroMap;
+	typedef std::map< wxString, int > MacroMap;
 	static PMacroDictionary s_instance;
 
-	typedef std::map<wxString, wxString> SynMap;
+	typedef std::map< wxString, wxString > SynMap;
 
 	MacroMap m_map;
 	SynMap m_synMap;
@@ -128,11 +128,10 @@ private:
 public:
 	static PMacroDictionary GetInstance();
 	static void Destroy();
-	bool SearchMacro( wxString name, int *result );
+	bool SearchMacro( wxString name, int* result );
 	void AddMacro( wxString name, int value );
 	void AddSynonymous( wxString synName, wxString name );
 	bool SearchSynonymous( wxString synName, wxString& result );
 };
 
 #endif //__TYPE_UTILS__
-
