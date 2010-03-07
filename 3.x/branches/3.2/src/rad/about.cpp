@@ -81,7 +81,7 @@ AboutDialog::AboutDialog( wxWindow *parent, int id )
 	sizer2->Add( m_staticText2, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 5 );
 	m_staticText3 = new wxStaticText( this, ID_DEFAULT, _("a RAD tool for wxWidgets framework"), wxDefaultPosition, wxDefaultSize, 0 );
 	sizer2->Add(m_staticText3, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5);
-	m_staticText6 = new wxStaticText( this, ID_DEFAULT, _("(C) 2005 Jose' Antonio Hurtado"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6 = new wxStaticText( this, ID_DEFAULT, "(C) 2005 Jose' Antonio Hurtado", wxDefaultPosition, wxDefaultSize, 0 );
 	sizer2->Add( m_staticText6, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 5 );
 	window1 = new wxStaticLine( this, ID_DEFAULT, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	sizer2->Add( window1, 0, wxALL | wxEXPAND, 5 );
@@ -90,9 +90,9 @@ AboutDialog::AboutDialog( wxWindow *parent, int id )
 	sizer3 = new wxBoxSizer( wxVERTICAL );
 	m_staticText8 = new wxStaticText( m_panel1, ID_DEFAULT, _("Developed by:"), wxDefaultPosition, wxDefaultSize, 0 );
 	sizer3->Add( m_staticText8, 0, wxALL, 5 );
-	m_staticText9 = new wxStaticText( m_panel1, ID_DEFAULT, _("- Jose' Antonio Hurtado"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText9 = new wxStaticText( m_panel1, ID_DEFAULT, "- Jose' Antonio Hurtado", wxDefaultPosition, wxDefaultSize, 0 );
 	sizer3->Add( m_staticText9, 0, wxALL, 5 );
-	m_staticText10 = new wxStaticText( m_panel1, ID_DEFAULT, _("- Juan Antonio Ortega"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText10 = new wxStaticText( m_panel1, ID_DEFAULT, "- Juan Antonio Ortega", wxDefaultPosition, wxDefaultSize, 0 );
 	sizer3->Add( m_staticText10, 0, wxALL, 5 );
 	m_panel1->SetSizer( sizer3 );
 	m_panel1->SetAutoLayout( true );

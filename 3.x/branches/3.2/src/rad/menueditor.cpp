@@ -141,10 +141,10 @@ MenuEditor::MenuEditor( wxWindow *parent, int id )
 	wxButton *m_bDown = new wxButton( this, ID_MENUDOWN, _("&Down"), wxDefaultPosition, wxDefaultSize, 0 );
 	sizerMoveButtons->Add( m_bDown, 0, wxALL, 5 );
 
-	wxButton *m_bLeft = new wxButton( this, ID_MENULEFT, _("<"), wxDefaultPosition, wxDefaultSize, 0 );
+	wxButton *m_bLeft = new wxButton( this, ID_MENULEFT, "<", wxDefaultPosition, wxDefaultSize, 0 );
 	sizerMoveButtons->Add( m_bLeft, 0, wxALL, 5 );
 
-	wxButton *m_bRight = new wxButton( this, ID_MENURIGHT, _(">"), wxDefaultPosition, wxDefaultSize, 0 );
+	wxButton *m_bRight = new wxButton( this, ID_MENURIGHT, ">", wxDefaultPosition, wxDefaultSize, 0 );
 	sizerMoveButtons->Add( m_bRight, 0, wxALL, 5 );
 
 	wxStdDialogButtonSizer* sizerOkCancel = new wxStdDialogButtonSizer();
