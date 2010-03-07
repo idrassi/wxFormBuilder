@@ -1150,7 +1150,7 @@ void ApplicationData::MergeProject( PObjectBase project )
 		value << " " << project->GetPropertyAsString("bitmaps");
 		prop->SetValue( value );
 	}
-	prop = thisProject->GetProperty( _("icons") );
+	prop = thisProject->GetProperty("icons");
 	if ( prop )
 	{
 		wxString value = prop->GetValue();
@@ -1978,7 +1978,7 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
             return;
         }
 
-		baseNameProp->SetValue( form->GetPropertyAsString( _("name") ) );
+		baseNameProp->SetValue( form->GetPropertyAsString("name") );
 		nameProp->SetValue( className );
 		fileProp->SetValue( inherFile.GetName() );
 		genfileProp->SetValue( genFile.GetFullPath() );
