@@ -35,10 +35,10 @@ class wxArrayString;
 
 namespace StringUtils
 {
-  wxString IntToStr(int num);
+	wxString IntToStr(int num);
 
-  wxString GetSupportedEncodings( bool columnateWithTab = true, wxArrayString* array = NULL );
-  wxFontEncoding GetEncodingFromUser( const wxString& message );
+	wxString GetSupportedEncodings( bool columnateWithTab = true, wxArrayString* array = NULL );
+	wxFontEncoding GetEncodingFromUser( const wxString& message );
 };
 
 namespace XMLUtils

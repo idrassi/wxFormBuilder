@@ -21,18 +21,19 @@
 //   Ryan Mulder - rjmyst3@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+	#pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+	#include <wx/wx.h>
 #endif
 
-#include "wxfbipc.h"
 #include <wx/filename.h>
+
+#include "wxfbipc.h"
 #include "utils/debug.h"
 
 bool wxFBIPC::VerifySingleInstance( const wxString& file, bool switchTo )
@@ -44,7 +45,7 @@ bool wxFBIPC::VerifySingleInstance( const wxString& file, bool switchTo )
 	wxFileName path( file );
 	if ( !path.IsOk() )
 	{
-		wxLogError( wxT("This path is invalid: %s"), file.c_str() );
+		wxLogError( _("This path is invalid: %s"), file.c_str() );
 		return false;
 	}
 
@@ -52,7 +53,7 @@ bool wxFBIPC::VerifySingleInstance( const wxString& file, bool switchTo )
 	{
 		if ( !path.MakeAbsolute() )
 		{
-			wxLogError( wxT("Could not make path absolute: %s"), file.c_str() );
+			wxLogError( _("Could not make path absolute: %s"), file.c_str() );
 			return false;
 		}
 	}
@@ -60,7 +61,7 @@ bool wxFBIPC::VerifySingleInstance( const wxString& file, bool switchTo )
 	// Check for single instance
 
 	// Create lockfile/mutex name
-	wxString name = wxString::Format( wxT("wxFormBuilder-%s-%s"), wxGetUserId().c_str(), path.GetFullPath().c_str() );
+	wxString name = wxString::Format( "wxFormBuilder-%s-%s", wxGetUserId().c_str(), path.GetFullPath().c_str() );
 
 	// Get forbidden characters
 	wxString forbidden = wxFileName::GetForbiddenChars();
@@ -69,19 +70,19 @@ bool wxFBIPC::VerifySingleInstance( const wxString& file, bool switchTo )
 	for ( size_t c = 0; c < forbidden.Length(); ++c )
 	{
 		wxString bad( forbidden.GetChar( c ) );
-		name.Replace( bad.c_str(), wxT("_") );
+		name.Replace( bad.c_str(), "_" );
 	}
 
 	// Paths are not case sensitive in windows
-	#ifdef __WXMSW__
+#ifdef __WXMSW__
 	name = name.MakeLower();
-	#endif
+#endif
 
 	// GetForbiddenChars is missing "/" in unix. Prepend '.' to make lockfiles hidden
-	#ifndef __WXMSW__
-	name.Replace( wxT("/"), wxT("_") );
-	name.Prepend( wxT(".") );
-	#endif
+#ifndef __WXMSW__
+	name.Replace( "/", "_" );
+	name.Prepend(".");
+#endif
 
 	// Check to see if I already have a server with this name - if so, no need to make another!
 	if ( m_server.get() )
@@ -95,9 +96,9 @@ bool wxFBIPC::VerifySingleInstance( const wxString& file, bool switchTo )
     std::auto_ptr< wxSingleInstanceChecker > checker;
     {
         // Suspend logging, because error messages here are not useful
-        #ifndef __WXFB_DEBUG__
+#ifndef __WXFB_DEBUG__
         wxLogNull stopLogging;
-        #endif
+#endif
         checker.reset( new wxSingleInstanceChecker( name ) );
     }
 
@@ -117,9 +118,9 @@ bool wxFBIPC::VerifySingleInstance( const wxString& file, bool switchTo )
 	else if ( switchTo )
     {
 		// Suspend logging, because error messages here are not useful
-		#ifndef __WXFB_DEBUG__
+#ifndef __WXFB_DEBUG__
 		wxLogNull stopLogging;
-		#endif
+#endif
 
 		// There is another app, so connect and send the expression
 
@@ -139,30 +140,30 @@ bool wxFBIPC::VerifySingleInstance( const wxString& file, bool switchTo )
 
 		// Create the connection
 		std::auto_ptr< wxConnectionBase > connection;
-		#ifdef __WXMSW__
-			connection.reset( client->MakeConnection( wxT("localhost"), name, name ) );
-		#else
+#ifdef __WXMSW__
+			connection.reset( client->MakeConnection( "localhost", name, name ) );
+#else
 			bool connected = false;
 			for ( int i = m_port; i < m_port + 20; ++i )
 			{
-				wxString nameWithPort = wxString::Format( wxT("%i%s"), i, name.c_str() );
-				connection.reset( client->MakeConnection( wxT("127.0.0.1"), nameWithPort, name ) );
+				wxString nameWithPort = wxString::Format( "%i%s", i, name.c_str() );
+				connection.reset( client->MakeConnection( "127.0.0.1", nameWithPort, name ) );
 				if ( NULL != connection.get() )
 				{
 					connected = true;
-					wxChar* pid = (wxChar*)connection->Request( wxT("PID"), NULL ); // TODO: fix this
+					wxChar* pid = ( wxChar* )connection->Request( "PID", NULL );
 					if ( NULL != pid )
 					{
-						wxLogStatus( wxT("%s already open in process %s"), file.c_str(), pid );
+						wxLogStatus( _("%s already open in process %s"), file.c_str(), pid );
 					}
 					break;
 				}
 			}
 			if ( !connected )
 			{
-				wxLogError( wxT("There is a lockfile named '%s', but unable to make a connection to that instance."), name.c_str() );
+				wxLogError( _("There is a lockfile named '%s', but unable to make a connection to that instance."), name.c_str() );
 			}
-		#endif
+#endif
 
 		// Drop the connection and client
 		connection.reset();
@@ -180,23 +181,23 @@ bool wxFBIPC::VerifySingleInstance( const wxString& file, bool switchTo )
 bool wxFBIPC::CreateServer( const wxString& name )
 {
 	// Suspend logging, because error messages here are not useful
-	#ifndef __WXFB_DEBUG__
+#ifndef __WXFB_DEBUG__
 	wxLogNull stopLogging;
-	#endif
+#endif
 
 	std::auto_ptr< AppServer > server( new AppServer( name ) );
 
-	#ifdef __WXMSW__
+#ifdef __WXMSW__
 		if ( server->Create( name ) )
 		{
 			m_server = server;
 			return true;
 		}
-	#else
+#else
 	{
 		for ( int i = m_port; i < m_port + 20; ++i )
 		{
-			wxString nameWithPort = wxString::Format( wxT("%i%s"), i, name.c_str() );
+			wxString nameWithPort = wxString::Format( "%i%s", i, name.c_str() );
 			if( server->Create( nameWithPort ) )
 			{
 				m_server = server;
@@ -204,13 +205,13 @@ bool wxFBIPC::CreateServer( const wxString& name )
 			}
 			else
 			{
-//				Debug::Print( wxT("Server Creation Failed. %s"), nameWithPort.c_str() ); TODO: Fix This
+				Debug::Print( wxString::Format( _("Server Creation Failed. %s"), nameWithPort.c_str() ) );
 			}
 		}
 	}
-	#endif
+#endif
 
-	wxLogError( wxT("Failed to create an IPC service with name %s"), name.c_str() );
+	wxLogError( _("Failed to create an IPC service with name %s"), name.c_str() );
 	return false;
 }
 
@@ -235,12 +236,9 @@ wxConnectionBase* AppServer::OnAcceptConnection( const wxString& topic )
 		{
 			frame->Iconize( false );
 		}
-
 		frame->Raise();
-
 		return new AppConnection;
 	}
-
 	return NULL;
 }
 
@@ -262,12 +260,12 @@ wxChar* AppConnection::OnRequest( const wxString& /*topic*/, const wxString& /*i
 	}
 	else
 	{
-		int length = m_data.Printf( wxT("%lu"), pid );
+		int length = m_data.Printf( "%lu", pid );
 		if ( NULL != size )
 		{
 			*size = (length + 1) * sizeof(wxChar);
 		}
-		//TODO: Check this change
+		// return const_cast< wxChar* >( m_data.c_str() ); TODO: Check this change
 		return m_data.wchar_str();
 	}
 }

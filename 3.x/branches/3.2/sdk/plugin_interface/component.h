@@ -22,10 +22,8 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 #ifndef __COMPONENT_H__
 #define __COMPONENT_H__
-
 
 #include <wx/wx.h>
 #include <wx/dynarray.h>
@@ -65,18 +63,18 @@ enum
 class IObject
 {
 public:
-	virtual bool 			IsNull 					(const wxString& pname) = 0;
-	virtual int 			GetPropertyAsInteger 	(const wxString& pname) = 0;
-//	virtual wxAlignment 	GetPropertyAsAlignment 	(const wxString& pname) = 0; TODO
-	virtual wxFontContainer GetPropertyAsFont    	(const wxString& pname) = 0;
-	virtual wxColour 		GetPropertyAsColour  	(const wxString& pname) = 0;
-	virtual wxString 		GetPropertyAsString  	(const wxString& pname) = 0;
-	virtual wxPoint  		GetPropertyAsPoint   	(const wxString& pname) = 0;
-	virtual wxSize   		GetPropertyAsSize    	(const wxString& pname) = 0;
-	virtual wxBitmap 		GetPropertyAsBitmap  	(const wxString& pname) = 0;
-	virtual wxArrayInt 		GetPropertyAsArrayInt	(const wxString& pname) = 0;
-	virtual wxArrayString 	GetPropertyAsArrayString(const wxString& pname) = 0;
-	virtual double 			GetPropertyAsFloat		(const wxString& pname) = 0;
+	virtual bool 			IsNull 					( const wxString& pname ) = 0;
+	virtual int 			GetPropertyAsInteger 	( const wxString& pname ) = 0;
+//	virtual wxAlignment 	GetPropertyAsAlignment 	( const wxString& pname ) = 0; TODO
+	virtual wxFontContainer GetPropertyAsFont    	( const wxString& pname ) = 0;
+	virtual wxColour 		GetPropertyAsColour  	( const wxString& pname ) = 0;
+	virtual wxString 		GetPropertyAsString  	( const wxString& pname ) = 0;
+	virtual wxPoint  		GetPropertyAsPoint   	( const wxString& pname ) = 0;
+	virtual wxSize   		GetPropertyAsSize    	( const wxString& pname ) = 0;
+	virtual wxBitmap 		GetPropertyAsBitmap  	( const wxString& pname ) = 0;
+	virtual wxArrayInt 		GetPropertyAsArrayInt	( const wxString& pname ) = 0;
+	virtual wxArrayString 	GetPropertyAsArrayString( const wxString& pname ) = 0;
+	virtual double 			GetPropertyAsFloat		( const wxString& pname ) = 0;
 	virtual wxString 		GetChildFromParentProperty( const wxString& parentName, const wxString& childName ) = 0;
 	virtual wxString 		GetClassName() = 0;
 	virtual ~IObject(){}
@@ -89,18 +87,18 @@ class IComponentLibrary
  public:
 
   // Used by the plugin for registering components and macros
-  virtual void RegisterComponent(const wxString &text, IComponent *c) = 0;
-  virtual void RegisterMacro(const wxString &text, const int value) = 0;
-  virtual void RegisterMacroSynonymous(const wxString &text, const wxString &name) = 0;
+  virtual void RegisterComponent( const wxString& text, IComponent *c ) = 0;
+  virtual void RegisterMacro( const wxString& text, const int value ) = 0;
+  virtual void RegisterMacroSynonymous( const wxString& text, const wxString& name ) = 0;
 
   // Used by wxFormBuilder for recovering components and macros
-  virtual IComponent* GetComponent(unsigned int idx) = 0;
-  virtual wxString    GetComponentName(unsigned int idx) = 0;
-  virtual wxString    GetMacroName(unsigned int i) = 0;
-  virtual int         GetMacroValue(unsigned int i) = 0;
-  //virtual wxString    GetMacroSynonymous(unsigned int i) = 0;
-  //virtual wxString    GetSynonymousName(unsigned int i) = 0;
-  virtual bool FindSynonymous(const wxString& syn, wxString& trans) = 0;
+  virtual IComponent* GetComponent( unsigned int idx ) = 0;
+  virtual wxString    GetComponentName( unsigned int idx ) = 0;
+  virtual wxString    GetMacroName( unsigned int i ) = 0;
+  virtual int         GetMacroValue( unsigned int i ) = 0;
+  //virtual wxString    GetMacroSynonymous( unsigned int i ) = 0;
+  //virtual wxString    GetSynonymousName( unsigned int i ) = 0;
+  virtual bool FindSynonymous( const wxString& syn, wxString& trans ) = 0;
 
   virtual unsigned int GetMacroCount() = 0;
   virtual unsigned int GetComponentCount() = 0;
@@ -241,17 +239,17 @@ extern "C" WXEXPORT IComponentLibrary* GetComponentLibrary( IManager* manager ) 
 	}
 
 #define MACRO( name ) \
-  lib->RegisterMacro( wxT(#name), name );
+  lib->RegisterMacro( #name, name );
 
 #define SYNONYMOUS( syn, name ) \
-  lib->RegisterMacroSynonymous( wxT(#syn), wxT(#name) );
+  lib->RegisterMacroSynonymous( #syn, #name );
 
-#define _REGISTER_COMPONENT( name, class, type )\
-  {                                     		\
-    ComponentBase* c = new class();     		\
-    c->__SetComponentType( type );        		\
-    c->__SetManager( manager );					\
-    lib->RegisterComponent( wxT(name), c ); 	\
+#define _REGISTER_COMPONENT( name, class, type ) 	\
+  {                                     			\
+    ComponentBase* c = new class(); 				\
+    c->__SetComponentType( type );        			\
+    c->__SetManager( manager );						\
+    lib->RegisterComponent( name, c ); 				\
   }
 
 #define WINDOW_COMPONENT( name, class ) \

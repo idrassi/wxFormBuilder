@@ -41,17 +41,17 @@ class wxFBEvent;
 class wxFBManager;
 class wxFBIPC;
 
-#define AppData() 				(ApplicationData::Get())
-#define AppDataCreate( path ) 	(ApplicationData::Get(path))
-#define AppDataInit() 			(ApplicationData::Initialize())
-#define AppDataDestroy() 		(ApplicationData::Destroy())
+#define AppData() 				( ApplicationData::Get() )
+#define AppDataCreate( path ) 	( ApplicationData::Get( path ) )
+#define AppDataInit() 			( ApplicationData::Initialize() )
+#define AppDataDestroy() 		( ApplicationData::Destroy() )
 
 // This class is a singleton class.
 
 class ApplicationData
 {
 private:
-	static ApplicationData *s_instance;
+	static ApplicationData* s_instance;
 
 	wxString 		m_rootDir; 		// directorio raíz (mismo que el ejecutable)
 	bool 			m_modFlag; 		// flag de proyecto modificado
@@ -108,7 +108,7 @@ private:
 	/**
 	 * Rutina auxiliar de ResolveNameConflict
 	 */
-	void BuildNameSet( PObjectBase obj, PObjectBase top, std::set<wxString> &name_set );
+	void BuildNameSet( PObjectBase obj, PObjectBase top, std::set< wxString >& name_set );
 
 	/**
 	 * Calcula la posición donde deberá ser insertado el objeto.
@@ -177,7 +177,7 @@ private:
 	void PropagateExpansion(PObjectBase obj, bool expand, bool up);
 
 	// hiden constructor
-	ApplicationData( const wxString &rootdir = wxT( "." ) );
+	ApplicationData( const wxString& rootdir = "." );
 
 #ifdef __WXFB_DEBUG__
 	wxLog* m_debugLogTarget;
@@ -190,7 +190,7 @@ public:
 	wxLog* GetDebugLogTarget(){ return m_debugLogTarget; }
 #endif
 
-	static ApplicationData* Get( const wxString &rootdir = wxT( "." ) );
+	static ApplicationData* Get( const wxString& rootdir = "." );
 
 	// Force the static AppData instance to Init()
 	static void Initialize();
@@ -207,8 +207,8 @@ public:
 	void RemoveHandler( wxEvtHandler* handler );
 
 	// Operaciones sobre los datos
-	bool LoadProject( const wxString &file, bool checkSingleInstance = true );
-	void SaveProject( const wxString &filename );
+	bool LoadProject( const wxString& file, bool checkSingleInstance = true );
+	void SaveProject( const wxString& filename );
 	void NewProject();
 
 	/**
@@ -264,7 +264,7 @@ public:
 
 	bool CanUndo() { return m_cmdProc.CanUndo(); }
 	bool CanRedo() { return m_cmdProc.CanRedo(); }
-	bool GetLayoutSettings( PObjectBase obj, int *flag, int *option, int *border, int* orient );
+	bool GetLayoutSettings( PObjectBase obj, int* flag, int* option, int* border, int* orient );
 	bool CanPasteObject();
 	bool CanPasteObjectFromClipboard();
 	bool CanCopyObject();
@@ -287,17 +287,17 @@ public:
 	const int 	m_fbpVerMinor;
 
 	/** Path to the fbp file that is opened. */
-	const wxString &GetProjectPath() { return m_projectPath; };
+	const wxString& GetProjectPath() { return m_projectPath; };
 
 	/**
 	Path where the files will be generated. */
 	wxString GetOutputPath();
 
-	void SetProjectPath( const wxString &path ) { m_projectPath = path; };
+	void SetProjectPath( const wxString& path ) { m_projectPath = path; };
 
-	const wxString &GetApplicationPath() { return m_rootDir; };
+	const wxString& GetApplicationPath() { return m_rootDir; };
 
-	void SetApplicationPath( const wxString &path ) { m_rootDir = path; };
+	void SetApplicationPath( const wxString& path ) { m_rootDir = path; };
 
 	// Allow a single instance check from outsid the AppData class
 	bool VerifySingleInstance( const wxString& file, bool switchTo = true );

@@ -209,10 +209,10 @@ void PythonPanel::OnCodeGeneration( wxFBEvent& event )
 
 	// If Python generation is not enabled, do not generate the file
 	bool doFile = false;
-	PProperty pCodeGen = project->GetProperty( "code_generation");
+	PProperty pCodeGen = project->GetProperty("code_generation");
 	if ( pCodeGen )
 	{
-		//doFile = TypeConv::FlagSet( wxT("C++"), pCodeGen->GetValue() ) && !panelOnly;
+		//doFile = TypeConv::FlagSet( "C++", pCodeGen->GetValue() ) && !panelOnly;
 		doFile = TypeConv::FlagSet( "Python", pCodeGen->GetValue() ) && !panelOnly;
 	}
 

@@ -25,8 +25,8 @@
 #define WXFBIPC_H
 
 #include <wx/ipc.h>
-#include <memory>
 #include <wx/snglinst.h>
+#include <memory>
 
 /* Only allow one instance of a project to be loaded at a time */
 
@@ -34,22 +34,21 @@ class AppServer;
 
 class wxFBIPC
 {
-	private:
-		std::auto_ptr< wxSingleInstanceChecker > m_checker;
-		std::auto_ptr< AppServer > m_server;
-		const int m_port;
+private:
+	std::auto_ptr< wxSingleInstanceChecker > m_checker;
+	std::auto_ptr< AppServer > m_server;
+	const int m_port;
 
-		bool CreateServer( const wxString& name );
+	bool CreateServer( const wxString& name );
 
-	public:
-		wxFBIPC()
-		:
-		m_port( 4242 )
-		{
-		}
-
-		bool VerifySingleInstance( const wxString& file, bool switchTo = true );
-		void Reset();
+public:
+	wxFBIPC()
+	:
+	m_port( 4242 )
+	{
+	}
+	bool VerifySingleInstance( const wxString& file, bool switchTo = true );
+	void Reset();
 };
 
 // Connection class, for use by both communicationg instances

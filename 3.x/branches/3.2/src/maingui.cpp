@@ -385,10 +385,9 @@ void MyApp::MacOpenFile(const wxString &fileName)
 					wxString type, name, value;
 					if ( frame.GetParam( i, &type, &name, &value) )
 					{
-						params << type << " " << name << wxT(" = ") << value << ", ";
+						params << type << " " << name << " = " << value << ", ";
 					}
 				}
-
 				params << ")";
 			}
 

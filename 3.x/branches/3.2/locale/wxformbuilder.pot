@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxFormBuilder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-07 00:34+0100\n"
+"POT-Creation-Date: 2010-03-07 09:01+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Andrea Zanellato <xvirc.client@gmail.com>\n"
 "Language-Team: \n"
@@ -356,11 +356,41 @@ msgstr ""
 msgid "Unable to load project: %s"
 msgstr ""
 
-#: wxformbuilder32/src/maingui.cpp:465
+#: wxformbuilder32/src/maingui.cpp:464
 msgid "A Fatal Error Occurred. Click Details for a backtrace."
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:86
+#: wxformbuilder32/src/utils/wxfbipc.cpp:48
+#, c-format
+msgid "This path is invalid: %s"
+msgstr ""
+
+#: wxformbuilder32/src/utils/wxfbipc.cpp:56
+#, c-format
+msgid "Could not make path absolute: %s"
+msgstr ""
+
+#: wxformbuilder32/src/utils/wxfbipc.cpp:157
+#, c-format
+msgid "%s already open in process %s"
+msgstr ""
+
+#: wxformbuilder32/src/utils/wxfbipc.cpp:164
+#, c-format
+msgid "There is a lockfile named '%s', but unable to make a connection to that instance."
+msgstr ""
+
+#: wxformbuilder32/src/utils/wxfbipc.cpp:208
+#, c-format
+msgid "Server Creation Failed. %s"
+msgstr ""
+
+#: wxformbuilder32/src/utils/wxfbipc.cpp:214
+#, c-format
+msgid "Failed to create an IPC service with name %s"
+msgstr ""
+
+#: wxformbuilder32/src/utils/stringutils.cpp:87
 msgid "Choose an Encoding"
 msgstr ""
 
@@ -564,6 +594,18 @@ msgid ""
 "New Encoding: %s"
 msgstr ""
 
+#: wxformbuilder32/src/utils/typeconv.cpp:400
+msgid "Load From File"
+msgstr ""
+
+#: wxformbuilder32/src/utils/typeconv.cpp:800
+msgid "Before: "
+msgstr ""
+
+#: wxformbuilder32/src/utils/typeconv.cpp:820
+msgid "After: "
+msgstr ""
+
 #: wxformbuilder32/src/utils/annoyingdialog.cpp:70
 #: wxformbuilder32/src/utils/annoyingdialog.cpp:77
 msgid "&OK"
@@ -584,8 +626,19 @@ msgstr ""
 msgid "&Cancel"
 msgstr ""
 
+#: wxformbuilder32/src/utils/annoyingdialog.cpp:92
+#, c-format
+msgid ""
+"Fatal error:\n"
+"Undefined style in dialog %s"
+msgstr ""
+
 #: wxformbuilder32/src/utils/annoyingdialog.cpp:147
 msgid "Don't annoy me again!"
+msgstr ""
+
+#: wxformbuilder32/src/utils/annoyingdialog.cpp:160
+msgid "Ow... null pointer."
 msgstr ""
 
 #: wxformbuilder32/src/rad/wxfbevent.cpp:81
@@ -1921,6 +1974,11 @@ msgstr ""
 msgid "delete ObjectBase"
 msgstr ""
 
+#: wxformbuilder32/src/model/objectbase.cpp:304
+#, c-format
+msgid "[ObjectBase::GetProperty] Property %s not found!"
+msgstr ""
+
 #: wxformbuilder32/src/model/objectbase.cpp:333
 msgid "[ObjectBase::GetEvent] Event "
 msgstr ""
@@ -1936,6 +1994,16 @@ msgstr ""
 #: wxformbuilder32/src/codegen/codegen.cpp:216
 #, c-format
 msgid "The property '%s' does not exist for objects of class '%s'"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/codegen.cpp:229
+#, c-format
+msgid "parsing property %s"
+msgstr ""
+
+#: wxformbuilder32/src/codegen/codegen.cpp:266
+#, c-format
+msgid "Parsed Text: %s"
 msgstr ""
 
 #: wxformbuilder32/src/codegen/codegen.cpp:361
@@ -2133,5 +2201,9 @@ msgstr ""
 
 #: wxformbuilder32/src/rad/title.h:36
 msgid "No title"
+msgstr ""
+
+#: wxformbuilder32/src/rad/geninheritclass/geninhertclass_gui.h:78
+msgid "Generate Inherited Class"
 msgstr ""
 

@@ -168,8 +168,8 @@ void MenuEditor::AddChild( long& n, int ident, PObjectBase obj )
 {
     for (unsigned int i = 0; i < obj->GetChildCount(); i++)
     {
-        PObjectBase childObj = obj->GetChild(i);
-        if (childObj->GetClassName() == wxT("wxMenuItem") )
+        PObjectBase childObj = obj->GetChild( i );
+        if ( childObj->GetClassName() == "wxMenuItem" )
         {
             InsertItem(n++, wxString( wxChar(' '), ident * IDENTATION) + childObj->GetPropertyAsString("label"),
 									childObj->GetPropertyAsString("shortcut"),
@@ -249,7 +249,7 @@ PObjectBase MenuEditor::GetMenu( long& n, PObjectDatabase base, bool isSubMenu )
 		createNew = true;
 
         label.Trim( true ); label.Trim( false );
-        if (label == wxT("---"))
+        if ( label == "---" )
         {
         	if ( menuitem )
         	{
@@ -621,7 +621,7 @@ void MenuEditor::OnLabelChanged( wxCommandEvent& )
 		else if ( label[i] == wxChar(' ') )
 		{
 			nextUpper = true;
-			id += wxT("_");
+			id += "_";
 		}
 	}
 	if ( name.Len() > 0 && isdigit( name[0] ) )

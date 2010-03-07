@@ -34,7 +34,7 @@ public:
     void DoLogString( const wxChar* str, time_t t )
 	{
 		m_str += str;
-		m_str += wxT("\n");
+		m_str += "\n";
 	}
 
     void FlushStr( wxString& str )

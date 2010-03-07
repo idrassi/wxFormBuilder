@@ -22,13 +22,11 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 #ifndef __ENC_UTILS_H__
 #define __ENC_UTILS_H__
+
 #include <wx/string.h>
 
-
-void UTF8ToAnsi(const wxString &filename);
-
+void UTF8ToAnsi( const wxString &filename );
 
 #endif //__ENC_UTILS_H__

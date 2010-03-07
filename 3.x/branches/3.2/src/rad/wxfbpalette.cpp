@@ -229,7 +229,7 @@ wxFbPalette::~wxFbPalette()
 	wxString pages;
 	for ( size_t i = 0; i < ( size_t )m_notebook->GetPageCount(); ++i )
 	{
-		pages << m_notebook->GetPageText( i ) << wxT( "," );
+		pages << m_notebook->GetPageText( i ) << ",";
 	}
 	config->Write( "/palette/pageOrder", pages );
 	config->Write( "/palette/notebook_style", m_notebook->GetWindowStyleFlag() );
