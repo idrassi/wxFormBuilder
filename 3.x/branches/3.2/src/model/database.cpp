@@ -247,7 +247,7 @@ PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase par
 	{
 		THROW_WXFBEX( _("Unknown Object Type: ") << _WXSTR( classname )
 			<< _("\nThe most likely causes are that this copy of wxFormBuilder is out of date, or that there is a plugin missing.\n")
-			<< _("Please check at http://www.wxFormBuilder.org\n") );
+			<< _("Please check at http://www.wxformbuilder.org\n") );
 	}
 
 	PObjectType objType = objInfo->GetObjectType();

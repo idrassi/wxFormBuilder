@@ -715,7 +715,7 @@ void CppCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &even
 	wxString class_name = propName->GetValue();
 	if ( class_name.empty() )
 	{
-		wxLogError( _("Object name cannot be null") );
+		wxLogError( _("Object name can not be null") );
 		return;
 	}
 

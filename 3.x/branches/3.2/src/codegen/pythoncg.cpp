@@ -560,7 +560,7 @@ void PythonCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &e
 	wxString class_name = propName->GetValue();
 	if ( class_name.empty() )
 	{
-		wxLogError( _("Object name cannot be null") );
+		wxLogError( _("Object name can not be null") );
 		return;
 	}
 
@@ -647,7 +647,7 @@ void PythonCodeGenerator::GenVirtualEventHandlers( const EventVector& events, co
 		// execute properly.
 		// So we create a default handler which will skip the event.
 		m_source->WriteLn( wxEmptyString );
-		m_source->WriteLn( _("# Virtual event handlers, overide them in your derived class") );
+		m_source->WriteLn( _("# Virtual event handlers, override them in your derived class") );
 
 		std::set<wxString> generatedHandlers;
 		for ( size_t i = 0; i < events.size(); i++ )
