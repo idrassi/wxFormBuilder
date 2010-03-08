@@ -85,9 +85,7 @@ PythonPanel::~PythonPanel()
 void PythonPanel::InitStyledTextCtrl( wxStyledTextCtrl *stc )
 {
 	stc->SetLexer( wxSTC_LEX_PYTHON );
-	stc->SetKeyWords( 0, _( "and assert break class continue def del elif else \
-							   except exec finally for from global if import in \
-							   is lambda not or pass print raise return try while" ) );
+	stc->SetKeyWords( 0, "and assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while" );
 
 #ifdef __WXGTK__
 	wxFont font( 8, wxMODERN, wxNORMAL, wxNORMAL );

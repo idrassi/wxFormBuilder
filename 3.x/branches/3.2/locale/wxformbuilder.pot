@@ -1,455 +1,149 @@
+# wxFormBuilder pot file
+# Copyright (C) 2010 Andrea Zanellato
+# This file is distributed under the same license as the wxFormBuilder package.
+# Andrea Zanellato <wxformbuilder@gmail.com>, 2010.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: wxFormBuilder\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-07 09:01+0100\n"
-"PO-Revision-Date: \n"
-"Last-Translator: Andrea Zanellato <xvirc.client@gmail.com>\n"
-"Language-Team: \n"
+"Project-Id-Version: wxFormBuilder-4.0.0\n"
+"Report-Msgid-Bugs-To: wxformbuilder@gmail.com\n"
+"POT-Creation-Date: 2010-03-08 08:48+0100\n"
+"PO-Revision-Date: 2010-03-08 08:50+0100\n"
+"Last-Translator: Andrea Zanellato <wxformbuilder@gmail.com>\n"
+"Language-Team: wxFormBuilder <wxformbuilder@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-Basepath: /media/WD1TB/CodeLiteProjects/\n"
-"X-Poedit-SearchPath-0: wxformbuilder32\n"
-
-#: wxformbuilder32/plugins/containers/containers.cpp:105
-msgid ""
-"wxAuiNotebook pages can normally be closed.\n"
-"However, it is difficult to design a page that has been closed, so this action has been vetoed."
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:106
-msgid "Page Close Vetoed!"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:112
-msgid ""
-"wxAuiNotebook pages can be dragged to other wxAuiNotebooks if the wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND event is caught and allowed.\n"
-"However, it is difficult to design a page that has been moved, so this action was not allowed."
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:113
-msgid "Page Move Not Allowed!"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:175
-msgid ""
-"Double-clicking a wxSplitterWindow sash with the minimum pane size set to 0 would normally unsplit it.\n"
-"However, it is difficult to design a pane that has been closed, so this action has been vetoed."
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:176
-msgid "Unsplit Vetoed!"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:327
-msgid "This should be a wxSplitterWindow"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:346
-#: wxformbuilder32/plugins/containers/containers.cpp:373
-msgid "A SplitterItem is abstract and must have a child!"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:624
-msgid "listbookpage"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:752
-#, c-format
-msgid "TreebookPageComponent is missing its wxFormBuilder object(%i), its parent(%i), or its child(%i)"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:761
-msgid "TreebookPageComponent has an invalid depth."
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:899
-#, c-format
-msgid "ToolbookPageComponent is missing its wxFormBuilder object(%i), its parent(%i), or its child(%i)"
-msgstr ""
-
-#: wxformbuilder32/plugins/containers/containers.cpp:1042
-#, c-format
-msgid "AuiNotebookPageComponent is missing its wxFormBuilder object(%i), its parent(%i), or its child(%i)"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:774
-#, c-format
-msgid "Cell (0,%d)"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:780
-#, c-format
-msgid "Cell (%d,%d)"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:849
-msgid "wxRadioBox must have at least one choice"
-msgstr ""
-
-#: wxformbuilder32/plugins/common/common.cpp:855
-msgid "majorDimension must be greater than zero."
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:99
-msgid "The parent of a SizerItem is either missing or not a wxSizer - this should not be possible!"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:107
-msgid "The SizerItem component has no child - this should not be possible!"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:146
-msgid "The SizerItem component's child is not a wxWindow or a wxSizer or a spacer - this should not be possible!"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:406
-msgid "The GBSizerItem component's child is not a wxWindow or a wxSizer or a Spacer - this should not be possible!"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:435
-msgid "This should be a wxGridBagSizer!"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:562
-#: wxformbuilder32/plugins/layout/layout.cpp:607
-#: wxformbuilder32/plugins/layout/layout.cpp:645
-#: wxformbuilder32/plugins/layout/layout.cpp:682
-msgid "OK"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:566
-#: wxformbuilder32/plugins/layout/layout.cpp:611
-#: wxformbuilder32/plugins/layout/layout.cpp:646
-#: wxformbuilder32/plugins/layout/layout.cpp:686
-msgid "Yes"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:570
-#: wxformbuilder32/plugins/layout/layout.cpp:615
-#: wxformbuilder32/plugins/layout/layout.cpp:647
-#: wxformbuilder32/plugins/layout/layout.cpp:690
-msgid "Save"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:574
-#: wxformbuilder32/plugins/layout/layout.cpp:619
-#: wxformbuilder32/plugins/layout/layout.cpp:648
-#: wxformbuilder32/plugins/layout/layout.cpp:694
-msgid "Apply"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:578
-#: wxformbuilder32/plugins/layout/layout.cpp:623
-#: wxformbuilder32/plugins/layout/layout.cpp:649
-#: wxformbuilder32/plugins/layout/layout.cpp:698
-msgid "No"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:582
-#: wxformbuilder32/plugins/layout/layout.cpp:627
-#: wxformbuilder32/plugins/layout/layout.cpp:650
-#: wxformbuilder32/plugins/layout/layout.cpp:702
-msgid "Cancel"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:586
-#: wxformbuilder32/plugins/layout/layout.cpp:631
-#: wxformbuilder32/plugins/layout/layout.cpp:651
-#: wxformbuilder32/plugins/layout/layout.cpp:706
-msgid "Help"
-msgstr ""
-
-#: wxformbuilder32/plugins/layout/layout.cpp:590
-#: wxformbuilder32/plugins/layout/layout.cpp:635
-#: wxformbuilder32/plugins/layout/layout.cpp:652
-#: wxformbuilder32/plugins/layout/layout.cpp:710
-msgid "ContextHelp"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:217
-msgid "Welcome to wxRichTextCtrl, a wxWidgets control for editing and presenting styled text and images"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:222
-msgid "by Julian Smart"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:234
-msgid "What can you do with this thing? "
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:236
-msgid " Well, you can change text "
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:239
-msgid "colour, like this red bit."
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:243
-msgid " And this blue bit."
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:246
-msgid " Naturally you can make things "
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:248
-msgid "bold "
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:251
-msgid "or italic "
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:254
-msgid "or underlined."
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:258
-msgid " Different font sizes on the same line is allowed, too."
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:261
-msgid " Next we'll show an indented paragraph."
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:266
-msgid "Indented paragraph."
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:271
-msgid "Next, we'll show a first-line indent, achieved using BeginLeftIndent(100, -40)."
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:276
-msgid "It was in January, the most down-trodden month of an Edinburgh winter."
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:281
-msgid "Numbered bullets are possible, again using subindents:"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:286
-msgid "This is my first item. Note that wxRichTextCtrl doesn't automatically do numbering, but this will be added later."
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:292
-msgid "This is my second item."
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:297
-msgid "The following paragraph is right-indented:"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:302
-msgid "It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable."
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:317
-msgid "This line contains tabs:\tFirst tab\tSecond tab\tThird tab"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:320
-msgid "Other notable features of wxRichTextCtrl include:"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:324
-msgid "Compatibility with wxTextCtrl API"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:327
-msgid ""
-"\n"
-"Note: this content was generated programmatically and copied from the sample. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:362
-msgid "This is a dummy page."
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:513
-msgid "The Root"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:514
-msgid "Child 1"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:515
-msgid "Child 2"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:516
-msgid "Child 3, very long, long, long, long"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:520
-msgid "Child 4"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:521
-msgid "Child 5"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:556
-#, c-format
-msgid "DataViewColumnComponent is missing its wxFormBuilder object(%i) or its parent(%i)"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:564
-msgid "Column with strings"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:568
-msgid "Column with icons"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:572
-msgid "ToggleCol"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:576
-msgid "ProgressCol"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:580
-msgid "BitmapCol"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:584
-msgid "DateCol"
-msgstr ""
-
-#: wxformbuilder32/plugins/additional/additional.cpp:588
-msgid "StringCol"
-msgstr ""
-
-#: wxformbuilder32/src/maingui.cpp:135
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: src\n"
+"X-Poedit-SearchPath-1: plugins\n"
+
+# Translators: You should probably not translate 'Ctrl' etc
+# in menu shortcuts, as apparently it stops them working
+# e.g. in "Cut\tCtrl+X" just translate the "Cut"
+#: src/maingui.cpp:135
 msgid "You must pass a path to a project file. Nothing to generate."
 msgstr ""
 
-#: wxformbuilder32/src/maingui.cpp:143
+#: src/maingui.cpp:143
 msgid "Empty language option. Nothing generated."
 msgstr ""
 
-#: wxformbuilder32/src/maingui.cpp:169
+#: src/maingui.cpp:169
 msgid "This path is invalid: "
 msgstr ""
 
-#: wxformbuilder32/src/maingui.cpp:176
+#: src/maingui.cpp:176
 msgid "Could not make path absolute: "
 msgstr ""
 
-#: wxformbuilder32/src/maingui.cpp:210
+#: src/maingui.cpp:210
 #, c-format
 msgid ""
 "Error loading application: %s\n"
 "wxFormBuilder cannot continue."
 msgstr ""
 
-#: wxformbuilder32/src/maingui.cpp:305
+#: src/maingui.cpp:305
 #, c-format
 msgid "Unable to load project: %s"
 msgstr ""
 
-#: wxformbuilder32/src/maingui.cpp:464
+#: src/maingui.cpp:464
 msgid "A Fatal Error Occurred. Click Details for a backtrace."
 msgstr ""
 
-#: wxformbuilder32/src/utils/wxfbipc.cpp:48
+#: src/utils/wxfbipc.cpp:48
 #, c-format
 msgid "This path is invalid: %s"
 msgstr ""
 
-#: wxformbuilder32/src/utils/wxfbipc.cpp:56
+#: src/utils/wxfbipc.cpp:56
 #, c-format
 msgid "Could not make path absolute: %s"
 msgstr ""
 
-#: wxformbuilder32/src/utils/wxfbipc.cpp:157
+#: src/utils/wxfbipc.cpp:157
 #, c-format
 msgid "%s already open in process %s"
 msgstr ""
 
-#: wxformbuilder32/src/utils/wxfbipc.cpp:164
+#: src/utils/wxfbipc.cpp:164
 #, c-format
 msgid "There is a lockfile named '%s', but unable to make a connection to that instance."
 msgstr ""
 
-#: wxformbuilder32/src/utils/wxfbipc.cpp:208
+#: src/utils/wxfbipc.cpp:208
 #, c-format
 msgid "Server Creation Failed. %s"
 msgstr ""
 
-#: wxformbuilder32/src/utils/wxfbipc.cpp:214
+#: src/utils/wxfbipc.cpp:214
 #, c-format
 msgid "Failed to create an IPC service with name %s"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:87
+#: src/utils/stringutils.cpp:87
 msgid "Choose an Encoding"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:103
+#: src/utils/stringutils.cpp:103
 msgid "This xml file has no declaration.\n"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:104
-#: wxformbuilder32/src/utils/stringutils.cpp:147
-#: wxformbuilder32/src/utils/stringutils.cpp:231
-#: wxformbuilder32/src/utils/stringutils.cpp:285
+#: src/utils/stringutils.cpp:104
+#: src/utils/stringutils.cpp:147
+#: src/utils/stringutils.cpp:231
+#: src/utils/stringutils.cpp:285
 msgid "Would you like wxFormBuilder to backup the file and convert it to UTF-8?\n"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:105
-#: wxformbuilder32/src/utils/stringutils.cpp:148
+#: src/utils/stringutils.cpp:105
+#: src/utils/stringutils.cpp:148
 msgid ""
 "You will be prompted for an encoding.\n"
 "\n"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:106
-#: wxformbuilder32/src/utils/stringutils.cpp:149
-#: wxformbuilder32/src/utils/stringutils.cpp:192
-#: wxformbuilder32/src/utils/stringutils.cpp:233
-#: wxformbuilder32/src/utils/stringutils.cpp:287
+#: src/utils/stringutils.cpp:106
+#: src/utils/stringutils.cpp:149
+#: src/utils/stringutils.cpp:192
+#: src/utils/stringutils.cpp:233
+#: src/utils/stringutils.cpp:287
 msgid "Path: "
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:108
+#: src/utils/stringutils.cpp:108
 msgid "Missing Declaration"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:112
-#: wxformbuilder32/src/utils/stringutils.cpp:119
+#: src/utils/stringutils.cpp:112
+#: src/utils/stringutils.cpp:119
 msgid "Missing Declaration on XML File: "
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:116
-#: wxformbuilder32/src/utils/stringutils.cpp:158
-#: wxformbuilder32/src/utils/stringutils.cpp:242
-#: wxformbuilder32/src/utils/stringutils.cpp:296
+#: src/utils/stringutils.cpp:116
+#: src/utils/stringutils.cpp:158
+#: src/utils/stringutils.cpp:242
+#: src/utils/stringutils.cpp:296
 msgid "Please choose the original encoding."
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:146
+#: src/utils/stringutils.cpp:146
 msgid "This xml file has no encoding specified.\n"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:151
+#: src/utils/stringutils.cpp:151
 msgid "Unknown Encoding"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:154
-#: wxformbuilder32/src/utils/stringutils.cpp:161
+#: src/utils/stringutils.cpp:154
+#: src/utils/stringutils.cpp:161
 msgid "Unknown Encoding for XML File: "
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:179
+#: src/utils/stringutils.cpp:179
 #, c-format
 msgid ""
 "The encoding of this xml file is not supported.\n"
@@ -461,71 +155,71 @@ msgid ""
 "%s"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:183
+#: src/utils/stringutils.cpp:183
 #, c-format
 msgid "Unsupported Encoding: %s"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:184
+#: src/utils/stringutils.cpp:184
 msgid "Unsupported encoding for XML File: "
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:189
+#: src/utils/stringutils.cpp:189
 #, c-format
 msgid "This xml file has specified encoding %s. wxFormBuilder only works with UTF-8.\n"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:191
+#: src/utils/stringutils.cpp:191
 msgid ""
 "Would you like wxFormBuilder to backup the file and convert it to UTF-8?\n"
 "\n"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:194
+#: src/utils/stringutils.cpp:194
 msgid "Not UTF-8"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:197
+#: src/utils/stringutils.cpp:197
 msgid "Wrong Encoding for XML File: "
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:216
-#: wxformbuilder32/src/utils/stringutils.cpp:271
+#: src/utils/stringutils.cpp:216
+#: src/utils/stringutils.cpp:271
 msgid "LoadXMLFile needs a path"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:221
-#: wxformbuilder32/src/utils/stringutils.cpp:276
+#: src/utils/stringutils.cpp:221
+#: src/utils/stringutils.cpp:276
 msgid ""
 "The file does not exist.\n"
 "File: "
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:230
-#: wxformbuilder32/src/utils/stringutils.cpp:284
+#: src/utils/stringutils.cpp:230
+#: src/utils/stringutils.cpp:284
 msgid "This xml file could not be loaded. This could be the result of an unsupported encoding.\n"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:232
-#: wxformbuilder32/src/utils/stringutils.cpp:286
+#: src/utils/stringutils.cpp:232
+#: src/utils/stringutils.cpp:286
 msgid ""
 "You will be prompted for the original encoding.\n"
 "\n"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:235
-#: wxformbuilder32/src/utils/stringutils.cpp:289
+#: src/utils/stringutils.cpp:235
+#: src/utils/stringutils.cpp:289
 msgid "Unable to load file"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:238
-#: wxformbuilder32/src/utils/stringutils.cpp:245
-#: wxformbuilder32/src/utils/stringutils.cpp:292
-#: wxformbuilder32/src/utils/stringutils.cpp:299
+#: src/utils/stringutils.cpp:238
+#: src/utils/stringutils.cpp:245
+#: src/utils/stringutils.cpp:292
+#: src/utils/stringutils.cpp:299
 msgid "Unable to load file: "
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:330
+#: src/utils/stringutils.cpp:330
 #, c-format
 msgid ""
 "Unable to backup file.\n"
@@ -533,7 +227,7 @@ msgid ""
 "Backup: %s.bak"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:341
+#: src/utils/stringutils.cpp:341
 #, c-format
 msgid ""
 "Unable to read the file in the specified encoding.\n"
@@ -541,7 +235,7 @@ msgid ""
 "Encoding: %s"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:347
+#: src/utils/stringutils.cpp:347
 #, c-format
 msgid ""
 "The file is either empty or read with the wrong encoding.\n"
@@ -549,35 +243,35 @@ msgid ""
 "Encoding: %s"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:353
+#: src/utils/stringutils.cpp:353
 #, c-format
 msgid ""
 "Unable to close original file.\n"
 "File: %s"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:373
+#: src/utils/stringutils.cpp:373
 #, c-format
 msgid ""
 "Found a declaration end tag \"?>\" but could not find the start \"<?\".\n"
 "File: %s"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:379
+#: src/utils/stringutils.cpp:379
 #, c-format
 msgid ""
 "Found a declaration start tag \"<?\" but could not find the end \"?>\".\n"
 "File: %s"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:390
+#: src/utils/stringutils.cpp:390
 #, c-format
 msgid ""
 "Unable to delete original file.\n"
 "File: %s"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:398
+#: src/utils/stringutils.cpp:398
 #, c-format
 msgid ""
 "Unable to write file in its new encoding.\n"
@@ -585,7 +279,7 @@ msgid ""
 "Encoding: %s"
 msgstr ""
 
-#: wxformbuilder32/src/utils/stringutils.cpp:404
+#: src/utils/stringutils.cpp:404
 #, c-format
 msgid ""
 "Unable to close file after converting the encoding.\n"
@@ -594,102 +288,98 @@ msgid ""
 "New Encoding: %s"
 msgstr ""
 
-#: wxformbuilder32/src/utils/typeconv.cpp:400
+#: src/utils/typeconv.cpp:400
 msgid "Load From File"
 msgstr ""
 
-#: wxformbuilder32/src/utils/typeconv.cpp:800
+#: src/utils/typeconv.cpp:800
 msgid "Before: "
 msgstr ""
 
-#: wxformbuilder32/src/utils/typeconv.cpp:820
+#: src/utils/typeconv.cpp:820
 msgid "After: "
 msgstr ""
 
-#: wxformbuilder32/src/utils/annoyingdialog.cpp:70
-#: wxformbuilder32/src/utils/annoyingdialog.cpp:77
+#: src/utils/annoyingdialog.cpp:70
+#: src/utils/annoyingdialog.cpp:77
 msgid "&OK"
 msgstr ""
 
-#: wxformbuilder32/src/utils/annoyingdialog.cpp:77
-#: wxformbuilder32/src/utils/annoyingdialog.cpp:86
+#: src/utils/annoyingdialog.cpp:77
+#: src/utils/annoyingdialog.cpp:86
 msgid "&Yes"
 msgstr ""
 
-#: wxformbuilder32/src/utils/annoyingdialog.cpp:78
-#: wxformbuilder32/src/utils/annoyingdialog.cpp:87
+#: src/utils/annoyingdialog.cpp:78
+#: src/utils/annoyingdialog.cpp:87
 msgid "&No"
 msgstr ""
 
-#: wxformbuilder32/src/utils/annoyingdialog.cpp:78
-#: wxformbuilder32/src/utils/annoyingdialog.cpp:88
+#: src/utils/annoyingdialog.cpp:78
+#: src/utils/annoyingdialog.cpp:88
 msgid "&Cancel"
 msgstr ""
 
-#: wxformbuilder32/src/utils/annoyingdialog.cpp:92
+#: src/utils/annoyingdialog.cpp:92
 #, c-format
 msgid ""
 "Fatal error:\n"
 "Undefined style in dialog %s"
 msgstr ""
 
-#: wxformbuilder32/src/utils/annoyingdialog.cpp:147
+#: src/utils/annoyingdialog.cpp:147
 msgid "Don't annoy me again!"
 msgstr ""
 
-#: wxformbuilder32/src/utils/annoyingdialog.cpp:160
+#: src/utils/annoyingdialog.cpp:160
 msgid "Ow... null pointer."
 msgstr ""
 
-#: wxformbuilder32/src/rad/wxfbevent.cpp:81
+#: src/rad/wxfbevent.cpp:81
 msgid "Unknown Type"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:464
+#: src/rad/appdata.cpp:464
 msgid "Logging"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:653
+#: src/rad/appdata.cpp:653
 #, c-format
 msgid "Empty item removed under %s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:740
+#: src/rad/appdata.cpp:740
 msgid "[ApplicationData::CreateObject] New "
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1153
-msgid "icons"
-msgstr ""
-
-#: wxformbuilder32/src/rad/appdata.cpp:1170
+#: src/rad/appdata.cpp:1170
 msgid "Modify property :"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1170
+#: src/rad/appdata.cpp:1170
 msgid " with "
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1196
+#: src/rad/appdata.cpp:1196
 msgid ""
 "You cannot save over a file that is currently open in another instance.\n"
 "Would you like to switch to that instance?"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1197
+#: src/rad/appdata.cpp:1197
 msgid "Open in Another Instance"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1232
+#: src/rad/appdata.cpp:1232
 msgid "LOADING"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1236
+#: src/rad/appdata.cpp:1236
 #, c-format
 msgid "This file does not exist: %s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1289
+#: src/rad/appdata.cpp:1289
 msgid ""
 "This project file is newer than this version of wxFormBuilder.\n"
 "It cannot be opened.\n"
@@ -697,11 +387,11 @@ msgid ""
 "Please download an updated version from http://www.wxFormBuilder.org"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1290
+#: src/rad/appdata.cpp:1290
 msgid "New Version"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1296
+#: src/rad/appdata.cpp:1296
 msgid ""
 "This project file is not of the current version.\n"
 "Would you to attempt automatic conversion?\n"
@@ -709,61 +399,61 @@ msgid ""
 "NOTE: This will modify your project file on disk!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1297
+#: src/rad/appdata.cpp:1297
 msgid "Old Version"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1304
+#: src/rad/appdata.cpp:1304
 msgid "Unable to convert project"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1441
+#: src/rad/appdata.cpp:1441
 msgid "The \"user_headers\" property has been removed.\n"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1442
+#: src/rad/appdata.cpp:1442
 msgid "Its purpose was to provide a place to include precompiled headers or\n"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1443
+#: src/rad/appdata.cpp:1443
 msgid "headers for subclasses.\n"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1444
+#: src/rad/appdata.cpp:1444
 msgid "There is now a \"precompiled_header\" property and a \"header\" subitem\n"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1445
+#: src/rad/appdata.cpp:1445
 msgid ""
 "on the subclass property.\n"
 "\n"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1446
+#: src/rad/appdata.cpp:1446
 msgid "Would you like the current value of the \"user_headers\" property to be saved\n"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1447
+#: src/rad/appdata.cpp:1447
 msgid "to a file so that you can distribute the headers among the \"precompiled_header\"\n"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1448
+#: src/rad/appdata.cpp:1448
 msgid "and \"subclass\" properties?"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1450
+#: src/rad/appdata.cpp:1450
 msgid "The \"user_headers\" property has been removed"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1455
+#: src/rad/appdata.cpp:1455
 msgid "Save \"user_headers\""
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1456
+#: src/rad/appdata.cpp:1456
 msgid "All files (*.*)|*.*"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1476
+#: src/rad/appdata.cpp:1476
 #, c-format
 msgid ""
 "Unable to open %s for writing.\n"
@@ -771,893 +461,861 @@ msgid ""
 "%s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1934
+#: src/rad/appdata.cpp:1934
 msgid "No Project?!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1940
+#: src/rad/appdata.cpp:1940
 #, c-format
 msgid "Invalid Path: %s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1954
+#: src/rad/appdata.cpp:1954
 msgid "Missing Property"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1961
-#: wxformbuilder32/src/rad/appdata.cpp:1969
+#: src/rad/appdata.cpp:1961
+#: src/rad/appdata.cpp:1969
 #, c-format
 msgid "Unable to make \"%s\" absolute to \"%s\""
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1976
+#: src/rad/appdata.cpp:1976
 #, c-format
 msgid "Unable to make \"%s\" relative to \"%s\""
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:1981
-msgid "name"
-msgstr ""
-
-#: wxformbuilder32/src/rad/appdata.cpp:2031
+#: src/rad/appdata.cpp:2031
 #, c-format
 msgid "Class generated at '%s'."
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:2212
+#: src/rad/appdata.cpp:2212
 #, c-format
 msgid "Parent of object '%s' is wrong!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:2435
+#: src/rad/appdata.cpp:2435
 msgid "Please select a form and try again."
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:2435
+#: src/rad/appdata.cpp:2435
 msgid "No Form Selected"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:2496
+#: src/rad/appdata.cpp:2496
 msgid "event: "
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:2507
+#: src/rad/appdata.cpp:2507
 msgid "Pending event:  "
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:2599
+#: src/rad/appdata.cpp:2599
 msgid "You must set the \"path\" property of the project to a valid path for output files"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:2610
+#: src/rad/appdata.cpp:2610
 msgid "You must save the project when using a relative path for output files"
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:2619
+#: src/rad/appdata.cpp:2619
 msgid "Invalid Path: "
 msgstr ""
 
-#: wxformbuilder32/src/rad/appdata.cpp:2619
+#: src/rad/appdata.cpp:2619
 msgid ""
 "\n"
 "You must set the \"path\" property of the project to a valid path for output files"
 msgstr ""
 
-#: wxformbuilder32/src/rad/about.cpp:52
+#: src/rad/about.cpp:52
 msgid ""
 "Impossible to determine the file type for extension html.\n"
 "Please edit your MIME types."
 msgstr ""
 
-#: wxformbuilder32/src/rad/about.cpp:75
+#: src/rad/about.cpp:75
 msgid "About..."
 msgstr ""
 
-#: wxformbuilder32/src/rad/about.cpp:82
+#: src/rad/about.cpp:82
 msgid "a RAD tool for wxWidgets framework"
 msgstr ""
 
-#: wxformbuilder32/src/rad/about.cpp:84
-msgid "(C) 2005 Jose' Antonio Hurtado"
-msgstr ""
-
-#: wxformbuilder32/src/rad/about.cpp:91
+#: src/rad/about.cpp:91
 msgid "Developed by:"
 msgstr ""
 
-#: wxformbuilder32/src/rad/about.cpp:93
-msgid "- Jose' Antonio Hurtado"
-msgstr ""
-
-#: wxformbuilder32/src/rad/about.cpp:95
-msgid "- Juan Antonio Ortega"
-msgstr ""
-
-#: wxformbuilder32/src/rad/menueditor.cpp:57
+#: src/rad/menueditor.cpp:57
 msgid "Menu Editor"
 msgstr ""
 
-#: wxformbuilder32/src/rad/menueditor.cpp:65
-#: wxformbuilder32/src/rad/menueditor.cpp:83
+#: src/rad/menueditor.cpp:65
+#: src/rad/menueditor.cpp:83
 msgid "Label"
 msgstr ""
 
-#: wxformbuilder32/src/rad/menueditor.cpp:66
-#: wxformbuilder32/src/rad/menueditor.cpp:88
+#: src/rad/menueditor.cpp:66
+#: src/rad/menueditor.cpp:88
 msgid "Shortcut"
 msgstr ""
 
-#: wxformbuilder32/src/rad/menueditor.cpp:67
-#: wxformbuilder32/src/rad/menueditor.cpp:93
+#: src/rad/menueditor.cpp:67
+#: src/rad/menueditor.cpp:93
 msgid "Id"
 msgstr ""
 
-#: wxformbuilder32/src/rad/menueditor.cpp:68
-#: wxformbuilder32/src/rad/menueditor.cpp:98
+#: src/rad/menueditor.cpp:68
+#: src/rad/menueditor.cpp:98
 msgid "Name"
 msgstr ""
 
-#: wxformbuilder32/src/rad/menueditor.cpp:69
-#: wxformbuilder32/src/rad/menueditor.cpp:103
+#: src/rad/menueditor.cpp:69
+#: src/rad/menueditor.cpp:103
 msgid "Help String"
 msgstr ""
 
-#: wxformbuilder32/src/rad/menueditor.cpp:70
-#: wxformbuilder32/src/rad/menueditor.cpp:111
+#: src/rad/menueditor.cpp:70
+#: src/rad/menueditor.cpp:111
 msgid "Kind"
 msgstr ""
 
-#: wxformbuilder32/src/rad/menueditor.cpp:79
+#: src/rad/menueditor.cpp:79
 msgid "Menu item"
 msgstr ""
 
-#: wxformbuilder32/src/rad/menueditor.cpp:110
+#: src/rad/menueditor.cpp:110
 msgid "Normal"
 msgstr ""
 
-#: wxformbuilder32/src/rad/menueditor.cpp:110
+#: src/rad/menueditor.cpp:110
 msgid "Check"
 msgstr ""
 
-#: wxformbuilder32/src/rad/menueditor.cpp:110
+#: src/rad/menueditor.cpp:110
 msgid "Radio"
 msgstr ""
 
-#: wxformbuilder32/src/rad/menueditor.cpp:118
+#: src/rad/menueditor.cpp:118
 msgid "&Add"
 msgstr ""
 
-#: wxformbuilder32/src/rad/menueditor.cpp:121
+#: src/rad/menueditor.cpp:121
 msgid "&Modify"
 msgstr ""
 
-#: wxformbuilder32/src/rad/menueditor.cpp:124
+#: src/rad/menueditor.cpp:124
 msgid "&Remove"
 msgstr ""
 
-#: wxformbuilder32/src/rad/menueditor.cpp:129
+#: src/rad/menueditor.cpp:129
 msgid "Add &Separator"
 msgstr ""
 
-#: wxformbuilder32/src/rad/menueditor.cpp:138
+#: src/rad/menueditor.cpp:138
 msgid "&Up"
 msgstr ""
 
-#: wxformbuilder32/src/rad/menueditor.cpp:141
+#: src/rad/menueditor.cpp:141
 msgid "&Down"
 msgstr ""
 
-#: wxformbuilder32/src/rad/menueditor.cpp:144
-msgid "<"
-msgstr ""
-
-#: wxformbuilder32/src/rad/menueditor.cpp:147
-msgid ">"
-msgstr ""
-
-#: wxformbuilder32/src/rad/menueditor.cpp:479
+#: src/rad/menueditor.cpp:479
 msgid "The children of the selected item will be eliminated too. Are you sure you want to continue?"
 msgstr ""
 
-#: wxformbuilder32/src/rad/bitmaps.cpp:86
-#: wxformbuilder32/src/rad/bitmaps.cpp:90
+#: src/rad/bitmaps.cpp:86
+#: src/rad/bitmaps.cpp:90
 #, c-format
 msgid "Error loading images: %s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:247
+#: src/rad/mainframe.cpp:247
 msgid "Toolbar"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:255
+#: src/rad/mainframe.cpp:255
 msgid "Object Tree"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:262
+#: src/rad/mainframe.cpp:262
 msgid "Object Properties"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:269
+#: src/rad/mainframe.cpp:269
 msgid "Editor"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:274
+#: src/rad/mainframe.cpp:274
 msgid "Component Palette"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:283
+#: src/rad/mainframe.cpp:283
 msgid "Dock Manager Settings"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:426
-#: wxformbuilder32/src/rad/mainframe.cpp:1258
+#: src/rad/mainframe.cpp:426
+#: src/rad/mainframe.cpp:1258
 msgid "Save Project"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:427
-#: wxformbuilder32/src/rad/mainframe.cpp:476
+#: src/rad/mainframe.cpp:427
+#: src/rad/mainframe.cpp:476
 msgid "wxFormBuilder Project File (*.fbp)|*.fbp|All files (*.*)|*.*"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:446
+#: src/rad/mainframe.cpp:446
 msgid "The file already exists. Do you want to replace it?"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:447
+#: src/rad/mainframe.cpp:447
 msgid "Overwrite the file"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:475
-#: wxformbuilder32/src/rad/mainframe.cpp:1257
+#: src/rad/mainframe.cpp:475
+#: src/rad/mainframe.cpp:1257
 msgid "Open Project"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:509
+#: src/rad/mainframe.cpp:509
 #, c-format
 msgid "The project file '%s' doesn't exist. Would you like to remove it from the recent files list?"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:511
+#: src/rad/mainframe.cpp:511
 msgid "Open recent project"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:521
-#: wxformbuilder32/src/rad/mainframe.cpp:1187
+#: src/rad/mainframe.cpp:521
+#: src/rad/mainframe.cpp:1187
 msgid "Import XRC file"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:544
+#: src/rad/mainframe.cpp:544
 msgid "Error while loading XRC"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:549
+#: src/rad/mainframe.cpp:549
 #, c-format
 msgid "Error Loading XRC: %s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:592
+#: src/rad/mainframe.cpp:592
 msgid "Project Loaded!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:597
-#: wxformbuilder32/src/rad/mainframe.cpp:633
-#: wxformbuilder32/src/rad/mainframe.cpp:729
+#: src/rad/mainframe.cpp:597
+#: src/rad/mainframe.cpp:633
+#: src/rad/mainframe.cpp:729
 #, c-format
 msgid "Name: %s | Class: %s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:608
+#: src/rad/mainframe.cpp:608
 msgid "Project Saved!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:629
+#: src/rad/mainframe.cpp:629
 msgid "\"Unknown\""
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:648
+#: src/rad/mainframe.cpp:648
 #, c-format
 msgid "Object '%s' of class '%s' created."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:654
+#: src/rad/mainframe.cpp:654
 msgid "Impossible to create the object. Did you forget to add a sizer/parent object?"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:665
+#: src/rad/mainframe.cpp:665
 #, c-format
 msgid "Object '%s' removed."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:687
+#: src/rad/mainframe.cpp:687
 #, c-format
 msgid "Name: %s %s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:692
+#: src/rad/mainframe.cpp:692
 msgid "Property Modified!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:704
+#: src/rad/mainframe.cpp:704
 #, c-format
 msgid "Event handler '%s' of object '%s' modified."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:719
+#: src/rad/mainframe.cpp:719
 msgid "Code Generated!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:757
-#: wxformbuilder32/src/rad/mainframe.cpp:822
+#: src/rad/mainframe.cpp:757
+#: src/rad/mainframe.cpp:822
 msgid "Edit"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:811
+#: src/rad/mainframe.cpp:811
 msgid "untitled"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1107
+#: src/rad/mainframe.cpp:1107
 msgid "You must set the \"file\" property of the project before generating inherited classes."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1126
+#: src/rad/mainframe.cpp:1126
 #, c-format
 msgid "Class(es) generated to '%s'."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1135
+#: src/rad/mainframe.cpp:1135
 msgid ""
 "Current project file has been modified...\n"
 "Do you want to save the changes?"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1136
+#: src/rad/mainframe.cpp:1136
 msgid "Save project"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1156
+#: src/rad/mainframe.cpp:1156
 msgid "Find"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1181
+#: src/rad/mainframe.cpp:1181
 msgid "&New Project\tCtrl+N"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1181
+#: src/rad/mainframe.cpp:1181
 msgid "Create an empty project"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1182
+#: src/rad/mainframe.cpp:1182
 msgid "&Open...\tCtrl+O"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1182
+#: src/rad/mainframe.cpp:1182
 msgid "Open a project"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1184
+#: src/rad/mainframe.cpp:1184
 msgid "&Save\tCtrl+S"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1184
+#: src/rad/mainframe.cpp:1184
 msgid "Save current project"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1185
+#: src/rad/mainframe.cpp:1185
 msgid "Save &As...\tCtrl-Shift+S"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1185
+#: src/rad/mainframe.cpp:1185
 msgid "Save current project as..."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1187
+#: src/rad/mainframe.cpp:1187
 msgid "&Import XRC..."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1189
+#: src/rad/mainframe.cpp:1189
 msgid "&Generate Code\tF8"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1189
-#: wxformbuilder32/src/rad/mainframe.cpp:1268
+#: src/rad/mainframe.cpp:1189
+#: src/rad/mainframe.cpp:1268
 msgid "Generate Code"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1191
+#: src/rad/mainframe.cpp:1191
 msgid "E&xit\tAlt-F4"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1191
+#: src/rad/mainframe.cpp:1191
 msgid "Quit wxFormBuilder"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1194
+#: src/rad/mainframe.cpp:1194
 msgid "&Undo \tCtrl+Z"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1194
+#: src/rad/mainframe.cpp:1194
 msgid "Undo changes"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1195
+#: src/rad/mainframe.cpp:1195
 msgid "&Redo \tCtrl+Y"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1195
+#: src/rad/mainframe.cpp:1195
 msgid "Redo changes"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1197
+#: src/rad/mainframe.cpp:1197
 msgid "&Copy \tCtrl+C"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1197
+#: src/rad/mainframe.cpp:1197
 msgid "Copy selected object"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1198
+#: src/rad/mainframe.cpp:1198
 msgid "Cut \tCtrl+X"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1198
+#: src/rad/mainframe.cpp:1198
 msgid "Cut selected object"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1199
+#: src/rad/mainframe.cpp:1199
 msgid "&Paste \tCtrl+V"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1199
+#: src/rad/mainframe.cpp:1199
 msgid "Paste on selected object"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1200
+#: src/rad/mainframe.cpp:1200
 msgid "&Delete \tCtrl+D"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1200
+#: src/rad/mainframe.cpp:1200
 msgid "Delete selected object"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1202
+#: src/rad/mainframe.cpp:1202
 msgid "Copy Object To Clipboard\tCtrl+Shift+C"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1202
+#: src/rad/mainframe.cpp:1202
 msgid "Copy Object to Clipboard"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1203
+#: src/rad/mainframe.cpp:1203
 msgid "Paste Object From Clipboard\tCtrl+Shift+V"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1203
+#: src/rad/mainframe.cpp:1203
 msgid "Paste Object from Clipboard"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1205
+#: src/rad/mainframe.cpp:1205
 msgid "Toggle &Expand\tAlt+W"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1205
+#: src/rad/mainframe.cpp:1205
 msgid "Toggle wxEXPAND flag of sizeritem properties"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1206
+#: src/rad/mainframe.cpp:1206
 msgid "Toggle &Stretch\tAlt+S"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1206
+#: src/rad/mainframe.cpp:1206
 msgid "Toggle option property of sizeritem properties"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1207
-#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:532
+#: src/rad/mainframe.cpp:1207
 msgid "Move Up\tAlt+Up"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1207
+#: src/rad/mainframe.cpp:1207
 msgid "Move Up selected object"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1208
-#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:533
+#: src/rad/mainframe.cpp:1208
 msgid "Move Down\tAlt+Down"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1208
+#: src/rad/mainframe.cpp:1208
 msgid "Move Down selected object"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1209
-#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:534
+#: src/rad/mainframe.cpp:1209
 msgid "Move Left\tAlt+Left"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1209
+#: src/rad/mainframe.cpp:1209
 msgid "Move Left selected object"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1210
-#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:535
+#: src/rad/mainframe.cpp:1210
 msgid "Move Right\tAlt+Right"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1210
+#: src/rad/mainframe.cpp:1210
 msgid "Move Right selected object"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1212
+#: src/rad/mainframe.cpp:1212
 msgid "&Find\tCtrl+F"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1212
+#: src/rad/mainframe.cpp:1212
 msgid "Find text in the active code viewer"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1214
+#: src/rad/mainframe.cpp:1214
 msgid "&Align &Left\tAlt+Shift+Left"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1214
+#: src/rad/mainframe.cpp:1214
 msgid "Align item to the left"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1215
+#: src/rad/mainframe.cpp:1215
 msgid "&Align Center &Horizontal\tAlt+Shift+H"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1215
+#: src/rad/mainframe.cpp:1215
 msgid "Align item to the center horizontally"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1216
+#: src/rad/mainframe.cpp:1216
 msgid "&Align &Right\tAlt+Shift+Right"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1216
+#: src/rad/mainframe.cpp:1216
 msgid "Align item to the right"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1217
+#: src/rad/mainframe.cpp:1217
 msgid "&Align &Top\tAlt+Shift+Up"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1217
+#: src/rad/mainframe.cpp:1217
 msgid "Align item to the top"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1218
+#: src/rad/mainframe.cpp:1218
 msgid "&Align Center &Vertical\tAlt+Shift+V"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1218
+#: src/rad/mainframe.cpp:1218
 msgid "Align item to the center vertically"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1219
+#: src/rad/mainframe.cpp:1219
 msgid "&Align &Bottom\tAlt+Shift+Down"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1219
+#: src/rad/mainframe.cpp:1219
 msgid "Align item to the bottom"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1222
+#: src/rad/mainframe.cpp:1222
 msgid "&XRC Window\tF5"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1222
+#: src/rad/mainframe.cpp:1222
 msgid "Show a preview of the XRC window"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1225
+#: src/rad/mainframe.cpp:1225
 msgid "&Generate Inherited Class\tF6"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1225
+#: src/rad/mainframe.cpp:1225
 msgid "Creates the needed files and class for proper inheritance of your designed GUI"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1228
+#: src/rad/mainframe.cpp:1228
 msgid "&About...\tF1"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1228
+#: src/rad/mainframe.cpp:1228
 msgid "Show about dialog"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1233
+#: src/rad/mainframe.cpp:1233
 msgid "&File"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1234
+#: src/rad/mainframe.cpp:1234
 msgid "&Edit"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1235
+#: src/rad/mainframe.cpp:1235
 msgid "&View"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1236
+#: src/rad/mainframe.cpp:1236
 msgid "&Tools"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1237
+#: src/rad/mainframe.cpp:1237
 msgid "&Help"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1250
+#: src/rad/mainframe.cpp:1250
 msgid "Customize..."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1256
+#: src/rad/mainframe.cpp:1256
 msgid "New Project"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1256
+#: src/rad/mainframe.cpp:1256
 msgid "New Project (Ctrl+N)"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1256
+#: src/rad/mainframe.cpp:1256
 msgid "Start a new project."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1257
+#: src/rad/mainframe.cpp:1257
 msgid "Open Project (Ctrl+O)"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1257
+#: src/rad/mainframe.cpp:1257
 msgid "Open an existing project."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1258
+#: src/rad/mainframe.cpp:1258
 msgid "Save Project (Ctrl+S)"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1258
+#: src/rad/mainframe.cpp:1258
 msgid "Save the current project."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1260
+#: src/rad/mainframe.cpp:1260
 msgid "Undo"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1260
+#: src/rad/mainframe.cpp:1260
 msgid "Undo (Ctrl+Z)"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1260
+#: src/rad/mainframe.cpp:1260
 msgid "Undo the last action."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1261
+#: src/rad/mainframe.cpp:1261
 msgid "Redo"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1261
+#: src/rad/mainframe.cpp:1261
 msgid "Redo (Ctrl+Y)"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1261
+#: src/rad/mainframe.cpp:1261
 msgid "Redo the last action that was undone."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1263
+#: src/rad/mainframe.cpp:1263
 msgid "Cut"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1263
+#: src/rad/mainframe.cpp:1263
 msgid "Cut (Ctrl+X)"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1263
+#: src/rad/mainframe.cpp:1263
 msgid "Remove the selected object and place it on the clipboard."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1264
+#: src/rad/mainframe.cpp:1264
 msgid "Copy"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1264
+#: src/rad/mainframe.cpp:1264
 msgid "Copy (Ctrl+C)"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1264
+#: src/rad/mainframe.cpp:1264
 msgid "Copy the selected object to the clipboard."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1265
+#: src/rad/mainframe.cpp:1265
 msgid "Paste"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1265
+#: src/rad/mainframe.cpp:1265
 msgid "Paste (Ctrl+V)"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1265
+#: src/rad/mainframe.cpp:1265
 msgid "Insert an object from the clipboard."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1266
+#: src/rad/mainframe.cpp:1266
 msgid "Delete"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1266
+#: src/rad/mainframe.cpp:1266
 msgid "Delete (Ctrl+D)"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1266
+#: src/rad/mainframe.cpp:1266
 msgid "Remove the selected object."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1268
+#: src/rad/mainframe.cpp:1268
 msgid "Generate Code (F8)"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1268
+#: src/rad/mainframe.cpp:1268
 msgid "Create code from the current project."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1270
+#: src/rad/mainframe.cpp:1270
 msgid "Align Left"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1270
+#: src/rad/mainframe.cpp:1270
 msgid "The item will be aligned to the left of the space alotted to it by the sizer."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1271
+#: src/rad/mainframe.cpp:1271
 msgid "Align Center Horizontally"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1271
+#: src/rad/mainframe.cpp:1271
 msgid "The item will be centered horizontally in the space alotted to it by the sizer."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1272
+#: src/rad/mainframe.cpp:1272
 msgid "Align Right"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1272
+#: src/rad/mainframe.cpp:1272
 msgid "The item will be aligned to the right of the space alotted to it by the sizer."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1274
+#: src/rad/mainframe.cpp:1274
 msgid "Align Top"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1274
+#: src/rad/mainframe.cpp:1274
 msgid "The item will be aligned to the top of the space alotted to it by the sizer."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1275
+#: src/rad/mainframe.cpp:1275
 msgid "Align Center Vertically"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1275
+#: src/rad/mainframe.cpp:1275
 msgid "The item will be centered vertically within space alotted to it by the sizer."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1276
+#: src/rad/mainframe.cpp:1276
 msgid "Align Bottom"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1276
+#: src/rad/mainframe.cpp:1276
 msgid "The item will be aligned to the bottom of the space alotted to it by the sizer."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1278
+#: src/rad/mainframe.cpp:1278
 msgid "Expand (Alt+W)"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1278
+#: src/rad/mainframe.cpp:1278
 msgid "The item will be expanded to fill the space assigned to the item."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1279
+#: src/rad/mainframe.cpp:1279
 msgid "Stretch (Alt+S)"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1279
+#: src/rad/mainframe.cpp:1279
 msgid "The item will grow and shrink with the sizer."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1281
+#: src/rad/mainframe.cpp:1281
 msgid "Left Border"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1281
+#: src/rad/mainframe.cpp:1281
 msgid "A border will be added on the left side of the item."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1282
+#: src/rad/mainframe.cpp:1282
 msgid "Right Border"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1282
+#: src/rad/mainframe.cpp:1282
 msgid "A border will be  added on the right side of the item."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1283
+#: src/rad/mainframe.cpp:1283
 msgid "Top Border"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1283
+#: src/rad/mainframe.cpp:1283
 msgid "A border will be  added on the top of the item."
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1284
+#: src/rad/mainframe.cpp:1284
 msgid "Bottom Border"
 msgstr ""
 
-#: wxformbuilder32/src/rad/mainframe.cpp:1284
+#: src/rad/mainframe.cpp:1284
 msgid "A border will be  added on the bottom of the item."
 msgstr ""
 
-#: wxformbuilder32/src/rad/customkeys.cpp:46
+#: src/rad/customkeys.cpp:46
 msgid "#### Parser test ####"
 msgstr ""
 
-#: wxformbuilder32/src/rad/customkeys.cpp:51
+#: src/rad/customkeys.cpp:51
 msgid "#### Templates ####"
 msgstr ""
 
-#: wxformbuilder32/src/rad/customkeys.cpp:55
+#: src/rad/customkeys.cpp:55
 msgid "#### Code ####"
 msgstr ""
 
-#: wxformbuilder32/src/rad/wxfbmanager.cpp:32
+#: src/rad/wxfbmanager.cpp:32
 #, c-format
 msgid "%s is NULL! <%s,%i>"
 msgstr ""
 
-#: wxformbuilder32/src/rad/wxfbmanager.cpp:37
+#: src/rad/wxfbmanager.cpp:37
 msgid "Visual Editor"
 msgstr ""
 
-#: wxformbuilder32/src/rad/wxfbmanager.cpp:173
+#: src/rad/wxfbmanager.cpp:173
 #, c-format
 msgid "%s has no property named %s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/wxfbpalette.cpp:75
+#: src/rad/wxfbpalette.cpp:75
 msgid "Missing Component for Class \""
 msgstr ""
 
-#: wxformbuilder32/src/rad/wxfbpalette.cpp:75
+#: src/rad/wxfbpalette.cpp:75
 msgid "\" of Package \""
 msgstr ""
 
-#: wxformbuilder32/src/rad/wxfbpalette.cpp:110
+#: src/rad/wxfbpalette.cpp:110
 #, c-format
 msgid "[Palette] Pages %d"
 msgstr ""
 
-#: wxformbuilder32/src/rad/codeeditor/codeeditor.cpp:132
+#: src/rad/codeeditor/codeeditor.cpp:132
 #, c-format
 msgid "\"%s\" not found!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/codeeditor/codeeditor.cpp:133
+#: src/rad/codeeditor/codeeditor.cpp:133
 msgid "Not Found!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/pythonpanel/pythonpanel.cpp:88
-msgid "and assert break class continue def del elif else \t\t\t\t\t\t\t   except exec finally for from global if import in \t\t\t\t\t\t\t   is lambda not or pass print raise return try while"
-msgstr ""
-
-#: wxformbuilder32/src/rad/pythonpanel/pythonpanel.cpp:335
-#: wxformbuilder32/src/rad/cpppanel/cpppanel.cpp:408
+#: src/rad/pythonpanel/pythonpanel.cpp:333
+#: src/rad/cpppanel/cpppanel.cpp:408
 #, c-format
 msgid "Code generated on '%s'."
 msgstr ""
 
-#: wxformbuilder32/src/rad/geninheritclass/geninhertclass_gui.cpp:38
+#: src/rad/geninheritclass/geninhertclass_gui.cpp:38
 msgid "Instructions"
 msgstr ""
 
-#: wxformbuilder32/src/rad/geninheritclass/geninhertclass_gui.cpp:40
+#: src/rad/geninheritclass/geninhertclass_gui.cpp:40
 msgid ""
 "1. Check the forms you would like to create the inherited class for.\n"
 "2. You can edit individual class details by clicking on their names in the list\n"
@@ -1667,92 +1325,92 @@ msgid ""
 "3. Click 'OK'."
 msgstr ""
 
-#: wxformbuilder32/src/rad/geninheritclass/geninhertclass_gui.cpp:53
+#: src/rad/geninheritclass/geninhertclass_gui.cpp:53
 msgid "Class Details"
 msgstr ""
 
-#: wxformbuilder32/src/rad/geninheritclass/geninhertclass_gui.cpp:55
+#: src/rad/geninheritclass/geninhertclass_gui.cpp:55
 msgid "Class Name:"
 msgstr ""
 
-#: wxformbuilder32/src/rad/geninheritclass/geninhertclass_gui.cpp:62
+#: src/rad/geninheritclass/geninhertclass_gui.cpp:62
 msgid "File Names: (.cpp/.h/.py)"
 msgstr ""
 
-#: wxformbuilder32/src/rad/inspector/objinspect.cpp:232
+#: src/rad/inspector/objinspect.cpp:232
 msgid "Properties"
 msgstr ""
 
-#: wxformbuilder32/src/rad/inspector/objinspect.cpp:233
+#: src/rad/inspector/objinspect.cpp:233
 msgid "Events"
 msgstr ""
 
-#: wxformbuilder32/src/rad/inspector/objinspect.cpp:550
+#: src/rad/inspector/objinspect.cpp:550
 msgid "Property type Unknown"
 msgstr ""
 
-#: wxformbuilder32/src/rad/inspector/objinspect.cpp:710
+#: src/rad/inspector/objinspect.cpp:710
 msgid "Property Changed"
 msgstr ""
 
-#: wxformbuilder32/src/rad/inspector/objinspect.cpp:718
+#: src/rad/inspector/objinspect.cpp:718
 msgid "Property Changed [PT_FLOAT]"
 msgstr ""
 
-#: wxformbuilder32/src/rad/inspector/objinspect.cpp:728
+#: src/rad/inspector/objinspect.cpp:728
 msgid "Property Changed [PT_UINT]"
 msgstr ""
 
-#: wxformbuilder32/src/rad/inspector/objinspect.cpp:732
+#: src/rad/inspector/objinspect.cpp:732
 msgid "Property Changed [PT_OPTION]"
 msgstr ""
 
-#: wxformbuilder32/src/rad/inspector/objinspect.cpp:762
+#: src/rad/inspector/objinspect.cpp:762
 msgid "Property Changed [PT_PARENT]"
 msgstr ""
 
-#: wxformbuilder32/src/rad/inspector/objinspect.cpp:769
+#: src/rad/inspector/objinspect.cpp:769
 msgid "Property Changed [PT_WXSTRING]"
 msgstr ""
 
-#: wxformbuilder32/src/rad/inspector/objinspect.cpp:775
+#: src/rad/inspector/objinspect.cpp:775
 msgid "Property Changed [PT_BOOL]"
 msgstr ""
 
-#: wxformbuilder32/src/rad/inspector/objinspect.cpp:780
+#: src/rad/inspector/objinspect.cpp:780
 msgid "Property Changed [PT_BITLIST]"
 msgstr ""
 
-#: wxformbuilder32/src/rad/inspector/objinspect.cpp:789
+#: src/rad/inspector/objinspect.cpp:789
 msgid "Property Changed [PT_WXPOINT]"
 msgstr ""
 
-#: wxformbuilder32/src/rad/inspector/objinspect.cpp:795
+#: src/rad/inspector/objinspect.cpp:795
 msgid "Property Changed [PT_WXSIZE]"
 msgstr ""
 
-#: wxformbuilder32/src/rad/inspector/objinspect.cpp:801
+#: src/rad/inspector/objinspect.cpp:801
 msgid "Property Changed [PT_WXFONT]"
 msgstr ""
 
-#: wxformbuilder32/src/rad/inspector/objinspect.cpp:814
+#: src/rad/inspector/objinspect.cpp:814
 msgid "Property Changed [PT_WXCOLOUR]"
 msgstr ""
 
-#: wxformbuilder32/src/rad/inspector/objinspect.cpp:831
+#: src/rad/inspector/objinspect.cpp:831
 msgid "Property Changed [PT_UINTLIST]"
 msgstr ""
 
-#: wxformbuilder32/src/rad/inspector/objinspect.cpp:837
+#: src/rad/inspector/objinspect.cpp:837
 msgid "Property Changed [PT_BITMAP]"
 msgstr ""
 
-#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:257
+#: src/rad/objecttree/objecttree.cpp:257
 #, c-format
 msgid "Item without object as child of '%s:%s'"
 msgstr ""
 
-#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:463
+#: src/rad/objecttree/objecttree.cpp:463
 #, c-format
 msgid ""
 "There is no tree item associated with this object.\n"
@@ -1760,76 +1418,76 @@ msgid ""
 "\tName: %s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:526
+#: src/rad/objecttree/objecttree.cpp:526
 msgid "Cut\tCtrl+X"
 msgstr ""
 
-#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:527
+#: src/rad/objecttree/objecttree.cpp:527
 msgid "Copy\tCtrl+C"
 msgstr ""
 
-#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:528
+#: src/rad/objecttree/objecttree.cpp:528
 msgid "Paste\tCtrl+V"
 msgstr ""
 
-#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:530
+#: src/rad/objecttree/objecttree.cpp:530
 msgid "Delete\tCtrl+D"
 msgstr ""
 
-#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:537
+#: src/rad/objecttree/objecttree.cpp:537
 msgid "Move into a new wxBoxSizer"
 msgstr ""
 
-#: wxformbuilder32/src/rad/objecttree/objecttree.cpp:539
+#: src/rad/objecttree/objecttree.cpp:539
 msgid "Menu Editor..."
 msgstr ""
 
-#: wxformbuilder32/src/rad/designer/visualeditor.cpp:155
+#: src/rad/designer/visualeditor.cpp:155
 msgid "wxObject was NULL!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/designer/visualeditor.cpp:166
+#: src/rad/designer/visualeditor.cpp:166
 #, c-format
 msgid "No corresponding ObjectBase for wxObject. Name: %s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/designer/visualeditor.cpp:175
+#: src/rad/designer/visualeditor.cpp:175
 msgid "baseobject was NULL!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/designer/visualeditor.cpp:186
+#: src/rad/designer/visualeditor.cpp:186
 #, c-format
 msgid "No corresponding wxObject for ObjectBase. Name: %s"
 msgstr ""
 
-#: wxformbuilder32/src/rad/designer/visualeditor.cpp:440
+#: src/rad/designer/visualeditor.cpp:440
 #, c-format
 msgid "Component for %s not found!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/designer/visualeditor.cpp:453
+#: src/rad/designer/visualeditor.cpp:453
 #, c-format
 msgid "Component for %s was registered as a window component, but this is not a wxWindow!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/designer/visualeditor.cpp:465
+#: src/rad/designer/visualeditor.cpp:465
 #, c-format
 msgid "Component for %s was registered as a sizer component, but this is not a wxSizer!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/designer/visualeditor.cpp:634
+#: src/rad/designer/visualeditor.cpp:634
 msgid "The event object is NULL - why?"
 msgstr ""
 
-#: wxformbuilder32/src/rad/xrcpreview/xrcpreview.cpp:51
+#: src/rad/xrcpreview/xrcpreview.cpp:51
 msgid "Close Preview"
 msgstr ""
 
-#: wxformbuilder32/src/rad/xrcpreview/xrcpreview.cpp:134
+#: src/rad/xrcpreview/xrcpreview.cpp:134
 msgid "WARNING - For XRC Developers ONLY!!"
 msgstr ""
 
-#: wxformbuilder32/src/rad/xrcpreview/xrcpreview.cpp:135
+#: src/rad/xrcpreview/xrcpreview.cpp:135
 msgid ""
 "The XRC language is not as powerful as C++.\n"
 "It has limitations that will affect the GUI\n"
@@ -1841,33 +1499,33 @@ msgid ""
 "preview, it will only confuse you."
 msgstr ""
 
-#: wxformbuilder32/src/rad/dataobject/dataobject.cpp:154
+#: src/rad/dataobject/dataobject.cpp:154
 msgid "This object cannot be pasted because it is from a newer version of wxFormBuilder"
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:248
+#: src/model/database.cpp:248
 msgid "Unknown Object Type: "
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:249
+#: src/model/database.cpp:249
 msgid ""
 "\n"
 "The most likely causes are that this copy of wxFormBuilder is out of date, or that there is a plugin missing.\n"
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:250
-msgid "Please check at http://www.wxFormBuilder.org\n"
+#: src/model/database.cpp:250
+msgid "Please check at http://www.wxformbuilder.org\n"
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:328
+#: src/model/database.cpp:328
 msgid "Review your definitions file (objtypes.xml)"
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:399
+#: src/model/database.cpp:399
 msgid "SetDefaultLayoutProperties expects a subclass of sizeritembase"
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:504
+#: src/model/database.cpp:504
 #, c-format
 msgid ""
 "The property named \"%s\" of class \"%s\" is not supported by this version of wxFormBuilder.\n"
@@ -1878,240 +1536,237 @@ msgid ""
 "If you save this project, YOU WILL LOSE DATA"
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:645
+#: src/model/database.cpp:645
 msgid "Merged plugins named \""
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:851
+#: src/model/database.cpp:851
 #, c-format
 msgid "Found second template definition for property \"%s\" for language \"%s\""
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:1021
+#: src/model/database.cpp:1021
 #, c-format
 msgid ""
 "Error: %s\n"
 "While parsing property \"%s\" of class \"%s\""
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:1233
-#: wxformbuilder32/src/model/database.cpp:1257
+#: src/model/database.cpp:1233
+#: src/model/database.cpp:1257
 msgid "Error loading library "
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:1245
+#: src/model/database.cpp:1245
 msgid " is not a valid component library: "
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:1267
+#: src/model/database.cpp:1267
 msgid " is not a valid component library"
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:1272
+#: src/model/database.cpp:1272
 msgid "[Database::ImportComponentLibrary] Importing "
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:1272
+#: src/model/database.cpp:1272
 msgid " library"
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:1295
+#: src/model/database.cpp:1295
 msgid "ObjectInfo for <"
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:1295
+#: src/model/database.cpp:1295
 msgid "> not found while loading library <"
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:1319
+#: src/model/database.cpp:1319
 #, c-format
 msgid "Unknown property type \"%s\""
 msgstr ""
 
-#: wxformbuilder32/src/model/database.cpp:1400
+#: src/model/database.cpp:1400
 #, c-format
 msgid "No Object Type found for \"%s\""
 msgstr ""
 
-#: wxformbuilder32/src/model/xrcfilter.cpp:42
+#: src/model/xrcfilter.cpp:42
 msgid "[XrcFilter::GetProject]"
 msgstr ""
 
-#: wxformbuilder32/src/model/xrcfilter.cpp:50
+#: src/model/xrcfilter.cpp:50
 msgid "Missing root element \"resource\""
 msgstr ""
 
-#: wxformbuilder32/src/model/xrcfilter.cpp:134
+#: src/model/xrcfilter.cpp:134
 #, c-format
 msgid "No component found for class \"%s\", found on line %i."
 msgstr ""
 
-#: wxformbuilder32/src/model/xrcfilter.cpp:142
+#: src/model/xrcfilter.cpp:142
 #, c-format
 msgid "ImportFromXrc returned NULL for class \"%s\", found on line %i."
 msgstr ""
 
-#: wxformbuilder32/src/model/xrcfilter.cpp:175
+#: src/model/xrcfilter.cpp:175
 #, c-format
 msgid "CreateObject failed for class \"%s\", with parent \"%s\", found on line %i"
 msgstr ""
 
-#: wxformbuilder32/src/model/xrcfilter.cpp:208
+#: src/model/xrcfilter.cpp:208
 #, c-format
 msgid "Unknown class \"%s\" found on line %i, replaced with a wxPanel"
 msgstr ""
 
-#: wxformbuilder32/src/model/xrcfilter.cpp:214
+#: src/model/xrcfilter.cpp:214
 #, c-format
 msgid "Unknown class \"%s\" found on line %i, and could not replace with a wxPanel as child of \"%s:%s\""
 msgstr ""
 
-#: wxformbuilder32/src/model/objectbase.cpp:269
+#: src/model/objectbase.cpp:269
 msgid "new ObjectBase"
 msgstr ""
 
-#: wxformbuilder32/src/model/objectbase.cpp:283
+#: src/model/objectbase.cpp:283
 msgid "delete ObjectBase"
 msgstr ""
 
-#: wxformbuilder32/src/model/objectbase.cpp:304
+#: src/model/objectbase.cpp:304
 #, c-format
 msgid "[ObjectBase::GetProperty] Property %s not found!"
 msgstr ""
 
-#: wxformbuilder32/src/model/objectbase.cpp:333
+#: src/model/objectbase.cpp:333
 msgid "[ObjectBase::GetEvent] Event "
 msgstr ""
 
-#: wxformbuilder32/src/model/objectbase.cpp:333
+#: src/model/objectbase.cpp:333
 msgid " not found!"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/codegen.cpp:134
+#: src/codegen/codegen.cpp:134
 msgid "Invalid Macro Type"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/codegen.cpp:216
+#: src/codegen/codegen.cpp:216
 #, c-format
 msgid "The property '%s' does not exist for objects of class '%s'"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/codegen.cpp:229
+#: src/codegen/codegen.cpp:229
 #, c-format
 msgid "parsing property %s"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/codegen.cpp:266
+#: src/codegen/codegen.cpp:266
 #, c-format
 msgid "Parsed Text: %s"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/codegen.cpp:361
+#: src/codegen/codegen.cpp:361
 msgid "ERROR"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/codegen.cpp:442
+#: src/codegen/codegen.cpp:442
 msgid "Property type not compatible with \"foreach\" macro"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/codegen.cpp:766
+#: src/codegen/codegen.cpp:766
 #, c-format
 msgid "Unknown macro: \"%s\""
 msgstr ""
 
-#: wxformbuilder32/src/codegen/pythoncg.cpp:263
+#: src/codegen/pythoncg.cpp:263
 #, c-format
 msgid ""
 "Python code generation does not support using URLs for bitmap properties:\n"
 "%s"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/pythoncg.cpp:378
-#: wxformbuilder32/src/codegen/cppcg.cpp:373
+#: src/codegen/pythoncg.cpp:378
+#: src/codegen/cppcg.cpp:373
 msgid "There is no object to generate inherited class"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/pythoncg.cpp:384
-#: wxformbuilder32/src/codegen/cppcg.cpp:379
+#: src/codegen/pythoncg.cpp:384
+#: src/codegen/cppcg.cpp:379
 msgid "This not a UserClasses object"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/pythoncg.cpp:440
-#: wxformbuilder32/src/codegen/cppcg.cpp:470
+#: src/codegen/pythoncg.cpp:440
+#: src/codegen/cppcg.cpp:470
 msgid "There is no project to generate code"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/pythoncg.cpp:475
-#: wxformbuilder32/src/codegen/cppcg.cpp:504
+#: src/codegen/pythoncg.cpp:475
+#: src/codegen/cppcg.cpp:504
 msgid "Missing \"file\" property on Project Object"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/pythoncg.cpp:555
-#: wxformbuilder32/src/codegen/pythoncg.cpp:741
-#: wxformbuilder32/src/codegen/cppcg.cpp:710
-#: wxformbuilder32/src/codegen/cppcg.cpp:992
+#: src/codegen/pythoncg.cpp:555
+#: src/codegen/pythoncg.cpp:741
+#: src/codegen/cppcg.cpp:710
+#: src/codegen/cppcg.cpp:992
 #, c-format
 msgid "Missing \"name\" property on \"%s\" class. Review your XML object description"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/pythoncg.cpp:563
-#: wxformbuilder32/src/codegen/cppcg.cpp:718
-msgid "Object name cannot be null"
+#: src/codegen/pythoncg.cpp:563
+#: src/codegen/pythoncg.cpp:748
+#: src/codegen/cppcg.cpp:718
+#: src/codegen/cppcg.cpp:1000
+msgid "Object name can not be null"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/pythoncg.cpp:596
-#: wxformbuilder32/src/codegen/cppcg.cpp:763
+#: src/codegen/pythoncg.cpp:596
+#: src/codegen/cppcg.cpp:763
 #, c-format
 msgid "Missing \"evt_%s\" template for \"%s\" class. Review your XML object description"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/pythoncg.cpp:650
-msgid "# Virtual event handlers, overide them in your derived class"
+#: src/codegen/pythoncg.cpp:650
+msgid "# Virtual event handlers, override them in your derived class"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/pythoncg.cpp:719
-#: wxformbuilder32/src/codegen/cppcg.cpp:973
+#: src/codegen/pythoncg.cpp:719
+#: src/codegen/cppcg.cpp:973
 #, c-format
 msgid "Missing \"%s\" template for \"%s\" class. Review your XML object description"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/pythoncg.cpp:748
-#: wxformbuilder32/src/codegen/cppcg.cpp:1000
-msgid "Object name can not be null"
-msgstr ""
-
-#: wxformbuilder32/src/codegen/pythoncg.cpp:1064
-#: wxformbuilder32/src/codegen/cppcg.cpp:1526
+#: src/codegen/pythoncg.cpp:1064
+#: src/codegen/cppcg.cpp:1526
 msgid "Missing subwindows for wxSplitterWindow widget."
 msgstr ""
 
-#: wxformbuilder32/src/codegen/pythoncg.cpp:1109
-#: wxformbuilder32/src/codegen/cppcg.cpp:1571
+#: src/codegen/pythoncg.cpp:1109
+#: src/codegen/cppcg.cpp:1571
 msgid "SizerItem child is not a Spacer and is not a subclass of wxWindow or of sizer."
 msgstr ""
 
-#: wxformbuilder32/src/codegen/pythoncg.cpp:1251
-#: wxformbuilder32/src/codegen/cppcg.cpp:1711
+#: src/codegen/pythoncg.cpp:1251
+#: src/codegen/cppcg.cpp:1711
 msgid "First ID is Less than 1000"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/cppcg.cpp:234
+#: src/codegen/cppcg.cpp:234
 #, c-format
 msgid ""
 "C++ code generation does not support using URLs for bitmap properties:\n"
 "%s"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/cppcg.cpp:440
+#: src/codegen/cppcg.cpp:440
 #, c-format
 msgid "// TODO: Implement %s"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/cppcg.cpp:846
+#: src/codegen/cppcg.cpp:846
 msgid "// Virtual event handlers, override them in your derived class"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/cppcg.cpp:1194
+#: src/codegen/cppcg.cpp:1194
 #, c-format
 msgid ""
 "Invalid Value for Property\n"
@@ -2120,90 +1775,401 @@ msgid ""
 "\tValue: %s"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/codewriter.cpp:239
+#: src/codegen/codewriter.cpp:239
 #, c-format
 msgid "Unable to create file: %s"
 msgstr ""
 
-#: wxformbuilder32/src/codegen/codewriter.cpp:266
+#: src/codegen/codewriter.cpp:266
 msgid "Unable to write file: "
 msgstr ""
 
-#: wxformbuilder32/src/codegen/codewriter.cpp:274
+#: src/codegen/codewriter.cpp:274
 msgid "Unable to create file: "
 msgstr ""
 
-#: wxformbuilder32/plugins/containers/bookutils.h:102
+#: plugins/containers/containers.cpp:105
+msgid ""
+"wxAuiNotebook pages can normally be closed.\n"
+"However, it is difficult to design a page that has been closed, so this action has been vetoed."
+msgstr ""
+
+#: plugins/containers/containers.cpp:106
+msgid "Page Close Vetoed!"
+msgstr ""
+
+#: plugins/containers/containers.cpp:112
+msgid ""
+"wxAuiNotebook pages can be dragged to other wxAuiNotebooks if the wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND event is caught and allowed.\n"
+"However, it is difficult to design a page that has been moved, so this action was not allowed."
+msgstr ""
+
+#: plugins/containers/containers.cpp:113
+msgid "Page Move Not Allowed!"
+msgstr ""
+
+#: plugins/containers/containers.cpp:175
+msgid ""
+"Double-clicking a wxSplitterWindow sash with the minimum pane size set to 0 would normally unsplit it.\n"
+"However, it is difficult to design a pane that has been closed, so this action has been vetoed."
+msgstr ""
+
+#: plugins/containers/containers.cpp:176
+msgid "Unsplit Vetoed!"
+msgstr ""
+
+#: plugins/containers/containers.cpp:327
+msgid "This should be a wxSplitterWindow"
+msgstr ""
+
+#: plugins/containers/containers.cpp:346
+#: plugins/containers/containers.cpp:373
+msgid "A SplitterItem is abstract and must have a child!"
+msgstr ""
+
+#: plugins/containers/containers.cpp:752
+#, c-format
+msgid "TreebookPageComponent is missing its wxFormBuilder object(%i), its parent(%i), or its child(%i)"
+msgstr ""
+
+#: plugins/containers/containers.cpp:761
+msgid "TreebookPageComponent has an invalid depth."
+msgstr ""
+
+#: plugins/containers/containers.cpp:899
+#, c-format
+msgid "ToolbookPageComponent is missing its wxFormBuilder object(%i), its parent(%i), or its child(%i)"
+msgstr ""
+
+#: plugins/containers/containers.cpp:1042
+#, c-format
+msgid "AuiNotebookPageComponent is missing its wxFormBuilder object(%i), its parent(%i), or its child(%i)"
+msgstr ""
+
+#: plugins/common/common.cpp:774
+#, c-format
+msgid "Cell (0,%d)"
+msgstr ""
+
+#: plugins/common/common.cpp:780
+#, c-format
+msgid "Cell (%d,%d)"
+msgstr ""
+
+#: plugins/common/common.cpp:849
+msgid "wxRadioBox must have at least one choice"
+msgstr ""
+
+#: plugins/common/common.cpp:855
+msgid "majorDimension must be greater than zero."
+msgstr ""
+
+#: plugins/layout/layout.cpp:99
+msgid "The parent of a SizerItem is either missing or not a wxSizer - this should not be possible!"
+msgstr ""
+
+#: plugins/layout/layout.cpp:107
+msgid "The SizerItem component has no child - this should not be possible!"
+msgstr ""
+
+#: plugins/layout/layout.cpp:146
+msgid "The SizerItem component's child is not a wxWindow or a wxSizer or a spacer - this should not be possible!"
+msgstr ""
+
+#: plugins/layout/layout.cpp:406
+msgid "The GBSizerItem component's child is not a wxWindow or a wxSizer or a Spacer - this should not be possible!"
+msgstr ""
+
+#: plugins/layout/layout.cpp:435
+msgid "This should be a wxGridBagSizer!"
+msgstr ""
+
+#: plugins/layout/layout.cpp:562
+#: plugins/layout/layout.cpp:607
+#: plugins/layout/layout.cpp:645
+#: plugins/layout/layout.cpp:682
+msgid "OK"
+msgstr ""
+
+#: plugins/layout/layout.cpp:566
+#: plugins/layout/layout.cpp:611
+#: plugins/layout/layout.cpp:646
+#: plugins/layout/layout.cpp:686
+msgid "Yes"
+msgstr ""
+
+#: plugins/layout/layout.cpp:570
+#: plugins/layout/layout.cpp:615
+#: plugins/layout/layout.cpp:647
+#: plugins/layout/layout.cpp:690
+msgid "Save"
+msgstr ""
+
+#: plugins/layout/layout.cpp:574
+#: plugins/layout/layout.cpp:619
+#: plugins/layout/layout.cpp:648
+#: plugins/layout/layout.cpp:694
+msgid "Apply"
+msgstr ""
+
+#: plugins/layout/layout.cpp:578
+#: plugins/layout/layout.cpp:623
+#: plugins/layout/layout.cpp:649
+#: plugins/layout/layout.cpp:698
+msgid "No"
+msgstr ""
+
+#: plugins/layout/layout.cpp:582
+#: plugins/layout/layout.cpp:627
+#: plugins/layout/layout.cpp:650
+#: plugins/layout/layout.cpp:702
+msgid "Cancel"
+msgstr ""
+
+#: plugins/layout/layout.cpp:586
+#: plugins/layout/layout.cpp:631
+#: plugins/layout/layout.cpp:651
+#: plugins/layout/layout.cpp:706
+msgid "Help"
+msgstr ""
+
+#: plugins/layout/layout.cpp:590
+#: plugins/layout/layout.cpp:635
+#: plugins/layout/layout.cpp:652
+#: plugins/layout/layout.cpp:710
+msgid "ContextHelp"
+msgstr ""
+
+#: plugins/additional/additional.cpp:217
+msgid "Welcome to wxRichTextCtrl, a wxWidgets control for editing and presenting styled text and images"
+msgstr ""
+
+#: plugins/additional/additional.cpp:222
+msgid "by Julian Smart"
+msgstr ""
+
+#: plugins/additional/additional.cpp:234
+msgid "What can you do with this thing? "
+msgstr ""
+
+#: plugins/additional/additional.cpp:236
+msgid " Well, you can change text "
+msgstr ""
+
+#: plugins/additional/additional.cpp:239
+msgid "colour, like this red bit."
+msgstr ""
+
+#: plugins/additional/additional.cpp:243
+msgid " And this blue bit."
+msgstr ""
+
+#: plugins/additional/additional.cpp:246
+msgid " Naturally you can make things "
+msgstr ""
+
+#: plugins/additional/additional.cpp:248
+msgid "bold "
+msgstr ""
+
+#: plugins/additional/additional.cpp:251
+msgid "or italic "
+msgstr ""
+
+#: plugins/additional/additional.cpp:254
+msgid "or underlined."
+msgstr ""
+
+#: plugins/additional/additional.cpp:258
+msgid " Different font sizes on the same line is allowed, too."
+msgstr ""
+
+#: plugins/additional/additional.cpp:261
+msgid " Next we'll show an indented paragraph."
+msgstr ""
+
+#: plugins/additional/additional.cpp:266
+msgid "Indented paragraph."
+msgstr ""
+
+#: plugins/additional/additional.cpp:271
+msgid "Next, we'll show a first-line indent, achieved using BeginLeftIndent(100, -40)."
+msgstr ""
+
+#: plugins/additional/additional.cpp:276
+msgid "It was in January, the most down-trodden month of an Edinburgh winter."
+msgstr ""
+
+#: plugins/additional/additional.cpp:281
+msgid "Numbered bullets are possible, again using subindents:"
+msgstr ""
+
+#: plugins/additional/additional.cpp:286
+msgid "This is my first item. Note that wxRichTextCtrl doesn't automatically do numbering, but this will be added later."
+msgstr ""
+
+#: plugins/additional/additional.cpp:292
+msgid "This is my second item."
+msgstr ""
+
+#: plugins/additional/additional.cpp:297
+msgid "The following paragraph is right-indented:"
+msgstr ""
+
+#: plugins/additional/additional.cpp:302
+msgid "It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable."
+msgstr ""
+
+#: plugins/additional/additional.cpp:317
+msgid "This line contains tabs:\tFirst tab\tSecond tab\tThird tab"
+msgstr ""
+
+#: plugins/additional/additional.cpp:320
+msgid "Other notable features of wxRichTextCtrl include:"
+msgstr ""
+
+#: plugins/additional/additional.cpp:324
+msgid "Compatibility with wxTextCtrl API"
+msgstr ""
+
+#: plugins/additional/additional.cpp:327
+msgid ""
+"\n"
+"Note: this content was generated programmatically and copied from the sample. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!"
+msgstr ""
+
+#: plugins/additional/additional.cpp:362
+msgid "This is a dummy page."
+msgstr ""
+
+#: plugins/additional/additional.cpp:513
+msgid "The Root"
+msgstr ""
+
+#: plugins/additional/additional.cpp:514
+msgid "Child 1"
+msgstr ""
+
+#: plugins/additional/additional.cpp:515
+msgid "Child 2"
+msgstr ""
+
+#: plugins/additional/additional.cpp:516
+msgid "Child 3, very long, long, long, long"
+msgstr ""
+
+#: plugins/additional/additional.cpp:520
+msgid "Child 4"
+msgstr ""
+
+#: plugins/additional/additional.cpp:521
+msgid "Child 5"
+msgstr ""
+
+#: plugins/additional/additional.cpp:556
+#, c-format
+msgid "DataViewColumnComponent is missing its wxFormBuilder object(%i) or its parent(%i)"
+msgstr ""
+
+#: plugins/additional/additional.cpp:564
+msgid "Column with strings"
+msgstr ""
+
+#: plugins/additional/additional.cpp:568
+msgid "Column with icons"
+msgstr ""
+
+#: plugins/additional/additional.cpp:572
+msgid "ToggleCol"
+msgstr ""
+
+#: plugins/additional/additional.cpp:576
+msgid "ProgressCol"
+msgstr ""
+
+#: plugins/additional/additional.cpp:580
+msgid "BitmapCol"
+msgstr ""
+
+#: plugins/additional/additional.cpp:584
+msgid "DateCol"
+msgstr ""
+
+#: plugins/additional/additional.cpp:588
+msgid "StringCol"
+msgstr ""
+
+#: src/rad/settingspanel.h:42
+msgid "Pane Border Size:"
+msgstr ""
+
+#: src/rad/settingspanel.h:53
+msgid "Sash Size:"
+msgstr ""
+
+#: src/rad/settingspanel.h:63
+msgid "Caption Size:"
+msgstr ""
+
+#: src/rad/settingspanel.h:73
+msgid "Background Color:"
+msgstr ""
+
+#: src/rad/settingspanel.h:81
+msgid "Sash Color:"
+msgstr ""
+
+#: src/rad/settingspanel.h:89
+msgid "Normal Caption:"
+msgstr ""
+
+#: src/rad/settingspanel.h:97
+msgid "Normal Caption Gradient:"
+msgstr ""
+
+#: src/rad/settingspanel.h:105
+msgid "Normal Caption Text:"
+msgstr ""
+
+#: src/rad/settingspanel.h:113
+msgid "Active Caption:"
+msgstr ""
+
+#: src/rad/settingspanel.h:121
+msgid "Active Caption Gradient:"
+msgstr ""
+
+#: src/rad/settingspanel.h:129
+msgid "Active Caption Text:"
+msgstr ""
+
+#: src/rad/settingspanel.h:137
+msgid "Border Color:"
+msgstr ""
+
+#: src/rad/settingspanel.h:145
+msgid "Gripper Color:"
+msgstr ""
+
+#: src/rad/settingspanel.h:242
+msgid "Color Picker"
+msgstr ""
+
+#: src/rad/title.h:36
+msgid "No title"
+msgstr ""
+
+#: src/rad/geninheritclass/geninhertclass_gui.h:78
+msgid "Generate Inherited Class"
+msgstr ""
+
+#: plugins/containers/bookutils.h:102
 #, c-format
 msgid "%s is missing its wxFormBuilder object(%i), its parent(%i), or its child(%i)"
 msgstr ""
 
-#: wxformbuilder32/plugins/containers/bookutils.h:117
+#: plugins/containers/bookutils.h:117
 #, c-format
 msgid "%s's parent is missing its wxFormBuilder object"
-msgstr ""
-
-#: wxformbuilder32/src/rad/settingspanel.h:42
-msgid "Pane Border Size:"
-msgstr ""
-
-#: wxformbuilder32/src/rad/settingspanel.h:53
-msgid "Sash Size:"
-msgstr ""
-
-#: wxformbuilder32/src/rad/settingspanel.h:63
-msgid "Caption Size:"
-msgstr ""
-
-#: wxformbuilder32/src/rad/settingspanel.h:73
-msgid "Background Color:"
-msgstr ""
-
-#: wxformbuilder32/src/rad/settingspanel.h:81
-msgid "Sash Color:"
-msgstr ""
-
-#: wxformbuilder32/src/rad/settingspanel.h:89
-msgid "Normal Caption:"
-msgstr ""
-
-#: wxformbuilder32/src/rad/settingspanel.h:97
-msgid "Normal Caption Gradient:"
-msgstr ""
-
-#: wxformbuilder32/src/rad/settingspanel.h:105
-msgid "Normal Caption Text:"
-msgstr ""
-
-#: wxformbuilder32/src/rad/settingspanel.h:113
-msgid "Active Caption:"
-msgstr ""
-
-#: wxformbuilder32/src/rad/settingspanel.h:121
-msgid "Active Caption Gradient:"
-msgstr ""
-
-#: wxformbuilder32/src/rad/settingspanel.h:129
-msgid "Active Caption Text:"
-msgstr ""
-
-#: wxformbuilder32/src/rad/settingspanel.h:137
-msgid "Border Color:"
-msgstr ""
-
-#: wxformbuilder32/src/rad/settingspanel.h:145
-msgid "Gripper Color:"
-msgstr ""
-
-#: wxformbuilder32/src/rad/settingspanel.h:242
-msgid "Color Picker"
-msgstr ""
-
-#: wxformbuilder32/src/rad/title.h:36
-msgid "No title"
-msgstr ""
-
-#: wxformbuilder32/src/rad/geninheritclass/geninhertclass_gui.h:78
-msgid "Generate Inherited Class"
 msgstr ""
 
