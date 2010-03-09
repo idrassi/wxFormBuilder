@@ -377,32 +377,39 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
 	switch ( type )
 	{
 		case PT_MACRO: {
+			Debug::Print( _("Property added [MACRO]") + name );
 			result = new wxStringProperty( name, wxPG_LABEL, prop->GetValueAsString() );
 			break;
 		}
 		case PT_INT: {
+			Debug::Print( _("Property added [INT]") + name );
 			result = new wxIntProperty( name, wxPG_LABEL, prop->GetValueAsInteger() );
 			break;
 		}
 		case PT_UINT: {
+			Debug::Print( _("Property added [UNIT]") + name );
 			result = new wxUIntProperty( name, wxPG_LABEL, (unsigned)prop->GetValueAsInteger() );
 			break;
 		}
 		case PT_WXSTRING:
 		case PT_WXSTRING_I18N: {
+			Debug::Print( _("Property added [WXSTRING]") + name );
 			result = new wxLongStringProperty( name, wxPG_LABEL, prop->GetValueAsText() );
 			break;
 		}
 		case PT_TEXT: {
+			Debug::Print( _("Property added [TEXT]") + name );
 			result = new wxLongStringProperty( name, wxPG_LABEL, prop->GetValueAsString() );
 			result->SetFlag( wxPG_PROP_NO_ESCAPE );
 			break;
 		}
 		case PT_BOOL: {
+			Debug::Print( _("Property added [BOOL]") + name );
 			result = new wxBoolProperty( name, wxPG_LABEL, prop->GetValue() == "1" );
 			break;
 		}
 		case PT_BITLIST: {
+			Debug::Print( _("Property added [BITLIST]") + name );
 			PPropertyInfo prop_desc = prop->GetPropertyInfo();
 			POptionList opt_list = prop_desc->GetOptionList();
 
@@ -434,10 +441,12 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
 		}
 		case PT_INTLIST:
 		case PT_UINTLIST: {
+			Debug::Print( _("Property added [INTLIST/UINTLIST]") + name );
 			result = new wxStringProperty( name, wxPG_LABEL, IntList( prop->GetValueAsString(), type == PT_UINTLIST ).ToString() );
 			break;
 		}
 		case PT_OPTION: {
+			Debug::Print( _("Property added [OPTION]") + name );
 			PPropertyInfo prop_desc = prop->GetPropertyInfo();
 			POptionList opt_list = prop_desc->GetOptionList();
 
@@ -471,19 +480,23 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
 			break;
 		}
 		case PT_WXPOINT: {
+			Debug::Print( _("Property added [POINT]") + name );
 			result = new wxPointProperty( name, wxPG_LABEL, prop->GetValueAsPoint() );
 			break;
 		}
 		case PT_WXSIZE: {
+			Debug::Print( _("Property added [SIZE]") + name );
 			result = new wxSizeProperty( name, wxPG_LABEL, prop->GetValueAsSize() );
 			break;
 		}
 		case PT_WXFONT: {
+			Debug::Print( _("Property added [FONT]") + name );
 			wxFontContainer container = TypeConv::StringToFont( prop->GetValueAsString() );
 			result = new wxFontProperty( name, wxPG_LABEL, container.GetFont() );
 			break;
 		}
 		case PT_WXCOLOUR: {
+			Debug::Print( _("Property added [WXCOLOUR]") + name );
 			wxString value = prop->GetValueAsString();
 			if ( value.empty() )
 			{
@@ -508,27 +521,33 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
 			break;
 		}
 		case PT_PATH: {
+			Debug::Print( _("Property added [PATH]") + name );
 			result = new wxDirProperty( name, wxPG_LABEL, prop->GetValueAsString() );
 			break;
 		}
 		case PT_FILE: {
+			Debug::Print( _("Property added [FILE]") + name );
 			result = new wxFileProperty( name, wxPG_LABEL, prop->GetValueAsString() );
 			break;
 		}
 		case PT_BITMAP: {
+			Debug::Print( _("Property added [BITMAP]") + name );
 			result = new wxImageFileProperty( name, wxPG_LABEL, prop->GetValue() );
 			break;
 		}
 		case PT_STRINGLIST: {
+			Debug::Print( _("Property added [STRING_LIST]") + name );
 			result = new wxArrayStringProperty( name, wxPG_LABEL,prop->GetValueAsArrayString() );
 			break;
 		}
 		case PT_FLOAT: {
+			Debug::Print( _("Property added [FLOAT]") + name );
 			result = new wxFloatProperty( name, wxPG_LABEL,prop->GetValueAsFloat() );
 			break;
 		}
 		case PT_PARENT: {
-			wxPropertyCategory* parent = new wxPropertyCategory( name, wxPG_LABEL );
+			wxPGProperty* parent = new wxPGProperty( name, wxPG_LABEL );
+			Debug::Print( _("Property added [PT_PARENT]") + name );
 
 			PPropertyInfo prop_desc = prop->GetPropertyInfo();
 			std::list< PropertyChild >* children = prop_desc->GetChildren();
@@ -536,7 +555,7 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
 			for ( it = children->begin(); it != children->end(); ++it )
 			{
 				wxPGProperty* child = new wxStringProperty( it->m_name, wxPG_LABEL, wxEmptyString );
-				m_pg->Append( child );
+				parent->AppendChild( child );
 				m_pg->SetPropertyHelpString( child, it->m_description );
 			}
 
@@ -545,6 +564,7 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
 			break;
 		}
 		default: {
+			Debug::Print( _("Property added [Default]") + name );
 			result = new wxStringProperty( name, wxPG_LABEL, prop->GetValueAsString() );
 			result->SetAttribute( wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING, vTrue );
 			wxLogError( _("Property type Unknown") );
