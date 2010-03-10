@@ -10,11 +10,11 @@
 	<property name="first_id" type="text" help="All GUI controls have an interger ID, this is the value for the first control, each additional control with increment by 1.">
 		1000
 	</property>
-	<property name="code_generation" type="bitlist">
-	  <option name="C++" help="Generate C++ Code" />
-	  <option name="Python" help="Generate Python Code" />
-	  <option name="XRC" help="Generate XRC Code"/>
-	  C++
+    <property name="code_generation" type="bitlist">
+      <option name="C++" help="Generate C++ Code" />
+      <option name="Python" help="Generate Python Code" />
+      <option name="XRC" help="Generate XRC Code"/>
+      C++
 	</property>
 	<category name="C++ Properties">
 		<property name="use_enum" type="bool" help="For C++ Only.&#x0A;Generate an enumeration for control IDs instead of a list of #defines">0</property>
@@ -24,7 +24,7 @@
 		<property name="class_decoration" type="parent" help="For C++ Only.&#x0A;Used to decorate classes with DLL export macros.">
 		  <child name="decoration" help="The name of the macro or the dll export decoration."/>
 		  <child name="header" help="Optional header file where the export macro is defined."/>
-		</property>
+	    </property>
 		<property name="encoding" type="option" help="">
 		  <option name="UTF-8" />
 		  <option name="ANSI" />UTF-8
@@ -52,7 +52,7 @@
 		  <option name="source_name" help="Pass source widget name to Unbind() function."/>
 		  <option name="handler_name" help="Pass event handler name to Unbind() function."/>source_name
 		</property>
-		</category>
+	</category>
   </objectinfo>
   <objectinfo class="C++" smallIcon="c++.png" type="interface">
     <property name="permission" type="option" hidden="1">

@@ -211,14 +211,14 @@ public:
 		return m_manager->NewNoObject(); /* Even components which are not visible must be unique in the map */
 	}
 
-    void Cleanup( wxObject* obj )
+    virtual void Cleanup( wxObject* obj )
     {
         wxWindow* window = dynamic_cast< wxWindow* >( obj );
         if ( window != 0 )
         {
-            if ( window->GetEventHandler() != window )
+            if ( window->GetEventHandler() != window && window )
             {
-                window->PopEventHandler( true );
+				window->PopEventHandler(true);
             }
         }
     }

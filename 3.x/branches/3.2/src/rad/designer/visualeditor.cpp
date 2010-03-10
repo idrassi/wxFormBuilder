@@ -104,7 +104,7 @@ VisualEditor::~VisualEditor()
 	AppData()->RemoveHandler( this->GetEventHandler() );
 	DeleteAbstractObjects();
 	
-	//ClearComponents( m_back->GetFrameContentPanel() );
+	ClearComponents( m_back->GetFrameContentPanel() );
 	m_back->Destroy();
 }
 
@@ -231,7 +231,7 @@ void VisualEditor::Create()
 	m_back->SetSelectedItem( NULL );
 	m_back->SetSelectedSizer( NULL );
 	m_back->SetSelectedObject( PObjectBase() );
-	//ClearComponents( m_back->GetFrameContentPanel() );
+	ClearComponents( m_back->GetFrameContentPanel() );
 	m_back->GetFrameContentPanel()->DestroyChildren();
 	m_back->GetFrameContentPanel()->SetSizer( NULL ); // TODO: *!*
 

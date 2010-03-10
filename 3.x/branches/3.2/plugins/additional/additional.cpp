@@ -112,7 +112,7 @@ public:
 	m_manager( manager )
 	{
 	}
-
+	
 protected:
 	void OnGenericDirCtrlLeftClick( wxMouseEvent& event );
 	DECLARE_EVENT_TABLE()
@@ -330,6 +330,11 @@ public:
 
 		return richText;
 	}
+
+	virtual void Cleanup( wxObject* obj )
+    {
+    }
+
 /*
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
@@ -366,6 +371,10 @@ public:
 
 		return hw;
 	}
+	
+	virtual void Cleanup( wxObject* obj )
+    {
+    }
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
@@ -468,6 +477,11 @@ public:
 
 		return tc;
 	}
+	
+	virtual void Cleanup( wxObject* obj )
+    {
+    }
+
 
 	ticpp::Element* ExportToXrc( IObject *obj )
 	{
@@ -743,6 +757,11 @@ public:
 								obj->GetPropertyAsInteger("window_style") );
 		return cl;
 	}
+	
+	virtual void Cleanup( wxObject* obj )
+    {
+    }
+
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
@@ -1236,6 +1255,8 @@ public:
 class GenericDirCtrlComponent : public ComponentBase
 {
 public:
+	GenericDirCtrlEvtHandler* m_evtHandler;
+	wxGenericDirCtrl* m_ctrl;
 	wxObject* Create( IObject* obj, wxObject* parent )
 	{
 		wxGenericDirCtrl* ctrl = new wxGenericDirCtrl(	(wxWindow*)parent, wxID_ANY,
@@ -1248,9 +1269,17 @@ public:
 														obj->GetPropertyAsInteger("defaultfilter") );
 
 		ctrl->ShowHidden( obj->GetPropertyAsInteger("show_hidden") != 0 );
-		ctrl->GetTreeCtrl()->PushEventHandler( new GenericDirCtrlEvtHandler( ctrl, GetManager() ) );
+		m_evtHandler = new GenericDirCtrlEvtHandler( ctrl, GetManager() );
+		ctrl->GetTreeCtrl()->PushEventHandler( m_evtHandler );
+		m_ctrl = ctrl;
 		return ctrl;
 	}
+	
+	virtual void Cleanup( wxObject* obj )
+    {
+		m_ctrl->GetTreeCtrl()->RemoveEventHandler(m_evtHandler);
+		delete m_evtHandler;
+    }
 
 	ticpp::Element* ExportToXrc( IObject *obj )
 	{
