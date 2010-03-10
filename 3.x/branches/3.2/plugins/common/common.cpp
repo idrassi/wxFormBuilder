@@ -798,6 +798,11 @@ public:
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
+	
+	virtual void Cleanup( wxObject* obj )
+    {
+    }
+
 };
 
 class ListBoxComponent : public ComponentBase
