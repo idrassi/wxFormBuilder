@@ -104,8 +104,8 @@ VisualEditor::~VisualEditor()
 	AppData()->RemoveHandler( this->GetEventHandler() );
 	DeleteAbstractObjects();
 	
-	ClearComponents( m_back->GetFrameContentPanel() );
-// 	m_back->Destroy();
+	//ClearComponents( m_back->GetFrameContentPanel() );
+	m_back->Destroy();
 }
 
 void VisualEditor::UpdateVirtualSize()
@@ -231,7 +231,7 @@ void VisualEditor::Create()
 	m_back->SetSelectedItem( NULL );
 	m_back->SetSelectedSizer( NULL );
 	m_back->SetSelectedObject( PObjectBase() );
-	ClearComponents( m_back->GetFrameContentPanel() );
+	//ClearComponents( m_back->GetFrameContentPanel() );
 	m_back->GetFrameContentPanel()->DestroyChildren();
 	m_back->GetFrameContentPanel()->SetSizer( NULL ); // TODO: *!*
 
@@ -808,13 +808,15 @@ wxInnerFrame( parent, id, pos, size, style )
 	m_selItem = NULL;
 	m_actPanel = NULL;
 	SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-
-	GetFrameContentPanel()->PushEventHandler(new HighlightPaintHandler(GetFrameContentPanel()));
+	
+	m_hpHandler = new HighlightPaintHandler(GetFrameContentPanel());
+	GetFrameContentPanel()->PushEventHandler(m_hpHandler);
 }
 
 DesignerWindow::~DesignerWindow()
 {
-    GetFrameContentPanel()->PopEventHandler( true );
+    GetFrameContentPanel()->RemoveEventHandler( m_hpHandler );
+	delete m_hpHandler;
 }
 
 void DesignerWindow::SetGrid( int x, int y )

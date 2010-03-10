@@ -78,7 +78,9 @@ private:
        HighlightPaintHandler(wxWindow *win);
        void OnPaint(wxPaintEvent &event);
 	};
-
+	
+	HighlightPaintHandler* m_hpHandler;
+	
 	class Wizard : public wxPanel
 	{
 	protected:
