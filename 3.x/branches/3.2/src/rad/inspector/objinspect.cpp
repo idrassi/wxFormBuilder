@@ -646,7 +646,7 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
 		{
 			continue;
 		}
-		wxPGProperty* catId = m_pg->Append( new wxPropertyCategory( nextCat->GetName() ) );
+		wxPGProperty* catId = m_pg->AppendIn( category->GetName() , new wxPropertyCategory( nextCat->GetName() ) );
 		ExpandMap::iterator it = m_isExpanded.find( nextCat->GetName() );
 		if ( it != m_isExpanded.end() )
 		{
