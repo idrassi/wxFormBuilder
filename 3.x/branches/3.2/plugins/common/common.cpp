@@ -369,11 +369,18 @@ public:
 				wxControl* control = wxDynamicCast( child, wxControl );
 				if ( NULL != control )
 				{
+					if( control->GetParent() != tb )
+					{
+						//FIXME : try to fix why the reparent is not fully working
+						control->Reparent(tb);
+					}
+					
 					tb->AddControl( control );
 				}
 			}
 		}
 		tb->Realize();
+		tb->GetParent()->Refresh();
 	}
 
 	ticpp::Element* ExportToXrc( IObject *obj )
