@@ -1782,13 +1782,22 @@ void CppCodeGenerator::GenDestruction( PObjectBase obj )
 
 void CppCodeGenerator::GenAddToolbar( PObjectInfo info, PObjectBase obj )
 {
+	wxArrayString arrCode;
+	
+	GetAddToolbarCode( info, obj, arrCode );
+	
+	for( size_t i = 0; i < arrCode.GetCount(); i++ ) m_source->WriteLn( arrCode[i] );
+}
+
+void CppCodeGenerator::GetAddToolbarCode( PObjectInfo info, PObjectBase obj, wxArrayString& codelines )
+{
 	wxString _template;
-	PCodeInfo code_info = info->GetCodeInfo("C++");
+	PCodeInfo code_info = info->GetCodeInfo( wxT( "C++" ) );
 
 	if ( !code_info )
 		return;
 
-	_template = code_info->GetTemplate("toolbar_add");
+	_template = code_info->GetTemplate( wxT( "toolbar_add" ) );
 
 	if ( !_template.empty() )
 	{
@@ -1796,17 +1805,16 @@ void CppCodeGenerator::GenAddToolbar( PObjectInfo info, PObjectBase obj )
 		wxString code = parser.ParseTemplate();
 		if ( !code.empty() )
 		{
-			m_source->WriteLn( code );
+			if( codelines.Index( code ) == wxNOT_FOUND ) codelines.Add( code );
 		}
 	}
-
+	
 	// Proceeding recursively with the base classes
 	for ( unsigned int i = 0; i < info->GetBaseClassCount(); i++ )
 	{
 		PObjectInfo base_info = info->GetBaseClass( i );
-		GenAddToolbar( base_info, obj );
+		GetAddToolbarCode( base_info, obj, codelines );
 	}
-
 }
 
 ///////////////////////////////////////////////////////////////////////

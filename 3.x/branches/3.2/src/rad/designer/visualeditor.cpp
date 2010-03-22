@@ -337,6 +337,15 @@ void VisualEditor::Create()
 				// Create the menubar later
 				menubar = child;
 			}
+			else if( !toolbar && ( m_form->GetObjectTypeName() == "toolbar_form" ) )
+			{
+				Generate( m_form, m_back->GetFrameContentPanel(), m_back->GetFrameContentPanel() );
+
+				ObjectBaseMap::iterator it = m_baseobjects.find( m_form.get() );
+				toolbar = wxDynamicCast( it->second, wxToolBar );
+				
+				break;
+			}
 			else
 			{
 				// Recursively generate the ObjectTree
@@ -360,14 +369,7 @@ void VisualEditor::Create()
 			}
 
 			// Attach the toolbar (if any) to the frame
-			if( !toolbar && ( m_form->GetObjectTypeName() == "toolbar_form" ) )
-			{
-				Generate( m_form, m_back->GetFrameContentPanel(), m_back->GetFrameContentPanel() );
-
-				ObjectBaseMap::iterator it = m_baseobjects.find( m_form.get() );
-				toolbar = wxDynamicCast( it->second, wxToolBar );
-			}
-			else if ( child->GetClassName() == "wxToolBar" )
+			if ( child->GetClassName() == "wxToolBar" )
 			{
 				ObjectBaseMap::iterator it = m_baseobjects.find( child.get() );
 				toolbar = wxDynamicCast( it->second, wxToolBar );
@@ -386,6 +388,7 @@ void VisualEditor::Create()
 			wiz = new DesignerWindow::Wizard( contentPanel, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 			wiz->Fit();
 		}
+		
 		m_back->Layout();
 
 		if ( backSize.GetHeight() == wxDefaultCoord || backSize.GetWidth() == wxDefaultCoord )
