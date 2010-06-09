@@ -86,7 +86,6 @@ class ObjectInspector : public wxPanel
   wxPropertyGridManager* m_pg;
   wxPropertyGridManager* m_eg;
   int m_style;
-  bool allowPropChange;
 
   int StringToBits(const wxString& strVal, wxPGChoices& constants);
 

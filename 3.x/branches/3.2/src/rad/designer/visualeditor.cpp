@@ -552,13 +552,6 @@ void VisualEditor::Create()
 		}
 
 		m_back->Layout();
-		
-		// Add toolbar to AuiManager and update content
-		if( m_auimgr )
-		{ 
-			if( toolbar ) SetupAui( GetObjectBase( toolbar ), toolbar );
-			m_auimgr->Update();
-		}
 
 		if ( backSize.GetHeight() == wxDefaultCoord || backSize.GetWidth() == wxDefaultCoord )
 		{
@@ -568,6 +561,15 @@ void VisualEditor::Create()
 
 		// Set size after fitting so if only one dimesion is -1, it still fits that dimension
 		m_back->SetSize( backSize );
+		
+		// Add toolbar to AuiManager and update content
+		if( m_auimgr )
+		{ 
+			if( toolbar ) SetupAui( GetObjectBase( toolbar ), toolbar );
+			m_auimgr->Update();
+		}
+		else
+			m_back->Refresh();
 
 		PProperty enabled( m_form->GetProperty( wxT("enabled") ) );
 		if ( enabled )

@@ -637,8 +637,6 @@ ObjectInspector::ObjectInspector( wxWindow* parent, int id, int style )
 	wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
 	topSizer->Add( m_nb, 1, wxALL | wxEXPAND, 0 );
 	SetSizer( topSizer );
-	
-	allowPropChange = true;
 }
 
 ObjectInspector::~ObjectInspector()
@@ -1186,18 +1184,20 @@ void ObjectInspector::OnPropertyGridChange( wxPropertyGridEvent& event )
 			{
 				if( prop->GetName() == wxT("aui_managed") )
 				{
-
 					PObjectBase propobj = prop->GetObject();
 					if( propobj->GetChildCount() )
 					{
 						wxMessageBox(wxT("You have to remove all child widgets first."));
-						AppData()->ModifyProperty( prop, event.GetPropertyValueAsBool() ? wxT("0") : wxT("1") );
-						allowPropChange = false;
 						
+						wxCommandEvent e( RECREATE_GRID_EVENT );
+						e.SetString( event.GetPropertyName() );
+						AddPendingEvent( e );
 					}
-					else AppData()->ModifyProperty( prop, event.GetPropertyValueAsBool() ? wxT("1") : wxT("0") );
+					else
+						AppData()->ModifyProperty( prop, event.GetPropertyValueAsBool() ? wxT("1") : wxT("0") );
 				}
-				else AppData()->ModifyProperty( prop, event.GetPropertyValueAsBool() ? wxT("1") : wxT("0") );
+				else
+					AppData()->ModifyProperty( prop, event.GetPropertyValueAsBool() ? wxT("1") : wxT("0") );
 				break;
 			}
 			case PT_BITLIST:
@@ -1405,12 +1405,6 @@ void ObjectInspector::OnPropertyModified( wxFBPropertyEvent& event )
 		break;
 	case PT_BOOL:
 		pgProp->SetValueFromInt(prop->GetValueAsString() == wxT("0") ? 0 : 1, 0);
-		/*if( allowPropChange ) 
-		else
-		{
-			//pgProp->SetValueFromInt(prop->GetValueAsString() == wxT("0") ? 1 : 0, 0);
-			allowPropChange = true;
-		}*/
 		break;
 	case PT_BITLIST:
 		{
