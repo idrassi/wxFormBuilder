@@ -287,7 +287,7 @@ void VisualEditor::ScanPanes( wxWindow* parent)
 							updateNeeded = true;
 						}
 						
-						// scan size
+						// scan "size"
 						wxSize paneSize = inf.floating_size;
 						if ( paneSize.x != -1 && paneSize.y != -1 )
 						{
@@ -300,6 +300,20 @@ void VisualEditor::ScanPanes( wxWindow* parent)
 								
 								updateNeeded = true;
 							}
+						}
+						
+						// scan "row" and "layer"
+						PProperty prop = obj->GetProperty(wxT("row") );
+						if( obj->GetPropertyAsInteger( wxT("row") ) != inf.dock_row )
+						{
+							prop->SetValue( inf.dock_row );
+							updateNeeded = true;
+						}
+						prop = obj->GetProperty(wxT("layer") );
+						if( obj->GetPropertyAsInteger( wxT("layer") ) != inf.dock_layer )
+						{
+							prop->SetValue( inf.dock_layer );
+							updateNeeded = true;
 						}
 					}
 					
