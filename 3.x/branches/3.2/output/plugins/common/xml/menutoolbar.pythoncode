@@ -152,6 +152,30 @@ Python code generation writen by
 	<template name="after_addchild">self.$name.Realize()</template>
   </templates>
 
+  <templates class="wxAuiToolBar">
+	<template name="construction">
+		self.$name = wx.aui.AuiToolBar( #wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, wxDefaultValidator, $window_name @} )
+
+		#ifnotnull $bitmapsize @{ #nl self.$name.SetToolBitmapSize( $bitmapsize ) @}
+
+		#ifnotnull $separation
+		@{
+		  #ifnotequal $separation "5"
+		  @{ #nl self.$name.SetToolSeparation( $separation ) @}
+		@}
+
+		#ifnotnull $margins    @{ #nl self.$name.SetMargins( $margins ) @}
+
+		#ifnotnull $packing
+		@{
+			#ifnotequal $packing "1"
+			@{ #nl self.$name.SetToolPacking( $packing ) @}
+		@}</template>
+	<template name="after_addchild">
+			self.$name.Realize()
+		</template>
+  </templates>
+
   <templates class="tool">
     <template name="construction">
 	#ifparenttypeequal "toolbar"
