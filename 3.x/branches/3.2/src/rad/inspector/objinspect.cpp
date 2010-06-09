@@ -637,6 +637,8 @@ ObjectInspector::ObjectInspector( wxWindow* parent, int id, int style )
 	wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
 	topSizer->Add( m_nb, 1, wxALL | wxEXPAND, 0 );
 	SetSizer( topSizer );
+	
+	allowPropChange = true;
 }
 
 ObjectInspector::~ObjectInspector()
@@ -1182,7 +1184,20 @@ void ObjectInspector::OnPropertyGridChange( wxPropertyGridEvent& event )
 			}
 			case PT_BOOL:
 			{
-				AppData()->ModifyProperty( prop, event.GetPropertyValueAsBool() ? wxT("1") : wxT("0") );
+				if( prop->GetName() == wxT("aui_managed") )
+				{
+
+					PObjectBase propobj = prop->GetObject();
+					if( propobj->GetChildCount() )
+					{
+						wxMessageBox(wxT("You have to remove all child widgets first."));
+						AppData()->ModifyProperty( prop, event.GetPropertyValueAsBool() ? wxT("0") : wxT("1") );
+						allowPropChange = false;
+						
+					}
+					else AppData()->ModifyProperty( prop, event.GetPropertyValueAsBool() ? wxT("1") : wxT("0") );
+				}
+				else AppData()->ModifyProperty( prop, event.GetPropertyValueAsBool() ? wxT("1") : wxT("0") );
 				break;
 			}
 			case PT_BITLIST:
@@ -1284,12 +1299,15 @@ void ObjectInspector::OnReCreateGrid( wxCommandEvent& event )
 
     // Re-expand the bitmap property, if it was expanded
     wxPGId bitmapProp = m_pg->GetPropertyByName( event.GetString() );
-    m_pg->SelectProperty( bitmapProp );
-    if ( event.GetInt() != 0 )
-    {
-        m_pg->Expand( bitmapProp );
-        m_pg->Expand( dynamic_cast< wxPGPropertyWithChildren* >( bitmapProp.GetPropertyPtr() )->Last() );
-    }
+	if( bitmapProp.IsOk() )
+	{
+		m_pg->SelectProperty( bitmapProp );
+		if ( event.GetInt() != 0 )
+		{
+			m_pg->Expand( bitmapProp );
+			m_pg->Expand( dynamic_cast< wxPGPropertyWithChildren* >( bitmapProp.GetPropertyPtr() )->Last() );
+		}
+	}
 }
 
 void ObjectInspector::OnEventGridChange(wxPropertyGridEvent& event)
@@ -1312,9 +1330,11 @@ void ObjectInspector::OnPropertyGridExpand(wxPropertyGridEvent& event)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void ObjectInspector::OnObjectSelected( wxFBObjectEvent& )
+void ObjectInspector::OnObjectSelected( wxFBObjectEvent& event)
 {
-	Create();
+	if( event.GetString() == wxT("force") )	Create(true);
+	else
+		Create(false);
 }
 
 void ObjectInspector::OnProjectRefresh( wxFBEvent& )
@@ -1385,6 +1405,12 @@ void ObjectInspector::OnPropertyModified( wxFBPropertyEvent& event )
 		break;
 	case PT_BOOL:
 		pgProp->SetValueFromInt(prop->GetValueAsString() == wxT("0") ? 0 : 1, 0);
+		/*if( allowPropChange ) 
+		else
+		{
+			//pgProp->SetValueFromInt(prop->GetValueAsString() == wxT("0") ? 1 : 0, 0);
+			allowPropChange = true;
+		}*/
 		break;
 	case PT_BITLIST:
 		{

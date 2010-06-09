@@ -128,7 +128,8 @@ protected:
 		ID_APPEND,
 		ID_CLASS,
 		ID_INDENT,
-		ID_UNINDENT
+		ID_UNINDENT,
+		ID_IFTYPEEQUAL
 	} Ident;
 
 	Ident SearchIdent(wxString ident);
@@ -172,6 +173,7 @@ protected:
 	void ParseClass();
 	void ParseIndent();
 	void ParseUnindent();
+	bool ParseIfTypeEqual();
 
 	PProperty GetProperty( wxString* childName = NULL );
 	PObjectBase GetWxParent();
