@@ -49,7 +49,6 @@ Written by
       <option name="wxFIXED_MINSIZE" 			help="Normally wxSizers will use GetAdjustedBestSize to determine what the minimal size of window items should be, and will use that size to calculate the layout. This allows layouts to adjust when an item changes and its best size becomes different. If you would rather have a window item stay the size it started with then use wxFIXED_MINSIZE. "/>
 	  wxALL
 	</property>
-	<property name="aui_managed" type="bool" help="!!! DO NOT EDIT THIS PROPERTY !!! EVER !!!">0</property>
   </objectinfo>
 
   <objectinfo class="sizeritem" smallIcon="sizer.xpm" type="sizeritem">
