@@ -798,7 +798,10 @@ public:
     {
         wxPropertyCategoryClass* pc = (wxPropertyCategoryClass*)wxPGIdToPtr(id);
 #ifdef __WXDEBUG__
-        if ( pc ) wxASSERT( pc->GetParentingType() > 0 );
+        if ( pc )
+		{
+			wxASSERT( pc->GetParentingType() > 0 );
+		}
 #endif
         m_targetState->m_currentCategory = pc;
     }
