@@ -125,6 +125,7 @@ protected:
 		ID_IFEQUAL,
 		ID_IFNOTEQUAL,
 		ID_IFPARENTTYPEEQUAL,
+		ID_IFPARENTCLASSEQUAL,
 		ID_APPEND,
 		ID_CLASS,
 		ID_INDENT,
@@ -169,6 +170,7 @@ protected:
 	bool ParseIfEqual();
 	bool ParseIfNotEqual();
 	bool ParseIfParentTypeEqual();
+	bool ParseIfParentClassEqual();
 	void ParseAppend();
 	void ParseClass();
 	void ParseIndent();

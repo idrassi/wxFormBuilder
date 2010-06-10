@@ -86,7 +86,10 @@
 			@{			
 			#ifequal #parent $aui_managed "1"
 			@{ 
-				m_mgr.AddPane( $name, wxAuiPaneInfo().Name( $aui_name ).$docking()#ifnotnull $caption 
+			#iftypeequal "widget || container || toolbar"
+			@{
+				m_mgr.AddPane( $name, wxAuiPaneInfo()#ifnotnull $aui_name
+				@{.Name( $aui_name )@}.$docking()#ifnotnull $caption 
 				@{.Caption( $caption )@}#ifequal $caption_visible "0"
 				@{.CaptionVisible( $caption_visible )@}#ifequal $close_button "0"
 				@{.CloseButton( $close_button )@}#ifequal $maximize_button "0"
@@ -100,7 +103,7 @@
 				@{.$dock()#ifequal $dock "Float"
 					@{.FloatingPosition( $pane_position )@}	
 				@}#ifnotnull $resize
-				@{.$resize()#ifequal $resize "Resizeable"
+				@{.$resize()#ifequal $resize "Resizable"
 					@{.FloatingSize( $pane_size )@}	
 				@}#ifequal $dock_fixed "0"
 				@{.DockFixed( $dock_fixed )@}#ifequal $BottomDockable "0"
@@ -116,6 +119,7 @@
 				@{.DefaultPane()@}#ifequal $toolbar_pane "1"
 				@{.ToolbarPane()@}
 				); #nl
+			@}
 			@}
 			@}
 

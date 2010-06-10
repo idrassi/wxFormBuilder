@@ -119,6 +119,9 @@ bool TemplateParser::ParseMacro()
 	case ID_IFPARENTTYPEEQUAL:
 		ParseIfParentTypeEqual();
 		break;
+	case ID_IFPARENTCLASSEQUAL:
+		ParseIfParentClassEqual();
+		break;
 	case ID_APPEND:
 		ParseAppend();
 		break;
@@ -739,7 +742,46 @@ bool TemplateParser::ParseIfParentTypeEqual()
     // compare give type name with type of the wx parent object
     if( parent )
     {
-        if( parent->GetObjectTypeName() == type )
+		bool equal = false;
+		wxStringTokenizer tokens( type, wxT("||") ); 
+		while ( tokens.HasMoreTokens() )
+		{
+			wxString token = tokens.GetNextToken();
+			token.Trim().Trim(false);
+			
+			if( token == parent->GetObjectTypeName() )
+			{
+				equal = true;
+				break;
+			}
+		}
+	
+        if( equal )
+        {
+            // generate the code
+			PTemplateParser parser = CreateParser( this, inner_template );
+			m_out << parser->ParseTemplate();
+			return true;
+        }
+    }
+
+    return false;
+}
+
+bool TemplateParser::ParseIfParentClassEqual()
+{
+    PObjectBase parent( m_obj->GetParent() );
+
+    // get examined type name
+    wxString type = ExtractLiteral();
+
+    // get the template to generate if comparison is true
+    wxString inner_template = ExtractInnerTemplate();
+
+    // compare give type name with type of the wx parent object
+    if( parent )
+    {
+        if( parent->GetClassName() == type )
         {
             // generate the code
 			PTemplateParser parser = CreateParser( this, inner_template );
@@ -758,15 +800,30 @@ bool TemplateParser::ParseIfTypeEqual()
 
     // get the template to generate if comparison is true
     wxString inner_template = ExtractInnerTemplate();
+	
+	bool equal = false;
+	wxStringTokenizer tokens( type, wxT("||") ); 
+	while ( tokens.HasMoreTokens() )
+	{
+		wxString token = tokens.GetNextToken();
+		token.Trim().Trim(false);
+		
+		if( token == m_obj->GetObjectTypeName() )
+		{
+			equal = true;
+			break;
+		}
+	}
 
     // compare give type name with type of the wx parent object
-    if( m_obj->GetObjectTypeName() == type )
+    if( equal )
     {
         // generate the code
 		PTemplateParser parser = CreateParser( this, inner_template );
 		m_out << parser->ParseTemplate();
 		return true;
 	}
+	
     return false;
 }
 
@@ -798,6 +855,8 @@ TemplateParser::Ident TemplateParser::SearchIdent(wxString ident)
 		return ID_IFNOTEQUAL;
 	else if (ident == wxT("ifparenttypeequal") )
 		return ID_IFPARENTTYPEEQUAL;
+	else if (ident == wxT("ifparentclassequal") )
+		return ID_IFPARENTCLASSEQUAL;
 	else if (ident == wxT("append") )
 		return ID_APPEND;
 	else if (ident == wxT("class") )
