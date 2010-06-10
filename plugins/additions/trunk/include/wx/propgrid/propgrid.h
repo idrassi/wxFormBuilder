@@ -5635,7 +5635,10 @@ public:
         wxPG_PROP_ID_CALL_PROLOG()
         wxPropertyCategoryClass* pc = (wxPropertyCategoryClass*)p;
 #ifdef __WXDEBUG__
-        if ( pc ) wxASSERT( pc->GetParentingType() > 0 );
+        if ( pc )
+		{
+			wxASSERT( pc->GetParentingType() > 0 );
+		}
 #endif
         m_pState->m_currentCategory = pc;
     }
