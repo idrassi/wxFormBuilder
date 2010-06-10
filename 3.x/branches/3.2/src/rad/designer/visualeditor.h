@@ -85,7 +85,7 @@ class DesignerWindow : public wxInnerFrame
    PObjectBase GetSelectedObject() { return m_selObj.lock(); }
    wxWindow* GetActivePanel() { return m_actPanel; }
    wxMenu* GetMenuFromObject(PObjectBase menu);
-   void SetFrameWidgets(PObjectBase menubar, wxWindow *toolbar, wxWindow* statusbar);
+   void SetFrameWidgets(PObjectBase menubar, wxWindow *toolbar, wxWindow* statusbar, wxWindow *auipanel);
    void HighlightSelection(wxDC& dc);
    void OnPaint(wxPaintEvent &event);
 };
@@ -104,6 +104,7 @@ class VisualEditor : public wxScrolledWindow
   ObjectBaseMap m_baseobjects;
 
   DesignerWindow *m_back;
+  wxPanel *m_auipanel;
 
   PObjectBase m_form;  // Pointer to last form created
 

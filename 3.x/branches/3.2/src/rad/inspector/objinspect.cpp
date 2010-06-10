@@ -1189,6 +1189,7 @@ void ObjectInspector::OnPropertyGridChange( wxPropertyGridEvent& event )
 					{
 						wxMessageBox(wxT("You have to remove all child widgets first."));
 						
+						// modified property must be reverted to its original form later.
 						wxCommandEvent e( RECREATE_GRID_EVENT );
 						e.SetString( event.GetPropertyName() );
 						AddPendingEvent( e );

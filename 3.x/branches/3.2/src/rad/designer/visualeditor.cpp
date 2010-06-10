@@ -55,6 +55,7 @@ BEGIN_EVENT_TABLE(VisualEditor,wxScrolledWindow)
 	EVT_FB_OBJECT_REMOVED( VisualEditor::OnObjectRemoved )
 	EVT_FB_PROPERTY_MODIFIED( VisualEditor::OnPropertyModified )
 	EVT_FB_PROJECT_REFRESH( VisualEditor::OnProjectRefresh )
+	EVT_FB_CODE_GENERATION( VisualEditor::OnProjectRefresh )
 	
 	EVT_TIMER( ID_TIMER_SCAN, VisualEditor::OnAuiScaner )
 
@@ -78,7 +79,9 @@ m_stopModifiedEvent( false )
 
 	m_back = new DesignerWindow( this, wxID_ANY, wxPoint(10,10) );
 	m_back->GetEventHandler()->Connect( wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler( VisualEditor::OnClickBackPanel ), NULL, this );
+	
 	m_auimgr = NULL;
+	m_auipanel = NULL;
 	
 	// scan aui panes in run-time
 	m_AuiScaner.SetOwner( this, ID_TIMER_SCAN );
@@ -296,7 +299,7 @@ void VisualEditor::ScanPanes( wxWindow* parent)
 							if( psize->GetValue() != TypeConv::SizeToString( paneSize ) )
 							{
 								psize->SetValue( TypeConv::SizeToString( paneSize )  );
-								obj->GetProperty( wxT("resize") )->SetValue( wxT("Resizeable") );
+								obj->GetProperty( wxT("resize") )->SetValue( wxT("Resizable") );
 								
 								updateNeeded = true;
 							}
@@ -335,12 +338,14 @@ void VisualEditor::ScanPanes( wxWindow* parent)
 
 void VisualEditor::ClearAui()
 {
-	if ( m_auimgr)
+	if ( m_auimgr )
 	{
 		m_auimgr->UnInit();
+		
 		delete m_auimgr;
 		m_auimgr = NULL;
-	}	
+		m_auipanel = NULL;
+	}
 }
 
 void VisualEditor::ClearComponents( wxWindow* parent )
@@ -392,205 +397,216 @@ void VisualEditor::Create()
 	// Clear all associations between ObjectBase and wxObjects
 	m_wxobjects.clear();
 	m_baseobjects.clear();
-
-	m_form = AppData()->GetSelectedForm();
-	if ( m_form )
+	
+	if( IsShown() )
 	{
-		m_back->Show(true);
-		
-		// --- [1] Configure the size of the form ---------------------------
-
-		// Get size properties
-		wxSize minSize( m_form->GetPropertyAsSize( wxT("minimum_size") ) );
-		m_back->SetMinSize( minSize );
-
-		wxSize maxSize( m_form->GetPropertyAsSize( wxT("maximum_size") ) );
-		m_back->SetMaxSize( maxSize );
-
-		wxSize size( m_form->GetPropertyAsSize( wxT("size") ) );
-
-		// Determine necessary size for back panel
-		wxSize backSize = size;
-		if ( backSize.GetWidth() < minSize.GetWidth() && backSize.GetWidth() != wxDefaultCoord )
+		m_form = AppData()->GetSelectedForm();
+		if ( m_form )
 		{
-			backSize.SetWidth( minSize.GetWidth() );
-		}
-		if ( backSize.GetHeight() < minSize.GetHeight() && backSize.GetHeight() != wxDefaultCoord )
-		{
-			backSize.SetHeight( minSize.GetHeight() );
-		}
-		if ( backSize.GetWidth() > maxSize.GetWidth() && maxSize.GetWidth() != wxDefaultCoord )
-		{
-			backSize.SetWidth( maxSize.GetWidth() );
-		}
-		if ( backSize.GetHeight() > maxSize.GetHeight() && maxSize.GetHeight() != wxDefaultCoord )
-		{
-			backSize.SetHeight( maxSize.GetHeight() );
-		}
-
-		// Modify size property to match
-		if ( size != backSize )
-		{
-			PProperty psize = m_form->GetProperty( wxT("size") );
-			if ( psize )
-			{
-				AppData()->ModifyProperty( psize, TypeConv::SizeToString( backSize ) );
-			}
-		}
-
-		// --- [2] Set the color of the form -------------------------------
-		PProperty background( m_form->GetProperty( wxT("bg") ) );
-		if ( background && !background->GetValue().empty() )
-		{
-			m_back->GetFrameContentPanel()->SetBackgroundColour( TypeConv::StringToColour( background->GetValue() ) );
-		}
-		else
-		{
-			m_back->GetFrameContentPanel()->SetOwnBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_APPWORKSPACE ) );
+			m_back->Show(true);
 			
-			/*if ( m_form->GetClassName() == wxT("Frame") )
+			// --- [1] Configure the size of the form ---------------------------
+
+			// Get size properties
+			wxSize minSize( m_form->GetPropertyAsSize( wxT("minimum_size") ) );
+			m_back->SetMinSize( minSize );
+
+			wxSize maxSize( m_form->GetPropertyAsSize( wxT("maximum_size") ) );
+			m_back->SetMaxSize( maxSize );
+
+			wxSize size( m_form->GetPropertyAsSize( wxT("size") ) );
+
+			// Determine necessary size for back panel
+			wxSize backSize = size;
+			if ( backSize.GetWidth() < minSize.GetWidth() && backSize.GetWidth() != wxDefaultCoord )
+			{
+				backSize.SetWidth( minSize.GetWidth() );
+			}
+			if ( backSize.GetHeight() < minSize.GetHeight() && backSize.GetHeight() != wxDefaultCoord )
+			{
+				backSize.SetHeight( minSize.GetHeight() );
+			}
+			if ( backSize.GetWidth() > maxSize.GetWidth() && maxSize.GetWidth() != wxDefaultCoord )
+			{
+				backSize.SetWidth( maxSize.GetWidth() );
+			}
+			if ( backSize.GetHeight() > maxSize.GetHeight() && maxSize.GetHeight() != wxDefaultCoord )
+			{
+				backSize.SetHeight( maxSize.GetHeight() );
+			}
+
+			// Modify size property to match
+			if ( size != backSize )
+			{
+				PProperty psize = m_form->GetProperty( wxT("size") );
+				if ( psize )
+				{
+					AppData()->ModifyProperty( psize, TypeConv::SizeToString( backSize ) );
+				}
+			}
+
+			// --- [2] Set the color of the form -------------------------------
+			PProperty background( m_form->GetProperty( wxT("bg") ) );
+			if ( background && !background->GetValue().empty() )
+			{
+				m_back->GetFrameContentPanel()->SetBackgroundColour( TypeConv::StringToColour( background->GetValue() ) );
+			}
+			else
 			{
 				m_back->GetFrameContentPanel()->SetOwnBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_APPWORKSPACE ) );
+				
+				/*if ( m_form->GetClassName() == wxT("Frame") )
+				{
+					m_back->GetFrameContentPanel()->SetOwnBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_APPWORKSPACE ) );
+				}
+				else
+				{
+					m_back->GetFrameContentPanel()->SetOwnBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+				}*/
+			}
+
+
+			// --- [3] Title bar Setup
+			if (  m_form->GetClassName() == wxT("Frame") || m_form->GetClassName() == wxT("Dialog") )
+			{
+				m_back->SetTitle( m_form->GetPropertyAsString( wxT("title") ) );
+				long style = m_form->GetPropertyAsInteger( wxT("style") );
+				m_back->SetTitleStyle( style );
+				m_back->ShowTitleBar( (style & wxCAPTION) != 0 );
 			}
 			else
+			  m_back->ShowTitleBar(false);
+			  
+			// --- AUI
+			if(  m_form->GetObjectTypeName() == wxT("form") )
 			{
-				m_back->GetFrameContentPanel()->SetOwnBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-			}*/
-		}
-
-
-		// --- [3] Title bar Setup
-		if (  m_form->GetClassName() == wxT("Frame") || m_form->GetClassName() == wxT("Dialog") )
-		{
-			m_back->SetTitle( m_form->GetPropertyAsString( wxT("title") ) );
-			long style = m_form->GetPropertyAsInteger( wxT("style") );
-			m_back->SetTitleStyle( style );
-			m_back->ShowTitleBar( (style & wxCAPTION) != 0 );
-		}
-		else
-		  m_back->ShowTitleBar(false);
-		  
-		// --- AUI
-		
-		if(  m_form->GetObjectTypeName() == wxT("form") )
-		{
-			if(  m_form->GetPropertyAsInteger( wxT("aui_managed")) == 1)
-			{
-				m_auimgr = new wxAuiManager(m_back->GetFrameContentPanel());
+				if(  m_form->GetPropertyAsInteger( wxT("aui_managed")) == 1)
+				{
+					m_auipanel = new wxPanel( m_back->GetFrameContentPanel() );
+					m_auimgr = new wxAuiManager( m_auipanel );
+				}
 			}
-		}
 
-		// --- [4] Create the components of the form -------------------------
+			// --- [4] Create the components of the form -------------------------
 
-		// Used to save frame objects for later display
-		PObjectBase menubar;
-		wxWindow* statusbar = NULL;
-		wxWindow* toolbar = NULL;
+			// Used to save frame objects for later display
+			PObjectBase menubar;
+			wxWindow* statusbar = NULL;
+			wxWindow* toolbar = NULL;
 
-		for ( unsigned int i = 0; i < m_form->GetChildCount(); i++ )
-		{
-			PObjectBase child = m_form->GetChild( i );
-
-			if( !menubar && (m_form->GetObjectTypeName() == wxT("menubar_form")) )
+			for ( unsigned int i = 0; i < m_form->GetChildCount(); i++ )
 			{
-				// main form acts as a menubar
-				menubar = m_form;
-			}
-			else if (child->GetObjectTypeName() == wxT("menubar") )
-			{
-				// Create the menubar later
-				menubar = child;
-			}
-			else if( !toolbar && (m_form->GetObjectTypeName() == wxT("toolbar_form")) )
-			{
-				Generate( m_form, m_back->GetFrameContentPanel(), m_back->GetFrameContentPanel() );
+				PObjectBase child = m_form->GetChild( i );
+
+				if( !menubar && (m_form->GetObjectTypeName() == wxT("menubar_form")) )
+				{
+					// main form acts as a menubar
+					menubar = m_form;
+				}
+				else if (child->GetObjectTypeName() == wxT("menubar") )
+				{
+					// Create the menubar later
+					menubar = child;
+				}
+				else if( !toolbar && (m_form->GetObjectTypeName() == wxT("toolbar_form")) )
+				{
+					Generate( m_form, m_back->GetFrameContentPanel(), m_back->GetFrameContentPanel() );
+					
+					ObjectBaseMap::iterator it = m_baseobjects.find( m_form.get() );
+					toolbar = wxDynamicCast( it->second, wxToolBar );
+					
+					break;
+				}
+				else
+				{
+					// Recursively generate the ObjectTree
+					try
+					{
+						// we have to put the content frame panel as parentObject in order
+						// to SetSizeHints be called.
+						if( m_auipanel )
+						{
+							Generate( child, m_auipanel, m_auipanel );
+						}
+						else
+							Generate( child, m_back->GetFrameContentPanel(), m_back->GetFrameContentPanel() );
+							
+					}
+					catch ( wxFBException& ex )
+					{
+						wxLogError ( ex.what() );
+					}
+				}
 				
-				ObjectBaseMap::iterator it = m_baseobjects.find( m_form.get() );
-				toolbar = wxDynamicCast( it->second, wxToolBar );
+				// Attach the toolbar (if any) to the frame
+				if (child->GetClassName() == wxT("wxToolBar") )
+				{
+					ObjectBaseMap::iterator it = m_baseobjects.find( child.get() );
+					toolbar = wxDynamicCast( it->second, wxToolBar );
+				}
+				else if (child->GetClassName() == wxT("wxAuiToolBar") )
+				{
+					ObjectBaseMap::iterator it = m_baseobjects.find( child.get() );
+					toolbar = wxDynamicCast( it->second, wxAuiToolBar );
+				}
 				
-				break;
+				// Attach the status bar (if any) to the frame
+				if ( child->GetClassName() == wxT("wxStatusBar") )
+				{
+					ObjectBaseMap::iterator it = m_baseobjects.find( child.get() );
+					statusbar = wxDynamicCast( it->second, wxStatusBar );
+				}
+				
+			}
+
+			if ( menubar || statusbar || toolbar || m_auipanel )
+			{
+				if( m_auimgr )
+				{
+					m_back->SetFrameWidgets( menubar, NULL, statusbar, m_auipanel );
+				}
+				else
+					m_back->SetFrameWidgets( menubar, toolbar, statusbar, m_auipanel );
+			}
+
+			m_back->Layout();
+
+			if ( backSize.GetHeight() == wxDefaultCoord || backSize.GetWidth() == wxDefaultCoord )
+			{
+				m_back->GetSizer()->Fit( m_back );
+				m_back->SetSize( m_back->GetBestSize() );
+			}
+
+			// Set size after fitting so if only one dimesion is -1, it still fits that dimension
+			m_back->SetSize( backSize );
+			
+			// Add toolbar to AuiManager and update content
+			if( m_auimgr )
+			{ 
+				if( toolbar ) SetupAui( GetObjectBase( toolbar ), toolbar );
+				m_auimgr->Update();
 			}
 			else
-			{
-				// Recursively generate the ObjectTree
-				try
-				{
-				  // we have to put the content frame panel as parentObject in order
-				  // to SetSizeHints be called.
-					Generate( child, m_back->GetFrameContentPanel(), m_back->GetFrameContentPanel() );
-				}
-				catch ( wxFBException& ex )
-				{
-					wxLogError ( ex.what() );
-				}
-			}
-			
-			// Attach the toolbar (if any) to the frame
-			if (child->GetClassName() == wxT("wxToolBar") )
-			{
-				ObjectBaseMap::iterator it = m_baseobjects.find( child.get() );
-				toolbar = wxDynamicCast( it->second, wxToolBar );
-			}
-			else if (child->GetClassName() == wxT("wxAuiToolBar") )
-			{
-				ObjectBaseMap::iterator it = m_baseobjects.find( child.get() );
-				toolbar = wxDynamicCast( it->second, wxAuiToolBar );
-			}
-			
-			// Attach the status bar (if any) to the frame
-			if ( child->GetClassName() == wxT("wxStatusBar") )
-			{
-				ObjectBaseMap::iterator it = m_baseobjects.find( child.get() );
-				statusbar = wxDynamicCast( it->second, wxStatusBar );
-			}
-			
-		}
+				m_back->Refresh();
 
-		if ( menubar || statusbar || toolbar )
-		{
-			m_back->SetFrameWidgets( menubar, toolbar, statusbar );
-		}
+			PProperty enabled( m_form->GetProperty( wxT("enabled") ) );
+			if ( enabled )
+			{
+				m_back->Enable( TypeConv::StringToInt( enabled->GetValue() ) != 0 );
+			}
 
-		m_back->Layout();
-
-		if ( backSize.GetHeight() == wxDefaultCoord || backSize.GetWidth() == wxDefaultCoord )
-		{
-		    m_back->GetSizer()->Fit( m_back );
-			m_back->SetSize( m_back->GetBestSize() );
-		}
-
-		// Set size after fitting so if only one dimesion is -1, it still fits that dimension
-		m_back->SetSize( backSize );
-		
-		// Add toolbar to AuiManager and update content
-		if( m_auimgr )
-		{ 
-			if( toolbar ) SetupAui( GetObjectBase( toolbar ), toolbar );
-			m_auimgr->Update();
+			PProperty hidden( m_form->GetProperty( wxT("hidden") ) );
+			if ( hidden )
+			{
+				m_back->Show( TypeConv::StringToInt( hidden->GetValue() ) == 0 );
+			}
 		}
 		else
-			m_back->Refresh();
-
-		PProperty enabled( m_form->GetProperty( wxT("enabled") ) );
-		if ( enabled )
 		{
-			m_back->Enable( TypeConv::StringToInt( enabled->GetValue() ) != 0 );
+			// There is no form to display
+			m_back->Show(false);
 		}
 
-		PProperty hidden( m_form->GetProperty( wxT("hidden") ) );
-		if ( hidden )
-		{
-			m_back->Show( TypeConv::StringToInt( hidden->GetValue() ) == 0 );
-		}
-	}
-	else
-	{
-		// There is no form to display
-		m_back->Show(false);
-	}
-
-	if ( IsShown() )
-	{
 		Thaw();
 	}
 
@@ -790,8 +806,9 @@ void VisualEditor::SetupAui( PObjectBase obj, wxWindow* window )
 	
 	//wxAuiPaneInfo info = m_auimgr->GetPane( window );
 	
-	wxString sName = obj->GetPropertyAsString( wxT("aui_name") );
-	m_auimgr->GetPane( window ).Name( sName );
+	wxString name = obj->GetPropertyAsString( wxT("aui_name") );
+	if( name != wxT("") ) m_auimgr->GetPane( window ).Name( name );
+	
 	if( obj->GetPropertyAsInteger( wxT("center_pane") )) m_auimgr->GetPane( window ).CenterPane();
 	if( obj->GetPropertyAsInteger( wxT("default_pane") )) m_auimgr->GetPane( window ).DefaultPane();
 	
@@ -808,7 +825,6 @@ void VisualEditor::SetupAui( PObjectBase obj, wxWindow* window )
 	m_auimgr->GetPane( window ).TopDockable( obj->GetPropertyAsInteger( wxT("TopDockable") ) );
 	m_auimgr->GetPane( window ).LeftDockable( obj->GetPropertyAsInteger( wxT("LeftDockable") ) );
 	m_auimgr->GetPane( window ).RightDockable( obj->GetPropertyAsInteger( wxT("RightDockable") ) );
-	
 	
 	if( !obj->IsNull(wxT("dock")) )
 	{
@@ -832,7 +848,7 @@ void VisualEditor::SetupAui( PObjectBase obj, wxWindow* window )
 	
 	if( !obj->IsNull(wxT("resize")) )
 	{
-		if( obj->GetPropertyAsString( wxT("resize") ) == wxT("Resizeable")) m_auimgr->GetPane( window ).Resizable();
+		if( obj->GetPropertyAsString( wxT("resize") ) == wxT("Resizable")) m_auimgr->GetPane( window ).Resizable();
 		else m_auimgr->GetPane( window ).Fixed();
 	}
 	
@@ -1247,11 +1263,10 @@ wxMenu* DesignerWindow::GetMenuFromObject(PObjectBase menu)
 	return menuWidget;
 }
 
-void DesignerWindow::SetFrameWidgets(PObjectBase menubar, wxWindow *toolbar, wxWindow *statusbar)
+void DesignerWindow::SetFrameWidgets(PObjectBase menubar, wxWindow *toolbar, wxWindow *statusbar, wxWindow *auipanel)
 {
 	wxWindow *contentPanel = GetFrameContentPanel();
 	Menubar *mbWidget = NULL;
-
 
 	if ( menubar )
 	{
@@ -1295,8 +1310,12 @@ void DesignerWindow::SetFrameWidgets(PObjectBase menubar, wxWindow *toolbar, wxW
 			dummySizer->Add(toolbar, 0, wxEXPAND | wxALL, 0);
 		}
 	}
-
-	if (mainSizer)
+	
+	if (auipanel)
+	{
+		contentSizer->Add(auipanel, 1, wxEXPAND | wxALL, 0);
+	}
+	else if (mainSizer)
 	{
 		contentSizer->Add(mainSizer, 1, wxEXPAND | wxALL, 0);
 		if ( mainSizer->GetChildren().IsEmpty() )
