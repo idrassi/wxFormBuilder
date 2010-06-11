@@ -133,6 +133,8 @@ protected:
 		ID_IFTYPEEQUAL
 	} Ident;
 
+	bool IsEqual(const wxString& value, const wxString& set);
+
 	Ident SearchIdent(wxString ident);
 	Ident ParseIdent();
 
