@@ -678,7 +678,8 @@ bool TemplateParser::ParseIfEqual()
 		}
 
 		// Compare
-		if ( propValue == value )
+		//if ( propValue == value )
+		if ( IsEqual( propValue, value ) )
 		{
 			// Generate the code
 			PTemplateParser parser = CreateParser(this,inner_template);
@@ -740,29 +741,12 @@ bool TemplateParser::ParseIfParentTypeEqual()
     wxString inner_template = ExtractInnerTemplate();
 
     // compare give type name with type of the wx parent object
-    if( parent )
+    if( parent && IsEqual( parent->GetObjectTypeName(), type) )
     {
-		bool equal = false;
-		wxStringTokenizer tokens( type, wxT("||") ); 
-		while ( tokens.HasMoreTokens() )
-		{
-			wxString token = tokens.GetNextToken();
-			token.Trim().Trim(false);
-			
-			if( token == parent->GetObjectTypeName() )
-			{
-				equal = true;
-				break;
-			}
-		}
-	
-        if( equal )
-        {
-            // generate the code
-			PTemplateParser parser = CreateParser( this, inner_template );
-			m_out << parser->ParseTemplate();
-			return true;
-        }
+		// generate the code
+		PTemplateParser parser = CreateParser( this, inner_template );
+		m_out << parser->ParseTemplate();
+		return true;
     }
 
     return false;
@@ -779,15 +763,12 @@ bool TemplateParser::ParseIfParentClassEqual()
     wxString inner_template = ExtractInnerTemplate();
 
     // compare give type name with type of the wx parent object
-    if( parent )
+    if( parent && IsEqual( parent->GetClassName(), type) )
     {
-        if( parent->GetClassName() == type )
-        {
-            // generate the code
-			PTemplateParser parser = CreateParser( this, inner_template );
-			m_out << parser->ParseTemplate();
-			return true;
-        }
+		// generate the code
+		PTemplateParser parser = CreateParser( this, inner_template );
+		m_out << parser->ParseTemplate();
+		return true;
     }
 
     return false;
@@ -800,23 +781,9 @@ bool TemplateParser::ParseIfTypeEqual()
 
     // get the template to generate if comparison is true
     wxString inner_template = ExtractInnerTemplate();
-	
-	bool equal = false;
-	wxStringTokenizer tokens( type, wxT("||") ); 
-	while ( tokens.HasMoreTokens() )
-	{
-		wxString token = tokens.GetNextToken();
-		token.Trim().Trim(false);
-		
-		if( token == m_obj->GetObjectTypeName() )
-		{
-			equal = true;
-			break;
-		}
-	}
 
     // compare give type name with type of the wx parent object
-    if( equal )
+    if( IsEqual( m_obj->GetObjectTypeName(), type) )
     {
         // generate the code
 		PTemplateParser parser = CreateParser( this, inner_template );
@@ -1037,4 +1004,24 @@ wxString TemplateParser::PropertyToCode(PProperty property)
 	{
 		return wxEmptyString;
 	}
+}
+
+bool TemplateParser::IsEqual(const wxString& value, const wxString& set)
+{
+	bool contains = false;
+	
+	wxStringTokenizer tokens( set, wxT("||") ); 
+	while ( tokens.HasMoreTokens() )
+	{
+		wxString token = tokens.GetNextToken();
+		token.Trim().Trim(false);
+		
+		if( token == value )
+		{
+			contains = true;
+			break;
+		}
+	}
+	
+	return contains;
 }
