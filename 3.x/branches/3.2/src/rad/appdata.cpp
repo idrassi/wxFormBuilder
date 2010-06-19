@@ -2496,6 +2496,12 @@ void ApplicationData::ShowXrcPreview()
 		return;
 	}
 
+	if( form->GetPropertyAsInteger( wxT("aui_managed") ) )
+	{
+		wxMessageBox( wxT( "AUI managed forms cannot be previewed by XRC system." ), wxT( "XRC preview" ), wxICON_ERROR );
+		return;
+	}
+	
 	XRCPreview::Show( form, GetProjectPath() );
 }
 
