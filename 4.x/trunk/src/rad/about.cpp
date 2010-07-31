@@ -22,112 +22,70 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-#include <wx/filename.h>
-#include <wx/html/htmlwin.h>
-#include <wx/mimetype.h>
-#include <wx/utils.h>
-
 #include "about.h"
 #include "rad/appdata.h"
 
-#define ID_DEFAULT -1 // Default
-#define ID_OK 1000
-
-BEGIN_EVENT_TABLE(AboutDialog,wxDialog)
-  EVT_BUTTON(ID_OK,AboutDialog::OnButtonEvent)
-END_EVENT_TABLE()
+#include <wx/mimetype.h>
+#include <wx/sizer.h>
 
 class HtmlWindow : public wxHtmlWindow
 {
-public:
-	HtmlWindow( wxWindow *parent ) : wxHtmlWindow( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+  public:
+    HtmlWindow( wxWindow *parent ) : wxHtmlWindow( parent, -1, wxDefaultPosition, wxDefaultSize,
 													wxHW_SCROLLBAR_NEVER | wxHW_NO_SELECTION | wxRAISED_BORDER )
     {
     }
 
-    void LaunchBrowser( const wxString& url )
+    void LaunchBrowser(const wxString& url)
     {
       wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension("html");
-      if ( !ft ) {
+      if (!ft) {
         wxLogError( _("Impossible to determine the file type for extension html.\nPlease edit your MIME types.") );
         return;
       }
 
       wxString cmd;
-      bool ok = ft->GetOpenCommand( &cmd, wxFileType::MessageParameters( url, "" ) );
+      bool ok = ft->GetOpenCommand( &cmd, wxFileType::MessageParameters(url, "") );
       delete ft;
 
       if ( ok )
           wxExecute( cmd, wxEXEC_ASYNC );
     }
 
-    void OnLinkClicked( const wxHtmlLinkInfo& link )
+    void OnLinkClicked(const wxHtmlLinkInfo& link)
     {
-    	#if wxCHECK_VERSION( 2, 8, 0 )
-    	   	::wxLaunchDefaultBrowser( link.GetHref() );
-		#else
-			LaunchBrowser( link.GetHref() );
-		#endif
+		::wxLaunchDefaultBrowser( link.GetHref() );
     }
 };
 
-AboutDialog::AboutDialog( wxWindow *parent, int id )
-			: wxDialog( parent, id, _("About..."), wxDefaultPosition, wxSize( 485, 470 ) ) // wxSize( 308, 248 ) )
+AboutDialog::AboutDialog( wxWindow* parent, wxWindowID id, const wxString& title,
+						const wxPoint& pos, const wxSize& size, long style )
+				: wxDialog( parent, id, title, pos, size, style )
 {
-	wxBoxSizer *sizer2;
-	sizer2 = new wxBoxSizer( wxVERTICAL );
-	m_staticText2 = new wxStaticText( this, ID_DEFAULT, "wxFormBuilder", wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->SetFont( wxFont( 12, 74, 90, 92, false, "Arial" ) );
-	sizer2->Add( m_staticText2, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 5 );
-	m_staticText3 = new wxStaticText( this, ID_DEFAULT, _("a RAD tool for wxWidgets framework"), wxDefaultPosition, wxDefaultSize, 0 );
-	sizer2->Add(m_staticText3, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5);
-	m_staticText6 = new wxStaticText( this, ID_DEFAULT, "(C) 2005 Jose' Antonio Hurtado", wxDefaultPosition, wxDefaultSize, 0 );
-	sizer2->Add( m_staticText6, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 5 );
-	window1 = new wxStaticLine( this, ID_DEFAULT, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	sizer2->Add( window1, 0, wxALL | wxEXPAND, 5 );
-	m_panel1 = new wxPanel( this, ID_DEFAULT, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER | wxTAB_TRAVERSAL );
-	wxBoxSizer *sizer3;
-	sizer3 = new wxBoxSizer( wxVERTICAL );
-	m_staticText8 = new wxStaticText( m_panel1, ID_DEFAULT, _("Developed by:"), wxDefaultPosition, wxDefaultSize, 0 );
-	sizer3->Add( m_staticText8, 0, wxALL, 5 );
-	m_staticText9 = new wxStaticText( m_panel1, ID_DEFAULT, "- Jose' Antonio Hurtado", wxDefaultPosition, wxDefaultSize, 0 );
-	sizer3->Add( m_staticText9, 0, wxALL, 5 );
-	m_staticText10 = new wxStaticText( m_panel1, ID_DEFAULT, "- Juan Antonio Ortega", wxDefaultPosition, wxDefaultSize, 0 );
-	sizer3->Add( m_staticText10, 0, wxALL, 5 );
-	m_panel1->SetSizer( sizer3 );
-	m_panel1->SetAutoLayout( true );
-	m_panel1->Layout();
-	sizer2->Add( m_panel1, 1, wxALL | wxEXPAND, 5 );
-	window2 = new wxStaticLine( this, ID_DEFAULT, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	sizer2->Add( window2, 0, wxALL | wxEXPAND, 5 );
-	m_button1 = new wxButton( this, ID_OK, "&OK", wxDefaultPosition, wxDefaultSize, 0 );
-	sizer2->Add( m_button1, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 5 );
-	this->SetSizer( sizer2 );
-	this->SetAutoLayout( true );
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	
+	wxBoxSizer* sizer;
+	sizer = new wxBoxSizer( wxVERTICAL );
+	
+	html = new HtmlWindow( this );
+	html->LoadFile( wxFileName( AppData()->GetApplicationPath() + wxFILE_SEP_PATH + "resources/about.html" ) );
+
+	sizer->Add( html, 1, wxALL|wxEXPAND, 5 );
+	
+	button = new wxButton( this, wxID_OK, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	sizer->Add( button, 0, wxALIGN_CENTER_HORIZONTAL|wxBOTTOM, 5 );
+	
+	this->SetSizer( sizer );
 	this->Layout();
+	
+	this->Centre( wxBOTH );
 
-	wxBoxSizer *mainSizer = new wxBoxSizer( wxVERTICAL );
-	wxHtmlWindow *htmlWin = new HtmlWindow( this );
+	button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AboutDialog::OnButtonEvent ), NULL, this );
+}
 
-	// I don't know where is the problem, but if you call SetBorders( b ) with
-	// 'b' between 0..6 it works, but if you use a bigger border, it doesn't fit
-	// correctly.
-	htmlWin->SetBorders( 5 );
-
-	htmlWin->LoadFile( wxFileName( AppData()->GetApplicationPath() + wxFILE_SEP_PATH + "resources/about.html" ) );
-
-#ifdef __WXMAC__
-	// Work around a wxMac bug
-	htmlWin->SetSize( 400, 600 );
-#else
-	htmlWin->SetSize( htmlWin->GetInternalRepresentation()->GetWidth(),
-	htmlWin->GetInternalRepresentation()->GetHeight());
-#endif
-
-	mainSizer->Add( htmlWin, 1, wxEXPAND | wxALL, 5 );
-	mainSizer->Add( new wxButton( this, wxID_OK, "OK" ), 0, wxALIGN_CENTER | wxBOTTOM, 5 );
-
-	SetSizerAndFit( mainSizer );
+AboutDialog::~AboutDialog()
+{
+	button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AboutDialog::OnButtonEvent ), NULL, this );
 }
 
 void AboutDialog::OnButtonEvent (wxCommandEvent &)
