@@ -230,12 +230,12 @@ else
 	end
 
 	-- Set wxWidgets build options.
-	table.insert( package.config["Debug"].buildoptions, "`$(291Debug)/wx-config "..debug_option.." --cflags`" )
-	table.insert( package.config["Release"].buildoptions, "`$(291Release)/wx-config --debug=no --cflags`" )
+	table.insert( package.config["Debug"].buildoptions, "`$(29xDebug)/wx-config "..debug_option.." --cflags`" )
+	table.insert( package.config["Release"].buildoptions, "`$(29xRelease)/wx-config --debug=no --cflags`" )
 
 	-- Set the wxWidgets link options.
-	table.insert( package.config["Debug"].linkoptions, "`$(291Debug)/wx-config "..debug_option.." --libs all`" )
-	table.insert( package.config["Release"].linkoptions, "`$(291Release)/wx-config --libs all`" )
+	table.insert( package.config["Debug"].linkoptions, "`$(29xDebug)/wx-config "..debug_option.." --libs all`" )
+	table.insert( package.config["Release"].linkoptions, "`$(29xRelease)/wx-config --libs all`" )
 
 	-- richtext is annoying, because it must be explicitly specified if wx is not monolithic, but cannot be specified if it is
 	-- so, determine if wx is monolithic by counting the occurences of "-l" in the --libs output

@@ -267,12 +267,12 @@ else
 	table.insert( package.excludes, matchrecursive( "*.rc" ) )
 
 	-- Set wxWidgets build options.
-	table.insert( package.config["Debug"].buildoptions, "`$(291Debug)/wx-config "..debug_option.." --cflags`" )
-	table.insert( package.config["Release"].buildoptions, "`$(291Release)/wx-config --debug=no --cflags`" )
+	table.insert( package.config["Debug"].buildoptions, "`$(29xDebug)/wx-config "..debug_option.." --cflags`" )
+	table.insert( package.config["Release"].buildoptions, "`$(29xRelease)/wx-config --debug=no --cflags`" )
 
 	-- Set the wxWidgets link options.
-	table.insert( package.config["Debug"].linkoptions, "`$(291Debug)/wx-config "..debug_option.." --libs all`" )
-	table.insert( package.config["Release"].linkoptions, "`$(291Release)/wx-config --libs all`" )
+	table.insert( package.config["Debug"].linkoptions, "`$(29xDebug)/wx-config "..debug_option.." --libs all`" )
+	table.insert( package.config["Release"].linkoptions, "`$(29xRelease)/wx-config --libs all`" )
 end
 
 if ( macosx ) then

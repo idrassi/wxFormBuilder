@@ -11,9 +11,9 @@ Linux
 	29xRelease=~/Dev/wx29x/buildgtk
 	29xDebug=~/Dev/wx29x/buildgtkd
 
-- Go to Workspace menu -> Workspace Settings... -> Parser Include Files and add a search path like:
+- Go to Workspace menu -> Workspace Settings... -> Parser Include Files and add a search path that will looks like:
 
-	~/Dev/wx29x/include
+	path/to/wx29x/include
 
 	so CodeLite will find correct files instead those installed in your system (if any)
 

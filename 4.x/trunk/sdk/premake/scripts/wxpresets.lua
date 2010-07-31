@@ -197,12 +197,12 @@ function ConfigureWxWidgets( package, altTargetName, wxVer, wxVerMinor )
 		table.insert( package.excludes, matchrecursive( "*.rc" ) )
 		
 		-- Set wxWidgets build options.
-		table.insert( package.config["Debug"].buildoptions, "`$(291Debug)/wx-config "..debug_option.." --cflags`" )
-		table.insert( package.config["Release"].buildoptions, "`$(291Release)/wx-config --debug=no --cflags`" )
+		table.insert( package.config["Debug"].buildoptions, "`$(29xDebug)/wx-config "..debug_option.." --cflags`" )
+		table.insert( package.config["Release"].buildoptions, "`$(29xRelease)/wx-config --debug=no --cflags`" )
 
 		-- Set the wxWidgets link options.
-		table.insert( package.config["Debug"].linkoptions, "`$(291Debug)/wx-config "..debug_option.." --libs all`" )
-		table.insert( package.config["Release"].linkoptions, "`$(291Release)/wx-config --libs all`" )
+		table.insert( package.config["Debug"].linkoptions, "`$(29xDebug)/wx-config "..debug_option.." --libs all`" )
+		table.insert( package.config["Release"].linkoptions, "`$(29xRelease)/wx-config --libs all`" )
 		
 		-- Set the Linux defines.
 		table.insert( package.defines, "__WXGTK__" )
@@ -212,8 +212,8 @@ function ConfigureWxWidgets( package, altTargetName, wxVer, wxVerMinor )
 			package.config["Release"].target = targetName
 			package.config["Debug"].target = targetName.."d"
 		else
-			package.config["Debug"].target = "`wx-config "..debug_option.." --basename`_"..targetName.."-`$(291Release)/wx-config`"
-			package.config["Release"].target = "`wx-config --basename`_"..targetName.."-`$(291Release)/wx-config`"
+			package.config["Debug"].target = "`wx-config "..debug_option.." --basename`_"..targetName.."-`$(29xRelease)/wx-config`"
+			package.config["Release"].target = "`wx-config --basename`_"..targetName.."-`$(29xRelease)/wx-config`"
 --			package.config["Debug"].target = "`wx-config "..debug_option.." --basename`_"..targetName.."-`wx-config --release`"
 --			package.config["Release"].target = "`wx-config --basename`_"..targetName.."-`wx-config --release`"
 		end
