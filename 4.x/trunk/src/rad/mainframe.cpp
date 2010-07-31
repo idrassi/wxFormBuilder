@@ -569,7 +569,6 @@ void MainFrame::OnAbout( wxCommandEvent &)
 {
 	AboutDialog *dlg = new AboutDialog( this );
 	dlg->ShowModal();
-	dlg->Destroy();
 }
 
 void MainFrame::OnExit( wxCommandEvent &)

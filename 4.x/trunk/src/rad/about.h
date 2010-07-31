@@ -25,33 +25,28 @@
 #ifndef __ABOUT__
 #define __ABOUT__
 
-#include <wx/wx.h>
+#include <wx/dialog.h>
+#include <wx/html/htmlwin.h>
 #include <wx/button.h>
-#include <wx/panel.h>
-#include <wx/statline.h>
 
 /**
  * Class AboutDialog
  */
-class AboutDialog : public wxDialog
+class AboutDialog : public wxDialog 
 {
+private:
+
 protected:
-    wxStaticText*	m_staticText2;
-    wxStaticText* 	m_staticText3;
-    wxStaticText* 	m_staticText6;
-    wxStaticLine* 	window1;
-    wxPanel* 		m_panel1;
-    wxStaticText* 	m_staticText8;
-    wxStaticText* 	m_staticText9;
-    wxStaticText* 	m_staticText10;
-    wxStaticLine* 	window2;
-    wxButton* 		m_button1;
-    
-    DECLARE_EVENT_TABLE()
+	wxHtmlWindow* 	html;
+	wxButton* 		button;
+	void 			OnButtonEvent( wxCommandEvent& event );
 
 public:
-    AboutDialog( wxWindow *parent, int id = wxID_ANY );
-    void OnButtonEvent( wxCommandEvent &event );
+	
+	AboutDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("About..."),
+				const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 420,600 ),
+				long style = wxDEFAULT_DIALOG_STYLE ); 
+	~AboutDialog();
 };
 
 #endif // __ABOUT__
