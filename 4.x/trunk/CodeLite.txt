@@ -1,11 +1,19 @@
 Linux
 -----
+- Checkout from wxWidgets svn trunk version in some path (something like ~/Dev/wx29x/ )
 
-Once created files:
+- Use the way to compile it without make install like described in wxWidgets docs/gtk/install.txt
 
-- Settings -> Environment Variables: create a new set (mine is called wx291) and add something like:
+- Execute create_build_files.sh from a terminal and than open wxFormBuilder.workspace
 
-	291Release=/path/to/local/wx291/buildgtk
-	291Debug=/path/to/local/wx291/buildgtkd
+- Go to Settings -> Environment Variables: create a new set (or use Default one) and add something like:
 
-- Settings -> Tags Settings -> Include Files tab: remove system installed wx include path if any
+	29xRelease=~/Dev/wx29x/buildgtk
+	29xDebug=~/Dev/wx29x/buildgtkd
+
+- Go to Workspace menu -> Workspace Settings... -> Parser Include Files and add a search path like:
+
+	~/Dev/wx29x/include
+
+	so CodeLite will find correct files instead those installed in your system (if any)
+
