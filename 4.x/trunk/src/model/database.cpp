@@ -1042,11 +1042,17 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 		std::string def_value;
 		try
 		{
-			ticpp::Node* lastChild = elem_prop->LastChild();
-			ticpp::Text* text = lastChild->ToText();
-			def_value = text->Value();
+			ticpp::Node* lastChild = elem_prop->LastChild( false );
+            if ( lastChild && lastChild->Type()== TiXmlNode::TEXT )
+            {
+				ticpp::Text* text = lastChild->ToText();
+				def_value = text->Value();
+			}
 		}
-		catch( ticpp::Exception& ){}
+		catch( ticpp::Exception& ) 
+		{
+			wxLogError( "Error: While getting default value \"%s\" of class \"%s\"", _WXSTR(pname).c_str(), obj_info->GetClassName().c_str() );
+		}
 
 		// If the property is a "bitlist" then parse all of the options
 		POptionList opt_list;
@@ -1088,9 +1094,9 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 				child.m_description = _WXSTR( child_description );
 
 				// Get default value
-				try
+				ticpp::Node* lastChild = elem_child->LastChild(false);
+				if ( lastChild )
 				{
-					ticpp::Node* lastChild = elem_child->LastChild();
 					ticpp::Text* text = lastChild->ToText();
 					child.m_defaultValue = _WXSTR( text->Value() );
 
@@ -1101,8 +1107,6 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 					}
 					def_value += text->Value();
 				}
-				catch( ticpp::Exception& ){}
-
 				children.push_back( child );
 
 				elem_child = elem_child->NextSiblingElement( "child", false );
@@ -1169,13 +1173,12 @@ void ObjectDatabase::ParseEvents( ticpp::Element* elem_obj, PObjectInfo obj_info
 
 		// Get default value
 		std::string def_value;
-		try
+		ticpp::Node* lastChild = elem_evt->LastChild(false);
+		if ( lastChild )
 		{
-			ticpp::Node* lastChild = elem_evt->LastChild();
 			ticpp::Text* text = lastChild->ToText();
 			def_value = text->Value();
 		}
-		catch( ticpp::Exception& ){}
 
 		// Create an instance of EventInfo
 		PEventInfo evt_info(
