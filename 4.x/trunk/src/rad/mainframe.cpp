@@ -753,7 +753,8 @@ void MainFrame::UpdateLayoutTools()
 	bool gotLayoutSettings = AppData()->GetLayoutSettings( AppData()->GetSelectedObject(),
 															&flag, &option, &border, &orient );
 	wxAuiToolBar* mainbar = this->GetToolBar();
-	wxMenu* menuEdit = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu( _("Edit") ) );
+	wxMenu* menuEdit = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu( _("&Edit") ) );
+	wxASSERT( menuEdit );
 
 	// Enable the layout tools if there are layout settings, else disable the tools
 	menuEdit->Enable( 		ID_EXPAND, 			gotLayoutSettings );
@@ -818,7 +819,8 @@ void MainFrame::UpdateFrame()
 	GetStatusBar()->SetStatusText( filename, STATUS_FIELD_PATH );
 
 	// Enable/Disable toolbar and menu entries
-	wxMenu* menuEdit = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu( _("Edit") ) );
+	wxMenu* menuEdit = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu( _("&Edit") ) );
+	wxASSERT( menuEdit );
 
 	bool redo = AppData()->CanRedo();
 	menuEdit->Enable( ID_REDO, redo );
@@ -861,7 +863,7 @@ void MainFrame::UpdateFrame()
 void MainFrame::UpdateRecentProjects()
 {
 	int i, fi;
-	wxMenu *menuFile = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu("File") );
+	wxMenu *menuFile = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu("&File") );
 
 	// Delete the menu items of the recent projects
 	for ( i = 0 ; i < 4 ; i++ )
