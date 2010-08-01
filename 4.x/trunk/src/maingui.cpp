@@ -74,9 +74,9 @@ static const wxCmdLineEntryDesc s_cmdLineDesc[] =
 	{ wxCMD_LINE_NONE }
 };
 
-IMPLEMENT_APP( MyApp )
+IMPLEMENT_APP( wxFormBuilderApp )
 
-int MyApp::OnRun()
+int wxFormBuilderApp::OnRun()
 {
 	// Abnormal Termination Handling
 #if wxUSE_ON_FATAL_EXCEPTION && wxUSE_STACKWALKER
@@ -110,6 +110,9 @@ int MyApp::OnRun()
 
 	// Message output to the same as the log target
 	delete wxMessageOutput::Set( new wxMessageOutputLog );
+
+    // Load locales
+    SelectLanguage( wxLANGUAGE_DEFAULT );
 
 	// Parse command line
 	wxCmdLineParser parser( s_cmdLineDesc, argc, argv );
@@ -324,13 +327,13 @@ int MyApp::OnRun()
 	return wxApp::OnRun();
 }
 
-bool MyApp::OnInit()
+bool wxFormBuilderApp::OnInit()
 {
 	// Initialization is done in OnRun, so MinGW SEH works for all code (it needs a local variable, OnInit is called before OnRun)
 	return true;
 }
 
-int MyApp::OnExit()
+int wxFormBuilderApp::OnExit()
 {
 	MacroDictionary::Destroy();
 	AppDataDestroy();
@@ -349,12 +352,24 @@ int MyApp::OnExit()
 	return wxApp::OnExit();
 }
 
-MyApp::~MyApp()
+void wxFormBuilderApp::SelectLanguage( int lang )
+{
+    if ( !m_locale.Init(lang) )
+    {
+        wxLogError( _("This language is not supported by the system.") );
+        return;
+    } 
+
+    wxLocale::AddCatalogLookupPathPrefix(".\\locale");
+    m_locale.AddCatalog("wxformbuilder");
+}
+
+wxFormBuilderApp::~wxFormBuilderApp()
 {
 }
 
 #ifdef __WXMAC__
-void MyApp::MacOpenFile(const wxString &fileName)
+void wxFormBuilderApp::MacOpenFile(const wxString &fileName)
 {
     if(m_frame == NULL) m_mac_file_name = fileName;
     else
@@ -407,7 +422,7 @@ void MyApp::MacOpenFile(const wxString &fileName)
 		}
 	};
 
-	void MyApp::OnFatalException()
+	void wxFormBuilderApp::OnFatalException()
 	{
 		LogStack();
 	}
