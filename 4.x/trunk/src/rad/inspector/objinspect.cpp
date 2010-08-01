@@ -53,7 +53,6 @@
 #define WXFB_PROPERTY_GRID 1000
 #define WXFB_EVENT_GRID    1001
 
-DECLARE_EVENT_TYPE( RECREATE_GRID_EVENT, -1 )
 DEFINE_EVENT_TYPE( RECREATE_GRID_EVENT )
 
 BEGIN_EVENT_TABLE(ObjectInspector, wxPanel)
@@ -546,7 +545,8 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
 			break;
 		}
 		case PT_PARENT: {
-			wxPGProperty* parent = new wxPGProperty( name, wxPG_LABEL );
+//			wxPGProperty* parent = new wxPGProperty( name, wxPG_LABEL );
+			wxPGProperty* parent = new wxStringProperty( name, wxPG_LABEL, "<composed>" );
 			Debug::Print( _("Property added [PT_PARENT]") + name );
 
 			PPropertyInfo prop_desc = prop->GetPropertyInfo();
@@ -559,7 +559,8 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
 				m_pg->SetPropertyHelpString( child, it->m_description );
 			}
 
-			parent->SetValueFromString( prop->GetValueAsString(), wxPG_FULL_VALUE );
+//			parent->SetValueFromString( prop->GetValueAsString(), wxPG_FULL_VALUE );
+			parent->SetValueFromString( prop->GetValueAsString() );
 			result = parent;
 			break;
 		}
@@ -622,16 +623,7 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
 
 			ExpandMap::iterator it = m_isExpanded.find( propName );
 			if ( it != m_isExpanded.end() )
-			{
-				if ( it->second )
-				{
-					m_pg->Expand( id );
-				}
-				else
-				{
-					m_pg->Collapse( id );
-				}
-			}
+				id->SetExpanded( it->second );
 
 			properties.insert( PropertyMap::value_type( propName, prop ) );
 			m_propMap.insert( ObjInspectorPropertyMap::value_type( id, prop ) );
@@ -643,22 +635,13 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
 	{
 		PPropertyCategory nextCat = category->GetCategory( i );
 		if ( 0 == nextCat->GetCategoryCount() && 0 == nextCat->GetPropertyCount() )
-		{
 			continue;
-		}
+
 		wxPGProperty* catId = m_pg->AppendIn( category->GetName() , new wxPropertyCategory( nextCat->GetName() ) );
 		ExpandMap::iterator it = m_isExpanded.find( nextCat->GetName() );
 		if ( it != m_isExpanded.end() )
-		{
-			if ( it->second )
-			{
-				m_pg->Expand( catId );
-			}
-			else
-			{
-				m_pg->Collapse( catId );
-			}
-		}
+			catId->SetExpanded( it->second );
+
 		AddItems( name, obj, obj_info, nextCat, properties );
 	}
 }
@@ -707,9 +690,8 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
 	{
 		PPropertyCategory nextCat = category->GetCategory( i );
 		if ( 0 == nextCat->GetCategoryCount() && 0 == nextCat->GetEventCount() )
-		{
 			continue;
-		}
+
 		m_eg->AppendIn( category->GetName(), new wxPropertyCategory( nextCat->GetName() ) );
 		AddItems( name, obj, obj_info, nextCat, events );
 	}
@@ -954,15 +936,11 @@ void ObjectInspector::OnPropertyModified( wxFBPropertyEvent& event )
 		if ( propobj->GetObjectInfo()->GetObjectType()->IsItem() )
 		{
 			if ( propobj->GetChildCount() > 0 )
-			{
 				shouldContinue = ( appobj == propobj->GetChild( 0 ) );
-			}
 		}
 	}
 	if ( !shouldContinue )
-	{
 		return;
-	}
 
 	wxPGProperty* pgid = m_pg->GetPropertyByLabel(prop->GetName() );
 	if ( pgid == NULL ) return; /** Puede que no se esté mostrando ahora esa página */
