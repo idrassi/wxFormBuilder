@@ -29,13 +29,14 @@
 
 class MainFrame;
 
-class MyApp : public wxApp
+class wxFormBuilderApp : public wxApp
 {
 private:
-	wxLog* 		m_old_log;
+	wxLog* 			m_old_log;
 	wxLogWindow* 	m_log;
-	MainFrame*	m_frame;
-  
+	MainFrame*		m_frame;
+	wxLocale        m_locale;
+
 public:
 	bool OnInit();
 #if wxUSE_ON_FATAL_EXCEPTION && wxUSE_STACKWALKER
@@ -43,14 +44,16 @@ public:
 #endif
 	int OnRun();
 	int OnExit();
-	~MyApp();
-  
+	~wxFormBuilderApp();
+
+	void SelectLanguage( int lang );
+
 #ifdef __WXMAC__
 	wxString m_mac_file_name;
-	void MacOpenFile(const wxString &fileName);
+	void MacOpenFile( const wxString &fileName );
 #endif
 };
 
-DECLARE_APP(MyApp)
+DECLARE_APP( wxFormBuilderApp )
 
 #endif //__MAINGUI__
