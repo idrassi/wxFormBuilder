@@ -360,7 +360,7 @@ void wxFormBuilderApp::SelectLanguage( int lang )
         return;
     } 
 
-    wxLocale::AddCatalogLookupPathPrefix(".\\locale");
+    wxLocale::AddCatalogLookupPathPrefix("../locale");
     m_locale.AddCatalog("wxformbuilder");
 }
 
