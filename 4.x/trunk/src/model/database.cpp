@@ -23,6 +23,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+// TODO: check comments translation
+
 #include "objectbase.h"
 #include "database.h"
 #include "rad/appdata.h"
@@ -68,16 +70,16 @@
 	#include <dlfcn.h>
 #endif
 
-ObjectPackage::ObjectPackage(wxString name, wxString desc, wxBitmap icon)
+ObjectPackage::ObjectPackage( wxString name, wxString desc, wxBitmap icon )
 {
 	m_name = name;
 	m_desc = desc;
 	m_icon = icon;
 }
 
-PObjectInfo ObjectPackage::GetObjectInfo(unsigned int idx)
+PObjectInfo ObjectPackage::GetObjectInfo( unsigned int idx )
 {
-	assert (idx < m_objs.size());
+	assert ( idx < m_objs.size() );
 	return m_objs[idx];
 }
 
@@ -89,8 +91,8 @@ void ObjectPackage::AppendPackage( PObjectPackage package )
 
 ObjectDatabase::ObjectDatabase()
 {
-	//InitObjectTypes();
-	//  InitWidgetTypes();
+//	InitObjectTypes();
+//  InitWidgetTypes();
 	InitPropertyTypes();
 }
 
@@ -98,7 +100,7 @@ ObjectDatabase::~ObjectDatabase()
 {
     for ( ComponentLibraryMap::iterator lib = m_componentLibs.begin(); lib != m_componentLibs.end(); ++lib )
     {
-        (*(lib->first))( lib->second );
+        ( *( lib->first ) )( lib->second );
     }
 
     for ( LibraryVector::iterator lib = m_libs.begin(); lib != m_libs.end(); ++lib )
@@ -132,13 +134,13 @@ PObjectInfo ObjectDatabase::GetObjectInfo(wxString class_name)
 
 PObjectPackage ObjectDatabase::GetPackage(unsigned int idx)
 {
-	assert (idx < m_pkgs.size());
+	assert ( idx < m_pkgs.size() );
 
 	return m_pkgs[idx];
 }
 
 /**
-* @todo La herencia de propiedades ha de ser de forma recursiva.
+* @todo The inheritance of property must be recursive.
 */
 
 PObjectBase ObjectDatabase::NewObject(PObjectInfo obj_info)
@@ -146,10 +148,11 @@ PObjectBase ObjectDatabase::NewObject(PObjectInfo obj_info)
 	PObjectBase object;
 
 	// Llagados aquí el objeto se crea seguro...
-	object = PObjectBase(new ObjectBase(obj_info->GetClassName()));
-	object->SetObjectTypeName(obj_info->GetObjectTypeName()); // *FIXME*
+	// At this point the object will be created (safe?)
+	object = PObjectBase( new ObjectBase( obj_info->GetClassName() ) );
+	object->SetObjectTypeName( obj_info->GetObjectTypeName() ); // *FIXME*
 
-	object->SetObjectInfo(obj_info);
+	object->SetObjectInfo( obj_info );
 
 	PPropertyInfo prop_info;
 	PEventInfo    event_info;
@@ -157,12 +160,12 @@ PObjectBase ObjectDatabase::NewObject(PObjectInfo obj_info)
 
 	unsigned int base = 0;
 
-	while (class_info)
+	while ( class_info )
 	{
 		unsigned int i;
-		for (i = 0; i < class_info->GetPropertyCount(); i++)
+		for ( i = 0; i < class_info->GetPropertyCount(); i++ )
 		{
-			prop_info = class_info->GetPropertyInfo( i );
+			prop_info = class_info->GetPropertyInfo(i);
 
 			PProperty property( new Property( prop_info, object ) );
 
@@ -177,7 +180,6 @@ PObjectBase ObjectDatabase::NewObject(PObjectInfo obj_info)
 				}
 			}
 			property->SetValue( defaultValue );
-
 			// Las propiedades están implementadas con una estructura "map",
 			// ello implica que no habrá propiedades duplicadas.
 			// En otro caso habrá que asegurarse de que dicha propiedad
@@ -185,21 +187,29 @@ PObjectBase ObjectDatabase::NewObject(PObjectInfo obj_info)
 			// Otra cosa importante, es que el orden en que se insertan
 			// las propiedades, de abajo-arriba, esto permite que se pueda redefir
 			// alguna propiedad.
+
+			// Properties are implemented with a "map" structure,
+			// this means no duplicate properties.
+			// In another case we must ensure that such property
+			// doesn't exists.
+			// Another important thing is the order in which those are inserted,
+			// from bottom to top (?), this means that we can redefine
+			// some property.
 			object->AddProperty( property );
 		}
 		for ( i=0; i < class_info->GetEventCount(); i++ )
 		{
 			event_info = class_info->GetEventInfo( i );
 			PEvent event( new Event( event_info, object ) );
-			// notice that for event there isn't a default value on its creation
+			// Notice that for event there isn't a default value on its creation
 			// because there is not handler at the moment
 			object->AddEvent( event );
 		}
 		class_info = ( base < obj_info->GetBaseClassCount() ?
 			obj_info->GetBaseClass( base++ ) : PObjectInfo() );
 	}
-	// si el objeto tiene la propiedad name (reservada para el nombre del
-	// objeto) le añadimos el contador para no repetir nombres.
+	// If the object has the name property (reserved for the object name)
+	// add a counter to prevent repeated names.
 
 	obj_info->IncrementInstanceCount();
 
@@ -222,22 +232,20 @@ int ObjectDatabase::CountChildrenWithSameType( PObjectBase parent, PObjectType t
 	}
 	return count;
 }
+
 /**
-* Crea una instancia de classname por debajo de parent.
-* La función realiza la comprobación de tipos para crear el objeto:
-* - Comprueba si el tipo es un tipo-hijo válido de "parent", en cuyo caso
-*   se comprobará también que el número de hijos del mismo tipo no sobrepase
-el máximo definido. El objeto no se crea si supera el máximo permitido.
-* - Si el tipo-hijo no se encuentra entre los definidos para el tipo de
-*   "parent" se intentará crearlo como hijo de alguno de los tipos hijos con el
-*   flag item a "1". Para ello va recorriendo todos los tipos con flag item,
-*   si no puede crear el objeto, bien por que el tipo no es válido o porque
-*   sobrepasa el máximo permitido si intenta con el siguiente hasta que no queden
-*   más.
+* Create an instance of classname as a child of the parent.
 *
-* Nota: quizá sea conveniente que el método cree el objeto sin enlazarlo
-*       en el árbol, para facilitar el undo-redo.
+* The function performs type checking to create the object:
+* - Check if the type is a valid child-type of "parent". 
+*    Also check that the number of children of the same type does not exceed the maximum.
+* - If the type is not an allowded child-type for the "parent" it will be created as child
+*    of a child item with the item flag "1".
+* 
+* Note: you may want to create the object method without linking it to the tree,
+*       to facilitate the undo-redo.
 */
+
 PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase parent )
 {
 	PObjectBase object;
@@ -254,7 +262,7 @@ PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase par
 
 	if ( parent )
 	{
-		// Comprobamos si el tipo es válido
+		// Type check
 		PObjectType parentType = parent->GetObjectInfo()->GetObjectType();
 		int max = parentType->FindChildType(objType);
 
@@ -264,6 +272,13 @@ PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase par
 		// de forms (como childType de project), pero hay mucho código no válido
 		// para forms que no sean de tipo "form". Dicho de otra manera, hay
 		// código que dependen del nombre del tipo, cosa que hay que evitar.
+
+		// FIXME! This is a workaround to avoid creating menubar, statusbar and
+		// toolbar types in a form other than Frame (pseudo wxFrame).
+		// Should be modified to allow all types have several form types
+		// (like project childType), but there is invalid code
+		// to forms not of type "form." In other words, there
+		// code depends on type name, which must be avoided.
 		if (parentType->GetName() 	== "form" 		&&
 			parent->GetClassName() 	!= "Frame" 		&&
 			(objType->GetName() 	== "statusbar" 	||
@@ -275,7 +290,7 @@ PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase par
 		{
 			bool create = true;
 
-			// comprobamos el número de instancias
+			// Check the number of instances
 			if ( max > 0 && CountChildrenWithSameType( parent, objType ) >= max )
 				create = false;
 
@@ -284,8 +299,7 @@ PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase par
 		}
 		else // max == 0
 		{
-			// el tipo no es válido, vamos a comprobar si podemos insertarlo
-			// como hijo de un "item"
+			// Type is not valid, let's see if we can insert it as child of an "item"
 			bool created = false;
 			for ( unsigned int i=0; !created && i < parentType->GetChildTypeCount(); i++ )
 			{
@@ -296,28 +310,28 @@ PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase par
 				{
 					max = parentType->FindChildType( childType );
 
-					// si el tipo es un item y además el tipo del objeto a crear
-					// puede ser hijo del tipo del item vamos a intentar crear la
-					// instancia del item para crear el objeto como hijo de este
+					// If the type is an item and the type of object to create can
+					// be the child of the type of item we will try to create the 
+					// instance of the item to create the object as a child of this
 					if ( max < 0 || CountChildrenWithSameType( parent, childType ) < max )
 					{
-						// No hay problemas para crear el item debajo de parent
+						// Create the item with this parent
 						PObjectBase item = NewObject( GetObjectInfo( childType->GetName() ) );
 
 						//PObjectBase obj = CreateObject(classname,item);
 						PObjectBase obj = NewObject( objInfo );
 
-						// la siguiente condición debe cumplirse siempre
-						// ya que un item debe siempre contener a otro objeto
+						// The following condition must be met as long as it should always
+						// contain one item to another object
 						if ( obj )
 						{
-							// enlazamos item y obj
+							// Link item and obj
 							item->AddChild( obj );
 							obj->SetParent( item );
 
-							// sizeritem es un tipo de objeto reservado, para que el uso sea
-							// más práctico se asignan unos valores por defecto en función
-							// del tipo de objeto creado
+							// Sizeritem is a reserved object type,
+							// Is more practical to assign default values based
+							// on the type of object created
 							if ( item->GetObjectInfo()->IsSubclassOf("sizeritembase") )
 								SetDefaultLayoutProperties( item );
 
@@ -331,8 +345,8 @@ PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase par
 			}
 		}
 		///////////////////////////////////////////////////////////////////////
-		// Nota: provisionalmente vamos a enlazar el objeto al padre pero
-		//       esto debería hacerse fuera para poder implementar el Undo-Redo
+		// Note: provisionally linking the object to the parent. 
+		//       This should be done outside in order to implement the Undo-Redo.
 		///////////////////////////////////////////////////////////////////////
 		//if ( object )
 		//{
@@ -380,7 +394,7 @@ PObjectBase ObjectDatabase::CopyObject( PObjectBase obj )
 		copyEvent->SetValue( event->GetValue() );
 	}
 
-	// creamos recursivamente los hijos
+	// Recursively create children
 	count = obj->GetChildCount();
 	for ( i = 0; i<count; i++ )
 	{
@@ -491,9 +505,9 @@ PObjectBase ObjectDatabase::CreateObject( ticpp::Element* xml_obj, PObjectBase p
 				xml_prop->GetAttribute( NAME_TAG, &prop_name, false );
 				PProperty prop = object->GetProperty( _WXSTR( prop_name ) );
 
-				if ( prop ) // does the property exist
+				if ( prop ) // Does the property exist
 				{
-					// load the value
+					// Load the value
 					prop->SetValue( _WXSTR( xml_prop->GetText( false ) ) );
 				}
 				else
@@ -507,7 +521,7 @@ PObjectBase ObjectDatabase::CreateObject( ticpp::Element* xml_obj, PObjectBase p
 				}
 				xml_prop = xml_prop->NextSiblingElement( PROPERTY_TAG, false );
 			}
-			// load the event handlers
+			// Load the event handlers
 			ticpp::Element* xml_event = xml_obj->FirstChildElement( EVENT_TAG, false );
 			while ( xml_event )
 			{
@@ -522,11 +536,11 @@ PObjectBase ObjectDatabase::CreateObject( ticpp::Element* xml_obj, PObjectBase p
 			}
 			if ( parent )
 			{
-				// set up parent/child relationship
+				// Set up parent/child relationship
 				parent->AddChild( newobject );
 				newobject->SetParent( parent );
 			}
-			// create the children
+			// Create the children
 			ticpp::Element* child = xml_obj->FirstChildElement( OBJECT_TAG, false );
 			while ( child )
 			{
@@ -698,7 +712,7 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
 
 		ticpp::Element* root = doc.FirstChildElement( PACKAGE_TAG );
 
-		// get the library to import
+		// Get the library to import
 		std::string lib;
 		root->GetAttributeOrDefault( "lib", &lib, "" );
 		if ( !lib.empty() )
@@ -812,13 +826,13 @@ void ObjectDatabase::LoadCodeGen( const wxString& file )
 		ticpp::Document doc;
 		XMLUtils::LoadXMLFile( doc, true, file );
 
-		// read the codegen element
+		// Read the codegen element
 		ticpp::Element* elem_codegen = doc.FirstChildElement("codegen");
 		std::string language;
 		elem_codegen->GetAttribute( "language", &language );
 		wxString lang = _WXSTR( language );
 
-		// read the templates
+		// Read the templates
 		ticpp::Element* elem_templates = elem_codegen->FirstChildElement( "templates", false );
 		while ( elem_templates  )
 		{
@@ -1034,7 +1048,7 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 		}
 		catch( ticpp::Exception& ){}
 
-		// if the property is a "bitlist" then parse all of the options
+		// If the property is a "bitlist" then parse all of the options
 		POptionList opt_list;
 		std::list< PropertyChild > children;
 		if ( ptype == PT_BITLIST || ptype == PT_OPTION )
@@ -1080,7 +1094,7 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 					ticpp::Text* text = lastChild->ToText();
 					child.m_defaultValue = _WXSTR( text->Value() );
 
-					// build parent default value
+					// Build parent default value
 					if ( children.size() > 0 )
 					{
 						def_value += "; ";
@@ -1094,13 +1108,13 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 				elem_child = elem_child->NextSiblingElement( "child", false );
 			}
 		}
-		// create an instance of PropertyInfo
+		// Create an instance of PropertyInfo
 		PPropertyInfo prop_info( new PropertyInfo( _WXSTR( pname ), ptype, _WXSTR( def_value ),
 													_WXSTR( description ), _WXSTR( customEditor ), opt_list, children ) );
-		// add the PropertyInfo to the property
+		// Add the PropertyInfo to the property
 		obj_info->AddPropertyInfo( prop_info );
 
-		// merge property code templates, once per property type
+		// Merge property code templates, once per property type
 		if ( types->insert( ptype ).second )
 		{
 			LangTemplateMap& propLangTemplates = m_propertyTypeTemplates[ ptype ];
@@ -1163,11 +1177,11 @@ void ObjectDatabase::ParseEvents( ticpp::Element* elem_obj, PObjectInfo obj_info
 		}
 		catch( ticpp::Exception& ){}
 
-		// create an instance of EventInfo
+		// Create an instance of EventInfo
 		PEventInfo evt_info(
 			new EventInfo( _WXSTR( evt_name ), _WXSTR( evt_class ), _WXSTR( def_value ), _WXSTR( description ) ) );
 
-		// add the EventInfo to the event
+		// Add the EventInfo to the event
 		obj_info->AddEventInfo( evt_info );
 
 		elem_evt = elem_evt->NextSiblingElement( EVENT_TAG, false );
@@ -1224,7 +1238,7 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 	#ifdef __WXMAC__
 		path += ".dylib";
 
-		// open the library
+		// Open the library
 		void* handle = dlopen( path.mb_str(), RTLD_LAZY );
 
 		if ( !handle )
@@ -1378,18 +1392,18 @@ bool ObjectDatabase::LoadObjectTypes()
 
 			elem = elem->NextSiblingElement( "objtype", false );
 		}
-		// now load the children
+		// Now load the children
 		elem = root->FirstChildElement("objtype");
 		while (elem)
 		{
 			wxString name = _WXSTR( elem->GetAttribute("name") );
 
-			// get the objType
+			// Get the objType
 			PObjectType objType = GetObjectType( name );
 			ticpp::Element* child = elem->FirstChildElement( "childtype", false );
 			while ( child )
 			{
-				int nmax = -1; // no limit
+				int nmax = -1; // No limit
 				child->GetAttributeOrDefault( "nmax", &nmax, -1 );
 
 				wxString childname = _WXSTR( child->GetAttribute("name") );
