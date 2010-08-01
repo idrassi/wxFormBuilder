@@ -1338,12 +1338,12 @@ public:
 
 		if ( !obj->IsNull("search_button") )
 		{
-			sc->ShowSearchButton( obj->GetPropertyAsInteger("search_button") );
+			sc->ShowSearchButton( 0!= obj->GetPropertyAsInteger("search_button") );
 		}
 		
 		if ( !obj->IsNull("cancel_button") )
 		{
-			sc->ShowCancelButton( obj->GetPropertyAsInteger("cancel_button") );
+			sc->ShowCancelButton( 0!= obj->GetPropertyAsInteger("cancel_button") );
 		}
 
 		sc->PushEventHandler( new ComponentEvtHandler( sc, GetManager() ) );

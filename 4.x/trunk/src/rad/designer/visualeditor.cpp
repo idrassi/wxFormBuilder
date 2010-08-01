@@ -967,7 +967,7 @@ wxMenu* DesignerWindow::GetMenuFromObject(PObjectBase menu)
 				if ( !menuItem->GetProperty("unchecked_bitmap")->IsNull() )
 				{
 					#ifdef __WXMSW__
-						item->SetBitmaps( wxNullBitmap,  menuItem->GetPropertyAsBitmap("unchecked_bitmap");
+						item->SetBitmaps( wxNullBitmap,  menuItem->GetPropertyAsBitmap("unchecked_bitmap") );
 					#endif
 				}
 			}
