@@ -43,8 +43,10 @@
 #include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/gbsizer.h>
+#include <wx/aui/aui.h>
 
 #include "innerframe.h"
+//#include "plugin.h" TODO: Unused?
 //#include "rad/designer/resizablepanel.h"
 #include "rad/designer/visualobj.h"
 #include "utils/wxfbdefs.h"
@@ -128,7 +130,7 @@ public:
 	PObjectBase GetSelectedObject() 				{ return m_selObj.lock(); }
 	wxWindow* GetActivePanel() 						{ return m_actPanel; }
 	wxMenu* GetMenuFromObject( PObjectBase menu );
-	void SetFrameWidgets( PObjectBase menubar, wxWindow *toolbar, wxWindow* statusbar );
+	void SetFrameWidgets( PObjectBase menubar, wxWindow *toolbar, wxWindow* statusbar, wxWindow *auipanel );
 	void HighlightSelection( wxDC& dc );
 	void OnPaint( wxPaintEvent &event );
 };
@@ -146,15 +148,18 @@ private:
 	typedef std::map< ObjectBase*, wxObject* > ObjectBaseMap;
 	ObjectBaseMap m_baseobjects;
 
-	DesignerWindow *m_back;
-
-	PObjectBase m_form;  // Pointer to last form created
+	DesignerWindow 	*m_back;
+	wxPanel 		*m_auipanel;
+	PObjectBase 	m_form;  // Pointer to last form created
 
 	// Prevent OnSelected in components
 	bool m_stopSelectedEvent;
 
 	// Prevent OnModified in components
 	bool m_stopModifiedEvent;
+
+	// AUI scan timer
+	wxTimer m_AuiScaner;
 
 	DECLARE_EVENT_TABLE()
 
@@ -164,6 +169,12 @@ protected:
 	void SetupSizer( PObjectBase obj, wxSizer* sizer );
 	void Create();
 	void DeleteAbstractObjects();
+
+	void ClearAui();
+	void SetupAui( PObjectBase obj, wxWindow* window );
+	void ScanPanes( wxWindow* parent );
+
+	void OnAuiScaner(wxTimerEvent& event);
 
 public:
 	VisualEditor(wxWindow *parent);
@@ -177,6 +188,9 @@ public:
 
 	PObjectBase GetObjectBase( wxObject* wxobject );
 	wxObject* GetWxObject( PObjectBase baseobject );
+
+	//AUI
+	wxAuiManager *m_auimgr;
 
 	// Give components an opportunity to cleanup
 	void ClearComponents( wxWindow* parent );

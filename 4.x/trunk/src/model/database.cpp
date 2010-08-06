@@ -266,6 +266,15 @@ PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase par
 		PObjectType parentType = parent->GetObjectInfo()->GetObjectType();
 		int max = parentType->FindChildType(objType);
 
+		//AUI
+		if( parentType->GetName() == wxT("form") )
+		{
+			// widgets and containers can be used without sizer only in AUI managed parents
+			if( (!parent->GetPropertyAsInteger(wxT("aui_managed")) && parent->GetObjectTypeName() != wxT("toolbar") ) && ( objType->GetName() == wxT("widget") || objType->GetName() == wxT("container") ) ) max = 0;
+			// sizer cannot be used with AUI managed parent
+			if( parent->GetPropertyAsInteger(wxT("aui_managed")) && ( objType->GetName() == wxT("sizer") ) ) max = 0;
+		}
+
 		// FIXME! Esto es un parche para evitar crear los tipos menubar,statusbar y
 		// toolbar en un form que no sea wxFrame.
 		// Hay que modificar el conjunto de tipos para permitir tener varios tipos
@@ -423,9 +432,8 @@ void ObjectDatabase::SetDefaultLayoutProperties(PObjectBase sizeritem)
 	if ( childInfo->IsSubclassOf("sizer") || obj_type == "splitter" || childInfo->GetClassName() == "spacer" )
 	{
 		if ( proportion )
-		{
 			proportion->SetValue( wxString("1") );
-		}
+
 		sizeritem->GetProperty("flag")->SetValue( wxString("wxEXPAND") );
 	}
 	else if ( childInfo->GetClassName() == "wxStaticLine" )
@@ -439,9 +447,8 @@ void ObjectDatabase::SetDefaultLayoutProperties(PObjectBase sizeritem)
 	else if ( obj_type == "widget" || obj_type == "statusbar" )
 	{
 		if ( proportion )
-		{
 			proportion->SetValue( wxString("0") );
-		}
+
 		sizeritem->GetProperty("flag")->SetValue( wxString("wxALL") );
 	}
 	else if (	obj_type == "expanded_widget" 	||
@@ -457,9 +464,8 @@ void ObjectDatabase::SetDefaultLayoutProperties(PObjectBase sizeritem)
 				obj_type == "container" )
 	{
 		if ( proportion )
-		{
 			proportion->SetValue( wxString("1") );
-		}
+
 		sizeritem->GetProperty("flag")->SetValue( wxString("wxEXPAND | wxALL") );
 	}
 }
@@ -468,9 +474,7 @@ void ObjectDatabase::ResetObjectCounters()
 {
 	ObjectInfoMap::iterator it;
 	for ( it = m_objs.begin() ; it != m_objs.end() ; it++ )
-	{
 		it->second->ResetInstanceCount();
-	}
 }
 ///////////////////////////////////////////////////////////////////////
 
@@ -487,9 +491,8 @@ PObjectBase ObjectDatabase::CreateObject( ticpp::Element* xml_obj, PObjectBase p
 		// If that is the case, reassign "object" to the actual object
 		PObjectBase object = newobject;
 		if ( object && object->GetChildCount() > 0 )
-		{
 			object = object->GetChild( 0 );
-		}
+
 		if ( object )
 		{
 			// Get the state of expansion in the object tree
@@ -578,14 +581,12 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 
 	// Open plugins directory for iteration
 	if ( !wxDir::Exists( m_pluginPath ) )
-	{
 		return;
-	}
+
 	wxDir pluginsDir( m_pluginPath );
 	if ( !pluginsDir.IsOpened() )
-	{
 		return;
-	}
+
 	// Iterate through plugin directories and load the package from the xml subdirectory
 	wxString pluginDirName;
 	bool moreDirectories = pluginsDir.GetFirst( &pluginDirName, wxEmptyString, wxDIR_DIRS | wxDIR_HIDDEN );
@@ -611,9 +612,8 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 						{
 							wxFileName nextXmlFile( nextPluginXmlPath + wxFILE_SEP_PATH + packageXmlFile );
 							if ( !nextXmlFile.IsAbsolute() )
-							{
 								nextXmlFile.MakeAbsolute();
-							}
+
 							PObjectPackage package = LoadPackage( nextXmlFile.GetFullPath(), nextPluginIconPath );
 							if ( package )
 							{
@@ -634,9 +634,8 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 						// Setup the inheritance for base classes
 						wxFileName fullNextPluginPath( nextPluginPath );
 						if ( !fullNextPluginPath.IsAbsolute() )
-						{
 							fullNextPluginPath.MakeAbsolute();
-						}
+
 						wxFileName xmlFileName( packageIt->first );
 						try
 						{
@@ -690,9 +689,7 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 	}
     // If any packages remain in the map, they are new plugins and must still be added
     for ( PackageMap::iterator packageIt = packages.begin(); packageIt != packages.end(); ++packageIt )
-    {
     	m_pkgs.push_back( packageIt->second );
-    }
 }
 
 void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, PwxFBManager manager )
@@ -976,9 +973,8 @@ PObjectPackage ObjectDatabase::LoadPackage( const wxString& file, const wxString
 
 			// Add the object to the palette
 			if ( ShowInPalette( obj_info->GetObjectTypeName() ) )
-			{
 				package->Add( obj_info );
-			}
+
 			elem_obj = elem_obj->NextSiblingElement( OBJINFO_TAG, false );
 		}
 	}
@@ -1166,7 +1162,6 @@ void ObjectDatabase::ParseEvents( ticpp::Element* elem_obj, PObjectInfo obj_info
 		std::string evt_class;
 		elem_evt->GetAttributeOrDefault( EVENT_CLASS_TAG, &evt_class, "wxEvent" );
 
-
 		// Help string
 		std::string description;
 		elem_evt->GetAttributeOrDefault( DESCRIPTION_TAG, &description, "" );
@@ -1270,9 +1265,7 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		// Attempt to load the DLL
 		wxDynamicLibrary* library = new wxDynamicLibrary( path );
 		if ( !library->IsLoaded() )
-		{
 			THROW_WXFBEX( _("Error loading library ") << path )
-		}
 
 		m_libs.push_back( library );
 
@@ -1280,10 +1273,7 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		PFFreeComponentLibrary FreeComponentLibrary = 	( PFFreeComponentLibrary )library->GetSymbol("FreeComponentLibrary");
 
 		if ( !(GetComponentLibrary && FreeComponentLibrary) )
-		{
 			THROW_WXFBEX( path << _(" is not a valid component library") )
-		}
-
 #endif
 // TODO: Check these changes
 		wxString msg = _("[Database::ImportComponentLibrary] Importing ") + path + _(" library");

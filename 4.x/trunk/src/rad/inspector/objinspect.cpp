@@ -716,7 +716,7 @@ void ObjectInspector::OnPropertyGridChange( wxPropertyGridEvent& event )
 		switch ( prop->GetType() )
 		{
 			case PT_FLOAT: {
-				/** Use typeconv to properly handle locale */
+				// Use typeconv to properly handle locale
 				Debug::Print( _("Property Changed [PT_FLOAT]") );
 				double val = m_pg->GetPropertyValueAsDouble( propPtr );
 				AppData()->ModifyProperty( prop, TypeConv::FloatToString( val ) );
@@ -735,7 +735,7 @@ void ObjectInspector::OnPropertyGridChange( wxPropertyGridEvent& event )
 				wxString value = m_pg->GetPropertyValueAsString( propPtr );
 				AppData()->ModifyProperty( prop, value );
 
-				/** Update displayed description for the new selection */
+				// Update displayed description for the new selection
 				PPropertyInfo prop_desc = prop->GetPropertyInfo();
 				POptionList opt_list = prop_desc->GetOptionList();
 
@@ -767,7 +767,7 @@ void ObjectInspector::OnPropertyGridChange( wxPropertyGridEvent& event )
 			}
 			case PT_WXSTRING:
 			case PT_WXSTRING_I18N: {
-				/** Las cadenas de texto del inspector son formateadas */
+				// Las cadenas de texto del inspector son formateadas
 				Debug::Print( _("Property Changed [PT_WXSTRING]") );
 				wxString value = m_pg->GetPropertyValueAsString( propPtr );
 				AppData()->ModifyProperty( prop, value );
@@ -775,7 +775,23 @@ void ObjectInspector::OnPropertyGridChange( wxPropertyGridEvent& event )
 			}
 			case PT_BOOL: {
 				Debug::Print( _("Property Changed [PT_BOOL]") );
-				AppData()->ModifyProperty( prop, m_pg->GetPropertyValueAsBool( propPtr ) ? "1" : "0" );
+				if( prop->GetName() == "aui_managed" )
+				{
+					PObjectBase propobj = prop->GetObject();
+					if( propobj->GetChildCount() )
+					{
+						wxMessageBox( _("You have to remove all child widgets first.") );
+						
+						// Modified property must be reverted to its original form later.
+						wxCommandEvent e( RECREATE_GRID_EVENT );
+						e.SetString( event.GetPropertyName() );
+						AddPendingEvent( e );
+					}
+					else
+						AppData()->ModifyProperty( prop, m_pg->GetPropertyValueAsBool( propPtr ) ? "1" : "0" );
+				}
+				else
+					AppData()->ModifyProperty( prop, m_pg->GetPropertyValueAsBool( propPtr ) ? "1" : "0" );
 				break;
 			}
 			case PT_BITLIST: {

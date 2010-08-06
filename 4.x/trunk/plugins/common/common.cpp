@@ -33,6 +33,7 @@
 #include <wx/radiobox.h>
 #include <wx/bmpbuttn.h>
 #include <wx/animate.h>
+#include <wx/aui/auibar.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 // Custom status bar class for windows to prevent the status bar gripper from
@@ -144,6 +145,7 @@ public:
 		{
 			xrc.AddPropertyValue( "centered", "1" );
 		}
+		xrc.AddProperty( _("aui_managed"), _("aui_managed"), XRC_TYPE_BOOL);
 		return xrc.GetXrcObject();
 	}
 
@@ -153,6 +155,7 @@ public:
 		filter.AddWindowProperties();
 		filter.AddProperty( "title", "title", XRC_TYPE_TEXT );
 		filter.AddProperty( "centered", "center", XRC_TYPE_BITLIST );
+		filter.AddProperty( _("aui_managed"), _("aui_managed"), XRC_TYPE_BOOL);
 		return filter.GetXfbObject();
 	}
 };
@@ -316,22 +319,19 @@ public:
 										obj->GetPropertyAsInteger("window_style") |
 										wxTB_NOALIGN | wxTB_NODIVIDER | wxNO_BORDER );
 		if ( !obj->IsNull("bitmapsize") )
-		{
 			tb->SetToolBitmapSize( obj->GetPropertyAsSize("bitmapsize") );
-		}
+
 		if ( !obj->IsNull("margins") )
 		{
 			wxSize margins( obj->GetPropertyAsSize("margins") );
 			tb->SetMargins( margins.GetWidth(), margins.GetHeight() );
 		}
 		if ( !obj->IsNull("packing") )
-		{
 			tb->SetToolPacking( obj->GetPropertyAsInteger("packing") );
-		}
+
 		if ( !obj->IsNull("separation") )
-		{
 			tb->SetToolSeparation(obj->GetPropertyAsInteger("separation") );
-		}
+
 		tb->PushEventHandler( new ComponentEvtHandler( tb, GetManager() ) );
 		return tb;
 	}
@@ -460,25 +460,20 @@ public:
 													obj->GetPropertyAsInteger("style") |
 													obj->GetPropertyAsInteger("window_style") );
 		if ( obj->GetPropertyAsInteger("default") != 0 )
-		{
 			button->SetDefault();
-		}
+
 		if ( !obj->IsNull("disabled") )
-		{
 			button->SetBitmapDisabled( obj->GetPropertyAsBitmap("disabled") );
-		}
+
 		if ( !obj->IsNull("selected") )
-		{
 			button->SetBitmapSelected( obj->GetPropertyAsBitmap("selected") );
-		}
+
 		if ( !obj->IsNull("focus") )
-		{
 			button->SetBitmapFocus( obj->GetPropertyAsBitmap("focus") );
-		}
+
 		if ( !obj->IsNull("hover") )
-		{
 			button->SetBitmapHover( obj->GetPropertyAsBitmap("hover") );
-		}
+
 		return button;
 	}
 
@@ -488,21 +483,17 @@ public:
 		xrc.AddWindowProperties();
 		xrc.AddProperty("bitmap","bitmap", XRC_TYPE_BITMAP );
 		if ( !obj->IsNull("disabled") )
-		{
 			xrc.AddProperty( "disabled", "disabled", XRC_TYPE_BITMAP );
-		}
+
 		if ( !obj->IsNull("selected") )
-		{
 			xrc.AddProperty( "selected", "selected", XRC_TYPE_BITMAP );
-		}
+
 		if ( !obj->IsNull("focus") )
-		{
 			xrc.AddProperty( "focus", "focus", XRC_TYPE_BITMAP );
-		}
+
 		if ( !obj->IsNull("hover") )
-		{
 			xrc.AddProperty( "hover", "hover", XRC_TYPE_BITMAP );
-		}
+
 		xrc.AddProperty( "default", "default", XRC_TYPE_BOOL );
 		return xrc.GetXrcObject();
 	}
@@ -533,9 +524,8 @@ public:
 										obj->GetPropertyAsInteger("style") |
 										obj->GetPropertyAsInteger("window_style") );
 		if ( !obj->IsNull("maxlength") )
-		{
 			tc->SetMaxLength( obj->GetPropertyAsInteger("maxlength") );
-		}
+
 		tc->PushEventHandler( new ComponentEvtHandler( tc, GetManager() ) );
 		return tc;
 	}
@@ -546,9 +536,8 @@ public:
 		xrc.AddWindowProperties();
 		xrc.AddProperty( "value", "value", XRC_TYPE_TEXT );
         if ( !obj->IsNull("maxlength") )
-		{
             xrc.AddProperty( "maxlength", "maxlength", XRC_TYPE_INTEGER );
-		}
+
 		return xrc.GetXrcObject();
 	}
 
@@ -594,6 +583,7 @@ public:
 		ObjectToXrcFilter xrc( obj, "wxStaticText", name );
 		xrc.AddWindowProperties();
 		xrc.AddProperty( "label", "label", XRC_TYPE_TEXT );
+		xrc.AddProperty( "wrap", "wrap",XRC_TYPE_INTEGER );
 		return xrc.GetXrcObject();
 	}
 
@@ -602,6 +592,7 @@ public:
 		XrcToXfbFilter filter( xrcObj, "wxStaticText" );
 		filter.AddWindowProperties();
 		filter.AddProperty( "label", "label", XRC_TYPE_TEXT );
+		filter.AddProperty( "wrap", "wrap",XRC_TYPE_INTEGER );
 		return filter.GetXfbObject();
 	}
 };
@@ -621,9 +612,8 @@ public:
 		// Choices
 		wxArrayString choices = obj->GetPropertyAsArrayString("choices");
 		for ( unsigned int i=0; i<choices.Count(); i++ )
-		{
 			combo->Append( choices[i] );
-		}
+
 		return combo;
 	}
 
@@ -784,7 +774,7 @@ public:
 			{
 				for ( i=1; i<4; i++)
 				{
-					buf.Printf(_( "Cell (%d,%d)"), i, j );
+					buf.Printf( _("Cell (%d,%d)"), i, j );
 					lc->SetItem( temp, i, buf );
 				}
 			}
@@ -826,9 +816,8 @@ public:
 		// Choices
 		wxArrayString choices = obj->GetPropertyAsArrayString("choices");
 		for ( unsigned int i=0; i<choices.Count(); i++ )
-		{
 			listbox->Append(choices[i]);
-		}
+
 		return listbox;
 	}
 
@@ -878,9 +867,8 @@ public:
 
 		int selection = obj->GetPropertyAsInteger("selection");
 		if ( selection < count )
-		{
 			radiobox->SetSelection( selection );
-		}
+
 		radiobox->Connect( 	wxEVT_COMMAND_RADIOBOX_SELECTED,
 							wxCommandEventHandler( RadioBoxComponent::OnRadioBox ), NULL, this );
 		return radiobox;
@@ -903,10 +891,8 @@ public:
 	{
 		wxRadioBox* window = dynamic_cast< wxRadioBox* >( obj );
 		if ( 0 != window )
-		{
 			window->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED,
 								wxCommandEventHandler( RadioBoxComponent::OnRadioBox ), NULL, this );
-		}
 		ComponentBase::Cleanup( obj );
 	}
 
@@ -1072,31 +1058,24 @@ public:
 		wxString shortcut = obj->GetPropertyAsString("shortcut");
 		wxString label;
 		if ( shortcut.IsEmpty() )
-		{
 			label = obj->GetPropertyAsString("label");
-		}
 		else
-		{
 			label = obj->GetPropertyAsString("label") + "\t" + shortcut;
-		}
+
 		xrc.AddPropertyValue( "label", label, true );
 		xrc.AddProperty( "help", "help", XRC_TYPE_TEXT );
 
 	    if ( !obj->IsNull("bitmap") )
-		{
 	      xrc.AddProperty( "bitmap", "bitmap", XRC_TYPE_BITMAP );
-		}
+
 		int kind = obj->GetPropertyAsInteger("kind");
 
 		if ( obj->GetPropertyAsInteger("checked") && ( kind == wxITEM_RADIO || kind == wxITEM_CHECK ) )
-		{
 			xrc.AddProperty( "checked", "checked", XRC_TYPE_BOOL );
-		}
 
 		if ( obj->GetPropertyAsInteger("enabled") == 0 )
-		{
 			xrc.AddProperty( "enabled", "enabled", XRC_TYPE_BOOL );
-		}
+
 		switch (kind)
 		{
 			case wxITEM_CHECK: xrc.AddPropertyValue( "checkable", "1" ); break;
@@ -1159,22 +1138,19 @@ public:
 										obj->GetPropertyAsInteger("window_style") |
 										wxTB_NOALIGN | wxTB_NODIVIDER | wxNO_BORDER );
 		if ( !obj->IsNull("bitmapsize") )
-		{
 			tb->SetToolBitmapSize( obj->GetPropertyAsSize("bitmapsize") );
-		}
+
 		if ( !obj->IsNull("margins") )
 		{
 			wxSize margins( obj->GetPropertyAsSize("margins") );
 			tb->SetMargins( margins.GetWidth(), margins.GetHeight() );
 		}
 		if ( !obj->IsNull("packing") )
-		{
 			tb->SetToolPacking( obj->GetPropertyAsInteger("packing") );
-		}
+
 		if ( !obj->IsNull("separation") )
-		{
 			tb->SetToolSeparation( obj->GetPropertyAsInteger("separation") );
-		}
+
 		tb->PushEventHandler( new ComponentEvtHandler( tb, GetManager() ) );
 		return tb;
 	}
@@ -1183,10 +1159,8 @@ public:
 	{
 		wxToolBar* tb = wxDynamicCast( wxobject, wxToolBar );
 		if ( NULL == tb )
-		{
 			// very very strange
 			return;
-		}
 
 		size_t count = GetManager()->GetChildCount( wxobject );
 		for ( size_t i = 0; i < count; ++i )
@@ -1211,9 +1185,7 @@ public:
 			{
 				wxControl* control = wxDynamicCast( child, wxControl );
 				if ( NULL != control )
-				{
 					tb->AddControl( control );
-				}
 			}
 		}
 		tb->Realize();
@@ -1242,14 +1214,104 @@ public:
 	}
 };
 
+class AuiToolBarComponent : public ComponentBase
+{
+public:
+	wxObject* Create(IObject *obj, wxObject *parent)
+	{
+		wxAuiToolBar *tb = new wxAuiToolBar((wxWindow*)parent, -1,
+											obj->GetPropertyAsPoint(_("pos")),
+											obj->GetPropertyAsSize(_("size")),
+											obj->GetPropertyAsInteger(_("style")) );
+// | obj->GetPropertyAsInteger(_("window_style")) | wxTB_NOALIGN | wxTB_NODIVIDER | wxNO_BORDER);
+
+		if ( !obj->IsNull("bitmapsize") )
+			tb->SetToolBitmapSize( obj->GetPropertyAsSize("bitmapsize") );
+
+		if ( !obj->IsNull("margins") )
+		{
+			wxSize margins( obj->GetPropertyAsSize("margins") );
+			tb->SetMargins( margins.GetWidth(), margins.GetHeight() );
+		}
+		if ( !obj->IsNull("packing") )
+			tb->SetToolPacking( obj->GetPropertyAsInteger("packing") );
+
+		if ( !obj->IsNull("separation") )
+			tb->SetToolSeparation( obj->GetPropertyAsInteger("separation") );
+
+		tb->PushEventHandler( new ComponentEvtHandler( tb, GetManager() ) );
+		return tb;
+	}
+
+	void OnCreated( wxObject* wxobject, wxWindow* /*wxparent*/ )
+	{
+		wxAuiToolBar* tb = wxDynamicCast( wxobject, wxAuiToolBar );
+		if ( NULL == tb )
+			// very very strange
+			return;
+
+		size_t count = GetManager()->GetChildCount( wxobject );
+		for ( size_t i = 0; i < count; ++i )
+		{
+			wxObject* child = GetManager()->GetChild( wxobject, i );
+			IObject* childObj = GetManager()->GetIObject( child );
+			if ( "tool" == childObj->GetClassName() )
+			{
+				tb->AddTool( 	wxID_ANY,
+								childObj->GetPropertyAsString("label"),
+								childObj->GetPropertyAsBitmap("bitmap"),
+								wxNullBitmap,
+								(wxItemKind)childObj->GetPropertyAsInteger("kind"),
+								childObj->GetPropertyAsString("help"),
+								wxEmptyString,
+								child
+							);
+			}
+			else if ( "toolSeparator" == childObj->GetClassName() )
+			{
+				tb->AddSeparator();
+			}
+			else
+			{
+				wxControl* control = wxDynamicCast( child, wxControl );
+				if ( NULL != control )
+				{
+					tb->AddControl( control );
+				}
+			}
+		}
+		tb->Realize();
+	}
+
+	ticpp::Element* ExportToXrc( IObject *obj )
+	{
+		ObjectToXrcFilter xrc( obj, "wxAuiToolBar", obj->GetPropertyAsString("name") );
+		xrc.AddWindowProperties();
+		xrc.AddProperty( "bitmapsize", "bitmapsize", XRC_TYPE_SIZE );
+		xrc.AddProperty( "margins", "margins", XRC_TYPE_SIZE );
+		xrc.AddProperty( "packing", "packing", XRC_TYPE_INTEGER );
+		xrc.AddProperty( "separation", "separation", XRC_TYPE_INTEGER );
+		return xrc.GetXrcObject();
+	}
+
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
+	{
+		XrcToXfbFilter filter( xrcObj, "wxAuiToolBar" );
+		filter.AddWindowProperties();
+		filter.AddProperty( "bitmapsize", "bitmapsize", XRC_TYPE_SIZE );
+		filter.AddProperty( "margins", "margins", XRC_TYPE_SIZE );
+		filter.AddProperty( "packing", "packing", XRC_TYPE_INTEGER );
+		filter.AddProperty( "separation", "separation", XRC_TYPE_INTEGER );
+		return filter.GetXfbObject();
+	}
+};
+
 void ComponentEvtHandler::OnTool( wxCommandEvent& event )
 {
 	wxToolBar* tb = wxDynamicCast( event.GetEventObject(), wxToolBar );
 	if ( NULL == tb )
-	{
 		// very very strange
 		return;
-	}
 
 	wxObject* wxobject = tb->GetToolClientData( event.GetId() );
 	if ( NULL != wxobject )
@@ -1295,9 +1357,7 @@ public:
 		{
 			toggle->GetTextOrDefault( &gotToggle, false );
 			if ( gotToggle )
-			{
 				filter.AddPropertyValue( "kind", "wxITEM_CHECK" );
-			}
 		}
 		if ( !gotToggle )
 		{
@@ -1306,15 +1366,12 @@ public:
 			{
 				radio->GetTextOrDefault( &gotRadio, false );
 				if ( gotRadio )
-				{
 					filter.AddPropertyValue( "kind", "wxITEM_RADIO" );
-				}
 			}
 		}
 		if ( !(gotToggle || gotRadio) )
-		{
 			filter.AddPropertyValue( "kind", "wxITEM_NORMAL" );
-		}
+
 		return filter.GetXfbObject();
 	}
 };
@@ -1343,9 +1400,8 @@ public:
 		wxArrayString choices = obj->GetPropertyAsArrayString("choices");
 		wxString *strings = new wxString[choices.Count()];
 		for ( unsigned int i=0; i < choices.Count(); i++ )
-		{
 			strings[i] = choices[i];
-		}
+
 		wxChoice *choice = new wxChoice((wxWindow*)parent, -1,
 										obj->GetPropertyAsPoint("pos"),
 										obj->GetPropertyAsSize("size"),
@@ -1475,26 +1531,18 @@ public:
 			if( ac->LoadFile( obj->GetPropertyAsString("animation") ) )
 			{
 				if ( !obj->IsNull("play") && ( obj->GetPropertyAsInteger("play") == 1 ) )
-				{
 					ac->Play();
-				}
 				else
-				{
 					ac->Stop();
-				}
 			}
 		}
 		if ( !obj->IsNull("inactive_bitmap") )
 		{
 			wxBitmap bmp = obj->GetPropertyAsBitmap("inactive_bitmap");
 			if( bmp.IsOk() )
-			{
 				ac->SetInactiveBitmap( bmp );
-			}
 			else
-			{
 				ac->SetInactiveBitmap( wxNullBitmap );
-			}
 		}
 		ac->PushEventHandler( new ComponentEvtHandler( ac, GetManager() ) );
 		return ac;
@@ -1549,6 +1597,7 @@ ABSTRACT_COMPONENT( "separator", SeparatorComponent )
 WINDOW_COMPONENT( "wxListCtrl", ListCtrlComponent )
 WINDOW_COMPONENT( "wxStatusBar", StatusBarComponent )
 WINDOW_COMPONENT( "wxToolBar", ToolBarComponent )
+WINDOW_COMPONENT( "wxAuiToolBar", AuiToolBarComponent )
 ABSTRACT_COMPONENT( "tool", ToolComponent )
 ABSTRACT_COMPONENT( "toolSeparator", ToolSeparatorComponent )
 WINDOW_COMPONENT( "wxChoice", ChoiceComponent )

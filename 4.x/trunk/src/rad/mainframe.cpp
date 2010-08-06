@@ -220,7 +220,7 @@ MainFrame::MainFrame( wxWindow *parent, int id, int style, wxPoint pos, wxSize s
 
 	SetTitle("wxFormBuilder");
 
-	SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+//	SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 
 	SetMenuBar( CreateFBMenuBar() );
 	CreateStatusBar( 3 );
@@ -569,6 +569,7 @@ void MainFrame::OnAbout( wxCommandEvent &)
 {
 	AboutDialog *dlg = new AboutDialog( this );
 	dlg->ShowModal();
+	dlg->Destroy();
 }
 
 void MainFrame::OnExit( wxCommandEvent &)
@@ -650,7 +651,7 @@ void MainFrame::OnObjectCreated( wxFBObjectEvent& event )
 	}
 	else
 	{
-		message = _("Impossible to create the object. Did you forget to add a sizer/parent object?");
+		message = _("Impossible to create the object. Did you forget to add a sizer/parent object or turn on/off an AUI management??");
 		wxMessageBox( message, "wxFormBuilder", wxICON_WARNING | wxOK );
 	}
 	GetStatusBar()->SetStatusText( message );
@@ -831,8 +832,7 @@ void MainFrame::UpdateFrame()
 	mainbar->EnableTool( ID_UNDO, undo );
 
 	bool copy = AppData()->CanCopyObject();
-// 	TODO: Designer or Editor?
-	bool isEditor = ( "Designer" != m_notebook->GetPageText( m_notebook->GetSelection() ) );
+	bool isEditor = ( _("Designer") != m_notebook->GetPageText( m_notebook->GetSelection() ) );
 	menuEdit->Enable( ID_FIND, isEditor );
 
 	menuEdit->Enable( ID_CLIPBOARD_COPY, copy );
@@ -863,7 +863,7 @@ void MainFrame::UpdateFrame()
 void MainFrame::UpdateRecentProjects()
 {
 	int i, fi;
-	wxMenu *menuFile = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu("&File") );
+	wxMenu *menuFile = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu(_("&File") ) );
 
 	// Delete the menu items of the recent projects
 	for ( i = 0 ; i < 4 ; i++ )
@@ -874,24 +874,19 @@ void MainFrame::UpdateRecentProjects()
 
 	wxMenuItem* mruSep = menuFile->FindItemByPosition( menuFile->GetMenuItemCount() - 1 );
 	if ( mruSep->IsSeparator() )
-	{
 	    menuFile->Destroy( mruSep );
-	}
 
 	// Remove empty filenames and 'compress' the rest
     fi = 0;
 	for ( i = 0 ; i < 4 ; i++ )
-	{
 	    if(!m_recentProjects[i].IsEmpty())
 	        m_recentProjects[fi++] = m_recentProjects[i];
-	}
+
 	for ( i = fi ; i < 4 ; i++ )
         m_recentProjects[i] = "";
 
     if ( !m_recentProjects[0].IsEmpty() )
-    {
         menuFile->AppendSeparator();
-    }
 
 	// Create new recent project files list
 	for ( unsigned int i = 0 ; i < 4 && !m_recentProjects[i].IsEmpty() ; i++ )
@@ -907,16 +902,13 @@ void MainFrame::InsertRecentProject( const wxString &file )
 		found = ( file == m_recentProjects[i] );
 
 	if ( found ) // i-1 is the position found (0 < i < 4)
-	{
 		// Move from 0 to i-1 position to the right (?)
 		for ( i = i - 1; i > 0; i-- )
 			m_recentProjects[i] = m_recentProjects[i-1];
-	}
 	else if ( !found )
-	{
 		for ( i = 3; i > 0; i-- )
 			m_recentProjects[i] = m_recentProjects[i-1];
-	}
+
 	m_recentProjects[0] = file;
 
 	UpdateRecentProjects();
@@ -1082,9 +1074,7 @@ void MainFrame::OnXrcPreview( wxCommandEvent& WXUNUSED( e ) )
 
 	wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
 	for ( int i = 0, count = all_panes.GetCount(); i < count; ++i )
-	{
 		wxAuiPaneInfo info = all_panes.Item( i );
-	}
 }
 
 void MainFrame::OnGenInhertedClass( wxCommandEvent& WXUNUSED( e ) )
@@ -1111,9 +1101,8 @@ void MainFrame::OnGenInhertedClass( wxCommandEvent& WXUNUSED( e ) )
 	GenInheritedClassDlg dlg( this, project );
 
 	if ( wxID_OK != dlg.ShowModal() )
-	{
 		return;
-	}
+
 	std::vector< GenClassDetails > selectedForms;
 	dlg.GetFormsSelected( &selectedForms );
 
@@ -1174,6 +1163,21 @@ void MainFrame::OnFind( wxFindDialogEvent& event )
 		event.SetClientData( m_findDialog );
 		m_notebook->GetPage( page )->GetEventHandler()->ProcessEvent( event );
 	}
+/*
+TODO: Find doesn't works...
+	for ( unsigned int idx = 0; idx < m_notebook->GetPageCount(); ++idx )
+	{
+		wxWindow *page = m_notebook->GetPage( idx );
+		wxAuiNotebookPage* pg = dynamic_cast<wxAuiNotebookPage*>( page );
+		if ( pg->active )
+		{
+			event.StopPropagation();
+			event.SetClientData( m_findDialog );
+			m_notebook->GetPage( idx )->GetEventHandler()->ProcessEvent( event );
+			break;
+		}
+	}
+*/
 }
 /////////////////////////////////////////////////////////////////////////////
 wxMenuBar * MainFrame::CreateFBMenuBar()

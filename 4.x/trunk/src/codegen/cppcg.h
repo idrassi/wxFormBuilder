@@ -37,6 +37,7 @@ The value of all properties that are file or a directory paths must be absolute,
 
 #include <set>
 #include "codegen.h"
+#include "codeparser.h"
 #include <wx/string.h>
 
 /**
@@ -72,6 +73,7 @@ private:
 		P_PUBLIC
 	} Permission;
 
+	CCodeParser m_inheritedCodeParser;
 	PCodeWriter 	m_header;
 	PCodeWriter 	m_source;
 	bool 			m_useRelativePath;
@@ -91,7 +93,7 @@ private:
 	/**
 	* Given an object and the name for a template, obtains the code.
 	*/
-	wxString GetCode( PObjectBase obj, wxString name);
+	wxString GetCode( PObjectBase obj, wxString name );
 
 	/**
 	* Stores the project's objects classes set, for generating the includes.
@@ -101,7 +103,7 @@ private:
 	/**
 	* Stores the needed "includes" set for the PT_XPM_BITMAP properties.
 	*/
-	void FindXpmProperties( PObjectBase obj, std::set< wxString >& xpmset);
+	void FindXpmProperties( PObjectBase obj, std::set< wxString >& xpmset );
 
 	/**
 	* Stores all the properties for "macro" type objects, so that their
@@ -112,7 +114,7 @@ private:
 	/**
 	 * Looks for "non-null" event handlers (PEvent) and collects it into a vector.
 	 */
-	void FindEventHandlers(PObjectBase obj, EventVector &events);
+	void FindEventHandlers( PObjectBase obj, EventVector &events );
 
 	/**
 	* Generates classes declarations inside the header file.
@@ -132,16 +134,16 @@ private:
 	/**
 	* Recursive function for the attributes declaration, used inside GenClassDeclaration.
 	*/
-	void GenAttributeDeclaration( PObjectBase obj, Permission perm);
+	void GenAttributeDeclaration( PObjectBase obj, Permission perm );
 
 	/**
 	* Recursive function for the validators' variables declaration, used inside GenClassDeclaration.
 	*/
-	void GenValidatorVariables( PObjectBase obj);
+	void GenValidatorVariables( PObjectBase obj );
 	/**
 	* Recursive function for the validators' variables declaration, used inside GenClassDeclaration.
 	*/
-	void GenValVarsBase( PObjectInfo info, PObjectBase obj);
+	void GenValVarsBase( PObjectInfo info, PObjectBase obj );
 
 	/**
 	* Generates the generated_event_handlers template
@@ -169,17 +171,17 @@ private:
 	/**
 	* Generates the '#include' section for the XPM properties.
 	*/
-	void GenXpmIncludes( PObjectBase project);
+	void GenXpmIncludes( PObjectBase project );
 
 	/**
 	* Generates the '#define' section for macros.
 	*/
-	void GenDefines( PObjectBase project);
+	void GenDefines( PObjectBase project );
 
 	/**
 	* Generates an enum with wxWindow identifiers.
 	*/
-	void GenEnumIds( PObjectBase class_obj);
+	void GenEnumIds( PObjectBase class_obj );
 
 	/**
 	* Generates the constructor for a class
@@ -207,7 +209,7 @@ private:
 	* Information for the class is given, because it will recursively make the
 	* configuration in the "super-classes".
 	*/
-	void GenSettings( PObjectInfo info, PObjectBase obj);
+	void GenSettings( PObjectInfo info, PObjectBase obj );
 
 	/**
 	* Adds a control for a toolbar. Needs the objectinfo (wxWindow type) where
@@ -216,7 +218,7 @@ private:
 	void GenAddToolbar( PObjectInfo info, PObjectBase obj );
 	void GetAddToolbarCode( PObjectInfo info, PObjectBase obj, wxArrayString& codelines );
 
-	void GenPrivateEventHandlers(const EventVector &events);
+	void GenPrivateEventHandlers(const EventVector &events );
 
     void GenVirtualEventHandlers( const EventVector &events, const wxString& eventHandlerPrefix, const wxString& eventHandlerPostfix );
 
@@ -224,7 +226,7 @@ public:
 	/**
 	* Convert a wxString to the "C/C++" format.
 	*/
-	static wxString ConvertCppString( wxString text);
+	static wxString ConvertCppString( wxString text );
 
 	/**
 	* Convert a path to a relative path.
@@ -252,6 +254,14 @@ public:
 	void SetSourceWriter( PCodeWriter cw )
 	{
 		m_source = cw;
+	}
+
+	/**
+	* Parse existing source/header files
+	*/
+	void ParseFiles( wxString headerFile, wxString sourceFile )
+	{
+		m_inheritedCodeParser = CCodeParser( headerFile, sourceFile );
 	}
 
 	/**

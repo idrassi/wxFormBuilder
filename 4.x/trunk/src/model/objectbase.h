@@ -22,13 +22,12 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-
-// Atencion!!!!!!
+// TODO: fix comment translations
+// Warning!!!!!!
 // ObjectBase::GetPropertyCount() != ObjectInfo::GetPropertyCount()
 //
-// En el primer caso devolverá el numero total de propiedades del objeto.
-// En el segundo caso sólo devolverá el número de propiedades definidas
-// para esa clase.
+// In the first case it will return the total number of properties of the object.
+// In the second case only return the number of properties defined for that class.
 
 #ifndef __OBJ__
 #define __OBJ__
@@ -95,7 +94,7 @@ private:
 	wxString       				m_def_value;
 	POptionList  				m_opt_list;
 	std::list< PropertyChild > 	m_children; 	// Only used for parent properties
-	bool 						m_hidden; 		// Juan. Determina si la propiedad aparece o no en XRC
+	bool 						m_hidden; 		// Juan. Determines if the property appears or not in XRC
 	wxString					m_description;
 	wxString					m_customEditor; // An optional custom editor for the property grid
 
@@ -203,8 +202,7 @@ private:
 	wxString 		m_value;  // handler function name
 
 public:
-	Event (	PEventInfo 	info,
-			PObjectBase obj)
+	Event (	PEventInfo 	info, PObjectBase obj)
     : m_info(info), m_object(obj)
 	{}
 
@@ -233,37 +231,25 @@ public:
 	wxString GetPropertyName( size_t index )
 	{
 		if ( index < m_properties.size() )
-		{
 			return m_properties[ index ];
-		}
 		else
-		{
 			return wxEmptyString;
-		}
 	}
 
 	wxString GetEventName( size_t index )
 	{
 		if ( index < m_events.size() )
-		{
 			return m_events[ index ];
-		}
 		else
-		{
 			return wxEmptyString;
-		}
 	}
 
 	PPropertyCategory GetCategory( size_t index )
 	{
 		if ( index < m_categories.size() )
-		{
 			return m_categories[ index ];
-		}
 		else
-		{
 			return PPropertyCategory();
-		}
 	}
 
 	size_t GetPropertyCount() { return m_properties.size(); }
@@ -315,21 +301,21 @@ public:
 	virtual ~ObjectBase();
 
 	/**
-	Sets whether the object is expanded in the object tree or not.
+	* Sets whether the object is expanded in the object tree or not.
 	*/
 	void SetExpanded( bool expanded ){ m_expanded = expanded; }
 
 	/**
-	Gets whether the object is expanded in the object tree or not.
+	* Gets whether the object is expanded in the object tree or not.
 	*/
 	bool GetExpanded(){ return m_expanded; }
 
 	/**
-	* Obtiene el nombre del objeto.
+	* Get the name of the object.
 	*
-	* @note No confundir con la propiedad nombre que tienen algunos objetos.
-	*       Cada objeto tiene un nombre, el cual será el mismo que el usado
-	*       como clave en el registro de descriptores.
+	* @note Do not confuse with the name property with some objects.
+	*       Each object has a name, which will be the same as that used
+	*       as the key in the registry of descriptors.
 	*/
 	wxString GetClassName () { return m_class;  }
 
@@ -340,39 +326,38 @@ public:
 	void SetParent(PObjectBase parent)  { m_parent = parent; }
 
 	/**
-	* Obtiene la propiedad identificada por el nombre.
+	* Get the property identified by name.
 	*
-	* @note Notar que no existe el método SetProperty, ya que la modificación
-	*       se hace a través de la referencia.
+	* @note Note that SetProperty method doesn't exists, since modification
+	*       is done through the reference.
 	*/
 	PProperty GetProperty( wxString name );
 
 	PEvent GetEvent( wxString name );
 
 	/**
-	* Añade una propiedad al objeto.
+	* Adds a property to the object.
 	*
-	* Este método será usado por el registro de descriptores para crear la
-	* instancia del objeto.
-	* Los objetos siempre se crearán a través del registro de descriptores.
+	* This method will be used in the descriptors registry to create the
+	* object instance.
+	* The objects are always created through the descriptors registry.
 	*/
 	void AddProperty( PProperty value );
 
 	void AddEvent( PEvent event );
 
 	/**
-	* Obtiene el número de propiedades del objeto.
+	* Gets the number of object properties.
 	*/
 	unsigned int GetPropertyCount() { return (unsigned int)m_properties.size(); }
 
 	unsigned int GetEventCount()    { return m_events.size(); }
 
 	/**
-	* Obtiene una propiedad del objeto.
-	* @todo esta función deberá lanzar una excepción en caso de no encontrarse
-	*       dicha propiedad, así se simplifica el código al no tener que hacer
-	*       tantas comprobaciones.
-	* Por ejemplo, el código sin excepciones sería algo así:
+	* Gets an object property.
+	* @todo This function should throw an exception if passed property is not found
+	*        and simplifies the code by not having to do many checks.
+	* For example, the code without exceptions would be something like:
 	*
 	* @code
 	*
@@ -396,7 +381,7 @@ public:
 	*
 	* @endcode
 	*
-	* y con excepciones:
+	* with exceptions:
 	*
 	* @code
 	*
@@ -410,7 +395,7 @@ public:
 	* }
 	* catch (...)
 	* {
-	*   // manejo del error
+	*   // error handling
 	* }
 	*
 	* @endcode
@@ -421,66 +406,65 @@ public:
 	PEvent GetEvent (unsigned int idx); // throws ...;
 
 	/**
-	* Devuelve el primer antecesor cuyo tipo coincida con el que se pasa
-	* como parámetro.
+	* Returns the first ancestor whose type matches the passed parameter.
 	*
-	* Será útil para encontrar el widget padre.
+	* It will be useful to find the parent widget.
 	*/
 	PObjectBase FindNearAncestor( wxString type );
 	PObjectBase FindNearAncestorByBaseClass( wxString type );
 	PObjectBase FindParentForm();
 
 	/**
-	* Obtiene el documento xml del arbol tomando como raíz el nodo actual.
+	* Gets the xml document from the tree taking current node as root node.
 	*/
 	void Serialize( ticpp::Document* serializedDocument );
 
 	/**
-	* Añade un hijo al objeto.
-	* Esta función es virtual, debido a que puede variar el comportamiento
-	* según el tipo de objeto.
+	* Adds a child to the object.
+	* This function is virtual, because it can change behavior
+	* depending on the type of object.
 	*
-	* @return true si se añadió el hijo con éxito y false en caso contrario.
+	* @return true if the child was added successfully and false otherwise.
 	*/
 	virtual bool AddChild    ( PObjectBase );
 	virtual bool AddChild    ( unsigned int idx, PObjectBase obj );
 
 	/**
-	* Devuelve la posicion del hijo o GetChildCount() en caso de no encontrarlo
+	* Returns the position of the child or GetChildCount () in if not found.
 	*/
 	unsigned int GetChildPosition( PObjectBase obj );
 	bool ChangeChildPosition( PObjectBase obj, unsigned int pos );
 
 	/**
-	* devuelve la posición entre sus hermanos
+	* Returns the position among its siblings
 	*/
 /*  unsigned int GetPosition();
 	bool ChangePosition( unsigned int pos );*/
 
 	/**
-	* Elimina un hijo del objeto.
+	* Removes a child of the object.
 	*/
 	void RemoveChild( PObjectBase obj );
 	void RemoveChild( unsigned int idx );
 	void RemoveAllChildren(){ m_children.clear(); }
 
 	/**
-	* Obtiene un hijo del objeto.
+	* Gets a child of the object.
 	*/
 	PObjectBase GetChild( unsigned int idx );
 
 	/**
-	* Obtiene el número de hijos del objeto.
+	* Gets the number of children of the object.
 	*/
 	unsigned int  GetChildCount() { return (unsigned int)m_children.size(); }
 
 	/**
-	* Comprueba si el tipo de objeto pasado es válido como hijo del objeto.
-	* Esta rutina es importante, ya que define las restricciónes de ubicación.
+	* Checks if passed object type is valid as a child of the object.
+	* This routine is important because it defines the restrictions of location.
 	*/
 	//bool ChildTypeOk( wxString type );
 	bool ChildTypeOk( PObjectType type );
-
+// TODO: a single function that returns object type like GetObjectType()
 	bool IsContainer() 	{ return ( GetObjectTypeName() == "container" ); }
 
 	bool IsWizardPage() { return ( GetObjectTypeName() == "wizardpage" ); }
@@ -488,37 +472,37 @@ public:
 	PObjectBase GetLayout();
 
 	/**
-	* Devuelve el tipo de objeto.
+	* Returns the type of object.
 	*
-	* Deberá ser redefinida en cada clase derivada.
+	* Must be redefined in every derived class.
 	*/
 	wxString GetObjectTypeName() { return m_type; }
 	void SetObjectTypeName( wxString type ) { m_type = type; }
 
 	/**
-	* Devuelve el descriptor del objeto.
+	* Returns the object descriptor.
 	*/
 	PObjectInfo GetObjectInfo() { return m_info; };
 	void SetObjectInfo( PObjectInfo info ) { m_info = info; };
 
 	/**
-	* Devuelve la profundidad  del objeto en el arbol.
+	* Returns the depth of the object in the tree.
 	*/
 	int Deep();
 
 	/**
-	* Imprime el arbol en un stream.
+	* Prints the tree in a stream.
 	*/
 	//virtual void PrintOut(ostream &s, int indent);
 
 	/**
-	* Sobrecarga del operador inserción.
+	* Insertion operator overload.
 	*/
 	friend std::ostream& operator << (std::ostream &s, PObjectBase obj);
 
-	/////////////////////////
-	// Implementación de la interfaz IObject para su uso dentro de los
-	// plugins
+	//
+	// IObject interface implementation for use within plugins.
+	//
 	bool 			IsNull 						( const wxString& pname );
 	int      		GetPropertyAsInteger 		( const wxString& pname );
 //	wxAlignment 	GetPropertyAsAlignment 		( const wxString& pname ); TODO
@@ -538,7 +522,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
-* Clase que guarda un conjunto de plantillas de código.
+* Class that stores a set of code templates.
 */
 class CodeInfo
 {
@@ -554,7 +538,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
-* Información de objeto o MetaObjeto.
+* Object or metaobject informations.
 */
 class ObjectInfo
 {
@@ -572,7 +556,7 @@ public:
 	unsigned int GetEventCount()    { return (unsigned int)m_events.size();     }
 
 	/**
-	* Obtiene el descriptor de la propiedad.
+	* Gets the property descriptor.
 	*/
 	PPropertyInfo GetPropertyInfo( wxString name );
 	PPropertyInfo GetPropertyInfo( unsigned int idx );
@@ -581,7 +565,7 @@ public:
 	PEventInfo GetEventInfo( unsigned int idx );
 
 	/**
-	* Añade un descriptor de propiedad al descriptor de objeto.
+	* Adds a property descriptor to the object descriptor.
 	*/
 	void AddPropertyInfo( PPropertyInfo pinfo );
 
@@ -618,22 +602,22 @@ public:
 	wxString GetClassName () { return m_class;  }
 
 	/**
-	* Imprime el descriptor en un stream.
+	* Prints the descriptor in a stream.
 	*/
 	//virtual void PrintOut(ostream &s, int indent);
 
 	/**
-	* Sobrecarga del operador inserción.
+	* Insertion operator overload.
 	*/
 	friend std::ostream& operator << ( std::ostream &s, PObjectInfo obj );
 
-	// nos serán utiles para generar el nombre del objeto
+	// Will be useful to generate the name of the object
 	unsigned int GetInstanceCount() { return m_numIns; }
 	void IncrementInstanceCount()   { m_numIns++; }
 	void ResetInstanceCount() 		{ m_numIns = 0; }
 
 	/**
-	* Añade la información de un objeto al conjunto de clases base.
+	* Adds information about an object to all base classes.
 	*/
 	size_t AddBaseClass( PObjectInfo base )
 	{
@@ -642,7 +626,7 @@ public:
 	}
 
 	/**
-	* Comprueba si el tipo es derivado del que se pasa como parámetro.
+	* Check if the type is derived from the given parameter.
 	*/
 	bool IsSubclassOf( wxString classname );
 
@@ -664,34 +648,32 @@ public:
 	bool IsStartOfGroup() { return m_startGroup; }
 
 	/**
-	* Le asigna un componente a la clase.
+	* Assigns a component to the class.
 	*/
 	void SetComponent( IComponent *c ) 	{ m_component = c; };
 	IComponent* GetComponent() 			{ return m_component; };
 
 private:
-	wxString m_class;         	// nombre de la clase (tipo de objeto)
-
-	PObjectType m_type;     	// tipo del objeto
+	wxString 		m_class; 	// Class name (object type)
+	PObjectType 	m_type;     // Object type
 	WPObjectPackage m_package; 	// Package that the object comes from
 
 	PPropertyCategory m_category;
 
-	wxBitmap m_icon;
-	wxBitmap m_smallIcon; 	// The icon for the property grid toolbar
-	bool m_startGroup; 		// Place a separator in the palette toolbar just before this widget
+	wxBitmap 	m_icon;
+	wxBitmap 	m_smallIcon; 	// The icon for the property grid toolbar
+	bool 		m_startGroup; 	// Place a separator in the palette toolbar just before this widget
 
-	std::map< wxString, PCodeInfo > m_codeTemp;  // plantillas de codigo K=language_name T=PCodeInfo
+	std::map< wxString, PCodeInfo > m_codeTemp;  // Code templates K=language_name T=PCodeInfo
 
-	unsigned int m_numIns;  // número de instancias del objeto
+	unsigned int m_numIns;  	// Number of instances of object
 
 	std::map< wxString, PPropertyInfo > m_properties;
 	std::map< wxString, PEventInfo >    m_events;
 
-	std::vector< PObjectInfo > m_base; // base classes
+	std::vector< PObjectInfo > m_base; // Base classes
 	std::map< size_t, std::map< wxString, wxString > > m_baseClassDefaultPropertyValues;
-	IComponent* m_component;  // componente asociado a la clase los objetos del
-	// designer
+	IComponent* m_component;  	// componente asociado a la clase los objetos del designer
 };
 
 #endif

@@ -118,6 +118,9 @@ bool TemplateParser::ParseMacro()
 		case ID_IFPARENTTYPEEQUAL:
 			ParseIfParentTypeEqual();
 			break;
+		case ID_IFPARENTCLASSEQUAL:
+			ParseIfParentClassEqual();
+			break;
 		case ID_APPEND:
 			ParseAppend();
 			break;
@@ -129,6 +132,9 @@ bool TemplateParser::ParseMacro()
 			break;
 		case ID_UNINDENT:
 			ParseUnindent();
+			break;
+		case ID_IFTYPEEQUAL:
+			ParseIfTypeEqual();
 			break;
 		default:
 			THROW_WXFBEX( _("Invalid Macro Type") );
@@ -291,15 +297,11 @@ PObjectBase TemplateParser::GetWxParent()
 	for ( size_t i = 0; i < candidates.size(); i++ )
 	{
 		if ( !wxparent )
-		{
 			wxparent = candidates[i];
-		}
 		else
 		{
 			if ( candidates[i] && candidates[i]->Deep() > wxparent->Deep() )
-			{
 				wxparent = candidates[i];
-			}
 		}
 	}
 	return wxparent;
@@ -357,9 +359,8 @@ bool TemplateParser::ParseParent()
 		m_out << PropertyToCode( property );
 	}
 	else
-	{
 		m_out << _("ERROR");
-	}
+
 	return true;
 }
 
@@ -513,7 +514,6 @@ void TemplateParser::ignore_whitespaces()
 	}
 }
 
-
 bool TemplateParser::ParseIfNotNull()
 {
 	ignore_whitespaces();
@@ -532,9 +532,7 @@ bool TemplateParser::ParseIfNotNull()
 		if ( !childName.empty() )
 		{
 			if ( property->GetChildFromParent( childName ).empty() )
-			{
 				return true;
-			}
 		}
 		// Generate the code from the block
 		PTemplateParser parser = CreateParser( this, inner_template );
@@ -643,15 +641,13 @@ bool TemplateParser::ParseIfEqual()
 		// Get the value of the property
 		wxString propValue;
 		if ( childName.empty() )
-		{
 			propValue = property->GetValue();
-		}
 		else
-		{
 			propValue = property->GetChildFromParent( childName );
-		}
+
 		// Compare
-		if ( propValue == value )
+//		if ( propValue == value )
+		if ( IsEqual( propValue, value ) )
 		{
 			// Generate the code
 			PTemplateParser parser = CreateParser( this, inner_template );
@@ -711,16 +707,57 @@ bool TemplateParser::ParseIfParentTypeEqual()
     wxString inner_template = ExtractInnerTemplate();
 
     // compare give type name with type of the wx parent object
-    if( parent )
+/*    if( parent )
     {
-        if( parent->GetObjectTypeName() == type )
-        {
+        if( parent->GetObjectTypeName() == type )*/
+		
+    if( parent && IsEqual( parent->GetObjectTypeName(), type) )
+    {
             // generate the code
 			PTemplateParser parser = CreateParser( this, inner_template );
 			m_out << parser->ParseTemplate();
 			return true;
-        }
     }
+    return false;
+}
+
+bool TemplateParser::ParseIfParentClassEqual()
+{
+    PObjectBase parent( m_obj->GetParent() );
+
+    // get examined type name
+    wxString type = ExtractLiteral();
+
+    // get the template to generate if comparison is true
+    wxString inner_template = ExtractInnerTemplate();
+
+    // compare give type name with type of the wx parent object
+    if( parent && IsEqual( parent->GetClassName(), type ) )
+    {
+		// generate the code
+		PTemplateParser parser = CreateParser( this, inner_template );
+		m_out << parser->ParseTemplate();
+		return true;
+    }
+    return false;
+}
+
+bool TemplateParser::ParseIfTypeEqual()
+{
+    // get examined type name
+    wxString type = ExtractLiteral();
+
+    // get the template to generate if comparison is true
+    wxString inner_template = ExtractInnerTemplate();
+
+    // compare give type name with type of the wx parent object
+    if( IsEqual( m_obj->GetObjectTypeName(), type) )
+    {
+        // generate the code
+		PTemplateParser parser = CreateParser( this, inner_template );
+		m_out << parser->ParseTemplate();
+		return true;
+	}
     return false;
 }
 
@@ -752,6 +789,8 @@ TemplateParser::Ident TemplateParser::SearchIdent( wxString ident )
 		return ID_IFNOTEQUAL;
 	else if ( ident == "ifparenttypeequal" )
 		return ID_IFPARENTTYPEEQUAL;
+	else if (ident == "ifparentclassequal" )
+		return ID_IFPARENTCLASSEQUAL;
 	else if ( ident == "append" )
 		return ID_APPEND;
 	else if ( ident == "class" )
@@ -762,6 +801,8 @@ TemplateParser::Ident TemplateParser::SearchIdent( wxString ident )
 		return ID_INDENT;
 	else if ( ident == "unindent" )
 		return ID_UNINDENT;
+	else if (ident == wxT("iftypeequal") )
+		return ID_IFTYPEEQUAL;
 	else
 		THROW_WXFBEX( wxString::Format( _("Unknown macro: \"%s\""), ident.c_str() ) );
 }
@@ -928,4 +969,23 @@ wxString TemplateParser::PropertyToCode( PProperty property )
 	{
 		return wxEmptyString;
 	}
+}
+
+bool TemplateParser::IsEqual(const wxString& value, const wxString& set)
+{
+	bool contains = false;
+	
+	wxStringTokenizer tokens( set, "||" ); 
+	while ( tokens.HasMoreTokens() )
+	{
+		wxString token = tokens.GetNextToken();
+		token.Trim().Trim(false);
+		
+		if( token == value )
+		{
+			contains = true;
+			break;
+		}
+	}
+	return contains;
 }
