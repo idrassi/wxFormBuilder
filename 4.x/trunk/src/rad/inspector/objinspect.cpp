@@ -893,7 +893,7 @@ void ObjectInspector::OnReCreateGrid( wxCommandEvent& event )
 
 	/** Re-expand the bitmap property, if it was expanded */
 	wxPGProperty* bitmapProp = m_pg->GetPropertyByName( event.GetString() );
-	if( bitmapProp.IsOk() )
+	if( bitmapProp )
 	{
 		m_pg->SelectProperty( bitmapProp );
 		if ( event.GetInt() != 0 )
