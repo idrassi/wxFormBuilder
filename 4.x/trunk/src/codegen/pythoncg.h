@@ -66,7 +66,7 @@ public:
 	// overrides for Python
 	PTemplateParser CreateParser( const TemplateParser* oldparser, wxString _template );
 	wxString RootWxParentToCode();
-	wxString ValueToCode( PropertyType type, wxString value);
+	wxString ValueToCode( PropertyType type, wxString value );
 
 };
 
@@ -172,6 +172,11 @@ private:
 	void GenConstruction( PObjectBase obj, bool is_widget );
 
 	/**
+	* Makes the objects destructions.
+	*/
+	void GenDestruction( PObjectBase obj );
+
+	/**
 	* Configures the object properties, both own and inherited ones.
 	* Information for the class is given, because it will recursively make the
 	* configuration in the "super-classes".
@@ -191,7 +196,7 @@ public:
 	/**
 	* Convert a wxString to the "C/C++" format.
 	*/
-	static wxString ConvertPythonString( wxString text);
+	static wxString ConvertPythonString( wxString text );
 
 	PythonCodeGenerator();
 
@@ -202,7 +207,6 @@ public:
 	{
 		m_source = cw;
 	}
-
 
 	/**
 	* Configures the reference path for generating relative paths to

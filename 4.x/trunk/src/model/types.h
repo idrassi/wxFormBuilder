@@ -39,15 +39,14 @@ typedef boost::shared_ptr< ObjectType > PObjectType;
 typedef boost::weak_ptr< ObjectType > WPObjectType;
 
 /**
- * Representa el tipo de objeto.
+ * Represents the type of object.
  *
- * Los tipos de objetos son necesarios para controlar las restricciones de
- * ubicación de los objetos dentro del árbol. Dichas restricciones vendrán
- * establecidas en el fichero objtypes.xml, y en principio se pueden definir
- * tantos tipos de objetos como sean necesarios.
+ * The types of objects are needed to control location restrictions
+ * of objects within the tree. These restrictions are defined
+ * in objtypes.xml, where we define all main object types we need.
  *
- * Aunque el conjunto de tipos está pensado para que sea fácilmente modificable,
- * actualmente, en el código hay muchas dependencias con los nombres de tipos
+ * Although all types are designed to be easily modified,
+ * currently, en el código hay muchas dependencias con los nombres de tipos
  * concretos. Así que una modificación en el nombre de un tipo casi con toda
  * seguridad causará fallos en el funcionamiento de la aplicación.
  *
@@ -69,19 +68,18 @@ public:
 
 	int 		GetId()     { return m_id;     }
 	wxString 	GetName()   { return m_name;   }
-//	bool   IsHidden() 		{ return m_hidden; }
-	bool   IsItem() 		{ return m_item;   }
+//	bool   		IsHidden() 	{ return m_hidden; }
+	bool   		IsItem() 	{ return m_item;   }
 
 	/**
-	* Añade el tipo de objeto a la lista de posibles hijos.
+	* Adds the object type to the list of possible children.
 	*/
-	void AddChildType(PObjectType type, int max = -1);
+	void AddChildType( PObjectType type, int max = -1 );
 
 	/**
-	* Busca si el tipo pasado como parámetros está entre sus posibles
-	* hijos.
-	* @return numero máximo de ocurrencias del objeto como hijo.
-	*         -1 = numero ilimitado, 0 = ninguna
+	* Finds whether the type passed as parameters are among the possible childrens.
+	* @return Maximum number of occurrences of the object as a child.
+	*         -1 = unlimited, 0 = none
 	*/
 	int FindChildType( int type_id );
 	int FindChildType( PObjectType type );
@@ -91,26 +89,25 @@ public:
 
 private:
 	/**
-	* Registro con los tipos de los hijos posibles y el número máximo
-	* de estos.
-	* @note vamos a usar smart-pointers de tipo "weak" ya que puede haber muchas
-	*       referencias cruzadas.
+	* Register with the types of children and the maximum number possible of those.
+	* @note We will use smart-pointers of type "weak" because there may be many
+	*       cross-references.
 	*/
 	typedef std::map< WPObjectType, int > ChildTypeMap;
 
-	int m_id; 			// identificador numérico del tipo de objeto */
-	wxString m_name; 	// cadena de texto asociado al tipo */
-	bool m_hidden;   	// indica si está oculto en el ObjectTree */
-	bool m_item;     	/* 	indica si es un "item". Los objetos contenidos en
+	int m_id; 			// Pbject identifier */
+	wxString m_name; 	// String associated with the type */
+	bool m_hidden;   	// Indicate if it is hidden in the ObjectTree */
+	bool m_item;     	/* 	Indicate if it is an "item". Los objetos contenidos en
 							en un item, muestran las propiedades de éste junto
 							con las propias del objeto. */
 
-	/** registro de posibles hijos */
+	/** Register of potential children */
 	ChildTypeMap m_childTypes;
 };
 
 /**
-* Tipos de propiedades.
+* Property types.
 */
 typedef enum
 {
@@ -143,7 +140,7 @@ typedef enum
 typedef enum
 {
 	W_NO_WIDGET,
-	W_GENERIC,    // para el caso de que nuestro widget no esté incluido
+	W_GENERIC,    // Case that our widget is not included
 	W_BUTTON,
 	W_COMBO_BOX,
 	W_TEXT_CTRL,
@@ -161,7 +158,7 @@ typedef enum
 } WidgetType;
 */
 /**
-* Lista de enteros.
+* List of integers.
 */
 class IntList
 {

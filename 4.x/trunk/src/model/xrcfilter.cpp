@@ -25,16 +25,15 @@
 
 #include "xrcfilter.h"
 #include "model/objectbase.h"
-#include "utils/typeconv.h"
 #include "utils/debug.h"
-
-#include <ticpp.h>
+#include "utils/typeconv.h"
 
 #include <sstream>
+#include <ticpp.h>
 
 #include <wx/filename.h>
-#include <wx/wfstream.h>
 #include <wx/txtstrm.h>
+#include <wx/wfstream.h>
 
 PObjectBase XrcLoader::GetProject( ticpp::Document* xrcDoc )
 {
@@ -116,13 +115,9 @@ PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 	else if ( className == "spacer" || className == "sizeritem" )
 	{
 		if ( parent->GetClassName() == "wxGridBagSizer" )
-		{
 			className = "gbsizeritem";
-		}
 		else
-		{
 			className = "sizeritem";
-		}
 	}
 	PObjectBase object;
 	PObjectInfo objInfo = m_objDb->GetObjectInfo( _WXSTR( className ) );
@@ -156,9 +151,8 @@ PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 						// If that is the case, reassign "object" to the actual object
 						PObjectBase sizer = newsizer;
 						if ( sizer->GetChildCount() > 0 )
-						{
 							sizer = sizer->GetChild( 0 );
-						}
+
 						if ( sizer )
 						{
 							object = m_objDb->CreateObject( fbObj, sizer );

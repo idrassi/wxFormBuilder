@@ -23,11 +23,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+//#include <wx/splash.h>
+#include "appdata.h"
+#include "mainframe.h"
 #include "maingui.h"
 #include "splashscreen.h"
-//#include <wx/splash.h>
-#include "rad/mainframe.h"
-#include "rad/appdata.h"
 
 #include "model/objectbase.h"
 

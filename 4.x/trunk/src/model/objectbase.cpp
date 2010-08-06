@@ -134,7 +134,7 @@ void Property::SetValue( const int integer )
 {
 	m_value = StringUtils::IntToStr( integer );
 }
-/* TODO
+/* TODO:
 void Property::SetValue( const wxAlignment alignment )
 {
 	m_value = TypeConv::AlignmentToString( alignment );
@@ -187,7 +187,7 @@ int Property::GetValueAsInteger()
 	}
 	return result;
 }
-/* TODO
+/* TODO:
 wxAlignment Property::GetValueAsAlignment()
 {
 	return TypeConv::StringToAlignment( m_value );
@@ -202,7 +202,6 @@ wxString Property::GetValueAsText()
 {
 	return TypeConv::StringToText( m_value );
 }
-
 
 wxArrayString Property::GetValueAsArrayString()
 {
@@ -249,13 +248,9 @@ wxString Property::GetChildFromParent( const wxString& childName )
 	child = children.find( childName );
 
 	if ( children.end() == child )
-	{
 		return wxEmptyString;
-	}
 	else
-	{
 		return child->second;
-	}
 }
 ///////////////////////////////////////////////////////////////////////////////
 const int ObjectBase::INDENT = 2;
@@ -271,7 +266,7 @@ m_expanded( true )
 
 ObjectBase::~ObjectBase()
 {
-	// remove the reference in the parent
+	// Remove the reference in the parent
 	PObjectBase parent = m_parent.lock();
 
 	if ( parent )
@@ -294,7 +289,6 @@ wxString ObjectBase::GetIndentString( int indent )
 	return s;
 }
 
-
 PProperty ObjectBase::GetProperty( wxString name )
 {
 	PropertyMap::iterator it = m_properties.find( name );
@@ -302,7 +296,7 @@ PProperty ObjectBase::GetProperty( wxString name )
 		return it->second;
 
 	Debug::Print( wxString::Format( _("[ObjectBase::GetProperty] Property %s not found!"), name.c_str() ) );
-	// este aserto falla siempre que se crea un sizeritem
+	// This assertion fails whenever we create a sizeritem
 	// assert( false );
 	return PProperty();
 }
@@ -426,8 +420,8 @@ bool ObjectBase::AddChild( unsigned int idx, PObjectBase obj )
 
 bool ObjectBase::ChildTypeOk( PObjectType type )
 {
-	// buscamos si puede haber objectos del tipo "type" como hijos
-	// del actual objeto tipo.
+	// Look if there may be objects of type "type" as children
+	// of current object.
 	int nmax = GetObjectInfo()->GetObjectType()->FindChildType( type );
 
 	if ( nmax == 0 )
@@ -436,19 +430,17 @@ bool ObjectBase::ChildTypeOk( PObjectType type )
 	if ( nmax < 0 )
 		return true;
 
-	// llegados aquí hay que comprobar el número de hijos del tipo pasado
+	// At this point we check the number of children of the last type
 	int count = 0;
 	for ( unsigned int i=0; i < GetChildCount() && count <= nmax; i++ )
 	{
 		if ( GetChild( i )->GetObjectInfo()->GetObjectType() == type )
 			count++;
 	}
-
 	if ( count > nmax )
 		return false;
 
 	return true;
-
 }
 
 PObjectBase ObjectBase::GetLayout()
@@ -607,7 +599,7 @@ bool ObjectBase::ChangeChildPosition( PObjectBase obj, unsigned int pos )
 	if ( pos == obj_pos )
 		return true;
 
-	// Procesamos el cambio de posición
+	// We process the change of position
 	RemoveChild( obj );
 	AddChild( pos, obj );
 	return true;
@@ -632,7 +624,7 @@ int ObjectBase::GetPropertyAsInteger ( const wxString& pname )
 	else
 		return 0;
 }
-/*
+/* TODO:
 wxAlignment ObjectBase::GetPropertyAsAlignment( const wxString& pname )
 {
 	PProperty property = GetProperty( pname );
@@ -870,9 +862,7 @@ bool ObjectInfo::IsSubclassOf( wxString classname )
 	bool found = false;
 
 	if ( GetClassName() == classname )
-	{
 		found = true;
-	}
 	else
 	{
 		for ( unsigned int i=0; !found && i < GetBaseClassCount() ; i++ )

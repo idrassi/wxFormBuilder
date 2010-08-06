@@ -120,7 +120,7 @@ void IntList::SetList( wxString str )
 		token.Trim( false );
 
 		if ( token.ToLong( &value ) )
-		Add( ( int )value );
+			Add( ( int )value );
 	}
 }
 

@@ -61,22 +61,21 @@ void CodeWriter::Unindent()
 	m_indent -= GetIndentSize();
 
 	if ( m_indent < 0 )
-	{
 		m_indent = 0;
-	}
 }
 
-void CodeWriter::WriteLn( wxString code )
+void CodeWriter::WriteLn( wxString code, bool keepIndents )
 {
 	// It will not be allowed newlines (carry return) inside "code"
 	// If there was anyone, then FixWrite gets the string and breaks it
 	// in different lines, inserting them one after another using WriteLn
 	if ( !StringOk( code ) )
-	{
-		FixWrite( code );
-	}
+		FixWrite( code, keepIndents );
 	else
 	{
+		if(keepIndents)
+			m_cols = m_indent;
+
 		Write( code );
 		#if defined( __WXMSW__ )
 			Write( "\r\n" );
@@ -94,7 +93,7 @@ bool CodeWriter::StringOk( wxString s )
 	return ( s.find( "\n", 0 ) == wxString::npos );
 }
 
-void CodeWriter::FixWrite( wxString s )
+void CodeWriter::FixWrite( wxString s, bool keepIndents )
 {
 	wxRegEx reIndent( "%TAB%\\s*", wxRE_ADVANCED );
 	wxStringTokenizer tkz( s, "\n", wxTOKEN_RET_EMPTY_ALL );
@@ -102,16 +101,16 @@ void CodeWriter::FixWrite( wxString s )
 	while ( tkz.HasMoreTokens() )
 	{
 		wxString line = tkz.GetNextToken();
-
-		line.Trim( false );
+		if(!keepIndents)
+			line.Trim( false );
+		// TODO: What?
 		line.Trim( true );
 
-		// replace indentations defined in code templates by #indent and #unindent macros...
+		// Replace indentations defined in code templates by #indent and #unindent macros...
 		reIndent.Replace( &line, "\t" );
-		WriteLn( line );
+		WriteLn( line, keepIndents );
 	}
 }
-
 
 void CodeWriter::Write( wxString code )
 {
@@ -119,9 +118,8 @@ void CodeWriter::Write( wxString code )
 	{
 		// Inserting indents
 		for ( int i = 0; i < m_indent; i++ )
-		{
 			DoWrite( "\t" );
-		}
+
 		m_cols = m_indent;
 	}
 	DoWrite( code );
@@ -242,9 +240,7 @@ void FileCodeWriter::WriteBuffer()
 
 		#ifdef __WXMSW__
 		if ( m_useMicrosoftBOM )
-		{
 			file.Write( microsoftBOM, 3 );
-		}
 		#endif
 
 		if (!m_useUtf8)
@@ -262,16 +258,12 @@ void FileCodeWriter::Clear()
 	{
 		// check for write access to the target file
 		if ( !wxFile::Access( m_filename, wxFile::write ) )
-		{
 			THROW_WXFBEX( _("Unable to write file: ") << m_filename );
-		}
 	}
 	else
 	{
 		wxFile file;
 		if ( !file.Create( m_filename, true ) )
-		{
 			THROW_WXFBEX( _("Unable to create file: ") << m_filename );
-		}
 	}
 }

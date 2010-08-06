@@ -380,7 +380,11 @@ void CppCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectB
 		return;
 	}
 
+	m_inheritedCodeParser.ParseCFiles(userClasses->GetPropertyAsString( _("name") ));
+	
+	//(FileCodeWriter*)m_header->
 	wxString type = userClasses->GetPropertyAsString("type");
+	wxString userCode;
 
 	// Start header file
 	wxString code = GetCode( userClasses, "guard_macro_open" );
@@ -394,10 +398,18 @@ void CppCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectB
 	code = GetCode( userClasses, "header_include" );
 	m_header->WriteLn( code );
 	m_header->WriteLn( wxEmptyString );
+	m_header->WriteLn("//// end generated include");
+
+	m_header->WriteLn( m_inheritedCodeParser.GetUserIncludes() );
+	if ( !userCode.IsEmpty() )
+	{
+		m_header->WriteLn( userCode );
+	}
 
 	code = GetCode( userClasses, "class_decl" );
 	m_header->WriteLn( code );
 	m_header->WriteLn("{");
+	m_header->Indent();
 
 	// Start source file
 	code = GetCode( userClasses, "source_include" );
@@ -407,7 +419,15 @@ void CppCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectB
 	code = GetCode( userClasses, type + "_cons_def" );
 	m_source->WriteLn( code );
 	m_source->WriteLn("{");
-	m_source->WriteLn( wxEmptyString );
+	userCode = m_inheritedCodeParser.GetFunctionContents( userClasses->GetPropertyAsString("name") );
+	if ( !userCode.IsEmpty() )
+	{
+		m_source->WriteLn( userCode, true );
+	}
+	else
+	{
+		m_source->WriteLn( wxEmptyString );
+	}
 	m_source->WriteLn("}");
 
 	// Do events in both files
@@ -433,34 +453,69 @@ void CppCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectB
 							event->GetEventInfo()->GetEventClassName().c_str() );
 
 				m_header->WriteLn( wxString::Format( "void %s;", prototype.c_str() ) );
-				m_source->WriteLn();
+
+				userCode = m_inheritedCodeParser.GetFunctionDocumentation( event->GetValue() );
+				if ( !userCode.IsEmpty() )
+					m_source->WriteLn( userCode, true );
+				else
+					m_source->WriteLn();
+
 				m_source->WriteLn( wxString::Format( "void %s::%s", className.c_str(), prototype.c_str() ) );
 				m_source->WriteLn("{");
-				m_source->Indent();
-				m_source->WriteLn( wxString::Format( _("// TODO: Implement %s"), event->GetValue().c_str() ) );
-				m_source->Unindent();
-				m_source->WriteLn("}");
 
-				generatedHandlers.insert(event->GetValue());
+				userCode = m_inheritedCodeParser.GetFunctionContents( event->GetValue() );
+				if ( !userCode.IsEmpty() )
+					m_source->WriteLn( userCode, true );
+				else
+				{
+					m_source->Indent();
+					m_source->WriteLn( wxString::Format( _("// TODO: Implement %s"), event->GetValue().c_str() ) );
+					m_source->Unindent();
+				}
+				m_source->WriteLn("}");
+				generatedHandlers.insert( event->GetValue() );
 			}
 		}
-		m_header->WriteLn( wxEmptyString );
-
+//		m_header->WriteLn( wxEmptyString );
 		m_header->Unindent();
 	}
 
 	// Finish header file
 	m_header->WriteLn("public:");
-
 	m_header->Indent();
+
 	code = GetCode( userClasses, type + "_cons_decl" );
 	m_header->WriteLn( code );
 	m_header->Unindent();
+	m_header->WriteLn("//// end generated class members");
 
+	userCode = m_inheritedCodeParser.GetUserMembers();
+	if ( !userCode.IsEmpty() )
+		m_header->WriteLn( userCode, true);
+	else
+		m_header->WriteLn(wxT(""));
+
+	m_header->Unindent();
 	m_header->WriteLn("};");
 	m_header->WriteLn( wxEmptyString );
+
 	code = GetCode( userClasses, "guard_macro_close" );
 	m_header->WriteLn( code );
+
+	userCode = m_inheritedCodeParser.GetRemainingFunctions();
+	if ( !userCode.IsEmpty() )
+	{
+		//m_source->Indent();
+		m_source->WriteLn( userCode, true );
+		//m_source->Unindent();
+	}
+	userCode = m_inheritedCodeParser.GetTrailingCode();
+	if ( !userCode.IsEmpty() )
+	{
+		//m_source->Indent();
+		m_source->WriteLn( userCode, true );
+		//m_source->Unindent();
+	}
 }
 
 bool CppCodeGenerator::GenerateCode( PObjectBase project )
@@ -512,7 +567,7 @@ bool CppCodeGenerator::GenerateCode( PObjectBase project )
 	}
 
 	wxString guardMacro;
-	wxFileName::SplitPath( file, 0, &guardMacro, 0 );
+	wxFileName::SplitPath( file, 0, &guardMacro, 0 ); // TODO: this UpperCase
 	guardMacro.Replace( " ", "_" );
 	m_header->WriteLn( "#ifndef __" + guardMacro + "__" );
 	m_header->WriteLn( "#define __" + guardMacro + "__" );
@@ -725,9 +780,7 @@ void CppCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &even
 	{
 		wxString subclass = propSubclass->GetChildFromParent("name");
 		if ( !subclass.empty() )
-		{
 			base_class = subclass;
-		}
 	}
 
 	if ( base_class.empty() )
@@ -747,14 +800,11 @@ void CppCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &even
 			PEvent event = events[i];
 			wxString handlerName;
 			if ( m_useConnect )
-			{
 				handlerName.Printf( "%sHandler( %s::%s )", event->GetEventInfo()->GetEventClassName().c_str(),
 									class_name.c_str(), event->GetValue().c_str() );
-			}
 			else
-			{
 				handlerName.Printf( "%s::_wxFB_%s", class_name.c_str(), event->GetValue().c_str() );
-			}
+
 			wxString templateName = wxString::Format( "%s_%s", m_useConnect ? "connect" : "entry", event->GetName().c_str() );
 
 			PObjectBase obj = event->GetObject();
@@ -799,9 +849,7 @@ bool CppCodeGenerator::GenEventEntry( PObjectBase obj, PObjectInfo obj_info, con
 	{
 		PObjectInfo base_info = obj_info->GetBaseClass( i );
 		if ( GenEventEntry( obj, base_info, templateName, handlerName, disconnect ) )
-		{
 			return true;
-		}
 	}
 	return false;
 }
@@ -904,9 +952,8 @@ void CppCodeGenerator::GenValVarsBase( PObjectInfo info, PObjectBase obj )
 	PCodeInfo code_info = info->GetCodeInfo("C++");
 
 	if ( !code_info )
-	{
 		return;
-	}
+
 	_template = code_info->GetTemplate("valvar_declaration");
 
 	if ( !_template.empty() )
@@ -914,9 +961,7 @@ void CppCodeGenerator::GenValVarsBase( PObjectInfo info, PObjectBase obj )
 		CppTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 		wxString code = parser.ParseTemplate();
 		if ( !code.empty() )
-		{
 			m_header->WriteLn( code );
-		}
 	}
 	// Proceeding recursively with the base classes
 	for ( unsigned int i = 0; i < info->GetBaseClassCount(); i++ )
@@ -950,9 +995,7 @@ void CppCodeGenerator::GenDefinedEventHandlers( PObjectInfo info, PObjectBase ob
 			wxString code = parser.ParseTemplate();
 
 			if ( !code.empty() )
-			{
 				m_header->WriteLn( code );
-			}
 		}
 	}
 	// Proceeding recursively with the base classes
@@ -1001,9 +1044,9 @@ void CppCodeGenerator::GenClassDeclaration( PObjectBase class_obj, bool use_enum
 		return;
 	}
 
-	m_header->WriteLn( "///////////////////////////////////////////////////////////////////////////////" );
-	m_header->WriteLn( "/// Class " + class_name );
-	m_header->WriteLn( "///////////////////////////////////////////////////////////////////////////////" );
+	m_header->WriteLn("///////////////////////////////////////////////////////////////////////////////");
+	m_header->WriteLn("/// Class " + class_name );
+	m_header->WriteLn("///////////////////////////////////////////////////////////////////////////////");
 
 	m_header->WriteLn( "class " + classDecoration + class_name + " : " + GetCode( class_obj, "base" ) );
 	m_header->WriteLn("{");
@@ -1011,18 +1054,15 @@ void CppCodeGenerator::GenClassDeclaration( PObjectBase class_obj, bool use_enum
 
 	// Are there event handlers?
 	if ( !m_useConnect && events.size() > 0 )
-	{
 		m_header->WriteLn( "DECLARE_EVENT_TABLE()" );
-	}
-	// private
+
+	// Private
 	m_header->WriteLn("private:");
 	m_header->Indent();
 	GenAttributeDeclaration( class_obj, P_PRIVATE );
 
 	if ( !m_useConnect )
-	{
 		GenPrivateEventHandlers( events );
-	}
 
 	m_header->Unindent();
 	m_header->WriteLn("");
@@ -1042,9 +1082,7 @@ void CppCodeGenerator::GenClassDeclaration( PObjectBase class_obj, bool use_enum
 
 	PProperty eventHandlerKindProp = class_obj->GetProperty("event_handler");
 	if ( eventHandlerKindProp )
-	{
 		eventHandlerKind = eventHandlerKindProp->GetValueAsString();
-	}
 
 	if ( 0 == eventHandlerKind.compare("decl_pure_virtual") )
 	{
@@ -1135,9 +1173,7 @@ void CppCodeGenerator::GenSubclassSets( PObjectBase obj, std::set< wxString >* s
 {
 	// Call GenSubclassForwardDeclarations on all children as well
 	for ( unsigned int i = 0; i < obj->GetChildCount(); i++ )
-	{
 		GenSubclassSets( obj->GetChild( i ), subclasses, sourceIncludes, headerIncludes );
-	}
 
 	// Fill the set
 	PProperty subclass = obj->GetProperty("subclass");
@@ -1286,9 +1322,7 @@ void CppCodeGenerator::GenObjectIncludes( PObjectBase project, std::vector< wxSt
 void CppCodeGenerator::GenBaseIncludes( PObjectInfo info, PObjectBase obj, std::vector< wxString >* includes, std::set< wxString >* templates )
 {
 	if ( !info )
-	{
 		return;
-	}
 
 	// Process all the base classes recursively
 	for ( unsigned int i = 0; i < info->GetBaseClassCount(); i++ )
@@ -1305,9 +1339,7 @@ void CppCodeGenerator::GenBaseIncludes( PObjectInfo info, PObjectBase obj, std::
 		if ( !include.empty() )
 		{
 			if ( templates->insert( include ).second )
-			{
 				AddUniqueIncludes( include, includes );
-			}
 		}
 	}
 }
@@ -1328,13 +1360,9 @@ void CppCodeGenerator::AddUniqueIncludes( const wxString& include, std::vector< 
 
 		// Anything within a #if preprocessor block will be written
 		if ( line.StartsWith("#if") )
-		{
 			inPreproc = true;
-		}
 		else if ( line.StartsWith("#endif") )
-		{
 			inPreproc = false;
-		}
 
 		if ( inPreproc )
 		{
@@ -1352,9 +1380,7 @@ void CppCodeGenerator::AddUniqueIncludes( const wxString& include, std::vector< 
 		// If it is an include, it must be unique to be written
 		std::vector< wxString >::iterator it = std::find( includes->begin(), includes->end(), line );
 		if ( includes->end() == it )
-		{
 			includes->push_back( line );
-		}
 	}
 }
 
@@ -1382,20 +1408,14 @@ void CppCodeGenerator::GenConstructor( PObjectBase class_obj, const EventVector 
 
 	wxString settings = GetCode( class_obj, "settings" );
 	if ( !settings.empty() )
-	{
 		m_source->WriteLn( settings );
-	}
 
 	for ( unsigned int i = 0; i < class_obj->GetChildCount(); i++ )
-	{
 		GenConstruction( class_obj->GetChild( i ), true );
-	}
 
 	wxString afterAddChild = GetCode( class_obj, "after_addchild" );
 	if ( !afterAddChild.empty() )
-	{
 		m_source->WriteLn( afterAddChild );
-	}
 
 	if ( m_useConnect && !events.empty() )
 	{
@@ -1461,16 +1481,14 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 			GenConstruction( child, isWidget );
 
 			if ( type == "toolbar" )
-			{
 				GenAddToolbar( child->GetObjectInfo(), child );
-			}
 		}
 
-		if ( !isWidget ) // sizers
+		if ( !isWidget ) // Sizers
 		{
 			if ( is_widget )
 			{
-				// the parent object is not a sizer. There is no template for
+				// The parent object is not a sizer. There is no template for
 				// this so we'll make it manually.
 				// It's not a good practice to embed templates into the source code,
 				// because you will need to recompile...
@@ -1507,13 +1525,9 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 
 					wxString _template;
 					if ( obj->GetProperty("splitmode")->GetValue() == "wxSPLIT_VERTICAL" )
-					{
 						_template = "$name->SplitVertically( ";
-					}
 					else
-					{
 						_template = "$name->SplitHorizontally( ";
-					}
 
 					_template = _template + sub1->GetProperty("name")->GetValue() +
 					            ", " + sub2->GetProperty("name")->GetValue() + ", $sashpos );";
@@ -1555,17 +1569,11 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 		PObjectInfo childInfo = obj->GetChild( 0 )->GetObjectInfo();
 		wxString temp_name;
 		if ( childInfo->IsSubclassOf("wxWindow") || "CustomControl" == childInfo->GetClassName() )
-		{
 			temp_name = "window_add";
-		}
 		else if ( childInfo->IsSubclassOf("sizer") )
-		{
 			temp_name = "sizer_add";
-		}
 		else if ( childInfo->GetClassName() == "spacer" )
-		{
 			temp_name = "spacer_add";
-		}
 		else
 		{
 			Debug::Print( _("SizerItem child is not a Spacer and is not a subclass of wxWindow or of sizer.") );
@@ -1638,9 +1646,7 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 	{
 		// Generate the children
 		for ( unsigned int i = 0; i < obj->GetChildCount(); i++ )
-		{
 			GenConstruction( obj->GetChild( i ), false );
-		}
 	}
 }
 
@@ -1660,17 +1666,12 @@ void CppCodeGenerator::FindMacros( PObjectBase obj, std::vector<wxString>* macro
 			if ( m_predMacros.end() == m_predMacros.find( value ) )
 			{
 				if ( macros->end() == std::find( macros->begin(), macros->end(), value ) )
-				{
 					macros->push_back( value );
-				}
 			}
 		}
 	}
-
 	for ( i = 0; i < obj->GetChildCount(); i++ )
-	{
 		FindMacros( obj->GetChild( i ), macros );
-	}
 }
 
 void CppCodeGenerator::FindEventHandlers( PObjectBase obj, EventVector &events )
@@ -1726,9 +1727,7 @@ void CppCodeGenerator::GenSettings( PObjectInfo info, PObjectBase obj )
 	PCodeInfo code_info = info->GetCodeInfo("C++");
 
 	if ( !code_info )
-	{
 		return;
-	}
 
 	_template = code_info->GetTemplate("settings");
 
@@ -1737,9 +1736,7 @@ void CppCodeGenerator::GenSettings( PObjectInfo info, PObjectBase obj )
 		CppTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 		wxString code = parser.ParseTemplate();
 		if ( !code.empty() )
-		{
 			m_source->WriteLn( code );
-		}
 	}
 
 	// Proceeding recursively with the base classes
@@ -1756,9 +1753,7 @@ void CppCodeGenerator::GenDestruction( PObjectBase obj )
 	PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo("C++");
 
 	if ( !code_info )
-	{
 		return;
-	}
 
 	_template = code_info->GetTemplate("destruction");
 
@@ -1767,9 +1762,7 @@ void CppCodeGenerator::GenDestruction( PObjectBase obj )
 		CppTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 		wxString code = parser.ParseTemplate();
 		if ( !code.empty() )
-		{
 			m_source->WriteLn( code );
-		}
 	}
 
 	// Process child widgets
@@ -1804,9 +1797,8 @@ void CppCodeGenerator::GetAddToolbarCode( PObjectInfo info, PObjectBase obj, wxA
 		CppTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 		wxString code = parser.ParseTemplate();
 		if ( !code.empty() )
-		{
-			if( codelines.Index( code ) == wxNOT_FOUND ) codelines.Add( code );
-		}
+			if( codelines.Index( code ) == wxNOT_FOUND )
+				codelines.Add( code );
 	}
 	
 	// Proceeding recursively with the base classes
@@ -1816,9 +1808,7 @@ void CppCodeGenerator::GetAddToolbarCode( PObjectInfo info, PObjectBase obj, wxA
 		GetAddToolbarCode( base_info, obj, codelines );
 	}
 }
-
 ///////////////////////////////////////////////////////////////////////
-
 
 void CppCodeGenerator::GenXpmIncludes( PObjectBase project )
 {
@@ -1828,18 +1818,14 @@ void CppCodeGenerator::GenXpmIncludes( PObjectBase project )
 	FindXpmProperties( project, include_set );
 
 	if ( include_set.empty() )
-	{
 		return;
-	}
+
 	// and then, we generate them
 	std::set<wxString>::iterator it;
 	for ( it = include_set.begin() ; it != include_set.end(); it++ )
-	{
 		if ( !it->empty() )
-		{
 			m_source->WriteLn( *it );
-		}
-	}
+
 	m_source->WriteLn();
 }
 
@@ -1860,9 +1846,7 @@ void CppCodeGenerator::FindXpmProperties( PObjectBase obj, std::set<wxString>& x
 			wxString path = property->GetValue();
 			size_t semicolonindex = path.find_first_of(";");
 			if ( semicolonindex != path.npos )
-			{
 				path = path.substr( 0, semicolonindex );
-			}
 
 			wxFileName bmpFileName( path );
 			if ( bmpFileName.GetExt().Upper() == "XPM" )

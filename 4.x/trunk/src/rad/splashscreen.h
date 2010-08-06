@@ -50,13 +50,13 @@ private:
 	wxTimer 	m_timer;
 	wxRegion 	r;
 
-    void DoPaint(wxDC &dc);
-    void OnPaint(wxPaintEvent &);
-    void OnEraseBackground(wxEraseEvent &);
-    void OnTimer(wxTimerEvent &);
-    void OnCloseWindow(wxCloseEvent &);
-    void OnChar(wxKeyEvent &);
-    void OnMouseEvent(wxMouseEvent &event);
+    void DoPaint( wxDC &dc );
+    void OnPaint( wxPaintEvent & );
+    void OnEraseBackground( wxEraseEvent & );
+    void OnTimer( wxTimerEvent & );
+    void OnCloseWindow( wxCloseEvent & );
+    void OnChar( wxKeyEvent & );
+    void OnMouseEvent( wxMouseEvent &event );
 
 	DECLARE_EVENT_TABLE()
 };
