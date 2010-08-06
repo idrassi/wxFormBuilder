@@ -21,8 +21,8 @@
 //   Ryan Mulder - rjmyst3@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-#include "wxfbmanager.h"
 #include "appdata.h"
+#include "wxfbmanager.h"
 #include "designer/visualeditor.h"
 #include "model/objectbase.h"
 
