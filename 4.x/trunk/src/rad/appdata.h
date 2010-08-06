@@ -74,19 +74,19 @@ private:
 
 	HandlerVector m_handlers;
 
-	void NotifyEvent( wxFBEvent& event, bool delayed = false );
+	void NotifyEvent( wxFBEvent& event );
 
 	// Notifican a cada observador el evento correspondiente
 	void NotifyProjectLoaded();
 	void NotifyProjectSaved();
 	void NotifyObjectExpanded		( PObjectBase obj );
-	void NotifyObjectSelected		( PObjectBase obj );
+	void NotifyObjectSelected		( PObjectBase obj, bool force = false );
 	void NotifyObjectCreated		( PObjectBase obj );
 	void NotifyObjectRemoved		( PObjectBase obj );
 	void NotifyPropertyModified		( PProperty prop );
 	void NotifyEventHandlerModified ( PEvent evtHandler );
 	void NotifyProjectRefresh();
-	void NotifyCodeGeneration( bool panelOnly = false, bool delayed = false );
+	void NotifyCodeGeneration( bool panelOnly = false );
 
 	/**
 	 * Comprueba las referencias cruzadas de todos los nodos del árbol

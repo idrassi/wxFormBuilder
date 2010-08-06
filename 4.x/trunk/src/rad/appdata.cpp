@@ -28,35 +28,34 @@
 #include "wxfbevent.h"
 #include "wxfbmanager.h"
 
-#include "model/objectbase.h"
-#include "utils/typeconv.h"
-#include "utils/debug.h"
-#include "utils/stringutils.h"
-#include "utils/wxfbipc.h"
-#include "utils/wxfbexception.h"
+#include "codegen/codewriter.h"
 #include "codegen/cppcg.h"
 #include "codegen/pythoncg.h"
 #include "codegen/xrccg.h"
-#include "codegen/codewriter.h"
-#include "rad/xrcpreview/xrcpreview.h"
+#include "model/objectbase.h"
 #include "rad/dataobject/dataobject.h"
-
-#include <ticpp.h>
+#include "rad/xrcpreview/xrcpreview.h"
+#include "utils/debug.h"
+#include "utils/stringutils.h"
+#include "utils/typeconv.h"
+#include "utils/wxfbexception.h"
+#include "utils/wxfbipc.h"
 
 #include <set>
+#include <ticpp.h>
 
-#include <wx/tokenzr.h>
+#include <wx/clipbrd.h>
 #include <wx/ffile.h>
 #include <wx/filename.h>
-#include <wx/clipbrd.h>
 #include <wx/fs_mem.h>
 #include <wx/fs_arc.h>
 #include <wx/fs_filter.h>
+#include <wx/tokenzr.h>
 
 using namespace TypeConv;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Comandos
+// Commands
 ///////////////////////////////////////////////////////////////////////////////
 
 /** Command for expanding an object in the object tree */
@@ -76,17 +75,17 @@ public:
 };
 
 /**
-* Comando para insertar un objeto en el árbol.
+* Command to insert an object in the tree.
 */
 
 class InsertObjectCmd : public Command
 {
 private:
 	ApplicationData *m_data;
-	PObjectBase m_parent;
-	PObjectBase m_object;
-	int m_pos;
-	PObjectBase m_oldSelected;
+	PObjectBase 	m_parent;
+	PObjectBase 	m_object;
+	int 			m_pos;
+	PObjectBase 	m_oldSelected;
 
 protected:
 	void DoExecute();
@@ -97,17 +96,17 @@ public:
 };
 
 /**
-* Comando para borrar un objeto.
+* Command to delete an object.
 */
 
 class RemoveObjectCmd : public Command
 {
 private:
 	ApplicationData *m_data;
-	PObjectBase m_parent;
-	PObjectBase m_object;
-	int m_oldPos;
-	PObjectBase m_oldSelected;
+	PObjectBase 	m_parent;
+	PObjectBase 	m_object;
+	int 			m_oldPos;
+	PObjectBase 	m_oldSelected;
 
 protected:
 	void DoExecute();
@@ -118,14 +117,14 @@ public:
 };
 
 /**
-* Comando para modificar una propiedad.
+* Command to change a property.
 */
 
 class ModifyPropertyCmd : public Command
 {
 private:
-	PProperty m_property;
-	wxString m_oldValue, m_newValue;
+	PProperty 	m_property;
+	wxString 	m_oldValue, m_newValue;
 
 protected:
 	void DoExecute();
@@ -136,14 +135,14 @@ public:
 };
 
 /**
-* Command for modifying an event
+* Command for modifying an event.
 */
 
 class ModifyEventHandlerCmd : public Command
 {
 private:
-	PEvent m_event;
-	wxString m_oldValue, m_newValue;
+	PEvent 		m_event;
+	wxString 	m_oldValue, m_newValue;
 
 protected:
 	void DoExecute();
@@ -154,7 +153,7 @@ public:
 };
 
 /**
-* Comando para mover de posición un objeto.
+* Command to change an object position.
 */
 
 class ShiftChildCmd : public Command
@@ -196,7 +195,7 @@ public:
 };
 
 /**
-* Cambia el padre.
+* Command to change parent object.
 */
 
 class ReparentObjectCmd : public Command
@@ -216,7 +215,7 @@ public:
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// Implementación de los Comandos
+// Command Implementation
 ///////////////////////////////////////////////////////////////////////////////
 ExpandObjectCmd::ExpandObjectCmd( PObjectBase object, bool expand )
 		: m_object( object ), m_expand( expand )
@@ -1876,9 +1875,8 @@ void ApplicationData::TransferOptionList( ticpp::Element* prop, std::set< wxStri
 		std::set< wxString >::iterator option;
 
 		for ( option = transfer.begin(); option != transfer.end(); ++option )
-		{
 			newOptionList << "|" << *option;
-		}
+
 		newProp->SetText( _STDSTR( newOptionList.substr( 1 ) ) );
 
 		if ( newProps.empty() )
@@ -1889,9 +1887,7 @@ void ApplicationData::TransferOptionList( ticpp::Element* prop, std::set< wxStri
 	}
 	// Set the value of the property to whatever is left
 	if ( keep.empty() )
-	{
 		parent->RemoveChild( prop );
-	}
 	else
 	{
 		std::set< wxString >::iterator option;
@@ -1921,7 +1917,7 @@ void ApplicationData::NewProject()
 
 void ApplicationData::GenerateCode( bool panelOnly )
 {
-	NotifyCodeGeneration( panelOnly, true );
+	NotifyCodeGeneration( panelOnly );
 }
 
 void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString className, wxString path, wxString file )
@@ -2006,8 +2002,9 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
 		if ( pCodeGen && TypeConv::FlagSet( "C++", pCodeGen->GetValue() ) )
 		{
 			CppCodeGenerator codegen;
-
 			const wxString& fullPath = inherFile.GetFullPath();
+			codegen.ParseFiles( fullPath + ".h", fullPath + ".cpp" );
+
 			PCodeWriter h_cw( new FileCodeWriter( fullPath + ".h", useMicrosoftBOM, useUtf8 ) );
 			PCodeWriter cpp_cw( new FileCodeWriter( fullPath + ".cpp", useMicrosoftBOM, useUtf8 ) );
 
@@ -2056,8 +2053,7 @@ void ApplicationData::MovePosition( PObjectBase obj, bool right, unsigned int nu
 		// nos aseguramos de que los límites son correctos
 		unsigned int children_count = parent->GetChildCount();
 
-		if ( ( right && num + pos < children_count ) ||
-			( !right && ( num <= pos ) ) )
+		if ( ( right && num + pos < children_count ) || ( !right && ( num <= pos ) ) )
 		{
 			pos = ( right ? pos + num : pos - num );
 
@@ -2435,6 +2431,11 @@ void ApplicationData::ShowXrcPreview()
 		wxMessageBox( _("Please select a form and try again."), _("No Form Selected"), wxICON_ERROR );
 		return;
 	}
+	if( form->GetPropertyAsInteger("aui_managed") )
+	{
+		wxMessageBox( _("AUI managed forms cannot be previewed by XRC system."), _("XRC preview"), wxICON_ERROR );
+		return;
+	}
 	XRCPreview::Show( form, GetProjectPath() );
 }
 
@@ -2486,11 +2487,11 @@ void ApplicationData::RemoveHandler( wxEvtHandler* handler )
 	}
 }
 
-void ApplicationData::NotifyEvent( wxFBEvent& event, bool delayed )
+void ApplicationData::NotifyEvent( wxFBEvent& event )
 {
 	static int count = 0;
 
-	if ( !delayed && (count == 0) )
+	if ( count == 0 )
 	{
 		count++;
 		wxString msg = _("event: ") + event.GetEventName();
@@ -2531,9 +2532,10 @@ void ApplicationData::NotifyObjectExpanded( PObjectBase obj )
 	NotifyEvent( event );
 }
 
-void ApplicationData::NotifyObjectSelected( PObjectBase obj )
+void ApplicationData::NotifyObjectSelected( PObjectBase obj, bool force )
 {
 	wxFBObjectEvent event( wxEVT_FB_OBJECT_SELECTED, obj );
+	if( force ) event.SetString("force");
 	NotifyEvent( event );
 }
 
@@ -2561,14 +2563,14 @@ void ApplicationData::NotifyEventHandlerModified( PEvent evtHandler )
 	NotifyEvent( event );
 }
 
-void ApplicationData::NotifyCodeGeneration( bool panelOnly, bool delayed )
+void ApplicationData::NotifyCodeGeneration( bool panelOnly )
 {
 	wxFBEvent event( wxEVT_FB_CODE_GENERATION );
 
 	// Using the previously unused Id field in the event to carry a boolean
 	event.SetId( ( panelOnly ? 1 : 0 ) );
 
-	NotifyEvent( event, delayed );
+	NotifyEvent( event );
 }
 
 void ApplicationData::NotifyProjectRefresh()
@@ -2609,8 +2611,14 @@ wxString ApplicationData::GetOutputPath()
 			{
 				THROW_WXFBEX( _("You must save the project when using a relative path for output files") );
 			}
+			/* this approach is probably incorrect if the fb project is located under a symlink
 			path.SetCwd( projectPath );
-			path.MakeAbsolute();
+			path.MakeAbsolute(); */
+			path = wxFileName(  projectPath + 
+								wxFileName::GetPathSeparator() + 
+								pathEntry + 
+								wxFileName::GetPathSeparator() );
+			path.Normalize();
 		}
 	}
 
