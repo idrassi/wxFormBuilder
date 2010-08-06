@@ -23,9 +23,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "wxfbpalette.h"
 #include "appdata.h"
 #include "bitmaps.h"
+#include "wxfbpalette.h"
 #include "model/objectbase.h"
 #include "utils/debug.h"
 #include "utils/wxfbdefs.h"
