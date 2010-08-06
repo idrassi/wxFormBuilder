@@ -893,11 +893,14 @@ void ObjectInspector::OnReCreateGrid( wxCommandEvent& event )
 
 	/** Re-expand the bitmap property, if it was expanded */
 	wxPGProperty* bitmapProp = m_pg->GetPropertyByName( event.GetString() );
-	m_pg->SelectProperty( bitmapProp );
-	if ( event.GetInt() != 0 )
+	if( bitmapProp.IsOk() )
 	{
-		m_pg->Expand( bitmapProp );
-		m_pg->Expand( dynamic_cast< wxPGProperty* >( bitmapProp )->Last() );
+		m_pg->SelectProperty( bitmapProp );
+		if ( event.GetInt() != 0 )
+		{
+			m_pg->Expand( bitmapProp );
+			m_pg->Expand( dynamic_cast< wxPGProperty* >( bitmapProp )->Last() );
+		}
 	}
 }
 
@@ -921,9 +924,12 @@ void ObjectInspector::OnPropertyGridExpand( wxPropertyGridEvent& event )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void ObjectInspector::OnObjectSelected( wxFBObjectEvent& )
+void ObjectInspector::OnObjectSelected( wxFBObjectEvent& event )
 {
-	Create();
+	if( event.GetString() == "force" )
+		Create(true);
+	else
+		Create(false);
 }
 
 void ObjectInspector::OnProjectRefresh( wxFBEvent& )
