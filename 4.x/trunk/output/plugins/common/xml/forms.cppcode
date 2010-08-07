@@ -48,7 +48,7 @@ Written by
 			@{ public wxFrame @}
 		</template>
 		<template name="cons_decl">
-			$name( wxWindow* parent, wxWindowID id = $id, const wxString&amp; title = $title, const wxPoint&amp; pos = $pos, const wxSize&amp; size = $size, long style = $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, const wxString&amp; name = $window_name @} );
+			$name( wxWindow* parent, wxWindowID id = $id, const wxString&amp; title = $title, const wxPoint&amp; pos = $pos, const wxSize&amp; size = $size, long style = $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, const wxString&amp; name = $window_name @} ); #nl
 
 			#ifequal $aui_managed "1"
 			@{ wxAuiManager m_mgr; #nl @}

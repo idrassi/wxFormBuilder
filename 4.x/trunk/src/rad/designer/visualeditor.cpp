@@ -216,13 +216,13 @@ void VisualEditor::ScanPanes( wxWindow* parent)
 			PObjectInfo obj_info = obj->GetObjectInfo();
 			wxString cname = obj_info->GetObjectType()->GetName();
 			
-			if( cname == wxT("widget") || cname == wxT("toolbar") || cname == wxT("container") )
+			if( cname == "widget" || cname == "toolbar" || cname == "container" )
 			{
 				wxAuiPaneInfo inf = m_auimgr->GetPane(*child);
 				if(inf.IsOk())
 				{
 					// scan position and docking mode
-					if( !obj->GetPropertyAsInteger( wxT("center_pane") ) )
+					if( !obj->GetPropertyAsInteger( "center_pane" ) )
 					{
 						wxString dock;
 						if( inf.IsDocked())
@@ -231,30 +231,30 @@ void VisualEditor::ScanPanes( wxWindow* parent)
 							switch(inf.dock_direction)
 							{
 								case 1:
-									dockDir = wxT("Top");
+									dockDir = "Top";
 									break;
 									
 								case 2:
-									dockDir = wxT("Right");
+									dockDir = "Right";
 									break;
 								
 								case 3:
-									dockDir = wxT("Bottom");
+									dockDir = "Bottom";
 									break;
 									
 								case 4:
-									dockDir = wxT("Left");
+									dockDir = "Left";
 									break;
 									
 								case 5:
-									dockDir = wxT("Center");
+									dockDir = "Center";
 									break;
 									
 								default:
-									dockDir = wxT("Left");
+									dockDir = "Left";
 									break;
 							}
-							PProperty pdock = obj->GetProperty( wxT("docking") );
+							PProperty pdock = obj->GetProperty("docking");
 							
 							if( pdock->GetValue() != dockDir )
 							{
@@ -262,23 +262,23 @@ void VisualEditor::ScanPanes( wxWindow* parent)
 								updateNeeded = true;
 							}
 							
-							dock = wxT("Dock");
+							dock = "Dock";
 						}
 						else
 						{
 							wxPoint pos = inf.floating_pos;
 							if ( pos.x != -1 && pos.y != -1 )
 							{
-								PProperty pposition = obj->GetProperty( wxT("pane_position") );
+								PProperty pposition = obj->GetProperty("pane_position");
 								if( pposition->GetValue() != TypeConv::PointToString( pos ) )
 								{
 									pposition->SetValue( TypeConv::PointToString( pos ) );
 									updateNeeded = true;
 								}
 							}
-							dock = wxT("Float");
+							dock = "Float";
 						}
-						PProperty pfloat = obj->GetProperty(wxT("dock") );
+						PProperty pfloat = obj->GetProperty("dock");
 						if( pfloat->GetValue() != dock )
 						{
 							pfloat->SetValue( dock );
@@ -289,26 +289,26 @@ void VisualEditor::ScanPanes( wxWindow* parent)
 						wxSize paneSize = inf.floating_size;
 						if ( paneSize.x != -1 && paneSize.y != -1 )
 						{
-							PProperty psize = obj->GetProperty( wxT("pane_size") );
+							PProperty psize = obj->GetProperty("pane_size");
 							
 							if( psize->GetValue() != TypeConv::SizeToString( paneSize ) )
 							{
-								psize->SetValue( TypeConv::SizeToString( paneSize )  );
-								obj->GetProperty( wxT("resize") )->SetValue( wxT("Resizable") );
+								psize->SetValue( TypeConv::SizeToString( paneSize ) );
+								obj->GetProperty("resize")->SetValue( wxT("Resizable") ); // TODO: Error without wxT
 								
 								updateNeeded = true;
 							}
 						}
 						
 						// scan "row" and "layer"
-						PProperty prop = obj->GetProperty(wxT("row") );
-						if( obj->GetPropertyAsInteger( wxT("row") ) != inf.dock_row )
+						PProperty prop = obj->GetProperty("row");
+						if( obj->GetPropertyAsInteger("row") != inf.dock_row )
 						{
 							prop->SetValue( inf.dock_row );
 							updateNeeded = true;
 						}
-						prop = obj->GetProperty(wxT("layer") );
-						if( obj->GetPropertyAsInteger( wxT("layer") ) != inf.dock_layer )
+						prop = obj->GetProperty("layer");
+						if( obj->GetPropertyAsInteger("layer") != inf.dock_layer )
 						{
 							prop->SetValue( inf.dock_layer );
 							updateNeeded = true;
@@ -316,8 +316,8 @@ void VisualEditor::ScanPanes( wxWindow* parent)
 					}
 					
 					// scan "show" property
-					PProperty pshow = obj->GetProperty(wxT("show") );
-					if( obj->GetPropertyAsInteger( wxT("show") ) != (int) inf.IsShown() )
+					PProperty pshow = obj->GetProperty("show");
+					if( obj->GetPropertyAsInteger("show") != (int) inf.IsShown() )
 					{
 						pshow->SetValue( inf.IsShown() );
 						updateNeeded = true;
@@ -395,7 +395,7 @@ void VisualEditor::Create()
 	m_wxobjects.clear();
 	m_baseobjects.clear();
 
-	if( IsShown() ) // TODO: Added from 3.2
+	if( IsShown() )
 	{
 		m_form = AppData()->GetSelectedForm();
 		if ( m_form )
@@ -786,11 +786,11 @@ void VisualEditor::SetupWindow( PObjectBase obj, wxWindow* window )
 
 	//AUI
 	wxString tname = obj->GetObjectInfo()->GetObjectType()->GetName();
-	if( m_auimgr && ( tname == wxT("widget") || tname == wxT("container") ) )
+	if( m_auimgr && ( tname == "widget" || tname == "container" ) )
 	{
-		if( obj->GetParent()->GetObjectTypeName() == wxT("form") )
+		if( obj->GetParent()->GetObjectTypeName() == "form" )
 		{
-			SetupAui(obj, window);
+			SetupAui( obj, window );
 		}
 	}
 }
@@ -801,63 +801,83 @@ void VisualEditor::SetupAui( PObjectBase obj, wxWindow* window )
 	
 	//wxAuiPaneInfo info = m_auimgr->GetPane( window );
 	
-	wxString name = obj->GetPropertyAsString( wxT("aui_name") );
-	if( name != wxT("") ) m_auimgr->GetPane( window ).Name( name );
+	wxString name = obj->GetPropertyAsString("aui_name");
+	if( name != "" )
+		m_auimgr->GetPane( window ).Name( name );
 	
-	if( obj->GetPropertyAsInteger( wxT("center_pane") )) m_auimgr->GetPane( window ).CenterPane();
-	if( obj->GetPropertyAsInteger( wxT("default_pane") )) m_auimgr->GetPane( window ).DefaultPane();
+	if( obj->GetPropertyAsInteger("center_pane") )
+		m_auimgr->GetPane( window ).CenterPane();
+
+	if( obj->GetPropertyAsInteger("default_pane") )
+		m_auimgr->GetPane( window ).DefaultPane();
 	
-	if( !obj->IsNull(wxT("caption"))) m_auimgr->GetPane(window).Caption(obj->GetPropertyAsString(wxT("caption")));
-	m_auimgr->GetPane( window ).CaptionVisible( obj->GetPropertyAsInteger( wxT("caption_visible") ) );
-	m_auimgr->GetPane( window ).CloseButton( obj->GetPropertyAsInteger( wxT("close_button") ) );
-	m_auimgr->GetPane( window ).MaximizeButton( obj->GetPropertyAsInteger( wxT("maximize_button") ) );
-	m_auimgr->GetPane( window ).MinimizeButton( obj->GetPropertyAsInteger( wxT("minimize_button") ) );
-	m_auimgr->GetPane( window ).PinButton( obj->GetPropertyAsInteger( wxT("pin_button") ) );
-	m_auimgr->GetPane( window ).PaneBorder( obj->GetPropertyAsInteger( wxT("pane_border") ) );
-	m_auimgr->GetPane( window ).Gripper(obj->GetPropertyAsInteger( wxT("gripper") ));
+	if( !obj->IsNull("caption") )
+		m_auimgr->GetPane( window ).Caption( obj->GetPropertyAsString("caption") );
+
+	m_auimgr->GetPane( window ).CaptionVisible( obj->GetPropertyAsInteger("caption_visible") );
+	m_auimgr->GetPane( window ).CloseButton( obj->GetPropertyAsInteger("close_button") );
+	m_auimgr->GetPane( window ).MaximizeButton( obj->GetPropertyAsInteger("maximize_button") );
+	m_auimgr->GetPane( window ).MinimizeButton( obj->GetPropertyAsInteger("minimize_button") );
+	m_auimgr->GetPane( window ).PinButton( obj->GetPropertyAsInteger("pin_button") );
+	m_auimgr->GetPane( window ).PaneBorder( obj->GetPropertyAsInteger("pane_border") );
+	m_auimgr->GetPane( window ).Gripper( obj->GetPropertyAsInteger("gripper") );
 	
-	m_auimgr->GetPane( window ).BottomDockable( obj->GetPropertyAsInteger( wxT("BottomDockable") ) );
-	m_auimgr->GetPane( window ).TopDockable( obj->GetPropertyAsInteger( wxT("TopDockable") ) );
-	m_auimgr->GetPane( window ).LeftDockable( obj->GetPropertyAsInteger( wxT("LeftDockable") ) );
-	m_auimgr->GetPane( window ).RightDockable( obj->GetPropertyAsInteger( wxT("RightDockable") ) );
+	m_auimgr->GetPane( window ).BottomDockable( obj->GetPropertyAsInteger("BottomDockable") );
+	m_auimgr->GetPane( window ).TopDockable( obj->GetPropertyAsInteger("TopDockable") );
+	m_auimgr->GetPane( window ).LeftDockable( obj->GetPropertyAsInteger("LeftDockable") );
+	m_auimgr->GetPane( window ).RightDockable( obj->GetPropertyAsInteger("RightDockable") );
 	
-	if( !obj->IsNull(wxT("dock")) )
+	if( !obj->IsNull("dock") )
 	{
-		if( obj->GetPropertyAsString( wxT("dock") ) == wxT("Dock"))
+		if( obj->GetPropertyAsString("dock") == "Dock" )
 		{
 			m_auimgr->GetPane( window ).Dock();
-			if( !obj->IsNull(wxT("docking")) )
+			if( !obj->IsNull("docking") )
 			{
-				if( obj->GetPropertyAsString(wxT("docking")) == wxT("Bottom") )  m_auimgr->GetPane( window ).Bottom();
-				else if( obj->GetPropertyAsString(wxT("docking")) == wxT("Top") )  m_auimgr->GetPane( window ).Top();
-				else if( obj->GetPropertyAsString(wxT("docking")) == wxT("Center") )  m_auimgr->GetPane( window ).Center();
-				else if( obj->GetPropertyAsString(wxT("docking")) == wxT("Right") )  m_auimgr->GetPane( window ).Right();
+				if( obj->GetPropertyAsString("docking") == "Bottom" )
+					m_auimgr->GetPane( window ).Bottom();
+				else if( obj->GetPropertyAsString("docking") == "Top" )
+					m_auimgr->GetPane( window ).Top();
+				else if( obj->GetPropertyAsString("docking") == "Center" )
+					m_auimgr->GetPane( window ).Center();
+				else if( obj->GetPropertyAsString("docking") == "Right" )
+					m_auimgr->GetPane( window ).Right();
 			}
 		}
 		else
 		{
 			m_auimgr->GetPane( window ).Float();
-			m_auimgr->GetPane( window ).FloatingPosition( obj->GetPropertyAsPoint( wxT("pane_position") ) );
+			m_auimgr->GetPane( window ).FloatingPosition( obj->GetPropertyAsPoint("pane_position") );
 		}
 	}
 	
-	if( !obj->IsNull(wxT("resize")) )
+	if( !obj->IsNull("resize") )
 	{
-		if( obj->GetPropertyAsString( wxT("resize") ) == wxT("Resizable")) m_auimgr->GetPane( window ).Resizable();
-		else m_auimgr->GetPane( window ).Fixed();
+		if( obj->GetPropertyAsString("resize") == "Resizable" )
+			m_auimgr->GetPane( window ).Resizable();
+		else
+			m_auimgr->GetPane( window ).Fixed();
 	}
 	
-	m_auimgr->GetPane( window ).DockFixed( obj->GetPropertyAsInteger( wxT("dock_fixed") ) );
-	m_auimgr->GetPane( window ).Movable( obj->GetPropertyAsInteger( wxT("movealbe") ));
-	m_auimgr->GetPane( window ).Floatable(obj->GetPropertyAsInteger( wxT("floatable") ));
+	m_auimgr->GetPane( window ).DockFixed( obj->GetPropertyAsInteger("dock_fixed") );
+	m_auimgr->GetPane( window ).Movable( obj->GetPropertyAsInteger("movealbe") );
+	m_auimgr->GetPane( window ).Floatable(obj->GetPropertyAsInteger("floatable") );
+	m_auimgr->GetPane( window ).FloatingSize( obj->GetPropertyAsSize("pane_size") );
 	
-	m_auimgr->GetPane( window ).FloatingSize( obj->GetPropertyAsSize( wxT("pane_size") ));
-	
-	if( obj->GetPropertyAsInteger( wxT("toolbar_pane") ) ) m_auimgr->GetPane( window ).ToolbarPane();
-	if( !obj->IsNull( wxT("position") ) )  m_auimgr->GetPane( window ).Position( obj->GetPropertyAsInteger( wxT("position") ));
-	if( !obj->IsNull( wxT("row") ) )  m_auimgr->GetPane( window ).Row( obj->GetPropertyAsInteger( wxT("row") ));
-    if( !obj->IsNull( wxT("layer") ) )  m_auimgr->GetPane( window ).Layer( obj->GetPropertyAsInteger( wxT("layer") ));
-	if( !obj->GetPropertyAsInteger( wxT("show") ) ) m_auimgr->GetPane( window ).Hide();
+	if( obj->GetPropertyAsInteger("toolbar_pane") )
+		m_auimgr->GetPane( window ).ToolbarPane();
+
+	if( !obj->IsNull("position") )
+		m_auimgr->GetPane( window ).Position( obj->GetPropertyAsInteger("position") );
+
+	if( !obj->IsNull("row") )
+		m_auimgr->GetPane( window ).Row( obj->GetPropertyAsInteger("row") );
+
+    if( !obj->IsNull("layer") )
+		m_auimgr->GetPane( window ).Layer( obj->GetPropertyAsInteger("layer") );
+
+	if( !obj->GetPropertyAsInteger("show") )
+		m_auimgr->GetPane( window ).Hide();
 
 }
 /////////////////////////////////////////////////////////////////////////////
@@ -1143,7 +1163,8 @@ void DesignerWindow::HighlightSelection( wxDC& dc )
 {
 	// Do not highlight if AUI is used
 	VisualEditor *editor = wxDynamicCast( GetParent(), VisualEditor );
-	if( editor && editor->m_auimgr ) return ;
+	if( editor && editor->m_auimgr )
+		return ;
 
 	wxSize size;
 	PObjectBase object = m_selObj.lock();
@@ -1325,9 +1346,8 @@ void DesignerWindow::SetFrameWidgets( PObjectBase menubar, wxWindow *toolbar, wx
 		contentSizer->AddStretchSpacer( 1 );
 
 	if ( statusbar )
-	{
 		contentSizer->Add( statusbar, 0, wxEXPAND | wxALL, 0 );
-	}
+
 	contentPanel->SetSizer( dummySizer, false );
 	contentPanel->Layout();
 }
@@ -1431,19 +1451,14 @@ DesignerWindow::Wizard::Wizard( wxWindow* parent, wxWindowID id,
 	m_btnBack->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Wizard::OnWizardBack ), NULL, this );
 	m_btnNext->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Wizard::OnWizardNext ), NULL, this );
 	m_btnCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Wizard::OnWizardCancel ), NULL, this );
-
-}
-
-DesignerWindow::Wizard::~Wizard()
-{
-	// Disconnect Events
-	m_btnBack->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Wizard::OnWizardBack ), NULL, this );
-	m_btnNext->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Wizard::OnWizardNext ), NULL, this );
-	m_btnCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Wizard::OnWizardCancel ), NULL, this );
 */
 }
 
 DesignerWindow::Wizard::~Wizard()
 {
-
+/* Disconnect Events
+	m_btnBack->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Wizard::OnWizardBack ), NULL, this );
+	m_btnNext->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Wizard::OnWizardNext ), NULL, this );
+	m_btnCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Wizard::OnWizardCancel ), NULL, this );
+*/
 }

@@ -26,6 +26,12 @@
 #ifndef __VISUAL_EDITOR__
 #define __VISUAL_EDITOR__
 
+#include "innerframe.h"
+#include "plugin.h" // TODO: Unused?
+//#include "rad/designer/resizablepanel.h"
+#include "rad/designer/visualobj.h"
+#include "utils/wxfbdefs.h"
+
 #include <wx/wx.h>
 #include <wx/intl.h>
 #include <wx/sashwin.h>
@@ -45,24 +51,18 @@
 #include <wx/gbsizer.h>
 #include <wx/aui/aui.h>
 
-#include "innerframe.h"
-//#include "plugin.h" TODO: Unused?
-//#include "rad/designer/resizablepanel.h"
-#include "rad/designer/visualobj.h"
-#include "utils/wxfbdefs.h"
-
 /**
  * Extends the wxInnerFrame to show the object highlight
  */
 class DesignerWindow : public wxInnerFrame
 {
 private:
-	int m_x;
-	int m_y;
-	wxSizer *m_selSizer;
-	wxObject *m_selItem;
+	int 		m_x;
+	int			m_y;
+	wxSizer 	*m_selSizer;
+	wxObject 	*m_selItem;
 	WPObjectBase m_selObj;
-	wxWindow *m_actPanel;
+	wxWindow 	*m_actPanel;
 
 	void DrawRectangle( wxDC& dc, const wxPoint& point, const wxSize& size, PObjectBase object );
 

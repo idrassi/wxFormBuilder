@@ -727,7 +727,7 @@ bool ApplicationData::SelectObject( PObjectBase obj, bool force /*= false*/, boo
 
 	if ( notify )
 	{
-		NotifyObjectSelected( obj );
+		NotifyObjectSelected( obj, force );
 	}
 	return true;
 }

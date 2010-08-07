@@ -26,6 +26,7 @@
 #define __INNER_FRAME__
 
 #include <wx/wx.h>
+#include <wx/aui/aui.h>
 
 class wxInnerFrame : public wxPanel
 {
@@ -48,7 +49,7 @@ private:
 
 	TitleBar *m_titleBar;
 	wxPanel *m_frameContent;
-  
+//	wxAuiManager m_mgr
 protected:
     wxSize DoGetBestSize() const;
 
@@ -57,12 +58,12 @@ public:
 				const wxPoint &pos = wxDefaultPosition,
 				const wxSize &size = wxDefaultSize,
 				long style = 0);
-
+//	virtual ~wxInnerFrame() { m_mgr.UnInit(); }
 	wxPanel *GetFrameContentPanel() { return m_frameContent; }
 	void OnMouseMotion( wxMouseEvent& e );
 	void OnLeftDown( wxMouseEvent& e );
 	void OnLeftUp( wxMouseEvent& e );
-
+//	wxAuiManager& GetAuiManager() { return m_mgr; }
 	void SetTitle( const wxString &title );
 	wxString GetTitle();
 

@@ -228,11 +228,11 @@ Written by
     <template name="construction">
 	#ifparenttypeequal "toolbar"
         @{
-		#parent $name->AddTool( $id, $label, $bitmap, wxNullBitmap, $kind, $tooltip, $statusbar );
+		#parent $name->AddTool( $id, $label, $bitmap, wxNullBitmap, $kind, $tooltip, $statusbar, NULL );
 	@}
 	#ifparenttypeequal "toolbar_form"
         @{
-		AddTool( $id, $label, $bitmap, wxNullBitmap, $kind, $tooltip, $statusbar );
+		AddTool( $id, $label, $bitmap, wxNullBitmap, $kind, $tooltip, $statusbar, NULL );
 	@}
     </template>
 	<template name="evt_entry_OnToolClicked">EVT_TOOL( $id, #handler )</template>
