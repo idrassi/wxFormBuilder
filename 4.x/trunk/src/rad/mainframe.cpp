@@ -651,7 +651,7 @@ void MainFrame::OnObjectCreated( wxFBObjectEvent& event )
 	}
 	else
 	{
-		message = _("Impossible to create the object. Did you forget to add a sizer/parent object or turn on/off an AUI management??");
+		message = _("Impossible to create the object. Did you forget to add a sizer/parent object or turn on/off an AUI management?");
 		wxMessageBox( message, "wxFormBuilder", wxICON_WARNING | wxOK );
 	}
 	GetStatusBar()->SetStatusText( message );

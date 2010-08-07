@@ -145,7 +145,7 @@ public:
 		{
 			xrc.AddPropertyValue( "centered", "1" );
 		}
-		xrc.AddProperty( _("aui_managed"), _("aui_managed"), XRC_TYPE_BOOL);
+		xrc.AddProperty( "aui_managed", "aui_managed", XRC_TYPE_BOOL);
 		return xrc.GetXrcObject();
 	}
 
@@ -155,7 +155,7 @@ public:
 		filter.AddWindowProperties();
 		filter.AddProperty( "title", "title", XRC_TYPE_TEXT );
 		filter.AddProperty( "centered", "center", XRC_TYPE_BITLIST );
-		filter.AddProperty( _("aui_managed"), _("aui_managed"), XRC_TYPE_BOOL);
+		filter.AddProperty( "aui_managed", "aui_managed", XRC_TYPE_BOOL);
 		return filter.GetXfbObject();
 	}
 };
