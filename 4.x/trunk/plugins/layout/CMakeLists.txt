@@ -1,7 +1,6 @@
 ############################################################
-# 
+# plugin-layout
 ############################################################
-PROJECT(plugin-layout)
 
 # define header and source files for the library
 set (HEADER_FILES

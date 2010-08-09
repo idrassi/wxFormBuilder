@@ -1,8 +1,6 @@
 ############################################################
-# 
+# plugin-interface
 ############################################################
-PROJECT(plugin-interface)
-
 
 # define header source files for the library
 SET (HEADER_FILES

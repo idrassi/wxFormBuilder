@@ -1,8 +1,7 @@
 ######################################
 # CMAKE settings / workarounds
 ######################################
-
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8) # 2.6 should be okay..but I didn't checked it
 cmake_policy(VERSION 2.8)
 set(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE) 
 
@@ -11,10 +10,7 @@ SET(MONOLITH_DEFAULT FALSE)
 
 if(WIN32)
   SET(MONOLITH_DEFAULT TRUE)   
-  # use relative path (only work partial)
   set(CMAKE_USE_RELATIVE_PATHS true)
-  # no ZERO_CHECK
-  set(CMAKE_SUPPRESS_REGENERATION true)
 endif()
 
 # Remove /STACK:10000000 set by CMake. This value for stack size
@@ -57,7 +53,16 @@ if (MINGW)
 endif ()
 
 # Specify build path
-SET(wxFB_PRJ_OUTPUT_DIR "${wxFB_PRJ_SOURCE_DIR}/output/bin")
+if (WIN32)
+  # win32: build in output directory (and get rid of 'debug/release' sub dir)
+  SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${wxFB_PRJ_SOURCE_DIR}/output")
+  SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+  SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+else()
+  SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+  SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/wxformbuilder")
+endif()
+
 IF (wxFB_DEBUG)
     SET(CMAKE_DEBUG_POSTFIX "d")
 ENDIF()
@@ -77,7 +82,7 @@ ELSE()
   FIND_PACKAGE(wxWidgets COMPONENTS base core aui adv html xml richtext xrc propgrid stc net)
   
   IF(NOT wxWidgets_FOUND)
-    MESSAGE(SEND_ERROR "wxWidgets libs/dlls not found!\nInstall/Compile wxWidgetSet.\nMake sure WXWIN environment variable is set.")
+    MESSAGE(SEND_ERROR "wxWidgets 2.9+ libs/dlls not found!\nInstall/Compile wxWidget.\nMake sure WXWIN environment variable is set.")
   ENDIF()
 ENDIF()
 
@@ -89,18 +94,6 @@ ENDIF()
 
 # Doxygen -> http://www.stack.nl/~dimitri/doxygen/index.html
 INCLUDE(FindDoxygen)
-
-######################################
-# Helper
-######################################
-#  set output directory
-#macro(SET_OUT_DIR target dir)
-#  SET_TARGET_PROPERTIES( ${target} PROPERTIES
-#    RUNTIME_OUTPUT_DIRECTORY "${wxFB_PRJ_OUTPUT_DIR}/${dir}"
-#    RUNTIME_OUTPUT_DIRECTORY_RELEASE "${wxFB_PRJ_OUTPUT_DIR}/${dir}"
-#    RUNTIME_OUTPUT_DIRECTORY_DEBUG "${wxFB_PRJ_OUTPUT_DIR}/${dir}"
-#    )
-#endmacro()
 
 ######################################
 # Helper for PLUGINs
@@ -142,24 +135,23 @@ macro(ADD_PLUGIN)
   TARGET_LINK_LIBRARIES( ${ARGV0} plugin-interface TiCPP )
 
   # set output name and dir
-  SET(LIB_PREFIX "")
-  if(WIN32)   
-    # for WIN we have to add lib .. just to be linux compatible
-    SET(LIB_PREFIX "lib")
+  if (WIN32)
+    SET_TARGET_PROPERTIES( ${ARGV0} PROPERTIES
+      RUNTIME_OUTPUT_DIRECTORY "${wxFB_PRJ_SOURCE_DIR}/output/plugins/${wxFB_PRJ_CUR_PLUGIN_NAME}"
+      RUNTIME_OUTPUT_DIRECTORY_RELEASE "${wxFB_PRJ_SOURCE_DIR}/output/plugins/${wxFB_PRJ_CUR_PLUGIN_NAME}"
+      RUNTIME_OUTPUT_DIRECTORY_DEBUG "${wxFB_PRJ_SOURCE_DIR}/output//plugins/${wxFB_PRJ_CUR_PLUGIN_NAME}"
+    )  
+  else()
+    SET_TARGET_PROPERTIES( ${ARGV0} PROPERTIES
+      RUNTIME_OUTPUT_DIRECTORY "${wxFB_PRJ_SOURCE_DIR}/output/lib/wxformbuilder"
+      )
   endif()
 
-#  SET_OUT_DIR( ${ARGV0} "${wxFB_PRJ_SOURCE_DIR}/output/lib/wxformbuilder")
-
   SET_TARGET_PROPERTIES( ${ARGV0} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${wxFB_PRJ_SOURCE_DIR}/output/lib/wxformbuilder"
-    RUNTIME_OUTPUT_DIRECTORY_RELEASE "${wxFB_PRJ_SOURCE_DIR}/output/lib/wxformbuilder"
-    RUNTIME_OUTPUT_DIRECTORY_DEBUG "${wxFB_PRJ_SOURCE_DIR}/output/lib/wxformbuilder"
-    )
-
-  SET_TARGET_PROPERTIES( ${ARGV0} PROPERTIES
-      RUNTIME_OUTPUT_NAME "${LIB_PREFIX}${wxFB_PRJ_CUR_PLUGIN_NAME}"
-      LIBRARY_OUTPUT_NAME "${LIB_PREFIX}${wxFB_PRJ_CUR_PLUGIN_NAME}"
-      ARCHIVE_OUTPUT_NAME "${LIB_PREFIX}${wxFB_PRJ_CUR_PLUGIN_NAME}"
+      PREFIX "lib"   # use "lib"-prefix on all plattforms
+      RUNTIME_OUTPUT_NAME "${wxFB_PRJ_CUR_PLUGIN_NAME}"
+      LIBRARY_OUTPUT_NAME "${wxFB_PRJ_CUR_PLUGIN_NAME}"
+      ARCHIVE_OUTPUT_NAME "${wxFB_PRJ_CUR_PLUGIN_NAME}"
     )
   
   # INSTALL
@@ -194,8 +186,9 @@ add_subdirectory(plugins)
 # Doxygen 
 ######################################
 IF (DOXYGEN_FOUND)
-	ADD_CUSTOM_TARGET(doc COMMAND 
-    ${DOXYGEN_EXECUTABLE} ${wxFB_PRJ_SOURCE_DIR}/Doxyfile
+  CONFIGURE_FILE( "${wxFB_PRJ_SOURCE_DIR}/cmake/Doxyfile.in" ${CMAKE_BINARY_DIR}/doxyfile)
+	ADD_CUSTOM_TARGET(DOC COMMAND 
+    ${DOXYGEN_EXECUTABLE} ${CMAKE_BINARY_DIR}/Doxyfile
     WORKING_DIRECTORY ${wxFB_PRJ_SOURCE_DIR}
     COMMENT "Building documentation" VERBATIM
   )
@@ -204,6 +197,6 @@ ENDIF()
 ######################################
 # some "make" helpers
 ######################################
-if (UNIX)
-    ADD_CUSTOM_TARGET(UNINSTALL  "${CMAKE_COMMAND}" -E cmake_echo_color --switch=$(COLOR) --cyan "PLEASE USE: xargs rm < install_manifest.txt") 
-endif()
+#if (UNIX)
+#    ADD_CUSTOM_TARGET(uninstall  "${CMAKE_COMMAND}" -E cmake_echo_color --switch=$(COLOR) --cyan "PLEASE USE: xargs rm < install_manifest.txt") 
+#endif()
