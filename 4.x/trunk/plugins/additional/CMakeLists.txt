@@ -1,7 +1,6 @@
 ############################################################
-# 
+# plugin-additional
 ############################################################
-PROJECT(plugin-additional)
 
 # define header and source files for the library
 set (HEADER_FILES

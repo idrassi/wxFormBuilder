@@ -1,7 +1,6 @@
 ############################################################
 # Main Application
 ############################################################
-PROJECT(wxFormBuilder)
 
 # Source files
 set (CODEGEN_FILES
@@ -121,7 +120,10 @@ set (UTIL_FILES
 	utils/wxlogstring.h
   )
 
+
+
 # Plattform depending
+set (SOURCE_FILES "")
 IF( WIN32 )
   SET(SOURCE_FILES ${SOURCE_FILES} 
                    wxFormBuilder.rc)
@@ -178,18 +180,24 @@ IF( WIN32 )
   SET_TARGET_PROPERTIES(wxFormBuilder PROPERTIES LINK_FLAGS " /MANIFEST:NO")
   
   if (MSVC_VERSION GREATER 1599)
-    message(WARNING "in VS2010 you have to disable 'Generate Manifest' in wxFormBuilder project linker options")
+    message(WARNING "(CMake bug): in VS2010 you have to disable 'Generate Manifest' in wxFormBuilder project linker options.")
   ENDIF()
 ENDIF( WIN32 )
 
 ADD_DEPENDENCIES( wxFormBuilder TiCPP)
 TARGET_LINK_LIBRARIES(wxFormBuilder ${wxWidgets_LIBRARIES} TiCPP)
 
-# set output directory
-#SET_OUT_DIR( wxFormBuilder "")
-
 # use lower case target name(for linux)
 SET_TARGET_PROPERTIES( wxFormBuilder PROPERTIES RUNTIME_OUTPUT_NAME "wxformbuilder" )
+
+# create symlinks for debugging on linux
+if (UNIX)
+    ADD_CUSTOM_COMMAND(TARGET wxFormBuilder POST_BUILD
+                    COMMAND "${CMAKE_COMMAND}" -E  make_directory "${CMAKE_BINARY_DIR}/share"
+                    COMMAND "${CMAKE_COMMAND}" -E create_symlink "${wxFB_PRJ_SOURCE_DIR}/output/" "${CMAKE_BINARY_DIR}/share/wxformbuilder"
+                    COMMENT "Creating debug symlinks"
+                                                 )
+endif()
 
 INSTALL(TARGETS wxFormBuilder DESTINATION bin)
 INSTALL(DIRECTORY "${wxFB_PRJ_SOURCE_DIR}/output/xml"
