@@ -1402,7 +1402,7 @@ DesignerWindow::Wizard::Wizard( wxWindow* parent, wxWindowID id,
 	m_fgsWizard->AddGrowableCol( 0 );
 	m_fgsWizard->SetFlexibleDirection( wxBOTH );
 	m_fgsWizard->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	m_fgsWizard->SetMinSize( wxSize( 420,350 ) );
+	m_fgsWizard->SetMinSize( wxSize( 410,340 ) );
 
 	wxFlexGridSizer* m_fgsPage;
 	m_fgsPage = new wxFlexGridSizer( 1, 2, 0, 0 );
@@ -1418,7 +1418,7 @@ DesignerWindow::Wizard::Wizard( wxWindow* parent, wxWindowID id,
 	m_fgsPage->Add( m_pnlPage, 0, wxALL | wxEXPAND, 5 );
 
 	m_fgsWizard->Add( m_fgsPage, 0, wxALL | wxEXPAND, 5 );
-	m_fgsWizard->Add( 0, 10, 1, wxEXPAND, 5 );
+//	m_fgsWizard->Add( 0, 10, 1, wxEXPAND, 5 );
 
 	m_lneSep = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	m_fgsWizard->Add( m_lneSep, 0, wxALL | wxEXPAND, 5 );

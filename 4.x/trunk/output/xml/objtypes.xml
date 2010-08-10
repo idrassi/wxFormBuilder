@@ -207,8 +207,7 @@
 	</objtype>
 
 	<objtype name="wizardpage" item="1">
-		<childtype name="container" nmax="1"/>
-		<childtype name="widget" nmax="1"/>
+		<childtype name="container" nmax="1" />
 	</objtype>
 
   <objtype name="menubar">
