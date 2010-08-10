@@ -1,0 +1,64 @@
+----- NEED REVIEW -----
+--currently it's just a quickly written collection of notes ---
+
+wxFormBuilder 4
+requires: wxWidgets 2.9+
+
+LINUX
+-----
+Build & Install
+ (here for Ubuntu but others are similar) 
+> mkdir build; cd build
+> cmake ..
+> make
+> sudo make install
+
+If you need more control or want to change setting use "ccmake" or "cmake-gui" instead of cmake.
+
+Dev's:
+- for better debugging set CMAKE_BUILD_TYPE to "Debug" to include debug informations
+- you may also set wxFB_DEBUG=ON to add extra wxformbuilder Debug stuff
+- if you have multiple wxWidget-Libs installed you may set 'wxWidgets_CONFIG_EXECUTABLE' to the corresponding wx-config
+Commandline example: cmake -DCMAKE_BUILD_TYPE=Debug -DwxFB_DEBUG=ON -DwxWidgets_CONFIG_EXECUTABLE=~/wx2-9 ..
+
+// IN CHANGE:
+//- binaries are written to 'output' directory 
+//  this may require some additional steps in you IDE
+//  for example in eclipse: 
+//    debug-configuration: Application: output/bin/wxformbuilder
+- CMake is integrated into the resulting makefiles.
+  So you only have to run CMake again if you want to change the build-options.
+- use 'make DOC' to build source documentation (doxygen required)
+
+
+
+Windows
+-------
+Run "cmake-gui" and choose source code directory.
+For build directory add an additional /build (too keep main source clean)
+On the first run cmake will prompt you to choose an IDE.
+CMake doesn't support to build 32bit & 64bit solutions add once.
+So you might have too choose which version you want.
+Note: Binaries are written to 'output' directory.
+
+Visual-Studio
+-------------
+Open the "wx_FB" solution from you build-folder.
+VS2010: Because of a bug in CMAKE you have to manually disable manifest generation in wxFormBuilder.
+        (properties->Linker->Manifestfile->Generate Manifest)
+When CMake files are modified VS will auto regenerate the solution on build.
+You may have to reload project/solution. This is usally detected by VS or by the VS-CMake addin.
+For Debug-Runs you should set "wxFormBuilder" as start project and set Workingdirectory to "${TargetDir}".
+
+The special projects in the solution:
+- 'DOC' will generate source-code documentation in docs/html/index.htm
+  (requires Doxygen; after doxygen installation you have to (re-)run cmake)
+- 'INSTALL' will copy all files to standard installtion path.  ( like c:/Program files/wxformbuilder )
+  Usually you only need that for final testing.
+- 'ZERO_CHECK' this is internal only - to check cmake files and update solution
+
+
+  
+
+
+
