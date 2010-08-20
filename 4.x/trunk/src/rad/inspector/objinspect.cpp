@@ -399,7 +399,7 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
 		case PT_TEXT: {
 			Debug::Print( _("Property added [TEXT]") + name );
 			result = new wxLongStringProperty( name, wxPG_LABEL, prop->GetValueAsString() );
-			result->SetFlag( wxPG_PROP_NO_ESCAPE );
+//			result->SetFlag( wxPG_PROP_NO_ESCAPE ); TODO ?
 			break;
 		}
 		case PT_BOOL: {

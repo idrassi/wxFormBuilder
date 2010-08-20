@@ -93,13 +93,6 @@ int wxFormBuilderApp::OnRun()
 	// Using a space so the initial 'w' will not be capitalized in wxLogGUI dialogs
 	wxApp::SetAppName(" wxFormBuilder");
 
-	// Creating the wxConfig manually so there will be no space
-	// The old config (if any) is returned, delete it
-	// TODO: make a new wxFormBuilder.layout config file to differ from older versions
-	//       and put it in a wxFormBuilder folder to let add different config files (future use)
-	//       using wxFileConfig (Windows version will use Documents & Settings instead of registry)
-	delete wxConfigBase::Set( new wxConfig("wxFormBuilder") );
-
 	// Get the data directory
 	wxStandardPathsBase& stdPaths = wxStandardPaths::Get();
 	wxString dataDir = stdPaths.GetDataDir();
@@ -243,17 +236,27 @@ int wxFormBuilderApp::OnRun()
 
 	wxYield();
 
-	// Read size and position from config file
-	wxConfigBase *config = wxConfigBase::Get();
-	config->SetPath("/mainframe");
-	int x, y, w, h;
-	// x = y = w = h = -1;
-	config->Read( "PosX", &x );
-	config->Read( "PosY", &y );
-	config->Read( "SizeW", &w );
-	config->Read( "SizeH", &h );
+	wxString confDir(wxStandardPaths::Get().GetUserConfigDir());
+	confDir << wxFileName::GetPathSeparator() << ".wxformbuilder4";
+	if ( !wxDirExists(confDir) )
+		wxMkdir(confDir);
 
-	config->SetPath("/");
+	confDir << wxFileName::GetPathSeparator() << "wxformbuilder.layout";
+
+	// Read size and position from config file
+	wxFileConfig *pConfig = new wxFileConfig( wxEmptyString, wxEmptyString, confDir,
+												wxEmptyString, wxCONFIG_USE_LOCAL_FILE );
+	wxConfigBase::Set(pConfig);
+
+	int x, y, w, h;
+	x = y = w = h = -1;
+
+	pConfig->SetPath("/mainframe");
+	pConfig->Read( "PosX", &x );
+	pConfig->Read( "PosY", &y );
+	pConfig->Read( "SizeW", &w );
+	pConfig->Read( "SizeH", &h );
+	pConfig->SetPath("/");
 
 	m_frame = new MainFrame( NULL, wxID_ANY, 0, wxPoint( x, y ), wxSize( w, h ) );
 	if ( !justGenerate )
