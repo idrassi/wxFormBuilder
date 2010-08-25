@@ -1541,6 +1541,33 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 					break;
 			}
 		}
+		else if ( type == wxT("collapsiblepanewindow") )
+		{
+			m_source->WriteLn( GetCode( obj, wxT("declaration") ) );
+			m_source->WriteLn( GetCode( obj, wxT("construction") ) );
+
+			// the child sizer
+			PObjectBase sizer = obj->GetChild( 0 );
+
+			//GenConstruction( sizer, true );
+			m_source->WriteLn( GetCode( sizer, wxT("declaration") ) );
+			m_source->WriteLn( GetCode( sizer, wxT("construction") ) );
+			GenSettings(sizer->GetObjectInfo(), sizer );
+
+			// generate teh code for the sizer's children
+			for ( unsigned int i = 0; i < sizer->GetChildCount(); i++ )
+			{
+				PObjectBase child = sizer->GetChild( i );
+				GenConstruction(child, false);
+			}
+
+			wxString afterAddChild = GetCode( obj, wxT("after_addchild") );
+			if ( !afterAddChild.empty() )
+			{
+				m_source->WriteLn( afterAddChild );
+			}
+			m_source->WriteLn( wxT("") );
+		}
 		else if (   type == "menubar"	    ||
                     type == "menu"		    ||
                     type == "submenu"	    ||

@@ -283,16 +283,17 @@ PObjectBase TemplateParser::GetWxParent()
 	PObjectBase wxparent;
 
 	std::vector< PObjectBase > candidates;
-	candidates.push_back( m_obj->FindNearAncestor( "container" ) );
-	candidates.push_back( m_obj->FindNearAncestor( "toolbar" ) );
-	candidates.push_back( m_obj->FindNearAncestor( "splitter" ) );
-	candidates.push_back( m_obj->FindNearAncestor( "notebook" ) );
-	candidates.push_back( m_obj->FindNearAncestor( "listbook" ) );
-	candidates.push_back( m_obj->FindNearAncestor( "choicebook" ) );
-	candidates.push_back( m_obj->FindNearAncestor( "treebook" ) );
-	candidates.push_back( m_obj->FindNearAncestor( "toolbook" ) );
-	candidates.push_back( m_obj->FindNearAncestor( "auinotebook" ) );
-	candidates.push_back( m_obj->FindNearAncestor( "flatnotebook" ) );
+	candidates.push_back( m_obj->FindNearAncestor("container") );
+	candidates.push_back( m_obj->FindNearAncestor("toolbar") );
+	candidates.push_back( m_obj->FindNearAncestor("splitter") );
+	candidates.push_back( m_obj->FindNearAncestor("notebook") );
+	candidates.push_back( m_obj->FindNearAncestor("listbook") );
+	candidates.push_back( m_obj->FindNearAncestor("choicebook") );
+	candidates.push_back( m_obj->FindNearAncestor("treebook") );
+	candidates.push_back( m_obj->FindNearAncestor("toolbook") );
+	candidates.push_back( m_obj->FindNearAncestor("auinotebook") );
+	candidates.push_back( m_obj->FindNearAncestor("flatnotebook") );
+	candidates.push_back( m_obj->FindNearAncestor("collapsiblepanewindow") );
 
 	for ( size_t i = 0; i < candidates.size(); i++ )
 	{

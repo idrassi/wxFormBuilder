@@ -104,6 +104,7 @@
 	<childtype name="auinotebook" nmax="1" />
     <childtype name="flatnotebook" nmax="1" />
     <childtype name="treelistctrl" nmax="1" />
+	<childtype name="collapsiblepane" nmax="1" />
   </objtype>
 
   <objtype name="gbsizeritem" item="1">
@@ -123,6 +124,7 @@
 	<childtype name="auinotebook" nmax="1" />
     <childtype name="flatnotebook" nmax="1" />
     <childtype name="treelistctrl" nmax="1" />
+	<childtype name="collapsiblepane" nmax="1" />
   </objtype>
 
   <objtype name="splitter" >
@@ -200,6 +202,14 @@
   <objtype name="flatnotebookpage" item="1">
     <childtype name="container" nmax="1" />
     <childtype name="widget" nmax="1" />
+  </objtype>
+
+  <objtype name="collapsiblepane" >
+    <childtype name="collapsiblepanewindow" nmax="1" />
+  </objtype>
+
+  <objtype name="collapsiblepanewindow" item="1">
+    <childtype name="sizer" nmax="1" />
   </objtype>
 
 	<objtype name="wizard">
