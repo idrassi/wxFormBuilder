@@ -28,6 +28,7 @@
 #include <xrcconv.h>
 #include <ticpp.h>
 
+#include <wx/collpane.h>
 #include <wx/splitter.h>
 #include <wx/listctrl.h>
 
@@ -61,6 +62,7 @@ protected:
 	void OnToolbookPageChanged( wxToolbookEvent& event );
 	void OnAuiNotebookPageChanged( wxAuiNotebookEvent& event );
 	void OnSplitterSashChanged( wxSplitterEvent& event );
+	void OnCollapsiblePaneChanged( wxCollapsiblePaneEvent& event );
 
 	template < class T >
 		void OnBookPageChanged( int selPage, wxEvent* event )
@@ -125,6 +127,7 @@ BEGIN_EVENT_TABLE( ComponentEvtHandler, wxEvtHandler )
 	EVT_AUINOTEBOOK_PAGE_CLOSE( -1, ComponentEvtHandler::OnAuiNotebookPageClosed )
 	EVT_AUINOTEBOOK_ALLOW_DND( -1, ComponentEvtHandler::OnAuiNotebookAllowDND )
 	EVT_SPLITTER_SASH_POS_CHANGED( -1, ComponentEvtHandler::OnSplitterSashChanged )
+	EVT_COLLAPSIBLEPANE_CHANGED( -1, ComponentEvtHandler::OnCollapsiblePaneChanged )
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1091,6 +1094,107 @@ public:
 */
 };
 
+class CollapsiblePaneComponent : public ComponentBase
+{
+public:
+
+	wxObject* Create(IObject *obj, wxObject *parent)
+	{
+		wxCollapsiblePane* collapsiblePane = new wxCollapsiblePane((wxWindow *)parent,-1,
+			obj->GetPropertyAsString(_("label")),
+			obj->GetPropertyAsPoint(_("pos")),
+			obj->GetPropertyAsSize(_("size")),
+			obj->GetPropertyAsInteger(_("window_style")));
+/*
+        ComponentEvtHandler* eventHandler = new ComponentEvtHandler( collapsiblePane, GetManager() );
+        collapsiblePane->PushEventHandler( eventHandler );
+        collapsiblePane->Collapse( false );
+
+	    bool collapsed = ( obj->GetPropertyAsInteger(_T("collapsed")) != 0 ? true : false );
+        wxCollapsiblePaneEvent event( collapsiblePane, -1, collapsed );
+        eventHandler->AddPendingEvent( event );
+*/
+        collapsiblePane->Collapse( ( obj->GetPropertyAsInteger(_T("collapsed")) != 0 ? true : false ) );
+        collapsiblePane->PushEventHandler( new ComponentEvtHandler( collapsiblePane, GetManager() ) );
+
+		return collapsiblePane;
+	}
+
+	ticpp::Element* ExportToXrc(IObject *obj)
+	{
+		ObjectToXrcFilter xrc(obj, _("wxCollapsiblePane"), obj->GetPropertyAsString(_("name")));
+		xrc.AddWindowProperties();
+		xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+		xrc.AddProperty(_("collapsed"),_("collapsed"),XRC_TYPE_BOOL);
+		return xrc.GetXrcObject();
+	}
+
+	ticpp::Element* ImportFromXrc(ticpp::Element *xrcObj)
+	{
+		XrcToXfbFilter filter(xrcObj, _("wxCollapsiblePane"));
+		filter.AddWindowProperties();
+		filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+		filter.AddProperty(_("collapsed"),_("collapsed"),XRC_TYPE_BOOL);
+		return filter.GetXfbObject();
+	}
+
+};
+
+void ComponentEvtHandler::OnCollapsiblePaneChanged( wxCollapsiblePaneEvent& event )
+{
+    if ( m_window != event.GetEventObject() )
+    {
+        return;
+    }
+
+	// Modify the "collapsed" property
+	wxCollapsiblePane* collapsiblePane = wxDynamicCast( m_window, wxCollapsiblePane );
+	if ( collapsiblePane != NULL )
+	{
+		bool collapsed = event.GetCollapsed();
+
+		m_manager->ModifyProperty( collapsiblePane, _("collapsed"), ( collapsed ? wxT("1") : wxT("0") ) );
+
+        collapsiblePane->Collapse( collapsed );
+
+        // select the corresponding collPane in the object tree
+        m_manager->SelectObject( collapsiblePane );
+	}
+}
+
+
+class CollapsiblePaneWindowComponent : public ComponentBase
+{
+public:
+
+	wxObject* Create(IObject *obj, wxObject *parent)
+	{
+		wxCollapsiblePane* collapsiblePane = wxDynamicCast( parent, wxCollapsiblePane );
+
+        if ( collapsiblePane == NULL )
+        {
+            wxLogError( _("CollapsiblePaneWindow must be added to a wxCollapsiblePane!") );
+            return NULL;
+        }
+
+		wxWindow* window = collapsiblePane->GetPane();
+		return window;
+	}
+
+	ticpp::Element* ExportToXrc(IObject *obj)
+	{
+		ObjectToXrcFilter xrc(obj, _("CollapsiblePaneWindow"), obj->GetPropertyAsString(_("name")));
+		xrc.AddWindowProperties();
+		return xrc.GetXrcObject();
+	}
+
+	ticpp::Element* ImportFromXrc(ticpp::Element *xrcObj)
+	{
+		XrcToXfbFilter filter(xrcObj, _("CollapsiblePaneWindow"));
+		filter.AddWindowProperties();
+		return filter.GetXfbObject();
+	}
+};
 ///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()
@@ -1119,6 +1223,10 @@ ABSTRACT_COMPONENT("toolbookpage", ToolbookPageComponent)
 
 WINDOW_COMPONENT("wxAuiNotebook", AuiNotebookComponent)
 ABSTRACT_COMPONENT("auinotebookpage", AuiNotebookPageComponent)
+
+// wxCollapsiblePane
+WINDOW_COMPONENT("wxCollapsiblePane",CollapsiblePaneComponent)
+WINDOW_COMPONENT("collapsiblepanewindow",CollapsiblePaneWindowComponent)
 
 // wxSplitterWindow
 MACRO(wxSP_3D)

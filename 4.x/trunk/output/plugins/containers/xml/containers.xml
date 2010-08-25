@@ -216,4 +216,18 @@ wxTreebook and wxToolbook by
 		<property name="select" type="bool" 	help="Select Page when Adding">0</property>
 	</objectinfo>
 
+  <objectinfo class="wxCollapsiblePane" icon="collpane.xpm" type="collapsiblepane">
+    <inherits class="wxWindow">
+        <property name="window_style">wxTAB_TRAVERSAL</property>
+	</inherits>
+    <property name="name" type="text">m_collapsiblePane</property>
+    <property name="label" type="wxString_i18n">Collapsible Pane</property>
+    <property name="collapsed" type="bool">0</property>
+    <event name="OnCollapsiblePaneChanged" class="wxCollapsiblePaneEvent" help="Process a wxEVT_COLLAPSIBLEPANE_CHANGED event, when the user shows or hides the collapsible pane." />
+  </objectinfo>
+
+  <objectinfo class="collapsiblepanewindow" icon="collpane.xpm" type="collapsiblepanewindow">
+	<property name="name" type="text">collapsiblePaneWindow</property>
+  </objectinfo>
+
 </package>

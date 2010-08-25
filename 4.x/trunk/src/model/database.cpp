@@ -461,6 +461,7 @@ void ObjectDatabase::SetDefaultLayoutProperties(PObjectBase sizeritem)
 				obj_type == "auinotebook"		||
 				obj_type == "flatnotebook"		||
 				obj_type == "treelistctrl"		||
+				obj_type == "collapsiblepane" 	||
 				obj_type == "container" )
 	{
 		if ( proportion )
@@ -813,6 +814,7 @@ bool ObjectDatabase::HasCppProperties(wxString type)
 			type == "toolbook"		    ||
 			type == "auinotebook"		||
 			type == "flatnotebook"		||
+			type == "collapsiblepane" 	||
 			type == "treelistctrl" );
 }
 
@@ -1217,6 +1219,7 @@ bool ObjectDatabase::ShowInPalette( wxString type )
 			type == "container"				||
 			type == "treelistctrl"			||
 			type == "treelistctrlcolumn" 	||
+			type == "collapsiblepane" 		||
 			type == "splitter" );
 }
 
