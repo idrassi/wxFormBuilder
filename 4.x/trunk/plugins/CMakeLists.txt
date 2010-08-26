@@ -1,5 +1,6 @@
 add_subdirectory(additional)
 add_subdirectory(common)
 add_subdirectory(containers)
+add_subdirectory(edit)
 add_subdirectory(layout)
 add_subdirectory(picker)
