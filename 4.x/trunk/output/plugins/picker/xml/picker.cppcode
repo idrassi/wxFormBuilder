@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!--
+wxFormBuilder - A Visual Dialog Editor for wxWidgets.
+Copyright (C) 2005 José Antonio Hurtado
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+Written by
+  José Antonio Hurtado - joseantonio.hurtado@gmail.com
+  Juan Antonio Ortega  - jortegalalmolda@gmail.com
+-->
+<codegen language="C++">
+
+  <templates class="wxColourPickerCtrl">
+    <template name="declaration">#class* $name;</template>
+    <template name="construction">
+	   $name = new #class( #wxparent $name, $id,
+	   #ifnull $colour
+	   @{ *wxBLACK, @}
+	   #ifnotnull $colour
+	   @{ $colour, @}
+	   $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, wxDefaultValidator, $window_name @} );
+    </template>
+    <template name="include">@#include &lt;wx/clrpicker.h&gt;</template>
+    <template name="evt_entry_OnColourChanged">EVT_COLOURPICKER_CHANGED( $id, #handler )</template>
+	<template name="evt_connect_OnColourChanged">$name->Connect( wxEVT_COMMAND_COLOURPICKER_CHANGED, #handler, NULL, this );</template>
+  </templates>
+
+  <templates class="wxDatePickerCtrl">
+    <template name="declaration">#class* $name;</template>
+    <template name="construction">$name = new #class( #wxparent $name, $id, wxDefaultDateTime, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, wxDefaultValidator, $window_name @} );</template>
+    <template name="include">
+		@#include &lt;wx/datectrl.h&gt;
+		#nl @#include &lt;wx/dateevt.h&gt;
+	</template>
+	<template name="evt_entry_OnDateChanged">EVT_DATE_CHANGED( $id, #handler )</template>
+	<template name="evt_connect_OnDateChanged">$name->Connect( wxEVT_DATE_CHANGED, #handler, NULL, this );</template>
+  </templates>
+
+  <templates class="wxDirPickerCtrl">
+    <template name="declaration">#class* $name;</template>
+    <template name="construction">
+	   $name = new #class( #wxparent $name, $id, $value, $message, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, wxDefaultValidator, $window_name @} );
+    </template>
+    <template name="include">@#include &lt;wx/filepicker.h&gt;</template>
+    <template name="evt_entry_OnDirChanged">EVT_DIRPICKER_CHANGED( $id, #handler )</template>
+	<template name="evt_connect_OnDirChanged">$name->Connect( wxEVT_COMMAND_DIRPICKER_CHANGED, #handler, NULL, this );</template>
+  </templates>
+
+  <templates class="wxFilePickerCtrl">
+    <template name="declaration">#class* $name;</template>
+    <template name="construction">
+	   $name = new #class( #wxparent $name, $id, $value, $message, $wildcard, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, wxDefaultValidator, $window_name @} );
+    </template>
+    <template name="include">@#include &lt;wx/filepicker.h&gt;</template>
+    <template name="evt_entry_OnFileChanged">EVT_FILEPICKER_CHANGED( $id, #handler )</template>
+	<template name="evt_connect_OnFileChanged">$name->Connect( wxEVT_COMMAND_FILEPICKER_CHANGED, #handler, NULL, this );</template>
+  </templates>
+
+  <templates class="wxFontPickerCtrl">
+    <template name="declaration">#class* $name;</template>
+    <template name="construction">
+	   $name = new #class( #wxparent $name, $id,
+	   #ifnull $value
+	   @{ wxNullFont, @}
+	   #ifnotnull $value
+	   @{ $value, @}
+	   $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, wxDefaultValidator, $window_name @} );
+    </template>
+    <template name="settings">
+		#ifnotnull $max_point_size
+		@{ $name->SetMaxPointSize( $max_point_size ); @}
+	</template>
+    <template name="include">@#include &lt;wx/fontpicker.h&gt;</template>
+    <template name="evt_entry_OnFontChanged">EVT_FONTPICKER_CHANGED( $id, #handler )</template>
+	<template name="evt_connect_OnFontChanged">$name->Connect( wxEVT_COMMAND_FONTPICKER_CHANGED, #handler, NULL, this );</template>
+  </templates>
+
+</codegen>
