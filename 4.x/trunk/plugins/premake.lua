@@ -5,6 +5,7 @@ dopackage( "additional" )
 dopackage( "common" )
 dopackage( "containers" )
 dopackage( "layout" )
+dopackage( "picker" )
 --dopackage( "wxAdditions" )
 
 -- Add dependency packages here.

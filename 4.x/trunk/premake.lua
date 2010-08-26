@@ -16,6 +16,7 @@ dopackage( "plugins/additional" )
 dopackage( "plugins/common" )
 dopackage( "plugins/containers" )
 dopackage( "plugins/layout" )
+dopackage( "plugins/picker" )
 --dopackage( "plugins/wxAdditions" )
 
 -- do this package last, so the post build step actually happens at the end of all the building
