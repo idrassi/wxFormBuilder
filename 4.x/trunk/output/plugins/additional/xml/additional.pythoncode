@@ -26,19 +26,6 @@ Python code generation written by
 -->
 <codegen language="Python">
 
-	<templates class="wxBitmapComboBox">
-		<template name="construction">
-			self.$name = wx.combo.BitmapComboBox( #wxparent $name, $id, $value, $pos, $size, "", $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, wx.DefaultValidator, $window_name @} )
-			#foreach $choices
-			@{ self.$name.Append( #pred.partition(":")[2], wx.Image.ConvertToBitmap(wx.Image(#pred.partition(":")[0]))); @}
-
-		</template>
-		<template name="evt_connect_OnCombobox">self.$name.Bind( wx.EVT_COMBOBOX, #handler )</template>
-		<template name="evt_connect_OnText">self.$name.Bind( wx.EVT_TEXT, #handler )</template>
-		<template name="evt_connect_OnTextEnter">self.$name.Bind( wx.EVT_TEXT_ENTER, #handler )</template>
-		<template name="include">import wx.combo</template>
-	</templates>
-
 	<templates class="wxCalendarCtrl">
 		<template name="construction">self.$name = #class( #wxparent $name, $id, wx.DefaultDateTime, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @} )</template>
 		<template name="include">import wx.calendar</template>
@@ -72,25 +59,6 @@ Python code generation written by
 		<template name="settings">
 			#nl self.$name.ShowHidden( $show_hidden )
 		</template>
-	</templates>
-
-	<templates class="wxMediaCtrl">
-		<template name="construction">
-			self.$name = wx.media.MediaCtrl( #wxparent $name, $id, wx.EmptyString, $pos, $size)
-			#ifnotnull $file
-			@{ #nl self.$name.Load( $file ) @}
-			#ifnotnull $playback_rate
-			@{#nl self.$name.SetPlaybackRate($playback_rate)@}
-			#ifnotnull $volume
-			@{#nl self.$name.SetVolume($volume)@}
-			#ifnotnull $player_controls
-			@{#nl self.$name.ShowPlayerControls(wxMEDIACTRLPLAYERCONTROLS_$player_controls)@}
-		</template>
-		<template name="settings">
-			#ifequal $play "1"
-			@{#nl self.$name.Play()@}
-		</template>	
-		<template name="include">import wx.media</template>
 	</templates>
 
 	<templates class="wxScrollBar">
@@ -163,12 +131,38 @@ Python code generation written by
 		<template name="evt_connect_OnSpinCtrlText">self.$name.Bind( wx.EVT_TEXT, #handler )</template>
 	</templates>
 
-	<templates class="wxTreeCtrl">
-		<template name="construction">self.$name = #class( #wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, wx.DefaultValidator, $window_name @} )</template>
-		<template name="evt_connect_OnTreeGetInfo">self.$name.Bind( wx.EVT_TREE_GET_INFO, #handler )</template>
-		<template name="evt_connect_OnTreeSetInfo">self.$name.Bind( wx.EVT_TREE_SET_INFO, #handler )</template>
-		<template name="evt_connect_OnTreeItemGetTooltip">self.$name.Bind( wx.EVT_TREE_ITEM_GETTOOLTIP, #handler )</template>
-		<template name="evt_connect_OnTreeStateImageClick">self.$name.Bind( wx.EVT_TREE_STATE_IMAGE_CLICK, #handler )</template>
+	<templates class="wxAnimationCtrl">
+		<template name="construction">
+			self.$name = #class( #wxparent $name, $id, wx.animate.NullAnimation, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @} )
+			#ifnotnull $animation
+			@{ #nl self.$name.LoadFile( $animation ) @}
+		</template>
+		<template name="settings">
+			#ifnotnull $inactive_bitmap
+			@{ #nl self.$name.SetInactiveBitmap( $inactive_bitmap ) @}
+			#ifequal $play "1"
+			@{ #nl self.$name.Play() @}
+		</template>
+		<template name="include">import wx.animate</template>
+	</templates>
+
+	<templates class="wxMediaCtrl">
+		<template name="construction">
+			self.$name = wx.media.MediaCtrl( #wxparent $name, $id, wx.EmptyString, $pos, $size)
+			#ifnotnull $file
+			@{ #nl self.$name.Load( $file ) @}
+			#ifnotnull $playback_rate
+			@{#nl self.$name.SetPlaybackRate($playback_rate)@}
+			#ifnotnull $volume
+			@{#nl self.$name.SetVolume($volume)@}
+			#ifnotnull $player_controls
+			@{#nl self.$name.ShowPlayerControls(wxMEDIACTRLPLAYERCONTROLS_$player_controls)@}
+		</template>
+		<template name="settings">
+			#ifequal $play "1"
+			@{#nl self.$name.Play()@}
+		</template>	
+		<template name="include">import wx.media</template>
 	</templates>
 
 	<templates class="wxHtmlWindow">

@@ -23,24 +23,6 @@ Written by
 -->
 <codegen language="C++">
 
-	<templates class="wxBitmapComboBox">
-		<template name="declaration">#class* $name;</template>
-		<template name="construction">
-			$name = new #class( #wxparent $name, $id, $value, $pos, $size, 0, NULL, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name 			@{, wxDefaultValidator, $window_name @} );
-
-				#foreach $choices
-				@{ $name->Append( wxString(#pred).AfterFirst(wxChar(58)), wxBitmap(wxImage(wxString(#pred).BeforeFirst(wxChar(58))))); @}
-
-		</template>
-		<template name="evt_entry_OnCombobox">EVT_COMBOBOX( $id, #handler )</template>
-		<template name="evt_connect_OnCombobox">$name->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, #handler, NULL, this );</template>
-		<template name="evt_entry_OnText">EVT_TEXT( $id, #handler )</template>
-		<template name="evt_connect_OnText">$name->Connect( wxEVT_COMMAND_TEXT_UPDATED, #handler, NULL, this );</template>
-		<template name="evt_entry_OnTextEnter">EVT_TEXT_ENTER( $id, #handler )</template>
-		<template name="evt_connect_OnTextEnter">$name->Connect( wxEVT_COMMAND_TEXT_ENTER, #handler, NULL, this );</template>
-		<template name="include">@#include &lt;wx/bmpcbox.h&gt;</template>
-	</templates>
-
 	<templates class="wxCalendarCtrl">
 		<template name="declaration">#class* $name;</template>
 		<template name="construction">$name = new #class( #wxparent $name, $id, wxDefaultDateTime, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @} );</template>
@@ -88,30 +70,6 @@ Written by
 		<template name="construction">$name = new #class( #wxparent $name, $id, $defaultfolder, $pos, $size, $style #ifnotnull $window_style @{ |$window_style@}, $filter, $defaultfilter #ifnotnull $window_name @{, $window_name @} );</template>
 		<template name="settings">#nl $name->ShowHidden( $show_hidden );</template>
 		<template name="include">@#include &lt;wx/dirctrl.h&gt;</template>
-	</templates>
-
-	<templates class="wxMediaCtrl">
-		<template name="declaration">#class* $name;</template>
-		<template name="construction">
-			$name = new #class( #wxparent $name, $id, "", $pos, $size);
-			#ifnotnull $file
-			@{ #nl $name->Load( $file );@}
-			#ifnotnull $playback_rate
-			@{#nl $name->SetPlaybackRate($playback_rate);@}
-			#ifnotnull $volume
-			@{#nl $name->SetVolume($volume);@}
-			
-			#ifnotnull $player_controls
-			@{#nl $name->ShowPlayerControls( wxMEDIACTRLPLAYERCONTROLS_$player_controls );@}
-					
-		</template>
-		<template name="settings">
-			#ifequal $play "1"
-			@{ #nl $name->Play(); @}
-			#ifnotequal $play "1"
-			@{ #nl $name->Stop(); @}
-		</template>
-		<template name="include">@#include &lt;wx/mediactrl.h&gt;</template>
 	</templates>
 
 	<templates class="wxScrollBar">
@@ -222,18 +180,44 @@ Written by
 		<template name="evt_connect_OnSpinCtrlText">$name->Connect( wxEVT_COMMAND_TEXT_UPDATED, #handler, NULL, this );</template>
 	</templates>
 
-	<templates class="wxTreeCtrl">
+	<templates class="wxAnimationCtrl">
 		<template name="declaration">#class* $name;</template>
-		<template name="construction">$name = new #class( #wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, wxDefaultValidator, $window_name @} );</template>
-		<template name="include">@#include &lt;wx/treectrl.h&gt;</template>
-		<template name="evt_entry_OnTreeGetInfo">EVT_TREE_GET_INFO( $id, #handler )</template>
-		<template name="evt_connect_OnTreeGetInfo">$name->Connect( wxEVT_COMMAND_TREE_GET_INFO, #handler, NULL, this );</template>
-		<template name="evt_entry_OnTreeSetInfo">EVT_TREE_SET_INFO( $id, #handler )</template>
-		<template name="evt_connect_OnTreeSetInfo">$name->Connect( wxEVT_COMMAND_TREE_SET_INFO, #handler, NULL, this );</template>
-		<template name="evt_entry_OnTreeItemGetTooltip">EVT_TREE_ITEM_GETTOOLTIP( $id, #handler )</template>
-		<template name="evt_connect_OnTreeItemGetTooltip">$name->Connect( wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP, #handler, NULL, this );</template>
-		<template name="evt_entry_OnTreeStateImageClick">EVT_TREE_STATE_IMAGE_CLICK( $id, #handler )</template>
-		<template name="evt_connect_OnTreeStateImageClick">$name->Connect( wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, #handler, NULL, this );</template>
+		<template name="construction">
+			$name = new #class( #wxparent $name, $id, wxNullAnimation, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @} );
+			#ifnotnull $animation
+			@{ #nl $name->LoadFile( $animation ); @}
+		</template>
+		<template name="settings">
+			#ifnotnull $inactive_bitmap
+			@{ #nl $name->SetInactiveBitmap( $inactive_bitmap ); @}
+			#ifequal $play "1"
+			@{ #nl $name->Play(); @}
+		</template>
+		<template name="include">@#include &lt;wx/animate.h&gt;</template>
+	</templates>
+
+	<templates class="wxMediaCtrl">
+		<template name="declaration">#class* $name;</template>
+		<template name="construction">
+			$name = new #class( #wxparent $name, $id, "", $pos, $size);
+			#ifnotnull $file
+			@{ #nl $name->Load( $file );@}
+			#ifnotnull $playback_rate
+			@{#nl $name->SetPlaybackRate($playback_rate);@}
+			#ifnotnull $volume
+			@{#nl $name->SetVolume($volume);@}
+			
+			#ifnotnull $player_controls
+			@{#nl $name->ShowPlayerControls( wxMEDIACTRLPLAYERCONTROLS_$player_controls );@}
+					
+		</template>
+		<template name="settings">
+			#ifequal $play "1"
+			@{ #nl $name->Play(); @}
+			#ifnotequal $play "1"
+			@{ #nl $name->Stop(); @}
+		</template>
+		<template name="include">@#include &lt;wx/mediactrl.h&gt;</template>
 	</templates>
 
 	<templates class="wxHtmlWindow">

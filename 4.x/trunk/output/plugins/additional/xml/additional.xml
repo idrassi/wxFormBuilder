@@ -21,24 +21,9 @@ Written by
   José Antonio Hurtado - joseantonio.hurtado@gmail.com
   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 -->
-<package name="Additional" lib="libadditional" icon="treectrl.xpm" desc="wxWidgets additional controls">
+<package name="Additional" lib="libadditional" icon="custctrl.xpm" desc="wxWidgets additional controls">
 
-	<objectinfo class="wxBitmapComboBox" icon="bmpcbox.xpm" type="widget">
-		<inherits class="wxWindow" />
-		<property name="name" type="text">m_bcomboBox</property>
-		<property name="value" type="wxString_i18n">Combo!</property>
-		<property name="choices" type="stringlist" help="Contents of the Combo Box. Use format bitmap:choice "></property>
-		<property name="style" type="bitlist">
-			<option name="wxCB_READONLY"      help="Same as wxCB_DROPDOWN but only the strings specified as the combobox choices can be selected, it is impossible to select (even from a program) a string which is not in the choices list."/>
-			<option name="wxCB_SORT"          help="Sorts the entries in the list alphabetically."/>
-			<option name="wxTE_PROCESS_ENTER" help="The control will generate the event wxEVT_COMMAND_TEXT_ENTER (otherwise pressing Enter key is either processed internally by the control or used for navigation between dialog controls)."/>
-		</property>
-		<event name="OnCombobox" class="wxCommandEvent" help="Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on the list is selected. Note that calling GetValue returns the new value of selection." />
-		<event name="OnText" class="wxCommandEvent" help="Process a wxEVT_COMMAND_TEXT_UPDATED event, when the combobox text changes." />
-		<event name="OnTextEnter" class="wxCommandEvent" help="Process a wxEVT_COMMAND_TEXT_ENTER event, when <RETURN> is pressed in the combobox." />
-	</objectinfo>
-
-	<objectinfo class="wxCalendarCtrl" startgroup="1" icon="calctrl.xpm" type="widget">
+	<objectinfo class="wxCalendarCtrl" icon="calctrl.xpm" type="widget">
 		<inherits class="wxWindow" />
 		<property name="name" 	type="text">m_calendar</property>
 		<property name="style" 	type="bitlist">
@@ -191,22 +176,6 @@ Written by
 		</property>
 	</objectinfo>
 
-	<objectinfo class="wxMediaCtrl" startgroup="1" icon="mediactrl.xpm" type="widget">
-		<inherits class="wxControl" />	
-		<inherits class="wxWindow" />
-		<property name="name" 				type="text">m_mediaCtrl</property>
-		<property name="file" 				type="file" 	help="The path to media file."/>
-		<property name="play" 				type="bool" 	help="Play the media file"/>
-		<property name="playback_rate" 		type="float" 	help="Sets the playback rate, or speed of the media, to that referred by dRate. 1.0 represents normal speed, while 2.0 represents twice the normal speed of the media, for example. Not supported on the GStreamer (Unix) backend.">1</property>
-		<property name="volume" 			type="float" 	help="Sets the volume of the media from a 0.0 to 1.0 range to that referred by dVolume. 1.0 represents full volume, while 0.5 represents half (50 percent) volume, for example. Note that this may not be exact due to conversion and rounding errors, although setting the volume to full or none is always exact.">1</property>
-		<property name="player_controls" 	type="option">
-			<option name="STEP" 	help="wxMEDIACTRLPLAYERCONTROLS_STEP, Step controls like fastfoward, step one frame etc. "/>		
-			<option name="VOLUME" 	help="wxMEDIACTRLPLAYERCONTROLS_VOLUME, Volume controls like the speaker icon, volume slider, etc. "/>
-			<option name="DEFAULT" 	help="wxMEDIACTRLPLAYERCONTROLS_DEFAULT, Default controls for the toolkit. Currently a typedef for wxMEDIACTRLPLAYERCONTROLS_STEP and wxMEDIACTRLPLAYERCONTROLS_VOLUME. "/>
-			<option name="NONE" 	help="wxMEDIACTRLPLAYERCONTROLS_NONE, No controls. return wxMediaCtrl to it's default state. "/>
-		</property>
-	</objectinfo>
-
 	<objectinfo class="wxScrollBar" icon="scrolbar.xpm" type="widget">
 		<inherits class="wxWindow" />
 		<property name="name" 	type="text">m_scrollBar</property>
@@ -241,27 +210,6 @@ Written by
 		<event name="OnCommandScrollChanged" 		class="wxScrollEvent" help="Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only). Variant taking a window identifier." />
 	</objectinfo>
 
-	<objectinfo class="wxSearchCtrl" icon="srchctrl.xpm" type="widget">
-		<inherits class="wxWindow" />
-		<property name="name" 	type="text">m_searchCtrl</property>
-		<property name="style" 	type="bitlist">
-			<option name="wxTE_PROCESS_ENTER" help="The control will generate the event wxEVT_COMMAND_TEXT_ENTER (otherwise pressing Enter key is either processed internally by the control or used for navigation between dialog controls)."/>
-			<option name="wxTE_PROCESS_TAB"   help="The control will receive wxEVT_CHAR events for TAB pressed - normally, TAB is used for passing to the next control in a dialog instead. For the control created with this style, you can still use Ctrl-Enter to pass to the next control from the keyboard."/>
-			<option name="wxTE_NOHIDESEL"     help="By default, the Windows text control doesn't show the selection when it doesn't have focus - use this style to force it to always show it. It doesn't do anything under other platforms."/>
-			<option name="wxTE_LEFT"          help="The text in the control will be left-justified (default)."/>
-			<option name="wxTE_CENTRE"        help="The text in the control will be centered (currently wxMSW and wxGTK2 only). "/>
-			<option name="wxTE_RIGHT"         help="The text in the control will be right-justified (currently wxMSW and wxGTK2 only)."/>
-			<option name="wxTE_CAPITALIZE"    help="On PocketPC and Smartphone, causes the first letter to be capitalized."/>
-		</property>
-		<property name="value" 			type="wxString_i18n" />
-		<property name="search_button" 	type="bool" 			help="Shows or hides the search button.">1</property>
-		<property name="cancel_button" 	type="bool" 			help="Shows or hides the cancel button.">0</property>
-		<event name="OnText" 			class="wxCommandEvent" 	help="Respond to a wxEVT_COMMAND_TEXT_UPDATED event, generated when the text changes. Notice that this event will always be sent when the text controls contents changes - whether this is due to user input or comes from the program itself (for example, if SetValue() is called)" />
-		<event name="OnTextEnter" 		class="wxCommandEvent" 	help="Respond to a wxEVT_COMMAND_TEXT_ENTER event, generated when enter is pressed in a text control (which must have wxTE_PROCESS_ENTER style for this event to be generated)." />
-		<event name="OnSearchButton" 	class="wxCommandEvent" 	help="Respond to a wxEVT_SEARCHCTRL_SEARCH_BTN event, generated when the search button is clicked. Note that this does not initiate a search." />
-		<event name="OnCancelButton" 	class="wxCommandEvent" 	help="Respond to a wxEVT_SEARCHCTRL_CANCEL_BTN event, generated when the cancel button is clicked." />
-	</objectinfo>
-
 	<objectinfo class="wxSpinButton" icon="spinbutt.xpm" type="widget">
 		<inherits class="wxWindow" />
 		<property name="name" 	type="text">m_spinBtn</property>
@@ -291,31 +239,53 @@ Written by
 		<event name="OnSpinCtrlText" 	class="wxCommandEvent" 	help="Generated whenever the user modifies the text in the edit part of the spin control directly." />
 	</objectinfo>
 
-	<objectinfo class="wxTreeCtrl" icon="treectrl.xpm" type="widget">
-		<inherits class="wxTreeCtrlBase"/>
+	<objectinfo class="wxSearchCtrl" icon="srchctrl.xpm" type="widget">
 		<inherits class="wxWindow" />
-		<property name="name" 	type="text">m_treeCtrl</property>
+		<property name="name" 	type="text">m_searchCtrl</property>
 		<property name="style" 	type="bitlist">
-			<option name="wxTR_EDIT_LABELS"             help="Use this style if you wish the user to be able to edit labels in the tree control." />
-			<option name="wxTR_NO_BUTTONS"              help="For convenience to document that no buttons are to be drawn." />
-			<option name="wxTR_HAS_BUTTONS"             help="Use this style to show + and - buttons to the left of parent items." />
-			<option name="wxTR_TWIST_BUTTONS"           help="??" />
-			<option name="wxTR_NO_LINES"                help="Use this style to hide vertical level connectors." />
-			<option name="wxTR_FULL_ROW_HIGHLIGHT"      help="Use this style to have the background colour and the selection highlight extend over the entire horizontal row of the tree control window. (This flag is ignored under Windows unless you specify wxTR_NO_LINES as well.)" />
-			<option name="wxTR_LINES_AT_ROOT"           help="Use this style to show lines between root nodes. Only applicable if wxTR_HIDE_ROOT is set and wxTR_NO_LINES is not set." />
-			<option name="wxTR_HIDE_ROOT"               help="Use this style to suppress the display of the root node, effectively causing the first-level nodes to appear as a series of root nodes." />
-			<option name="wxTR_ROW_LINES"               help="Use this style to draw a contrasting border between displayed rows." />
-			<option name="wxTR_HAS_VARIABLE_ROW_HEIGHT" help="Use this style to cause row heights to be just big enough to fit the content. If not set, all rows use the largest row height. The default is that this flag is unset. Generic only." />
-			<option name="wxTR_SINGLE"                  help="For convenience to document that only one item may be selected at a time. Selecting another item causes the current selection, if any, to be deselected. This is the default." />
-			<option name="wxTR_MULTIPLE"                help="Use this style to allow a range of items to be selected. If a second range is selected, the current range, if any, is deselected." />
-			<option name="wxTR_EXTENDED"                help="Use this style to allow disjoint items to be selected. (Only partially implemented; may not work in all cases.)" />
-			<option name="wxTR_DEFAULT_STYLE"           help="The set of flags that are closest to the defaults for the native control for a particular toolkit." />
-			wxTR_DEFAULT_STYLE
+			<option name="wxTE_PROCESS_ENTER" help="The control will generate the event wxEVT_COMMAND_TEXT_ENTER (otherwise pressing Enter key is either processed internally by the control or used for navigation between dialog controls)."/>
+			<option name="wxTE_PROCESS_TAB"   help="The control will receive wxEVT_CHAR events for TAB pressed - normally, TAB is used for passing to the next control in a dialog instead. For the control created with this style, you can still use Ctrl-Enter to pass to the next control from the keyboard."/>
+			<option name="wxTE_NOHIDESEL"     help="By default, the Windows text control doesn't show the selection when it doesn't have focus - use this style to force it to always show it. It doesn't do anything under other platforms."/>
+			<option name="wxTE_LEFT"          help="The text in the control will be left-justified (default)."/>
+			<option name="wxTE_CENTRE"        help="The text in the control will be centered (currently wxMSW and wxGTK2 only). "/>
+			<option name="wxTE_RIGHT"         help="The text in the control will be right-justified (currently wxMSW and wxGTK2 only)."/>
+			<option name="wxTE_CAPITALIZE"    help="On PocketPC and Smartphone, causes the first letter to be capitalized."/>
 		</property>
-		<event name="OnTreeGetInfo" 		class="wxTreeEvent" help="Request information from the application." />
-		<event name="OnTreeSetInfo" 		class="wxTreeEvent" help="Information is being supplied." />
-		<event name="OnTreeItemGetTooltip" 	class="wxTreeEvent" help="The opportunity to set the item tooltip is being given to the application (call wxTreeEvent::SetToolTip). Windows only." />
-		<event name="OnTreeStateImageClick" class="wxTreeEvent" help="The state image has been clicked. Windows only." />
+		<property name="value" 			type="wxString_i18n" />
+		<property name="search_button" 	type="bool" 			help="Shows or hides the search button.">1</property>
+		<property name="cancel_button" 	type="bool" 			help="Shows or hides the cancel button.">0</property>
+		<event name="OnText" 			class="wxCommandEvent" 	help="Respond to a wxEVT_COMMAND_TEXT_UPDATED event, generated when the text changes. Notice that this event will always be sent when the text controls contents changes - whether this is due to user input or comes from the program itself (for example, if SetValue() is called)" />
+		<event name="OnTextEnter" 		class="wxCommandEvent" 	help="Respond to a wxEVT_COMMAND_TEXT_ENTER event, generated when enter is pressed in a text control (which must have wxTE_PROCESS_ENTER style for this event to be generated)." />
+		<event name="OnSearchButton" 	class="wxCommandEvent" 	help="Respond to a wxEVT_SEARCHCTRL_SEARCH_BTN event, generated when the search button is clicked. Note that this does not initiate a search." />
+		<event name="OnCancelButton" 	class="wxCommandEvent" 	help="Respond to a wxEVT_SEARCHCTRL_CANCEL_BTN event, generated when the cancel button is clicked." />
+	</objectinfo>
+
+	<objectinfo class="wxAnimationCtrl" icon="mediactrl.xpm" type="widget" startgroup="1">
+		<inherits class="wxWindow"/>
+		<property name="name" 	type="text">m_animCtrl</property>
+		<property name="style" 	type="bitlist">
+			<option name="wxAC_DEFAULT_STYLE" help="The default style: wxNO_BORDER."/>
+			<option name="wxAC_NO_AUTORESIZE" help="By default, the control will adjust its size to exactly fit to the size of the animation when SetAnimation is called. If this style flag is given, the control will not change its size."/>wxAC_DEFAULT_STYLE
+		</property>
+		<property name="animation" 			type="file" help="Full file path (only *.gif and *.ani files are supported)."/>
+		<property name="inactive_bitmap" 	type="bitmap"/>
+		<property name="play" type="bool">0</property>
+	</objectinfo>
+
+	<objectinfo class="wxMediaCtrl" icon="mediactrl.xpm" type="widget">
+		<inherits class="wxControl" />	
+		<inherits class="wxWindow" />
+		<property name="name" 				type="text">m_mediaCtrl</property>
+		<property name="file" 				type="file" 	help="The path to media file."/>
+		<property name="play" 				type="bool" 	help="Play the media file"/>
+		<property name="playback_rate" 		type="float" 	help="Sets the playback rate, or speed of the media, to that referred by dRate. 1.0 represents normal speed, while 2.0 represents twice the normal speed of the media, for example. Not supported on the GStreamer (Unix) backend.">1</property>
+		<property name="volume" 			type="float" 	help="Sets the volume of the media from a 0.0 to 1.0 range to that referred by dVolume. 1.0 represents full volume, while 0.5 represents half (50 percent) volume, for example. Note that this may not be exact due to conversion and rounding errors, although setting the volume to full or none is always exact.">1</property>
+		<property name="player_controls" 	type="option">
+			<option name="STEP" 	help="wxMEDIACTRLPLAYERCONTROLS_STEP, Step controls like fastfoward, step one frame etc. "/>		
+			<option name="VOLUME" 	help="wxMEDIACTRLPLAYERCONTROLS_VOLUME, Volume controls like the speaker icon, volume slider, etc. "/>
+			<option name="DEFAULT" 	help="wxMEDIACTRLPLAYERCONTROLS_DEFAULT, Default controls for the toolkit. Currently a typedef for wxMEDIACTRLPLAYERCONTROLS_STEP and wxMEDIACTRLPLAYERCONTROLS_VOLUME. "/>
+			<option name="NONE" 	help="wxMEDIACTRLPLAYERCONTROLS_NONE, No controls. return wxMediaCtrl to it's default state. "/>
+		</property>
 	</objectinfo>
 
 	<objectinfo class="wxHtmlWindow" icon="htmlwin.xpm" type="widget">
@@ -326,6 +296,19 @@ Written by
 			<option name="wxHW_SCROLLBAR_AUTO"  help="Display scrollbars only if page's size exceeds window's size." />
 			<option name="wxHW_NO_SELECTION"    help="Don't allow the user to select text." />
 			wxHW_SCROLLBAR_AUTO
+		</property>
+		<event name="OnHtmlCellClicked" class="wxHtmlCellEvent" help="A wxHtmlCell was clicked." />
+		<event name="OnHtmlCellHover" 	class="wxHtmlCellEvent" help="The mouse passed over a wxHtmlCell." />
+		<event name="OnHtmlLinkClicked" class="wxHtmlLinkEvent" help="A wxHtmlCell which contains an hyperlink was clicked." />
+	</objectinfo>
+
+	<objectinfo class="wxSimpleHtmlListBox" icon="htmllbox.xpm" type="widget">
+		<inherits class="wxWindow" />
+		<property name="name" type="text">m_htmlListBox</property>
+		<property name="style" type="bitlist">
+			<option name="wxHLB_DEFAULT_STYLE" help="The default style: wxBORDER_SUNKEN." />
+			<option name="wxHW_SCROLLBAR_AUTO"  help="Multiple-selection list: the user can toggle multiple items on and off." />
+			wxHLB_DEFAULT_STYLE
 		</property>
 		<event name="OnHtmlCellClicked" class="wxHtmlCellEvent" help="A wxHtmlCell was clicked." />
 		<event name="OnHtmlCellHover" 	class="wxHtmlCellEvent" help="The mouse passed over a wxHtmlCell." />
@@ -351,20 +334,7 @@ Written by
 		<event name="OnHyperlink" class="wxHyperlinkEvent" help="The hyperlink was (left) clicked. If this event is not handled in user's code (or it's skipped; see wxEvent::Skip), then a call to wxLaunchDefaultBrowser is done with the hyperlink's URL."/>
 	</objectinfo>
 
-	<objectinfo class="wxSimpleHtmlListBox" icon="htmllbox.xpm" type="widget">
-		<inherits class="wxWindow" />
-		<property name="name" type="text">m_htmlListBox</property>
-		<property name="style" type="bitlist">
-			<option name="wxHLB_DEFAULT_STYLE" help="The default style: wxBORDER_SUNKEN." />
-			<option name="wxHW_SCROLLBAR_AUTO"  help="Multiple-selection list: the user can toggle multiple items on and off." />
-			wxHLB_DEFAULT_STYLE
-		</property>
-		<event name="OnHtmlCellClicked" class="wxHtmlCellEvent" help="A wxHtmlCell was clicked." />
-		<event name="OnHtmlCellHover" 	class="wxHtmlCellEvent" help="The mouse passed over a wxHtmlCell." />
-		<event name="OnHtmlLinkClicked" class="wxHtmlLinkEvent" help="A wxHtmlCell which contains an hyperlink was clicked." />
-	</objectinfo>
-
-	<objectinfo class="CustomControl" icon="custctrl.xpm" type="widget">
+	<objectinfo class="CustomControl" icon="custctrl.xpm" type="widget" startgroup="1">
 		<inherits class="wxWindow"/>
 		<property name="name" 			type="text" help="The control is added to a sizer using this name.">m_customControl</property>
 		<property name="class" 			type="text" help="The control is generated to XRC with this class."/>
