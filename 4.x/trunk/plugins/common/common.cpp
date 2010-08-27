@@ -28,11 +28,12 @@
 #include <xrcconv.h>
 #include <ticpp.h>
 
-#include <wx/statline.h>
+#include <wx/animate.h>
+#include <wx/bmpbuttn.h>
 #include <wx/listctrl.h>
 #include <wx/radiobox.h>
-#include <wx/bmpbuttn.h>
-#include <wx/animate.h>
+#include <wx/statline.h>
+#include <wx/tglbtn.h>
 #include <wx/aui/auibar.h>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -508,6 +509,66 @@ public:
 		filter.AddProperty( "focus", "focus", XRC_TYPE_BITMAP );
 		filter.AddProperty( "hover", "hover", XRC_TYPE_BITMAP );
 		filter.AddProperty( "default", "default", XRC_TYPE_BOOL );
+		return filter.GetXfbObject();
+	}
+};
+
+class ToggleButtonComponent : public ComponentBase, public wxEvtHandler
+{
+public:
+	wxObject* Create( IObject *obj, wxObject *parent )
+	{
+		wxToggleButton* window = new wxToggleButton((wxWindow *)parent, -1,
+													obj->GetPropertyAsString("label"),
+													obj->GetPropertyAsPoint("pos"),
+													obj->GetPropertyAsSize("size"),
+													obj->GetPropertyAsInteger("window_style") );
+
+		window->SetValue( ( obj->GetPropertyAsInteger("value") != 0 ) );
+
+		window->Connect(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED,
+						wxCommandEventHandler( ToggleButtonComponent::OnToggle ), NULL, this );
+		return window;
+	}
+
+	void OnToggle( wxCommandEvent& event )
+	{
+		wxToggleButton* window = dynamic_cast< wxToggleButton* >( event.GetEventObject() );
+		if ( 0 != window )
+		{
+			wxString value;
+			value.Printf( "%i", window->GetValue() ? 1 : 0 );
+			GetManager()->ModifyProperty( window, "value", value );
+			window->SetFocus();
+		}
+	}
+
+	void Cleanup( wxObject* obj )
+	{
+		wxToggleButton* window = dynamic_cast< wxToggleButton* >( obj );
+		if ( 0 != window )
+		{
+			window->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED,
+								wxCommandEventHandler( ToggleButtonComponent::OnToggle ), NULL, this );
+		}
+		ComponentBase::Cleanup( obj );
+	}
+
+	ticpp::Element* ExportToXrc( IObject *obj )
+	{
+		ObjectToXrcFilter xrc( obj, "wxToggleButton", obj->GetPropertyAsString("name") );
+		xrc.AddWindowProperties();
+		xrc.AddProperty( "label", "label", XRC_TYPE_TEXT );
+		xrc.AddProperty( "value", "checked", XRC_TYPE_BOOL );
+		return xrc.GetXrcObject();
+	}
+
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
+	{
+		XrcToXfbFilter filter( xrcObj, "wxToggleButton" );
+		filter.AddWindowProperties();
+		filter.AddProperty( "label", "label", XRC_TYPE_TEXT );
+		filter.AddProperty( "checked", "value", XRC_TYPE_BOOL );
 		return filter.GetXfbObject();
 	}
 };
@@ -1569,229 +1630,216 @@ public:
 
 BEGIN_LIBRARY()
 
-// forms aren't considered as windows !
-ABSTRACT_COMPONENT( "Frame", FrameFormComponent )
-ABSTRACT_COMPONENT( "Panel", PanelFormComponent )
-ABSTRACT_COMPONENT( "Dialog", DialogFormComponent )
-ABSTRACT_COMPONENT( "MenuBar", MenuBarFormComponent )
-WINDOW_COMPONENT( "ToolBar", ToolBarFormComponent )
-ABSTRACT_COMPONENT( "Wizard", WizardFormComponent ) // MACRO(wxWIZARD_EX_HELPBUTTON)
-ABSTRACT_COMPONENT( "wizardpage", WizardPageComponent )
+	// wxWindow style macros
+	MACRO(wxSIMPLE_BORDER)
+	MACRO(wxDOUBLE_BORDER)
+	MACRO(wxSUNKEN_BORDER)
+	MACRO(wxRAISED_BORDER)
+	MACRO(wxSTATIC_BORDER)
+	MACRO(wxNO_BORDER)
+	MACRO(wxTRANSPARENT_WINDOW)
+	MACRO(wxTAB_TRAVERSAL)
+	MACRO(wxWANTS_CHARS)
+	MACRO(wxVSCROLL)
+	MACRO(wxHSCROLL)
+	MACRO(wxALWAYS_SHOW_SB)
+	MACRO(wxCLIP_CHILDREN)
+	MACRO(wxFULL_REPAINT_ON_RESIZE)
+	MACRO(wxWS_EX_VALIDATE_RECURSIVELY)
+	MACRO(wxWS_EX_BLOCK_EVENTS)
+	MACRO(wxWS_EX_TRANSIENT)
+	MACRO(wxWS_EX_PROCESS_IDLE)
+	MACRO(wxWS_EX_PROCESS_UI_UPDATES)
 
-WINDOW_COMPONENT( "wxButton", ButtonComponent )
-WINDOW_COMPONENT( "wxBitmapButton", BitmapButtonComponent )
-WINDOW_COMPONENT( "wxTextCtrl", TextCtrlComponent )
-WINDOW_COMPONENT( "wxStaticText", StaticTextComponent )
-WINDOW_COMPONENT( "wxComboBox", ComboBoxComponent )
-WINDOW_COMPONENT( "wxListBox", ListBoxComponent )
-WINDOW_COMPONENT( "wxRadioBox", RadioBoxComponent )
-WINDOW_COMPONENT( "wxRadioButton", RadioButtonComponent )
-WINDOW_COMPONENT( "wxCheckBox", CheckBoxComponent )
-WINDOW_COMPONENT( "wxStaticBitmap", StaticBitmapComponent )
-WINDOW_COMPONENT( "wxStaticLine", StaticLineComponent )
-WINDOW_COMPONENT( "wxMenuBar", MenuBarComponent )
-ABSTRACT_COMPONENT( "wxMenu", MenuComponent )
-ABSTRACT_COMPONENT( "submenu", SubMenuComponent )
-ABSTRACT_COMPONENT( "wxMenuItem", MenuItemComponent )
-ABSTRACT_COMPONENT( "separator", SeparatorComponent )
-WINDOW_COMPONENT( "wxListCtrl", ListCtrlComponent )
-WINDOW_COMPONENT( "wxStatusBar", StatusBarComponent )
-WINDOW_COMPONENT( "wxToolBar", ToolBarComponent )
-WINDOW_COMPONENT( "wxAuiToolBar", AuiToolBarComponent )
-ABSTRACT_COMPONENT( "tool", ToolComponent )
-ABSTRACT_COMPONENT( "toolSeparator", ToolSeparatorComponent )
-WINDOW_COMPONENT( "wxChoice", ChoiceComponent )
-WINDOW_COMPONENT( "wxSlider", SliderComponent )
-WINDOW_COMPONENT( "wxGauge", GaugeComponent )
-WINDOW_COMPONENT( "wxAnimationCtrl", AnimCtrlComponent )
+	// Forms aren't considered as windows!
+	ABSTRACT_COMPONENT( "Frame", FrameFormComponent )
+	MACRO(wxDEFAULT_FRAME_STYLE)
+	MACRO(wxICONIZE)
+	MACRO(wxCAPTION)
+	MACRO(wxMINIMIZE)
+	MACRO(wxMINIMIZE_BOX)
+	MACRO(wxMAXIMIZE)
+	MACRO(wxMAXIMIZE_BOX)
+	MACRO(wxCLOSE_BOX)
+	MACRO(wxSTAY_ON_TOP)
+	MACRO(wxSYSTEM_MENU)
+	MACRO(wxRESIZE_BORDER)
+	MACRO(wxFRAME_TOOL_WINDOW)
+	MACRO(wxFRAME_NO_TASKBAR)
+	MACRO(wxFRAME_FLOAT_ON_PARENT)
+	MACRO(wxFRAME_SHAPED)
+	MACRO(wxFRAME_EX_CONTEXTHELP)
+	MACRO(wxFRAME_EX_METAL)
 
-// wxWindow style macros
-MACRO(wxSIMPLE_BORDER)
-MACRO(wxDOUBLE_BORDER)
-MACRO(wxSUNKEN_BORDER)
-MACRO(wxRAISED_BORDER)
-MACRO(wxSTATIC_BORDER)
-MACRO(wxNO_BORDER)
-MACRO(wxTRANSPARENT_WINDOW)
-MACRO(wxTAB_TRAVERSAL)
-MACRO(wxWANTS_CHARS)
-MACRO(wxVSCROLL)
-MACRO(wxHSCROLL)
-MACRO(wxALWAYS_SHOW_SB)
-MACRO(wxCLIP_CHILDREN)
-MACRO(wxFULL_REPAINT_ON_RESIZE)
-MACRO(wxWS_EX_VALIDATE_RECURSIVELY)
-MACRO(wxWS_EX_BLOCK_EVENTS)
-MACRO(wxWS_EX_TRANSIENT)
-MACRO(wxWS_EX_PROCESS_IDLE)
-MACRO(wxWS_EX_PROCESS_UI_UPDATES)
+	ABSTRACT_COMPONENT( "Panel", PanelFormComponent )
 
-// wxFrame style macros
-MACRO(wxDEFAULT_FRAME_STYLE)
-MACRO(wxICONIZE)
-MACRO(wxCAPTION)
-MACRO(wxMINIMIZE)
-MACRO(wxMINIMIZE_BOX)
-MACRO(wxMAXIMIZE)
-MACRO(wxMAXIMIZE_BOX)
-MACRO(wxCLOSE_BOX)
-MACRO(wxSTAY_ON_TOP)
-MACRO(wxSYSTEM_MENU)
-MACRO(wxRESIZE_BORDER)
-MACRO(wxFRAME_TOOL_WINDOW)
-MACRO(wxFRAME_NO_TASKBAR)
-MACRO(wxFRAME_FLOAT_ON_PARENT)
-MACRO(wxFRAME_SHAPED)
-MACRO(wxFRAME_EX_CONTEXTHELP)
-MACRO(wxFRAME_EX_METAL)
+	ABSTRACT_COMPONENT( "Dialog", DialogFormComponent )
+	MACRO(wxCAPTION)
+	MACRO(wxDEFAULT_DIALOG_STYLE)
+	MACRO(wxRESIZE_BORDER)
+	MACRO(wxSYSTEM_MENU)
+	MACRO(wxCLOSE_BOX)
+	MACRO(wxMAXIMIZE_BOX)
+	MACRO(wxMINIMIZE_BOX)
+	MACRO(wxSTAY_ON_TOP)
+	MACRO(wxDIALOG_NO_PARENT)
+	MACRO(wxBOTH)
+	SYNONYMOUS(1,wxBOTH)
 
-// wxDialog style macros
-MACRO(wxCAPTION)
-MACRO(wxDEFAULT_DIALOG_STYLE)
-MACRO(wxRESIZE_BORDER)
-MACRO(wxSYSTEM_MENU)
-MACRO(wxCLOSE_BOX)
-MACRO(wxMAXIMIZE_BOX)
-MACRO(wxMINIMIZE_BOX)
-MACRO(wxSTAY_ON_TOP)
-MACRO(wxDIALOG_NO_PARENT)
+	ABSTRACT_COMPONENT( "MenuBar", MenuBarFormComponent )
 
-// wxButton
-MACRO(wxBU_LEFT)
-MACRO(wxBU_TOP)
-MACRO(wxBU_RIGHT)
-MACRO(wxBU_BOTTOM)
-MACRO(wxBU_EXACTFIT)
-MACRO(wxBU_AUTODRAW)
+	WINDOW_COMPONENT( 	"ToolBar", ToolBarFormComponent )
 
-// wxStaticText
-MACRO(wxALIGN_LEFT)
-MACRO(wxALIGN_CENTRE)
-MACRO(wxALIGN_RIGHT)
-MACRO(wxST_NO_AUTORESIZE)
+	ABSTRACT_COMPONENT( "Wizard", 	WizardFormComponent ) // MACRO(wxWIZARD_EX_HELPBUTTON)
+	ABSTRACT_COMPONENT( "wizardpage", WizardPageComponent )
 
-// wxTextCtrl
-MACRO(wxTE_MULTILINE)
-MACRO(wxTE_READONLY)
-MACRO(wxTE_RICH)
-MACRO(wxTE_AUTO_URL)
-MACRO(wxTE_CAPITALIZE)
-MACRO(wxTE_CENTRE)
-MACRO(wxTE_CHARWRAP)
-MACRO(wxTE_DONTWRAP)
-MACRO(wxTE_LEFT)
-MACRO(wxTE_NOHIDESEL)
-MACRO(wxTE_PASSWORD)
-MACRO(wxTE_PROCESS_ENTER)
-MACRO(wxTE_PROCESS_TAB)
-MACRO(wxTE_RICH2)
-MACRO(wxTE_RIGHT)
-MACRO(wxTE_WORDWRAP)
+	WINDOW_COMPONENT( "wxButton", ButtonComponent )
+	MACRO(wxBU_LEFT)
+	MACRO(wxBU_TOP)
+	MACRO(wxBU_RIGHT)
+	MACRO(wxBU_BOTTOM)
+	MACRO(wxBU_EXACTFIT)
+	MACRO(wxBU_AUTODRAW)
 
-// wxStaticLine
-MACRO(wxLI_HORIZONTAL)
-MACRO(wxLI_VERTICAL)
+	WINDOW_COMPONENT( "wxBitmapButton", BitmapButtonComponent )
+	WINDOW_COMPONENT( "wxToggleButton", ToggleButtonComponent )
 
-// wxListCtrl
-MACRO(wxLC_LIST)
-MACRO(wxLC_REPORT)
-MACRO(wxLC_VIRTUAL)
-MACRO(wxLC_ICON)
-MACRO(wxLC_SMALL_ICON)
-MACRO(wxLC_ALIGN_TOP)
-MACRO(wxLC_ALIGN_LEFT)
-MACRO(wxLC_AUTOARRANGE)
-MACRO(wxLC_EDIT_LABELS)
-MACRO(wxLC_NO_SORT_HEADER)
-MACRO(wxLC_NO_HEADER)
-MACRO(wxLC_SINGLE_SEL)
-MACRO(wxLC_SORT_ASCENDING)
-MACRO(wxLC_SORT_DESCENDING)
-MACRO(wxLC_HRULES)
-MACRO(wxLC_VRULES)
+	WINDOW_COMPONENT( "wxTextCtrl", TextCtrlComponent )
+	MACRO(wxTE_MULTILINE)
+	MACRO(wxTE_READONLY)
+	MACRO(wxTE_RICH)
+	MACRO(wxTE_AUTO_URL)
+	MACRO(wxTE_CAPITALIZE)
+	MACRO(wxTE_CENTRE)
+	MACRO(wxTE_CHARWRAP)
+	MACRO(wxTE_DONTWRAP)
+	MACRO(wxTE_LEFT)
+	MACRO(wxTE_NOHIDESEL)
+	MACRO(wxTE_PASSWORD)
+	MACRO(wxTE_PROCESS_ENTER)
+	MACRO(wxTE_PROCESS_TAB)
+	MACRO(wxTE_RICH2)
+	MACRO(wxTE_RIGHT)
+	MACRO(wxTE_WORDWRAP)
 
-// wxListBox
-MACRO(wxLB_SINGLE)
-MACRO(wxLB_MULTIPLE)
-MACRO(wxLB_EXTENDED)
-MACRO(wxLB_HSCROLL)
-MACRO(wxLB_ALWAYS_SB)
-MACRO(wxLB_NEEDED_SB)
-MACRO(wxLB_SORT)
+	WINDOW_COMPONENT( "wxStaticText", StaticTextComponent )
+	MACRO(wxALIGN_LEFT)
+	MACRO(wxALIGN_CENTRE)
+	MACRO(wxALIGN_RIGHT)
+	MACRO(wxST_NO_AUTORESIZE)
 
-// wxRadioBox
-MACRO(wxRA_SPECIFY_ROWS)
-MACRO(wxRA_SPECIFY_COLS)
-MACRO(wxRA_USE_CHECKBOX)
+	WINDOW_COMPONENT( "wxComboBox", ComboBoxComponent )
+	MACRO(wxCB_DROPDOWN)
+	MACRO(wxCB_READONLY)
+	MACRO(wxCB_SIMPLE)
+	MACRO(wxCB_SORT)
 
-// wxRadioButton
-MACRO(wxRB_GROUP)
-MACRO(wxRB_SINGLE)
-MACRO(wxRB_USE_CHECKBOX)
+	WINDOW_COMPONENT( "wxListBox", ListBoxComponent )
+	MACRO(wxLB_SINGLE)
+	MACRO(wxLB_MULTIPLE)
+	MACRO(wxLB_EXTENDED)
+	MACRO(wxLB_HSCROLL)
+	MACRO(wxLB_ALWAYS_SB)
+	MACRO(wxLB_NEEDED_SB)
+	MACRO(wxLB_SORT)
 
-// wxStatusBar
-MACRO(wxST_SIZEGRIP)
+	WINDOW_COMPONENT( "wxRadioBox", RadioBoxComponent )
+	MACRO(wxRA_SPECIFY_ROWS)
+	MACRO(wxRA_SPECIFY_COLS)
+	MACRO(wxRA_USE_CHECKBOX)
 
-// wxMenuBar
-MACRO(wxMB_DOCKABLE)
+	WINDOW_COMPONENT( "wxRadioButton", RadioButtonComponent )
+	MACRO(wxRB_GROUP)
+	MACRO(wxRB_SINGLE)
+	MACRO(wxRB_USE_CHECKBOX)
 
-// wxMenuItem
-MACRO(wxITEM_NORMAL)
-MACRO(wxITEM_CHECK)
-MACRO(wxITEM_RADIO)
+	WINDOW_COMPONENT( "wxCheckBox", CheckBoxComponent )
+	MACRO(wxCHK_2STATE)
+	MACRO(wxCHK_3STATE)
+	MACRO(wxCHK_ALLOW_3RD_STATE_FOR_USER)
 
-// wxToolBar
-MACRO(wxTB_FLAT)
-MACRO(wxTB_DOCKABLE)
-MACRO(wxTB_HORIZONTAL)
-MACRO(wxTB_VERTICAL)
-MACRO(wxTB_TEXT)
-MACRO(wxTB_NOICONS)
-MACRO(wxTB_NODIVIDER)
-MACRO(wxTB_NOALIGN)
-MACRO(wxTB_HORZ_LAYOUT)
-MACRO(wxTB_HORZ_TEXT)
+	WINDOW_COMPONENT( "wxStaticBitmap", StaticBitmapComponent )
 
-// wxTool
-MACRO(wxITEM_NORMAL)
-MACRO(wxITEM_CHECK)
-MACRO(wxITEM_RADIO)
+	WINDOW_COMPONENT( "wxStaticLine", StaticLineComponent )
+	MACRO(wxLI_HORIZONTAL)
+	MACRO(wxLI_VERTICAL)
 
-// wxSlider
-MACRO(wxSL_AUTOTICKS)
-MACRO(wxSL_BOTTOM)
-MACRO(wxSL_HORIZONTAL)
-MACRO(wxSL_INVERSE)
-MACRO(wxSL_LABELS)
-MACRO(wxSL_LEFT)
-MACRO(wxSL_RIGHT)
-MACRO(wxSL_SELRANGE)
-MACRO(wxSL_TOP)
-MACRO(wxSL_VERTICAL)
-MACRO(wxSL_BOTH)
+	WINDOW_COMPONENT( 	"wxMenuBar", 	MenuBarComponent )
+	MACRO(wxMB_DOCKABLE)
 
-// wxComboBox
-MACRO(wxCB_DROPDOWN)
-MACRO(wxCB_READONLY)
-MACRO(wxCB_SIMPLE)
-MACRO(wxCB_SORT)
+	ABSTRACT_COMPONENT( "wxMenuItem", 	MenuItemComponent )
+	MACRO(wxITEM_NORMAL)
+	MACRO(wxITEM_CHECK)
+	MACRO(wxITEM_RADIO)
 
-// wxCheckBox
-MACRO(wxCHK_2STATE)
-MACRO(wxCHK_3STATE)
-MACRO(wxCHK_ALLOW_3RD_STATE_FOR_USER)
+	ABSTRACT_COMPONENT( "wxMenu", 		MenuComponent )
+	ABSTRACT_COMPONENT( "separator", 	SeparatorComponent )
+	ABSTRACT_COMPONENT( "submenu", 		SubMenuComponent )
 
-// wxGauge
-MACRO(wxGA_HORIZONTAL)
-MACRO(wxGA_SMOOTH)
-MACRO(wxGA_VERTICAL)
+	WINDOW_COMPONENT( "wxListCtrl", ListCtrlComponent )
+	MACRO(wxLC_LIST)
+	MACRO(wxLC_REPORT)
+	MACRO(wxLC_VIRTUAL)
+	MACRO(wxLC_ICON)
+	MACRO(wxLC_SMALL_ICON)
+	MACRO(wxLC_ALIGN_TOP)
+	MACRO(wxLC_ALIGN_LEFT)
+	MACRO(wxLC_AUTOARRANGE)
+	MACRO(wxLC_EDIT_LABELS)
+	MACRO(wxLC_NO_SORT_HEADER)
+	MACRO(wxLC_NO_HEADER)
+	MACRO(wxLC_SINGLE_SEL)
+	MACRO(wxLC_SORT_ASCENDING)
+	MACRO(wxLC_SORT_DESCENDING)
+	MACRO(wxLC_HRULES)
+	MACRO(wxLC_VRULES)
 
-//wxDialog
-MACRO(wxBOTH)
-SYNONYMOUS(1,wxBOTH)
+	WINDOW_COMPONENT( "wxStatusBar", StatusBarComponent )
+	MACRO(wxST_SIZEGRIP)
 
-//wxAnimationCtrl
-MACRO(wxAC_DEFAULT_STYLE)
-MACRO(wxAC_NO_AUTORESIZE)
+	WINDOW_COMPONENT( "wxToolBar", ToolBarComponent )
+	MACRO(wxTB_FLAT)
+	MACRO(wxTB_DOCKABLE)
+	MACRO(wxTB_HORIZONTAL)
+	MACRO(wxTB_VERTICAL)
+	MACRO(wxTB_TEXT)
+	MACRO(wxTB_NOICONS)
+	MACRO(wxTB_NODIVIDER)
+	MACRO(wxTB_NOALIGN)
+	MACRO(wxTB_HORZ_LAYOUT)
+	MACRO(wxTB_HORZ_TEXT)
+
+	WINDOW_COMPONENT( "wxAuiToolBar", AuiToolBarComponent )
+
+	ABSTRACT_COMPONENT( "tool", ToolComponent )
+	MACRO(wxITEM_NORMAL)
+	MACRO(wxITEM_CHECK)
+	MACRO(wxITEM_RADIO)
+
+	ABSTRACT_COMPONENT( "toolSeparator", ToolSeparatorComponent )
+
+	WINDOW_COMPONENT( "wxChoice", ChoiceComponent )
+
+	WINDOW_COMPONENT( "wxSlider", SliderComponent )
+	MACRO(wxSL_AUTOTICKS)
+	MACRO(wxSL_BOTTOM)
+	MACRO(wxSL_HORIZONTAL)
+	MACRO(wxSL_INVERSE)
+	MACRO(wxSL_LABELS)
+	MACRO(wxSL_LEFT)
+	MACRO(wxSL_RIGHT)
+	MACRO(wxSL_SELRANGE)
+	MACRO(wxSL_TOP)
+	MACRO(wxSL_VERTICAL)
+	MACRO(wxSL_BOTH)
+
+	WINDOW_COMPONENT( "wxGauge", GaugeComponent )
+	MACRO(wxGA_HORIZONTAL)
+	MACRO(wxGA_SMOOTH)
+	MACRO(wxGA_VERTICAL)
+
+	WINDOW_COMPONENT( "wxAnimationCtrl", AnimCtrlComponent )
+	MACRO(wxAC_DEFAULT_STYLE)
+	MACRO(wxAC_NO_AUTORESIZE)
 
 END_LIBRARY()

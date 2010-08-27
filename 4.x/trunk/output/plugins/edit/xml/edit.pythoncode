@@ -1,6 +1,111 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <codegen language="Python">
 
+	<templates class="wxGrid">
+		<template name="include">import wx.grid</template>
+		<template name="construction">self.$name = #class( #wxparent $name, $id, $pos, $size, $window_style #ifnotnull $window_name @{, $window_name @} )</template>
+		<template name="settings">
+			#nl @# Grid
+			#nl self.$name.CreateGrid( $rows, $cols )
+			#nl self.$name.EnableEditing( $editing )
+			#nl self.$name.EnableGridLines( $grid_lines )
+			#ifnotnull $grid_line_color
+			@{
+				#nl self.$name.SetGridLineColour( $grid_line_color )
+			@}
+			#nl self.$name.EnableDragGridSize( $drag_grid_size )
+			#nl self.$name.SetMargins( $margin_width, $margin_height )
+			#nl
+			#nl @# Columns
+			#foreach $column_sizes
+			@{ self.$name.SetColSize( #npred, #pred ) @}
+			#ifnotequal $autosize_cols "0"
+			@{
+				#nl self.$name.AutoSizeColumns()
+			@}
+			#nl self.$name.EnableDragColMove( $drag_col_move )
+			#nl self.$name.EnableDragColSize( $drag_col_size )
+			#nl self.$name.SetColLabelSize( $col_label_size )
+			#foreach $col_label_values
+			@{ self.$name.SetColLabelValue( #npred, #pred ) @}
+			#nl self.$name.SetColLabelAlignment( $col_label_horiz_alignment, $col_label_vert_alignment )
+			#nl
+			#nl @# Rows
+			#foreach $row_sizes
+			@{ self.$name.SetRowSize( #npred, #pred ) @}
+			#ifnotequal $autosize_rows "0"
+			@{
+				#nl self.$name.AutoSizeRows()
+			@}
+			#nl self.$name.EnableDragRowSize( $drag_row_size )
+			#nl self.$name.SetRowLabelSize( $row_label_size )
+			#foreach $row_label_values
+			@{ self.$name.SetRowLabelValue( #npred, #pred ) @}
+			#nl self.$name.SetRowLabelAlignment( $row_label_horiz_alignment, $row_label_vert_alignment )
+			#nl
+			#nl @# Label Appearance
+			#ifnotnull $label_bg
+			@{
+				#nl self.$name.SetLabelBackgroundColour( $label_bg )
+			@}
+			#ifnotnull $label_font
+			@{
+				#nl self.$name.SetLabelFont( $label_font )
+			@}
+			#ifnotnull $label_text
+			@{
+				#nl self.$name.SetLabelTextColour( $label_text )
+			@}
+			#nl
+			#nl @# Cell Defaults
+			#ifnotnull $cell_bg
+			@{
+				#nl self.$name.SetDefaultCellBackgroundColour( $cell_bg )
+			@}
+			#ifnotnull $cell_text
+			@{
+				#nl self.$name.SetDefaultCellTextColour( $cell_text )
+			@}
+			#ifnotnull $cell_font
+			@{
+				#nl self.$name.SetDefaultCellFont( $cell_font )
+			@}
+			#nl self.$name.SetDefaultCellAlignment( $cell_horiz_alignment, $cell_vert_alignment )
+		</template>
+		<template name="evt_connect_OnGridCellLeftClick">self.$name.Bind( wx.grid.EVT_GRID_CELL_LEFT_CLICK, #handler )</template>
+		<template name="evt_connect_OnGridCellRightClick">self.$name.Bind( wx.grid.EVT_GRID_CELL_RIGHT_CLICK, #handler )</template>
+		<template name="evt_connect_OnGridCellLeftDClick">self.$name.Bind( wx.grid.EVT_GRID_CELL_LEFT_DCLICK, #handler )</template>
+		<template name="evt_connect_OnGridCellRightDClick">self.$name.Bind( wx.grid.EVT_GRID_CELL_RIGHT_DCLICK, #handler )</template>
+		<template name="evt_connect_OnGridLabelLeftClick">self.$name.Bind( wx.grid.EVT_GRID_LABEL_LEFT_CLICK, #handler )</template>
+		<template name="evt_connect_OnGridLabelRightClick">self.$name.Bind( wx.grid.EVT_GRID_LABEL_RIGHT_CLICK, #handler )</template>
+		<template name="evt_connect_OnGridLabelLeftDClick">self.$name.Bind( wx.grid.EVT_GRID_LABEL_LEFT_DCLICK, #handler )</template>
+		<template name="evt_connect_OnGridLabelRightDClick">self.$name.Bind( wx.grid.EVT_GRID_LABEL_RIGHT_DCLICK, #handler )</template>
+		<template name="evt_connect_OnGridCellChange">self.$name.Bind( wx.grid.EVT_GRID_CELL_CHANGE, #handler )</template>
+		<template name="evt_connect_OnGridSelectCell">self.$name.Bind( wx.grid.EVT_GRID_SELECT_CELL, #handler )</template>
+		<template name="evt_connect_OnGridEditorHidden">self.$name.Bind( wx.grid.EVT_GRID_EDITOR_HIDDEN, #handler )</template>
+		<template name="evt_connect_OnGridEditorShown">self.$name.Bind( wx.grid.EVT_GRID_EDITOR_SHOWN, #handler )</template>
+		<template name="evt_connect_OnGridCmdCellLeftClick">self.$name.Bind( wx.grid.EVT_GRID_CELL_LEFT_CLICK, #handler )</template>
+		<template name="evt_connect_OnGridCmdCellRightClick">self.$name.Bind( wx.grid.EVT_GRID_CELL_RIGHT_CLICK, #handler )</template>
+		<template name="evt_connect_OnGridCmdCellLeftDClick">self.$name.Bind( wx.grid.EVT_GRID_CELL_LEFT_DCLICK, #handler )</template>
+		<template name="evt_connect_OnGridCmdCellRightDClick">self.$name.Bind( wx.grid.EVT_GRID_CELL_RIGHT_DCLICK, #handler )</template>
+		<template name="evt_connect_OnGridCmdLabelLeftClick">self.$name.Bind( wx.grid.EVT_GRID_LABEL_LEFT_CLICK, #handler )</template>
+		<template name="evt_connect_OnGridCmdLabelRightClick">self.$name.Bind( wx.grid.EVT_GRID_LABEL_RIGHT_CLICK, #handler )</template>
+		<template name="evt_connect_OnGridCmdLabelLeftDClick">self.$name.Bind( wx.grid.EVT_GRID_LABEL_LEFT_DCLICK, #handler )</template>
+		<template name="evt_connect_OnGridCmdLabelRightDClick">self.$name.Bind( wx.grid.EVT_GRID_LABEL_RIGHT_DCLICK, #handler )</template>
+		<template name="evt_connect_OnGridCmdCellChange">self.$name.Bind( wx.grid.EVT_GRID_CELL_CHANGE, #handler )</template>
+		<template name="evt_connect_OnGridCmdSelectCell">self.$name.Bind( wx.grid.EVT_GRID_SELECT_CELL, #handler )</template>
+		<template name="evt_connect_OnGridCmdEditorHidden">self.$name.Bind( wx.grid.EVT_GRID_EDITOR_HIDDEN, #handler )</template>
+		<template name="evt_connect_OnGridCmdEditorShown">self.$name.Bind( wx.grid.EVT_GRID_EDITOR_SHOWN, #handler )</template>
+		<template name="evt_connect_OnGridColSize">self.$name.Bind( wx.grid.EVT_GRID_COL_SIZE, #handler )</template>
+		<template name="evt_connect_OnGridRowSize">self.$name.Bind( wx.grid.EVT_GRID_ROW_SIZE, #handler )</template>
+		<template name="evt_connect_OnGridCmdColSize">self.$name.Bind( wx.grid.EVT_GRID_COL_SIZE, #handler )</template>
+		<template name="evt_connect_OnGridCmdRowSize">self.$name.Bind( wx.grid.EVT_GRID_ROW_SIZE, #handler )</template>
+		<template name="evt_connect_OnGridRangeSelect">self.$name.Bind( wx.grid.EVT_GRID_RANGE_SELECT, #handler )</template>
+		<template name="evt_connect_OnGridCmdRangeSelect">self.$name.Bind( wx.grid.EVT_GRID_RANGE_SELECT, #handler )</template>
+		<template name="evt_connect_OnGridEditorCreated">self.$name.Bind( wx.grid.EVT_GRID_EDITOR_CREATED, #handler )</template>
+		<template name="evt_connect_OnGridCmdEditorCreated">self.$name.Bind( wx.grid.EVT_GRID_EDITOR_CREATED, #handler )</template>
+	</templates>
+
 	<templates class="wxPropertyGrid">
 		<template name="construction">
 			@# WARNING: wxPython code generation isn't supported for this widget yet. #nl
