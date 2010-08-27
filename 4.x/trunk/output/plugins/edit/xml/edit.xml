@@ -70,25 +70,47 @@
 			<option name="wxPG_DESCRIPTION"				help="wxPropertyGridManager only: Show adjustable text box showing description or help text,
 																if available, for currently selected property. "/>
 			<option name="wxPG_NO_INTERNAL_BORDER" 		help="wxPropertyGridManager only: don't show an internal border around the property grid.
-																Recommended if you use a header. "
+																Recommended if you use a header."/>
 		<!--option name="wxTAB_TRAVERSAL"				help="wxTAB_TRAVERSAL allows using Tab/Shift-Tab to travel between properties
 															    in grid. Travelling forwards from last property will navigate to the
 															    next control, and backwards from first will navigate to the previous one."/>
 			<option name="wxPG_COMPACTOR"				help="Show compactor button that toggles hidden state of low-priority properties."/-->
 			<option name="wxPGMAN_DEFAULT_STYLE"		help="Combines various styles."/>
-			wxPGMAN_DEFAULT_STYLE | wxPG_TOOLBAR | wxPG_COMPACTOR
+			wxPG_SPLITTER_AUTO_CENTER | wxPG_TOOLBAR
 		</property>
 		<property name="extra_style" type="bitlist">
-			<option name="wxPG_EX_INIT_NOCAT"		help="NOTE: wxPG_EX_xxx are extra window styles and must be set using SetExtraStyle() member function.
-															Speeds up switching to wxPG_HIDE_CATEGORIES mode. Initially, if wxPG_HIDE_CATEGORIES
-															is not defined, the non-categorized data storage is not activated, and switching
-															the mode first time becomes somewhat slower. wxPG_EX_INIT_NOCAT activates the
-															non-categorized data storage right away.
-															NOTE: If you do plan not switching to non-categoric mode, or if you don't plan to use
-															categories at all, then using this style will result in waste of resources."/>
-
-		    <option name="wxPG_EX_NO_FLAT_TOOLBAR"	help="Extended window style that sets wxPropertyGridManager tool bar to not use flat style."/>
-			<option name="wxPG_EX_MODE_BUTTONS"		help="Shows alphabetic/categoric mode buttons from tool bar."/>
+			<option name="wxPG_EX_INIT_NOCAT"					help="NOTE: wxPG_EX_xxx are extra window styles and must be set using SetExtraStyle() member function.
+																		Speeds up switching to wxPG_HIDE_CATEGORIES mode. Initially, if wxPG_HIDE_CATEGORIES
+																		is not defined, the non-categorized data storage is not activated, and switching
+																		the mode first time becomes somewhat slower. wxPG_EX_INIT_NOCAT activates the
+																		non-categorized data storage right away.
+																		NOTE: If you do plan not switching to non-categoric mode, or if you don't plan to use
+																		categories at all, then using this style will result in waste of resources."/>
+		    <option name="wxPG_EX_NO_FLAT_TOOLBAR"				help="Extended window style that sets wxPropertyGridManager tool bar to not use flat style."/>
+			<option name="wxPG_EX_MODE_BUTTONS"					help="Shows alphabetic/categoric mode buttons from tool bar."/>
+			<option name="wxPG_EX_HELP_AS_TOOLTIPS"				help="Show property help strings as tool tips instead as text on the status bar.
+																		You can set the help strings using SetPropertyHelpString member function."/>
+			<option name="wxPG_EX_NATIVE_DOUBLE_BUFFERING" 		help="Allows relying on native double-buffering."/>
+			<option name="wxPG_EX_AUTO_UNSPECIFIED_VALUES" 		help="Set this style to let user have ability to set values of properties to unspecified state."/>
+			<option name="wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES" help="If this style is used, built-in attributes (such as wxPG_FLOAT_PRECISION and wxPG_STRING_PASSWORD)
+																		are not stored into property's attribute storage (thus they are not readable).
+																		Note that this option is global, and applies to all wxPG property containers."/>
+			<option name="wxPG_EX_HIDE_PAGE_BUTTONS" 			help="Hides page selection buttons from tool bar."/>
+			<option name="wxPG_EX_MULTIPLE_SELECTION" 			help="Allows multiple properties to be selected by user
+																		(by pressing SHIFT when clicking on a property,
+																		or by dragging with left mouse button down).
+																		You can get array of selected properties with wxPropertyGridInterface::GetSelectedProperties().
+																		In multiple selection mode wxPropertyGridInterface::GetSelection()
+																		returns property which has editor active (usually the first one selected).
+																		Other useful member functions are ClearSelection(), AddToSelection() and RemoveFromSelection()."/>
+			<option name="wxPG_EX_ENABLE_TLP_TRACKING" 			help="This enables top-level window tracking which allows wxPropertyGrid to notify
+																		the application of last-minute property value changes by user.
+																		This style is not enabled by default because it may cause crashes when
+																		wxPropertyGrid is used in with wxAUI or similar system.
+																		Remarks: If you are not in fact using any system that may change wxPropertyGrid's
+																		top-level parent window on its own, then you are recommended to enable this style."/>
+			<option name="wxPG_EX_NO_TOOLBAR_DIVIDER" 			help="Don't show divider above toolbar, on Windows."/>
+			<option name="wxPG_EX_TOOLBAR_SEPARATOR" 			help="Show a separator below the toolbar."/>
 			wxPG_EX_MODE_BUTTONS
 		</property>
 		<property name="name" type="text">m_propGridMgr</property>
