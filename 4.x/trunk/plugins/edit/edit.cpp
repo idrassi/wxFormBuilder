@@ -161,12 +161,12 @@ public:
 																obj->GetPropertyAsInteger("style") |
 																obj->GetPropertyAsInteger("window_style") );
 
-		wxPropertyGridPage* pg = pgman->AddPage("First Page");
-
 		if ( !obj->GetPropertyAsString("extra_style").empty() )
 			pgman->SetExtraStyle( obj->GetPropertyAsInteger("extra_style") );
 
 		pgman->ShowHeader( obj->GetPropertyAsInteger("show_header") );
+
+		wxPropertyGridPage* pg = pgman->AddPage("First Page");
 
 		pg->Append( new wxPropertyCategory( "Sample Category", wxPG_LABEL ) );
 
@@ -210,31 +210,47 @@ public:
 		// A file selector property.
 		pg->Append( new wxFileProperty( "FileProperty", wxPG_LABEL, wxEmptyString ) );
 
+		wxPropertyGridPage* pg2 = pgman->AddPage("Second Page");
+
+		pg2->Append( new wxPropertyCategory( "Sample Parent Property", wxPG_LABEL ) );
+
+		wxPGProperty* carProp2 = pg2->Append( new wxStringProperty( "Car", wxPG_LABEL, "<composed>" ) );
+		pg2->AppendIn( carProp2, new wxStringProperty( "Model", wxPG_LABEL, "Lamborghini Diablo SV" ) );
+		pg2->AppendIn( carProp2, new wxIntProperty( "Engine Size (cc)", wxPG_LABEL, 5707) );
+
+		wxPGProperty* speedsProp2 = pg2->AppendIn( carProp2, new wxStringProperty( "Speeds", wxPG_LABEL, "<composed>" ) );
+		pg2->AppendIn( speedsProp2, new wxIntProperty( "Max. Speed (mph)", wxPG_LABEL, 300 ) );
+		pg2->AppendIn( speedsProp2, new wxFloatProperty( "0-100 mph (sec)", wxPG_LABEL, 3.9 ) );
+		pg2->AppendIn( speedsProp2, new wxFloatProperty( "1/4 mile (sec)", wxPG_LABEL, 8.6) );
+
+		pg2->AppendIn( carProp2, new wxIntProperty( "Price ($)", wxPG_LABEL, 300000 ) );
+
 		if ( obj->GetPropertyAsInteger("include_advanced") )
 		{
-			pg->Append( new wxPropertyCategory( "Advanced Properties", wxPG_LABEL ) );
+			pg2->Append( new wxPropertyCategory( "Advanced Properties", wxPG_LABEL ) );
 			// wxArrayStringProperty embeds a wxArrayString.
-			pg->Append( new wxArrayStringProperty( "Example of ArrayStringProperty", "ArrayStringProp" ) );
+			pg2->Append( new wxArrayStringProperty( "Example of ArrayStringProperty", "ArrayStringProp" ) );
 
 			// Image file property. Wildcard is auto-generated from available
 			// image handlers, so it is not set this time.
-			pg->Append( new wxImageFileProperty( "Example of ImageFileProperty", "ImageFileProp" ) );
+			pg2->Append( new wxImageFileProperty( "Example of ImageFileProperty", "ImageFileProp" ) );
 
 			// Font property has sub-properties.
-			pg->Append( new wxFontProperty( "Font", wxPG_LABEL ) );
+			pg2->Append( new wxFontProperty( "Font", wxPG_LABEL ) );
 
 			// Colour property with arbitrary colour.
-			pg->Append( new wxColourProperty( "My Colour 1", wxPG_LABEL, wxColour( 242, 109, 0 ) ) );
+			pg2->Append( new wxColourProperty( "My Colour 1", wxPG_LABEL, wxColour( 242, 109, 0 ) ) );
 
 			// System colour property.
-			pg->Append( new wxSystemColourProperty( "My SysColour 1", wxPG_LABEL, wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) ) );
+			pg2->Append( new wxSystemColourProperty( "My SysColour 1", wxPG_LABEL, wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) ) );
 
 			// System colour property with custom colour.
-			pg->Append( new wxSystemColourProperty( "My SysColour 2", wxPG_LABEL, wxColour( 0, 200, 160 ) ) );
+			pg2->Append( new wxSystemColourProperty( "My SysColour 2", wxPG_LABEL, wxColour( 0, 200, 160 ) ) );
 
 			// Cursor property
-			pg->Append( new wxCursorProperty( "My Cursor", wxPG_LABEL, wxCURSOR_ARROW ) );
+			pg2->Append( new wxCursorProperty( "My Cursor", wxPG_LABEL, wxCURSOR_ARROW ) );
 		}
+		pgman->SelectPage( 0 );
 		return pgman;
 	}
 };
