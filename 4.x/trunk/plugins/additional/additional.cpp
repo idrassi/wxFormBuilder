@@ -34,7 +34,6 @@
 #include <wx/checklst.h>
 #include <wx/dataview.h>
 #include <wx/dirctrl.h>
-#include <wx/grid.h>
 #include <wx/hyperlink.h>
 #include <wx/htmllbox.h>
 #include <wx/imaglist.h>
@@ -42,7 +41,6 @@
 #include <wx/spinbutt.h>
 #include <wx/spinctrl.h>
 #include <wx/srchctrl.h>
-#include <wx/tglbtn.h>
 #include <wx/treectrl.h>
 #include <wx/html/htmlwin.h>
 
@@ -64,10 +62,7 @@ public:
 	m_manager( manager ) {}
 
 protected:
-	void OnGridClick( wxGridEvent& event );
-	void OnGridColSize( wxGridSizeEvent& event );
-	void OnGridRowSize( wxGridSizeEvent& event );
-	void OnText( wxCommandEvent& event );
+	void OnText( wxCommandEvent& event ); 					// wxSearchCtrl
 	void OnGenericDirCtrlExpandItem( wxTreeEvent& event );
 	//void OnColClick( wxDataViewEvent& event );
 	//void OnColEndDrag( wxDataViewEvent& event );
@@ -77,11 +72,6 @@ protected:
 
 BEGIN_EVENT_TABLE( ComponentEvtHandler, wxEvtHandler )
 	EVT_TEXT( wxID_ANY, ComponentEvtHandler::OnText )
-	// Grid also seems to ignore clicks
-	EVT_GRID_CELL_LEFT_CLICK( ComponentEvtHandler::OnGridClick )
-	EVT_GRID_LABEL_LEFT_CLICK( ComponentEvtHandler::OnGridClick )
-	EVT_GRID_COL_SIZE( ComponentEvtHandler::OnGridColSize )
-	EVT_GRID_ROW_SIZE( ComponentEvtHandler::OnGridRowSize )
 END_EVENT_TABLE()
 
 /**
@@ -110,21 +100,6 @@ BEGIN_EVENT_TABLE( GenericDirCtrlEvtHandler, wxEvtHandler )
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////
-class CustomControlComponent : public ComponentBase
-{
-public:
-	wxObject* Create( IObject* /*obj*/, wxObject *parent )
-	{
-		return new wxPanel( (wxWindow *)parent, -1, wxDefaultPosition, wxDefaultSize, 0 );
-	}
-
-	ticpp::Element* ExportToXrc(IObject *obj)
-	{
-		ObjectToXrcFilter xrc( obj, obj->GetPropertyAsString("class"), obj->GetPropertyAsString("name") );
-		return xrc.GetXrcObject();
-	}
-};
-
 class BitmapComboBoxComponent : public ComponentBase
 {
 public:
@@ -401,177 +376,6 @@ void GenericDirCtrlEvtHandler::OnGenericDirCtrlLeftClick( wxMouseEvent& event )
 	event.Skip();
 }
 
-class GridComponent : public ComponentBase
-{
-public:
-
-	wxObject* Create(IObject *obj, wxObject *parent)
-	{
-		wxGrid *grid = new wxGrid(	(wxWindow *)parent, -1,
-									obj->GetPropertyAsPoint("pos"),
-									obj->GetPropertyAsSize("size"),
-									obj->GetPropertyAsInteger("window_style") );
-
-		grid->CreateGrid( 	obj->GetPropertyAsInteger("rows"),
-							obj->GetPropertyAsInteger("cols") );
-
-		grid->EnableDragColMove( obj->GetPropertyAsInteger("drag_col_move") != 0 );
-		grid->EnableDragColSize( obj->GetPropertyAsInteger("drag_col_size") != 0 );
-		grid->EnableDragGridSize( obj->GetPropertyAsInteger("drag_grid_size") != 0 );
-		grid->EnableDragRowSize( obj->GetPropertyAsInteger("drag_row_size") != 0 );
-		grid->EnableEditing( obj->GetPropertyAsInteger("editing") != 0 );
-		grid->EnableGridLines( obj->GetPropertyAsInteger("grid_lines") != 0 );
-		if ( !obj->IsNull("grid_line_color") )
-		{
-			grid->SetGridLineColour( obj->GetPropertyAsColour("grid_line_color") );
-		}
-		grid->SetMargins( 	obj->GetPropertyAsInteger("margin_width"),
-							obj->GetPropertyAsInteger("margin_height") );
-
-		// Label Properties
-		grid->SetColLabelAlignment( obj->GetPropertyAsInteger("col_label_horiz_alignment"),
-									obj->GetPropertyAsInteger("col_label_vert_alignment") );
-		grid->SetColLabelSize( obj->GetPropertyAsInteger("col_label_size") );
-
-		wxArrayString columnLabels = obj->GetPropertyAsArrayString("col_label_values");
-		for ( int i = 0; i < (int)columnLabels.size() && i < grid->GetNumberCols(); ++i )
-		{
-			grid->SetColLabelValue( i, columnLabels[i] );
-		}
-
-		wxArrayInt columnSizes = obj->GetPropertyAsArrayInt("column_sizes");
-		for ( int i = 0; i < (int)columnSizes.size() && i < grid->GetNumberCols(); ++i )
-		{
-			grid->SetColSize( i, columnSizes[i] );
-		}
-
-		grid->SetRowLabelAlignment( obj->GetPropertyAsInteger("row_label_horiz_alignment"),
-									obj->GetPropertyAsInteger("row_label_vert_alignment") );
-
-		grid->SetRowLabelSize( obj->GetPropertyAsInteger("row_label_size") );
-
-		wxArrayString rowLabels = obj->GetPropertyAsArrayString("row_label_values");
-		for ( int i = 0; i < (int)rowLabels.size() && i < grid->GetNumberRows(); ++i )
-		{
-			grid->SetRowLabelValue( i, rowLabels[i] );
-		}
-
-		wxArrayInt rowSizes = obj->GetPropertyAsArrayInt("row_sizes");
-		for ( int i = 0; i < (int)rowSizes.size() && i < grid->GetNumberRows(); ++i )
-		{
-			grid->SetRowSize( i, rowSizes[i] );
-		}
-
-		if ( !obj->IsNull("label_bg") )
-		{
-			grid->SetLabelBackgroundColour( obj->GetPropertyAsColour("label_bg") );
-		}
-		if ( !obj->IsNull("label_text") )
-		{
-			grid->SetLabelTextColour( obj->GetPropertyAsColour("label_text") );
-		}
-		if ( !obj->IsNull("label_font") )
-		{
-			grid->SetLabelFont( obj->GetPropertyAsFont("label_font") );
-		}
-
-		// Default Cell Properties
-		grid->SetDefaultCellAlignment( 	obj->GetPropertyAsInteger("cell_horiz_alignment"),
-										obj->GetPropertyAsInteger("cell_vert_alignment") );
-
-		if ( !obj->IsNull("cell_bg") )
-		{
-			grid->SetDefaultCellBackgroundColour( obj->GetPropertyAsColour("cell_bg") );
-		}
-		if ( !obj->IsNull("cell_text") )
-		{
-			grid->SetDefaultCellTextColour( obj->GetPropertyAsColour("cell_text") );
-		}
-		if ( !obj->IsNull("cell_font") )
-		{
-			grid->SetDefaultCellFont( obj->GetPropertyAsFont("cell_font") );
-		}
-
-		// Example Cell Values
-		for ( int col = 0; col < grid->GetNumberCols(); ++col )
-		{
-			for ( int row = 0; row < grid->GetNumberRows(); ++row )
-			{
-				grid->SetCellValue( row, col, grid->GetColLabelValue( col ) + "-" + grid->GetRowLabelValue( row ) );
-			}
-		}
-
-		if ( obj->GetPropertyAsInteger("autosize_rows") != 0 )
-		{
-			grid->AutoSizeRows();
-		}
-		if ( obj->GetPropertyAsInteger("autosize_cols") != 0 )
-		{
-			grid->AutoSizeColumns();
-		}
-
-		grid->PushEventHandler( new ComponentEvtHandler( grid, GetManager() ) );
-
-		return grid;
-	}
-
-	ticpp::Element* ExportToXrc(IObject *obj)
-	{
-		ObjectToXrcFilter xrc( obj, "wxGrid", obj->GetPropertyAsString("name") );
-		xrc.AddWindowProperties();
-		return xrc.GetXrcObject();
-	}
-
-	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
-	{
-		XrcToXfbFilter filter( xrcObj, "wxGrid" );
-		filter.AddWindowProperties();
-		return filter.GetXfbObject();
-	}
-};
-
-void ComponentEvtHandler::OnGridClick( wxGridEvent& event )
-{
-	m_manager->SelectObject( m_window );
-	event.Skip();
-}
-
-void ComponentEvtHandler::OnGridColSize( wxGridSizeEvent& )
-{
-	wxGrid* grid = wxDynamicCast( m_window, wxGrid );
-	if ( NULL == grid )
-	{
-		return;
-	}
-
-	wxString sizes;
-	for ( int i = 0; i < grid->GetNumberCols(); ++i )
-	{
-		sizes += wxString::Format( "%i,", grid->GetColSize( i ) );
-	}
-	sizes = sizes.substr( 0, sizes.length() - 1 );
-
-	m_manager->ModifyProperty( m_window, "column_sizes", sizes, true );
-}
-
-void ComponentEvtHandler::OnGridRowSize( wxGridSizeEvent& )
-{
-	wxGrid* grid = wxDynamicCast( m_window, wxGrid );
-	if ( NULL == grid )
-	{
-		return;
-	}
-
-	wxString sizes;
-	for ( int i = 0; i < grid->GetNumberRows(); ++i )
-	{
-		sizes += wxString::Format( "%i,", grid->GetRowSize( i ) );
-	}
-	sizes = sizes.substr( 0, sizes.length() - 1 );
-
-	m_manager->ModifyProperty( m_window, "row_sizes", sizes, true );
-}
-
 #if wxUSE_MEDIACTRL
 #include <wx/mediactrl.h>
 
@@ -833,66 +637,6 @@ public:
 	}
 };
 
-class ToggleButtonComponent : public ComponentBase, public wxEvtHandler
-{
-public:
-	wxObject* Create( IObject *obj, wxObject *parent )
-	{
-		wxToggleButton* window = new wxToggleButton((wxWindow *)parent, -1,
-													obj->GetPropertyAsString("label"),
-													obj->GetPropertyAsPoint("pos"),
-													obj->GetPropertyAsSize("size"),
-													obj->GetPropertyAsInteger("window_style") );
-
-		window->SetValue( ( obj->GetPropertyAsInteger("value") != 0 ) );
-
-		window->Connect(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED,
-						wxCommandEventHandler( ToggleButtonComponent::OnToggle ), NULL, this );
-		return window;
-	}
-
-	void OnToggle( wxCommandEvent& event )
-	{
-		wxToggleButton* window = dynamic_cast< wxToggleButton* >( event.GetEventObject() );
-		if ( 0 != window )
-		{
-			wxString value;
-			value.Printf( "%i", window->GetValue() ? 1 : 0 );
-			GetManager()->ModifyProperty( window, "value", value );
-			window->SetFocus();
-		}
-	}
-
-	void Cleanup( wxObject* obj )
-	{
-		wxToggleButton* window = dynamic_cast< wxToggleButton* >( obj );
-		if ( 0 != window )
-		{
-			window->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED,
-								wxCommandEventHandler( ToggleButtonComponent::OnToggle ), NULL, this );
-		}
-		ComponentBase::Cleanup( obj );
-	}
-
-	ticpp::Element* ExportToXrc( IObject *obj )
-	{
-		ObjectToXrcFilter xrc( obj, "wxToggleButton", obj->GetPropertyAsString("name") );
-		xrc.AddWindowProperties();
-		xrc.AddProperty( "label", "label", XRC_TYPE_TEXT );
-		xrc.AddProperty( "value", "checked", XRC_TYPE_BOOL );
-		return xrc.GetXrcObject();
-	}
-
-	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
-	{
-		XrcToXfbFilter filter( xrcObj, "wxToggleButton" );
-		filter.AddWindowProperties();
-		filter.AddProperty( "label", "label", XRC_TYPE_TEXT );
-		filter.AddProperty( "checked", "value", XRC_TYPE_BOOL );
-		return filter.GetXfbObject();
-	}
-};
-
 class TreeCtrlComponent : public ComponentBase
 {
 public:
@@ -1087,9 +831,22 @@ public:
 	}
 };
 
-BEGIN_LIBRARY()
+class CustomControlComponent : public ComponentBase
+{
+public:
+	wxObject* Create( IObject* /*obj*/, wxObject *parent )
+	{
+		return new wxPanel( (wxWindow *)parent, -1, wxDefaultPosition, wxDefaultSize, 0 );
+	}
 
-	WINDOW_COMPONENT( "CustomControl", 		CustomControlComponent )
+	ticpp::Element* ExportToXrc(IObject *obj)
+	{
+		ObjectToXrcFilter xrc( obj, obj->GetPropertyAsString("class"), obj->GetPropertyAsString("name") );
+		return xrc.GetXrcObject();
+	}
+};
+
+BEGIN_LIBRARY()
 
 	WINDOW_COMPONENT( "wxBitmapComboBox", 	BitmapComboBoxComponent )
 
@@ -1121,15 +878,8 @@ BEGIN_LIBRARY()
 	MACRO(wxDIRCTRL_SHOW_FILTERS)
 	MACRO(wxDIRCTRL_EDIT_LABELS)
 
-	WINDOW_COMPONENT( "wxGrid", GridComponent )
-	MACRO(wxALIGN_LEFT)
-	MACRO(wxALIGN_CENTRE)
-	MACRO(wxALIGN_RIGHT)
-	MACRO(wxALIGN_TOP)
-	MACRO(wxALIGN_BOTTOM)
-
 #if wxUSE_MEDIACTRL
-//	WINDOW_COMPONENT( "wxMediaCtrl", MediaCtrlComponent )
+//	WINDOW_COMPONENT( "wxMediaCtrl", MediaCtrlComponent ) TODO: wxMediaCtrl won't compile
 #endif
 
 	WINDOW_COMPONENT( "wxScrollBar", ScrollBarComponent )
@@ -1151,8 +901,6 @@ BEGIN_LIBRARY()
 	MACRO(wxSP_WRAP)
 	MACRO(wxSP_HORIZONTAL)
 	MACRO(wxSP_VERTICAL)
-
-	WINDOW_COMPONENT( "wxToggleButton", ToggleButtonComponent )
 
 	WINDOW_COMPONENT( "wxTreeCtrl", TreeCtrlComponent )
 	MACRO(wxTR_EDIT_LABELS)
@@ -1185,5 +933,7 @@ BEGIN_LIBRARY()
 	WINDOW_COMPONENT( "wxSimpleHtmlListBox", HtmlListBoxSimpleWindowComponent )
 	MACRO(wxHLB_DEFAULT_STYLE)
 	MACRO(wxHW_SCROLLBAR_AUTO)
+
+	WINDOW_COMPONENT( "CustomControl", CustomControlComponent )
 
 END_LIBRARY()

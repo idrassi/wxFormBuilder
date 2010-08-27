@@ -59,6 +59,14 @@ Written by
 		<property name="hover" 		type="bitmap" help="Bitmap shown when the mouse is over the button (but it is not pressed). Notice that if hover bitmap is not specified but the current platform UI uses hover images for the buttons (such as Windows XP or GTK+), then the focus bitmap is used for hover state as well. This makes it possible to set focus bitmap only to get reasonably good behaviour on all platforms."/>
 	</objectinfo>
 
+	<objectinfo class="wxToggleButton" icon="tglbtn.xpm" type="widget">
+		<inherits class="wxWindow" />
+		<property name="name" 	type="text">m_toggleBtn</property>
+		<property name="label" 	type="wxString_i18n">Toggle me!</property>
+		<property name="value" 	type="bool">0</property>
+		<event name="OnToggleButton" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RADIOBUTTON_SELECTED event, when the radiobutton is clicked." />
+	</objectinfo>
+
 	<objectinfo class="wxStaticText" icon="stattext.xpm" type="widget">
 		<inherits class="wxWindow"/>
 		<property name="name" 	type="text">m_staticText</property>
