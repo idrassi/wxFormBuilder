@@ -27,6 +27,10 @@
 #include <xrcconv.h>
 #include <ticpp.h>
 
+#include <wx/propgrid/propgrid.h>
+#include <wx/propgrid/advprops.h>
+#include <wx/propgrid/manager.h>
+#include <wx/propgrid/props.h>
 #include <wx/richtext/richtextctrl.h>
 #include <wx/stc/stc.h>
 
@@ -56,6 +60,95 @@ protected:
 BEGIN_EVENT_TABLE( ComponentEvtHandler, wxEvtHandler )
 	EVT_STC_MARGINCLICK( -1, ComponentEvtHandler::OnMarginClick )
 END_EVENT_TABLE()
+
+class PropertyGridComponent : public ComponentBase
+{
+public:
+	wxObject* Create(IObject *obj, wxObject *parent)
+	{
+		wxPropertyGrid* pg = new wxPropertyGrid((wxWindow *)parent,-1,
+												obj->GetPropertyAsPoint("pos"),
+												obj->GetPropertyAsSize("size"),
+												obj->GetPropertyAsInteger("style") |
+												obj->GetPropertyAsInteger("window_style") );
+
+		if ( !obj->GetPropertyAsString("extra_style").empty() )
+			pg->SetExtraStyle( obj->GetPropertyAsInteger("extra_style") );
+
+		pg->Append( new wxPropertyCategory( "Sample Category", wxPG_LABEL ) );
+
+		// Add string property
+		pg->Append( new wxStringProperty( "Label", "Name", "Initial Value" ) );
+
+		// Add int property
+		pg->Append( new wxIntProperty ( "IntProperty", wxPG_LABEL, 12345678 ) );
+
+		// Add float property (value type is actually double)
+		pg->Append( new wxFloatProperty ( "FloatProperty", wxPG_LABEL, 12345.678 ) );
+
+		// Add a bool property
+		pg->Append( new wxBoolProperty ( "BoolProperty", wxPG_LABEL, false ) );
+		pg->Append( new wxBoolProperty ( "BoolPropertyAsCheckbox", wxPG_LABEL, true ) );
+		pg->SetPropertyAttribute( "BoolPropertyAsCheckbox", wxPG_BOOL_USE_CHECKBOX, (long)1 );
+
+		// A string property that can be edited in a separate editor dialog.
+		pg->Append( new wxLongStringProperty ( "LongStringProperty",
+			wxPG_LABEL,
+			"This is much longer string than the "
+			"first one. Edit it by clicking the button." ) );
+
+		// String editor with dir selector button.
+		pg->Append( new wxDirProperty( "DirProperty", wxPG_LABEL, ::wxGetUserHome() ) );
+
+		// A file selector property.
+		pg->Append( new wxFileProperty( "FileProperty", wxPG_LABEL, wxEmptyString ) );
+
+		pg->Append( new wxPropertyCategory( "Sample Parent Property", wxPG_LABEL ) );
+
+		wxPGProperty* carProp = pg->Append( new wxStringProperty( "Car", wxPG_LABEL, "<composed>" ) );
+		pg->AppendIn( carProp, new wxStringProperty( "Model", wxPG_LABEL, "Lamborghini Diablo SV" ) );
+		pg->AppendIn( carProp, new wxIntProperty( "Engine Size (cc)", wxPG_LABEL, 5707) );
+
+		wxPGProperty* speedsProp = pg->AppendIn( carProp, new wxStringProperty( "Speeds", wxPG_LABEL, "<composed>" ) );
+		pg->AppendIn( speedsProp, new wxIntProperty( "Max. Speed (mph)", wxPG_LABEL, 300 ) );
+		pg->AppendIn( speedsProp, new wxFloatProperty( "0-100 mph (sec)", wxPG_LABEL, 3.9 ) );
+		pg->AppendIn( speedsProp, new wxFloatProperty( "1/4 mile (sec)", wxPG_LABEL, 8.6) );
+
+		pg->AppendIn( carProp, new wxIntProperty( "Price ($)", wxPG_LABEL, 300000 ) );
+
+		if ( obj->GetPropertyAsInteger("include_advanced") )
+		{
+			pg->Append( new wxPropertyCategory( "Advanced Properties", wxPG_LABEL ) );
+			// wxArrayStringProperty embeds a wxArrayString.
+			pg->Append( new wxArrayStringProperty( "Example of ArrayStringProperty", "ArrayStringProp" ) );
+
+			// Image file property. Wildcard is auto-generated from available
+			// image handlers, so it is not set this time.
+			pg->Append( new wxImageFileProperty( "Example of ImageFileProperty", "ImageFileProp" ) );
+
+			// Font property has sub-properties.
+			pg->Append( new wxFontProperty( "Font", wxPG_LABEL ) );
+
+			// Colour property with arbitrary colour.
+			pg->Append( new wxColourProperty( "My Colour 1", wxPG_LABEL, wxColour( 242, 109, 0 ) ) );
+
+			// System colour property.
+			pg->Append( new wxSystemColourProperty( "My SysColour 1", wxPG_LABEL, wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) ) );
+
+			// System colour property with custom colour.
+			pg->Append( new wxSystemColourProperty( "My SysColour 2", wxPG_LABEL, wxColour( 0, 200, 160 ) ) );
+
+			// Cursor property
+			pg->Append( new wxCursorProperty( "My Cursor", wxPG_LABEL, wxCURSOR_ARROW ) );
+		}
+		return pg;
+	}
+
+	void Cleanup( wxObject* )
+	{
+		// Prevent assert for missing event handler
+	}
+};
 
 class RichTextCtrlComponent : public ComponentBase
 {
@@ -354,6 +447,21 @@ void ComponentEvtHandler::OnMarginClick( wxStyledTextEvent& event )
 }
 
 BEGIN_LIBRARY()
+
+	WINDOW_COMPONENT("wxPropertyGrid", PropertyGridComponent)
+	MACRO(wxPG_AUTO_SORT)
+	MACRO(wxPG_HIDE_CATEGORIES)
+	MACRO(wxPG_ALPHABETIC_MODE)
+	MACRO(wxPG_BOLD_MODIFIED)
+	MACRO(wxPG_SPLITTER_AUTO_CENTER)
+	MACRO(wxPG_TOOLTIPS)
+	MACRO(wxPG_HIDE_MARGIN)
+	MACRO(wxPG_STATIC_SPLITTER)
+	MACRO(wxPG_STATIC_LAYOUT)
+	MACRO(wxPG_LIMITED_EDITING)
+	MACRO(wxPG_EX_INIT_NOCAT)
+	MACRO(wxPG_DEFAULT_STYLE)
+	MACRO(wxTAB_TRAVERSAL)
 
 	WINDOW_COMPONENT( "wxRichTextCtrl", RichTextCtrlComponent )
 	MACRO(wxTE_PROCESS_ENTER);
