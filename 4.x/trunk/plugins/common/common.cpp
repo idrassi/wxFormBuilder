@@ -22,23 +22,22 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 #include <component.h>
 #include <plugin.h>
 #include <xrcconv.h>
 #include <ticpp.h>
 
-#include <wx/animate.h>
 #include <wx/bmpbuttn.h>
+#include <wx/bmpcbox.h>
 #include <wx/listctrl.h>
 #include <wx/radiobox.h>
 #include <wx/statline.h>
 #include <wx/tglbtn.h>
+#include <wx/treectrl.h>
 #include <wx/aui/auibar.h>
 
-///////////////////////////////////////////////////////////////////////////////
-// Custom status bar class for windows to prevent the status bar gripper from
-// moving the entire wxFB window
+/** Custom status bar class for windows to prevent the status bar gripper from
+	moving the entire wxFB window */
 #if defined(__WIN32__) && wxUSE_NATIVE_STATUSBAR
 class wxIndependentStatusBar : public wxStatusBar
 {
@@ -697,6 +696,49 @@ public:
 	}
 };
 
+class BitmapComboBoxComponent : public ComponentBase
+{
+public:
+	wxObject* Create(IObject *obj, wxObject *parent)
+	{
+		wxBitmapComboBox *bcombo = new wxBitmapComboBox((wxWindow *)parent,-1,
+			obj->GetPropertyAsString(_("value")),
+			obj->GetPropertyAsPoint(_("pos")),
+			obj->GetPropertyAsSize(_("size")),
+			0,
+			NULL,
+			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+
+		// choices
+		wxArrayString choices = obj->GetPropertyAsArrayString(_("choices"));
+		for (unsigned int i=0; i<choices.Count(); i++)
+		{
+			wxImage img(choices[i].BeforeFirst(wxChar(58)));
+			bcombo->Append(choices[i].AfterFirst(wxChar(58)), wxBitmap(img));
+		}
+			
+		return bcombo;
+	}
+	
+	ticpp::Element* ExportToXrc(IObject *obj)
+	{
+		ObjectToXrcFilter xrc(obj, _("wxBitmapComboBox"), obj->GetPropertyAsString(_("name")));
+		xrc.AddWindowProperties();
+		xrc.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
+		xrc.AddProperty(_("choices"),_("content"),XRC_TYPE_STRINGLIST);
+		return xrc.GetXrcObject();
+	}
+
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
+	{
+		XrcToXfbFilter filter(xrcObj, _("wxBitmapComboBox"));
+		filter.AddWindowProperties();
+		filter.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
+		filter.AddProperty(_("content"),_("choices"),XRC_TYPE_STRINGLIST);
+		return filter.GetXfbObject();
+	}
+};
+
 class CheckBoxComponent : public ComponentBase
 {
 public:
@@ -895,6 +937,52 @@ public:
 		XrcToXfbFilter filter( xrcObj, "wxListBox" );
 		filter.AddWindowProperties();
 		filter.AddProperty( "content", "choices", XRC_TYPE_STRINGLIST );
+		return filter.GetXfbObject();
+	}
+};
+
+class TreeCtrlComponent : public ComponentBase
+{
+public:
+	wxObject* Create( IObject *obj, wxObject *parent )
+	{
+		int style = obj->GetPropertyAsInteger("style");
+		wxTreeCtrl *tc = new wxTreeCtrl((wxWindow *)parent,-1,
+										obj->GetPropertyAsPoint("pos"),
+										obj->GetPropertyAsSize("size"),
+										style | obj->GetPropertyAsInteger("window_style") );
+
+		// Dummy nodes
+		wxTreeItemId root = tc->AddRoot("root node");
+		wxTreeItemId node1 = tc->AppendItem( root, 	"node1" );
+		wxTreeItemId node2 = tc->AppendItem( root, 	"node2" );
+		wxTreeItemId node3 = tc->AppendItem( node2, "node3" );
+		if ( ( style & wxTR_HIDE_ROOT ) == 0 )
+			tc->Expand(root);
+
+		tc->Expand(node1);
+		tc->Expand(node2);
+		tc->Expand(node3);
+
+		return tc;
+	}
+	
+	virtual void Cleanup( wxObject* obj )
+    {
+    }
+
+
+	ticpp::Element* ExportToXrc( IObject *obj )
+	{
+		ObjectToXrcFilter xrc( obj, "wxTreeCtrl", obj->GetPropertyAsString("name") );
+		xrc.AddWindowProperties();
+		return xrc.GetXrcObject();
+	}
+
+	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
+	{
+		XrcToXfbFilter filter( xrcObj, "wxTreeCtrl" );
+		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
 };
@@ -1577,57 +1665,6 @@ public:
 	}
 };
 
-class AnimCtrlComponent : public ComponentBase
-{
-public:
-	wxObject* Create( IObject *obj, wxObject *parent )
-	{
-		wxAnimationCtrl* ac = new wxAnimationCtrl( (wxWindow *)parent, wxID_ANY, wxNullAnimation,
-													obj->GetPropertyAsPoint("pos"),
-													obj->GetPropertyAsSize("size"),
-													obj->GetPropertyAsInteger("style") |
-													obj->GetPropertyAsInteger("window_style") );
-		if ( !obj->IsNull("animation") )
-		{
-			if( ac->LoadFile( obj->GetPropertyAsString("animation") ) )
-			{
-				if ( !obj->IsNull("play") && ( obj->GetPropertyAsInteger("play") == 1 ) )
-					ac->Play();
-				else
-					ac->Stop();
-			}
-		}
-		if ( !obj->IsNull("inactive_bitmap") )
-		{
-			wxBitmap bmp = obj->GetPropertyAsBitmap("inactive_bitmap");
-			if( bmp.IsOk() )
-				ac->SetInactiveBitmap( bmp );
-			else
-				ac->SetInactiveBitmap( wxNullBitmap );
-		}
-		ac->PushEventHandler( new ComponentEvtHandler( ac, GetManager() ) );
-		return ac;
-	}
-
-	ticpp::Element* ExportToXrc( IObject *obj )
-	{
-		ObjectToXrcFilter xrc( obj, "wxAnimationCtrl", obj->GetPropertyAsString("name") );
-		xrc.AddWindowProperties();
-		xrc.AddProperty( "animation", "animation", XRC_TYPE_TEXT );
-		return xrc.GetXrcObject();
-	}
-
-	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
-	{
-		XrcToXfbFilter filter( xrcObj, "wxAnimation" );
-		filter.AddWindowProperties();
-		filter.AddProperty( "animation", "animation", XRC_TYPE_TEXT );
-		return filter.GetXfbObject();
-	}
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
 BEGIN_LIBRARY()
 
 	// wxWindow style macros
@@ -1734,6 +1771,8 @@ BEGIN_LIBRARY()
 	MACRO(wxCB_SIMPLE)
 	MACRO(wxCB_SORT)
 
+	WINDOW_COMPONENT( "wxBitmapComboBox", 	BitmapComboBoxComponent )
+
 	WINDOW_COMPONENT( "wxListBox", ListBoxComponent )
 	MACRO(wxLB_SINGLE)
 	MACRO(wxLB_MULTIPLE)
@@ -1794,6 +1833,22 @@ BEGIN_LIBRARY()
 	MACRO(wxLC_HRULES)
 	MACRO(wxLC_VRULES)
 
+	WINDOW_COMPONENT( "wxTreeCtrl", TreeCtrlComponent )
+	MACRO(wxTR_EDIT_LABELS)
+	MACRO(wxTR_NO_BUTTONS)
+	MACRO(wxTR_HAS_BUTTONS)
+	MACRO(wxTR_TWIST_BUTTONS)
+	MACRO(wxTR_NO_LINES)
+	MACRO(wxTR_FULL_ROW_HIGHLIGHT)
+	MACRO(wxTR_LINES_AT_ROOT)
+	MACRO(wxTR_HIDE_ROOT)
+	MACRO(wxTR_ROW_LINES)
+	MACRO(wxTR_HAS_VARIABLE_ROW_HEIGHT)
+	MACRO(wxTR_SINGLE)
+	MACRO(wxTR_MULTIPLE)
+	MACRO(wxTR_EXTENDED)
+	MACRO(wxTR_DEFAULT_STYLE)
+
 	WINDOW_COMPONENT( "wxStatusBar", StatusBarComponent )
 	MACRO(wxST_SIZEGRIP)
 
@@ -1837,9 +1892,5 @@ BEGIN_LIBRARY()
 	MACRO(wxGA_HORIZONTAL)
 	MACRO(wxGA_SMOOTH)
 	MACRO(wxGA_VERTICAL)
-
-	WINDOW_COMPONENT( "wxAnimationCtrl", AnimCtrlComponent )
-	MACRO(wxAC_DEFAULT_STYLE)
-	MACRO(wxAC_NO_AUTORESIZE)
 
 END_LIBRARY()

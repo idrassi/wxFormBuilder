@@ -22,14 +22,13 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 #include <component.h>
 #include <plugin.h>
 #include <xrcconv.h>
 #include <ticpp.h>
 
+#include <wx/animate.h>
 #include <wx/arrstr.h>
-#include <wx/bmpcbox.h>
 #include <wx/calctrl.h>
 #include <wx/checklst.h>
 #include <wx/dataview.h>
@@ -41,7 +40,6 @@
 #include <wx/spinbutt.h>
 #include <wx/spinctrl.h>
 #include <wx/srchctrl.h>
-#include <wx/treectrl.h>
 #include <wx/html/htmlwin.h>
 
 #include "smiley.xpm"
@@ -98,50 +96,6 @@ BEGIN_EVENT_TABLE( GenericDirCtrlEvtHandler, wxEvtHandler )
 	// GenericDirCtrl also seems to ignore clicks
 	EVT_LEFT_DOWN( GenericDirCtrlEvtHandler::OnGenericDirCtrlLeftClick )
 END_EVENT_TABLE()
-
-///////////////////////////////////////////////////////////////////////////////
-class BitmapComboBoxComponent : public ComponentBase
-{
-public:
-	wxObject* Create(IObject *obj, wxObject *parent)
-	{
-		wxBitmapComboBox *bcombo = new wxBitmapComboBox((wxWindow *)parent,-1,
-			obj->GetPropertyAsString(_("value")),
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			0,
-			NULL,
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
-
-		// choices
-		wxArrayString choices = obj->GetPropertyAsArrayString(_("choices"));
-		for (unsigned int i=0; i<choices.Count(); i++)
-		{
-			wxImage img(choices[i].BeforeFirst(wxChar(58)));
-			bcombo->Append(choices[i].AfterFirst(wxChar(58)), wxBitmap(img));
-		}
-			
-		return bcombo;
-	}
-	
-	ticpp::Element* ExportToXrc(IObject *obj)
-	{
-		ObjectToXrcFilter xrc(obj, _("wxBitmapComboBox"), obj->GetPropertyAsString(_("name")));
-		xrc.AddWindowProperties();
-		xrc.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
-		xrc.AddProperty(_("choices"),_("content"),XRC_TYPE_STRINGLIST);
-		return xrc.GetXrcObject();
-	}
-
-	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
-	{
-		XrcToXfbFilter filter(xrcObj, _("wxBitmapComboBox"));
-		filter.AddWindowProperties();
-		filter.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
-		filter.AddProperty(_("content"),_("choices"),XRC_TYPE_STRINGLIST);
-		return filter.GetXfbObject();
-	}
-};
 
 class CalendarCtrlComponent : public ComponentBase
 {
@@ -637,48 +591,51 @@ public:
 	}
 };
 
-class TreeCtrlComponent : public ComponentBase
+class AnimCtrlComponent : public ComponentBase
 {
 public:
 	wxObject* Create( IObject *obj, wxObject *parent )
 	{
-		int style = obj->GetPropertyAsInteger("style");
-		wxTreeCtrl *tc = new wxTreeCtrl((wxWindow *)parent,-1,
-										obj->GetPropertyAsPoint("pos"),
-										obj->GetPropertyAsSize("size"),
-										style | obj->GetPropertyAsInteger("window_style") );
-
-		// Dummy nodes
-		wxTreeItemId root = tc->AddRoot("root node");
-		wxTreeItemId node1 = tc->AppendItem( root, 	"node1" );
-		wxTreeItemId node2 = tc->AppendItem( root, 	"node2" );
-		wxTreeItemId node3 = tc->AppendItem( node2, "node3" );
-		if ( ( style & wxTR_HIDE_ROOT ) == 0 )
-			tc->Expand(root);
-
-		tc->Expand(node1);
-		tc->Expand(node2);
-		tc->Expand(node3);
-
-		return tc;
+		wxAnimationCtrl* ac = new wxAnimationCtrl( (wxWindow *)parent, wxID_ANY, wxNullAnimation,
+													obj->GetPropertyAsPoint("pos"),
+													obj->GetPropertyAsSize("size"),
+													obj->GetPropertyAsInteger("style") |
+													obj->GetPropertyAsInteger("window_style") );
+		if ( !obj->IsNull("animation") )
+		{
+			if( ac->LoadFile( obj->GetPropertyAsString("animation") ) )
+			{
+				if ( !obj->IsNull("play") && ( obj->GetPropertyAsInteger("play") == 1 ) )
+					ac->Play();
+				else
+					ac->Stop();
+			}
+		}
+		if ( !obj->IsNull("inactive_bitmap") )
+		{
+			wxBitmap bmp = obj->GetPropertyAsBitmap("inactive_bitmap");
+			if( bmp.IsOk() )
+				ac->SetInactiveBitmap( bmp );
+			else
+				ac->SetInactiveBitmap( wxNullBitmap );
+		}
+		ac->PushEventHandler( new ComponentEvtHandler( ac, GetManager() ) );
+		return ac;
 	}
-	
-	virtual void Cleanup( wxObject* obj )
-    {
-    }
-
 
 	ticpp::Element* ExportToXrc( IObject *obj )
 	{
-		ObjectToXrcFilter xrc( obj, "wxTreeCtrl", obj->GetPropertyAsString("name") );
+		ObjectToXrcFilter xrc( obj, "wxAnimationCtrl", obj->GetPropertyAsString("name") );
 		xrc.AddWindowProperties();
+		xrc.AddProperty( "animation", "animation", XRC_TYPE_TEXT );
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter( xrcObj, "wxTreeCtrl" );
+		XrcToXfbFilter filter( xrcObj, "wxAnimation" );
 		filter.AddWindowProperties();
+		filter.AddProperty( "animation", "animation", XRC_TYPE_TEXT );
 		return filter.GetXfbObject();
 	}
 };
@@ -848,8 +805,6 @@ public:
 
 BEGIN_LIBRARY()
 
-	WINDOW_COMPONENT( "wxBitmapComboBox", 	BitmapComboBoxComponent )
-
 	WINDOW_COMPONENT( "wxCalendarCtrl",		CalendarCtrlComponent )
 	MACRO(wxCAL_SUNDAY_FIRST)
 	MACRO(wxCAL_MONDAY_FIRST)
@@ -878,10 +833,6 @@ BEGIN_LIBRARY()
 	MACRO(wxDIRCTRL_SHOW_FILTERS)
 	MACRO(wxDIRCTRL_EDIT_LABELS)
 
-#if wxUSE_MEDIACTRL
-//	WINDOW_COMPONENT( "wxMediaCtrl", MediaCtrlComponent ) TODO: wxMediaCtrl won't compile
-#endif
-
 	WINDOW_COMPONENT( "wxScrollBar", ScrollBarComponent )
 	MACRO(wxSB_HORIZONTAL)
 	MACRO(wxSB_VERTICAL)
@@ -902,21 +853,13 @@ BEGIN_LIBRARY()
 	MACRO(wxSP_HORIZONTAL)
 	MACRO(wxSP_VERTICAL)
 
-	WINDOW_COMPONENT( "wxTreeCtrl", TreeCtrlComponent )
-	MACRO(wxTR_EDIT_LABELS)
-	MACRO(wxTR_NO_BUTTONS)
-	MACRO(wxTR_HAS_BUTTONS)
-	MACRO(wxTR_TWIST_BUTTONS)
-	MACRO(wxTR_NO_LINES)
-	MACRO(wxTR_FULL_ROW_HIGHLIGHT)
-	MACRO(wxTR_LINES_AT_ROOT)
-	MACRO(wxTR_HIDE_ROOT)
-	MACRO(wxTR_ROW_LINES)
-	MACRO(wxTR_HAS_VARIABLE_ROW_HEIGHT)
-	MACRO(wxTR_SINGLE)
-	MACRO(wxTR_MULTIPLE)
-	MACRO(wxTR_EXTENDED)
-	MACRO(wxTR_DEFAULT_STYLE)
+#if wxUSE_MEDIACTRL
+//	WINDOW_COMPONENT( "wxMediaCtrl", MediaCtrlComponent ) TODO: wxMediaCtrl won't compile
+#endif
+
+	WINDOW_COMPONENT( "wxAnimationCtrl", AnimCtrlComponent )
+	MACRO(wxAC_DEFAULT_STYLE)
+	MACRO(wxAC_NO_AUTORESIZE)
 
 	WINDOW_COMPONENT( "wxHtmlWindow", HtmlWindowComponent )
 	MACRO(wxHW_SCROLLBAR_NEVER)

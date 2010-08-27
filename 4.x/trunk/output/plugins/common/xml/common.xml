@@ -111,22 +111,12 @@ Written by
 		<event name="OnTextMaxLen" 	class="wxCommandEvent" help="User tried to enter more text into the control than the limit set by SetMaxLength."/>
 	</objectinfo>
 
-	<objectinfo class="wxStaticBitmap" icon="statbmp.xpm" type="widget">
+	<objectinfo class="wxChoice" icon="choice.xpm" type="widget">
 		<inherits class="wxWindow"/>
-		<property name="name" 	type="text">m_bitmap</property>
-		<property name="bitmap" type="bitmap"/>
-	</objectinfo>
-
-	<objectinfo class="wxAnimationCtrl" icon="animate.xpm" type="widget">
-		<inherits class="wxWindow"/>
-		<property name="name" 	type="text">m_animCtrl</property>
-		<property name="style" 	type="bitlist">
-			<option name="wxAC_DEFAULT_STYLE" help="The default style: wxNO_BORDER."/>
-			<option name="wxAC_NO_AUTORESIZE" help="By default, the control will adjust its size to exactly fit to the size of the animation when SetAnimation is called. If this style flag is given, the control will not change its size."/>wxAC_DEFAULT_STYLE
-		</property>
-		<property name="animation" 			type="file" help="Full file path (only *.gif and *.ani files are supported)."/>
-		<property name="inactive_bitmap" 	type="bitmap"/>
-		<property name="play" type="bool">0</property>
+		<property name="name" 		type="text">m_choice</property>
+		<property name="choices" 	type="stringlist" 	help="An array of strings with which to initialise the choice control."/>
+		<property name="selection" 	type="uint" 		help="Zero-based position of the selected choice.">0</property>
+		<event name="OnChoice" class="wxCommandEvent" 	help="Process a wxEVT_COMMAND_CHOICE_SELECTED event, when an item on the list is selected."/>
 	</objectinfo>
 
 	<objectinfo class="wxComboBox" icon="combobox.xpm" type="widget">
@@ -146,12 +136,19 @@ Written by
 		<event name="OnTextEnter" 	class="wxCommandEvent" help="Process a wxEVT_COMMAND_TEXT_ENTER event, when <RETURN> is pressed in the combobox."/>
 	</objectinfo>
 
-	<objectinfo class="wxChoice" icon="choice.xpm" type="widget">
-		<inherits class="wxWindow"/>
-		<property name="name" 		type="text">m_choice</property>
-		<property name="choices" 	type="stringlist" 	help="An array of strings with which to initialise the choice control."/>
-		<property name="selection" 	type="uint" 		help="Zero-based position of the selected choice.">0</property>
-		<event name="OnChoice" class="wxCommandEvent" 	help="Process a wxEVT_COMMAND_CHOICE_SELECTED event, when an item on the list is selected."/>
+	<objectinfo class="wxBitmapComboBox" icon="combobox.xpm" type="widget">
+		<inherits class="wxWindow" />
+		<property name="name" type="text">m_bComboBox</property>
+		<property name="value" type="wxString_i18n">Combo!</property>
+		<property name="choices" type="stringlist" help="Contents of the Combo Box. Use format bitmap:choice "></property>
+		<property name="style" type="bitlist">
+			<option name="wxCB_READONLY"      help="Same as wxCB_DROPDOWN but only the strings specified as the combobox choices can be selected, it is impossible to select (even from a program) a string which is not in the choices list."/>
+			<option name="wxCB_SORT"          help="Sorts the entries in the list alphabetically."/>
+			<option name="wxTE_PROCESS_ENTER" help="The control will generate the event wxEVT_COMMAND_TEXT_ENTER (otherwise pressing Enter key is either processed internally by the control or used for navigation between dialog controls)."/>
+		</property>
+		<event name="OnCombobox" class="wxCommandEvent" help="Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on the list is selected. Note that calling GetValue returns the new value of selection." />
+		<event name="OnText" class="wxCommandEvent" help="Process a wxEVT_COMMAND_TEXT_UPDATED event, when the combobox text changes." />
+		<event name="OnTextEnter" class="wxCommandEvent" help="Process a wxEVT_COMMAND_TEXT_ENTER event, when <RETURN> is pressed in the combobox." />
 	</objectinfo>
 
 	<objectinfo class="wxListBox" icon="listbox.xpm" type="widget">
@@ -213,6 +210,33 @@ Written by
 		<event name="OnListCacheHint" 		class="wxListEvent" help="Prepare cache for a virtual list control."/>
 	</objectinfo>
 
+	<objectinfo class="wxTreeCtrl" icon="treectrl.xpm" type="widget">
+		<inherits class="wxTreeCtrlBase"/>
+		<inherits class="wxWindow" />
+		<property name="name" 	type="text">m_treeCtrl</property>
+		<property name="style" 	type="bitlist">
+			<option name="wxTR_EDIT_LABELS"             help="Use this style if you wish the user to be able to edit labels in the tree control." />
+			<option name="wxTR_NO_BUTTONS"              help="For convenience to document that no buttons are to be drawn." />
+			<option name="wxTR_HAS_BUTTONS"             help="Use this style to show + and - buttons to the left of parent items." />
+			<option name="wxTR_TWIST_BUTTONS"           help="??" />
+			<option name="wxTR_NO_LINES"                help="Use this style to hide vertical level connectors." />
+			<option name="wxTR_FULL_ROW_HIGHLIGHT"      help="Use this style to have the background colour and the selection highlight extend over the entire horizontal row of the tree control window. (This flag is ignored under Windows unless you specify wxTR_NO_LINES as well.)" />
+			<option name="wxTR_LINES_AT_ROOT"           help="Use this style to show lines between root nodes. Only applicable if wxTR_HIDE_ROOT is set and wxTR_NO_LINES is not set." />
+			<option name="wxTR_HIDE_ROOT"               help="Use this style to suppress the display of the root node, effectively causing the first-level nodes to appear as a series of root nodes." />
+			<option name="wxTR_ROW_LINES"               help="Use this style to draw a contrasting border between displayed rows." />
+			<option name="wxTR_HAS_VARIABLE_ROW_HEIGHT" help="Use this style to cause row heights to be just big enough to fit the content. If not set, all rows use the largest row height. The default is that this flag is unset. Generic only." />
+			<option name="wxTR_SINGLE"                  help="For convenience to document that only one item may be selected at a time. Selecting another item causes the current selection, if any, to be deselected. This is the default." />
+			<option name="wxTR_MULTIPLE"                help="Use this style to allow a range of items to be selected. If a second range is selected, the current range, if any, is deselected." />
+			<option name="wxTR_EXTENDED"                help="Use this style to allow disjoint items to be selected. (Only partially implemented; may not work in all cases.)" />
+			<option name="wxTR_DEFAULT_STYLE"           help="The set of flags that are closest to the defaults for the native control for a particular toolkit." />
+			wxTR_DEFAULT_STYLE
+		</property>
+		<event name="OnTreeGetInfo" 		class="wxTreeEvent" help="Request information from the application." />
+		<event name="OnTreeSetInfo" 		class="wxTreeEvent" help="Information is being supplied." />
+		<event name="OnTreeItemGetTooltip" 	class="wxTreeEvent" help="The opportunity to set the item tooltip is being given to the application (call wxTreeEvent::SetToolTip). Windows only." />
+		<event name="OnTreeStateImageClick" class="wxTreeEvent" help="The state image has been clicked. Windows only." />
+	</objectinfo>
+
 	<objectinfo class="wxCheckBox" icon="checkbox.xpm" type="widget">
 		<inherits class="wxWindow"/>
 		<property name="name" 	type="text">m_checkBox</property>
@@ -257,12 +281,17 @@ Written by
 		<event name="OnRadioButton" class="wxCommandEvent" help="Handles a toggle button click event."/>
 	</objectinfo>
 
-	<objectinfo class="wxStaticLine" icon="statline.xpm" type="widget">
+	<objectinfo class="wxGauge" icon="gauge.xpm" type="widget">
 		<inherits class="wxWindow"/>
-		<property name="name" 	type="text">m_staticline</property>
+		<property name="name" 	type="text">m_gauge</property>
+		<property name="range" 	type="uint" help="Integer range (maximum value) of the gauge.">100</property>
+		<property name="value" 	type="uint" help="Initial position for the gauge."></property>
 		<property name="style" 	type="bitlist">
-		<option name="wxLI_HORIZONTAL" help="Creates a horizontal line."/>
-		<option name="wxLI_VERTICAL"   help="Creates a vertical line."/>wxLI_HORIZONTAL</property>
+			<option name="wxGA_HORIZONTAL" 	help="Creates a horizontal gauge. "/>
+			<option name="wxGA_VERTICAL" 	help="Creates a vertical gauge."/>
+			<option name="wxGA_SMOOTH" 		help="Creates smooth progress bar with one pixel wide update step (not supported by all platforms)."/>
+			wxGA_HORIZONTAL
+		</property>
 	</objectinfo>
 
 	<objectinfo class="wxSlider" icon="slider.xpm" type="widget">
@@ -305,17 +334,18 @@ Written by
 		<event name="OnCommandScrollChanged" 		class="wxScrollEvent" help="Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only). Variant taking a window identifier."/>
 	</objectinfo>
 
-	<objectinfo class="wxGauge" icon="gauge.xpm" type="widget">
+	<objectinfo class="wxStaticLine" icon="statline.xpm" type="widget">
 		<inherits class="wxWindow"/>
-		<property name="name" 	type="text">m_gauge</property>
-		<property name="range" 	type="uint" help="Integer range (maximum value) of the gauge.">100</property>
-		<property name="value" 	type="uint" help="Initial position for the gauge."></property>
+		<property name="name" 	type="text">m_staticline</property>
 		<property name="style" 	type="bitlist">
-			<option name="wxGA_HORIZONTAL" 	help="Creates a horizontal gauge. "/>
-			<option name="wxGA_VERTICAL" 	help="Creates a vertical gauge."/>
-			<option name="wxGA_SMOOTH" 		help="Creates smooth progress bar with one pixel wide update step (not supported by all platforms)."/>
-			wxGA_HORIZONTAL
-		</property>
+		<option name="wxLI_HORIZONTAL" help="Creates a horizontal line."/>
+		<option name="wxLI_VERTICAL"   help="Creates a vertical line."/>wxLI_HORIZONTAL</property>
+	</objectinfo>
+
+	<objectinfo class="wxStaticBitmap" icon="statbmp.xpm" type="widget">
+		<inherits class="wxWindow"/>
+		<property name="name" 	type="text">m_bitmap</property>
+		<property name="bitmap" type="bitmap"/>
 	</objectinfo>
 
 </package>
