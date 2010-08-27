@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <codegen language="C++">
 
+	<templates class="wxPropertyGrid">
+		<template name="declaration">#class* $name;</template>
+		<template name="construction">$name = new #class(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @});</template>
+		<template name="include">
+			@#include &lt;wx/propgrid/propgrid.h&gt;
+			#ifequal $include_advanced "1"
+				@{ #nl @#include &lt;wx/propgrid/advprops.h&gt; @}
+		</template>
+		<template name="settings">
+		    #ifnotnull $extra_style
+		    @{ $name->SetExtraStyle( $extra_style ); @}
+		</template>
+	</templates>
+
+	<templates class="wxPropertyGridManager">
+		<template name="declaration">#class* $name;</template>
+		<template name="construction">$name = new #class(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @});
+			#ifequal $show_header "1"
+				@{ #nl $name->ShowHeader( $show_header ); @}
+		</template>
+		<template name="include">
+			@#include &lt;wx/propgrid/propgrid.h&gt; #nl
+			@#include &lt;wx/propgrid/manager.h&gt;
+			#ifequal $include_advanced "1"
+				@{ #nl @#include &lt;wx/propgrid/advprops.h&gt; @}
+		</template>
+		<template name="settings">
+		    #ifnotnull $extra_style
+		    @{ $name->SetExtraStyle( $extra_style ); @}
+		</template>
+	</templates>
+
 	<templates class="wxRichTextCtrl">
 		<template name="declaration">#class* $name;</template>
 		<template name="construction">$name = new #class( #wxparent $name, $id, wxEmptyString, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, wxDefaultValidator, $window_name @} );</template>

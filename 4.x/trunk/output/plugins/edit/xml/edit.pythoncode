@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <codegen language="Python">
 
+	<templates class="wxPropertyGrid">
+		<template name="construction">
+			@# WARNING: wxPython code generation isn't supported for this widget yet. #nl
+			self.$name = wx.Window( #wxparent $name )
+		</template>
+	</templates>
+
+	<templates class="wxPropertyGridManager">
+		<template name="construction">
+			@# WARNING: wxPython code generation isn't supported for this widget yet. #nl
+			self.$name = wx.Window( #wxparent $name )
+		</template>
+	</templates>
+
 	<templates class="wxRichTextCtrl">
 		<template name="construction">self.$name = #class( #wxparent $name, $id, wx.EmptyString, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, wx.DefaultValidator, $window_name @} )</template>
 		<template name="include">import wx.richtext</template>
