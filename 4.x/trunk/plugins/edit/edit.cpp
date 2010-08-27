@@ -86,7 +86,7 @@ public:
 		// Add float property (value type is actually double)
 		pg->Append( new wxFloatProperty ( "FloatProperty", wxPG_LABEL, 12345.678 ) );
 
-		// Add a bool property
+		// Add bool properties
 		pg->Append( new wxBoolProperty ( "BoolProperty", wxPG_LABEL, false ) );
 		pg->Append( new wxBoolProperty ( "BoolPropertyAsCheckbox", wxPG_LABEL, true ) );
 		pg->SetPropertyAttribute( "BoolPropertyAsCheckbox", wxPG_BOOL_USE_CHECKBOX, (long)1 );
@@ -147,6 +147,95 @@ public:
 	void Cleanup( wxObject* )
 	{
 		// Prevent assert for missing event handler
+	}
+};
+
+class PropertyGridManagerComponent : public ComponentBase
+{
+public:
+	wxObject* Create(IObject *obj, wxObject *parent)
+	{
+		wxPropertyGridManager* pgman = new wxPropertyGridManager( (wxWindow *)parent, -1,
+																obj->GetPropertyAsPoint("pos"),
+																obj->GetPropertyAsSize("size"),
+																obj->GetPropertyAsInteger("style") |
+																obj->GetPropertyAsInteger("window_style") );
+
+		wxPropertyGridPage* pg = pgman->AddPage("First Page");
+
+		if ( !obj->GetPropertyAsString("extra_style").empty() )
+			pgman->SetExtraStyle( obj->GetPropertyAsInteger("extra_style") );
+
+		pgman->ShowHeader( obj->GetPropertyAsInteger("show_header") );
+
+		pg->Append( new wxPropertyCategory( "Sample Category", wxPG_LABEL ) );
+
+		// Add string property
+		pg->Append( new wxStringProperty( "Label", "Name", "Initial Value" ) );
+
+		// Add int property
+		pg->Append( new wxIntProperty ( "IntProperty", wxPG_LABEL, 12345678 ) );
+
+		// Add float property (value type is actually double)
+		pg->Append( new wxFloatProperty ( "FloatProperty", wxPG_LABEL, 12345.678 ) );
+
+		// Add bool properties
+		pg->Append( new wxBoolProperty ( "BoolProperty", wxPG_LABEL, false ) );
+		pg->Append( new wxBoolProperty ( "BoolPropertyAsCheckbox", wxPG_LABEL, true ) );
+		pg->SetPropertyAttribute( "BoolPropertyAsCheckbox", wxPG_BOOL_USE_CHECKBOX, (long)1 );
+
+		// Add an enum property
+        wxArrayString strings;
+        strings.Add( _("Herbivore") );
+        strings.Add( _("Carnivore") );
+        strings.Add( _("Omnivore") );
+
+		wxArrayInt indexes;
+		indexes.Add( 0 );
+		indexes.Add( 1 );
+		indexes.Add( 2 );
+
+		pg->Append( new wxEnumProperty( "EnumProperty", wxPG_LABEL, strings, indexes, 0 ) );
+
+		pg->Append( new wxPropertyCategory( "Low Priority Properties", wxPG_LABEL ) );
+		// A string property that can be edited in a separate editor dialog.
+		pg->Append( new wxLongStringProperty ( "LongStringProperty",
+			wxPG_LABEL,
+			"This is much longer string than the "
+			"first one. Edit it by clicking the button." ) );
+
+		// String editor with dir selector button.
+		pg->Append( new wxDirProperty( "DirProperty", wxPG_LABEL, ::wxGetUserHome() ) );
+
+		// A file selector property.
+		pg->Append( new wxFileProperty( "FileProperty", wxPG_LABEL, wxEmptyString ) );
+
+		if ( obj->GetPropertyAsInteger("include_advanced") )
+		{
+			pg->Append( new wxPropertyCategory( "Advanced Properties", wxPG_LABEL ) );
+			// wxArrayStringProperty embeds a wxArrayString.
+			pg->Append( new wxArrayStringProperty( "Example of ArrayStringProperty", "ArrayStringProp" ) );
+
+			// Image file property. Wildcard is auto-generated from available
+			// image handlers, so it is not set this time.
+			pg->Append( new wxImageFileProperty( "Example of ImageFileProperty", "ImageFileProp" ) );
+
+			// Font property has sub-properties.
+			pg->Append( new wxFontProperty( "Font", wxPG_LABEL ) );
+
+			// Colour property with arbitrary colour.
+			pg->Append( new wxColourProperty( "My Colour 1", wxPG_LABEL, wxColour( 242, 109, 0 ) ) );
+
+			// System colour property.
+			pg->Append( new wxSystemColourProperty( "My SysColour 1", wxPG_LABEL, wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) ) );
+
+			// System colour property with custom colour.
+			pg->Append( new wxSystemColourProperty( "My SysColour 2", wxPG_LABEL, wxColour( 0, 200, 160 ) ) );
+
+			// Cursor property
+			pg->Append( new wxCursorProperty( "My Cursor", wxPG_LABEL, wxCURSOR_ARROW ) );
+		}
+		return pgman;
 	}
 };
 
@@ -448,7 +537,7 @@ void ComponentEvtHandler::OnMarginClick( wxStyledTextEvent& event )
 
 BEGIN_LIBRARY()
 
-	WINDOW_COMPONENT("wxPropertyGrid", PropertyGridComponent)
+	WINDOW_COMPONENT( "wxPropertyGrid", PropertyGridComponent )
 	MACRO(wxPG_AUTO_SORT)
 	MACRO(wxPG_HIDE_CATEGORIES)
 	MACRO(wxPG_ALPHABETIC_MODE)
@@ -462,6 +551,13 @@ BEGIN_LIBRARY()
 	MACRO(wxPG_EX_INIT_NOCAT)
 	MACRO(wxPG_DEFAULT_STYLE)
 	MACRO(wxTAB_TRAVERSAL)
+
+	WINDOW_COMPONENT( "wxPropertyGridManager", PropertyGridManagerComponent )
+	MACRO(wxPG_EX_NO_FLAT_TOOLBAR)
+	MACRO(wxPG_EX_MODE_BUTTONS)
+	MACRO(wxPGMAN_DEFAULT_STYLE)
+	MACRO(wxPG_DESCRIPTION)
+	MACRO(wxPG_TOOLBAR)
 
 	WINDOW_COMPONENT( "wxRichTextCtrl", RichTextCtrlComponent )
 	MACRO(wxTE_PROCESS_ENTER);
