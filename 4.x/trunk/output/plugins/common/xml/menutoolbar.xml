@@ -78,15 +78,15 @@ Written by
 
 	<objectinfo class="wxToolBar" icon="toolbar.xpm" type="toolbar" startgroup="1">
 		<inherits class="wxWindow"/>
-		<property name="name" type="text">m_toolBar</property>
-		<property name="bitmapsize" type="wxSize" help="Default size of each tool bitmap. The default bitmap size is 16 by 15 pixels."/>
-		<property name="margins" type="wxSize"    help="Values to be used as margins for the toolbar."/>
-		<property name="packing" type="uint"      help="Value used for spacing tools. Remarks: The packing is used for spacing in the vertical direction if the toolbar is horizontal, and for spacing in the horizontal direction if the toolbar is vertical.">1</property>
-		<property name="separation" type="uint"   help="The default separator size. Remarks: This is the size between each toolbar tool.">5</property>
-		<property name="style" type="bitlist">
+		<property name="name" 		type="text">m_toolBar</property>
+		<property name="bitmapsize" type="wxSize" 	help="Default size of each tool bitmap. The default bitmap size is 16 by 15 pixels."/>
+		<property name="margins" 	type="wxSize"   help="Values to be used as margins for the toolbar."/>
+		<property name="packing" 	type="uint"     help="Value used for spacing tools. Remarks: The packing is used for spacing in the vertical direction if the toolbar is horizontal, and for spacing in the horizontal direction if the toolbar is vertical.">1</property>
+		<property name="separation" type="uint"   	help="The default separator size. Remarks: This is the size between each toolbar tool.">5</property>
+		<property name="style" 		type="bitlist">
 			<option name="wxTB_FLAT" 		help="Gives the toolbar a flat look (Windows and GTK only)."/>
 			<option name="wxTB_DOCKABLE" 	help="Makes the toolbar floatable and dockable (GTK only)."/>
-			<option name="wxTB_HORIZONTAL" 	help="Specifies horizontal layout."/>
+			<option name="wxTB_HORIZONTAL" 	help="Specifies horizontal layout (default)."/>
 			<option name="wxTB_VERTICAL" 	help="Specifies vertical layout."/>
 			<option name="wxTB_TEXT" 		help="Shows the text in the toolbar buttons; by default only icons are shown."/>
 			<option name="wxTB_NOICONS" 	help="Specifies no icons in the toolbar buttons; by default they are shown."/>
@@ -94,6 +94,9 @@ Written by
 			<option name="wxTB_NOALIGN" 	help="Specifies no alignment with the parent window (Windows only, not very useful)."/>
 			<option name="wxTB_HORZ_LAYOUT" help="Shows the text and the icons alongside, not vertically stacked (Windows and GTK 2 only). This style must be used with wxTB_TEXT."/>
 			<option name="wxTB_HORZ_TEXT" 	help="Combination of wxTB_HORZ_LAYOUT and wxTB_TEXT."/>
+			<option name="wxTB_NO_TOOLTIPS" help="Don't show the short help tooltips for the tools when the mouse hovers over them."/>
+			<option name="wxTB_BOTTOM" 		help="Align the toolbar at the bottom of parent window."/>
+			<option name="wxTB_RIGHT" 		help="Align the toolbar at the right side of parent window."/>
 			wxTB_HORIZONTAL
 		</property>
 	</objectinfo>
@@ -126,19 +129,23 @@ Written by
 		<property name="label" 	type="wxString_i18n">tool</property>
 		<property name="bitmap" type="bitmap" help="The primary tool bitmap."/>
 		<property name="kind" 	type="option">
-			<option name="wxITEM_NORMAL" help="A normal toolbar button."/>
-			<option name="wxITEM_CHECK"  help="A checkable tool (stays pressed after it has been toggled)."/>
-			<option name="wxITEM_RADIO"  help="A checkable tool which makes part of a radio group of tools each of which is automatically unchecked whenever another button in the group is checked."/>
+			<option name="wxITEM_NORMAL" 	help="A normal toolbar button."/>
+			<option name="wxITEM_CHECK"  	help="A checkable tool (stays pressed after it has been toggled)."/>
+			<option name="wxITEM_RADIO"  	help="A checkable tool which makes part of a radio group of tools each of which is automatically unchecked whenever another button in the group is checked."/>
+			<option name="wxITEM_DROPDOWN"  help="Normal tool button with a dropdown arrow next to it.
+													Clicking the dropdown arrow sends a wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED event
+													and may also display the menu previously associated with the item with
+													wxToolBar::SetDropdownMenu(). Currently this type of tools is supported under MSW and GTK."/>
 			wxITEM_NORMAL
 		</property>
-		<property name="tooltip" type="wxString_i18n" 	help="Help string used in the tooltip."/>
-		<property name="statusbar" type="wxString_i18n" help="This string is shown in the statusbar (if any) of the parent frame when the mouse pointer is inside the tool."/>
-		<property name="id" type="macro">wxID_ANY</property>
-		<event name="OnToolClicked" class="wxCommandEvent" 		help="Process a wxEVT_COMMAND_TOOL_CLICKED event (a synonym for wxEVT_COMMAND_MENU_SELECTED). Pass the id of the tool."/>
-		<event name="OnMenuSelection" class="wxCommandEvent" 	help="The same as OnToolClicked. (EVT_TOOL)"/>
-		<event name="OnToolRClicked" class="wxCommandEvent" 	help="Process a wxEVT_COMMAND_TOOL_RCLICKED event."/>
-		<event name="OnToolEnter" class="wxCommandEvent" 		help="Process a wxEVT_COMMAND_TOOL_ENTER event. This uses the tools parent ID, the ToolBar, so be sure you set it to something that is not the default. The value of wxCommandEvent::GetSelection is the tool id, or -1 if the mouse cursor has moved off a tool."/>
-		<event name="OnUpdateUI" class="wxUpdateUIEvent" 		help="Process a wxEVT_UPDATE_UI event."/>
+		<property name="tooltip" 	type="wxString_i18n" help="Help string used in the tooltip."/>
+		<property name="statusbar" 	type="wxString_i18n" help="This string is shown in the statusbar (if any) of the parent frame when the mouse pointer is inside the tool."/>
+		<property name="id" 		type="macro">wxID_ANY</property>
+		<event name="OnToolClicked" 	class="wxCommandEvent" 	help="Process a wxEVT_COMMAND_TOOL_CLICKED event (a synonym for wxEVT_COMMAND_MENU_SELECTED). Pass the id of the tool."/>
+		<event name="OnMenuSelection" 	class="wxCommandEvent" 	help="The same as OnToolClicked. (EVT_TOOL)"/>
+		<event name="OnToolRClicked" 	class="wxCommandEvent" 	help="Process a wxEVT_COMMAND_TOOL_RCLICKED event."/>
+		<event name="OnToolEnter" 		class="wxCommandEvent" 	help="Process a wxEVT_COMMAND_TOOL_ENTER event. This uses the tools parent ID, the ToolBar, so be sure you set it to something that is not the default. The value of wxCommandEvent::GetSelection is the tool id, or -1 if the mouse cursor has moved off a tool."/>
+		<event name="OnUpdateUI" 		class="wxUpdateUIEvent" help="Process a wxEVT_UPDATE_UI event."/>
 	</objectinfo>
 
 	<objectinfo class="toolSeparator" icon="toolsep.xpm" type="tool"></objectinfo>
