@@ -1836,7 +1836,7 @@ BEGIN_LIBRARY()
 	MACRO(wxITEM_CHECK)
 	MACRO(wxITEM_RADIO)
 
-	WINDOW_COMPONENT( "wxMenu", 		MenuComponent )
+	ABSTRACT_COMPONENT( "wxMenu", 		MenuComponent )
 	ABSTRACT_COMPONENT( "separator", 	SeparatorComponent )
 	ABSTRACT_COMPONENT( "submenu", 		SubMenuComponent )
 
@@ -1891,7 +1891,7 @@ BEGIN_LIBRARY()
 
 	WINDOW_COMPONENT( "wxAuiToolBar", AuiToolBarComponent )
 
-	WINDOW_COMPONENT( "tool", ToolComponent )
+	ABSTRACT_COMPONENT( "tool", ToolComponent )
 	MACRO(wxITEM_NORMAL)
 	MACRO(wxITEM_CHECK)
 	MACRO(wxITEM_RADIO)
