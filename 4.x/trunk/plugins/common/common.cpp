@@ -142,9 +142,8 @@ public:
 		xrc.AddWindowProperties();
 		xrc.AddProperty( "title", "title", XRC_TYPE_TEXT );
 		if ( !obj->IsNull("center") )
-		{
 			xrc.AddPropertyValue( "centered", "1" );
-		}
+
 		xrc.AddProperty( "aui_managed", "aui_managed", XRC_TYPE_BOOL);
 		return xrc.GetXrcObject();
 	}
@@ -230,13 +229,11 @@ public:
 		xrc.AddWindowProperties();
 		xrc.AddProperty( "title", "title", XRC_TYPE_TEXT );
 		if ( !obj->IsNull("center") )
-		{
 			xrc.AddPropertyValue( "centered", "1" );
-		}
-    if ( !obj->IsNull("bitmap") )
-		{
+
+		if ( !obj->IsNull("bitmap") )
 			xrc.AddProperty( "bitmap", "bitmap", XRC_TYPE_BITMAP );
-		}
+
 		return xrc.GetXrcObject();
 	}
 
@@ -264,10 +261,9 @@ public:
 	{
     ObjectToXrcFilter xrc( obj, "wxWizardPage" );
 		xrc.AddProperty( "page_name", "name", XRC_TYPE_TEXT );
-    if ( !obj->IsNull("bitmap") )
-		{
+		if ( !obj->IsNull("bitmap") )
 			xrc.AddProperty( "bitmap", "bitmap", XRC_TYPE_BITMAP );
-		}
+
 		return xrc.GetXrcObject();
 	}
 
@@ -387,8 +383,12 @@ public:
 	{
 		ObjectToXrcFilter xrc( obj, "wxToolBar", obj->GetPropertyAsString("name") );
 		xrc.AddWindowProperties();
-		xrc.AddProperty( "bitmapsize", "bitmapsize", XRC_TYPE_SIZE );
-		xrc.AddProperty( "margins", "margins", XRC_TYPE_SIZE );
+		if ( !obj->GetPropertyAsString("bitmapsize").empty() )
+			xrc.AddProperty( "bitmapsize", "bitmapsize", XRC_TYPE_SIZE );
+
+		if ( !obj->GetPropertyAsString("margins").empty() )
+			xrc.AddProperty( "margins", "margins", XRC_TYPE_SIZE );
+
 		xrc.AddProperty( "packing", "packing", XRC_TYPE_INTEGER );
 		xrc.AddProperty( "separation", "separation", XRC_TYPE_INTEGER );
 		return xrc.GetXrcObject();
@@ -1344,8 +1344,12 @@ public:
 	{
 		ObjectToXrcFilter xrc( obj, "wxToolBar", obj->GetPropertyAsString("name") );
 		xrc.AddWindowProperties();
-		xrc.AddProperty( "bitmapsize", "bitmapsize", XRC_TYPE_SIZE );
-		xrc.AddProperty( "margins", "margins", XRC_TYPE_SIZE );
+		if ( !obj->IsNull("bitmapsize") )
+			xrc.AddProperty( "bitmapsize", "bitmapsize", XRC_TYPE_SIZE );
+
+		if ( !obj->IsNull("margins") )
+			xrc.AddProperty( "margins", "margins", XRC_TYPE_SIZE );
+
 		xrc.AddProperty( "packing", "packing", XRC_TYPE_INTEGER );
 		xrc.AddProperty( "separation", "separation", XRC_TYPE_INTEGER );
 		return xrc.GetXrcObject();
@@ -1476,18 +1480,27 @@ public:
 	{
 		ObjectToXrcFilter xrc( obj, "tool", obj->GetPropertyAsString("name") );
 		xrc.AddProperty( "label", "label", XRC_TYPE_TEXT );
-		xrc.AddProperty( "tooltip", "tooltip", XRC_TYPE_TEXT );
-		xrc.AddProperty( "statusbar", "longhelp", XRC_TYPE_TEXT );
-		xrc.AddProperty( "bitmap", "bitmap", XRC_TYPE_BITMAP );
+		if ( !obj->IsNull("tooltip") )
+			xrc.AddProperty( "tooltip", "tooltip", XRC_TYPE_TEXT );
+
+		if ( !obj->IsNull("longhelp") )
+			xrc.AddProperty( "statusbar", "longhelp", XRC_TYPE_TEXT );
+
+		if ( ( !obj->IsNull("bitmap") ) )
+			xrc.AddProperty( "bitmap", "bitmap", XRC_TYPE_BITMAP );
 
 		wxItemKind kind = (wxItemKind)obj->GetPropertyAsInteger("kind");
-		if ( wxITEM_CHECK == kind )
+		if ( wxITEM_RADIO == kind )
+		{
+			xrc.AddPropertyValue( "radio", "1" );
+		}
+		else if ( wxITEM_CHECK == kind )
 		{
 			xrc.AddPropertyValue( "toggle", "1" );
 		}
-		else if ( wxITEM_RADIO == kind )
+		else if ( wxITEM_DROPDOWN == kind )
 		{
-			xrc.AddPropertyValue( "radio", "1" );
+			xrc.AddPropertyValue( "dropdown", wxEmptyString );
 		}
 		return xrc.GetXrcObject();
 	}
@@ -1870,6 +1883,7 @@ BEGIN_LIBRARY()
 	MACRO(wxITEM_NORMAL)
 	MACRO(wxITEM_CHECK)
 	MACRO(wxITEM_RADIO)
+	MACRO(wxITEM_DROPDOWN)
 
 	ABSTRACT_COMPONENT( "toolSeparator", ToolSeparatorComponent )
 
