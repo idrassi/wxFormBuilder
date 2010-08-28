@@ -27,12 +27,14 @@
 #include <xrcconv.h>
 #include <ticpp.h>
 
+#include <wx/msgdlg.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bmpcbox.h>
 #include <wx/listctrl.h>
 #include <wx/radiobox.h>
 #include <wx/statline.h>
 #include <wx/tglbtn.h>
+#include <wx/toolbar.h>
 #include <wx/treectrl.h>
 #include <wx/aui/auibar.h>
 
@@ -198,9 +200,8 @@ public:
 		xrc.AddWindowProperties();
 		xrc.AddProperty( "title", "title", XRC_TYPE_TEXT );
 		if ( !obj->IsNull("center") )
-		{
 			xrc.AddPropertyValue( "centered", "1" );
-		}
+
 		return xrc.GetXrcObject();
 	}
 
@@ -349,12 +350,10 @@ public:
 			{
 				tb->AddTool(wxID_ANY,
 							childObj->GetPropertyAsString("label"),
-							childObj->GetPropertyAsBitmap("bitmap"),
-							wxNullBitmap,
+							childObj->GetPropertyAsBitmap("bitmap"), wxNullBitmap,
 							(wxItemKind)childObj->GetPropertyAsInteger("kind"),
 							childObj->GetPropertyAsString("help"),
-							wxEmptyString,
-							child );
+							wxEmptyString, child );
 			}
 			else if ( "toolSeparator" == childObj->GetClassName() )
 			{
@@ -423,9 +422,8 @@ public:
 										obj->GetPropertyAsInteger("window_style") );
 
 		if ( obj->GetPropertyAsInteger("default") != 0 )
-		{
 			button->SetDefault();
-		}
+
 		return button;
 	}
 
@@ -502,12 +500,12 @@ public:
 	{
 		XrcToXfbFilter filter( xrcObj, "wxBitmapButton" );
 		filter.AddWindowProperties();
-		filter.AddProperty( "bitmap", "bitmap", XRC_TYPE_BITMAP );
+		filter.AddProperty( "bitmap", 	"bitmap", 	XRC_TYPE_BITMAP );
 		filter.AddProperty( "disabled", "disabled", XRC_TYPE_BITMAP );
 		filter.AddProperty( "selected", "selected", XRC_TYPE_BITMAP );
-		filter.AddProperty( "focus", "focus", XRC_TYPE_BITMAP );
-		filter.AddProperty( "hover", "hover", XRC_TYPE_BITMAP );
-		filter.AddProperty( "default", "default", XRC_TYPE_BOOL );
+		filter.AddProperty( "focus", 	"focus", 	XRC_TYPE_BITMAP );
+		filter.AddProperty( "hover", 	"hover", 	XRC_TYPE_BITMAP );
+		filter.AddProperty( "default", 	"default", 	XRC_TYPE_BOOL );
 		return filter.GetXfbObject();
 	}
 };
@@ -546,10 +544,9 @@ public:
 	{
 		wxToggleButton* window = dynamic_cast< wxToggleButton* >( obj );
 		if ( 0 != window )
-		{
 			window->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED,
 								wxCommandEventHandler( ToggleButtonComponent::OnToggle ), NULL, this );
-		}
+
 		ComponentBase::Cleanup( obj );
 	}
 
@@ -643,7 +640,7 @@ public:
 		ObjectToXrcFilter xrc( obj, "wxStaticText", name );
 		xrc.AddWindowProperties();
 		xrc.AddProperty( "label", "label", XRC_TYPE_TEXT );
-		xrc.AddProperty( "wrap", "wrap",XRC_TYPE_INTEGER );
+		xrc.AddProperty( "wrap", "wrap", XRC_TYPE_INTEGER );
 		return xrc.GetXrcObject();
 	}
 
@@ -652,7 +649,7 @@ public:
 		XrcToXfbFilter filter( xrcObj, "wxStaticText" );
 		filter.AddWindowProperties();
 		filter.AddProperty( "label", "label", XRC_TYPE_TEXT );
-		filter.AddProperty( "wrap", "wrap",XRC_TYPE_INTEGER );
+		filter.AddProperty( "wrap", "wrap", XRC_TYPE_INTEGER );
 		return filter.GetXfbObject();
 	}
 };
@@ -665,8 +662,7 @@ public:
 		wxComboBox *combo = new wxComboBox((wxWindow *)parent, -1,
 											obj->GetPropertyAsString("value"),
 											obj->GetPropertyAsPoint("pos"),
-											obj->GetPropertyAsSize("size"),
-											0, NULL,
+											obj->GetPropertyAsSize("size"), 0, NULL,
 											obj->GetPropertyAsInteger("style") |
 											obj->GetPropertyAsInteger("window_style") );
 		// Choices
@@ -702,19 +698,17 @@ public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		wxBitmapComboBox *bcombo = new wxBitmapComboBox((wxWindow *)parent,-1,
-			obj->GetPropertyAsString(_("value")),
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			0,
-			NULL,
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
-
-		// choices
+														obj->GetPropertyAsString("value"),
+														obj->GetPropertyAsPoint("pos"),
+														obj->GetPropertyAsSize("size"), 0, NULL,
+														obj->GetPropertyAsInteger("style") |
+														obj->GetPropertyAsInteger("window_style") );
+		// Choices
 		wxArrayString choices = obj->GetPropertyAsArrayString(_("choices"));
-		for (unsigned int i=0; i<choices.Count(); i++)
+		for ( unsigned int i=0; i<choices.Count(); i++ )
 		{
-			wxImage img(choices[i].BeforeFirst(wxChar(58)));
-			bcombo->Append(choices[i].AfterFirst(wxChar(58)), wxBitmap(img));
+			wxImage img( choices[i].BeforeFirst( wxChar(58) ) );
+			bcombo->Append(choices[i].AfterFirst( wxChar(58) ), wxBitmap(img));
 		}
 			
 		return bcombo;
@@ -722,19 +716,19 @@ public:
 	
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxBitmapComboBox"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc( obj, "wxBitmapComboBox", obj->GetPropertyAsString("name") );
 		xrc.AddWindowProperties();
-		xrc.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
-		xrc.AddProperty(_("choices"),_("content"),XRC_TYPE_STRINGLIST);
+		xrc.AddProperty( "value", "value", XRC_TYPE_TEXT );
+		xrc.AddProperty( "choices", "content", XRC_TYPE_STRINGLIST );
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxBitmapComboBox"));
+		XrcToXfbFilter filter( xrcObj, "wxBitmapComboBox" );
 		filter.AddWindowProperties();
-		filter.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
-		filter.AddProperty(_("content"),_("choices"),XRC_TYPE_STRINGLIST);
+		filter.AddProperty( "value", "value", XRC_TYPE_TEXT );
+		filter.AddProperty( "content", "choices", XRC_TYPE_STRINGLIST );
 		return filter.GetXfbObject();
 	}
 };
@@ -855,12 +849,12 @@ public:
 		wxListCtrl *lc = new wxListCtrl((wxWindow*)parent, -1,
 										obj->GetPropertyAsPoint("pos"),
 										obj->GetPropertyAsSize("size"),
-										( 	obj->GetPropertyAsInteger("style") |
-											obj->GetPropertyAsInteger("window_style") ) & ~wxLC_VIRTUAL );
+									( 	obj->GetPropertyAsInteger("style") |
+										obj->GetPropertyAsInteger("window_style") ) & ~wxLC_VIRTUAL );
 		// Refilling
-		int i,j;
+		int i, j;
 		wxString buf;
-		if ( (lc->GetWindowStyle() & wxLC_REPORT) != 0 )
+		if ( ( lc->GetWindowStyle() & wxLC_REPORT ) != 0 )
 		{
 			for ( i=0; i<4; i++ )
 			{
@@ -873,7 +867,7 @@ public:
 			long temp;
 			buf.Printf(_( "Cell (0,%d)"), j );
 			temp = lc->InsertItem( j, buf );
-			if ( (lc->GetWindowStyle() & wxLC_REPORT) != 0 )
+			if ( ( lc->GetWindowStyle() & wxLC_REPORT ) != 0 )
 			{
 				for ( i=1; i<4; i++)
 				{
@@ -898,11 +892,8 @@ public:
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
-	
-	virtual void Cleanup( wxObject* obj )
-    {
-    }
 
+	virtual void Cleanup( wxObject* obj ) { }
 };
 
 class ListBoxComponent : public ComponentBase
@@ -912,8 +903,7 @@ public:
 	{
 		wxListBox *listbox = new wxListBox((wxWindow*)parent, -1,
 											obj->GetPropertyAsPoint("pos"),
-											obj->GetPropertyAsSize("size"),
-											0, NULL,
+											obj->GetPropertyAsSize("size"), 0, NULL,
 											obj->GetPropertyAsInteger("style") |
 											obj->GetPropertyAsInteger("window_style") );
 		// Choices
@@ -958,11 +948,11 @@ public:
 		wxTreeItemId node2 = tc->AppendItem( root, 	"node2" );
 		wxTreeItemId node3 = tc->AppendItem( node2, "node3" );
 		if ( ( style & wxTR_HIDE_ROOT ) == 0 )
-			tc->Expand(root);
+			tc->Expand( root );
 
-		tc->Expand(node1);
-		tc->Expand(node2);
-		tc->Expand(node3);
+		tc->Expand( node1 );
+		tc->Expand( node2 );
+		tc->Expand( node3 );
 
 		return tc;
 	}
@@ -970,7 +960,6 @@ public:
 	virtual void Cleanup( wxObject* obj )
     {
     }
-
 
 	ticpp::Element* ExportToXrc( IObject *obj )
 	{
@@ -1000,7 +989,7 @@ public:
 		    count = 1;
 		}
 		int majorDim = obj->GetPropertyAsInteger("majorDimension");
-		if (majorDim < 1)
+		if ( majorDim < 1 )
 		{
 			wxLogWarning(_("majorDimension must be greater than zero."));
 			majorDim = 1;
@@ -1009,8 +998,7 @@ public:
 		wxRadioBox *radiobox = new wxRadioBox( (wxWindow*)parent, -1,
 												obj->GetPropertyAsString("label"),
 												obj->GetPropertyAsPoint("pos"),
-												obj->GetPropertyAsSize("size"),
-												choices, majorDim,
+												obj->GetPropertyAsSize("size"), choices, majorDim,
 												obj->GetPropertyAsInteger("style") |
 												obj->GetPropertyAsInteger("window_style") );
 
@@ -1165,6 +1153,26 @@ public:
 class MenuComponent : public ComponentBase
 {
 public:
+/*
+	wxObject* Create( IObject *obj, wxObject *parent )
+	{
+		wxMenu* menu = new wxMenu();
+		return menu;
+	}
+
+	void Cleanup( wxObject* obj )
+	{
+		wxMenu* window = dynamic_cast< wxMenu* >( obj );
+		if ( 0 != window )
+		{
+			wxObject* wxparent = GetManager()->GetParent( obj );
+			IObject* parent = GetManager()->GetIParent( obj );
+			if ( "tool" == parent->GetClassName() )
+				GetManager()->ModifyProperty( wxparent, "kind", "wxITEM_NORMAL" );
+		}
+		ComponentBase::Cleanup( obj );
+	}
+*/
 	ticpp::Element* ExportToXrc( IObject *obj )
 	{
 		ObjectToXrcFilter xrc( obj, "wxMenu", obj->GetPropertyAsString("name") );
@@ -1225,7 +1233,7 @@ public:
 		if ( obj->GetPropertyAsInteger("enabled") == 0 )
 			xrc.AddProperty( "enabled", "enabled", XRC_TYPE_BOOL );
 
-		switch (kind)
+		switch( kind )
 		{
 			case wxITEM_CHECK: xrc.AddPropertyValue( "checkable", "1" ); break;
 			case wxITEM_RADIO: xrc.AddPropertyValue( "radio", "1" ); break;
@@ -1250,9 +1258,8 @@ public:
 			filter.AddPropertyValue( "label", label, true );
 			filter.AddPropertyValue( "shortcut", shortcut );
 		}
-		catch( ticpp::Exception& )
-		{
-		}
+		catch( ticpp::Exception& ) { }
+
 		filter.AddProperty( "help", "help", XRC_TYPE_TEXT );
 		filter.AddProperty( "bitmap", "bitmap", XRC_TYPE_BITMAP );
 		return filter.GetXfbObject();
@@ -1320,8 +1327,7 @@ public:
 			{
 				tb->AddTool(wxID_ANY,
 							childObj->GetPropertyAsString("label"),
-							childObj->GetPropertyAsBitmap("bitmap"),
-							wxNullBitmap,
+							childObj->GetPropertyAsBitmap("bitmap"), wxNullBitmap,
 							(wxItemKind)childObj->GetPropertyAsInteger("kind"),
 							childObj->GetPropertyAsString("help"),
 							wxEmptyString, child );
@@ -1350,8 +1356,12 @@ public:
 		if ( !obj->IsNull("margins") )
 			xrc.AddProperty( "margins", "margins", XRC_TYPE_SIZE );
 
-		xrc.AddProperty( "packing", "packing", XRC_TYPE_INTEGER );
-		xrc.AddProperty( "separation", "separation", XRC_TYPE_INTEGER );
+		if ( !obj->IsNull("packing") )
+			xrc.AddProperty( "packing", "packing", XRC_TYPE_INTEGER );
+
+		if ( !obj->IsNull("separation") )
+			xrc.AddProperty( "separation", "separation", XRC_TYPE_INTEGER );
+
 		return xrc.GetXrcObject();
 	}
 
@@ -1370,7 +1380,7 @@ public:
 class AuiToolBarComponent : public ComponentBase
 {
 public:
-	wxObject* Create(IObject *obj, wxObject *parent)
+	wxObject* Create( IObject *obj, wxObject *parent )
 	{
 		wxAuiToolBar *tb = new wxAuiToolBar((wxWindow*)parent, -1,
 											obj->GetPropertyAsPoint(_("pos")),
@@ -1393,6 +1403,7 @@ public:
 			tb->SetToolSeparation( obj->GetPropertyAsInteger("separation") );
 
 		tb->PushEventHandler( new ComponentEvtHandler( tb, GetManager() ) );
+
 		return tb;
 	}
 
@@ -1409,28 +1420,20 @@ public:
 			wxObject* child = GetManager()->GetChild( wxobject, i );
 			IObject* childObj = GetManager()->GetIObject( child );
 			if ( "tool" == childObj->GetClassName() )
-			{
-				tb->AddTool( 	wxID_ANY,
-								childObj->GetPropertyAsString("label"),
-								childObj->GetPropertyAsBitmap("bitmap"),
-								wxNullBitmap,
-								(wxItemKind)childObj->GetPropertyAsInteger("kind"),
-								childObj->GetPropertyAsString("help"),
-								wxEmptyString,
-								child
-							);
-			}
+				tb->AddTool( wxID_ANY,
+							childObj->GetPropertyAsString("label"),
+							childObj->GetPropertyAsBitmap("bitmap"), wxNullBitmap,
+							(wxItemKind)childObj->GetPropertyAsInteger("kind"),
+							childObj->GetPropertyAsString("help"), wxEmptyString, child );
+
 			else if ( "toolSeparator" == childObj->GetClassName() )
-			{
 				tb->AddSeparator();
-			}
+
 			else
 			{
 				wxControl* control = wxDynamicCast( child, wxControl );
 				if ( NULL != control )
-				{
 					tb->AddControl( control );
-				}
 			}
 		}
 		tb->Realize();
@@ -1440,10 +1443,18 @@ public:
 	{
 		ObjectToXrcFilter xrc( obj, "wxAuiToolBar", obj->GetPropertyAsString("name") );
 		xrc.AddWindowProperties();
-		xrc.AddProperty( "bitmapsize", "bitmapsize", XRC_TYPE_SIZE );
-		xrc.AddProperty( "margins", "margins", XRC_TYPE_SIZE );
-		xrc.AddProperty( "packing", "packing", XRC_TYPE_INTEGER );
-		xrc.AddProperty( "separation", "separation", XRC_TYPE_INTEGER );
+		if ( !obj->IsNull("bitmapsize") )
+			xrc.AddProperty( "bitmapsize", "bitmapsize", XRC_TYPE_SIZE );
+
+		if ( !obj->IsNull("margins") )
+			xrc.AddProperty( "margins", "margins", XRC_TYPE_SIZE );
+
+		if ( !obj->IsNull("packing") )
+			xrc.AddProperty( "packing", "packing", XRC_TYPE_INTEGER );
+
+		if ( !obj->IsNull("separation") )
+			xrc.AddProperty( "separation", "separation", XRC_TYPE_INTEGER );
+
 		return xrc.GetXrcObject();
 	}
 
@@ -1462,20 +1473,26 @@ public:
 void ComponentEvtHandler::OnTool( wxCommandEvent& event )
 {
 	wxToolBar* tb = wxDynamicCast( event.GetEventObject(), wxToolBar );
+
 	if ( NULL == tb )
-		// very very strange
-		return;
+		return; // very very strange
 
 	wxObject* wxobject = tb->GetToolClientData( event.GetId() );
+
 	if ( NULL != wxobject )
-	{
 		m_manager->SelectObject( wxobject );
-	}
 }
 
 class ToolComponent : public ComponentBase
 {
 public:
+	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
+	{
+		wxObject* menu = GetManager()->GetChild( wxobject, 0 );
+		if ( menu )
+			GetManager()->ModifyProperty( wxobject, "kind", "wxITEM_DROPDOWN" );
+	}
+
 	ticpp::Element* ExportToXrc( IObject *obj )
 	{
 		ObjectToXrcFilter xrc( obj, "tool", obj->GetPropertyAsString("name") );
@@ -1490,18 +1507,14 @@ public:
 			xrc.AddProperty( "bitmap", "bitmap", XRC_TYPE_BITMAP );
 
 		wxItemKind kind = (wxItemKind)obj->GetPropertyAsInteger("kind");
-		if ( wxITEM_RADIO == kind )
-		{
+
+		if ( kind == wxITEM_RADIO )
 			xrc.AddPropertyValue( "radio", "1" );
-		}
-		else if ( wxITEM_CHECK == kind )
-		{
+		else if ( kind == wxITEM_CHECK )
 			xrc.AddPropertyValue( "toggle", "1" );
-		}
-		else if ( wxITEM_DROPDOWN == kind )
-		{
+		else if ( kind == wxITEM_DROPDOWN )
 			xrc.AddPropertyValue( "dropdown", wxEmptyString );
-		}
+
 		return xrc.GetXrcObject();
 	}
 
@@ -1531,10 +1544,10 @@ public:
 					filter.AddPropertyValue( "kind", "wxITEM_RADIO" );
 			}
 		}
-		if ( !(gotToggle || gotRadio) )
+		if ( !( gotToggle || gotRadio ) )
 			filter.AddPropertyValue( "kind", "wxITEM_NORMAL" );
 
-		return filter.GetXfbObject();
+		return filter.GetXfbObject(); // TODO: Add wxITEM_DROPDOWN
 	}
 };
 
@@ -1566,8 +1579,7 @@ public:
 
 		wxChoice *choice = new wxChoice((wxWindow*)parent, -1,
 										obj->GetPropertyAsPoint("pos"),
-										obj->GetPropertyAsSize("size"),
-										(int)choices.Count(), strings,
+										obj->GetPropertyAsSize("size"), (int)choices.Count(), strings,
 										obj->GetPropertyAsInteger("window_style") );
 
 		choice->SetSelection(obj->GetPropertyAsInteger("selection"));
@@ -1824,7 +1836,7 @@ BEGIN_LIBRARY()
 	MACRO(wxITEM_CHECK)
 	MACRO(wxITEM_RADIO)
 
-	ABSTRACT_COMPONENT( "wxMenu", 		MenuComponent )
+	WINDOW_COMPONENT( "wxMenu", 		MenuComponent )
 	ABSTRACT_COMPONENT( "separator", 	SeparatorComponent )
 	ABSTRACT_COMPONENT( "submenu", 		SubMenuComponent )
 
@@ -1879,7 +1891,7 @@ BEGIN_LIBRARY()
 
 	WINDOW_COMPONENT( "wxAuiToolBar", AuiToolBarComponent )
 
-	ABSTRACT_COMPONENT( "tool", ToolComponent )
+	WINDOW_COMPONENT( "tool", ToolComponent )
 	MACRO(wxITEM_NORMAL)
 	MACRO(wxITEM_CHECK)
 	MACRO(wxITEM_RADIO)

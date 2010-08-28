@@ -319,10 +319,10 @@ public:
 	*/
 	wxString GetClassName () { return m_class;  }
 
-	/// Gets the parent object
+	/** Gets the parent object */
 	PObjectBase GetParent () { return m_parent.lock(); }
 
-	/// Links the object to a parent
+	/** Links the object to a parent */
 	void SetParent(PObjectBase parent)  { m_parent = parent; }
 
 	/**
