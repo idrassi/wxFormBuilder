@@ -70,13 +70,11 @@ protected:
 		// Only handle events from this book - prevents problems with nested books, because OnSelected is fired on an
 		// object and all of its parents
 		if ( m_window != event->GetEventObject() )
-		{
 			return;
-		}
+
 		if ( selPage < 0 )
-		{
 			return;
-		}
+
 		size_t count = m_manager->GetChildCount( m_window );
 		for ( size_t i = 0; i < count; i++ )
 		{
@@ -85,21 +83,15 @@ protected:
 			if ( iChild )
 			{
 				if ( (int)i == selPage && !iChild->GetPropertyAsInteger("selected") )
-				{
 					m_manager->ModifyProperty( wxChild, "select", "1", false );
-				}
 				else if ( (int)i != selPage && iChild->GetPropertyAsInteger("selected") )
-				{
 					m_manager->ModifyProperty( wxChild, "select", "0", false );
-				}
 			}
 		}
 		// Select the corresponding panel in the object tree
 		T* book = wxDynamicCast( m_window, T );
 		if ( NULL != book )
-		{
 			m_manager->SelectObject( book->GetPage( selPage ) );
-		}
 	}
 
 	void OnAuiNotebookPageClosed( wxAuiNotebookEvent& event )
@@ -237,7 +229,6 @@ public:
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
-
 };
 
 class SplitterWindowComponent : public ComponentBase
@@ -257,10 +248,10 @@ class SplitterWindowComponent : public ComponentBase
 			gravity = ( gravity > 1.0 ? 1.0 : gravity );
 			splitter->SetSashGravity( gravity );
 		}
+
 		if ( !obj->IsNull("sashsize") )
-		{
 			splitter->SetSashSize( obj->GetPropertyAsInteger("sashsize") );
-		}
+
 		if ( !obj->IsNull("min_pane_size") )
 		{
 			int minPaneSize = obj->GetPropertyAsInteger("min_pane_size");
@@ -286,13 +277,10 @@ class SplitterWindowComponent : public ComponentBase
 		xrc.AddProperty( "min_pane_size", "minsize", XRC_TYPE_INTEGER );
 
 		if ( obj->GetPropertyAsString("splitmode") == "wxSPLIT_VERTICAL" )
-		{
 			xrc.AddPropertyValue( "orientation", "vertical" );
-		}
 		else
-		{
 			xrc.AddPropertyValue( "orientation", "horizontal" );
-		}
+
 		return xrc.GetXrcObject();
 	}
 
@@ -307,18 +295,14 @@ class SplitterWindowComponent : public ComponentBase
 		{
 			ticpp::Element *splitmode = xrcObj->FirstChildElement("orientation");
 			std::string value = splitmode->GetText();
-			if (value == "vertical")
-			{
+			if ( value == "vertical" )
 				filter.AddPropertyValue( "splitmode", "wxSPLIT_VERTICAL" );
-			}
 			else
-			{
 				filter.AddPropertyValue( "splitmode", "wxSPLIT_HORIZONTAL" );
-			}
+
 		}
-		catch( ticpp::Exception& )
-		{
-		}
+		catch( ticpp::Exception& ) { }
+
 		return filter.GetXfbObject();
 	}
 
@@ -355,9 +339,8 @@ class SplitterWindowComponent : public ComponentBase
 					firstChild->Destroy();
 				}
 				else
-				{
 					splitter->Initialize( subwindow );
-				}
+
 				splitter->PushEventHandler( new ComponentEvtHandler( splitter, GetManager() ) );
 				break;
 			}
@@ -380,9 +363,7 @@ class SplitterWindowComponent : public ComponentBase
 				// Get the split mode and sash position
 				IObject* obj = GetManager()->GetIObject( wxobject );
 				if ( obj == NULL )
-				{
 					return;
-				}
 
 				int sashPos = obj->GetPropertyAsInteger("sashpos");
 				int splitmode = obj->GetPropertyAsInteger("splitmode");
@@ -394,13 +375,10 @@ class SplitterWindowComponent : public ComponentBase
 				}
 
 				if ( splitmode == wxSPLIT_VERTICAL )
-				{
 					splitter->SplitVertically( subwindow0, subwindow1, sashPos );
-				}
 				else
-				{
 					splitter->SplitHorizontally( subwindow0, subwindow1, sashPos );
-				}
+
 				splitter->PushEventHandler( new ComponentEvtHandler( splitter, GetManager() ) );
 				break;
 			}
@@ -416,9 +394,7 @@ void ComponentEvtHandler::OnSplitterSashChanged( wxSplitterEvent& )
 	if ( window != NULL )
 	{
 		if ( window->m_customSashPos != 0 )
-		{
 			m_manager->ModifyProperty( window, "sashpos", wxString::Format( "%i", window->GetSashPosition() ) );
-		}
 	}
 }
 
