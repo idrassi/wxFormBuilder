@@ -1323,7 +1323,7 @@ public:
 		{
 			wxObject* child = GetManager()->GetChild( wxobject, i );
 			IObject* childObj = GetManager()->GetIObject( child );
-			if ("tool" == childObj->GetClassName() )
+			if ( "tool" == childObj->GetClassName() )
 			{
 				tb->AddTool(wxID_ANY,
 							childObj->GetPropertyAsString("label"),

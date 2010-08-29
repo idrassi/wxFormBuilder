@@ -293,7 +293,7 @@ PObjectBase TemplateParser::GetWxParent()
 	candidates.push_back( m_obj->FindNearAncestor("toolbook") );
 	candidates.push_back( m_obj->FindNearAncestor("auinotebook") );
 	candidates.push_back( m_obj->FindNearAncestor("flatnotebook") );
-	candidates.push_back( m_obj->FindNearAncestor("collapsiblepanewindow") );
+	candidates.push_back( m_obj->FindNearAncestor("collapsiblepane") );
 
 	for ( size_t i = 0; i < candidates.size(); i++ )
 	{

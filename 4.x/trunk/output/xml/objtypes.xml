@@ -206,10 +206,10 @@ object, so nmax is set to '1'.
 	</objtype>
 
 	<objtype name="collapsiblepane" >
-		<childtype name="collapsiblepanewindow" nmax="1" />
+		<childtype name="panewindow" />
 	</objtype>
 
-	<objtype name="collapsiblepanewindow" item="1">
+	<objtype name="panewindow" item="1">
 		<childtype name="sizer" nmax="1" />
 	</objtype>
 
@@ -245,7 +245,7 @@ object, so nmax is set to '1'.
 		<childtype name="expanded_widget" />
 	</objtype>
 
-	<objtype name="tool">
+	<objtype name="tool" item="1">
 		<childtype name="menu" nmax="1" />
 	</objtype>
 
