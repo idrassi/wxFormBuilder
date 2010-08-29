@@ -696,7 +696,7 @@ public:
 
 	ticpp::Element* ExportToXrc( IObject *obj )
 	{
-		ObjectToXrcFilter xrc( obj, "wxTreebook", obj->GetPropertyAsString("name") );
+		ObjectToXrcFilter xrc( obj, "wxTreebook" ); //, obj->GetPropertyAsString("name")
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
@@ -739,6 +739,7 @@ public:
 		{
 			wxLogError( _("TreebookPageComponent has an invalid depth."), obj, book, page );
 			// TODO : Change depth property to 0
+			// GetManager()->ModifyProperty( wxobject, "depth", "0" );
 			return;
 		}
 
@@ -784,7 +785,7 @@ public:
 
 		if ( obj->GetPropertyAsString("select") == "0" && selection >= 0 )
 		{
-			book->SetSelection(selection);
+			book->SetSelection( selection );
 		}
 		else
 		{
@@ -843,7 +844,7 @@ public:
 
 	ticpp::Element* ExportToXrc( IObject *obj )
 	{
-		ObjectToXrcFilter xrc( obj, "wxToolbook", obj->GetPropertyAsString("name") );
+		ObjectToXrcFilter xrc( obj, "wxToolbook" ); //, obj->GetPropertyAsString("name")
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
@@ -1077,10 +1078,10 @@ public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		wxCollapsiblePane* collapsiblePane = new wxCollapsiblePane((wxWindow *)parent,-1,
-			obj->GetPropertyAsString(_("label")),
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("window_style")));
+																	obj->GetPropertyAsString("label"),
+																	obj->GetPropertyAsPoint("pos"),
+																	obj->GetPropertyAsSize("size"),
+																	obj->GetPropertyAsInteger("window_style") );
 /*
         ComponentEvtHandler* eventHandler = new ComponentEvtHandler( collapsiblePane, GetManager() );
         collapsiblePane->PushEventHandler( eventHandler );
@@ -1090,60 +1091,58 @@ public:
         wxCollapsiblePaneEvent event( collapsiblePane, -1, collapsed );
         eventHandler->AddPendingEvent( event );
 */
-        collapsiblePane->Collapse( ( obj->GetPropertyAsInteger(_T("collapsed")) != 0 ? true : false ) );
+/*
+        collapsiblePane->Collapse( ( obj->GetPropertyAsInteger("collapsed") != 0 ? true : false ) );
         collapsiblePane->PushEventHandler( new ComponentEvtHandler( collapsiblePane, GetManager() ) );
-
+*/
 		return collapsiblePane;
 	}
 
-	ticpp::Element* ExportToXrc(IObject *obj)
+	ticpp::Element* ExportToXrc( IObject *obj )
 	{
-		ObjectToXrcFilter xrc(obj, _("wxCollapsiblePane"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc( obj, "wxCollapsiblePane" ); //, obj->GetPropertyAsString("name")
 		xrc.AddWindowProperties();
-		xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
-		xrc.AddProperty(_("collapsed"),_("collapsed"),XRC_TYPE_BOOL);
+		xrc.AddProperty( "label", "label", XRC_TYPE_TEXT );
+		xrc.AddProperty( "collapsed", "collapsed", XRC_TYPE_BOOL );
 		return xrc.GetXrcObject();
 	}
 
-	ticpp::Element* ImportFromXrc(ticpp::Element *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element *xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxCollapsiblePane"));
+		XrcToXfbFilter filter( xrcObj, "wxCollapsiblePane" );
 		filter.AddWindowProperties();
-		filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
-		filter.AddProperty(_("collapsed"),_("collapsed"),XRC_TYPE_BOOL);
+		filter.AddProperty( "label", "label", XRC_TYPE_TEXT );
+		filter.AddProperty( "collapsed", "collapsed", XRC_TYPE_BOOL );
 		return filter.GetXfbObject();
 	}
-
 };
 
 void ComponentEvtHandler::OnCollapsiblePaneChanged( wxCollapsiblePaneEvent& event )
 {
     if ( m_window != event.GetEventObject() )
-    {
         return;
-    }
-
+/*
 	// Modify the "collapsed" property
 	wxCollapsiblePane* collapsiblePane = wxDynamicCast( m_window, wxCollapsiblePane );
 	if ( collapsiblePane != NULL )
 	{
 		bool collapsed = event.GetCollapsed();
 
-		m_manager->ModifyProperty( collapsiblePane, _("collapsed"), ( collapsed ? wxT("1") : wxT("0") ) );
+		m_manager->ModifyProperty( collapsiblePane, "collapsed", "collapsed" ? "1" : "0" );
 
         collapsiblePane->Collapse( collapsed );
 
-        // select the corresponding collPane in the object tree
+        // Select the corresponding collPane in the object tree
         m_manager->SelectObject( collapsiblePane );
 	}
+*/ 
 }
-
 
 class CollapsiblePaneWindowComponent : public ComponentBase
 {
 public:
 
-	wxObject* Create(IObject *obj, wxObject *parent)
+	wxObject* Create( IObject *obj, wxObject *parent )
 	{
 		wxCollapsiblePane* collapsiblePane = wxDynamicCast( parent, wxCollapsiblePane );
 
@@ -1157,111 +1156,96 @@ public:
 		return window;
 	}
 
-	ticpp::Element* ExportToXrc(IObject *obj)
+	ticpp::Element* ExportToXrc( IObject *obj )
 	{
-		ObjectToXrcFilter xrc(obj, _("CollapsiblePaneWindow"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc( obj, "panewindow" );//, obj->GetPropertyAsString("pane_name") );
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
-	ticpp::Element* ImportFromXrc(ticpp::Element *xrcObj)
+	ticpp::Element* ImportFromXrc( ticpp::Element *xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("CollapsiblePaneWindow"));
+		XrcToXfbFilter filter( xrcObj, "panewindow" );
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
 };
-///////////////////////////////////////////////////////////////////////////////
 
 BEGIN_LIBRARY()
 
-WINDOW_COMPONENT("wxPanel",PanelComponent)
+	WINDOW_COMPONENT("wxPanel",PanelComponent)
 
-WINDOW_COMPONENT("wxSplitterWindow",SplitterWindowComponent)
-ABSTRACT_COMPONENT("splitteritem",SplitterItemComponent)
+	WINDOW_COMPONENT( 	"wxCollapsiblePane", 	CollapsiblePaneComponent)
+	ABSTRACT_COMPONENT( "panewindow", 		CollapsiblePaneWindowComponent)
 
-WINDOW_COMPONENT("wxScrolledWindow",ScrolledWindowComponent)
+	WINDOW_COMPONENT("wxScrolledWindow",ScrolledWindowComponent)
+	MACRO(wxHSCROLL);
+	MACRO(wxVSCROLL);
 
-WINDOW_COMPONENT("wxNotebook", NotebookComponent)
-ABSTRACT_COMPONENT("notebookpage",NotebookPageComponent)
+	WINDOW_COMPONENT("wxSplitterWindow",SplitterWindowComponent)
+	ABSTRACT_COMPONENT("splitteritem",SplitterItemComponent)
+	MACRO(wxSP_3D)
+	MACRO(wxSP_3DSASH)
+	MACRO(wxSP_3DBORDER)
+	MACRO(wxSP_BORDER)
+	MACRO(wxSP_NOBORDER)
+	MACRO(wxSP_NO_XP_THEME)
+	MACRO(wxSP_PERMIT_UNSPLIT)
+	MACRO(wxSP_LIVE_UPDATE)
+	MACRO(wxSPLIT_VERTICAL)
+	MACRO(wxSPLIT_HORIZONTAL)
 
-WINDOW_COMPONENT("wxListbook", ListbookComponent)
-ABSTRACT_COMPONENT("listbookpage", ListbookPageComponent)
+	WINDOW_COMPONENT("wxChoicebook", ChoicebookComponent)
+	ABSTRACT_COMPONENT("choicebookpage", ChoicebookPageComponent)
+	MACRO(wxCHB_TOP)
+	MACRO(wxCHB_LEFT)
+	MACRO(wxCHB_RIGHT)
+	MACRO(wxCHB_BOTTOM)
+	MACRO(wxCHB_DEFAULT)
 
-WINDOW_COMPONENT("wxChoicebook", ChoicebookComponent)
-ABSTRACT_COMPONENT("choicebookpage", ChoicebookPageComponent)
+	WINDOW_COMPONENT("wxListbook", ListbookComponent)
+	ABSTRACT_COMPONENT("listbookpage", ListbookPageComponent)
+	MACRO(wxLB_TOP)
+	MACRO(wxLB_LEFT)
+	MACRO(wxLB_RIGHT)
+	MACRO(wxLB_BOTTOM)
+	MACRO(wxLB_DEFAULT)
 
-WINDOW_COMPONENT("wxTreebook", TreebookComponent)
-ABSTRACT_COMPONENT("treebookpage", TreebookPageComponent)
+	WINDOW_COMPONENT("wxNotebook", NotebookComponent)
+	ABSTRACT_COMPONENT("notebookpage",NotebookPageComponent)
+	MACRO(wxNB_TOP)
+	MACRO(wxNB_LEFT)
+	MACRO(wxNB_RIGHT)
+	MACRO(wxNB_BOTTOM)
+	MACRO(wxNB_FIXEDWIDTH)
+	MACRO(wxNB_MULTILINE)
+	MACRO(wxNB_NOPAGETHEME)
+	MACRO(wxNB_FLAT)
 
-WINDOW_COMPONENT("wxToolbook", ToolbookComponent)
-ABSTRACT_COMPONENT("toolbookpage", ToolbookPageComponent)
+	WINDOW_COMPONENT("wxTreebook", TreebookComponent)
+	ABSTRACT_COMPONENT("treebookpage", TreebookPageComponent)
 
-WINDOW_COMPONENT("wxAuiNotebook", AuiNotebookComponent)
-ABSTRACT_COMPONENT("auinotebookpage", AuiNotebookPageComponent)
+	WINDOW_COMPONENT("wxToolbook", ToolbookComponent)
+	ABSTRACT_COMPONENT("toolbookpage", ToolbookPageComponent)
 
-// wxCollapsiblePane
-WINDOW_COMPONENT("wxCollapsiblePane",CollapsiblePaneComponent)
-WINDOW_COMPONENT("collapsiblepanewindow",CollapsiblePaneWindowComponent)
+	// wxBookCtrl flags (common for wxNotebook, wxListbook, wxChoicebook, wxTreebook)
+	MACRO(wxBK_DEFAULT)
+	MACRO(wxBK_TOP)
+	MACRO(wxBK_BOTTOM)
+	MACRO(wxBK_LEFT)
+	MACRO(wxBK_RIGHT)
 
-// wxSplitterWindow
-MACRO(wxSP_3D)
-MACRO(wxSP_3DSASH)
-MACRO(wxSP_3DBORDER)
-MACRO(wxSP_BORDER)
-MACRO(wxSP_NOBORDER)
-MACRO(wxSP_NO_XP_THEME)
-MACRO(wxSP_PERMIT_UNSPLIT)
-MACRO(wxSP_LIVE_UPDATE)
-
-MACRO(wxSPLIT_VERTICAL)
-MACRO(wxSPLIT_HORIZONTAL)
-
-// wxScrolledWindow
-MACRO(wxHSCROLL);
-MACRO(wxVSCROLL);
-
-// wxBookCtrl flags (common for wxNotebook, wxListbook, wxChoicebook, wxTreebook)
-MACRO(wxBK_DEFAULT)
-MACRO(wxBK_TOP)
-MACRO(wxBK_BOTTOM)
-MACRO(wxBK_LEFT)
-MACRO(wxBK_RIGHT)
-
-// wxNotebook
-MACRO(wxNB_TOP)
-MACRO(wxNB_LEFT)
-MACRO(wxNB_RIGHT)
-MACRO(wxNB_BOTTOM)
-MACRO(wxNB_FIXEDWIDTH)
-MACRO(wxNB_MULTILINE)
-MACRO(wxNB_NOPAGETHEME)
-MACRO(wxNB_FLAT)
-
-// wxListbook
-MACRO(wxLB_TOP)
-MACRO(wxLB_LEFT)
-MACRO(wxLB_RIGHT)
-MACRO(wxLB_BOTTOM)
-MACRO(wxLB_DEFAULT)
-
-// wxChoicebook
-MACRO(wxCHB_TOP)
-MACRO(wxCHB_LEFT)
-MACRO(wxCHB_RIGHT)
-MACRO(wxCHB_BOTTOM)
-MACRO(wxCHB_DEFAULT)
-
-// wxAuiNotebook
-MACRO(wxAUI_NB_DEFAULT_STYLE)
-MACRO(wxAUI_NB_TAB_SPLIT)
-MACRO(wxAUI_NB_TAB_MOVE)
-MACRO(wxAUI_NB_TAB_EXTERNAL_MOVE)
-MACRO(wxAUI_NB_TAB_FIXED_WIDTH)
-MACRO(wxAUI_NB_SCROLL_BUTTONS)
-MACRO(wxAUI_NB_WINDOWLIST_BUTTON)
-MACRO(wxAUI_NB_CLOSE_BUTTON)
-MACRO(wxAUI_NB_CLOSE_ON_ACTIVE_TAB)
-MACRO(wxAUI_NB_CLOSE_ON_ALL_TABS)
+	WINDOW_COMPONENT("wxAuiNotebook", AuiNotebookComponent)
+	ABSTRACT_COMPONENT("auinotebookpage", AuiNotebookPageComponent)
+	MACRO(wxAUI_NB_DEFAULT_STYLE)
+	MACRO(wxAUI_NB_TAB_SPLIT)
+	MACRO(wxAUI_NB_TAB_MOVE)
+	MACRO(wxAUI_NB_TAB_EXTERNAL_MOVE)
+	MACRO(wxAUI_NB_TAB_FIXED_WIDTH)
+	MACRO(wxAUI_NB_SCROLL_BUTTONS)
+	MACRO(wxAUI_NB_WINDOWLIST_BUTTON)
+	MACRO(wxAUI_NB_CLOSE_BUTTON)
+	MACRO(wxAUI_NB_CLOSE_ON_ACTIVE_TAB)
+	MACRO(wxAUI_NB_CLOSE_ON_ALL_TABS)
 
 END_LIBRARY()

@@ -226,8 +226,8 @@ wxTreebook and wxToolbook by
     <event name="OnCollapsiblePaneChanged" class="wxCollapsiblePaneEvent" help="Process a wxEVT_COLLAPSIBLEPANE_CHANGED event, when the user shows or hides the collapsible pane." />
   </objectinfo>
 
-  <objectinfo class="collapsiblepanewindow" icon="collpane.xpm" type="collapsiblepanewindow">
-	<property name="name" type="text">collapsiblePaneWindow</property>
+  <objectinfo class="panewindow" icon="collpane.xpm" type="panewindow">
+	<!--property name="pane_name" type="text">collapsiblePaneWindow</property-->
   </objectinfo>
 
 </package>
