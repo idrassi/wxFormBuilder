@@ -200,5 +200,14 @@ Python code generation written by
 		</template>
 	</templates>
 
-
+	<templates class="wxCollapsiblePane">
+		<template name="construction">
+			$name = new #class( #wxparent $name, $id, $label, $pos, $size, $window_style );
+			#ifequal $collapsed "1"
+			@{ #nl $name.Collapse( true ) #nl @}
+			#ifequal $collapsed "0"
+			@{ #nl $name.Collapse( false ) #nl @}
+		</template>
+		<template name="evt_connect_OnCollapsiblePaneChanged">self.$name.Bind( wx.EVT_COLLAPSIBLEPANE_CHANGED, #handler )</template>
+	</templates>
 </codegen>
