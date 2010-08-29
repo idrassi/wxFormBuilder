@@ -1074,7 +1074,6 @@ public:
 class CollapsiblePaneComponent : public ComponentBase
 {
 public:
-
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		wxCollapsiblePane* collapsiblePane = new wxCollapsiblePane((wxWindow *)parent,-1,
@@ -1091,16 +1090,17 @@ public:
         wxCollapsiblePaneEvent event( collapsiblePane, -1, collapsed );
         eventHandler->AddPendingEvent( event );
 */
-/*
+		SuppressEventHandlers suppress( collapsiblePane );
+
         collapsiblePane->Collapse( ( obj->GetPropertyAsInteger("collapsed") != 0 ? true : false ) );
         collapsiblePane->PushEventHandler( new ComponentEvtHandler( collapsiblePane, GetManager() ) );
-*/
+
 		return collapsiblePane;
 	}
 
 	ticpp::Element* ExportToXrc( IObject *obj )
 	{
-		ObjectToXrcFilter xrc( obj, "wxCollapsiblePane" ); //, obj->GetPropertyAsString("name")
+		ObjectToXrcFilter xrc( obj, "wxCollapsiblePane", obj->GetPropertyAsString("name") );
 		xrc.AddWindowProperties();
 		xrc.AddProperty( "label", "label", XRC_TYPE_TEXT );
 		xrc.AddProperty( "collapsed", "collapsed", XRC_TYPE_BOOL );
@@ -1121,11 +1121,13 @@ void ComponentEvtHandler::OnCollapsiblePaneChanged( wxCollapsiblePaneEvent& even
 {
     if ( m_window != event.GetEventObject() )
         return;
-/*
+
 	// Modify the "collapsed" property
 	wxCollapsiblePane* collapsiblePane = wxDynamicCast( m_window, wxCollapsiblePane );
 	if ( collapsiblePane != NULL )
 	{
+		SuppressEventHandlers suppress( collapsiblePane );
+
 		bool collapsed = event.GetCollapsed();
 
 		m_manager->ModifyProperty( collapsiblePane, "collapsed", "collapsed" ? "1" : "0" );
@@ -1135,20 +1137,18 @@ void ComponentEvtHandler::OnCollapsiblePaneChanged( wxCollapsiblePaneEvent& even
         // Select the corresponding collPane in the object tree
         m_manager->SelectObject( collapsiblePane );
 	}
-*/ 
 }
 
 class CollapsiblePaneWindowComponent : public ComponentBase
 {
 public:
-
 	wxObject* Create( IObject *obj, wxObject *parent )
 	{
 		wxCollapsiblePane* collapsiblePane = wxDynamicCast( parent, wxCollapsiblePane );
 
         if ( collapsiblePane == NULL )
         {
-            wxLogError( _("CollapsiblePaneWindow must be added to a wxCollapsiblePane!") );
+            wxLogError( _("panewindow must be added to a wxCollapsiblePane!") );
             return NULL;
         }
 

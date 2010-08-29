@@ -554,9 +554,7 @@ void VisualEditor::Create()
 			if ( menubar || statusbar || toolbar || m_auipanel )
 			{
 				if( m_auimgr )
-				{
 					m_back->SetFrameWidgets( menubar, NULL, statusbar, m_auipanel );
-				}
 				else
 					m_back->SetFrameWidgets( menubar, toolbar, statusbar, m_auipanel );
 			}

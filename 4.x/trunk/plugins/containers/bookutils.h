@@ -21,18 +21,19 @@
 //   Ryan Mulder - rjmyst3@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef BOOKUTILS
-#define BOOKUTILS
+#ifndef __BOOKUTILS_H__
+#define __BOOKUTILS_H__
 
 #include <component.h>
 #include <default.xpm>
+
 #include <wx/image.h>
 #include <wx/imaglist.h>
-#include <wx/notebook.h>
-#include <wx/listbook.h>
 #include <wx/choicebk.h>
-#include <wx/treebook.h>
+#include <wx/listbook.h>
+#include <wx/notebook.h>
 #include <wx/toolbook.h>
+#include <wx/treebook.h>
 #include <wx/aui/auibook.h>
 
 class SuppressEventHandlers
@@ -47,18 +48,14 @@ public:
 	m_window( window  )
 	{
 		while ( window->GetEventHandler() != window )
-		{
 			m_handlers.push_back( window->PopEventHandler() );
-		}
 	}
 
 	~SuppressEventHandlers()
 	{
 		std::vector< wxEvtHandler* >::reverse_iterator handler;
 		for ( handler = m_handlers.rbegin(); handler != m_handlers.rend(); ++handler )
-		{
 			m_window->PushEventHandler( *handler );
-		}
 	}
 };
 
@@ -85,16 +82,14 @@ namespace BookUtils
 
 		T* book = wxDynamicCast( wxparent, T );
 
-		//This wouldn't compile in MinGW - strange
-		///wxWindow* page = wxDynamicCast( manager->GetChild( wxobject, 0 ), wxWindow );
+		// This wouldn't compile in MinGW - strange
+		// wxWindow* page = wxDynamicCast( manager->GetChild( wxobject, 0 ), wxWindow );
 
 		// Do this instead
 		wxObject* child = manager->GetChild( wxobject, 0 );
 		wxWindow* page = NULL;
-		if ( child->IsKindOf(CLASSINFO(wxWindow)))
-		{
+		if ( child->IsKindOf( CLASSINFO( wxWindow ) ) )
 			page = (wxWindow*)child;
-		}
 
 		// Error checking
 		if ( !( obj && book && page ) )
@@ -139,13 +134,9 @@ namespace BookUtils
 		}
 
 		if ( obj->GetPropertyAsString("select" ) == "0" && selection >= 0 )
-		{
 			book->SetSelection(selection);
-		}
 		else
-		{
 			book->SetSelection( book->GetPageCount() - 1 );
-		}
 	}
 
 	template < class T >
@@ -154,9 +145,7 @@ namespace BookUtils
 		// Get actual page - first child
 		wxObject* page = manager->GetChild( wxobject, 0 );
 		if ( NULL == page )
-		{
 			return;
-		}
 
 		T* book = wxDynamicCast( manager->GetParent( wxobject ), T );
 		if ( book )
@@ -176,4 +165,4 @@ namespace BookUtils
 	}
 }
 
-#endif //BOOKUTILS
+#endif //__BOOKUTILS_H__
