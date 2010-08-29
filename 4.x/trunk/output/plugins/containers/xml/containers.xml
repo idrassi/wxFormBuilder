@@ -70,6 +70,20 @@ wxTreebook and wxToolbook by
 		<property name="scroll_rate_y" type="uint" help="Set the vertical scrolling increment.">5</property>
 	</objectinfo>
 
+	<objectinfo class="wxCollapsiblePane" icon="collpane.xpm" type="collapsiblepane">
+		<inherits class="wxWindow">
+			<property name="window_style">wxTAB_TRAVERSAL</property>
+		</inherits>
+		<property name="name" type="text">m_collapsiblePane</property>
+		<property name="label" type="wxString_i18n">Collapsible Pane</property>
+		<property name="collapsed" type="bool">0</property>
+		<event name="OnCollapsiblePaneChanged" class="wxCollapsiblePaneEvent" help="Process a wxEVT_COLLAPSIBLEPANE_CHANGED event, when the user shows or hides the collapsible pane." />
+	</objectinfo>
+
+	<objectinfo class="panewindow" icon="collpane.xpm" type="panewindow">
+		<!--property name="name" type="text">collapsiblePaneWindow</property-->
+	</objectinfo>
+
 	<objectinfo class="wxNotebook" icon="notebook.xpm" type="notebook"  startgroup="1">
 		<inherits class="wxWindow" />
 		<property name="name" 		type="text">m_notebook</property>
@@ -95,6 +109,24 @@ wxTreebook and wxToolbook by
 		<property name="select" type="bool" 	help="Select Page when Adding">0</property>
 	</objectinfo>
 
+	<objectinfo class="wxChoicebook" icon="choicebk.xpm" type="choicebook">
+		<inherits class="wxWindow" />
+		<property name="name" 	type="text">m_choicebook</property>
+		<property name="style" 	type="bitlist">
+			<option name="wxCHB_DEFAULT" help="Choose the default location for the labels depending on the current platform (left everywhere except Mac where it is top)." />
+			<option name="wxCHB_TOP"     help="Place labels above the page area." />
+			<option name="wxCHB_LEFT"    help="Place labels on the left side." />
+			<option name="wxCHB_RIGHT"   help="Place labels on the right side." />
+			<option name="wxCHB_BOTTOM"  help="Place labels below the page area." />wxCHB_DEFAULT</property>
+		<event name="OnChoicebookPageChanged" 	class="wxChoicebookEvent" help="The page selection was changed. Processes a wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED event." />
+		<event name="OnChoicebookPageChanging" 	class="wxChoicebookEvent" help="The page selection is about to be changed. Processes a wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING event. This event can be vetoed." />
+	</objectinfo>
+
+	<objectinfo class="choicebookpage" icon="choicebk.xpm" type="choicebookpage">
+		<property name="label" 	type="wxString_i18n">a page</property>
+		<property name="select" type="bool" help="Select Page when Adding">0</property>
+	</objectinfo>
+
 	<objectinfo class="wxListbook" icon="listbook.xpm" type="listbook">
 		<inherits class="wxWindow" />
 		<property name="name" 		type="text">m_listbook</property>
@@ -118,22 +150,25 @@ wxTreebook and wxToolbook by
 		<property name="select" type="bool" 	help="Select Page when Adding">0</property>
 	</objectinfo>
 
-	<objectinfo class="wxChoicebook" icon="choicebk.xpm" type="choicebook">
-		<inherits class="wxWindow" />
-		<property name="name" 	type="text">m_choicebook</property>
-		<property name="style" 	type="bitlist">
-			<option name="wxCHB_DEFAULT" help="Choose the default location for the labels depending on the current platform (left everywhere except Mac where it is top)." />
-			<option name="wxCHB_TOP"     help="Place labels above the page area." />
-			<option name="wxCHB_LEFT"    help="Place labels on the left side." />
-			<option name="wxCHB_RIGHT"   help="Place labels on the right side." />
-			<option name="wxCHB_BOTTOM"  help="Place labels below the page area." />wxCHB_DEFAULT</property>
-		<event name="OnChoicebookPageChanged" 	class="wxChoicebookEvent" help="The page selection was changed. Processes a wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED event." />
-		<event name="OnChoicebookPageChanging" 	class="wxChoicebookEvent" help="The page selection is about to be changed. Processes a wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING event. This event can be vetoed." />
+	<objectinfo class="wxToolbook" icon="toolbook.xpm" type="toolbook">
+		<inherits class="wxWindow"/>
+		<property name="name" 		type="text">m_toolbook</property>
+		<property name="bitmapsize" type="wxSize" help="Size of page images"/>
+		<property name="style" 		type="bitlist">
+			<option name="wxBK_DEFAULT" help="Choose the default location for the toolbar depending on the current platform"/>
+			<option name="wxBK_TOP"     help="Place labels above the page area."/>
+			<option name="wxBK_LEFT"    help="Place labels on the left side."/>
+			<option name="wxBK_RIGHT"   help="Place labels on the right side."/>
+			<option name="wxBK_BOTTOM"  help="Place labels below the page area."/>wxBK_DEFAULT</property>
+		<event name="OnToolbookPageChanged" 	class="wxToolbookEvent" help="The page selection was changed. Processes a wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED event."/>
+		<event name="OnToolbookPageChanging" 	class="wxToolbookEvent" help="The page selection is about to be changed. Processes a wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING event. This event can be vetoed."/>
 	</objectinfo>
 
-	<objectinfo class="choicebookpage" icon="choicebk.xpm" type="choicebookpage">
+	<objectinfo class="toolbookpage" icon="toolbook.xpm" type="toolbookpage">
 		<property name="label" 	type="wxString_i18n">a page</property>
-		<property name="select" type="bool" help="Select Page when Adding">0</property>
+		<property name="bitmap" type="bitmap" 	help="Page Image"/>
+		<!--property name="image" type="int" 		help="wxImageList Index"/-->
+		<property name="select" type="bool" 	help="Select Page when Adding">0</property>
 	</objectinfo>
 
 	<objectinfo class="wxTreebook" icon="treebook.xpm" type="treebook">
@@ -154,27 +189,6 @@ wxTreebook and wxToolbook by
 
 	<objectinfo class="treebookpage" icon="treebook.xpm" type="treebookpage">
 		<property name="depth" 	type="int" 		help="Adds a new child-page to the last top-level page">0</property>
-		<property name="label" 	type="wxString_i18n">a page</property>
-		<property name="bitmap" type="bitmap" 	help="Page Image"/>
-		<!--property name="image" type="int" 		help="wxImageList Index"/-->
-		<property name="select" type="bool" 	help="Select Page when Adding">0</property>
-	</objectinfo>
-
-	<objectinfo class="wxToolbook" icon="toolbook.xpm" type="toolbook">
-		<inherits class="wxWindow"/>
-		<property name="name" 		type="text">m_toolbook</property>
-		<property name="bitmapsize" type="wxSize" help="Size of page images"/>
-		<property name="style" 		type="bitlist">
-			<option name="wxBK_DEFAULT" help="Choose the default location for the toolbar depending on the current platform"/>
-			<option name="wxBK_TOP"     help="Place labels above the page area."/>
-			<option name="wxBK_LEFT"    help="Place labels on the left side."/>
-			<option name="wxBK_RIGHT"   help="Place labels on the right side."/>
-			<option name="wxBK_BOTTOM"  help="Place labels below the page area."/>wxBK_DEFAULT</property>
-		<event name="OnToolbookPageChanged" 	class="wxToolbookEvent" help="The page selection was changed. Processes a wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED event."/>
-		<event name="OnToolbookPageChanging" 	class="wxToolbookEvent" help="The page selection is about to be changed. Processes a wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING event. This event can be vetoed."/>
-	</objectinfo>
-
-	<objectinfo class="toolbookpage" icon="toolbook.xpm" type="toolbookpage">
 		<property name="label" 	type="wxString_i18n">a page</property>
 		<property name="bitmap" type="bitmap" 	help="Page Image"/>
 		<!--property name="image" type="int" 		help="wxImageList Index"/-->
@@ -215,19 +229,5 @@ wxTreebook and wxToolbook by
 		<!--property name="image" type="int" 		help="wxImageList Index"/-->
 		<property name="select" type="bool" 	help="Select Page when Adding">0</property>
 	</objectinfo>
-
-  <objectinfo class="wxCollapsiblePane" icon="collpane.xpm" type="collapsiblepane">
-    <inherits class="wxWindow">
-        <property name="window_style">wxTAB_TRAVERSAL</property>
-	</inherits>
-    <property name="name" type="text">m_collapsiblePane</property>
-    <property name="label" type="wxString_i18n">Collapsible Pane</property>
-    <property name="collapsed" type="bool">0</property>
-    <event name="OnCollapsiblePaneChanged" class="wxCollapsiblePaneEvent" help="Process a wxEVT_COLLAPSIBLEPANE_CHANGED event, when the user shows or hides the collapsible pane." />
-  </objectinfo>
-
-  <objectinfo class="panewindow" icon="collpane.xpm" type="panewindow">
-	<!--property name="pane_name" type="text">collapsiblePaneWindow</property-->
-  </objectinfo>
 
 </package>
