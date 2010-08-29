@@ -348,6 +348,7 @@ Written by
     </template>
     <template name="include">@#include &lt;wx/collpane.h&gt;</template>
     <template name="evt_entry_OnCollapsiblePaneChanged">EVT_COLLAPSIBLEPANE_CHANGED( $id, #handler )</template>
+    <template name="evt_connect_OnCollapsiblePaneChanged">$name->Connect( wxEVT_COMMAND_COLLPANE_CHANGED, #handler, NULL, this );</template>
   </templates>
 
   <templates class="collapsiblepanewindow">
