@@ -225,12 +225,20 @@ void wxFbPalette::OnButtonClick( wxCommandEvent &event )
 
 wxFbPalette::~wxFbPalette()
 {
-	wxConfigBase* config = wxConfigBase::Get();
-	wxString pages;
-	for ( size_t i = 0; i < ( size_t )m_notebook->GetPageCount(); ++i )
+	wxConfigBase* 	config 		= wxConfigBase::Get();
+	/** @todo This crashes on exit when notebook have no pages */
+	size_t 			pageCount 	= m_notebook->GetPageCount();
+	wxString 		separator 	= ",";
+	if ( pageCount > 0 )
 	{
-		pages << m_notebook->GetPageText( i ) << ",";
+		wxString pages;
+		for ( size_t i = 0; i < pageCount; i++ )
+		{
+			if ( i == pageCount-1 )
+				separator = "";
+			pages << m_notebook->GetPageText( i ) << separator;
+		}
+		config->Write( "/palette/pageOrder", pages );
 	}
-	config->Write( "/palette/pageOrder", pages );
 	config->Write( "/palette/notebook_style", m_notebook->GetWindowStyleFlag() );
 }

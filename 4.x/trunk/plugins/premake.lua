@@ -4,6 +4,7 @@ project.name = "wxFormBuilder Plugins"
 dopackage( "additional" )
 dopackage( "common" )
 dopackage( "containers" )
+dopackage( "edit" )
 dopackage( "layout" )
 dopackage( "picker" )
 --dopackage( "wxAdditions" )

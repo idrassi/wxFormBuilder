@@ -26,11 +26,11 @@
 #ifndef __OBJECT_TREE__
 #define __OBJECT_TREE__
 
-#include "rad/customkeys.h"
 #include "utils/wxfbdefs.h"
 
 #include <map>
 
+#include <wx/menu.h>
 #include <wx/treectrl.h>
 
 class wxFBEvent;
@@ -88,8 +88,6 @@ public:
 	void OnObjectRemoved ( wxFBObjectEvent &event );
 	void OnPropertyModified ( wxFBPropertyEvent &event );
 	void OnProjectRefresh ( wxFBEvent &event);
-
-	void AddCustomKeysHandler( CustomKeysEvtHandler *h ) { m_tcObjects->PushEventHandler( h ); };
 };
 
 /**
