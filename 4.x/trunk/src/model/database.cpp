@@ -23,7 +23,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-// TODO: check comments translation
+/** @todo Check comments translation */
 
 #include "objectbase.h"
 #include "database.h"
@@ -139,10 +139,6 @@ PObjectPackage ObjectDatabase::GetPackage(unsigned int idx)
 	return m_pkgs[idx];
 }
 
-/**
-* @todo The inheritance of property must be recursive.
-*/
-
 PObjectBase ObjectDatabase::NewObject(PObjectInfo obj_info)
 {
 	PObjectBase object;
@@ -232,19 +228,6 @@ int ObjectDatabase::CountChildrenWithSameType( PObjectBase parent, PObjectType t
 	}
 	return count;
 }
-
-/**
-* Create an instance of classname as a child of the parent.
-*
-* The function performs type checking to create the object:
-* - Check if the type is a valid child-type of "parent". 
-*    Also check that the number of children of the same type does not exceed the maximum.
-* - If the type is not an allowded child-type for the "parent" it will be created as child
-*    of a child item with the item flag "1".
-* 
-* Note: you may want to create the object method without linking it to the tree,
-*       to facilitate the undo-redo.
-*/
 
 PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase parent )
 {
@@ -1124,9 +1107,7 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 			for ( lang = propLangTemplates.begin(); lang != propLangTemplates.end(); ++lang )
 			{
 				if ( lang->second )
-				{
 					obj_info->AddCodeInfo( lang->first, lang->second );
-				}
 			}
 		}
 		elem_prop = elem_prop->NextSiblingElement( PROPERTY_TAG, false );
@@ -1254,7 +1235,7 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		PFFreeComponentLibrary FreeComponentLibrary = (PFFreeComponentLibrary) dlsym( handle, "FreeComponentLibrary" );
 
 		const char *dlsym_error = dlerror();
-		if (dlsym_error)
+		if ( dlsym_error )
 		{
 			wxString error = wxString( dlsym_error, wxConvUTF8 );
 			THROW_WXFBEX( path << _(" is not a valid component library: ") << error )
@@ -1278,7 +1259,6 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		if ( !(GetComponentLibrary && FreeComponentLibrary) )
 			THROW_WXFBEX( path << _(" is not a valid component library") )
 #endif
-// TODO: Check these changes
 		wxString msg = _("[Database::ImportComponentLibrary] Importing ") + path + _(" library");
 		Debug::Print( msg );
 
@@ -1429,7 +1409,7 @@ PObjectType ObjectDatabase::GetObjectType( wxString name )
 {
 	PObjectType type;
 	ObjectTypeMap::iterator it = m_types.find( name );
-	if (it != m_types.end())
+	if ( it != m_types.end() )
 		type = it->second;
 
 	return type;
