@@ -22,18 +22,23 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-// TODO: fix comment translations
 // Warning!!!!!!
 // ObjectBase::GetPropertyCount() != ObjectInfo::GetPropertyCount()
 //
 // In the first case it will return the total number of properties of the object.
 // In the second case only return the number of properties defined for that class.
+/**
+ * @file types.h
+ * @author 
+ * @date 
+ * @brief 
+ */
 
 #ifndef __OBJ__
 #define __OBJ__
 
-#include <wx/wx.h>
-#include <wx/string.h>
+#include "model/types.h"
+#include "utils/wxfbdefs.h"
 
 #include <iostream>
 #include <list>
@@ -41,27 +46,42 @@
 #include <component.h>
 #include <ticpp.h>
 
-#include "types.h"
-#include "utils/wxfbdefs.h"
+#include <wx/wx.h>
+#include <wx/string.h>
 
-///////////////////////////////////////////////////////////////////////////////
-
+/**
+ * @class OptionList
+ * @brief 
+ *
+ * @todo Description needed.
+ */
 class OptionList
 {
 private:
-
+	/** @todo Description needed. */
 	std::map< wxString, wxString > m_options;
 
 public:
-
+	/**
+	 * @todo Description needed.
+	 *
+	 * @param option 		
+	 * @param description 	
+	 */
 	void AddOption( wxString option, wxString description = wxString() )
 	{
 		m_options[option] = description;
 	}
+	/**
+	 * @todo Description needed.
+	 * 
+	 * @return 
+	 */
 	unsigned int GetOptionCount()
 	{
-		return (unsigned int)m_options.size();
+		return ( unsigned int )m_options.size();
 	}
+	/** @todo Description needed. */
 	const std::map< wxString, wxString >& GetOptions()
 	{
 		return m_options;
@@ -71,80 +91,120 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
-@internal
-Data Container for children of a Parent property
-*/
+ * @class PropertyChild
+ * @brief 
+ * @internal
+ * Data Container for children of a Parent property.
+ */
 class PropertyChild
 {
 public:
-	wxString m_name;
-	wxString m_defaultValue;
-	wxString m_description;
+	wxString m_name; 			/**< @todo Description needed. */
+	wxString m_defaultValue; 	/**< @todo Description needed. */
+	wxString m_description; 	/**< @todo Description needed. */
 };
 
-///////////////////////////////////////////////////////////////////////////////
-
+/**
+ * @class PropertyChild
+ * @brief 
+ * @todo Description needed.
+ */
 class PropertyInfo
 {
 	friend class Property;
 
 private:
-	wxString 					m_name;
-	PropertyType 				m_type;
-	wxString       				m_def_value;
-	POptionList  				m_opt_list;
-	std::list< PropertyChild > 	m_children; 	// Only used for parent properties
-	bool 						m_hidden; 		// Juan. Determines if the property appears or not in XRC
-	wxString					m_description;
-	wxString					m_customEditor; // An optional custom editor for the property grid
+	wxString 					m_name; 		/**< @todo Description needed. */
+	PropertyType 				m_type; 		/**< @todo Description needed. */
+	wxString       				m_def_value; 	/**< @todo Description needed. */
+	POptionList  				m_opt_list; 	/**< @todo Description needed. */
+	std::list< PropertyChild > 	m_children; 	/**< Only used for parent properties. */
+	bool 						m_hidden; 		/**< Juan. Determines if the property appears or not in XRC. */
+	wxString					m_description; 	/**< @todo Description needed. */
+	wxString					m_customEditor; /**< An optional custom editor for the property grid. */
 
 public:
+	/**
+	 * Constructor.
+	 * @todo Description needed.
+	 * @param name 			Name.
+	 * @param type  		Type.
+	 * @param def_value 	Default value.  
+	 * @param description 	Description.  
+	 * @param description 	Custom editor.  
+	 * @param opt_list 		Option list.  
+	 * @param children 		Children.  
+	 */
+	PropertyInfo( wxString name, PropertyType type, wxString def_value,
+				wxString description, wxString customEditor,
+				POptionList opt_list, const std::list< PropertyChild >& children );
 
-	PropertyInfo(wxString name, PropertyType type, wxString def_value, wxString description, wxString customEditor,
-	POptionList opt_list, const std::list< PropertyChild >& children );
-
+	/** Destructor. */
 	~PropertyInfo();
 
-	wxString       				GetDefaultValue() 	{ return m_def_value;  	}
-	PropertyType 				GetType() 			{ return m_type;       	}
-	wxString       				GetName() 			{ return m_name;       	}
-	POptionList  				GetOptionList () 	{ return m_opt_list;   	}
-	std::list< PropertyChild >* GetChildren() 		{ return &m_children; 	}
-	wxString		 			GetDescription	() 	{ return m_description;	}
-	wxString					GetCustomEditor() 	{ return m_customEditor; }
+	wxString       				GetDefaultValue() 	{ return m_def_value;  	} /**< @todo Description needed. */
+	PropertyType 				GetType() 			{ return m_type;       	} /**< @todo Description needed. */
+	wxString       				GetName() 			{ return m_name;       	} /**< @todo Description needed. */
+	POptionList  				GetOptionList () 	{ return m_opt_list;   	} /**< @todo Description needed. */
+	std::list< PropertyChild >* GetChildren() 		{ return &m_children; 	} /**< @todo Description needed. */
+	wxString		 			GetDescription	() 	{ return m_description;	} /**< @todo Description needed. */
+	wxString					GetCustomEditor() 	{ return m_customEditor; } /**< @todo Description needed. */
 };
 
+/**
+ * @class EventInfo
+ * @brief 
+ * @todo Description needed.
+ */
 class EventInfo
 {
 private:
-	wxString m_name;
-	wxString m_eventClass;
-	wxString m_defaultValue;
-	wxString m_description;
+	wxString m_name; 			/**< @todo Description needed. */
+	wxString m_eventClass; 		/**< @todo Description needed. */
+	wxString m_defaultValue; 	/**< @todo Description needed. */
+	wxString m_description; 	/**< @todo Description needed. */
 
 public:
-  EventInfo(const wxString &name,
-            const wxString &eventClass,
-            const wxString &defValue,
-            const wxString &description);
+	/**
+	 * Constructor.
+	 * @todo Description needed.
+	 * @param name 			
+	 * @param eventClass  	
+	 * @param defValue 		
+	 * @param description 	
+	 */
+	EventInfo( const wxString &name,
+				const wxString &eventClass,
+				const wxString &defValue,
+				const wxString &description);
 
-  wxString GetName()           { return m_name; }
-  wxString GetEventClassName() { return m_eventClass; }
-  wxString GetDefaultValue()   { return m_defaultValue; }
-  wxString GetDescription()    { return m_description; }
+	wxString GetName()           { return m_name; } 		/**< @todo Description needed. */
+	wxString GetEventClassName() { return m_eventClass; } 	/**< @todo Description needed. */
+	wxString GetDefaultValue()   { return m_defaultValue; } /**< @todo Description needed. */
+	wxString GetDescription()    { return m_description; } 	/**< @todo Description needed. */
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @class Property
+ * @brief 
+ * @todo Description needed.
+ */
 class Property
 {
 private:
-	PPropertyInfo m_info;   // pointer to its descriptor
-	WPObjectBase  m_object; // pointer to the owner object
-
-	wxString m_value;
+	PPropertyInfo 	m_info;   /**< Pointer to its descriptor. */
+	WPObjectBase 	m_object; /**< Pointer to the owner object. */
+	wxString 		m_value;  /**< Property value. */
 
 public:
+	/**
+	 * Constructor.
+	 * @todo Description needed.
+	 * @param info 	
+	 * @param obj 	
+	 */
 	Property( PPropertyInfo info, PObjectBase obj = PObjectBase() )
 	{
 		m_object = obj;
@@ -197,9 +257,9 @@ public:
 class Event
 {
 private:
-	PEventInfo  	m_info;   // pointer to its descriptor
-	WPObjectBase 	m_object; // pointer to the owner object
-	wxString 		m_value;  // handler function name
+	PEventInfo  	m_info;   /**< Pointer to its descriptor. */
+	WPObjectBase 	m_object; /**< Pointer to the owner object. */
+	wxString 		m_value;  /**< Handler function name */
 
 public:
 	Event (	PEventInfo 	info, PObjectBase obj)

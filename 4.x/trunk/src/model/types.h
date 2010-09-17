@@ -22,16 +22,22 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
+/**
+ * @file types.h
+ * @author 
+ * @date 
+ * @brief 
+ */
 
 #ifndef __TYPES__
 #define __TYPES__
 
-#include <wx/wx.h>
-#include <wx/string.h>
-
 #include <map>
 #include <vector>
 #include <boost/smart_ptr.hpp>
+
+#include <wx/wx.h>
+#include <wx/string.h>
 
 class ObjectType;
 
@@ -39,7 +45,8 @@ typedef boost::shared_ptr< ObjectType > PObjectType;
 typedef boost::weak_ptr< ObjectType > WPObjectType;
 
 /**
- * Represents the type of object.
+ * @class ObjectType
+ * @brief Represents the type of object.
  *
  * The types of objects are needed to control location restrictions
  * of objects within the tree. These restrictions are defined
@@ -50,6 +57,7 @@ typedef boost::weak_ptr< ObjectType > WPObjectType;
  * concretos. Así que una modificación en el nombre de un tipo casi con toda
  * seguridad causará fallos en el funcionamiento de la aplicación.
  *
+ * @todo Translation needed.
  * @todo hay que eliminar las dependencias en el código con los nombres de los
  *       tipos. Para ello lo mejor será definir una serie de atributos asociados
  *       al tipo.
@@ -64,51 +72,83 @@ typedef boost::weak_ptr< ObjectType > WPObjectType;
 class ObjectType
 {
 public:
-	ObjectType(wxString name, int id, bool hidden = false, bool item = false);
+	/**
+	 * Constructor.
+	 *
+	 * @param name 		Object type name.
+	 * @param id 		Identifier.
+	 * @param hidden 	<b>true</b> if is a hidden object, <b>false</b> otherwise (Default: false).
+	 * @param item 		<b>true</b> if is an item type, <b>false</b> otherwise (Default: false).
+	 */
+	ObjectType( wxString name, int id, bool hidden = false, bool item = false );
 
-	int 		GetId()     { return m_id;     }
-	wxString 	GetName()   { return m_name;   }
+	int 		GetId()     { return m_id;     } /**< @return Object type ID. */
+	wxString 	GetName()   { return m_name;   } /**< @return Object type name. */
 //	bool   		IsHidden() 	{ return m_hidden; }
-	bool   		IsItem() 	{ return m_item;   }
+	bool   		IsItem() 	{ return m_item;   } /**< @return <b>true</b> if is an item type object, <b>false</b> otherwise. */
 
 	/**
-	* Adds the object type to the list of possible children.
-	*/
+	 * Adds the object type to the list of possible children.
+	 *
+	 * @param type 	Shared pointer to object type.
+	 * @param max 	Maximum children accepted by the object to add.
+	 */
 	void AddChildType( PObjectType type, int max = -1 );
 
 	/**
-	* Finds whether the type passed as parameters are among the possible childrens.
-	* @return Maximum number of occurrences of the object as a child.
-	*         -1 = unlimited, 0 = none
-	*/
+	 * Finds whether the type passed as parameters are among the possible childrens.
+	 *
+	 * @param type_id Object type identifier.
+	 * @return Maximum number of occurrences of the object as a child.
+	 *         -1 = unlimited, 0 = none
+	 */
 	int FindChildType( int type_id );
+
+	/**
+	 * Finds whether the type passed as parameters are among the possible childrens.
+	 *
+	 * @param type Shared pointer to object type.
+	 * @return Maximum number of occurrences of the object as a child.
+	 *         -1 = unlimited, 0 = none
+	 */
 	int FindChildType( PObjectType type );
 
+	/**
+	 * @todo Description needed.
+	 *
+	 * @return 
+	 */
 	unsigned int GetChildTypeCount();
+
+	/**
+	 * @todo Description needed.
+	 *
+	 * @param idx  
+	 */
 	PObjectType GetChildType( unsigned int idx );
 
 private:
 	/**
-	* Register with the types of children and the maximum number possible of those.
-	* @note We will use smart-pointers of type "weak" because there may be many
-	*       cross-references.
-	*/
+	 * Register with the types of children and the maximum number possible of those.
+	 * @note We will use smart-pointers of type "weak" because there may be many
+	 *       cross-references.
+	 */
 	typedef std::map< WPObjectType, int > ChildTypeMap;
 
-	int m_id; 			// Pbject identifier */
-	wxString m_name; 	// String associated with the type */
-	bool m_hidden;   	// Indicate if it is hidden in the ObjectTree */
-	bool m_item;     	/* 	Indicate if it is an "item". Los objetos contenidos en
-							en un item, muestran las propiedades de éste junto
-							con las propias del objeto. */
-
-	/** Register of potential children */
-	ChildTypeMap m_childTypes;
+	int 			m_id; 			/**< Object identifier */
+	wxString 		m_name; 		/**< String associated with the type */
+	bool 			m_hidden;   	/**< Indicate if it is hidden in the ObjectTree */
+	bool 			m_item;     	/**< Indicate if it is an "item".
+									 * @todo Translation needed.
+									 * @todo Los objetos contenidos en
+									 * en un item, muestran las propiedades de éste junto
+									 * con las propias del objeto. */
+	ChildTypeMap 	m_childTypes; 	/**< Register of potential children */
 };
 
 /**
-* Property types.
-*/
+ * Property types.
+ */
 typedef enum
 {
 	PT_ERROR,
@@ -136,51 +176,66 @@ typedef enum
 	PT_PARENT,
 	PT_CLASS
 } PropertyType;
-/*
-typedef enum
-{
-	W_NO_WIDGET,
-	W_GENERIC,    // Case that our widget is not included
-	W_BUTTON,
-	W_COMBO_BOX,
-	W_TEXT_CTRL,
-	W_STATIC_TEXT,
-	W_PANEL,
-	W_BOX_SIZER,
-	W_GRID_SIZER,
-	W_FLEX_GRID_SIZER,
-	W_CHECK_BOX,
-	W_SPACER,
-	W_SIZERITEM,
-	W_GRID,
-	W_STATIC_BITMAP
-	//W_PLUGIN
-} WidgetType;
-*/
+
 /**
-* List of integers.
-*/
+ * @class IntList
+ * @brief List of integers.
+ */
 class IntList
 {
 private:
-	typedef std::vector< int > IntVector;
-	IntVector m_ints;
-	bool m_abs;
+	typedef std::vector< int > 	IntVector; 	/**< @todo Description needed. */
+	IntVector 					m_ints; 	/**< @todo Description needed. */
+	bool 						m_abs; 		/**< @todo Description needed. */
 
 public:
-	IntList( bool absolute_value = false )
-	:
-	m_abs( absolute_value )
-	{
-	}
+	/**
+	 * @todo Description needed.
+	 *
+	 * @param absolute_value 
+	 */
+	IntList( bool absolute_value = false ) : m_abs( absolute_value ) {}
 
+	/**
+	 * @todo Description needed.
+	 *
+	 * @param value 			
+	 * @param absolute_value 	
+	 */
 	IntList( wxString value, bool absolute_value = false );
 
+	/**
+	 * @todo Description needed.
+	 *
+	 * @return 
+	 */
 	unsigned int GetSize() { return ( unsigned int)m_ints.size(); };
+
+	/**
+	 * @todo Description needed.
+	 *
+	 * @param idx  
+	 */
 	int GetValue( unsigned int idx ) { return m_ints[idx]; };
+
+	/**
+	 * @todo Description needed.
+	 *
+	 * @param value  
+	 */
 	void Add( int value );
+
+	/** @todo Description needed. */
 	void DeleteList();
+
+	/**
+	 * @todo Description needed.
+	 *
+	 * @param str  
+	 */
 	void SetList( wxString str );
+
+	/** @todo Description needed. */
 	wxString ToString();
 };
 
