@@ -66,7 +66,7 @@ int ObjectType::FindChildType( PObjectType type )
 
 unsigned int ObjectType::GetChildTypeCount()
 {
-	return (unsigned int)m_childTypes.size();
+	return ( unsigned int )m_childTypes.size();
 }
 
 PObjectType ObjectType::GetChildType( unsigned int idx )
@@ -128,9 +128,9 @@ wxString IntList::ToString()
 {
 	wxString result;
 
-	if (m_ints.size() > 0)
+	if ( m_ints.size() > 0 )
 	{
-		result = StringUtils::IntToStr(m_ints[0]);
+		result = StringUtils::IntToStr( m_ints[0] );
 
 		for ( unsigned int i=1; i< m_ints.size() ; i++ )
 			result = result + "," + StringUtils::IntToStr( m_ints[i] );
