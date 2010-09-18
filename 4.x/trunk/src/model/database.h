@@ -22,7 +22,12 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-
+/**
+ * @file database.h
+ * @author 
+ * @date 
+ * @brief 
+ */
 #ifndef __OBJ_DATABASE__
 #define __OBJ_DATABASE__
 
@@ -38,6 +43,7 @@ class ObjectDatabase;
 class ObjectTypeDictionary;
 class PropertyCategory;
 
+/** Shared pointer for ObjectDatabase class */
 typedef boost::shared_ptr< ObjectDatabase > PObjectDatabase;
 
 namespace ticpp
@@ -118,7 +124,7 @@ public:
 	 * Checks if a given object type owns c++ properties.
 	 *
 	 * @param type Object type.
-	 * @return True if a given object type owns c++ properties, false otherwise
+	 * @return @true if a given object type owns c++ properties, @false otherwise
 	 */
 	static bool HasCppProperties( wxString type );
 
