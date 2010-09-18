@@ -28,23 +28,23 @@
 // In the first case it will return the total number of properties of the object.
 // In the second case only return the number of properties defined for that class.
 /**
- * @file types.h
+ * @file objectbase.h
  * @author 
  * @date 
  * @brief 
  */
 
-#ifndef __OBJ__
-#define __OBJ__
+#ifndef __OBJECTBASE_H__
+#define __OBJECTBASE_H__
 
 #include "model/types.h"
 #include "utils/wxfbdefs.h"
 
-#include <iostream>
-#include <list>
-
 #include <component.h>
 #include <ticpp.h>
+
+#include <iostream>
+#include <list>
 
 #include <wx/wx.h>
 #include <wx/string.h>
@@ -68,27 +68,18 @@ public:
 	 * @param option 		
 	 * @param description 	
 	 */
-	void AddOption( wxString option, wxString description = wxString() )
-	{
-		m_options[option] = description;
-	}
+	void AddOption( wxString option, wxString description = wxString() ) { m_options[option] = description; }
+
 	/**
 	 * @todo Description needed.
 	 * 
 	 * @return 
 	 */
-	unsigned int GetOptionCount()
-	{
-		return ( unsigned int )m_options.size();
-	}
-	/** @todo Description needed. */
-	const std::map< wxString, wxString >& GetOptions()
-	{
-		return m_options;
-	}
-};
+	unsigned int GetOptionCount() { return ( unsigned int )m_options.size(); }
 
-///////////////////////////////////////////////////////////////////////////////
+	/** @todo Description needed. */
+	const std::map< wxString, wxString >& GetOptions() { return m_options; }
+};
 
 /**
  * @class PropertyChild
@@ -595,145 +586,166 @@ public:
 	void 		Merge( PCodeInfo merger );
 };
 
-///////////////////////////////////////////////////////////////////////////////
-
 /**
-* Object or metaobject informations.
-*/
+ * @class ObjectInfo
+ * @brief Object or metaobject informations.
+ */
 class ObjectInfo
 {
 public:
 	/**
-	* Constructor.
-	*/
+	 * Constructor.
+	 * @param class_name Class name.
+	 * @param type		Object type.
+	 * @param package 	Weak pointer to ObjectPackage.
+	 * @param startGroup Sets if it is a starting group object: if @true a toolbar separator will be placed in palette toolbar.
+	 */
 	ObjectInfo(wxString class_name, PObjectType type, WPObjectPackage package, bool startGroup = false );
 
+	/** Virtual destructor. */
 	virtual ~ObjectInfo() {};
 
+	/** @todo Description needed. */
 	PPropertyCategory GetCategory(){ return m_category; }
 
+	/** @todo Description needed. */
 	unsigned int GetPropertyCount() { return (unsigned int)m_properties.size(); }
+
+	/** @todo Description needed. */
 	unsigned int GetEventCount()    { return (unsigned int)m_events.size();     }
 
 	/**
-	* Gets the property descriptor.
-	*/
+	 * Gets the property descriptor.
+	 * @param name Property descriptor name.
+	 */
 	PPropertyInfo GetPropertyInfo( wxString name );
+
+	/**
+	 * Gets the property descriptor.
+	 * @param idx Property descriptor index.
+	 */
 	PPropertyInfo GetPropertyInfo( unsigned int idx );
 
+	/** @todo Description needed. */
 	PEventInfo GetEventInfo( wxString name );
+
+	/** @todo Description needed. */
 	PEventInfo GetEventInfo( unsigned int idx );
 
-	/**
-	* Adds a property descriptor to the object descriptor.
-	*/
+	/** Adds a property descriptor to the object descriptor. */
 	void AddPropertyInfo( PPropertyInfo pinfo );
 
-	/**
-	 * Adds a event descriptor.
-	 */
+	/** Adds a event descriptor. */
 	void AddEventInfo( PEventInfo evtInfo );
 
 	/**
 	* Add a default value for an inherited property.
-	* @param baseIndex Index of base class returned from AddBaseClass.
-	* @param propertyName Property of base class to assign a default value to.
+	* @param baseIndex 		Index of base class returned from AddBaseClass.
+	* @param propertyName 	Property of base class to assign a default value to.
 	* @param defaultValue Default value of the inherited property.
 	*/
 	void AddBaseClassDefaultPropertyValue( size_t baseIndex, const wxString& propertyName, const wxString& defaultValue );
 
 	/**
 	* Get a default value for an inherited property.
-	* @param baseIndex Index of base class in the base class vector
-	* @param propertName Name of the property to get the default value for
+	* @param baseIndex 		Index of base class in the base class vector
+	* @param propertName 	Name of the property to get the default value for
 	* @return The default value for the property
 	*/
 	wxString GetBaseClassDefaultPropertyValue( size_t baseIndex, const wxString& propertyName );
 
 	/**
-	* Devuelve el tipo de objeto, será util para que el constructor de objetos
-	* sepa la clase derivada de ObjectBase que ha de crear a partir del
-	* descriptor.
-	*/
+	 * @todo Translation needed.
+	 * Devuelve el tipo de objeto, será util para que el constructor de objetos
+	 * sepa la clase derivada de ObjectBase que ha de crear a partir del
+	 * descriptor.
+	 */
 	wxString GetObjectTypeName() { return m_type->GetName();   }
 
+	/** @todo Description needed. */
 	PObjectType GetObjectType() { return m_type; }
 
+	/** @todo Description needed. */
 	wxString GetClassName () { return m_class;  }
 
-	/**
-	* Prints the descriptor in a stream.
-	*/
+	/** Prints the descriptor in a stream. */
 	//virtual void PrintOut(ostream &s, int indent);
 
-	/**
-	* Insertion operator overload.
-	*/
+	/** Insertion operator overload. */
 	friend std::ostream& operator << ( std::ostream &s, PObjectInfo obj );
 
-	// Will be useful to generate the name of the object
+	/** Will be useful to generate the name of the object. */
 	unsigned int GetInstanceCount() { return m_numIns; }
+
+	/** @todo Description needed. */
 	void IncrementInstanceCount()   { m_numIns++; }
+
+	/** @todo Description needed. */
 	void ResetInstanceCount() 		{ m_numIns = 0; }
 
-	/**
-	* Adds information about an object to all base classes.
-	*/
+	/** Adds information about an object to all base classes. */
 	size_t AddBaseClass( PObjectInfo base )
 	{
 		m_base.push_back(base);
 		return m_base.size() - 1;
 	}
 
-	/**
-	* Check if the type is derived from the given parameter.
-	*/
+	/** Check if the type is derived from the given parameter. */
 	bool IsSubclassOf( wxString classname );
 
+	/** @todo Description needed. */
 	PObjectInfo GetBaseClass( unsigned int idx );
 	unsigned int GetBaseClassCount();
 
-	//
+	/** @todo Description needed. */
 	void SetIconFile( wxBitmap icon ) { m_icon = icon; };
+
+	/** @todo Description needed. */
 	wxBitmap GetIconFile() { return m_icon; }
 
+	/** @todo Description needed. */
 	void SetSmallIconFile( wxBitmap icon ) { m_smallIcon = icon; };
+
+	/** @todo Description needed. */
 	wxBitmap GetSmallIconFile() { return m_smallIcon; }
 
+	/** @todo Description needed. */
 	void AddCodeInfo( wxString lang, PCodeInfo codeinfo );
+
+	/** @todo Description needed. */
 	PCodeInfo GetCodeInfo( wxString lang );
 
+	/** @return Shared pointer to object package */
 	PObjectPackage GetPackage();
 
+	/** @return @true if a component is a staring group component, @false otherwise. */
 	bool IsStartOfGroup() { return m_startGroup; }
 
-	/**
-	* Assigns a component to the class.
-	*/
+	/** Assigns a component to the class. */
 	void SetComponent( IComponent *c ) 	{ m_component = c; };
+
+	/** Gets a component from the class. */
 	IComponent* GetComponent() 			{ return m_component; };
 
 private:
-	wxString 		m_class; 	// Class name (object type)
-	PObjectType 	m_type;     // Object type
-	WPObjectPackage m_package; 	// Package that the object comes from
-
-	PPropertyCategory m_category;
+	wxString 			m_class; 	/**< Class name (object type). */
+	PObjectType 		m_type;     /**< Object type. */
+	WPObjectPackage 	m_package; 	/**< Package that the object comes from. */
+	PPropertyCategory 	m_category; /**< Property category. */
 
 	wxBitmap 	m_icon;
-	wxBitmap 	m_smallIcon; 	// The icon for the property grid toolbar
-	bool 		m_startGroup; 	// Place a separator in the palette toolbar just before this widget
+	wxBitmap 	m_smallIcon; 	/**< The icon for the property grid toolbar. */
+	bool 		m_startGroup; 	/**< Place a separator in the palette toolbar just before this widget. */
 
-	std::map< wxString, PCodeInfo > m_codeTemp;  // Code templates K=language_name T=PCodeInfo
+	std::map< wxString, PCodeInfo > 	m_codeTemp;  	/**< Code templates K=language_name T=PCodeInfo. */
+	unsigned int 						m_numIns;  		/**< Number of instances of object. */
+	std::map< wxString, PPropertyInfo > m_properties; 	/**< Properties. */
+	std::map< wxString, PEventInfo >    m_events; 		/**< Events. */
+	std::vector< PObjectInfo > 			m_base; 		/**< Base classes. */
 
-	unsigned int m_numIns;  	// Number of instances of object
-
-	std::map< wxString, PPropertyInfo > m_properties;
-	std::map< wxString, PEventInfo >    m_events;
-
-	std::vector< PObjectInfo > m_base; // Base classes
+	/** @todo Description needed. */
 	std::map< size_t, std::map< wxString, wxString > > m_baseClassDefaultPropertyValues;
-	IComponent* m_component;  	// componente asociado a la clase los objetos del designer
+	IComponent* m_component; /**< Component associated with the class designer objects. */
 };
 
-#endif
+#endif //__OBJECTBASE_H__

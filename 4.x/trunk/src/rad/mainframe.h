@@ -39,19 +39,16 @@ class PythonPanel;
 class XrcPanel;
 class ObjectTree;
 class ObjectInspector;
-class wxFbPalette;
+class Palette;
 class VisualEditor;
-
+class Palette;
 /**
  * wxFormBuilder GUI styles.
  */
 enum {
 	wxFB_DEFAULT_GUI,
-	wxFB_DOCKABLE_GUI,
 	wxFB_CLASSIC_GUI,
-	wxFB_WIDE_GUI,
-	ID_AUI_SETTINGS,
-	ID_AUI_CUSTOMIZETOOLBAR
+	ID_AUI_SETTINGS
 };
 
 class MainFrame : public wxFrame
@@ -66,7 +63,7 @@ private:
 	wxAuiManager 		m_mgr;
 	wxAuiNotebook* 		m_notebook;
 	wxAuiToolBar* 		mainbar;
-	wxFbPalette* 		m_palette;
+	Palette* 			m_palette;
 	ObjectTree* 		m_objTree;
 	ObjectInspector* 	m_objInsp;
 	VisualEditor* 		m_visualEdit;

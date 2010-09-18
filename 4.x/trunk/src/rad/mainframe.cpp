@@ -35,7 +35,7 @@
 #include "title.h"
 #include "wxfbevent.h"
 #include "wxfbmanager.h"
-#include "wxfbpalette.h"
+#include "palette.h"
 
 #include "cpppanel/cpppanel.h"
 #include "designer/visualeditor.h"
@@ -1323,7 +1323,7 @@ wxWindow * MainFrame::CreateComponentPalette ( wxWindow *parent )
 {
 	// la paleta de componentes, no es un observador propiamente dicho, ya
 	// que no responde ante los eventos de la aplicación
-	m_palette = new wxFbPalette( parent, wxID_ANY );
+	m_palette = new Palette( parent, wxID_ANY );
 	m_palette->Create();
 	m_palette->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) );
 

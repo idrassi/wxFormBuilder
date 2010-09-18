@@ -29,8 +29,8 @@
  * @brief 
  */
 
-#ifndef __TYPES__
-#define __TYPES__
+#ifndef __TYPES_H__
+#define __TYPES_H__
 
 #include <map>
 #include <vector>
@@ -239,4 +239,4 @@ public:
 	wxString ToString();
 };
 
-#endif // __TYPES__
+#endif // __TYPES_H__
