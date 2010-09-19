@@ -22,7 +22,6 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 /**
  * @file codegen.h
  * @author José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -30,7 +29,6 @@
  * @date 
  * @brief 
  */
-
 #ifndef __CODEGEN_H__
 #define __CODEGEN_H__
 
