@@ -122,7 +122,7 @@ public:
 	 * @param type  		Type.
 	 * @param def_value 	Default value.  
 	 * @param description 	Description.  
-	 * @param description 	Custom editor.  
+	 * @param customEditor 	Custom editor.  
 	 * @param opt_list 		Option list.  
 	 * @param children 		Children.  
 	 */
@@ -175,8 +175,6 @@ public:
 	wxString GetDescription()    { return m_description; } 	/**< @todo Description needed. */
 };
 
-///////////////////////////////////////////////////////////////////////////////
-
 /**
  * @class Property
  * @brief 
@@ -198,53 +196,85 @@ public:
 	 */
 	Property( PPropertyInfo info, PObjectBase obj = PObjectBase() )
 	{
-		m_object = obj;
-		m_info = info;
+		m_object 	= obj;
+		m_info 		= info;
 	}
 
+	/** @todo Description needed. */
 	PObjectBase GetObject() 			{ return m_object.lock(); }
+
+	/** @todo Description needed. */
 	wxString GetName() 					{ return m_info->GetName(); }
+
+	/** @todo Description needed. */
 	wxString GetValue() 				{ return m_value; }
+
+	/** @todo Description needed. */
 	void SetValue( wxString& val ) 		{ m_value = val; }
+
+	/** @todo Description needed. */
 	void SetValue( const wxChar* val ) 	{ m_value = val; }
 
+	/** @todo Description needed. */
 	PPropertyInfo GetPropertyInfo() { return m_info; }
+
+	/** @todo Description needed. */
 	PropertyType  GetType()         { return m_info->GetType();  }
 
-	bool IsDefaultValue();
-	bool IsNull();
-	void SetDefaultValue();
+	bool IsDefaultValue(); 	/**< @todo Description needed. */
+	bool IsNull();			/**< @todo Description needed. */
+	void SetDefaultValue(); /**< @todo Description needed. */
+
+	/**
+	 * @todo Description needed.
+	 * @param value 
+	 */
 	void ChangeDefaultValue( const wxString& value )
 	{
 		m_info->m_def_value = value;
 	}
 
-	////////////////////
-	void SetValue( const wxFontContainer &font );
-	void SetValue( const wxColour &colour );
-	void SetValue( const wxString &str, bool format = false );
-	void SetValue( const wxPoint &point );
-	void SetValue( const wxSize &size );
-	void SetValue( const int integer );
-//	void SetValue( const wxAlignment alignment ); TODO
-	void SetValue( const double val );
+	void SetValue( const wxFontContainer &font ); 				/**< @todo Description needed. */
+	void SetValue( const wxColour &colour ); 					/**< @todo Description needed. */
+	void SetValue( const wxString &str, bool format = false ); 	/**< @todo Description needed. */
+	void SetValue( const wxPoint &point ); 						/**< @todo Description needed. */
+	void SetValue( const wxSize &size ); 						/**< @todo Description needed. */
+	void SetValue( const int integer ); 						/**< @todo Description needed. */
+//	void SetValue( const wxAlignment alignment ); 				/**< @todo */
+	void SetValue( const double val ); 							/**< @todo Description needed. */
 
-	wxFontContainer GetValueAsFont();
-	wxColour 		GetValueAsColour();
-	wxPoint  		GetValueAsPoint();
-	wxSize   		GetValueAsSize();
-	int      		GetValueAsInteger();
-//	wxAlignment 	GetValueAsAlignment(); TODO
-	wxString 		GetValueAsString();
-	wxBitmap 		GetValueAsBitmap();
-	wxString 		GetValueAsText(); 		// sustituye los ('\n',...) por ("\\n",...)
+	wxFontContainer GetValueAsFont(); 							/**< @todo Description needed. */
+	wxColour 		GetValueAsColour(); 						/**< @todo Description needed. */
+	wxPoint  		GetValueAsPoint(); 							/**< @todo Description needed. */
+	wxSize   		GetValueAsSize(); 							/**< @todo Description needed. */
+	int      		GetValueAsInteger(); 						/**< @todo Description needed. */
+//	wxAlignment 	GetValueAsAlignment(); 						/**< @todo */
+	wxString 		GetValueAsString(); 						/**< @todo Description needed. */
+	wxBitmap 		GetValueAsBitmap(); 						/**< @todo Description needed. */
+	/** @todo Description needed. */
+	wxString 		GetValueAsText(); // Replace ('\n',...) in ("\\n",...)
 
-	wxArrayString 	GetValueAsArrayString();
-	double 			GetValueAsFloat();
+	wxArrayString 	GetValueAsArrayString(); 					/**< @todo Description needed. */
+	double 			GetValueAsFloat(); 							/**< @todo Description needed. */
+
+	/**
+	 * @todo Description needed.
+	 * @param children 
+	 */
 	void 			SplitParentProperty( std::map< wxString, wxString >* children );
+
+	/**
+	 * @todo Description needed.
+	 * @param childName
+	 */
 	wxString 		GetChildFromParent( const wxString& childName );
 };
 
+/**
+ * @class Event
+ * @brief 
+ * @todo Description needed.
+ */
 class Event
 {
 private:
@@ -253,32 +283,73 @@ private:
 	wxString 		m_value;  /**< Handler function name */
 
 public:
-	Event (	PEventInfo 	info, PObjectBase obj)
-    : m_info(info), m_object(obj)
-	{}
+	/**
+	 * Constructor.
+	 * @param info  
+	 * @param obj 	
+	 * @todo Description needed.
+	 */
+	Event (	PEventInfo info, PObjectBase obj ) : m_info(info), m_object( obj ) {}
 
-	void 		SetValue(const wxString &value) { m_value = value; }
-	wxString 	GetValue()                  	{ return m_value; }
-	wxString 	GetName()                   	{ return m_info->GetName(); }
-	PObjectBase GetObject()              		{ return m_object.lock(); }
-	PEventInfo 	GetEventInfo()            		{ return m_info; }
+	/**
+	 * @todo Description needed.
+	 * @param value 
+	 */
+	void 		SetValue( const wxString &value ) 	{ m_value = value; }
+	wxString 	GetValue()                  		{ return m_value; } 			/**< @todo Description needed. */
+	wxString 	GetName()                   		{ return m_info->GetName(); } 	/**< @todo Description needed. */
+	PObjectBase GetObject()              			{ return m_object.lock(); } 	/**< @todo Description needed. */
+	PEventInfo 	GetEventInfo()            			{ return m_info; } 				/**< @todo Description needed. */
 };
 
+/**
+ * @class PropertyCategory
+ * @brief 
+ * @todo Description needed.
+ */
 class PropertyCategory
 {
 private:
-	wxString m_name;
-	std::vector< wxString > m_properties;
-	std::vector< wxString > m_events;
-	std::vector< PPropertyCategory > m_categories;
+	wxString 							m_name; 		/**< @todo Description needed. */
+	std::vector< wxString > 			m_properties; 	/**< @todo Description needed. */
+	std::vector< wxString > 			m_events; 		/**< @todo Description needed. */
+	std::vector< PPropertyCategory > 	m_categories; 	/**< @todo Description needed. */
 
 public:
+	/**
+	 * Constructor.
+	 * @param name 
+	 * @todo Description needed.
+	 */
+	PropertyCategory( wxString name ) : m_name( name ) {}
 
-	PropertyCategory( wxString name ) : m_name( name ){}
-	void AddProperty( wxString name ){ m_properties.push_back( name ); }
-	void AddEvent( wxString name ){ m_events.push_back( name ); }
-	void AddCategory( PPropertyCategory category ){ m_categories.push_back( category ); }
-	wxString GetName(){ return m_name; }
+	/**
+	 * @todo Description needed.
+	 * @param name	
+	 */
+	void AddProperty( wxString name )				{ m_properties.push_back( name ); }
+
+	/**
+	 * @todo Description needed.
+	 * @param name	
+	 */
+	void AddEvent( wxString name )					{ m_events.push_back( name ); }
+
+	/**
+	 * @todo Description needed.
+	 * @param category 	
+	 */
+	void AddCategory( PPropertyCategory category )	{ m_categories.push_back( category ); }
+
+	/**
+	 * @todo Description needed.
+	 */
+	wxString GetName()								{ return m_name; }
+
+	/**
+	 * @todo Description needed.
+	 * @param index 
+	 */
 	wxString GetPropertyName( size_t index )
 	{
 		if ( index < m_properties.size() )
@@ -287,6 +358,10 @@ public:
 			return wxEmptyString;
 	}
 
+	/**
+	 * @todo Description needed.
+	 * @param index 
+	 */
 	wxString GetEventName( size_t index )
 	{
 		if ( index < m_events.size() )
@@ -295,6 +370,10 @@ public:
 			return wxEmptyString;
 	}
 
+	/**
+	 * @todo Description needed.
+	 * @param index 
+	 */
 	PPropertyCategory GetCategory( size_t index )
 	{
 		if ( index < m_categories.size() )
@@ -303,71 +382,71 @@ public:
 			return PPropertyCategory();
 	}
 
-	size_t GetPropertyCount() { return m_properties.size(); }
-	size_t GetEventCount() { return m_events.size(); }
-	size_t GetCategoryCount() { return m_categories.size(); }
+	size_t GetPropertyCount() 	{ return m_properties.size(); } /**< @todo Description needed. */
+	size_t GetEventCount() 		{ return m_events.size(); } 	/**< @todo Description needed. */
+	size_t GetCategoryCount() 	{ return m_categories.size(); } /**< @todo Description needed. */
 };
 
-///////////////////////////////////////////////////////////////////////////////
 namespace ticpp
 {
 	class Document;
 	class Element;
 }
 
-class ObjectBase : public IObject, public boost::enable_shared_from_this<ObjectBase>
+class ObjectBase : public IObject, public boost::enable_shared_from_this< ObjectBase >
 {
 	friend class wxFBDataObject;
-private:
-	wxString     m_class;  // class name
-	wxString     m_type;   // type of object
-	WPObjectBase m_parent; // weak pointer, no reference loops please!
 
-	ObjectBaseVector 	m_children;
-	PropertyMap      	m_properties;
-	EventMap         	m_events;
-	PObjectInfo      	m_info;
-	bool 				m_expanded; // is expanded in the object tree, allows for saving to file
+private:
+	wxString     		m_class;  		/**< Class name. */
+	wxString     		m_type;   		/**< Object type. */
+	WPObjectBase 		m_parent; 		/**< Weak pointer, no reference loops please! */
+	ObjectBaseVector 	m_children; 	/**< @todo Description needed. */
+	PropertyMap      	m_properties; 	/**< @todo Description needed. */
+	EventMap         	m_events; 		/**< @todo Description needed. */
+	PObjectInfo      	m_info; 		/**< @todo Description needed. */
+	bool 				m_expanded; 	/**< Is expanded in the object tree, allows for saving to file */
 
 protected:
-	// utilites for implementing the tree
-	static const int 	INDENT;  						// size of indent
-	wxString 			GetIndentString(int indent); 	// obtiene la cadena con el indentado
+	// Utilites for implementing the tree
+	static const int 	INDENT;  						/**< Size of indent. */
+	wxString 			GetIndentString( int indent ); 	/**< Gets the string with the indentation. */
 
+	/** @todo Description needed. */
 	ObjectBaseVector& GetChildren()     { return m_children; };
+
+	/** @todo Description needed. */
 	PropertyMap&      GetProperties()   { return m_properties; };
 
-	// Create an object element
+	/** Create an object element */
 	void SerializeObject( ticpp::Element* serializedElement );
 
-	// Get "this" pointer
+	/** Get "this" pointer */
 	PObjectBase GetThis() { return shared_from_this(); }
 
 public:
+	/**
+	 * Constructor.
+	 * @param class_name Class name.
+	 */
+	ObjectBase ( wxString class_name );
 
-	/// Constructor.
-	ObjectBase (wxString class_name);
-
-	/// Destructor.
+	/** Virtual destructor. */
 	virtual ~ObjectBase();
 
-	/**
-	* Sets whether the object is expanded in the object tree or not.
-	*/
+	/** Sets whether the object is expanded in the object tree or not. */
 	void SetExpanded( bool expanded ){ m_expanded = expanded; }
 
-	/**
-	* Gets whether the object is expanded in the object tree or not.
-	*/
+	/** Gets whether the object is expanded in the object tree or not. */
 	bool GetExpanded(){ return m_expanded; }
 
 	/**
-	* Get the name of the object.
-	*
-	* @note Do not confuse with the name property with some objects.
-	*       Each object has a name, which will be the same as that used
-	*       as the key in the registry of descriptors.
-	*/
+	 * Get the name of the object.
+	 *
+	 * @note Do not confuse with the name property with some objects.
+	 *       Each object has a name, which will be the same as that used
+	 *       as the key in the registry of descriptors.
+	 */
 	wxString GetClassName () { return m_class;  }
 
 	/** Gets the parent object */
@@ -377,218 +456,255 @@ public:
 	void SetParent(PObjectBase parent)  { m_parent = parent; }
 
 	/**
-	* Get the property identified by name.
-	*
-	* @note Note that SetProperty method doesn't exists, since modification
-	*       is done through the reference.
-	*/
+	 * Get the property identified by name.
+	 *
+	 * @note SetProperty method doesn't exists, since modification
+	 *       is done through the reference.
+	 */
 	PProperty GetProperty( wxString name );
 
+	/**
+	 * @todo Description needed.
+	 * @param name 
+	 */
 	PEvent GetEvent( wxString name );
 
 	/**
-	* Adds a property to the object.
-	*
-	* This method will be used in the descriptors registry to create the
-	* object instance.
-	* The objects are always created through the descriptors registry.
-	*/
+	 * Adds a property to the object.
+	 *
+	 * This method will be used in the descriptors registry to create the
+	 * object instance.
+	 * The objects are always created through the descriptors registry.
+	 */
 	void AddProperty( PProperty value );
 
+	/**
+	 * @todo Description needed.
+	 * @param event 
+	 */
 	void AddEvent( PEvent event );
 
-	/**
-	* Gets the number of object properties.
-	*/
-	unsigned int GetPropertyCount() { return (unsigned int)m_properties.size(); }
+	/** Gets the number of object properties.
+	 * @note ObjectBase::GetPropertyCount() != ObjectInfo::GetPropertyCount()
+	 *
+	 * In the first case it will return the total number of properties of the object.
+	 * In the second case only return the number of properties defined for that class.
+	 */
+	unsigned int GetPropertyCount() { return ( unsigned int )m_properties.size(); }
 
+	/** Gets the number of object events. */
 	unsigned int GetEventCount()    { return m_events.size(); }
 
 	/**
-	* Gets an object property.
-	* @todo This function should throw an exception if passed property is not found
-	*        and simplifies the code by not having to do many checks.
-	* For example, the code without exceptions would be something like:
-	*
-	* @code
-	*
-	* PProperty plabel = obj->GetProperty("label");
-	* PProperty ppos = obj->GetProperty("pos");
-	* PProperty psize = obj->GetProperty("size");
-	* PProperty pstyle = obj->GetProperty("style");
-	*
-	* if (plabel && ppos && psize && pstyle)
-	* {
-	*   wxButton *button = new wxButton(parent,-1,
-	*    plabel->GetValueAsString(),
-	*    ppos->GetValueAsPoint(),
-	*    psize->GetValueAsSize(),
-	*    pstyle->GetValueAsInteger());
-	* }
-	* else
-	* {
-	*   // manejo del error
-	* }
-	*
-	* @endcode
-	*
-	* with exceptions:
-	*
-	* @code
-	*
-	* try
-	* {
-	*   wxButton *button = new wxButton(parent,-1,
-	*     obj->GetProperty("label")->GetValueAsString(),
-	*     obj->GetProperty("pos")->GetValueAsPoint(),
-	*     obj->GetProperty("size")->GetValueAsSize(),
-	*     obj->GetProperty("style")->GetValueAsInteger());
-	* }
-	* catch (...)
-	* {
-	*   // error handling
-	* }
-	*
-	* @endcode
-	*
-	*/
-	PProperty GetProperty (unsigned int idx); // throws ...;
-
-	PEvent GetEvent (unsigned int idx); // throws ...;
+	 * Gets an object property.
+	 * @todo This function should throw an exception if passed property is not found
+	 * 		and simplifies the code by not having to do many checks.
+	 * 		For example, the code without exceptions would be something like:
+	 *
+	 * @code
+	 *
+	 * PProperty plabel = obj->GetProperty("label");
+	 * PProperty ppos = obj->GetProperty("pos");
+	 * PProperty psize = obj->GetProperty("size");
+	 * PProperty pstyle = obj->GetProperty("style");
+	 *
+	 * if (plabel && ppos && psize && pstyle)
+	 * {
+	 *   wxButton *button = new wxButton(parent,-1,
+	 *    plabel->GetValueAsString(),
+	 *    ppos->GetValueAsPoint(),
+	 *    psize->GetValueAsSize(),
+	 *    pstyle->GetValueAsInteger());
+	 * }
+	 * else
+	 * {
+	 *   // Error handling here.
+	 * }
+	 *
+	 * @endcode
+	 *
+	 * With exceptions:
+	 *
+	 * @code
+	 *
+	 * try
+	 * {
+	 *   wxButton *button = new wxButton(parent,-1,
+	 *     obj->GetProperty("label")->GetValueAsString(),
+	 *     obj->GetProperty("pos")->GetValueAsPoint(),
+	 *     obj->GetProperty("size")->GetValueAsSize(),
+	 *     obj->GetProperty("style")->GetValueAsInteger());
+	 * }
+	 * catch (...)
+	 * {
+	 *   // Error handling here.
+	 * }
+	 *
+	 * @endcode
+	 */
+	PProperty GetProperty ( unsigned int idx ); // throws ...;
 
 	/**
-	* Returns the first ancestor whose type matches the passed parameter.
-	*
-	* It will be useful to find the parent widget.
-	*/
+	 * @todo Description needed.
+	 * @param idx 
+	 */
+	PEvent GetEvent ( unsigned int idx ); // throws ...;
+
+	/**
+	 * Returns the first ancestor whose type matches the passed parameter.
+	 *
+	 * It will be useful to find the parent widget.
+	 */
 	PObjectBase FindNearAncestor( wxString type );
+
+	/**
+	 * @todo Description needed.
+	 * @param type 
+	 */
 	PObjectBase FindNearAncestorByBaseClass( wxString type );
+
+	/** @todo Description needed. */
 	PObjectBase FindParentForm();
 
-	/**
-	* Gets the xml document from the tree taking current node as root node.
-	*/
+	/** Gets the xml document from the tree taking current node as root node. */
 	void Serialize( ticpp::Document* serializedDocument );
 
 	/**
-	* Adds a child to the object.
-	* This function is virtual, because it can change behavior
-	* depending on the type of object.
-	*
-	* @return true if the child was added successfully and false otherwise.
-	*/
+	 * Adds a child to the object.
+	 * This function is virtual, because it can change behavior
+	 * depending on the type of object.
+	 *
+	 * @return true if the child was added successfully and false otherwise.
+	 */
 	virtual bool AddChild    ( PObjectBase );
+
+	/** @todo Description needed. */
 	virtual bool AddChild    ( unsigned int idx, PObjectBase obj );
 
-	/**
-	* Returns the position of the child or GetChildCount () in if not found.
-	*/
+	/** Returns the position of the child or GetChildCount() in if not found. */
 	unsigned int GetChildPosition( PObjectBase obj );
-	bool ChangeChildPosition( PObjectBase obj, unsigned int pos );
 
 	/**
-	* Returns the position among its siblings
-	*/
+	 * Changes child position.
+	 * @param obj Object.
+	 * @param pos Position.
+	 * @return @true if success, @false otherwise.
+	 */
+	bool ChangeChildPosition( PObjectBase obj, unsigned int pos );
+
+	/** Returns the position among its siblings */
 /*  unsigned int GetPosition();
 	bool ChangePosition( unsigned int pos );*/
 
-	/**
-	* Removes a child of the object.
-	*/
+	/** Removes a child of the object. */
 	void RemoveChild( PObjectBase obj );
+
+	/** @todo Description needed. */
 	void RemoveChild( unsigned int idx );
+
+	/** Removes all object's children. */
 	void RemoveAllChildren(){ m_children.clear(); }
 
-	/**
-	* Gets a child of the object.
-	*/
+	/** Gets a child of the object. */
 	PObjectBase GetChild( unsigned int idx );
 
-	/**
-	* Gets the number of children of the object.
-	*/
-	unsigned int  GetChildCount() { return (unsigned int)m_children.size(); }
+	/** Gets the number of children of the object. */
+	unsigned int  GetChildCount() { return ( unsigned int )m_children.size(); }
 
 	/**
-	* Checks if passed object type is valid as a child of the object.
-	* This routine is important because it defines the restrictions of location.
-	*/
+	 * Checks if passed object type is valid as a child of the object.
+	 * This routine is important because it defines the restrictions of location.
+	 */
 	//bool ChildTypeOk( wxString type );
 	bool ChildTypeOk( PObjectType type );
-// TODO: a single function that returns object type like GetObjectType()
-	bool IsContainer() 	{ return ( GetObjectTypeName() == "container" ); }
 
+	/** @todo A single function that returns object type like GetObjectType(). */
+	bool IsContainer() 	{ return ( GetObjectTypeName() == "container" ); }
+	/** @todo A single function that returns object type like GetObjectType(). */
 	bool IsWizardPage() { return ( GetObjectTypeName() == "wizardpage" ); }
 
+	/** @todo Description needed. */
 	PObjectBase GetLayout();
 
 	/**
-	* Returns the type of object.
-	*
-	* Must be redefined in every derived class.
-	*/
+	 * Returns the type of object.
+	 *
+	 * Must be redefined in every derived class.
+	 */
 	wxString GetObjectTypeName() { return m_type; }
+
+	/**
+	 * Sets the type of object.
+	 *
+	 * @param type Object type.
+	 */
 	void SetObjectTypeName( wxString type ) { m_type = type; }
 
-	/**
-	* Returns the object descriptor.
-	*/
+	/** Returns the object descriptor. */
 	PObjectInfo GetObjectInfo() { return m_info; };
+
+	/** @todo Description needed. */
 	void SetObjectInfo( PObjectInfo info ) { m_info = info; };
 
-	/**
-	* Returns the depth of the object in the tree.
-	*/
+	/** Returns the depth of the object in the tree. */
 	int Deep();
 
-	/**
-	* Prints the tree in a stream.
-	*/
+	/** Prints the tree in a stream. */
 	//virtual void PrintOut(ostream &s, int indent);
 
-	/**
-	* Insertion operator overload.
-	*/
+	/** Insertion operator overload. */
 	friend std::ostream& operator << (std::ostream &s, PObjectBase obj);
 
-	//
 	// IObject interface implementation for use within plugins.
-	//
-	bool 			IsNull 						( const wxString& pname );
-	int      		GetPropertyAsInteger 		( const wxString& pname );
-//	wxAlignment 	GetPropertyAsAlignment 		( const wxString& pname ); TODO
-	wxFontContainer GetPropertyAsFont    		( const wxString& pname );
-	wxColour 		GetPropertyAsColour  		( const wxString& pname );
-	wxString 		GetPropertyAsString  		( const wxString& pname );
-	wxPoint  		GetPropertyAsPoint   		( const wxString& pname );
-	wxSize   		GetPropertyAsSize    		( const wxString& pname );
-	wxBitmap 		GetPropertyAsBitmap  		( const wxString& pname );
-	double	 		GetPropertyAsFloat	  		( const wxString& pname );
 
-	wxArrayInt    	GetPropertyAsArrayInt 		( const wxString& pname );
-	wxArrayString 	GetPropertyAsArrayString  	( const wxString& pname );
-	wxString 		GetChildFromParentProperty 	( const wxString& parentName, const wxString& childName );
+	bool 			IsNull 						( const wxString& pname ); /**< @todo Description needed. */
+	int      		GetPropertyAsInteger 		( const wxString& pname ); /**< @todo Description needed. */
+//	wxAlignment 	GetPropertyAsAlignment 		( const wxString& pname ); /**< @todo */
+	wxFontContainer GetPropertyAsFont    		( const wxString& pname ); /**< @todo Description needed. */
+	wxColour 		GetPropertyAsColour  		( const wxString& pname ); /**< @todo Description needed. */
+	wxString 		GetPropertyAsString  		( const wxString& pname ); /**< @todo Description needed. */
+	wxPoint  		GetPropertyAsPoint   		( const wxString& pname ); /**< @todo Description needed. */
+	wxSize   		GetPropertyAsSize    		( const wxString& pname ); /**< @todo Description needed. */
+	wxBitmap 		GetPropertyAsBitmap  		( const wxString& pname ); /**< @todo Description needed. */
+	double	 		GetPropertyAsFloat	  		( const wxString& pname ); /**< @todo Description needed. */
+	wxArrayInt    	GetPropertyAsArrayInt 		( const wxString& pname ); /**< @todo Description needed. */
+	wxArrayString 	GetPropertyAsArrayString  	( const wxString& pname ); /**< @todo Description needed. */
+
+	/**
+	 * @todo Description needed.
+	 * @param parentName  	
+	 * @param childName 	
+	 */
+	wxString 		GetChildFromParentProperty( const wxString& parentName, const wxString& childName );
 };
 
-///////////////////////////////////////////////////////////////////////////////
-
 /**
-* Class that stores a set of code templates.
-*/
+ * @class CodeInfo
+ * Class that stores a set of code templates.
+ */
 class CodeInfo
 {
 private:
+	/** @todo Description needed. */
 	typedef std::map< wxString, wxString > TemplateMap;
+
+	/** @todo Description needed. */
 	TemplateMap m_templates;
+
 public:
+	/** @todo Description needed. */
 	wxString 	GetTemplate( wxString name );
+
+	/** @todo Description needed. */
 	void 		AddTemplate( wxString name, wxString _template );
+
+	/** @todo Description needed. */
 	void 		Merge( PCodeInfo merger );
 };
 
 /**
  * @class ObjectInfo
- * @brief Object or metaobject informations.
+ * Object or metaobject informations.
  */
 class ObjectInfo
 {
@@ -608,8 +724,13 @@ public:
 	/** @todo Description needed. */
 	PPropertyCategory GetCategory(){ return m_category; }
 
-	/** @todo Description needed. */
-	unsigned int GetPropertyCount() { return (unsigned int)m_properties.size(); }
+	/** @todo Description needed.
+	 * @note ObjectBase::GetPropertyCount() != ObjectInfo::GetPropertyCount()
+	 *
+	 * In the first case it will return the total number of properties of the object.
+	 * In the second case only return the number of properties defined for that class.
+	 */
+	unsigned int GetPropertyCount() { return ( unsigned int )m_properties.size(); }
 
 	/** @todo Description needed. */
 	unsigned int GetEventCount()    { return (unsigned int)m_events.size();     }
@@ -629,7 +750,10 @@ public:
 	/** @todo Description needed. */
 	PEventInfo GetEventInfo( wxString name );
 
-	/** @todo Description needed. */
+	/**
+	 * @todo Description needed.
+	 * @param idx 	
+	 */
 	PEventInfo GetEventInfo( unsigned int idx );
 
 	/** Adds a property descriptor to the object descriptor. */
@@ -649,8 +773,8 @@ public:
 	/**
 	* Get a default value for an inherited property.
 	* @param baseIndex 		Index of base class in the base class vector
-	* @param propertName 	Name of the property to get the default value for
-	* @return The default value for the property
+	* @param propertyName 	Name of the property to get the default value for
+	* @return The default value for the property.
 	*/
 	wxString GetBaseClassDefaultPropertyValue( size_t baseIndex, const wxString& propertyName );
 
@@ -695,6 +819,8 @@ public:
 
 	/** @todo Description needed. */
 	PObjectInfo GetBaseClass( unsigned int idx );
+
+	/** @todo Description needed. */
 	unsigned int GetBaseClassCount();
 
 	/** @todo Description needed. */
@@ -733,7 +859,7 @@ private:
 	WPObjectPackage 	m_package; 	/**< Package that the object comes from. */
 	PPropertyCategory 	m_category; /**< Property category. */
 
-	wxBitmap 	m_icon;
+	wxBitmap 	m_icon; 		/** @todo Description needed. */
 	wxBitmap 	m_smallIcon; 	/**< The icon for the property grid toolbar. */
 	bool 		m_startGroup; 	/**< Place a separator in the palette toolbar just before this widget. */
 

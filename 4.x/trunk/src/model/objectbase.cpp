@@ -217,9 +217,7 @@ void Property::SplitParentProperty( std::map< wxString, wxString >* children )
 {
 	children->clear();
 	if ( m_info->GetType() != PT_PARENT )
-	{
 		return;
-	}
 
 	std::list< PropertyChild >* myChildren = m_info->GetChildren();
 	std::list< PropertyChild >::iterator it = myChildren->begin();
@@ -228,9 +226,8 @@ void Property::SplitParentProperty( std::map< wxString, wxString >* children )
 	while ( tkz.HasMoreTokens() )
 	{
 		if ( myChildren->end() == it )
-		{
 			return;
-		}
+
 		wxString child = tkz.GetNextToken();
 		child.Trim( false );
 		child.Trim( true );
@@ -252,7 +249,7 @@ wxString Property::GetChildFromParent( const wxString& childName )
 	else
 		return child->second;
 }
-///////////////////////////////////////////////////////////////////////////////
+
 const int ObjectBase::INDENT = 2;
 
 ObjectBase::ObjectBase ( wxString class_name )
@@ -726,8 +723,6 @@ wxString ObjectBase::GetChildFromParentProperty( const wxString& parentName, con
 	else
 		return wxEmptyString;
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 ObjectInfo::ObjectInfo( wxString class_name, PObjectType type, WPObjectPackage package, bool startGroup )
 {
