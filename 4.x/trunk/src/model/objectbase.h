@@ -102,6 +102,7 @@ public:
  */
 class PropertyInfo
 {
+	/**  @todo Description needed. */
 	friend class Property;
 
 private:
@@ -164,10 +165,10 @@ public:
 	 * @param defValue 		
 	 * @param description 	
 	 */
-	EventInfo( const wxString &name,
+	EventInfo(  const wxString &name,
 				const wxString &eventClass,
 				const wxString &defValue,
-				const wxString &description);
+				const wxString &description );
 
 	wxString GetName()           { return m_name; } 		/**< @todo Description needed. */
 	wxString GetEventClassName() { return m_eventClass; } 	/**< @todo Description needed. */
@@ -185,7 +186,7 @@ class Property
 private:
 	PPropertyInfo 	m_info;   /**< Pointer to its descriptor. */
 	WPObjectBase 	m_object; /**< Pointer to the owner object. */
-	wxString 		m_value;  /**< Property value. */
+	wxString 		m_value;  /**< Value. */
 
 public:
 	/**
@@ -737,13 +738,13 @@ public:
 
 	/**
 	 * Gets the property descriptor.
-	 * @param name Property descriptor name.
+	 * @param name Descriptor name.
 	 */
 	PPropertyInfo GetPropertyInfo( wxString name );
 
 	/**
 	 * Gets the property descriptor.
-	 * @param idx Property descriptor index.
+	 * @param idx Descriptor index.
 	 */
 	PPropertyInfo GetPropertyInfo( unsigned int idx );
 
@@ -765,8 +766,8 @@ public:
 	/**
 	* Add a default value for an inherited property.
 	* @param baseIndex 		Index of base class returned from AddBaseClass.
-	* @param propertyName 	Property of base class to assign a default value to.
-	* @param defaultValue Default value of the inherited property.
+	* @param propertyName 	Name of base class to assign a default value to.
+	* @param defaultValue 	Default value of the inherited property.
 	*/
 	void AddBaseClassDefaultPropertyValue( size_t baseIndex, const wxString& propertyName, const wxString& defaultValue );
 
@@ -857,9 +858,9 @@ private:
 	wxString 			m_class; 	/**< Class name (object type). */
 	PObjectType 		m_type;     /**< Object type. */
 	WPObjectPackage 	m_package; 	/**< Package that the object comes from. */
-	PPropertyCategory 	m_category; /**< Property category. */
+	PPropertyCategory 	m_category; /**< Category. */
 
-	wxBitmap 	m_icon; 		/** @todo Description needed. */
+	wxBitmap 	m_icon; 		/**< @todo Description needed. */
 	wxBitmap 	m_smallIcon; 	/**< The icon for the property grid toolbar. */
 	bool 		m_startGroup; 	/**< Place a separator in the palette toolbar just before this widget. */
 
