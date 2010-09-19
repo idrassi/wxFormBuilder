@@ -22,102 +22,151 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-
-#ifndef __CODE_WRITER__
-#define __CODE_WRITER__
+/**
+ * @file codewriter.h
+ * @author 
+ * @date 
+ * @brief 
+ */
+#ifndef __CODEWRITER_H__
+#define __CODEWRITER_H__
 
 #include <wx/string.h>
 #include <wx/stc/stc.h>
 
-/** Abstracts the code generation from the target.
-Because, in some cases the target is a file, sometimes a TextCtrl, and sometimes both.
-*/
+/**
+ * @class CodeWriter
+ * Abstracts the code generation from the target.
+ * Because, in some cases the target is a file, sometimes a TextCtrl, and sometimes both.
+ */
 class CodeWriter
 {
 private:
-	// Current indentation level in the file
-	int m_indent;
-	int m_cols;
+	int m_indent; 	/**< Current indentation level in the file. */
+	int m_cols; 	/**< @todo Description needed. */
 
 protected:
-	/// Write a wxString.
+	/** Write a wxString. */
 	virtual void DoWrite( wxString code ) = 0;
 
-	/// Returns the size of the indentation - was useful when using spaces, now it is 1 because using tabs.
+	/** Returns the size of the indentation - was useful when using spaces, now it is 1 because using tabs. */
 	virtual int GetIndentSize();
 
-	/// Verifies that the wxString does not contain carraige return characters.
+	/** Verifies that the wxString does not contain carraige return characters. */
 	bool StringOk( wxString s );
 
-	/** Divides a badly formed string (including carriage returns) in simple
-	columns, inserting them one after another and taking indent into account.
-	*/
+	/**
+	 * Divides a badly formed string (including carriage returns)
+	 * in simple columns, inserting them one after another and taking indent into account.
+	 */
 	void FixWrite( wxString s, bool keepIndents = false );
 
 public:
-	/// Constructor.
+	/** Constructor. */
 	CodeWriter();
 
-	/// Destructor.
+	/** Destructor. */
 	virtual ~CodeWriter();
 
-	/// Increment the indent.
+	/** Increment the indent. */
 	void Indent();
 
-	/// Decrement the indent.
+	/** Decrement the indent. */
 	void Unindent();
 
-	/// Write a line of code.
+	/** Write a line of code. */
 	void WriteLn( wxString code = wxEmptyString, bool keepIndents = false );
 
-	/// Writes a text string into the code.
+	/** Writes a text string into the code. */
 	void Write( wxString code );
 
-	/// Deletes all the code previously written.
+	/** Deletes all the code previously written. */
 	virtual void Clear() = 0;
 };
 
+/**
+ * @class TCCodeWriter
+ * @todo Description needed.
+ */
 class TCCodeWriter : public CodeWriter
 {
 private:
-	wxStyledTextCtrl *m_tc;
+	wxStyledTextCtrl *m_tc; /**< Control associated to display code. */
 
 protected:
+	/**
+	 * @todo Description needed.
+	 * @param code 
+	 */
 	void DoWrite( wxString code );
 
 public:
+	/** Constructor. */
 	TCCodeWriter();
+
+	/**
+	 * Constructor.
+	 * @param tc Pointer to associated text control to display code.
+	 */
 	TCCodeWriter( wxStyledTextCtrl *tc );
+
+	/** Sets text control to assign to display code. */
 	void SetTextCtrl( wxStyledTextCtrl* tc );
+
+	/** Clear code inside text control. */
 	void Clear();
 };
 
+/**
+ * @class StringCodeWriter
+ * @todo Description needed.
+ */
 class StringCodeWriter : public CodeWriter
 {
 protected:
-	wxString m_buffer;
-	void DoWrite( wxString code );
+	wxString m_buffer; 				/**< @todo Description needed. */
+	void DoWrite( wxString code ); 	/**< @todo Description needed. */
 
 public:
+	/** Constructor. */
 	StringCodeWriter();
+
+	/** Clear code inside text control. */
 	void Clear();
+
+	/** @todo Description needed. */
 	wxString GetString();
 };
 
+/**
+ * @class FileCodeWriter
+ * @todo Description needed.
+ */
 class FileCodeWriter : public StringCodeWriter
 {
 private:
-	wxString m_filename;
-	bool m_useMicrosoftBOM;
-	bool m_useUtf8;
+	wxString m_filename; 	/**< @todo Description needed. */
+	bool m_useMicrosoftBOM; /**< @todo Description needed. */
+	bool m_useUtf8; 		/**< @todo Description needed. */
 
 protected:
-	void WriteBuffer();
+	void WriteBuffer(); 	/**< @todo Description needed. */
 
 public:
+	/**
+	 * Constructor.
+	 * @todo Description needed.
+	 * @param file 				
+	 * @param useMicrosoftBOM 	
+	 * @param useUtf8 			
+	 */
 	FileCodeWriter( const wxString &file, bool useMicrosoftBOM = false, bool useUtf8 = true );
+
+	/** Destructor. */
 	~FileCodeWriter();
+
+	/** Clear code inside text control. */
 	void Clear();
 };
 
-#endif //__CODE_WRITER__
+#endif //__CODEWRITER_H__

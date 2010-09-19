@@ -22,7 +22,6 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 #include "codewriter.h"
 #include "md5/md5.hh"
 #include "utils/wxfbexception.h"
@@ -256,7 +255,7 @@ void FileCodeWriter::Clear()
 
 	if ( ::wxFileExists( m_filename ) )
 	{
-		// check for write access to the target file
+		// Check for write access to the target file
 		if ( !wxFile::Access( m_filename, wxFile::write ) )
 			THROW_WXFBEX( _("Unable to write file: ") << m_filename );
 	}
