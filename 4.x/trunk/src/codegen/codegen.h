@@ -24,85 +24,82 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
-@file
-@author José Antonio Hurtado - joseantonio.hurtado@gmail.com
-@author Juan Antonio Ortega  - jortegalalmolda@gmail.com
-*/
+ * @file codegen.h
+ * @author José Antonio Hurtado - joseantonio.hurtado@gmail.com
+ * @author Juan Antonio Ortega  - jortegalalmolda@gmail.com
+ * @date 
+ * @brief 
+ */
 
-#ifndef __CODEGEN__
-#define __CODEGEN__
+#ifndef __CODEGEN_H__
+#define __CODEGEN_H__
 
-#include <wx/sstream.h>
-#include <map>
 #include "model/types.h"
 #include "utils/wxfbdefs.h"
 
-/**
-* Template notes
-*
-* The preprocessor macros begin with the character '#'.
-*   Example: #wxparent $name
-*
-* The object properties begin with the character '$'.
-*   Example: $name
-*
-* The creation of a local variable begins with the character '%'
-*   Example: int %var = $style;
-*
-* The '@' character is used to escape the special characters to treat them as text
-*   Example: @# @$ @@ @%
-*
-*/
+#include <map>
+
+#include <wx/sstream.h>
 
 /**
-* Preprocessor directives:
-*
-* - #wxparent $property
-*   Used to get the property of the parent of the current object.
-*	 This directive is necessary to generate the parameter "wxWindow* parent" in the constructors of each widget.
-*   Example:
-*     $name = new wxButton( #wxparent $name, ....
-*
-* - #wxchild $property
-*   Used to get a property of the first child of the current object.
-*   Used by "sizeritem" in order to add a sizer object.
-*
-* - #ifnotnull $property @{ .... @}
-*   Used to generate code as long as the property is not null
-*
-* - #foreach $property @{ ..... @}
-*   Used to repeat code for each subproperty of $property, where $property is a comma delimited list.
-*   The code is contained between '@{' and '@}'. The code will be generated as many times as there are subexpressions
-*   in the value of the property. Within the brace, access to the subexpression is obtained with the #pred directive, and
-*	access to index of the subexpression is obtained with #npred.
-*   Example:
-*    #foreach $growable_cols
-*    @{
-*		$name->AddGrowableCol(#pred);
-*    @}
-*
-* - #pred (see #foreach)
-* - #npred (see #foreach)
-*
-*/
+ * @class TemplateParser
+ * Template notes
+ *
+ * The preprocessor macros begin with the character '#'.
+ *   Example: @code #wxparent $name @endcode
+ *
+ * The object properties begin with the character '$'.
+ *   Example: @code $name @endcode
+ *
+ * The creation of a local variable begins with the character '%'
+ *   Example: @code int %var = $style; @endcode
+ *
+ * The '@' character is used to escape the special characters to treat them as text
+ *   Example: @code @# @$ @@ @% @endcode
+ *
+ * Preprocessor directives:
+ *
+ * - #wxparent $property
+ *   Used to get the property of the parent of the current object.
+ *	 This directive is necessary to generate the parameter "wxWindow* parent" in the constructors of each widget.
+ *   Example: @code $name = new wxButton( #wxparent $name, .... @endcode
+ *
+ * - @code #wxchild $property @endcode
+ *   Used to get a property of the first child of the current object.
+ *   Used by "sizeritem" in order to add a sizer object.
+ *
+ * - @code #ifnotnull $property @{ .... @} @endcode
+ *   Used to generate code as long as the property is not null
+ *
+ * - @code #foreach $property @{ ..... @} @endcode
+ *   Used to repeat code for each subproperty of $property, where $property is a comma delimited list.
+ *   The code is contained between '@{' and '@}'. The code will be generated as many times as there are subexpressions
+ *   in the value of the property. Within the brace, access to the subexpression is obtained with the #pred directive, and
+ *	access to index of the subexpression is obtained with #npred.
+ *   Example:
+ * @code
+ *    #foreach $growable_cols
+ *    @{
+ *		$name->AddGrowableCol(#pred);
+ *    @}
+ * @endcode
+ * - #pred (see #foreach)
+ * - #npred (see #foreach)
+ */
 
-/**
-* Template Parser
-*/
 class TemplateParser
 {
 private:
-	PObjectBase 		m_obj;
-	wxStringInputStream m_in;
-	wxString 			m_out;
-	wxString 			m_pred;
-	wxString 			m_npred;
-	void ignore_whitespaces();
-	
-	// Current indentation level in the file
-	int m_indent;
+	PObjectBase 		m_obj; 		/**< @todo Description needed. */
+	wxStringInputStream m_in; 		/**< @todo Description needed. */
+	wxString 			m_out; 		/**< @todo Description needed. */
+	wxString 			m_pred; 	/**< @todo Description needed. */
+	wxString 			m_npred; 	/**< @todo Description needed. */
+	void ignore_whitespaces(); 		/**< @todo Description needed. */
+	int m_indent;					/**< Current indentation level in the file */
 
 protected:
+	/** @todo Description needed. */
 	typedef enum {
 		TOK_ERROR,
 		TOK_MACRO,
@@ -110,6 +107,7 @@ protected:
 		TOK_PROPERTY
 	} Token;
 
+	/** @todo Description needed. */
 	typedef enum {
 		ID_ERROR,
 		ID_WXPARENT,
@@ -133,146 +131,168 @@ protected:
 		ID_IFTYPEEQUAL
 	} Ident;
 
-	bool IsEqual(const wxString& value, const wxString& set);
+	/**
+	 * @todo Description needed.
+	 * @param value 
+	 * @param set 	
+	 */
+	bool IsEqual( const wxString& value, const wxString& set );
 
-	Ident SearchIdent(wxString ident);
+	/**
+	 * @todo Description needed.
+	 * @param ident 
+	 */
+	Ident SearchIdent( wxString ident );
+
+	/** @todo Description needed. */
 	Ident ParseIdent();
 
-	wxString ParsePropertyName( wxString* child = NULL );
 	/**
-	* This routine extracts the source code from a template enclosed between
-	* the #begin and #end macros, having in mind that they can be nested
-	*/
+	 * @todo Description needed.
+	 * @param child 
+	 */
+	wxString ParsePropertyName( wxString* child = NULL );
+
+	/**
+	 * This routine extracts the source code from a template enclosed between
+	 * the \#begin and \#end macros, having in mind that they can be nested.
+	 * 
+	 * Obtaining the template enclosed between "@{" and "@}"
+	 * @note Whitespaces at the very start will be ignored.
+	 */
 	wxString ExtractInnerTemplate();
 
 	/**
-	* A literal value is an string enclosed between '"' (e.g. "xxx"),
-	* The " character is represented with "".
-	*/
+	 * A literal value is an string enclosed between '"' (e.g. "xxx"),
+	 * The " character is represented with "".
+	 */
 	wxString ExtractLiteral();
 
 	/**
-	* Look up for the following symbol from input and returns the token.
-	* @return TOK_MACRO when it's followed by a command.
-	*         TOK_PROPERTY when it's followed by a property.
-	*         TOK_TEXT when it's followed by normal text.
-	*/
+	 * Look up for the following symbol from input and returns the token.
+	 * @return TOK_MACRO when it's followed by a command.
+	 *         TOK_PROPERTY when it's followed by a property.
+	 *         TOK_TEXT when it's followed by normal text.
+	 */
 	Token GetNextToken();
 
-	bool ParseInnerTemplate();
-	bool ParseWxParent();
-	bool ParseParent();
-	bool ParseForm();
-	bool ParseChild();
-	bool ParseForEach();
-	bool ParseIfNotNull();
-	bool ParseIfNull();
-	bool ParseNewLine();
-	bool ParseIfEqual();
-	bool ParseIfNotEqual();
-	bool ParseIfParentTypeEqual();
-	bool ParseIfParentClassEqual();
-	void ParseAppend();
-	void ParseClass();
-	void ParseIndent();
-	void ParseUnindent();
-	bool ParseIfTypeEqual();
+	bool ParseInnerTemplate(); 		/**< @todo Description needed. */
+	bool ParseWxParent(); 			/**< @todo Description needed. */
+	bool ParseParent(); 			/**< @todo Description needed. */
+	bool ParseForm(); 				/**< @todo Description needed. */
+	bool ParseChild(); 				/**< @todo Description needed. */
+	bool ParseForEach(); 			/**< @todo Description needed. */
+	bool ParseIfNotNull(); 			/**< @todo Description needed. */
+	bool ParseIfNull(); 			/**< @todo Description needed. */
+	bool ParseNewLine(); 			/**< @todo Description needed. */
+	bool ParseIfEqual(); 			/**< @todo Description needed. */
+	bool ParseIfNotEqual(); 		/**< @todo Description needed. */
+	bool ParseIfParentTypeEqual(); 	/**< @todo Description needed. */
+	bool ParseIfParentClassEqual(); /**< @todo Description needed. */
+	void ParseAppend(); 			/**< @todo Description needed. */
+	void ParseClass(); 				/**< @todo Description needed. */
+	void ParseIndent(); 			/**< @todo Description needed. */
+	void ParseUnindent(); 			/**< @todo Description needed. */
+	bool ParseIfTypeEqual(); 		/**< @todo Description needed. */
 
+	/**
+	 * @todo Description needed.
+	 * @param childName 
+	 */
 	PProperty GetProperty( wxString* childName = NULL );
+
+	/** @todo Description needed. */
 	PObjectBase GetWxParent();
+
+	/**
+	 * @todo Description needed.
+	 * @param relative 
+	 */
 	PProperty GetRelatedProperty( PObjectBase relative );
 
-	/**
-	* Parse a macro.
-	*/
-	bool ParseMacro();
-
-	/**
-	* Parse a property.
-	*/
-	bool ParseProperty();
-
-
-	/**
-	* Parse text.
-	*/
-	bool ParseText();
-
-	bool ParsePred();
-	bool ParseNPred();
+	bool ParseMacro(); 				/**< Parse a macro. */
+	bool ParseProperty(); 			/**< Parse a property. */
+	bool ParseText(); 				/**< Parse text. */
+	bool ParsePred(); 				/**< Parse #pred macro. */
+	bool ParseNPred(); 				/**< Parse #npred macro. */
 
 public:
-	TemplateParser( PObjectBase obj, wxString _template );
-	TemplateParser( const TemplateParser & that, wxString _template );
 	/**
-	* Returns the code for a property value in the language format.
-	* @note use ValueToCode
-	*/
+	 * Constructor.
+	 * @param obj 		Object.
+	 * @param _template Code template.
+	 */
+	TemplateParser( PObjectBase obj, wxString _template );
+
+	/**
+	 * Constructor.
+	 * @param that 		Parser.
+	 * @param _template Code template.
+	 */
+	TemplateParser( const TemplateParser& that, wxString _template );
+
+	/**
+	 * Returns the code for a property value in the language format.
+	 * @note use ValueToCode
+	 */
 	wxString PropertyToCode( PProperty property );
 
 	/**
-	* This method creates a new parser with the same type that the object
-	* calling such method.
-	*/
+	 * This method creates a new parser with the same type that the object
+	 * calling such method.
+	 */
 	virtual PTemplateParser CreateParser( const TemplateParser* oldparser, wxString _template ) = 0;
 
+	/** Virtual destructor */
 	virtual ~TemplateParser() {};
 
 	/**
-	* Returns the code for a "wxWindow *parent" root attribute' name.
-	* In C++ it will be the "this" pointer, but in other languages it
-	* could be named differently.
-	*/
+	 * Returns the code for a "wxWindow *parent" root attribute' name.
+	 * In C++ it will be the "this" pointer, but in other languages it
+	 * could be named differently.
+	 */
 	virtual wxString RootWxParentToCode() = 0;
 
-	/**
-	* Generates the code from a property value.
-	*/
+	/** Generates the code from a property value. */
 	virtual wxString ValueToCode( PropertyType type, wxString value ) = 0;
 
-	/**
-	* The "star" function for this class. Analyzes a template, returning the code.
-	*/
+	/** The "star" function for this class. Analyzes a template, returning the code. */
 	wxString ParseTemplate();
 
-	/**
-	* Set the string for the #pred and #npred macros
-	*/
+	/** Set the string for the #pred and #npred macros */
 	void SetPredefined( wxString pred, wxString npred ) { m_pred = pred; m_npred = npred; };
 };
 
 /**
-* Code Generator
-*
-* This class defines an interface to execute the code generation.
-* The algorithms to generate the code are similar from one language to another.
-* Examples:
-*
-* - In C++, we generate the class declarations and then its implementation,
-*   besides the related #define and #include.
-* - In java, it has a similar syntax, but declaration and implementation are
-*   together in the same file, and it's required one file per class.
-* - In XRC format (XML), it's a different way, it's more likely to the
-*   data model from the application itself.
-*
-* Given that doesn't exist an "universal" algorithm for generating code, there
-* is no choice but to make a different implementation for each language. It's
-* possible to reuse the whole code templates system, although, simplifying a lot
-* the implementation task for a new language.
-*/
+ * @class CodeGenerator
+ * Code Generator
+ *
+ * This class defines an interface to execute the code generation.
+ * The algorithms to generate the code are similar from one language to another.
+ * Examples:
+ *
+ * - In C++, we generate the class declarations and then its implementation,
+ *   besides the related #define and #include.
+ * - In java, it has a similar syntax, but declaration and implementation are
+ *   together in the same file, and it's required one file per class.
+ * - In XRC format (XML), it's a different way, it's more likely to the
+ *   data model from the application itself.
+ *
+ * Given that doesn't exist an "universal" algorithm for generating code, there
+ * is no choice but to make a different implementation for each language. It's
+ * possible to reuse the whole code templates system, although, simplifying a lot
+ * the implementation task for a new language.
+ */
 class CodeGenerator
 {
 protected:
 
 public:
-	/**
-	* Virtual destructor.
-	*/
+	/** Virtual destructor. */
 	virtual ~CodeGenerator() {};
-	/**
-	* Generate the code of the project
-	*/
+
+	/** Generate the code of the project */
 	virtual bool GenerateCode( PObjectBase project ) = 0;
 };
 
-#endif //__CODEGEN__
+#endif //__CODEGEN_H__

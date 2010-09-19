@@ -22,9 +22,15 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-
-#ifndef __XRC_FILTER__
-#define __XRC_FILTER__
+/**
+ * @file xrcfilter.h
+ * @author 
+ * @date 
+ * @brief 
+ */
+ 
+#ifndef __XRCFILTER_H__
+#define __XRCFILTER_H__
 
 #include "model/database.h"
 #include "utils/wxfbdefs.h"
@@ -32,24 +38,34 @@
 #include <ticpp.h>
 
 /**
- * Filtro de importación de un fichero XRC.
+ * @class XrcLoader
+ * XRC files import filter.
  */
 class XrcLoader
 {
 private:
-
+	/** @todo Description needed. */
 	PObjectDatabase m_objDb;
 
+	/**
+	 * @todo Description needed.
+	 * @param xrcObj 
+	 * @param parent 
+	 */
 	PObjectBase GetObject(ticpp::Element *xrcObj, PObjectBase parent );
 
 public:
-
+	/**
+	 * @todo Description needed.
+	 * @param db 
+	 */
 	void SetObjectDatabase( PObjectDatabase db ) { m_objDb = db; }
 
 	/**
-	* Dado un árbol XML en formato XRC, crea el arbol de objetos asociado.
-	*/
+	 * Creates the associated object tree.
+	 * @param xrcDoc XML tree in XRC format.
+	 */
 	PObjectBase GetProject( ticpp::Document* xrcDoc );
 };
 
-#endif //__XRC_FILTER__
+#endif //__XRCFILTER_H__

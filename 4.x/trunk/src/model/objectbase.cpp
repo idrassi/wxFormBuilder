@@ -26,8 +26,8 @@
 #include "objectbase.h"
 #include "rad/appdata.h"
 #include "utils/debug.h"
-#include "utils/typeconv.h"
 #include "utils/stringutils.h"
+#include "utils/typeconv.h"
 
 #include <ticpp.h>
 
@@ -42,13 +42,13 @@ PropertyInfo::PropertyInfo( wxString 							name,
 							POptionList 						opt_list,
 							const std::list< PropertyChild >& 	children )
 {
-	m_name = name;
-	m_type = type;
-	m_def_value = def_value;
-	m_opt_list = opt_list;
-	m_description = description;
-	m_children = children;
-	m_customEditor = customEditor;
+	m_name 			= name;
+	m_type 			= type;
+	m_def_value 	= def_value;
+	m_opt_list 		= opt_list;
+	m_description 	= description;
+	m_children 		= children;
+	m_customEditor 	= customEditor;
 }
 
 PropertyInfo::~PropertyInfo()
@@ -79,14 +79,12 @@ bool Property::IsNull()
 		{
 			wxString path;
 			size_t semicolonIndex = m_value.find_first_of(";");
+
 			if ( semicolonIndex != m_value.npos )
-			{
 				path = m_value.substr( 0, semicolonIndex );
-			}
 			else
-			{
 				path = m_value;
-			}
+
 			return path.empty();
 		}
 		case PT_WXSIZE:
@@ -280,7 +278,7 @@ wxString ObjectBase::GetIndentString( int indent )
 	int i;
 	wxString s;
 
-	for ( i=0; i<indent; i++ )
+	for ( i = 0; i < indent; i++ )
 		s += " ";
 
 	return s;
@@ -358,7 +356,7 @@ PObjectBase ObjectBase::FindNearAncestor( wxString type )
 {
 	PObjectBase result;
 	PObjectBase parent = GetParent();
-	if (parent)
+	if ( parent )
 	{
 		if ( parent->GetObjectTypeName() == type )
 			result = parent;
@@ -430,10 +428,9 @@ bool ObjectBase::ChildTypeOk( PObjectType type )
 	// At this point we check the number of children of the last type
 	int count = 0;
 	for ( unsigned int i=0; i < GetChildCount() && count <= nmax; i++ )
-	{
 		if ( GetChild( i )->GetObjectInfo()->GetObjectType() == type )
 			count++;
-	}
+
 	if ( count > nmax )
 		return false;
 
@@ -489,32 +486,30 @@ int ObjectBase::Deep()
 	}
 	return deep;
 }
+/*
+void ObjectBase::PrintOut(ostream &s, int indent)
+{
+	wxString ind_str = GetIndentString(indent);
 
-//void ObjectBase::PrintOut(ostream &s, int indent)
-//{
-//  wxString ind_str = GetIndentString(indent);
-//
-//  s << ind_str << "[ " << GetClassName() << " ] " << GetObjectType() << endl;
-//  map< wxString, PProperty >::const_iterator it_prop;
-//  for (it_prop = m_properties.begin(); it_prop!= m_properties.end(); it_prop++)
-//  {
-//    s << ind_str << "property '" << it_prop->first << "' = '" <<
-//      it_prop->second->GetValue() << "'" << endl;
-//  }
-//
-//  vector< PObjectBase >::const_iterator it_ch;
-//  for (it_ch = m_children.begin() ; it_ch != m_children.end(); it_ch++)
-//  {
-//    (*it_ch)->PrintOut(s,INDENT + indent);
-//  }
-//}
-//
-//ostream& operator << (ostream &s, PObjectBase obj)
-//{
-//  obj->PrintOut(s,0);
-//  return s;
-//}
+	s << ind_str << "[ " << GetClassName() << " ] " << GetObjectType() << endl;
+	map< wxString, PProperty >::const_iterator it_prop;
+	for ( it_prop = m_properties.begin(); it_prop!= m_properties.end(); it_prop++ )
+	{
+		s << ind_str << "property '" << it_prop->first << "' = '" <<
+		it_prop->second->GetValue() << "'" << endl;
+	}
 
+	vector< PObjectBase >::const_iterator it_ch;
+	for ( it_ch = m_children.begin(); it_ch != m_children.end(); it_ch++ )
+		(*it_ch)->PrintOut( s, INDENT + indent );
+}
+
+ostream& operator << (ostream &s, PObjectBase obj)
+{
+	obj->PrintOut(s,0);
+	return s;
+}
+*/
 void ObjectBase::SerializeObject( ticpp::Element* serializedElement )
 {
 	ticpp::Element element("object");
@@ -601,8 +596,6 @@ bool ObjectBase::ChangeChildPosition( PObjectBase obj, unsigned int pos )
 	AddChild( pos, obj );
 	return true;
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 bool ObjectBase::IsNull( const wxString& pname )
 {
@@ -868,24 +861,23 @@ bool ObjectInfo::IsSubclassOf( wxString classname )
 	}
 	return found;
 }
+/*
+void ObjectInfo::PrintOut(ostream &s, int indent)
+{
+	wxString ind_str = "";
+	for ( int i = 0; i < indent; i++ )
+	ind_str = ind_str + " ";
 
-//
-//void ObjectInfo::PrintOut(ostream &s, int indent)
-//{
-//  wxString ind_str = "";
-//  for (int i=0;i<indent;i++)
-//    ind_str = ind_str + " ";
-//
-//  s << ind_str << "[ " << GetClassName() << " ] " << GetObjectType() << endl;
-//  map< wxString, PPropertyInfo >::const_iterator it_prop;
-//  for (it_prop = m_properties.begin(); it_prop!= m_properties.end(); it_prop++)
-//  {
-//    s << ind_str << "property '" << it_prop->first << "' type = '" <<
-//      it_prop->second->GetType() << "' with value = '" <<
-//      it_prop->second->GetDefaultValue() << "' by default" << endl;
-//  }
-//}
-
+	s << ind_str << "[ " << GetClassName() << " ] " << GetObjectType() << endl;
+	map< wxString, PPropertyInfo >::const_iterator it_prop;
+	for ( it_prop = m_properties.begin(); it_prop!= m_properties.end(); it_prop++ )
+	{
+		s << ind_str << "property '" << it_prop->first << "' type = '" <<
+		it_prop->second->GetType() << "' with value = '" <<
+		it_prop->second->GetDefaultValue() << "' by default" << endl;
+	}
+}
+*/
 void ObjectInfo::AddCodeInfo( wxString lang, PCodeInfo codeinfo )
 {
 	std::map< wxString, PCodeInfo >::iterator templates = m_codeTemp.find( lang );
@@ -910,14 +902,13 @@ PCodeInfo ObjectInfo::GetCodeInfo( wxString lang )
 
 	return result;
 }
-
-//ostream& operator << (ostream &s, PObjectInfo obj)
-//{
-//  obj->PrintOut(s,0);
-//  return s;
-//}
-
-///////////////////////////////////////////////////////////////////////////////
+/*
+ostream& operator << (ostream &s, PObjectInfo obj)
+{
+	obj->PrintOut(s,0);
+	return s;
+}
+*/
 wxString CodeInfo::GetTemplate( wxString name )
 {
 	wxString result;
