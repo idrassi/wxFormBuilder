@@ -10,6 +10,12 @@ major=2
 #major=`ls src/.libs/lib*.so.* | \
 # awk '{if (match($$0,/\.so\.[0-9]+$$/)) print substr($$0,RSTART+4)}'`
 
+get-orig-source:
+	svn export https://wxformbuilder.svn.sourceforge.net/svnroot/wxformbuilder/plugins/additions/trunk libwxadditions28
+	
+	cd $(CURDIR)/libwxadditions28 && install/linux/create_src_tarball
+	rm -rf $(CURDIR)/libwxadditions28
+	
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
