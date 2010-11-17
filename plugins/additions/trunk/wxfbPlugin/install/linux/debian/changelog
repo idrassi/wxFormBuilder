@@ -1,3 +1,9 @@
+wxfb-wxadditions (1.0.9-0ubuntu1~hardy1) hardy; urgency=low
+
+  * Sync with upstrean.
+
+ -- Ryan Pusztai <rpusztai@gmail.com>  Wed, 17 Nov 2010 15:24:22 -0500
+
 wxfb-wxadditions (1.0.6-0ubuntu1~intrepid1) intrepid; urgency=low
 
   * Updated wxTreeListCtrl.
