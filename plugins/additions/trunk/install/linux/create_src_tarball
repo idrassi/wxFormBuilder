@@ -35,7 +35,7 @@ function make_src_tarball
 	  make -C$PREMAKE_DIR/src -f../build/Makefile
 
 	  # Use premake to generate Makefiles
-	  $PREMAKE_DIR/bin/premake --linux --target gnu --unicode --disable-wx-debug --with-wx-shared --shared
+	  $PREMAKE_DIR/bin/premake --linux --target gnu --unicode --with-wx-shared --shared
 
 	  # remove premake, as it is no longer necessary
 	  rm -rf $PREMAKE_DIR
