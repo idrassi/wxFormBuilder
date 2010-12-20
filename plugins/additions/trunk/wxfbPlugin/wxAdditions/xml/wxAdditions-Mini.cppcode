@@ -3,9 +3,12 @@
 
 	<templates class="wxAdditions">
 		<template name="include">
-		  @#ifdef __VISUALC__		#nl
-		  @#include &lt;wx/link_additions.h&gt; #nl
-		  @#endif //__VISUALC__
+		#ifequal $use_wxAddition "1"
+		@{
+			@#ifdef __VISUALC__		#nl
+			@#include &lt;wx/link_additions.h&gt; #nl
+			@#endif //__VISUALC__
+		@}
 		</template>
 	</templates>
 	
@@ -21,6 +24,10 @@
 		    #ifnotnull $extra_style
 		    @{ $name->SetExtraStyle( $extra_style ); @}
 		</template>
+		<template name="evt_entry_OnPropertyGridChanging">EVT_PG_CHANGING( $id, #handler )</template>
+		<template name="evt_connect_OnPropertyGridChanging">$name->Connect( wxEVT_PG_CHANGING, #handler, NULL, this );</template>
+		<template name="evt_entry_OnPropertyGridChanged">EVT_PG_CHANGED( $id, #handler )</template>
+		<template name="evt_connect_OnPropertyGridChanged">$name->Connect( wxEVT_PG_CHANGED, #handler, NULL, this );</template>
 	</templates>
 
 	<templates class="wxPropertyGridManager">
@@ -36,6 +43,10 @@
 		    #ifnotnull $extra_style
 		    @{ $name->SetExtraStyle( $extra_style ); @}
 		</template>
+		<template name="evt_entry_OnPropertyGridChanging">EVT_PG_CHANGING( $id, #handler )</template>
+		<template name="evt_connect_OnPropertyGridChanging">$name->Connect( wxEVT_PG_CHANGING, #handler, NULL, this );</template>
+		<template name="evt_entry_OnPropertyGridChanged">EVT_PG_CHANGED( $id, #handler )</template>
+		<template name="evt_connect_OnPropertyGridChanged">$name->Connect( wxEVT_PG_CHANGED, #handler, NULL, this );</template>
 	</templates>
 
 
