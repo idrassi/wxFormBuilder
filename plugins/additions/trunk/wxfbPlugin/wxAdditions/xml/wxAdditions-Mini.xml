@@ -2,7 +2,9 @@
 <package name="wxAdditions" lib="libwxadditions-mini" icon="plot16x16.png" desc="wxFormBuilder embedded controls">
 
 	<!-- All wxAdditions inherit this class so that the linker header will be included -->
-	<objectinfo class="wxAdditions" type="interface"/>
+	<objectinfo class="wxAdditions" type="interface">
+		<property name="use_wxAddition" type="bool" help="Use the wxAddition library.">1</property>
+	</objectinfo>
 	
 	<objectinfo class="wxPropertyGrid" icon="propgrid.xpm" type="expanded_widget">
 		<inherits class="wxAdditions"/>
@@ -42,6 +44,8 @@
 		</property>
 		<property name="name" type="text">m_propertyGrid</property>
 		<property name="include_advanced" type="bool" help="Include Advanced Properties">1</property>
+		<event name="OnPropertyGridChanging" class="wxPropertyGridEvent" help="Property value is about to be changed. Use wxPropertyGridEvent::GetValue() to take a peek at the pending value, and wxPropertyGridEvent::Veto() to prevent change from taking place, if necessary." />
+		<event name="OnPropertyGridChanged"  class="wxPropertyGridEvent" help="Property value is modified." />
 	</objectinfo>
 
 	<objectinfo class="wxPropertyGridManager" icon="propgridman.xpm" type="expanded_widget">
@@ -87,6 +91,8 @@
 		</property>
 		<property name="name" type="text">m_propertyGridManager</property>
 		<property name="include_advanced" type="bool" help="Include Advanced Properties">1</property>
+		<event name="OnPropertyGridChanging" class="wxPropertyGridEvent" help="Property value is about to be changed. Use wxPropertyGridEvent::GetValue() to take a peek at the pending value, and wxPropertyGridEvent::Veto() to prevent change from taking place, if necessary." />
+		<event name="OnPropertyGridChanged"  class="wxPropertyGridEvent" help="Property value is modified." />
 	</objectinfo>
 
   <objectinfo class="wxFlatNotebook" icon="flatnotebook.xpm" type="flatnotebook">
