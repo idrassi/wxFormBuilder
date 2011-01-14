@@ -17,6 +17,7 @@ set WXBUILD_VERSION=1.06
 :: MinGW Gcc install location. This must match you systems configuration.
 set GCCDIR=C:\MinGW
 set GCC4DIR=C:\MinGW4
+set CPU=X86
 
 if (%1) == () goto ERROR
 :: -- Check if user wants help --
@@ -35,6 +36,8 @@ if %1 == VC80   goto SETUP_VC80_BUILD_ENVIRONMENT
 if %1 == vc80   goto SETUP_VC80_BUILD_ENVIRONMENT
 if %1 == VC90   goto SETUP_VC90_BUILD_ENVIRONMENT
 if %1 == vc90   goto SETUP_VC90_BUILD_ENVIRONMENT
+if %1 == VC100    goto SETUP_VC100_BUILD_ENVIRONMENT
+if %1 == vc100    goto SETUP_VC100_BUILD_ENVIRONMENT
 if %1 == MINGW  goto SETUP_GCC_BUILD_ENVIRONMENT
 if %1 == mingw  goto SETUP_GCC_BUILD_ENVIRONMENT
 if %1 == MINGW4  goto SETUP_GCC4_BUILD_ENVIRONMENT
@@ -95,6 +98,17 @@ set MAKEFILE=makefile.vc
 set FLAGS=USE_ODBC=1 USE_OPENGL=1 USE_QA=1 USE_GDIPLUS=1
 goto START
 
+:SETUP_VC100_BUILD_ENVIRONMENT
+:: Add the VC 2010 includes.
+echo Setting environment for Visual C++ 10.0...
+echo.
+call "%VS100COMNTOOLS%vsvars32.bat"
+set INCLUDE=%WXWIN%\include;%INCLUDE%
+:: -- Setup the make executable and the actual makefile name --
+set MAKE=nmake
+set MAKEFILE=makefile.vc
+set FLAGS=USE_ODBC=1 USE_OPENGL=1 USE_QA=1 USE_GDIPLUS=1
+goto START
 :SETUP_GCC_BUILD_ENVIRONMENT
 echo Assuming that MinGW has been installed to:
 echo   %GCCDIR%
@@ -172,6 +186,8 @@ if %1 == VC80   goto MOVE_VC80
 if %1 == vc80   goto MOVE_VC80
 if %1 == VC90   goto MOVE_VC90
 if %1 == vc90   goto MOVE_VC90
+if %1 == VC100    goto MOVE_VC100
+if %1 == vc100    goto MOVE_VC100
 if %1 == MINGW  goto MOVE_MINGW
 if %1 == mingw  goto MOVE_MINGW
 if %1 == MINGW4  goto MOVE_MINGW4
@@ -199,6 +215,12 @@ if exist ..\..\lib\vc_dll move /Y ..\..\lib\vc_dll ..\..\lib\vc9_dll
 echo.
 goto END
 
+:MOVE_VC100
+:: Move Visual C++ 10.0 directories.
+if exist ..\..\lib\vc_lib move /Y ..\..\lib\vc_lib ..\..\lib\vc10_lib
+if exist ..\..\lib\vc_dll move /Y ..\..\lib\vc_dll ..\..\lib\vc10_dll
+echo.
+goto END
 :MOVE_MINGW
 :: Move MinGW 3.x.x directories.
 if exist ..\..\lib\gcc_lib move /Y ..\..\lib\gcc_lib ..\..\lib\gcc3_lib
@@ -221,7 +243,7 @@ goto LIB_DEBUG
 :LIB_DEBUG
 echo Compiling lib debug...
 :: Calling the compilers  make
-%MAKE% -f %MAKEFILE% BUILD=debug SHARED=0 OFFICIAL_BUILD=1 RUNTIME_LIBS=static %FLAGS%
+%MAKE% -f %MAKEFILE% BUILD=debug SHARED=0 OFFICIAL_BUILD=1 RUNTIME_LIBS=static TARGET_CPU=%CPU% %FLAGS%
 
 echo.
 :: Check for specific mode.
@@ -232,7 +254,7 @@ goto LIB_RELEASE
 :LIB_RELEASE
 echo Compiling lib release...
 :: Calling the compilers  make
-%MAKE% -f %MAKEFILE% BUILD=release SHARED=0 OFFICIAL_BUILD=1 RUNTIME_LIBS=static %FLAGS%
+%MAKE% -f %MAKEFILE% BUILD=release SHARED=0 OFFICIAL_BUILD=1 RUNTIME_LIBS=static TARGET_CPU=%CPU% %FLAGS%
 
 echo.
 :: Check for specific mode.
@@ -278,7 +300,7 @@ goto DLL_DEBUG
 :DLL_DEBUG
 echo Compiling dll debug...
 :: Calling the compilers  make
-%MAKE% -f %MAKEFILE%  BUILD=debug SHARED=1 OFFICIAL_BUILD=1 %FLAGS%
+%MAKE% -f %MAKEFILE%  BUILD=debug SHARED=1 OFFICIAL_BUILD=1 TARGET_CPU=%CPU% %FLAGS%
 
 echo.
 :: Check for specific mode.
@@ -289,7 +311,7 @@ goto DLL_RELEASE
 :DLL_RELEASE
 echo Compiling dll release...
 :: Calling the compilers  make
-%MAKE% -f %MAKEFILE%  BUILD=release SHARED=1 OFFICIAL_BUILD=1 %FLAGS%
+%MAKE% -f %MAKEFILE%  BUILD=release SHARED=1 OFFICIAL_BUILD=1 TARGET_CPU=%CPU% %FLAGS%
 
 echo.
 :: Check for specific mode.
@@ -401,7 +423,7 @@ echo.
 echo wxBuild_default v%WXBUILD_VERSION%
 echo     Build wxWidgets things with the MinGW/Visual C++ ToolKit.
 echo.
-echo Usage: "wxBuild_default.bat <Compiler{MINGW|VCTK|VC71|VC80|VC90}> <BuildTarget{LIB|DLL|ALL|CLEAN|NULL}> [Specific Option (See Below)]"
+echo Usage: "wxBuild_default.bat <Compiler{MINGW|VCTK|VC71|VC80|VC90|VC100}> <BuildTarget{LIB|DLL|ALL|CLEAN|NULL}> [Specific Option (See Below)]"
 goto SHOW_OPTIONS
 
 :SHOW_OPTIONS
@@ -413,6 +435,7 @@ echo           VCTK  = Visual C++ 7.1 Toolkit
 echo           VC71  = Visual C++ 7.1
 echo           VC80  = Visual C++ 8.0
 echo           VC90  = Visual C++ 9.0
+echo           VC100 = Visual C++ 10.0
 echo.
 echo      BuildTarget Options:
 echo           LIB   = Builds all the static library targets.
