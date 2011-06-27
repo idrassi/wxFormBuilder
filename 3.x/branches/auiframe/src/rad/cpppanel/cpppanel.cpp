@@ -46,9 +46,14 @@
 #include <wx/config.h>
 
 #include <wx/wxScintilla/wxscintilla.h>
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
 
+#ifdef WXFB_USE_AUI
+    #include <wx/aui/auibook.h>
+BEGIN_EVENT_TABLE ( CppPanel,  wxAuiNotebook )
+#else
+    #include <wx/wxFlatNotebook/wxFlatNotebook.h>
 BEGIN_EVENT_TABLE ( CppPanel,  wxPanel )
+#endif
 	EVT_FB_CODE_GENERATION( CppPanel::OnCodeGeneration )
 	EVT_FB_PROJECT_REFRESH( CppPanel::OnProjectRefresh )
 	EVT_FB_PROPERTY_MODIFIED( CppPanel::OnPropertyModified )
@@ -61,14 +66,28 @@ BEGIN_EVENT_TABLE ( CppPanel,  wxPanel )
 	EVT_FIND_NEXT( wxID_ANY, CppPanel::OnFind )
 END_EVENT_TABLE()
 
+#ifdef WXFB_USE_AUI
+CppPanel::CppPanel( wxWindow * parent, wxWindowID id,
+					const wxPoint& pos, const wxSize& size, long style )
+		: wxAuiNotebook( parent, id, pos, size, style )
+#else
 CppPanel::CppPanel( wxWindow *parent, int id )
 :
 wxPanel( parent, id ),
 m_icons( new wxFlatNotebookImageList )
+#endif
+
+#ifndef WXFB_USE_AUI
+
+#endif
 {
 	AppData()->AddHandler( this->GetEventHandler() );
-	wxBoxSizer *top_sizer = new wxBoxSizer( wxVERTICAL );
 
+#ifdef WXFB_USE_AUI
+	m_cppPanel = new CodeEditor( this, -1 );
+#else
+	wxBoxSizer *top_sizer = new wxBoxSizer( wxVERTICAL );
+ 
 	long nbStyle;
 	wxConfigBase* config = wxConfigBase::Get();
 	config->Read( wxT("/mainframe/editor/cpp/notebook_style"), &nbStyle, wxFNB_NO_X_BUTTON | wxFNB_NO_NAV_BUTTONS | wxFNB_NODRAG | wxFNB_FF2 | wxFNB_CUSTOM_DLG );
@@ -77,16 +96,30 @@ m_icons( new wxFlatNotebookImageList )
 	m_notebook->SetCustomizeOptions( wxFNB_CUSTOM_TAB_LOOK | wxFNB_CUSTOM_ORIENTATION | wxFNB_CUSTOM_LOCAL_DRAG );
 
 	// Set notebook icons
-	m_icons->Add( AppBitmaps::GetBitmap( wxT( "cpp" ), 16 ) );
-	m_icons->Add( AppBitmaps::GetBitmap( wxT( "h" ), 16 ) );
+	m_icons->Add( AppBitmaps::GetBitmap( wxT("c++"), 16 ) );
+	m_icons->Add( AppBitmaps::GetBitmap( wxT("h"), 16 ) );
+
 	m_notebook->SetImageList( m_icons );
 
 	m_cppPanel = new CodeEditor( m_notebook, -1 );
-	InitStyledTextCtrl( m_cppPanel->GetTextCtrl() );
-	m_notebook->AddPage( m_cppPanel, wxT( "cpp" ), false, 0 );
+#endif
 
+	InitStyledTextCtrl( m_cppPanel->GetTextCtrl() );
+
+#ifdef WXFB_USE_AUI
+    AddPage( m_cppPanel, wxT( "cpp" ), false, AppBitmaps::GetBitmap( wxT("c++"), 16 ) );
+
+	m_hPanel = new CodeEditor( this, -1 );
+#else
 	m_hPanel = new CodeEditor( m_notebook, -1 );
+	m_notebook->AddPage( m_cppPanel, wxT( "cpp" ), false, 0 );
+#endif
+
 	InitStyledTextCtrl( m_hPanel->GetTextCtrl() );
+
+#ifdef WXFB_USE_AUI
+	AddPage( m_hPanel, wxT( "h" ), false, AppBitmaps::GetBitmap( wxT("h"), 16 ) );
+#else
 	m_notebook->AddPage( m_hPanel, wxT( "h" ), false, 1 );
 
 	top_sizer->Add( m_notebook, 1, wxEXPAND, 0 );
@@ -96,17 +129,25 @@ m_icons( new wxFlatNotebookImageList )
 	//top_sizer->SetSizeHints( this );
 	top_sizer->Fit( this );
 	top_sizer->Layout();
-
+#endif
 	m_hCW = PTCCodeWriter( new TCCodeWriter( m_hPanel->GetTextCtrl() ) );
 	m_cppCW = PTCCodeWriter( new TCCodeWriter( m_cppPanel->GetTextCtrl() ) );
 }
 
 CppPanel::~CppPanel()
 {
+#ifndef WXFB_USE_AUI
 	delete m_icons;
+#endif
+
 	AppData()->RemoveHandler( this->GetEventHandler() );
 	wxConfigBase *config = wxConfigBase::Get();
+
+#ifdef WXFB_USE_AUI
+	config->Write( wxT("/mainframe/editor/cpp/auinbook_style"), this->GetWindowStyleFlag() );
+#else
 	config->Write( wxT("/mainframe/editor/cpp/notebook_style"), m_notebook->GetWindowStyleFlag() );
+#endif
 }
 
 void CppPanel::InitStyledTextCtrl( wxScintilla *stc )
@@ -154,7 +195,11 @@ void CppPanel::InitStyledTextCtrl( wxScintilla *stc )
 
 void CppPanel::OnFind( wxFindDialogEvent& event )
 {
+#ifdef WXFB_USE_AUI
+    wxAuiNotebook* languageBook = wxDynamicCast( this->GetParent(), wxAuiNotebook );
+#else
 	wxFlatNotebook* languageBook = wxDynamicCast( this->GetParent(), wxFlatNotebook );
+#endif
 	if ( NULL == languageBook )
 	{
 		return;
@@ -171,8 +216,11 @@ void CppPanel::OnFind( wxFindDialogEvent& event )
 	{
 		return;
 	}
-
+#ifdef WXFB_USE_AUI
+    wxAuiNotebook* notebook = wxDynamicCast( m_cppPanel->GetParent(), wxAuiNotebook );
+#else
 	wxFlatNotebook* notebook = wxDynamicCast( m_cppPanel->GetParent(), wxFlatNotebook );
+#endif
 	if ( NULL == notebook )
 	{
 		return;
@@ -238,7 +286,7 @@ void CppPanel::OnCodeGeneration( wxFBEvent& event )
 	{
 		return;
 	}
-	
+
 	// For code preview generate only code relevant to selected form,
 	// otherwise generate full project code.
 
@@ -403,7 +451,7 @@ void CppPanel::OnCodeGeneration( wxFBEvent& event )
 
 			// Determine if Utf8 or Ansi is to be created
 			bool useUtf8 = false;
-			PProperty pUseUtf8 = project->GetProperty( _("encoding") );
+			PProperty pUseUtf8 = project->GetProperty( wxT("encoding") );
 
 			if ( pUseUtf8 )
 			{

@@ -33,9 +33,12 @@
 class CodeEditor;
 
 class wxScintilla;
+#ifdef WXFB_USE_AUI
+    #include <wx/aui/auibook.h>
+#else
 class wxFlatNotebook;
 class wxFlatNotebookImageList;
-
+#endif
 class wxFindDialogEvent;
 
 class wxFBEvent;
@@ -43,20 +46,32 @@ class wxFBPropertyEvent;
 class wxFBObjectEvent;
 class wxFBEventHandlerEvent;
 
-class CppPanel : public wxPanel
+class CppPanel : public
+#ifdef WXFB_USE_AUI
+ wxAuiNotebook
+#else
+ wxPanel
+#endif
 {
 private:
 	CodeEditor* m_cppPanel;
 	CodeEditor* m_hPanel;
 	PTCCodeWriter m_hCW;
 	PTCCodeWriter m_cppCW;
+#ifndef WXFB_USE_AUI
 	wxFlatNotebookImageList* m_icons;
 	wxFlatNotebook* m_notebook;
-
+#endif
 	void InitStyledTextCtrl( wxScintilla* stc );
 
 public:
+#ifdef WXFB_USE_AUI
+	CppPanel( wxWindow* parent, wxWindowID id = wxID_ANY,
+			const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+			long style = wxAUI_NB_DEFAULT_STYLE );
+#else
 	CppPanel( wxWindow *parent, int id );
+#endif
 	~CppPanel();
 
 	void OnPropertyModified( wxFBPropertyEvent& event );

@@ -271,7 +271,7 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
                 break;
             }
 
-            if ( source == wxT("Load From File") || source == wxT("Load From Embedded File"))
+            if ( source == _("Load From File") || source == _("Load From Embedded File"))
 			{
 			    wxString absPath;
 			    try
@@ -281,7 +281,7 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
 				catch( wxFBException& ex )
 				{
 				    wxLogError( ex.what() );
-				    result = wxT( "wx.NullBitmap" );
+				    result = wxT("wx.NullBitmap");
 				    break;
 				}
 
@@ -289,11 +289,11 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
 				
 				result << wxT("wx.Bitmap( u\"") << PythonCodeGenerator::ConvertPythonString( file ) << wxT("\", wx.BITMAP_TYPE_ANY )");
 			}
-			else if ( source == wxT("Load From Resource") )
+			else if ( source == _("Load From Resource") )
 			{
 				result << wxT("wx.Bitmap( u\"") << path << wxT("\", wx.BITMAP_TYPE_RESOURCE )");
 			}
-			else if ( source == wxT("Load From Icon Resource") )
+			else if ( source == _("Load From Icon Resource") )
 			{
                 if ( wxDefaultSize == icoSize )
                 {
@@ -304,7 +304,7 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
                     result.Printf( wxT("wx.Icon( u\"%s\", wx.BITMAP_TYPE_ICO_RESOURCE, %i, %i )"), path.c_str(), icoSize.GetWidth(), icoSize.GetHeight() );
                 }
 			}
-			else if ( source == wxT( "Load From Art Provider" ) )
+			else if ( source == _("Load From Art Provider") )
 			{
 				wxString rid = path.BeforeFirst( wxT(':') );
 				
@@ -396,13 +396,13 @@ void PythonCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObje
 {
 	if (!userClasses)
 	{
-		wxLogError(wxT("There is no object to generate inherited class"));
+		wxLogError(_("There is no object to generate inherited class"));
 		return;
 	}
 
 	if ( wxT("UserClasses") != userClasses->GetClassName() )
 	{
-		wxLogError(wxT("This not a UserClasses object"));
+		wxLogError(_("This not a UserClasses object"));
 		return;
 	}
 
@@ -458,7 +458,7 @@ bool PythonCodeGenerator::GenerateCode( PObjectBase project )
 {
 	if (!project)
 	{
-		wxLogError(wxT("There is no project to generate code"));
+		wxLogError(_("There is no project to generate code"));
 		return false;
 	}
 
@@ -494,7 +494,7 @@ bool PythonCodeGenerator::GenerateCode( PObjectBase project )
 	PProperty propFile = project->GetProperty( wxT("file") );
 	if (!propFile)
 	{
-		wxLogError( wxT("Missing \"file\" property on Project Object") );
+		wxLogError(_("Missing \"file\" property on Project Object") );
 		return false;
 	}
 
@@ -584,7 +584,7 @@ void PythonCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &e
 	PProperty propName = class_obj->GetProperty( wxT("name") );
 	if ( !propName )
 	{
-		wxLogError(wxT("Missing \"name\" property on \"%s\" class. Review your XML object description"),
+		wxLogError(_("Missing \"name\" property on \"%s\" class. Review your XML object description"),
 			class_obj->GetClassName().c_str());
 		return;
 	}
@@ -592,7 +592,7 @@ void PythonCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &e
 	wxString class_name = propName->GetValue();
 	if ( class_name.empty() )
 	{
-		wxLogError( wxT("Object name cannot be null") );
+		wxLogError(_("Object name cannot be null") );
 		return;
 	}
 
@@ -625,7 +625,7 @@ void PythonCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &e
 			PObjectBase obj = event->GetObject();
 			if ( !GenEventEntry( obj, obj->GetObjectInfo(), templateName, handlerName, disconnect ) )
 			{
-				wxLogError( wxT("Missing \"evt_%s\" template for \"%s\" class. Review your XML object description"),
+				wxLogError(_("Missing \"evt_%s\" template for \"%s\" class. Review your XML object description"),
 					templateName.c_str(), class_name.c_str() );
 			}
 		}
@@ -718,7 +718,7 @@ void PythonCodeGenerator::GetGenEventHandlers( PObjectBase obj )
 
 void PythonCodeGenerator::GenDefinedEventHandlers( PObjectInfo info, PObjectBase obj )
 {
-	PCodeInfo code_info = info->GetCodeInfo( wxT( "Python" ) );
+	PCodeInfo code_info = info->GetCodeInfo( wxT("Python") );
 	if ( code_info )
 	{
 		wxString _template = code_info->GetTemplate( wxT("generated_event_handlers") );
@@ -752,7 +752,7 @@ wxString PythonCodeGenerator::GetCode(PObjectBase obj, wxString name, bool silen
 	{
 		if( !silent )
 		{
-			wxString msg( wxString::Format( wxT("Missing \"%s\" template for \"%s\" class. Review your XML object description"),
+			wxString msg( wxString::Format(_("Missing \"%s\" template for \"%s\" class. Review your XML object description"),
 				name.c_str(), obj->GetClassName().c_str() ) );
 			wxLogError(msg);
 		}
@@ -772,7 +772,7 @@ void PythonCodeGenerator::GenClassDeclaration(PObjectBase class_obj, bool use_en
 	PProperty propName = class_obj->GetProperty( wxT("name") );
 	if ( !propName )
 	{
-		wxLogError(wxT("Missing \"name\" property on \"%s\" class. Review your XML object description"),
+		wxLogError(_("Missing \"name\" property on \"%s\" class. Review your XML object description"),
 			class_obj->GetClassName().c_str());
 		return;
 	}
@@ -780,7 +780,7 @@ void PythonCodeGenerator::GenClassDeclaration(PObjectBase class_obj, bool use_en
 	wxString class_name = propName->GetValue();
 	if ( class_name.empty() )
 	{
-		wxLogError( wxT("Object name can not be null") );
+		wxLogError(_("Object name can not be null") );
 		return;
 	}
 	
@@ -1113,21 +1113,21 @@ void PythonCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 					break;
 				}
 				default:
-					wxLogError( wxT("Missing subwindows for wxSplitterWindow widget.") );
+					wxLogError(_("Missing subwindows for wxSplitterWindow widget.") );
 					break;
 			}
 		}
-		else if ( 	type == wxT("menubar")	||
-				type == wxT("menu")		||
-				type == wxT("submenu")	||
-				type == wxT("toolbar")	||
-				type == wxT("tool")	||
-				type == wxT("listbook")	||
-				type == wxT("notebook")	||
-				type == wxT("auinotebook")	||
-				type == wxT("treelistctrl")	||
-				type == wxT("flatnotebook")
-			)
+		else if ( type == wxT("menubar")      ||
+                  type == wxT("menu")         ||
+                  type == wxT("submenu")      ||
+                  type == wxT("toolbar")      ||
+                  type == wxT("tool")         ||
+                  type == wxT("listbook")     ||
+                  type == wxT("notebook")     ||
+                  type == wxT("auinotebook")  ||
+                  type == wxT("treelistctrl") ||
+                  type == wxT("flatnotebook")
+                )
 		{
 			wxString afterAddChild = GetCode( obj, wxT("after_addchild") );
 			if ( !afterAddChild.empty() )
@@ -1165,12 +1165,12 @@ void PythonCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 
 		m_source->WriteLn( GetCode( obj, temp_name ) );
 	}
-	else if (	type == wxT("notebookpage")		||
-				type == wxT("flatnotebookpage")	||
-				type == wxT("listbookpage")		||
-				type == wxT("choicebookpage")	||
-				type == wxT("auinotebookpage")
-			)
+	else if ( type == wxT("notebookpage")     ||
+              type == wxT("flatnotebookpage") ||
+              type == wxT("listbookpage")     ||
+              type == wxT("choicebookpage")   ||
+              type == wxT("auinotebookpage")
+            )
 	{
 		GenConstruction( obj->GetChild( 0 ), false );
 		m_source->WriteLn( GetCode( obj, wxT("page_add") ) );
@@ -1185,17 +1185,17 @@ void PythonCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 	{
 		// If loading bitmap from ICON resource, and size is not set, set size to toolbars bitmapsize
 		// So hacky, yet so useful ...
-		wxSize toolbarsize = obj->GetParent()->GetPropertyAsSize( _("bitmapsize") );
+		wxSize toolbarsize = obj->GetParent()->GetPropertyAsSize( wxT("bitmapsize") );
 		if ( wxDefaultSize != toolbarsize )
 		{
-			PProperty prop = obj->GetProperty( _("bitmap") );
+			PProperty prop = obj->GetProperty( wxT("bitmap") );
 			if ( prop )
 			{
 				wxString oldVal = prop->GetValueAsString();
 				wxString path, source;
 				wxSize toolsize;
 				TypeConv::ParseBitmapWithResource( oldVal, &path, &source, &toolsize );
-				if ( wxT("Load From Icon Resource") == source && wxDefaultSize == toolsize )
+				if (_("Load From Icon Resource") == source && wxDefaultSize == toolsize )
 				{
 					prop->SetValue( wxString::Format( wxT("%s; %s [%i; %i]"), path.c_str(), source.c_str(), toolbarsize.GetWidth(), toolbarsize.GetHeight() ) );
 					m_source->WriteLn( GetCode( obj, wxT("construction") ) );
@@ -1219,14 +1219,14 @@ void PythonCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 void PythonCodeGenerator::GenDestruction( PObjectBase obj )
 {
 	wxString _template;
-	PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( wxT( "Python" ) );
+	PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( wxT("Python") );
 
 	if ( !code_info )
 	{
 		return;
 	}
 
-	_template = code_info->GetTemplate( wxT( "destruction" ) );
+	_template = code_info->GetTemplate( wxT("destruction") );
 
 	if ( !_template.empty() )
 	{
@@ -1369,12 +1369,12 @@ void PythonCodeGenerator::GenAddToolbar( PObjectInfo info, PObjectBase obj )
 void PythonCodeGenerator::GetAddToolbarCode( PObjectInfo info, PObjectBase obj, wxArrayString& codelines )
 {
 	wxString _template;
-	PCodeInfo code_info = info->GetCodeInfo( wxT( "Python" ) );
+	PCodeInfo code_info = info->GetCodeInfo( wxT("Python") );
 
 	if ( !code_info )
 		return;
 
-	_template = code_info->GetTemplate( wxT( "toolbar_add" ) );
+	_template = code_info->GetTemplate( wxT("toolbar_add") );
 
 	if ( !_template.empty() )
 	{

@@ -34,7 +34,9 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/clipbrd.h>
 #include <wx/msgout.h>
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
+#ifndef WXFB_USE_AUI
+    #include <wx/wxFlatNotebook/wxFlatNotebook.h>
+#endif
 #include "utils/wxfbexception.h"
 #include <memory>
 #include "maingui.h"
@@ -62,16 +64,16 @@ void LogStack();
 
 static const wxCmdLineEntryDesc s_cmdLineDesc[] =
 {
-	{ wxCMD_LINE_SWITCH, wxT("g"), wxT("generate"),	wxT("Generate code from passed file.") },
-	{ wxCMD_LINE_OPTION, wxT("l"), wxT("language"),	wxT("Override the code_generation property from the passed file and generate the passed languages. Separate multiple languages with commas.") },
-	{ wxCMD_LINE_SWITCH, wxT("h"), wxT("help"),		wxT("Show this help message."), wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_HELP  },
+	{ wxCMD_LINE_SWITCH, wxT("g"), wxT("generate"),	_("Generate code from passed file.") },
+	{ wxCMD_LINE_OPTION, wxT("l"), wxT("language"),	_("Override the code_generation property from the passed file and generate the passed languages. Separate multiple languages with commas.") },
+	{ wxCMD_LINE_SWITCH, wxT("h"), wxT("help"),		_("Show this help message."), wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_HELP  },
 	{ wxCMD_LINE_PARAM, NULL, NULL,	wxT("File to open."), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
 	{ wxCMD_LINE_NONE }
 };
 
-IMPLEMENT_APP( MyApp )
+IMPLEMENT_APP( wxFormBuilderApp )
 
-int MyApp::OnRun()
+int wxFormBuilderApp::OnRun()
 {
 	// Abnormal Termination Handling
 	#if wxUSE_ON_FATAL_EXCEPTION && wxUSE_STACKWALKER
@@ -97,11 +99,40 @@ int MyApp::OnRun()
 	wxString dataDir = stdPaths.GetDataDir();
 	dataDir.Replace( GetAppName().c_str(), wxT("wxformbuilder") );
 
+	// And set it to help also load locale if wxFB is not installed in system
+	::wxSetWorkingDirectory( dataDir );
+
 	// Log to stderr while working on the command line
 	delete wxLog::SetActiveTarget( new wxLogStderr );
 
 	// Message output to the same as the log target
 	delete wxMessageOutput::Set( new wxMessageOutputLog );
+
+	// Load locales (if localization is enabled)
+
+	bool enabled; int selection, lang;
+	wxConfigBase* config = wxConfigBase::Get();
+
+	config->Read( wxT("/preferences/locale/enabled"), &enabled, 0 );
+	config->Read( wxT("/preferences/locale/language"), &selection, 0 );
+
+	if ( enabled )
+	{
+		switch ( selection )
+		{
+		case 0:
+			lang = wxLANGUAGE_DEFAULT; break;
+		case 1:
+			lang = wxLANGUAGE_ENGLISH; break;
+		case 2:
+			lang = wxLANGUAGE_ENGLISH_US; break;
+		case 3:
+			lang = wxLANGUAGE_GERMAN; break;
+		case 4:
+			lang = wxLANGUAGE_ITALIAN; break;
+		}
+		SelectLanguage( lang );
+	}
 
 	// Parse command line
 	wxCmdLineParser parser( s_cmdLineDesc, argc, argv );
@@ -158,14 +189,14 @@ int MyApp::OnRun()
 			wxFileName projectPath( projectToLoad );
 			if ( !projectPath.IsOk() )
 			{
-				THROW_WXFBEX( wxT("This path is invalid: ") << projectToLoad );
+				THROW_WXFBEX( _("This path is invalid: ") << projectToLoad );
 			}
 
 			if ( !projectPath.IsAbsolute() )
 			{
 				if ( !projectPath.MakeAbsolute() )
 				{
-					THROW_WXFBEX( wxT("Could not make path absolute: ") << projectToLoad );
+					THROW_WXFBEX( _("Could not make path absolute: ") << projectToLoad );
 				}
 			}
 			projectToLoad = projectPath.GetFullPath();
@@ -224,7 +255,6 @@ int MyApp::OnRun()
 	wxYield();
 
 	// Read size and position from config file
-	wxConfigBase *config = wxConfigBase::Get();
 	config->SetPath( wxT("/mainframe") );
 	int x, y, w, h;
 	x = y = w = h = -1;
@@ -232,16 +262,19 @@ int MyApp::OnRun()
 	config->Read( wxT( "PosY" ), &y );
 	config->Read( wxT( "SizeW" ), &w );
 	config->Read( wxT( "SizeH" ), &h );
-
+#ifndef WXFB_USE_AUI
 	long style = config->Read( wxT("style"), wxFB_WIDE_GUI );
 	if ( style != wxFB_CLASSIC_GUI )
 	{
 		style = wxFB_WIDE_GUI;
 	}
-
+#endif
 	config->SetPath( wxT("/") );
-
+#ifdef WXFB_USE_AUI
+    m_frame = new MainFrame( NULL, -1, 0, wxPoint( x, y ), wxSize( w, h ) );
+#else
 	m_frame = new MainFrame( NULL ,-1, (int)style, wxPoint( x, y ), wxSize( w, h ) );
+#endif
 	if ( !justGenerate )
 	{
 		m_frame->Show( TRUE );
@@ -266,7 +299,7 @@ int MyApp::OnRun()
 	// This puts an unneccessary lock on the directory.
 	// This changes the CWD to the already locked app directory as a workaround
 	#ifdef __WXMSW__
-	::wxSetWorkingDirectory( dataDir );
+//	::wxSetWorkingDirectory( dataDir );
 	#endif
 
 	if ( !projectToLoad.empty() )
@@ -278,7 +311,7 @@ int MyApp::OnRun()
 				if ( hasLanguage )
 				{
 					PObjectBase project = AppData()->GetProjectData();
-					PProperty codeGen = project->GetProperty( _("code_generation") );
+					PProperty codeGen = project->GetProperty( wxT("code_generation") );
 					if ( codeGen )
 					{
 						codeGen->SetValue( language );
@@ -295,7 +328,7 @@ int MyApp::OnRun()
 		}
 		else
 		{
-			wxLogError( wxT("Unable to load project: %s"), projectToLoad.c_str() );
+			wxLogError( _("Unable to load project: %s"), projectToLoad.c_str() );
 		}
 	}
 
@@ -318,16 +351,18 @@ int MyApp::OnRun()
 	return wxApp::OnRun();
 }
 
-bool MyApp::OnInit()
+bool wxFormBuilderApp::OnInit()
 {
 	// Initialization is done in OnRun, so MinGW SEH works for all code (it needs a local variable, OnInit is called before OnRun)
 	return true;
 }
 
-int MyApp::OnExit()
+int wxFormBuilderApp::OnExit()
 {
 	MacroDictionary::Destroy();
+#ifndef WXFB_USE_AUI
 	wxFlatNotebook::CleanUp();
+#endif
 	AppDataDestroy();
 
 	if( !wxTheClipboard->IsOpened() )
@@ -345,14 +380,36 @@ int MyApp::OnExit()
 	return wxApp::OnExit();
 }
 
-MyApp::~MyApp()
+wxFormBuilderApp::~wxFormBuilderApp()
 {
 }
 
-#ifdef __WXMAC__
-void MyApp::MacOpenFile(const wxString &fileName)
+void wxFormBuilderApp::SelectLanguage( int lang )
 {
-    if(m_frame == NULL) m_mac_file_name = fileName;
+    if ( !m_locale.Init( lang, wxLOCALE_CONV_ENCODING ) )
+    {
+        wxLogError( wxT("This language is not supported by the system.") );
+        return;
+    } 
+
+    wxLocale::AddCatalogLookupPathPrefix( wxT("locale") );
+
+    m_locale.AddCatalog( wxT("wxformbuilder") );
+
+#ifdef __LINUX__
+    {
+        wxLogNull noLog;
+        m_locale.AddCatalog(_T("fileutils"));
+    }
+#endif
+}
+
+
+
+#ifdef __WXMAC__
+void wxFormBuilderApp::MacOpenFile(const wxString &fileName)
+{
+    if( m_frame == NULL ) m_mac_file_name = fileName;
     else
     {
         if(!m_frame->SaveWarning()) return;
@@ -404,7 +461,7 @@ void MyApp::MacOpenFile(const wxString &fileName)
 		}
 	};
 
-	void MyApp::OnFatalException()
+	void wxFormBuilderApp::OnFatalException()
 	{
 		LogStack();
 	}

@@ -27,7 +27,11 @@
 #define __OBJ_INSPECT__
 
 #include "wx/wx.h"
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
+#ifdef WXFB_USE_AUI
+    #include <wx/aui/auibook.h>
+#else
+    #include <wx/wxFlatNotebook/wxFlatNotebook.h>
+#endif
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/propdev.h>
 #include <wx/propgrid/advprops.h>
@@ -82,7 +86,12 @@ class ObjectInspector : public wxPanel
   ObjInspectorEventMap m_eventMap;
 
   PObjectBase m_currentSel;
-  wxFlatNotebook* m_nb;
+#ifdef WXFB_USE_AUI
+    wxAuiNotebook* m_nb;
+#else
+    wxFlatNotebook* m_nb;
+    wxFlatNotebookImageList m_icons;
+#endif
   wxPropertyGridManager* m_pg;
   wxPropertyGridManager* m_eg;
   int m_style;

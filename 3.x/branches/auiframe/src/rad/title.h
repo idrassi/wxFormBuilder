@@ -22,22 +22,35 @@
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
-
-#ifndef __TITLE__
-#define __TITLE__
+#ifndef __TITLE_H__
+#define __TITLE_H__
 
 #include <wx/wx.h>
 
 class Title : public wxPanel
 {
- private:
-//  DECLARE_EVENT_TABLE()
- public:
-  Title(wxWindow *parent,const wxString &title=wxT("No title"));
+private:
+	wxColour getColourFromConfig( const wxString& confpath, wxSystemColour sys_colour );
 
-  static wxWindow* CreateTitle (wxWindow *inner, const wxString &title);
+	void drawTitle( wxDC &dc );
+
+	void onClose( wxCloseEvent &event );
+	void onPaint( wxPaintEvent &event );
+	void onSize ( wxSizeEvent  &event );
+
+	int      m_hgtCaptText;
+	wxString m_strCaptText;
+	wxColour m_colCaptText;
+	wxColour m_colActvCapt;
+	wxColour m_colActvGrdt;
+	bool     m_bGradVert;
+
+	DECLARE_EVENT_TABLE()
+
+public:
+	Title(wxWindow *parent,const wxString &title=wxT("No title"));
+
+	static wxWindow* CreateTitle (wxWindow *inner, const wxString &title);
 };
 
-
-
-#endif //__TITLE__
+#endif //__TITLE_H__

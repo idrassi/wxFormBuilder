@@ -31,6 +31,7 @@
 #include "utils/debug.h"
 #include "utils/wxfbexception.h"
 #include "rad/appdata.h"
+#include "maingui.h"
 #include <wx/filename.h>
 #include <wx/image.h>
 #include <wx/dir.h>
@@ -39,6 +40,7 @@
 #include <wx/tokenzr.h>
 #include <wx/stdpaths.h>
 #include <wx/app.h>
+#include <wx/intl.h>
 
 //#define DEBUG_PRINT(x) cout << x
 
@@ -682,7 +684,7 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 							if ( !addedPackage.second )
 							{
 								addedPackage.first->second->AppendPackage( packageIt->second );
-								Debug::Print( _("Merged plugins named \"%s\""), packageIt->second->GetPackageName().c_str() );
+								Debug::Print( wxT("Merged plugins named \"%s\""), packageIt->second->GetPackageName().c_str() );
 							}
 
 						}
@@ -744,6 +746,7 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
 		// get the library to import
 		std::string lib;
 		root->GetAttributeOrDefault( "lib", &lib, "" );
+
 		if ( !lib.empty() )
 		{
 			// Allows plugin dependency dlls to be next to plugin dll in windows
@@ -766,6 +769,9 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
 
 			// Put Cwd back
 			wxFileName::SetCwd( workingDir );
+
+			// Add locale support the loaded plugin
+			wxGetApp().AddPluginLocaleCatalog( _WXSTR( lib ) );
 		}
 
 		ticpp::Element* elem_obj = root->FirstChildElement( OBJINFO_TAG, false );
@@ -813,7 +819,7 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
                             typeName == wxT("gbsizer")  ||
                             typeName == wxT("menuitem")  )
 					{
-						class_info->AddBaseClassDefaultPropertyValue( baseIndex, _("permission"), _("none") );
+						class_info->AddBaseClassDefaultPropertyValue( baseIndex, wxT("permission"), wxT("none") );
 					}
 				}
 			}
@@ -1149,6 +1155,8 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 		}
 
 		// create an instance of PropertyInfo
+		
+		wxGetTranslation( _WXSTR(description) );
 		PPropertyInfo prop_info( new PropertyInfo( _WXSTR(pname), ptype, _WXSTR(def_value), _WXSTR(description), _WXSTR(customEditor), opt_list, children ) );
 
 		// add the PropertyInfo to the property

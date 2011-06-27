@@ -31,7 +31,7 @@ Written by
       <option name="wxTR_EDIT_LABELS"             help="Use this style if you wish the user to be able to edit labels in the tree control." />
       <option name="wxTR_NO_BUTTONS"              help="For convenience to document that no buttons are to be drawn." />
       <option name="wxTR_HAS_BUTTONS"             help="Use this style to show + and - buttons to the left of parent items." />
-      <option name="wxTR_TWIST_BUTTONS"           help="??" />
+      <option name="wxTR_TWIST_BUTTONS"           help="Use this style to show Mac-style twister buttons to the left of parent items. If both wxTR_HAS_BUTTONS and wxTR_TWIST_BUTTONS are given, twister buttons are generated." />
       <option name="wxTR_NO_LINES"                help="Use this style to hide vertical level connectors." />
       <option name="wxTR_FULL_ROW_HIGHLIGHT"      help="Use this style to have the background colour and the selection highlight extend over the entire horizontal row of the tree control window. (This flag is ignored under Windows unless you specify wxTR_NO_LINES as well.)" />
       <option name="wxTR_LINES_AT_ROOT"           help="Use this style to show lines between root nodes. Only applicable if wxTR_HIDE_ROOT is set and wxTR_NO_LINES is not set." />

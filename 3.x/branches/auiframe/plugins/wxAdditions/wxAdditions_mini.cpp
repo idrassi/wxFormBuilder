@@ -87,13 +87,13 @@ protected:
 			IObject*  iChild = m_manager->GetIObject( wxChild );
 			if ( iChild )
 			{
-				if ( (int)i == selPage && !iChild->GetPropertyAsInteger( _("select") ) )
+				if ( (int)i == selPage && !iChild->GetPropertyAsInteger( wxT("select") ) )
 				{
-					m_manager->ModifyProperty( wxChild, _("select"), wxT("1"), false );
+					m_manager->ModifyProperty( wxChild, wxT("select"), wxT("1"), false );
 				}
-				else if ( (int)i != selPage && iChild->GetPropertyAsInteger( _("select") ) )
+				else if ( (int)i != selPage && iChild->GetPropertyAsInteger( wxT("select") ) )
 				{
-					m_manager->ModifyProperty( wxChild, _("select"), wxT("0"), false );
+					m_manager->ModifyProperty( wxChild, wxT("select"), wxT("0"), false );
 				}
 			}
 		}
@@ -108,8 +108,8 @@ protected:
 
 	void OnFlatNotebookPageClosing( wxFlatNotebookEvent& event )
 	{
-		wxMessageBox( wxT("wxFlatNotebook pages can normally be closed.\nHowever, it is difficult to design a page that has been closed, so this action has been vetoed."),
-						wxT("Page Close Vetoed!"), wxICON_INFORMATION, NULL );
+		wxMessageBox( _("wxFlatNotebook pages can normally be closed.\nHowever, it is difficult to design a page that has been closed, so this action has been vetoed."),
+						_("Page Close Vetoed!"), wxICON_INFORMATION, NULL );
 		event.Veto();
 	}
 
@@ -130,19 +130,19 @@ public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		wxPropertyGrid* pg = new wxPropertyGrid((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 
-		if ( !obj->GetPropertyAsString(_("extra_style")).empty() )
+		if ( !obj->GetPropertyAsString(wxT("extra_style")).empty() )
 		{
-			pg->SetExtraStyle( obj->GetPropertyAsInteger( _("extra_style") ) );
+			pg->SetExtraStyle( obj->GetPropertyAsInteger( wxT("extra_style") ) );
 		}
 
-		pg->AppendCategory(wxT("Sample Category"));
+		pg->AppendCategory(_("Sample Category"));
 
 		// Add string property
-		pg->Append( wxStringProperty(wxT("Label"),wxT("Name"),wxT("Initial Value")) );
+		pg->Append( wxStringProperty(wxT("Label"),_("Name"),_("Initial Value")) );
 
 		// Add int property
 		pg->Append ( wxIntProperty ( wxT("IntProperty"), wxPG_LABEL, 12345678 ) );
@@ -158,8 +158,7 @@ public:
 		// A string property that can be edited in a separate editor dialog.
 		pg->Append ( wxLongStringProperty (wxT("LongStringProperty"),
 			wxPG_LABEL,
-			wxT("This is much longer string than the ")
-			wxT("first one. Edit it by clicking the button.")));
+			_("This is much longer string than the first one. Edit it by clicking the button.")));
 
 		// String editor with dir selector button.
 		pg->Append ( wxDirProperty( wxT("DirProperty"), wxPG_LABEL, ::wxGetUserHome()) );
@@ -167,41 +166,41 @@ public:
 		// A file selector property.
 		wxPGId fid = pg->Append ( wxFileProperty( wxT("FileProperty"), wxPG_LABEL, wxEmptyString ) );
 
-		pg->AppendCategory( wxT("Sample Parent Property") );
-		wxPGId pid = pg->Append( wxParentProperty(wxT("Car"),wxPG_LABEL) );
-		pg->AppendIn( pid, wxStringProperty(wxT("Model"), wxPG_LABEL,wxT("Lamborghini Diablo SV")) );
-		pg->AppendIn( pid, wxIntProperty(wxT("Engine Size (cc)"), wxPG_LABEL, 5707) );
+		pg->AppendCategory( _("Sample Parent Property") );
+		wxPGId pid = pg->Append( wxParentProperty(_("Car"),wxPG_LABEL) );
+		pg->AppendIn( pid, wxStringProperty(_("Model"), wxPG_LABEL,wxT("Lamborghini Diablo SV")) );
+		pg->AppendIn( pid, wxIntProperty(_("Engine Size (cc)"), wxPG_LABEL, 5707) );
 
-		wxPGId speedId = pg->AppendIn( pid, wxParentProperty(wxT("Speeds"),wxPG_LABEL) );
-		pg->AppendIn( speedId, wxIntProperty(wxT("Max. Speed (mph)"),wxPG_LABEL,300) );
-		pg->AppendIn( speedId, wxFloatProperty(wxT("0-100 mph (sec)"),wxPG_LABEL,3.9) );
-		pg->AppendIn( speedId, wxFloatProperty(wxT("1/4 mile (sec)"),wxPG_LABEL,8.6) );
-		pg->AppendIn( pid, wxIntProperty(wxT("Price ($)"), wxPG_LABEL, 300000) );
+		wxPGId speedId = pg->AppendIn( pid, wxParentProperty(_("Speeds"),wxPG_LABEL) );
+		pg->AppendIn( speedId, wxIntProperty(_("Max. Speed (mph)"),wxPG_LABEL,300) );
+		pg->AppendIn( speedId, wxFloatProperty(_("0-100 mph (sec)"),wxPG_LABEL,3.9) );
+		pg->AppendIn( speedId, wxFloatProperty(_("1/4 mile (sec)"),wxPG_LABEL,8.6) );
+		pg->AppendIn( pid, wxIntProperty(_("Price ($)"), wxPG_LABEL, 300000) );
 
 		if ( obj->GetPropertyAsInteger( wxT("include_advanced") ) )
 		{
-			pg->AppendCategory( wxT("Advanced Properties") );
+			pg->AppendCategory( _("Advanced Properties") );
 			// wxArrayStringProperty embeds a wxArrayString.
-			pg->Append ( wxArrayStringProperty( wxT("Example of ArrayStringProperty"), wxT("ArrayStringProp") ) );
+			pg->Append ( wxArrayStringProperty( _("Example of ArrayStringProperty"), wxT("ArrayStringProp") ) );
 
 			// Image file property. Wildcard is auto-generated from available
 			// image handlers, so it is not set this time.
-			pg->Append ( wxImageFileProperty(wxT("Example of ImageFileProperty"), wxT("ImageFileProp")));
+			pg->Append ( wxImageFileProperty(_("Example of ImageFileProperty"), wxT("ImageFileProp")));
 
 			// Font property has sub-properties.
-			pg->Append ( wxFontProperty(wxT("Font"), wxPG_LABEL, wxFontPropertyValue()) );
+			pg->Append ( wxFontProperty(_("Font"), wxPG_LABEL, wxFontPropertyValue()) );
 
 			// Colour property with arbitrary colour.
-			pg->Append ( wxColourProperty(wxT("My Colour 1"), wxPG_LABEL, wxColour(242,109,0) ) );
+			pg->Append ( wxColourProperty(_("My Colour 1"), wxPG_LABEL, wxColour(242,109,0) ) );
 
 			// System colour property.
-			pg->Append ( wxSystemColourProperty (wxT("My SysColour 1"), wxPG_LABEL, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)) );
+			pg->Append ( wxSystemColourProperty (_("My SysColour 1"), wxPG_LABEL, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)) );
 
 			// System colour property with custom colour.
-			pg->Append ( wxSystemColourProperty (wxT("My SysColour 2"), wxPG_LABEL, wxColour(0,200,160) ) );
+			pg->Append ( wxSystemColourProperty (_("My SysColour 2"), wxPG_LABEL, wxColour(0,200,160) ) );
 
 			// Cursor property
-			pg->Append ( wxCursorProperty (wxT("My Cursor"), wxPG_LABEL, wxCURSOR_ARROW));
+			pg->Append ( wxCursorProperty (_("My Cursor"), wxPG_LABEL, wxCURSOR_ARROW));
 		}
 
 		return pg;
@@ -219,31 +218,31 @@ public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		wxPropertyGridManager* pg = new wxPropertyGridManager((wxWindow *)parent, -1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 
-		if ( !obj->GetPropertyAsString(_("extra_style")).empty() )
+		if ( !obj->GetPropertyAsString(wxT("extra_style")).empty() )
 		{
-			pg->SetExtraStyle( obj->GetPropertyAsInteger( _("extra_style") ) );
+			pg->SetExtraStyle( obj->GetPropertyAsInteger( wxT("extra_style") ) );
 		}
 
 		// Adding a page sets target page to the one added, so
 		// we don't have to call SetTargetPage if we are filling
 		// it right after adding.
-		pg->AddPage(wxT("First Page"));
+		pg->AddPage(_("First Page"));
 
-		pg->AppendCategory( wxT("Sample Category") );
+		pg->AppendCategory(_("Sample Category") );
 
 		// Add string property
-		wxPGId id = pg->Append( wxStringProperty(wxT("Label"),wxT("Name"),wxT("Initial Value")) );
-		pg->SetPropertyHelpString( id, wxT("A string property") );
+		wxPGId id = pg->Append( wxStringProperty(wxT("Label"), _("Name"), _("Initial Value") ) );
+		pg->SetPropertyHelpString( id, _("A string property") );
 
 		// Add int property
-		pg->Append ( wxIntProperty ( wxT("IntProperty"), wxPG_LABEL, 12345678 ) );
+		pg->Append ( wxIntProperty ( wxT("IntProperty" ), wxPG_LABEL, 12345678 ) );
 
 		// Add float property (value type is actually double)
-		pg->Append ( wxFloatProperty ( wxT("FloatProperty"), wxPG_LABEL, 12345.678 ) );
+		pg->Append ( wxFloatProperty ( wxT("FloatProperty" ), wxPG_LABEL, 12345.678 ) );
 
 		// Add a bool property
 		pg->Append ( wxBoolProperty ( wxT("BoolProperty"), wxPG_LABEL, false ) );
@@ -252,19 +251,18 @@ public:
 
 		// Add an enum property
         wxArrayString strings;
-        strings.Add(wxT("Herbivore"));
-        strings.Add(wxT("Carnivore"));
-        strings.Add(wxT("Omnivore"));
+        strings.Add(_("Herbivore"));
+        strings.Add(_("Carnivore"));
+        strings.Add(_("Omnivore"));
 
         pg->Append( wxEnumProperty(wxT("EnumProperty"), wxPG_LABEL, strings) );
 
-		pg->AppendCategory( wxT("Low Priority Properties") );
+		pg->AppendCategory(_("Low Priority Properties") );
 
 		// A string property that can be edited in a separate editor dialog.
 		pg->TogglePropertyPriority( pg->Append ( wxLongStringProperty (wxT("LongStringProperty"),
 			wxPG_LABEL,
-			wxT("This is much longer string than the ")
-			wxT("first one. Edit it by clicking the button."))));
+			_("This is much longer string than the first one. Edit it by clicking the button."))));
 
 		// String editor with dir selector button.
 		pg->TogglePropertyPriority( pg->Append ( wxDirProperty( wxT("DirProperty"), wxPG_LABEL, ::wxGetUserHome()) ));
@@ -272,44 +270,44 @@ public:
 		// A file selector property.
 		pg->TogglePropertyPriority( pg->Append ( wxFileProperty( wxT("FileProperty"), wxPG_LABEL, wxEmptyString ) ));
 
-		pg->AddPage(wxT("Second Page"));
+		pg->AddPage(_("Second Page"));
 
-		pg->AppendCategory( wxT("Sample Parent Property") );
+		pg->AppendCategory(_("Sample Parent Property") );
 		wxPGId pid = pg->Append( wxParentProperty(wxT("Car"),wxPG_LABEL) );
-		pg->AppendIn( pid, wxStringProperty(wxT("Model"), wxPG_LABEL,wxT("Lamborghini Diablo SV")) );
-		pg->AppendIn( pid, wxIntProperty(wxT("Engine Size (cc)"), wxPG_LABEL, 5707) );
+		pg->AppendIn( pid, wxStringProperty(_("Model"), wxPG_LABEL, wxT("Lamborghini Diablo SV")) );
+		pg->AppendIn( pid, wxIntProperty(_("Engine Size (cc)"), wxPG_LABEL, 5707) );
 
-		wxPGId speedId = pg->AppendIn( pid, wxParentProperty(wxT("Speeds"),wxPG_LABEL) );
-		pg->AppendIn( speedId, wxIntProperty(wxT("Max. Speed (mph)"),wxPG_LABEL,300) );
-		pg->AppendIn( speedId, wxFloatProperty(wxT("0-100 mph (sec)"),wxPG_LABEL,3.9) );
-		pg->AppendIn( speedId, wxFloatProperty(wxT("1/4 mile (sec)"),wxPG_LABEL,8.6) );
-		pg->AppendIn( pid, wxIntProperty(wxT("Price ($)"), wxPG_LABEL, 300000) );
+		wxPGId speedId = pg->AppendIn( pid, wxParentProperty(_("Speeds"), wxPG_LABEL) );
+		pg->AppendIn( speedId, wxIntProperty(_("Max. Speed (mph)"), wxPG_LABEL,300) );
+		pg->AppendIn( speedId, wxFloatProperty(_("0-100 mph (sec)"), wxPG_LABEL,3.9) );
+		pg->AppendIn( speedId, wxFloatProperty(_("1/4 mile (sec)"), wxPG_LABEL,8.6) );
+		pg->AppendIn( pid, wxIntProperty(_("Price ($)"), wxPG_LABEL, 300000) );
 
 		if ( obj->GetPropertyAsInteger( wxT("include_advanced") ) )
 		{
-			pg->AppendCategory( wxT("Advanced Properties") );
+			pg->AppendCategory(_("Advanced Properties") );
 			// wxArrayStringProperty embeds a wxArrayString.
-			pg->Append ( wxArrayStringProperty(wxT("Example of ArrayStringProperty"),
+			pg->Append ( wxArrayStringProperty(_("Example of ArrayStringProperty"),
 				wxT("ArrayStringProp")));
 
 			// Image file property. Wildcard is auto-generated from available
 			// image handlers, so it is not set this time.
-			pg->Append ( wxImageFileProperty(wxT("Example of ImageFileProperty"), wxT("ImageFileProp")));
+			pg->Append ( wxImageFileProperty(_("Example of ImageFileProperty"), wxT("ImageFileProp")));
 
 			// Font property has sub-properties.
-			pg->Append ( wxFontProperty(wxT("Font"), wxPG_LABEL, wxFontPropertyValue()) );
+			pg->Append ( wxFontProperty(_("Font"), wxPG_LABEL, wxFontPropertyValue()) );
 
 			// Colour property with arbitrary colour.
-			pg->Append ( wxColourProperty(wxT("My Colour 1"), wxPG_LABEL, wxColour(242,109,0) ) );
+			pg->Append ( wxColourProperty(_("My Colour 1"), wxPG_LABEL, wxColour(242,109,0) ) );
 
 			// System colour property.
-			pg->Append ( wxSystemColourProperty (wxT("My SysColour 1"), wxPG_LABEL, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)) );
+			pg->Append ( wxSystemColourProperty (_("My SysColour 1"), wxPG_LABEL, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)) );
 
 			// System colour property with custom colour.
-			pg->Append ( wxSystemColourProperty (wxT("My SysColour 2"), wxPG_LABEL, wxColour(0,200,160) ) );
+			pg->Append ( wxSystemColourProperty (_("My SysColour 2"), wxPG_LABEL, wxColour(0,200,160) ) );
 
 			// Cursor property
-			pg->Append ( wxCursorProperty (wxT("My Cursor"), wxPG_LABEL, wxCURSOR_ARROW));
+			pg->Append ( wxCursorProperty (_("My Cursor"), wxPG_LABEL, wxCURSOR_ARROW));
 		}
 
 		// For total safety, finally reset the target page.
@@ -332,17 +330,17 @@ public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		wxFlatNotebook* book = new wxFlatNotebook((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 
-		if ( obj->GetPropertyAsInteger( _("has_images") ) != 0 )
+		if ( obj->GetPropertyAsInteger( wxT("has_images") ) != 0 )
 		{
 			wxFlatNotebookImageList* images = new wxFlatNotebookImageList();
 			book->SetImageList( images );
 		}
 
-		book->SetCustomizeOptions( obj->GetPropertyAsInteger( _("customize_options") ) );
+		book->SetCustomizeOptions( obj->GetPropertyAsInteger( wxT("customize_options") ) );
 
 		book->PushEventHandler( new ComponentEvtHandler( book, GetManager() ) );
 
@@ -351,14 +349,14 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxFlatNotebook"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxFlatNotebook"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxFlatNotebook"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxFlatNotebook"));
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -390,33 +388,33 @@ public:
 
 		// Apply image to page
 		IObject* parentObj = GetManager()->GetIObject( wxparent );
-		if ( parentObj->GetPropertyAsInteger( _("has_images") ) != 0 )
+		if ( parentObj->GetPropertyAsInteger( wxT("has_images") ) != 0 )
 		{
-			if ( !obj->GetPropertyAsString( _("bitmap") ).empty() )
+			if ( !obj->GetPropertyAsString( wxT("bitmap") ).empty() )
 			{
 				wxFlatNotebookImageList* imageList = book->GetImageList();
-				if ( parentObj->GetPropertyAsInteger( _("auto_scale_images") ) != 0 )
+				if ( parentObj->GetPropertyAsInteger( wxT("auto_scale_images") ) != 0 )
 				{
-					wxImage image = obj->GetPropertyAsBitmap( _("bitmap") ).ConvertToImage();
+					wxImage image = obj->GetPropertyAsBitmap( wxT("bitmap") ).ConvertToImage();
 					imageList->Add( image.Scale( 16, 16 ) );
 				}
 				else
 				{
-					imageList->Add( obj->GetPropertyAsBitmap( _("bitmap") ) );
+					imageList->Add( obj->GetPropertyAsBitmap( wxT("bitmap") ) );
 				}
-				book->AddPage( page, obj->GetPropertyAsString( _("label") ), false, imageList->GetCount() - 1 );
+				book->AddPage( page, obj->GetPropertyAsString( wxT("label") ), false, imageList->GetCount() - 1 );
 			}
 			else
 			{
-				book->AddPage(page,obj->GetPropertyAsString(_("label")));
+				book->AddPage(page,obj->GetPropertyAsString(wxT("label")));
 			}
 		}
 		else
 		{
-			book->AddPage(page,obj->GetPropertyAsString(_("label")));
+			book->AddPage(page,obj->GetPropertyAsString(wxT("label")));
 		}
 
-		if ( obj->GetPropertyAsString( _("select") ) == wxT("0") && selection >= 0 )
+		if ( obj->GetPropertyAsString( wxT("select") ) == wxT("0") && selection >= 0 )
 		{
 			book->SetSelection( selection) ;
 		}
@@ -463,23 +461,23 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc( obj, _("notebookpage") );
-		xrc.AddProperty( _("label"), _("label"), XRC_TYPE_TEXT );
-		xrc.AddProperty( _("selected"), _("selected"), XRC_TYPE_BOOL );
-		if ( !obj->IsNull( _("bitmap") ) )
+		ObjectToXrcFilter xrc( obj, wxT("notebookpage") );
+		xrc.AddProperty( wxT("label"), wxT("label"), XRC_TYPE_TEXT );
+		xrc.AddProperty( wxT("selected"), wxT("selected"), XRC_TYPE_BOOL );
+		if ( !obj->IsNull( wxT("bitmap") ) )
 		{
-			xrc.AddProperty( _("bitmap"), _("bitmap"), XRC_TYPE_BITMAP );
+			xrc.AddProperty( wxT("bitmap"), wxT("bitmap"), XRC_TYPE_BITMAP );
 		}
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter( xrcObj, _("notebookpage") );
+		XrcToXfbFilter filter( xrcObj, wxT("notebookpage") );
 		filter.AddWindowProperties();
-		filter.AddProperty( _("selected"), _("selected"), XRC_TYPE_BOOL );
-		filter.AddProperty( _("label"), _("label"), XRC_TYPE_TEXT );
-		filter.AddProperty( _("bitmap"), _("bitmap"), XRC_TYPE_BITMAP );
+		filter.AddProperty( wxT("selected"), wxT("selected"), XRC_TYPE_BOOL );
+		filter.AddProperty( wxT("label"), wxT("label"), XRC_TYPE_TEXT );
+		filter.AddProperty( wxT("bitmap"), wxT("bitmap"), XRC_TYPE_BITMAP );
 		return filter.GetXfbObject();
 	}
 };
@@ -492,14 +490,14 @@ public:
 	wxObject* Create( IObject* obj, wxObject* parent )
 	{
 		wxScintilla* m_code = new wxScintilla( 	(wxWindow *)parent, -1,
-												obj->GetPropertyAsPoint(_("pos")),
-												obj->GetPropertyAsSize(_("size")),
-												obj->GetPropertyAsInteger(_("window_style")),
-												obj->GetPropertyAsString(_("name"))
+												obj->GetPropertyAsPoint(wxT("pos")),
+												obj->GetPropertyAsSize(wxT("size")),
+												obj->GetPropertyAsInteger(wxT("window_style")),
+												obj->GetPropertyAsString(wxT("name"))
 											);
 
 		// Line Numbers
-		if ( 0 != obj->GetPropertyAsInteger(_("line_numbers") ) )
+		if ( 0 != obj->GetPropertyAsInteger(wxT("line_numbers") ) )
 		{
 			m_code->SetMarginType( 0, wxSCI_MARGIN_NUMBER );
 			m_code->SetMarginWidth( 0, m_code->TextWidth (wxSCI_STYLE_LINENUMBER, wxT("_99999"))  );
@@ -527,7 +525,7 @@ public:
 		m_code->MarkerDefine (wxSCI_MARKNUM_FOLDERTAIL, wxSCI_MARK_EMPTY);
 
 		// folding
-		if ( 0 != obj->GetPropertyAsInteger(_("folding") ) )
+		if ( 0 != obj->GetPropertyAsInteger(wxT("folding") ) )
 		{
 			m_code->SetMarginType (1, wxSCI_MARGIN_SYMBOL);
 			m_code->SetMarginMask (1, wxSCI_MASK_FOLDERS);
@@ -541,7 +539,7 @@ public:
 		{
 			m_code->SetMarginWidth( 1, 0 );
 		}
-		m_code->SetIndentationGuides( ( 0 != obj->GetPropertyAsInteger( _("indentation_guides") ) ) );
+		m_code->SetIndentationGuides( ( 0 != obj->GetPropertyAsInteger( wxT("indentation_guides") ) ) );
 
 		m_code->SetMarginWidth( 2, 0 );
 
@@ -556,9 +554,9 @@ public:
 							   while"));
 
 		wxFont font(10, wxMODERN, wxNORMAL, wxNORMAL);
-		if ( !obj->GetPropertyAsString(_("font")).empty() )
+		if ( !obj->GetPropertyAsString(wxT("font")).empty() )
 		{
-			font = obj->GetPropertyAsFont(_("font"));
+			font = obj->GetPropertyAsFont(wxT("font"));
 		}
 
 		m_code->StyleSetFont(wxSCI_STYLE_DEFAULT, font );
@@ -574,15 +572,15 @@ public:
 		m_code->StyleSetForeground(wxSCI_C_COMMENTDOC, wxColour(0, 128, 0));
 		m_code->StyleSetForeground(wxSCI_C_COMMENTLINEDOC, wxColour(0, 128, 0));
 		m_code->StyleSetForeground(wxSCI_C_NUMBER, *wxBLUE );
-		m_code->SetUseTabs( ( 0 != obj->GetPropertyAsInteger( _("use_tabs") ) ) );
-		m_code->SetTabWidth( obj->GetPropertyAsInteger( _("tab_width") ) );
-		m_code->SetTabIndents( ( 0 != obj->GetPropertyAsInteger( _("tab_indents") ) ) );
-		m_code->SetBackSpaceUnIndents( ( 0 != obj->GetPropertyAsInteger( _("backspace_unindents") ) ) );
-		m_code->SetIndent( obj->GetPropertyAsInteger( _("tab_width") ) );
+		m_code->SetUseTabs( ( 0 != obj->GetPropertyAsInteger( wxT("use_tabs") ) ) );
+		m_code->SetTabWidth( obj->GetPropertyAsInteger( wxT("tab_width") ) );
+		m_code->SetTabIndents( ( 0 != obj->GetPropertyAsInteger( wxT("tab_indents") ) ) );
+		m_code->SetBackSpaceUnIndents( ( 0 != obj->GetPropertyAsInteger( wxT("backspace_unindents") ) ) );
+		m_code->SetIndent( obj->GetPropertyAsInteger( wxT("tab_width") ) );
 		m_code->SetSelBackground(true, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
 		m_code->SetSelForeground(true, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
-		m_code->SetViewEOL( ( 0 != obj->GetPropertyAsInteger( _("view_eol") ) ) );
-		m_code->SetViewWhiteSpace( ( 0 != obj->GetPropertyAsInteger( _("view_whitespace") ) ) );
+		m_code->SetViewEOL( ( 0 != obj->GetPropertyAsInteger( wxT("view_eol") ) ) );
+		m_code->SetViewWhiteSpace( ( 0 != obj->GetPropertyAsInteger( wxT("view_whitespace") ) ) );
 
 		m_code->SetCaretWidth(2);
 
@@ -688,7 +686,6 @@ MACRO(wxFNB_CUSTOM_FOREIGN_DRAG)
 MACRO(wxFNB_CUSTOM_LOCAL_DRAG)
 MACRO(wxFNB_CUSTOM_CLOSE_BUTTON)
 MACRO(wxFNB_CUSTOM_ALL)
-
 
 // wxScintilla
 WINDOW_COMPONENT("wxScintilla", ScintillaComponent )
