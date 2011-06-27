@@ -108,7 +108,7 @@ wxPGWindowPair wxPGSliderEditor::CreateControls( wxPropertyGrid* propgrid,
 {
     wxCHECK_MSG( property->IsKindOf(WX_PG_CLASSINFO(wxFloatProperty)),
                  NULL,
-                 wxT("Slider editor can only be used with wxFloatProperty or derivative.") );
+                 _("Slider editor can only be used with wxFloatProperty or derivative.") );
 
     // Use two stage creation to allow cleaner display on wxMSW
     wxSlider* ctrl = new wxSlider();
@@ -323,8 +323,8 @@ wxSizePropertyClass::wxSizePropertyClass ( const wxString& label, const wxString
 										  const wxSize& value) : wxPGPropertyWithChildren(label,name)
 {
 	wxPG_INIT_REQUIRED_TYPE(wxSize)
-	AddChild( wxIntProperty(wxT("Width"),wxPG_LABEL,value.GetWidth()) );
-	AddChild( wxIntProperty(wxT("Height"),wxPG_LABEL,value.GetHeight()) );
+	AddChild( wxIntProperty(_("Width"),wxPG_LABEL,value.GetWidth()) );
+	AddChild( wxIntProperty(_("Height"),wxPG_LABEL,value.GetHeight()) );
 
 	DoSetValue((void*)&value);
 
@@ -481,21 +481,21 @@ wxBitmapWithResourcePropertyClass::wxBitmapWithResourcePropertyClass ( const wxS
 wxPGPropertyWithChildren(label,name)
 {	
 	// Add the options
-	m_strings.Add(wxT("Load From File"));
-    m_strings.Add(wxT("Load From Embedded File"));
-    m_strings.Add(wxT("Load From Resource"));
-    m_strings.Add(wxT("Load From Icon Resource"));
-    m_strings.Add(wxT("Load From Art Provider"));
+	m_strings.Add(_("Load From File") );
+    m_strings.Add(_("Load From Embedded File") );
+    m_strings.Add(_("Load From Resource") );
+    m_strings.Add(_("Load From Icon Resource") );
+    m_strings.Add(_("Load From Art Provider") );
 
 	// Parse default value, ( sets m_image and m_source based on 'value' )
 	DoSetValue( (void*)&value );
 
 	// Add the appropriate child
-	if ( (m_source == wxT("Load From File")) || (m_source == wxT("Load From Embedded File")) )
+	if ( (m_source == _("Load From File")) || (m_source == _("Load From Embedded File")) )
 	{
 		wxPGProperty* child = wxImageFileProperty( wxT("file_path"), wxPG_LABEL, m_image );
 		AddChild( child );
-		child->SetHelpString( wxT("Path to the image file.") );
+		child->SetHelpString( _("Path to the image file.") );
 		if ( g_imageFilterIndex >= 0 )
 		{
 			wxVariant filterIndex( g_imageFilterIndex );
@@ -508,7 +508,7 @@ wxPGPropertyWithChildren(label,name)
 			child->SetAttribute( wxPG_FILE_INITIAL_PATH, initialPath );
 		}
 	}
-	else if ( m_source == wxT("Load From Art Provider") )
+	else if ( m_source == _("Load From Art Provider") )
 	{
 		if( m_ids.IsEmpty() )
 		{
@@ -647,7 +647,7 @@ wxPGPropertyWithChildren(label,name)
 		
 		wxPGProperty* child = wxEnumProperty( wxT("id"), wxPG_LABEL, m_ids, m_ids.Index( m_id ) );
 		AddChild( child );
-		child->SetHelpString( wxT("wxArtID unique identifier of the bitmap. IDs with prefix 'gtk-' are available under wxGTK only.") );
+		child->SetHelpString( _("wxArtID unique identifier of the bitmap. IDs with prefix 'gtk-' are available under wxGTK only.") );
 		
 		if( m_clients.IsEmpty() )
 		{
@@ -663,34 +663,34 @@ wxPGPropertyWithChildren(label,name)
 		
 		child = wxEnumProperty( wxT("client"), wxPG_LABEL, m_clients, m_clients.Index( m_client ) );
 		AddChild( child );
-		child->SetHelpString( wxT("wxArtClient identifier of the client (i.e. who is asking for the bitmap).") );
+		child->SetHelpString( _("wxArtClient identifier of the client (i.e. who is asking for the bitmap).") );
 	}
 	else
 	{
 		wxPGProperty* child = wxStringProperty( wxT("resource_name"), wxPG_LABEL, m_image );
 		AddChild( child );
-		child->SetHelpString( wxT("Windows Only. Name of the resource in the .rc file.") );
+		child->SetHelpString( _("Windows Only. Name of the resource in the .rc file.") );
 	}
 
 	wxPGProperty* child2 = wxEnumProperty(wxT("source"), wxPG_LABEL, m_strings, m_strings.Index( m_source ) );
 	AddChild( child2 );
-	child2->SetHelpString( 	wxT("Load From File:\n")
-							wxT("Load the image from a file on disk.\n\n")
-							wxT("Load From Embedded File:\n")
-							wxT("C++ Only. Embed the image file in the exe and load it.\nFor other languages, behaves like \"Load From File\".\n\n")
-							wxT("Load From Resource:\n")
-							wxT("Windows Only. Load the image from a BITMAP resource in a .rc file\n\n")
-							wxT("Load From Icon Resource:\n")
-							wxT("Windows Only. Load the image from a ICON resource in a .rc file\n\n")
-							wxT("Load From Art Provider:\n")
-							wxT("Query registered providers for bitmap with given ID.\n\n")
+	child2->SetHelpString( 	wxString(_("Load From File:\n") ) +
+							wxString(_("Load the image from a file on disk.\n\n") ) +
+							wxString(_("Load From Embedded File:\n") ) +
+							wxString(_("C++ Only. Embed the image file in the exe and load it.\nFor other languages, behaves like \"Load From File\".\n\n") ) +
+							wxString(_("Load From Resource:\n") ) +
+							wxString(_("Windows Only. Load the image from a BITMAP resource in a .rc file\n\n") ) +
+							wxString(_("Load From Icon Resource:\n") ) +
+							wxString(_("Windows Only. Load the image from a ICON resource in a .rc file\n\n") ) +
+							wxString(_("Load From Art Provider:\n") ) +
+							wxString(_("Query registered providers for bitmap with given ID.\n\n") )
 						);
 
-    if ( m_source == wxT("Load From Icon Resource") )
+    if ( m_source == _("Load From Icon Resource") )
     {
         wxPGProperty* child3 = wxSizeProperty(wxT("ico_size"), wxPG_LABEL, wxDefaultSize);
         AddChild( child3 );
-        child3->SetHelpString( wxT("The size of the icon to use from a ICON resource with multiple icons in it.") );
+        child3->SetHelpString( _("The size of the icon to use from a ICON resource with multiple icons in it.") );
     }
 
 	RefreshChildren();
@@ -710,9 +710,9 @@ void wxBitmapWithResourcePropertyClass::DoSetValue ( wxPGVariant value )
 
 	if ( wxNOT_FOUND == m_strings.Index( m_source.c_str() ) )
     {
-        m_source = wxT("Load From File");
+        m_source = _("Load From File");
     }
-	else if( m_source == wxT("Load From Art Provider") )
+	else if( m_source == _("Load From Art Provider") )
 	{
 		m_id = m_image.BeforeFirst( wxT(':') );
 		m_client = m_image.AfterFirst( wxT(':') );
@@ -736,7 +736,7 @@ void wxBitmapWithResourcePropertyClass::RefreshChildren()
 		return;
 	}
 	
-	if( m_source != wxT("Load From Art Provider") )
+	if( m_source != _("Load From Art Provider") )
 	{
 		if ( 3 == count )
 		{
@@ -796,27 +796,41 @@ ObjectInspector::ObjectInspector( wxWindow* parent, int id, int style )
 	m_currentSel = PObjectBase();
 
 	long nbStyle;
+
 	wxConfigBase* config = wxConfigBase::Get();
+#ifdef WXFB_USE_AUI
+    config->Read( wxT("/mainframe/objectInspector/auinbook_style"), &nbStyle, wxAUI_NB_WINDOWLIST_BUTTON | wxAUI_NB_SCROLL_BUTTONS );
+
+    m_nb = new wxAuiNotebook( this, -1, wxDefaultPosition, wxDefaultSize, nbStyle );
+#else
 	config->Read( wxT("/mainframe/objectInspector/notebook_style"), &nbStyle, wxFNB_NO_X_BUTTON | wxFNB_NO_NAV_BUTTONS | wxFNB_NODRAG | wxFNB_DROPDOWN_TABS_LIST | wxFNB_FF2 | wxFNB_CUSTOM_DLG );
 
 	m_nb = new wxFlatNotebook( this, -1, wxDefaultPosition, wxDefaultSize, FNB_STYLE_OVERRIDES( nbStyle ) );
 	m_nb->SetCustomizeOptions( wxFNB_CUSTOM_TAB_LOOK | wxFNB_CUSTOM_ORIENTATION | wxFNB_CUSTOM_LOCAL_DRAG );
 
+	m_icons.Add( AppBitmaps::GetBitmap( wxT("properties"), 16 ) );
+	m_icons.Add( AppBitmaps::GetBitmap( wxT("events"), 16 ) );
+	m_nb->SetImageList( &m_icons );
+#endif
 	// the colour of property grid description looks ugly if we don't set this
 	// colour
 	m_nb->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 
 	// Register the slider editor
-	#if wxUSE_SLIDER
+#if wxUSE_SLIDER
 	wxPGRegisterEditorClass( Slider );
-	#endif
+#endif
 
 	m_pg = CreatePropertyGridManager(m_nb, WXFB_PROPERTY_GRID);
 	m_eg = CreatePropertyGridManager(m_nb, WXFB_EVENT_GRID);
 
-	m_nb->AddPage(m_pg,wxT("Properties"),false);
-	m_nb->AddPage(m_eg,wxT("Events"),false);
-
+#ifdef WXFB_USE_AUI
+	m_nb->AddPage( m_pg, _("Properties"), false, AppBitmaps::GetBitmap( wxT("properties"), 16 ) );
+	m_nb->AddPage( m_eg, _("Events"),     false, AppBitmaps::GetBitmap( wxT("events"), 16 ) );
+#else
+	m_nb->AddPage( m_pg, _("Properties"), false, 0 );
+	m_nb->AddPage( m_eg, _("Events"),     false, 1 );
+#endif
 	wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
 	topSizer->Add( m_nb, 1, wxALL | wxEXPAND, 0 );
 	SetSizer( topSizer );
@@ -832,7 +846,11 @@ void ObjectInspector::SavePosition()
 	// Save Layout
 	wxConfigBase* config = wxConfigBase::Get();
 	config->Write( wxT("/mainframe/objectInspector/DescBoxHeight" ), m_pg->GetDescBoxHeight() );
+#ifdef WXFB_USE_AUI
+    config->Write( wxT("/mainframe/objectInspector/auinbook_style"), m_nb->GetWindowStyleFlag() );
+#else
 	config->Write( wxT("/mainframe/objectInspector/notebook_style"), m_nb->GetWindowStyleFlag() );
+#endif
 }
 
 void ObjectInspector::Create( bool force )
@@ -884,7 +902,7 @@ void ObjectInspector::Create( bool force )
 			// We create the categories with the properties of the object organized by "classes"
 			CreateCategory( obj_desc->GetClassName(), sel_obj, obj_desc, propMap, false );
 			CreateCategory( obj_desc->GetClassName(), sel_obj, obj_desc, eventMap, true );
-			
+
 			for (unsigned int i=0; i<obj_desc->GetBaseClassCount() ; i++)
 			{
 				PObjectInfo info_base = obj_desc->GetBaseClass(i);
@@ -1016,7 +1034,8 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
 				std::map< wxString, wxString >::const_iterator option = options.find( prop->GetLabel() );
 				if ( option != options.end() )
 				{
-					m_pg->SetPropertyHelpString( prop, option->second );
+					wxString localized = wxGetTranslation( option->second );
+					m_pg->SetPropertyHelpString( prop, localized );
 				}
 			}
 		}
@@ -1060,7 +1079,8 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
 		{
 			desc += wxT("\n\n") + value + wxT(":\n") + help;
 		}
-		result->SetHelpString( desc );
+		wxString localized = wxGetTranslation( desc );
+		result->SetHelpString( localized );
 
 	}
 	else if (type == PT_WXPOINT)
@@ -1136,7 +1156,8 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
 		{
 			wxPGProperty* child = wxStringProperty( it->m_name, wxPG_LABEL, wxEmptyString );
 			parent->AddChild( child );
-			m_pg->SetPropertyHelpString( child, it->m_description );
+			wxString localized = wxGetTranslation( it->m_description );
+			m_pg->SetPropertyHelpString( child, localized );
 		}
 
 		parent->SetValueFromString( prop->GetValueAsString(), wxPG_FULL_VALUE );
@@ -1147,7 +1168,7 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
 	{
 		result = wxStringProperty(name, wxPG_LABEL, prop->GetValueAsString());
 		result->SetAttribute(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING, vTrue);
-		wxLogError(wxT("Property type Unknown"));
+		wxLogError(_("Property type Unknown"));
 	}
 
 	return result;
@@ -1173,7 +1194,8 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
 			wxPGId id = m_pg->Append( GetProperty( prop ) );
 			if ( prop->GetType() != PT_OPTION )
 			{
-				m_pg->SetPropertyHelpString( id, propInfo->GetDescription() );
+				wxString localized = wxGetTranslation( propInfo->GetDescription() );
+				m_pg->SetPropertyHelpString( id, localized );
 			}
 			wxString customEditor = propInfo->GetCustomEditor();
 			if ( !customEditor.empty() )
@@ -1257,7 +1279,8 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
 		{
 			wxPGProperty *pgProp = wxStringProperty( eventInfo->GetName(), wxPG_LABEL, event->GetValue() );
 			wxPGId id = m_eg->Append( pgProp );
-			m_eg->SetPropertyHelpString( id, eventInfo->GetDescription() );
+			wxString localized = eventInfo->GetDescription();
+			m_eg->SetPropertyHelpString( id, localized );
 
 			if (m_style != wxFB_OI_MULTIPAGE_STYLE)
 			{
@@ -1346,8 +1369,9 @@ void ObjectInspector::OnPropertyGridChange( wxPropertyGridEvent& event )
 						}
 					}
 				}
-				m_pg->SetPropertyHelpString( propPtr, helpString );
-				m_pg->SetDescription( propPtr->GetLabel(), helpString );
+				wxString localized = wxGetTranslation( helpString );
+				m_pg->SetPropertyHelpString( propPtr, localized );
+				m_pg->SetDescription( propPtr->GetLabel(), localized );
 				break;
 			}
 			case PT_PARENT:
@@ -1370,7 +1394,7 @@ void ObjectInspector::OnPropertyGridChange( wxPropertyGridEvent& event )
 					PObjectBase propobj = prop->GetObject();
 					if( propobj->GetChildCount() )
 					{
-						wxMessageBox(wxT("You have to remove all child widgets first."));
+						wxMessageBox(_("You have to remove all child widgets first."));
 						
 						// modified property must be reverted to its original form later.
 						wxCommandEvent e( RECREATE_GRID_EVENT );
@@ -1768,4 +1792,3 @@ void ObjectInspector::AutoGenerateId(PObjectBase objectChanged, PProperty propCh
 	}
 	m_pg->Update();
 }
-

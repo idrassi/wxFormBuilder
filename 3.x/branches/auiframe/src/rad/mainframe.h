@@ -27,11 +27,16 @@
 #define __MAIN_FRAME__
 
 #include "wx/wx.h"
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
-//#include "wx/aui/aui.h"
-#include "wx/splitter.h"
-#include <wx/fdrepdlg.h>
+#ifdef WXFB_USE_AUI
+    #include <wx/aui/aui.h>
+    #include <wx/spinctrl.h>
+    #include <wx/artprov.h>
+#else
+    #include <wx/wxFlatNotebook/wxFlatNotebook.h>
+    #include <wx/splitter.h>
+#endif
 
+#include <wx/fdrepdlg.h>
 
 class wxFBEvent;
 class wxFBObjectEvent;
@@ -52,18 +57,24 @@ class VisualEditor;
 enum {
   wxFB_DEFAULT_GUI,
   wxFB_DOCKABLE_GUI,
-	wxFB_CLASSIC_GUI,
-	wxFB_WIDE_GUI
+  wxFB_CLASSIC_GUI,
+  wxFB_WIDE_GUI
 };
 
 class MainFrame : public wxFrame
 {
- private:
-  #ifdef __WXFB_DEBUG__
+private:
+#ifdef __WXFB_DEBUG__
   wxLog * m_old_log;
   wxLogWindow * m_log;
-  #endif //__WXFB_DEBUG__
+#endif //__WXFB_DEBUG__
 
+#ifdef WXFB_USE_AUI
+  wxAuiNotebook *m_notebook;
+  wxAuiToolBar *m_toolbar;
+  wxImageList *m_icons;
+  wxAuiManager m_mgr;
+#else
   wxSplitterWindow *m_leftSplitter;
   wxSplitterWindow *m_rightSplitter;
   int m_leftSplitterWidth;
@@ -72,6 +83,7 @@ class MainFrame : public wxFrame
   //wxFrameManager m_mgr;
   wxFlatNotebook *m_notebook;
   wxFlatNotebookImageList m_icons;
+#endif
   wxFbPalette *m_palette;
   ObjectTree *m_objTree;
   ObjectInspector *m_objInsp;
@@ -83,13 +95,13 @@ class MainFrame : public wxFrame
 
   // Save which page is selected
   int m_page_selection;
-
+#ifndef WXFB_USE_AUI
   // Save right splitter's sash position
   int m_rightSplitter_sash_pos;
 
   // Automatically update sash in splitter window base on user action
   bool m_autoSash;
-
+#endif
   wxString m_currentDir;
   wxString m_recentProjects[4];
 
@@ -99,10 +111,12 @@ class MainFrame : public wxFrame
   void UpdateRecentProjects();
   void OnOpenRecent(wxCommandEvent &event);
   void UpdateLayoutTools();
-
+#ifdef WXFB_USE_AUI
+  //wxPoint GetStartPosition();
+#else
   // Used to correctly restore splitter position
   void OnIdle( wxIdleEvent& );
-
+#endif
   wxFindReplaceData m_findData;
   wxFindReplaceDialog* m_findDialog;
 
@@ -110,7 +124,7 @@ class MainFrame : public wxFrame
   wxEvtHandler* m_focusKillEvtHandler;
 
   DECLARE_EVENT_TABLE()
- public:
+public:
   MainFrame(wxWindow *parent, int id = -1, int style = wxFB_DEFAULT_GUI, wxPoint pos = wxDefaultPosition, wxSize size = wxSize( 1000, 800 ) );
   ~MainFrame();
   void RestorePosition(const wxString &name);
@@ -143,9 +157,14 @@ class MainFrame : public wxFrame
   void OnChangeBorder(wxCommandEvent& e);
   void OnXrcPreview(wxCommandEvent& e);
   void OnGenInhertedClass(wxCommandEvent& e);
-
+#ifdef WXFB_USE_AUI
+  //void OnAuiSettings (wxCommandEvent &event);
+  void OnAuiNotebookPageChanged( wxAuiNotebookEvent& event );
+  wxAuiDockArt* GetDockArt();
+  void DoUpdate();
+#else
   void OnFlatNotebookPageChanged( wxFlatNotebookEvent& event );
-
+#endif
   void OnProjectLoaded( wxFBEvent& event );
   void OnProjectSaved( wxFBEvent& event );
   void OnObjectExpanded( wxFBObjectEvent& event );
@@ -156,8 +175,10 @@ class MainFrame : public wxFrame
   void OnEventHandlerModified( wxFBEventHandlerEvent& event );
   void OnCodeGeneration( wxFBEvent& event );
   void OnProjectRefresh( wxFBEvent& event );
-
+#ifndef WXFB_USE_AUI
   void OnSplitterChanged( wxSplitterEvent &event );
+#endif
+  void OnPreferences( wxCommandEvent &event );
 
   void InsertRecentProject(const wxString &file);
 
@@ -166,17 +187,20 @@ class MainFrame : public wxFrame
   wxWindow  *CreateObjectTree       (wxWindow *parent);
   wxWindow  *CreateObjectInspector  (wxWindow *parent);
   wxMenuBar *CreateFBMenuBar();
+#ifdef WXFB_USE_AUI
+  wxAuiToolBar *GetToolBar() { return m_toolbar; }
+  wxAuiToolBar *RecreateFBAuiToolBar();
+#else
   wxToolBar *CreateFBToolBar();
 
   void CreateWideGui();
   void CreateClassicGui();
-
+#endif
   void OnFindDialog( wxCommandEvent& event );
   void OnFind( wxFindDialogEvent& event );
   void OnFindClose( wxFindDialogEvent& event );
 
   bool SaveWarning();
-  };
-
+};
 
 #endif //__MAIN_FRAME__

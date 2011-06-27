@@ -27,30 +27,57 @@
 #define __PALETTE__
 
 #include <wx/wx.h>
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
-#include <wx/spinbutt.h>
+#ifdef WXFB_USE_AUI
+    #include <wx/aui/auibar.h>
+    #include <wx/aui/auibook.h>
+#else
+    #include <wx/wxFlatNotebook/wxFlatNotebook.h>
+    #include <wx/spinbutt.h>
+#endif
 #include <vector>
 #include <utils/wxfbdefs.h>
 #include <model/database.h>
 
+#ifdef WXFB_USE_AUI
+typedef std::vector<wxAuiToolBar*> ToolbarVector;
+#else
 typedef std::vector<wxToolBar*> ToolbarVector;
+#endif
 
-class wxFbPalette : public wxPanel
+class wxFbPalette : public
+#ifdef WXFB_USE_AUI
+  wxAuiNotebook
+#else
+  wxPanel
+#endif
 {
- private:
-  ToolbarVector m_tv;
+private:
+
+#ifndef WXFB_USE_AUI
   wxFlatNotebook *m_notebook;
-  static wxWindowID nextId;
-  std::vector<int> m_posVector;
   wxFlatNotebookImageList m_icons;
+#endif
 
+  ToolbarVector m_tv;
+  static wxWindowID nextId;
 
-  void PopulateToolbar(PObjectPackage pkg, wxToolBar *toolbar);
+#ifdef WXFB_USE_AUI
+  void PopulateToolbar( PObjectPackage pkg, wxAuiToolBar *toolbar );
+  void arrangeTabOrder( std::vector< wxWindow* > &pages ); // TODO: set the wx version when it will be fixed
+#else
+  std::vector<int> m_posVector;
+  void PopulateToolbar( PObjectPackage pkg, wxToolBar *toolbar );
+#endif
 
   DECLARE_EVENT_TABLE()
 
- public:
+public:
+#ifdef WXFB_USE_AUI
+  wxFbPalette( wxWindow *parent, int id = wxID_ANY,
+               long style = wxAUI_NB_TAB_MOVE | wxAUI_NB_WINDOWLIST_BUTTON );
+#else
   wxFbPalette(wxWindow *parent,int id);
+#endif
   ~wxFbPalette();
 
   /**
@@ -58,8 +85,10 @@ class wxFbPalette : public wxPanel
    * DataObservable.
    */
   void Create();
+#ifndef WXFB_USE_AUI
   void OnSpinUp(wxSpinEvent& e);
   void OnSpinDown(wxSpinEvent& e);
+#endif
   void OnButtonClick(wxCommandEvent &event);
 };
 /*

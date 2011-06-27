@@ -67,7 +67,7 @@ PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 	{
 		if ( className == "wxBitmap" )
 		{
-			PProperty bitmapsProp = parent->GetProperty( _( "bitmaps" ) );
+			PProperty bitmapsProp = parent->GetProperty( wxT( "bitmaps" ) );
 			if ( bitmapsProp )
 			{
 				wxString value = bitmapsProp->GetValue();
@@ -80,7 +80,7 @@ PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 		}
 		if ( className == "wxIcon" )
 		{
-			PProperty iconsProp = parent->GetProperty( _( "icons" ) );
+			PProperty iconsProp = parent->GetProperty( wxT( "icons" ) );
 			if ( iconsProp )
 			{
 				wxString value = iconsProp->GetValue();

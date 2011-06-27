@@ -26,6 +26,7 @@
 #include "window_buttons.h"
 #include <wx/dcbuffer.h>
 #include <wx/settings.h>
+#include <wx/config.h>
 
 DEFINE_EVENT_TYPE( wxEVT_INNER_FRAME_RESIZED )
 

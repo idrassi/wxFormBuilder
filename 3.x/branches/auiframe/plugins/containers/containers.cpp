@@ -82,13 +82,13 @@ protected:
 			IObject*  iChild = m_manager->GetIObject( wxChild );
 			if ( iChild )
 			{
-				if ( (int)i == selPage && !iChild->GetPropertyAsInteger( _("select") ) )
+				if ( (int)i == selPage && !iChild->GetPropertyAsInteger( wxT("select") ) )
 				{
-					m_manager->ModifyProperty( wxChild, _("select"), wxT("1"), false );
+					m_manager->ModifyProperty( wxChild, wxT("select"), wxT("1"), false );
 				}
-				else if ( (int)i != selPage && iChild->GetPropertyAsInteger( _("select") ) )
+				else if ( (int)i != selPage && iChild->GetPropertyAsInteger( wxT("select") ) )
 				{
-					m_manager->ModifyProperty( wxChild, _("select"), wxT("0"), false );
+					m_manager->ModifyProperty( wxChild, wxT("select"), wxT("0"), false );
 				}
 			}
 		}
@@ -103,15 +103,15 @@ protected:
 
 	void OnAuiNotebookPageClosed( wxAuiNotebookEvent& event )
 	{
-		wxMessageBox( wxT("wxAuiNotebook pages can normally be closed.\nHowever, it is difficult to design a page that has been closed, so this action has been vetoed."),
-						wxT("Page Close Vetoed!"), wxICON_INFORMATION, NULL );
+		wxMessageBox( _("wxAuiNotebook pages can normally be closed.\nHowever, it is difficult to design a page that has been closed, so this action has been vetoed."),
+						_("Page Close Vetoed!"), wxICON_INFORMATION, NULL );
 		event.Veto();
 	}
 
 	void OnAuiNotebookAllowDND( wxAuiNotebookEvent& event )
 	{
-		wxMessageBox( wxT("wxAuiNotebook pages can be dragged to other wxAuiNotebooks if the wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND event is caught and allowed.\nHowever, it is difficult to design a page that has been moved, so this action was not allowed."),
-						wxT("Page Move Not Allowed!"), wxICON_INFORMATION, NULL );
+		wxMessageBox( _("wxAuiNotebook pages can be dragged to other wxAuiNotebooks if the wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND event is caught and allowed.\nHowever, it is difficult to design a page that has been moved, so this action was not allowed."),
+						_("Page Move Not Allowed!"), wxICON_INFORMATION, NULL );
 		event.Veto();
 	}
 
@@ -171,8 +171,8 @@ private:
 	{
 		if ( 0 == m_customMinPaneSize )
 		{
-			wxMessageBox( wxT("Double-clicking a wxSplitterWindow sash with the minimum pane size set to 0 would normally unsplit it.\nHowever, it is difficult to design a pane that has been closed, so this action has been vetoed."),
-					wxT("Unsplit Vetoed!"), wxICON_INFORMATION, NULL );
+			wxMessageBox( _("Double-clicking a wxSplitterWindow sash with the minimum pane size set to 0 would normally unsplit it.\nHowever, it is difficult to design a pane that has been closed, so this action has been vetoed."),
+					_("Unsplit Vetoed!"), wxICON_INFORMATION, NULL );
 		}
 	}
 
@@ -211,22 +211,22 @@ public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		wxPanel* panel = new wxPanel((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 		return panel;
 	}
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxPanel"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxPanel"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxPanel"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxPanel"));
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -239,26 +239,26 @@ class SplitterWindowComponent : public ComponentBase
 	{
 		wxCustomSplitterWindow *splitter =
 			new wxCustomSplitterWindow((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			(obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style"))) & ~wxSP_PERMIT_UNSPLIT );
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			(obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style"))) & ~wxSP_PERMIT_UNSPLIT );
 
-		if ( !obj->IsNull( _("sashgravity") ) )
+		if ( !obj->IsNull( wxT("sashgravity") ) )
 		{
-			float gravity = obj->GetPropertyAsFloat( _("sashgravity") );
+			float gravity = obj->GetPropertyAsFloat( wxT("sashgravity") );
 			gravity = ( gravity < 0.0 ? 0.0 : gravity );
 			gravity = ( gravity > 1.0 ? 1.0 : gravity );
 			splitter->SetSashGravity( gravity );
 		}
 
-		if ( !obj->IsNull( _("sashsize") ) )
+		if ( !obj->IsNull( wxT("sashsize") ) )
 		{
-			splitter->SetSashSize( obj->GetPropertyAsInteger( _("sashsize") ) );
+			splitter->SetSashSize( obj->GetPropertyAsInteger( wxT("sashsize") ) );
 		}
 
-		if ( !obj->IsNull( _("min_pane_size") ) )
+		if ( !obj->IsNull( wxT("min_pane_size") ) )
 		{
-			int minPaneSize = obj->GetPropertyAsInteger( _("min_pane_size") );
+			int minPaneSize = obj->GetPropertyAsInteger( wxT("min_pane_size") );
 			splitter->m_customMinPaneSize = minPaneSize;
 			minPaneSize = ( minPaneSize < 1 ? 1 : minPaneSize );
 			splitter->SetMinimumPaneSize( minPaneSize );
@@ -268,7 +268,7 @@ class SplitterWindowComponent : public ComponentBase
 		splitter->Initialize( new wxPanel( splitter ) );
 
 		// Used to ensure sash position is correct
-		splitter->m_initialSashPos = obj->GetPropertyAsInteger( _("sashpos") );
+		splitter->m_initialSashPos = obj->GetPropertyAsInteger( wxT("sashpos") );
 		splitter->Connect( wxEVT_IDLE, wxIdleEventHandler( wxCustomSplitterWindow::OnIdle ) );
 
 		return splitter;
@@ -276,26 +276,26 @@ class SplitterWindowComponent : public ComponentBase
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxSplitterWindow"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxSplitterWindow"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
-		xrc.AddProperty(_("sashpos"),_("sashpos"),XRC_TYPE_INTEGER);
-		xrc.AddProperty(_("sashgravity"),_("gravity"),XRC_TYPE_FLOAT);
-		xrc.AddProperty(_("min_pane_size"),_("minsize"),XRC_TYPE_INTEGER);
-		if (obj->GetPropertyAsString(_("splitmode")) == wxT("wxSPLIT_VERTICAL"))
-			xrc.AddPropertyValue(_("orientation"),wxT("vertical"));
+		xrc.AddProperty(wxT("sashpos"),wxT("sashpos"),XRC_TYPE_INTEGER);
+		xrc.AddProperty(wxT("sashgravity"),wxT("gravity"),XRC_TYPE_FLOAT);
+		xrc.AddProperty(wxT("min_pane_size"),wxT("minsize"),XRC_TYPE_INTEGER);
+		if (obj->GetPropertyAsString(wxT("splitmode")) == wxT("wxSPLIT_VERTICAL"))
+			xrc.AddPropertyValue(wxT("orientation"),wxT("vertical"));
 		else
-			xrc.AddPropertyValue(_("orientation"),wxT("horizontal"));
+			xrc.AddPropertyValue(wxT("orientation"),wxT("horizontal"));
 
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxSplitterWindow"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxSplitterWindow"));
 		filter.AddWindowProperties();
-		filter.AddProperty(_("sashpos"),_("sashpos"),XRC_TYPE_INTEGER);
-		filter.AddProperty(_("gravity"),_("sashgravity"),XRC_TYPE_FLOAT);
-		filter.AddProperty(_("minsize"),_("min_pane_size"),XRC_TYPE_INTEGER);
+		filter.AddProperty(wxT("sashpos"),wxT("sashpos"),XRC_TYPE_INTEGER);
+		filter.AddProperty(wxT("gravity"),wxT("sashgravity"),XRC_TYPE_FLOAT);
+		filter.AddProperty(wxT("minsize"),wxT("min_pane_size"),XRC_TYPE_INTEGER);
 		try
 		{
 			ticpp::Element *splitmode = xrcObj->FirstChildElement("orientation");
@@ -375,8 +375,8 @@ class SplitterWindowComponent : public ComponentBase
 					return;
 				}
 
-				int sashPos = obj->GetPropertyAsInteger(_("sashpos"));
-				int splitmode = obj->GetPropertyAsInteger(_("splitmode"));
+				int sashPos = obj->GetPropertyAsInteger(wxT("sashpos"));
+				int splitmode = obj->GetPropertyAsInteger(wxT("splitmode"));
 
 				if ( firstChild )
 				{
@@ -409,7 +409,7 @@ void ComponentEvtHandler::OnSplitterSashChanged( wxSplitterEvent& )
 	{
 		if ( window->m_customSashPos != 0 )
 		{
-			m_manager->ModifyProperty( window, _("sashpos"), wxString::Format( wxT("%i"), window->GetSashPosition() ) );
+			m_manager->ModifyProperty( window, wxT("sashpos"), wxString::Format( wxT("%i"), window->GetSashPosition() ) );
 		}
 	}
 }
@@ -419,7 +419,7 @@ class SplitterItemComponent : public ComponentBase
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		// A __dummyitem__ will be ignored...
-		ObjectToXrcFilter xrc(obj, _("__dummyitem__"),wxT(""));
+		ObjectToXrcFilter xrc(obj, wxT("__dummyitem__"),wxT(""));
 		return xrc.GetXrcObject();
 	}
 };
@@ -431,26 +431,26 @@ public:
     wxObject* Create(IObject *obj, wxObject *parent)
     {
         wxScrolledWindow *sw = new wxScrolledWindow((wxWindow *)parent, -1,
-            obj->GetPropertyAsPoint(_("pos")),
-            obj->GetPropertyAsSize(_("size")),
-            obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+            obj->GetPropertyAsPoint(wxT("pos")),
+            obj->GetPropertyAsSize(wxT("size")),
+            obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 
         sw->SetScrollRate(
-            obj->GetPropertyAsInteger(_("scroll_rate_x")),
-            obj->GetPropertyAsInteger(_("scroll_rate_y")));
+            obj->GetPropertyAsInteger(wxT("scroll_rate_x")),
+            obj->GetPropertyAsInteger(wxT("scroll_rate_y")));
         return sw;
     }
 
     ticpp::Element* ExportToXrc(IObject *obj)
     {
-        ObjectToXrcFilter xrc(obj, _("wxScrolledWindow"), obj->GetPropertyAsString(_("name")));
+        ObjectToXrcFilter xrc(obj, wxT("wxScrolledWindow"), obj->GetPropertyAsString(wxT("name")));
         xrc.AddWindowProperties();
         return xrc.GetXrcObject();
     }
 
     ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
     {
-        XrcToXfbFilter filter(xrcObj, _("wxScrolledWindow"));
+        XrcToXfbFilter filter(xrcObj, wxT("wxScrolledWindow"));
         filter.AddWindowProperties();
         return filter.GetXfbObject();
     }
@@ -463,9 +463,9 @@ public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		wxNotebook* book = new wxCustomNotebook((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 
 		BookUtils::AddImageList( obj, book );
 
@@ -476,14 +476,14 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxNotebook"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxNotebook"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxNotebook"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxNotebook"));
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -500,7 +500,7 @@ class NotebookPageComponent : public ComponentBase
 public:
 	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
 	{
-		BookUtils::OnCreated< wxNotebook >( wxobject, wxparent, GetManager(), _("NotebookPageComponent") );
+		BookUtils::OnCreated< wxNotebook >( wxobject, wxparent, GetManager(), wxT("NotebookPageComponent") );
 	}
 
 	void OnSelected( wxObject* wxobject )
@@ -510,18 +510,18 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-    ObjectToXrcFilter xrc(obj, _("notebookpage"));
-		xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
-		xrc.AddProperty(_("select"),_("selected"),XRC_TYPE_BOOL);
+    ObjectToXrcFilter xrc(obj, wxT("notebookpage"));
+		xrc.AddProperty(wxT("label"),wxT("label"),XRC_TYPE_TEXT);
+		xrc.AddProperty(wxT("select"),wxT("selected"),XRC_TYPE_BOOL);
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-    XrcToXfbFilter filter(xrcObj, _("notebookpage"));
+    XrcToXfbFilter filter(xrcObj, wxT("notebookpage"));
 		filter.AddWindowProperties();
-		filter.AddProperty(_("selected"),_("select"),XRC_TYPE_BOOL);
-		filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+		filter.AddProperty(wxT("selected"),wxT("select"),XRC_TYPE_BOOL);
+		filter.AddProperty(wxT("label"),wxT("label"),XRC_TYPE_TEXT);
 		return filter.GetXfbObject();
 	}
 };
@@ -532,9 +532,9 @@ public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		wxListbook* book = new wxListbook((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 
 		BookUtils::AddImageList( obj, book );
 
@@ -552,7 +552,7 @@ public:
 		{
 			// Small icon style if bitmapsize is not set
 			IObject* obj = GetManager()->GetIObject( wxobject );
-			if ( obj->GetPropertyAsString( _("bitmapsize") ).empty() )
+			if ( obj->GetPropertyAsString( wxT("bitmapsize") ).empty() )
 			{
 				wxListView* tmpListView = book->GetListView();
 				long flags = tmpListView->GetWindowStyleFlag();
@@ -565,14 +565,14 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxListbook"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxListbook"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxListbook"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxListbook"));
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -589,7 +589,7 @@ class ListbookPageComponent : public ComponentBase
 public:
 	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
 	{
-		BookUtils::OnCreated< wxListbook >( wxobject, wxparent, GetManager(), _("ListbookPageComponent") );
+		BookUtils::OnCreated< wxListbook >( wxobject, wxparent, GetManager(), wxT("ListbookPageComponent") );
 	}
 
 	void OnSelected( wxObject* wxobject )
@@ -599,18 +599,18 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("listbookpage"));
-		xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
-		xrc.AddProperty(_("select"),_("selected"),XRC_TYPE_BOOL);
+		ObjectToXrcFilter xrc(obj, wxT("listbookpage"));
+		xrc.AddProperty(wxT("label"),wxT("label"),XRC_TYPE_TEXT);
+		xrc.AddProperty(wxT("select"),wxT("selected"),XRC_TYPE_BOOL);
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("listbookpage"));
+		XrcToXfbFilter filter(xrcObj, wxT("listbookpage"));
 		filter.AddWindowProperties();
-		filter.AddProperty(_("selected"),_("select"),XRC_TYPE_BOOL);
-		filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+		filter.AddProperty(wxT("selected"),wxT("select"),XRC_TYPE_BOOL);
+		filter.AddProperty(wxT("label"),wxT("label"),XRC_TYPE_TEXT);
 		return filter.GetXfbObject();
 	}
 };
@@ -621,9 +621,9 @@ public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		wxChoicebook* book = new wxChoicebook((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 
 		book->PushEventHandler( new ComponentEvtHandler( book, GetManager() ) );
 
@@ -632,14 +632,14 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxChoicebook"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxChoicebook"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxChoicebook"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxChoicebook"));
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -656,7 +656,7 @@ class ChoicebookPageComponent : public ComponentBase
 public:
 	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
 	{
-		BookUtils::OnCreated< wxChoicebook >( wxobject, wxparent, GetManager(), _("ChoicebookPageComponent") );
+		BookUtils::OnCreated< wxChoicebook >( wxobject, wxparent, GetManager(), wxT("ChoicebookPageComponent") );
 	}
 
 	void OnSelected( wxObject* wxobject )
@@ -666,18 +666,18 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("choicebookpage"));
-		xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
-		xrc.AddProperty(_("select"),_("selected"),XRC_TYPE_BOOL);
+		ObjectToXrcFilter xrc(obj, wxT("choicebookpage"));
+		xrc.AddProperty(wxT("label"),wxT("label"),XRC_TYPE_TEXT);
+		xrc.AddProperty(wxT("select"),wxT("selected"),XRC_TYPE_BOOL);
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("choicebookpage"));
+		XrcToXfbFilter filter(xrcObj, wxT("choicebookpage"));
 		filter.AddWindowProperties();
-		filter.AddProperty(_("selected"),_("select"),XRC_TYPE_BOOL);
-		filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+		filter.AddProperty(wxT("selected"),wxT("select"),XRC_TYPE_BOOL);
+		filter.AddProperty(wxT("label"),wxT("label"),XRC_TYPE_TEXT);
 		return filter.GetXfbObject();
 	}
 };
@@ -688,12 +688,12 @@ public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		wxAuiNotebook* book = new wxAuiNotebook((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 
-		book->SetTabCtrlHeight( obj->GetPropertyAsInteger( _("tab_ctrl_height") ) );
-		book->SetUniformBitmapSize( obj->GetPropertyAsSize( _("uniform_bitmap_size") ) );
+		book->SetTabCtrlHeight( obj->GetPropertyAsInteger( wxT("tab_ctrl_height") ) );
+		book->SetUniformBitmapSize( obj->GetPropertyAsSize( wxT("uniform_bitmap_size") ) );
 
 		book->PushEventHandler( new ComponentEvtHandler( book, GetManager() ) );
 
@@ -703,14 +703,14 @@ public:
 /*
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxAuiNotebook"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxAuiNotebook"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxAuiNotebook"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxAuiNotebook"));
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -756,10 +756,10 @@ public:
 
 		// Save selection
 		int selection = book->GetSelection();
-		const wxBitmap& bitmap = obj->IsNull( _("bitmap") ) ? wxNullBitmap : obj->GetPropertyAsBitmap( _("bitmap") );
-		book->AddPage( page, obj->GetPropertyAsString( _("label") ), false, bitmap );
+		const wxBitmap& bitmap = obj->IsNull( wxT("bitmap") ) ? wxNullBitmap : obj->GetPropertyAsBitmap( wxT("bitmap") );
+		book->AddPage( page, obj->GetPropertyAsString( wxT("label") ), false, bitmap );
 
-		if ( obj->GetPropertyAsString( _("select") ) == wxT("0") && selection >= 0 )
+		if ( obj->GetPropertyAsString( wxT("select") ) == wxT("0") && selection >= 0 )
 		{
 			book->SetSelection(selection);
 		}
@@ -776,18 +776,18 @@ public:
 /*
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("auinotebookpage"));
-		xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
-		xrc.AddProperty(_("selected"),_("selected"),XRC_TYPE_BOOL);
+		ObjectToXrcFilter xrc(obj, wxT("auinotebookpage"));
+		xrc.AddProperty(wxT("label"),wxT("label"),XRC_TYPE_TEXT);
+		xrc.AddProperty(wxT("selected"),wxT("selected"),XRC_TYPE_BOOL);
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("auinotebookpage"));
+		XrcToXfbFilter filter(xrcObj, wxT("auinotebookpage"));
 		filter.AddWindowProperties();
-		filter.AddProperty(_("selected"),_("selected"),XRC_TYPE_BOOL);
-		filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+		filter.AddProperty(wxT("selected"),wxT("selected"),XRC_TYPE_BOOL);
+		filter.AddProperty(wxT("label"),wxT("label"),XRC_TYPE_TEXT);
 		return filter.GetXfbObject();
 	}
 */

@@ -8,6 +8,10 @@
 + Added support for drop-down menus in wxAuiToolBar - RedTide.
 * Fixed handling of "moveable" AUI property.
 + XRCID() macro can be used as a widget ID.
+^ AUI sperimental GUI version (can be enabled with WXFB_USE_AUI definition) - RedTide.
++ New preference dialog (atm to set locale and some GUI options) - RedTide.
++ Stock icons for menus and main toolbar, some new icon and GUI customization - RedTide.
++ Locale support + partial italian translation by me and partial german one by McBen - RedTide.
 
 03/22/2011 Version 3.02.02 (Beta)
 * Fixed positioning of status bar on AUI-managed frame.

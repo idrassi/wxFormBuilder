@@ -98,7 +98,7 @@ wxString FileToCArray::Generate( const wxString& sourcePath )
 
 	// Determine if Utf8 or Ansi is to be created
 	bool useUtf8 = false;
-	PProperty pUseUtf8 = project->GetProperty( _("encoding") );
+	PProperty pUseUtf8 = project->GetProperty( wxT("encoding") );
 
 	if ( pUseUtf8 )
 	{
