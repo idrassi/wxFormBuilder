@@ -1686,7 +1686,7 @@ wxWindow * MainFrame::CreateDesignerWindow( wxWindow *parent )
 	m_python     = new PythonPanel( m_notebook, wxID_ANY );
 	m_xrc        = new XrcPanel( m_notebook, wxID_ANY );
 
-	m_notebook->AddPage( m_visualEdit, wxT("Designer"), false, AppBitmaps::GetBitmap( wxT("designer"), 16 );
+	m_notebook->AddPage( m_visualEdit, wxT("Designer"), false, AppBitmaps::GetBitmap( wxT("designer"), 16 ) );
 	m_notebook->AddPage( m_cpp,        wxT("C++"),      false, AppBitmaps::GetBitmap( wxT("cpp"),      16 ) );
 	m_notebook->AddPage( m_python,     wxT("Python"),   false, AppBitmaps::GetBitmap( wxT("py"),       16 ) );
 	m_notebook->AddPage( m_xrc,        wxT("XRC"),      false, AppBitmaps::GetBitmap( wxT("xrc"),      16 ) );
