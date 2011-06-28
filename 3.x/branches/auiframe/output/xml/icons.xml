@@ -7,7 +7,7 @@
 
 	<!-- Toolbar Icons -->
 	<icon name="new" 		file="file_new.png"	/>
-	<icon name="open" 		file="new_open.png"	/>
+	<icon name="open" 		file="open.png"		/>
 	<icon name="save" 		file="save.png"		/>
 	<icon name="undo" 		file="undo.png"		/>
 	<icon name="redo" 		file="redo.png"		/>
