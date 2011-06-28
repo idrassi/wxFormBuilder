@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxFormBuilder-3.0\n"
+"Project-Id-Version: wxFormBuilder-3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-27 20:14+0100\n"
+"POT-Creation-Date: 2011-06-28 03:30+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Andrea Zanellato <zanellato.andrea@gmail.com>\n"
 "Language-Team: wxFormBuilder <wxformbuilder@gmail.com>\n"
@@ -14,8 +14,9 @@ msgstr ""
 "X-Poedit-Basepath: ../../../../\n"
 "X-Poedit-Language: Italian\n"
 "X-Poedit-Country: ITALY\n"
-"X-Poedit-KeywordsList: _\n"
+"X-Poedit-KeywordsList: _;help\n"
 "X-Poedit-SearchPath-0: src\n"
+"X-Poedit-SearchPath-1: output/xml\n"
 
 #: src/maingui.cpp:67
 msgid "Generate code from passed file."
@@ -73,12 +74,54 @@ msgstr "Nessun componente trovato per la classe \"%s\", alla linea %i."
 msgid "ImportFromXrc returned NULL for class \"%s\", found on line %i."
 msgstr "ImportFromXrc ritorna NULL per la classe \"%s\", alla linea %i."
 
+#: src/model/xrcfilter.cpp:178
+#, c-format
+msgid "CreateObject failed for class \"%s\", with parent \"%s\", found on line %i"
+msgstr "CreateObject fallito per la classe \"%s\", con padre \"%s\", alla linea %i"
+
+#: src/model/xrcfilter.cpp:209
+#, c-format
+msgid "Unknown class \"%s\" found on line %i, replaced with a wxPanel"
+msgstr "Classe \"%s\" sconosciuta alla linea %i, sostituito con un wxPanel"
+
+#: src/model/xrcfilter.cpp:214
+#, c-format
+msgid "Unknown class \"%s\" found on line %i, and could not replace with a wxPanel as child of \"%s:%s\""
+msgstr "Classe \"%s\" sconosciuta alla linea %i, non puo' essere sostituito con un wxPanel come figlio di \"%s:%s\""
+
 #: src/model/database.cpp:906
 #, c-format
 msgid "Found second template definition for property \"%s\" for language \"%s\""
 msgstr "Trovato secondo modello di definizione per la proprietà \"%s\" per il linguaggio \"%s\""
 
-#: src/model/database.cpp:1465
+#: src/model/database.cpp:1081
+#, c-format
+msgid ""
+"Error: %s\n"
+"While parsing property \"%s\" of class \"%s\""
+msgstr ""
+"Errore: %s\n"
+"Durante l'analisi della proprieta' \"%s\" della classe \"%s\""
+
+#: src/model/database.cpp:1291
+#: src/model/database.cpp:1317
+msgid "Error loading library "
+msgstr "Errore caricamento libreria"
+
+#: src/model/database.cpp:1304
+msgid " is not a valid component library: "
+msgstr " non e' una libreria di componente valida: "
+
+#: src/model/database.cpp:1327
+msgid " is not a valid component library"
+msgstr " non e' una libreria di componente valida"
+
+#: src/model/database.cpp:1378
+#, c-format
+msgid "Unknown property type \"%s\""
+msgstr "Tipo proprieta' sconosciuto \"%s\""
+
+#: src/model/database.cpp:1464
 #, c-format
 msgid "No Object Type found for \"%s\""
 msgstr "Nessun Tipo Oggetto trovato per \"%s\""
@@ -313,10 +356,6 @@ msgstr "<< Compatto"
 msgid "Expand >>"
 msgstr "Espandi"
 
-#: src/controls/src/wxFlatNotebook/wxFlatNotebook.cpp:958
-msgid "Properties..."
-msgstr "Impostazioni..."
-
 #: src/controls/src/wxFlatNotebook/wxFlatNotebook.cpp:1658
 #, c-format
 msgid "Old Page Index = %i"
@@ -326,110 +365,6 @@ msgstr "Indice Precedente = %i"
 #, c-format
 msgid "OnDropTarget: index by HitTest = %i"
 msgstr "OnDropTarget: index by HitTest = %i"
-
-#: src/controls/src/wxFlatNotebook/popup_dlg.cpp:226
-msgid "Opened tabs:"
-msgstr "Schede Aperte:"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:34
-msgid "&Close"
-msgstr "&Chiudi"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:87
-msgid "Default"
-msgstr "Predefinito"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:113
-msgid "Visual Style:"
-msgstr "Stile Visuale"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:122
-msgid "Upper Tabs"
-msgstr "Schede Sopra"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:122
-msgid "Bottom Tabs"
-msgstr "Schede Sotto"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:124
-msgid "Tab Positioning:"
-msgstr "Posizionamento Schede:"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:132
-msgid "Rotation Arrows"
-msgstr "Frecce di Rotazione"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:132
-msgid "Drop Down Tab List"
-msgstr "Lista Schede a Discesa"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:132
-msgid "None"
-msgstr "Nessuno"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:134
-msgid "Navigation Style:"
-msgstr "Stile di Navigazione:"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:147
-msgid "General:"
-msgstr "Generale:"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:152
-msgid "Draw Thin Border Around Tab Area"
-msgstr "Disegna Bordo Sottile Attorno Area Schede"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:157
-msgid "Hide Close Button"
-msgstr "Nascondi Pulsante Chiusura"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:162
-msgid "Mouse Middle Button Closes Tab"
-msgstr "Pulsante Centrale Mouse Chiude Scheda"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:167
-msgid "Place Close Button On Active Tab"
-msgstr "Inserisci Pulsante Chiusura Su Scheda Attiva"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:172
-msgid "Double Click Closes Tab"
-msgstr "Doppio Click Chiude Scheda"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:177
-msgid "Enable Smart Tabbing"
-msgstr "Abilita Tabulazione Intelligente"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:187
-msgid "Drag And Drop:"
-msgstr "Trascinamento:"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:188
-msgid "Enable Drag And Drop"
-msgstr "Abilita trascinamento"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:193
-msgid "Allow Drag And Drop from other notebooks"
-msgstr "Permetti trascinamento da altri notebook"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:205
-msgid "Effects:"
-msgstr "Effetti:"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:207
-msgid "Use Gradient painting for tabs area"
-msgstr "Usa gradiente per colorare l'area delle schede"
-
-#: src/controls/src/wxFlatNotebook/fnb_customize_dlg.cpp:211
-msgid "Set Random Colour for Tabs"
-msgstr "Imposta Colori Casuali per le Schede"
-
-#: src/controls/src/wxFlatNotebook/xh_fnb.cpp:92
-msgid "Error in resource."
-msgstr "Errore nella risorsa."
-
-#: src/controls/src/wxFlatNotebook/xh_fnb.cpp:97
-msgid "Error in resource: no control within notebook's <page> tag."
-msgstr "Errore nella risorsa: nessun controllo all'interno del tag <page>."
 
 #: src/rad/mainframe.cpp:268
 msgid "Toolbar"
@@ -1093,6 +1028,92 @@ msgstr "Sviluppato da:"
 msgid "&OK"
 msgstr "&Ok"
 
+#: src/rad/menueditor.cpp:57
+msgid "Menu Editor"
+msgstr "Menu Editor"
+
+#: src/rad/menueditor.cpp:64
+#: src/rad/menueditor.cpp:84
+msgid "Label"
+msgstr "Etichetta"
+
+#: src/rad/menueditor.cpp:65
+#: src/rad/menueditor.cpp:90
+msgid "Shortcut"
+msgstr "Collegamento"
+
+#: src/rad/menueditor.cpp:66
+#: src/rad/menueditor.cpp:96
+msgid "Id"
+msgstr "ID"
+
+#: src/rad/menueditor.cpp:67
+#: src/rad/menueditor.cpp:102
+msgid "Name"
+msgstr "Nome"
+
+#: src/rad/menueditor.cpp:68
+#: src/rad/menueditor.cpp:108
+msgid "Help String"
+msgstr "Stringa Aiuto"
+
+#: src/rad/menueditor.cpp:69
+#: src/rad/menueditor.cpp:116
+msgid "Kind"
+msgstr "Tipo"
+
+#: src/rad/menueditor.cpp:78
+msgid "Menu item"
+msgstr "Oggetto Menu"
+
+#: src/rad/menueditor.cpp:115
+msgid "Normal"
+msgstr "Normale"
+
+#: src/rad/menueditor.cpp:115
+msgid "Check"
+msgstr "Selezionato"
+
+#: src/rad/menueditor.cpp:115
+msgid "Radio"
+msgstr "Radio"
+
+#: src/rad/menueditor.cpp:124
+msgid "&Add"
+msgstr "&Aggiungi"
+
+#: src/rad/menueditor.cpp:128
+msgid "&Modify"
+msgstr "&Modifica"
+
+#: src/rad/menueditor.cpp:132
+msgid "&Remove"
+msgstr "&Rimuovi"
+
+#: src/rad/menueditor.cpp:138
+msgid "Add &Separator"
+msgstr "Aggiungi &Separatore"
+
+#: src/rad/menueditor.cpp:145
+msgid "&Up"
+msgstr "&Sù"
+
+#: src/rad/menueditor.cpp:148
+msgid "&Down"
+msgstr "&Giù"
+
+#: src/rad/menueditor.cpp:151
+msgid "<"
+msgstr "<"
+
+#: src/rad/menueditor.cpp:154
+msgid ">"
+msgstr ">"
+
+#: src/rad/menueditor.cpp:484
+msgid "The children of the selected item will be eliminated too. Are you sure you want to continue?"
+msgstr "Gli oggetti figlio della voce selezionata verranno eliminati anch'essi. Sicuro di voler continuare? "
+
 #: src/rad/appdata.cpp:1312
 msgid ""
 "This project file is newer than this version of wxFormBuilder.\n"
@@ -1385,11 +1406,11 @@ msgstr "Proprietà"
 msgid "Events"
 msgstr "Eventi"
 
-#: src/rad/inspector/objinspect.cpp:1171
+#: src/rad/inspector/objinspect.cpp:1168
 msgid "Property type Unknown"
 msgstr "Tipo Proprietà Sconosciuto"
 
-#: src/rad/inspector/objinspect.cpp:1397
+#: src/rad/inspector/objinspect.cpp:1393
 msgid "You have to remove all child widgets first."
 msgstr "Devi prima rimuovere tutti i controlli inseriti."
 
@@ -1791,13 +1812,1041 @@ msgstr ""
 "Vecchia Codifica: %s\n"
 "Nuova Codifica: %s"
 
-#: src/controls/include/wx/wxFlatNotebook/fnb_customize_dlg.h:48
-msgid "Customize"
-msgstr "Personalizza"
-
 #: src/rad/prefs/prefsdialog.h:88
 msgid "Preferences"
 msgstr "Preferenze"
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:5
+#, no-wrap
+msgid "The path to generated files"
+msgstr "Percorso dei file generati."
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:6
+#, no-wrap
+msgid "The path to generated files for embedded files"
+msgstr "Percorso dei file generati per i file da incorporare."
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:7
+#, no-wrap
+msgid "The filenames for generated files"
+msgstr "I nomi per i file generati."
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:8
+#, no-wrap
+msgid "Use relative paths for external files ( e.g. image files )"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:11
+#, no-wrap
+msgid "All GUI controls have an interger ID, this is the value for the first control, each additional control with increment by 1."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:15
+#, no-wrap
+msgid "Generate C++ Code"
+msgstr "Genera Codice C++"
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:16
+#, no-wrap
+msgid "Generate Python Code"
+msgstr "Genera Codice Python"
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:17
+#, no-wrap
+msgid "Generate XRC Code"
+msgstr "Genera Codice XRC"
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:20
+#, no-wrap
+msgid "For C++ Only.&#x0A;Generate strings with _() macro instead of wxT() macro. This allows for translation."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:22
+#, no-wrap
+msgid "For C++ Only.&#x0A;Generate an enumeration for control IDs instead of a list of #defines"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:23
+#, no-wrap
+msgid "For C++ and WXMSW Only.&#x0A;Files are generated with UTF-8 encoding. Microsoft compiliers expect a specific byte sequence at the beginning of a file. GCC does NOT expect this. Only set this to true when using a Microsoft compiler."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:24
+#, no-wrap
+msgid "For C++ Only.&#x0A;The exact code to be generated at the top of the source file to support precompiled headers. For example, to include wxprec.h, the value of this property should be:&#x0A;#include &lt;wx/wxprec.h&gt;"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:25
+#, no-wrap
+msgid "For C++ Only.&#x0A;Used to decorate classes with DLL export macros."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><child>
+#: output/xml/default.xml:26
+#, no-wrap
+msgid "The name of the macro or the dll export decoration."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><child>
+#: output/xml/default.xml:27
+#, no-wrap
+msgid "Optional header file where the export macro is defined."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:33
+#, no-wrap
+msgid "For C++ Only.&#x0A;Namespaces to wrap class declarations in."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:34
+#, no-wrap
+msgid "For C++ Only.&#x0A;Type of event connection to generate."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:35
+#, no-wrap
+msgid "Use the Connect() function to link event handlers to events."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:36
+#, no-wrap
+msgid "Use event macro tables to link event handlers to events."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:39
+#, no-wrap
+msgid "For event_generation=connect Only.&#x0A;Disconnect events in the destructor."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:42
+#, no-wrap
+msgid "For C++ Only.&#x0A;The class of help provider to use for context-sensitive help."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:43
+#, no-wrap
+msgid "No support for context-sensitive help."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:44
+#, no-wrap
+msgid "Use wxSimpleHelpProvider to provide context-sensitive help."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:45
+#, no-wrap
+msgid "Use wxHelpControllerHelpProvider to provide context-sensitive help."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:50
+#, no-wrap
+msgid "For Python Only.&#x0A;Call Skip() function in all generated event handlers."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:51
+#, no-wrap
+msgid "For Python Only.&#x0A;Disconnect events in the destructor."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:52
+#, no-wrap
+msgid "For Python Only.&#x0A;Choose which strategy will be used for disconnecting of events (due to different prototypes of Unbind() function in wxPython)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:53
+#, no-wrap
+msgid "Pass source widget name to Unbind() function."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:54
+#, no-wrap
+msgid "Pass event handler name to Unbind() function."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:79
+#, no-wrap
+msgid "Window position. The default is (-1, -1) which indicates that wxWidgets should generate a default position for the window."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:80
+#, no-wrap
+msgid "Window size. The default is (-1, -1) which indicates that wxWidgets should generate a default size for the window."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:81
+#, no-wrap
+msgid "Sets the minimum size of the window, to indicate to the sizer layout mechanism that this is the minimum required size."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:82
+#, no-wrap
+msgid "Sets the maximum size of the window, to indicate to the sizer layout mechanism that this is the maximum allowable size."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:83
+#, no-wrap
+msgid "Sets the font for this window. This should not be use for a parent window if you don't want its font to be inherited by its children"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:84
+#, no-wrap
+msgid "Sets the foreground colour of the window."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:85
+#, no-wrap
+msgid "Sets the background colour of the window."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:86
+#, no-wrap
+msgid "The name of the window. This parameter is used to associate a name with the item, allowing the application user to set Motif resource values for individual windows."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:88
+#, no-wrap
+msgid "Displays a thin border around the window. wxBORDER is the old name for this style."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:89
+#, no-wrap
+msgid "Displays a double border. Windows and Mac only."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:90
+#, no-wrap
+msgid "Displays a sunken border."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:91
+#, no-wrap
+msgid "Displays a raised border."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:92
+#, no-wrap
+msgid "Displays a border suitable for a static control. Windows only."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:93
+#, no-wrap
+msgid "Displays no border, overriding the default border style for the window."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:94
+#, no-wrap
+msgid "The window is transparent, that is, it will not receive paint events. Windows only."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:95
+#, no-wrap
+msgid "Use this to enable tab traversal for non-dialog windows."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:96
+#, no-wrap
+msgid "Use this to indicate that the window wants to get all char/key events for all keys - even for keys like TAB or ENTER which are usually used for dialog navigation and which wouldn't be generated without this style. If you need to use this style in order to get the arrows or etc., but would still like to have normal keyboard navigation take place, you should create and send a wxNavigationKeyEvent in response to the key events for Tab and Shift-Tab."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:97
+#, no-wrap
+msgid "Use this style to enable a vertical scrollbar."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:98
+#, no-wrap
+msgid "Use this style to enable a horizontal scrollbar."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:99
+#, no-wrap
+msgid "If a window has scrollbars, disable them instead of hiding them when they are not needed (i.e. when the size of the window is big enough to not require the scrollbars to navigate it). This style is currently only implemented for wxMSW and wxUniversal and does nothing on the other platforms."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:100
+#, no-wrap
+msgid "Use this style to eliminate flicker caused by the background being repainted, then children being painted over them. Windows only."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:101
+#, no-wrap
+msgid "Use this style to force a complete redraw of the window whenever it is resized instead of redrawing just the part of the window affected by resizing. Note that this was the behaviour by default before 2.5.1 release and that if you experience redraw problems with code which previously used to work you may want to try this. Currently this style applies on GTK+ 2 and Windows only, and full repainting is always done on other platforms."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:104
+#, no-wrap
+msgid "By default, Validate/TransferDataTo/FromWindow() only work on direct children of the window (compatible behaviour). Set this flag to make them recursively descend into all subwindows."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:105
+#, no-wrap
+msgid "wxCommandEvents and the objects of the derived classes are forwarded to the parent window and so on recursively by default. Using this flag for the given window allows to block this propagation at this window, i.e. prevent the events from being propagated further upwards. Dialogs have this flag on by default."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:106
+#, no-wrap
+msgid "Don't use this window as an implicit parent for the other windows: this must be used with transient windows as otherwise there is the risk of creating a dialog/frame with this window as a parent which would lead to a crash if the parent is destroyed before the child."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:107
+#, no-wrap
+msgid "This window should always process idle events, even if the mode set by wxIdleEvent::SetMode is wxIDLE_PROCESS_SPECIFIED."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/xml/default.xml:108
+#, no-wrap
+msgid "This window should always process UI update events, even if the mode set by wxUpdateUIEvent::SetMode is wxUPDATE_UI_PROCESS_SPECIFIED."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:112
+#, no-wrap
+msgid "Sets the internale name of the pane."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:113
+#, no-wrap
+msgid "Indicates that a pane caption should be visible."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:114
+#, no-wrap
+msgid "Sets the caption of the pane."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:115
+#, no-wrap
+msgid "Indicates that a close button should be drawn for the pane."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:116
+#, no-wrap
+msgid "Indicates that a maximize button should be drawn for the pane."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:117
+#, no-wrap
+msgid "Indicates that a minimize button should be drawn for the pane."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:118
+#, no-wrap
+msgid "Indicates that a pin button should be drawn for the pane."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:119
+#, no-wrap
+msgid "Indicates that a border should be drawn for the pane."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:120
+#, no-wrap
+msgid "Indicates that a pane should be shown."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:121
+#, no-wrap
+msgid "Indicates that a gripper should be drawn for the pane."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:123
+#, no-wrap
+msgid "Specifies that the pane should adopt the default center pane settings. Centre panes usually do not have caption bars. This function provides an easy way of preparing a pane to be displayed in the center dock position."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:124
+#, no-wrap
+msgid "Specifies that the pane should adopt the default pane settings."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:125
+#, no-wrap
+msgid "Specifies that the pane should adopt the default toolbar pane settings."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:128
+#, no-wrap
+msgid "Indicates whether a frame can be moved."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:130
+#, no-wrap
+msgid "Allows a pane to be resized if the parameter is true, and forces it to be a fixed size if the parameter is false."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:131
+#, no-wrap
+msgid "Forces a pane to be fixed size so that it cannot be resized."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:133
+#, no-wrap
+msgid "Sets the size of the floating pane."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:134
+#, no-wrap
+msgid "Sets the ideal size for the pane."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:135
+#, no-wrap
+msgid "Sets the minimum size of the pane."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:136
+#, no-wrap
+msgid "Sets the maximum size of the pane."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:139
+#, no-wrap
+msgid "Indicates that a pane should be docked."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:140
+#, no-wrap
+msgid "Indicates that a pane should be floated."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:142
+#, no-wrap
+msgid "Causes the containing dock to have no resize sash. This is useful for creating panes that span the entire width or height of a dock, but should not be resizable in the other direction."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:143
+#, no-wrap
+msgid "Sets whether the user will be able to undock a pane and turn it into a floating window."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:144
+#, no-wrap
+msgid "Indicates whether a pane can be docked at the bottom of the frame."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:145
+#, no-wrap
+msgid "Indicates whether a pane can be docked at the top of the frame."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:146
+#, no-wrap
+msgid "Indicates whether a pane can be docked on the left of the frame."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:147
+#, no-wrap
+msgid "Indicates whether a pane can be docked on the right of the frame."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:149
+#, no-wrap
+msgid "Determines the direction of the docked pane."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:156
+#, no-wrap
+msgid "Sets the position of the floating pane."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:157
+#, no-wrap
+msgid "Determines the position of the docked pane."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:158
+#, no-wrap
+msgid "Determines the row of the docked pane."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:159
+#, no-wrap
+msgid "Determines the layer of the docked pane. The dock layer is similar to an onion, the inner-most layer being layer 0. Each shell moving in the outward direction has a higher layer number. This allows for more complex docking layout formation."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:164
+#, no-wrap
+msgid "For C++ Only.&#x0A;Type of a validator assigned to the window"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:165
+#, no-wrap
+msgid "Default validator (does nothing)"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:166
+#, no-wrap
+msgid "Generic validator. Transfers data from/to window ."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:167
+#, no-wrap
+msgid "Text validator. Transfer data from/to window and allows basic data filtering."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:169
+#, no-wrap
+msgid "For C++ Only.&#x0A;Data filtering style for wxTextValidator."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:170
+#, no-wrap
+msgid "No filtering takes place."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:171
+#, no-wrap
+msgid "Non-ASCII characters are filtered out."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:172
+#, no-wrap
+msgid "Non-alpha characters are filtered out."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:173
+#, no-wrap
+msgid "Non-alphanumeric characters are filtered out."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:174
+#, no-wrap
+msgid "Non-numeric characters are filtered out."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:175
+#, no-wrap
+msgid "Use an include list. The validator checks if the user input is on the list, complaining if not. See wxTextValidator::SetIncludes."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:176
+#, no-wrap
+msgid "Use an exclude list. The validator checks if the user input is on the list, complaining if it is. See wxTextValidator::SetExcludes."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:177
+#, no-wrap
+msgid "Use an include list. The validator checks if each input character is in the list (one character per list element), complaining if not. See wxTextValidator::SetIncludes."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:178
+#, no-wrap
+msgid "Use an include list. The validator checks if each input character is in the list (one character per list element), complaining if it is. See wxTextValidator::SetExcludes."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:181
+#, no-wrap
+msgid "For C++ Only.&#x0A;Name of a member variable associated with the validator"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property>
+#: output/xml/default.xml:182
+#, no-wrap
+msgid "For C++ Only.&#x0A;Data type of the member variable"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:183
+#, no-wrap
+msgid "Undefined data type."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:184
+#, no-wrap
+msgid "Logical value. This should be used for wxCheckBox and wxRadioButton."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:185
+#, no-wrap
+msgid "Signed integer value. This should be used for wxGauge, wxScrollBar, wxRadioBox, wxSpinButton, wxChoice."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:186
+#, no-wrap
+msgid "String value. This should be used for wxButton, wxComboBox, wxStaticText, wxTextCtrl."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><property><option>
+#: output/xml/default.xml:187
+#, no-wrap
+msgid "Array of integers. This should be used for wxListBox, wxCheckListBox."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:190
+#, no-wrap
+msgid "Attach a tooltip to the window."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:191
+#, no-wrap
+msgid "Generates event handler for displaying of menu assigned to this widgets as a context menu."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:192
+#, no-wrap
+msgid "Attach context-sensitive help to the window. Note: The Project's &quot;help_provider&quot; property must be set for context-sensitive help to work."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:193
+#, no-wrap
+msgid "Enable or disable the window for user input. Note that when a parent window is disabled, all of its children are disabled as well and they are reenabled again when the parent is."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:194
+#, no-wrap
+msgid "Shows or hides the window."
+msgstr "Visualizza o nasconde la finestra."
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/xml/default.xml:195
+#, no-wrap
+msgid "For easy use of custom widgets which are simple variations from standard ones, without requiring a new plugin for wxFB or a full xrc handler for wxWidgets. For C++, this replaces the name of the class. For XRC, this sets the subclass value on the object tag."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><child>
+#: output/xml/default.xml:196
+#, no-wrap
+msgid "The name of the subclass."
+msgstr "Il nome della sottoclasse."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><child>
+#: output/xml/default.xml:197
+#, no-wrap
+msgid "For C++ Only. The header to be included for the subclass."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:200
+#, no-wrap
+msgid "Process a wxEVT_CHAR event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:201
+#, no-wrap
+msgid "Process a wxEVT_KEY_DOWN event (any key has been pressed)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:202
+#, no-wrap
+msgid "Process a wxEVT_KEY_UP event (any key has been released)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:205
+#, no-wrap
+msgid "Process a wxEVT_ENTER_WINDOW event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:206
+#, no-wrap
+msgid "Process a wxEVT_LEAVE_WINDOW event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:207
+#, no-wrap
+msgid "Process a wxEVT_LEFT_DCLICK event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:208
+#, no-wrap
+msgid "Process a wxEVT_LEFT_DOWN event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:209
+#, no-wrap
+msgid "Process a wxEVT_LEFT_UP event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:210
+#, no-wrap
+msgid "Process a wxEVT_MIDDLE_DCLICK event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:211
+#, no-wrap
+msgid "Process a wxEVT_MIDDLE_DOWN event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:212
+#, no-wrap
+msgid "Process a wxEVT_MIDDLE_UP event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:213
+#, no-wrap
+msgid "Process a wxEVT_MOTION event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:214
+#, no-wrap
+msgid "Process all mouse events."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:215
+#, no-wrap
+msgid "Process a wxEVT_MOUSEWHEEL event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:216
+#, no-wrap
+msgid "Process a wxEVT_RIGHT_DCLICK event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:217
+#, no-wrap
+msgid "Process a wxEVT_RIGHT_DOWN event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:218
+#, no-wrap
+msgid "Process a wxEVT_RIGHT_UP event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:221
+#, no-wrap
+msgid "Process a wxEVT_KILL_FOCUS event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:222
+#, no-wrap
+msgid "Process a wxEVT_SET_FOCUS event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:225
+#, no-wrap
+msgid "Process a wxEVT_ERASE_BACKGROUND event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:226
+#, no-wrap
+msgid "Process a wxEVT_PAINT event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:227
+#, no-wrap
+msgid "Process a wxEVT_SIZE event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><category><event>
+#: output/xml/default.xml:228
+#, no-wrap
+msgid "Process a wxEVT_UPDATE_UI event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/xml/default.xml:232
+#, no-wrap
+msgid "Begin dragging with the left mouse button."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/xml/default.xml:233
+#, no-wrap
+msgid "Begin dragging with the right mouse button."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/xml/default.xml:234
+#, no-wrap
+msgid "End dragging with the left or right mouse button."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/xml/default.xml:235
+#, no-wrap
+msgid "Begin editing a label. This can be prevented by calling Veto()."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/xml/default.xml:236
+#, no-wrap
+msgid "Finish editing a label. This can be prevented by calling Veto()."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/xml/default.xml:237
+#, no-wrap
+msgid "Delete an item."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/xml/default.xml:238
+#, no-wrap
+msgid "The item has been activated, i.e. chosen by double clicking it with mouse or from keyboard."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/xml/default.xml:239
+#, no-wrap
+msgid "The item has been collapsed."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/xml/default.xml:240
+#, no-wrap
+msgid "The item is being collapsed. This can be prevented by calling Veto()."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/xml/default.xml:241
+#, no-wrap
+msgid "The item has been expanded."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/xml/default.xml:242
+#, no-wrap
+msgid "The item is being expanded. This can be prevented by calling Veto()."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/xml/default.xml:243
+#, no-wrap
+msgid "The user has clicked the item with the right mouse button"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/xml/default.xml:244
+#, no-wrap
+msgid "The user has clicked the item with the middle mouse button."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/xml/default.xml:245
+#, no-wrap
+msgid "Selection has changed."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/xml/default.xml:246
+#, no-wrap
+msgid "Selection is changing. This can be prevented by calling Veto()."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/xml/default.xml:247
+#, no-wrap
+msgid "A key has been pressed."
+msgstr "E' stato premuto un tasto."
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/xml/default.xml:248
+#, no-wrap
+msgid "The context menu for the selected item has been requested, either by a right click or by using the menu key."
+msgstr "E' stato richiesto il menu contestuale dell'oggetto selezionato, da un click col tasto destro del mouse o dal tasto di menu."
+
+#~ msgid "Properties..."
+#~ msgstr "Impostazioni..."
+
+#~ msgid "Opened tabs:"
+#~ msgstr "Schede Aperte:"
+
+#~ msgid "&Close"
+#~ msgstr "&Chiudi"
+
+#~ msgid "Default"
+#~ msgstr "Predefinito"
+
+#~ msgid "Visual Style:"
+#~ msgstr "Stile Visuale"
+
+#~ msgid "Upper Tabs"
+#~ msgstr "Schede Sopra"
+
+#~ msgid "Bottom Tabs"
+#~ msgstr "Schede Sotto"
+
+#~ msgid "Tab Positioning:"
+#~ msgstr "Posizionamento Schede:"
+
+#~ msgid "Rotation Arrows"
+#~ msgstr "Frecce di Rotazione"
+
+#~ msgid "Drop Down Tab List"
+#~ msgstr "Lista Schede a Discesa"
+
+#~ msgid "None"
+#~ msgstr "Nessuno"
+
+#~ msgid "Navigation Style:"
+#~ msgstr "Stile di Navigazione:"
+
+#~ msgid "General:"
+#~ msgstr "Generale:"
+
+#~ msgid "Draw Thin Border Around Tab Area"
+#~ msgstr "Disegna Bordo Sottile Attorno Area Schede"
+
+#~ msgid "Hide Close Button"
+#~ msgstr "Nascondi Pulsante Chiusura"
+
+#~ msgid "Mouse Middle Button Closes Tab"
+#~ msgstr "Pulsante Centrale Mouse Chiude Scheda"
+
+#~ msgid "Place Close Button On Active Tab"
+#~ msgstr "Inserisci Pulsante Chiusura Su Scheda Attiva"
+
+#~ msgid "Double Click Closes Tab"
+#~ msgstr "Doppio Click Chiude Scheda"
+
+#~ msgid "Enable Smart Tabbing"
+#~ msgstr "Abilita Tabulazione Intelligente"
+
+#~ msgid "Drag And Drop:"
+#~ msgstr "Trascinamento:"
+
+#~ msgid "Enable Drag And Drop"
+#~ msgstr "Abilita trascinamento"
+
+#~ msgid "Allow Drag And Drop from other notebooks"
+#~ msgstr "Permetti trascinamento da altri notebook"
+
+#~ msgid "Effects:"
+#~ msgstr "Effetti:"
+
+#~ msgid "Use Gradient painting for tabs area"
+#~ msgstr "Usa gradiente per colorare l'area delle schede"
+
+#~ msgid "Set Random Colour for Tabs"
+#~ msgstr "Imposta Colori Casuali per le Schede"
+
+#~ msgid "Error in resource."
+#~ msgstr "Errore nella risorsa."
+
+#~ msgid "Error in resource: no control within notebook's <page> tag."
+#~ msgstr "Errore nella risorsa: nessun controllo all'interno del tag <page>."
+
+#~ msgid "Customize"
+#~ msgstr "Personalizza"
 
 #~ msgid "Sash Color:"
 #~ msgstr "Colore Divisorio:"
@@ -1922,49 +2971,6 @@ msgstr "Preferenze"
 
 #~ msgid "#### Code ####"
 #~ msgstr "#### Codice ####"
-
-#~ msgid "Menu Editor"
-#~ msgstr "Menu Editor"
-
-#~ msgid "Label"
-#~ msgstr "Etichetta"
-
-#~ msgid "Shortcut"
-#~ msgstr "Collegamento"
-
-#~ msgid "Id"
-#~ msgstr "ID"
-
-#~ msgid "Help String"
-#~ msgstr "Stringa Aiuto"
-
-#~ msgid "Kind"
-#~ msgstr "Tipo"
-
-#~ msgid "Menu item"
-#~ msgstr "Oggetto Menu"
-
-#~ msgid "Normal"
-#~ msgstr "Normale"
-
-#~ msgid "Check"
-#~ msgstr "Selezionato"
-
-#~ msgid "Radio"
-#~ msgstr "Radio"
-
-#~ msgid "&Modify"
-#~ msgstr "&Modifica"
-
-#~ msgid "Add &Separator"
-#~ msgstr "Aggiungi &Separatore"
-
-#~ msgid ""
-#~ "The children of the selected item will be eliminated too. Are you sure "
-#~ "you want to continue?"
-#~ msgstr ""
-#~ "Gli oggetti figlio della voce selezionata verranno eliminati anch'essi. "
-#~ "Sicuro di voler continuare? "
 
 #~ msgid "\" of Package \""
 #~ msgstr "\" del Package \""
@@ -2341,22 +3347,6 @@ msgstr "Preferenze"
 #~ "Il valore di proprieta' e': %s\n"
 #~ "Se salvi questo progetto, PERDERAI DATI"
 
-#~ msgid ""
-#~ "Error: %s\n"
-#~ "While parsing property \"%s\" of class \"%s\""
-#~ msgstr ""
-#~ "Errore: %s\n"
-#~ "Durante l'analisi della proprieta' \"%s\" della classe \"%s\""
-
-#~ msgid "Error loading library "
-#~ msgstr "Errore caricamento libreria"
-
-#~ msgid " is not a valid component library: "
-#~ msgstr " non e' una libreria di componente valida: "
-
-#~ msgid " is not a valid component library"
-#~ msgstr " non e' una libreria di componente valida"
-
 #~ msgid "[Database::ImportComponentLibrary] Importing "
 #~ msgstr "[Database::ImportComponentLibrary] Importazione "
 
@@ -2368,9 +3358,6 @@ msgstr "Preferenze"
 
 #~ msgid "> not found while loading library <"
 #~ msgstr "> non trovato caricando la libreria <"
-
-#~ msgid "Unknown property type \"%s\""
-#~ msgstr "Tipo proprieta' sconosciuto \"%s\""
 
 #~ msgid "delete ObjectBase"
 #~ msgstr "elimina ObjectBase"
@@ -2386,21 +3373,6 @@ msgstr "Preferenze"
 
 #~ msgid "[XrcFilter::GetProject]"
 #~ msgstr "[XrcFilter::GetProject]"
-
-#~ msgid ""
-#~ "CreateObject failed for class \"%s\", with parent \"%s\", found on line %i"
-#~ msgstr ""
-#~ "CreateObject fallito per la classe \"%s\", con padre \"%s\", alla linea %i"
-
-#~ msgid "Unknown class \"%s\" found on line %i, replaced with a wxPanel"
-#~ msgstr "Classe \"%s\" sconosciuta alla linea %i, sostituito con un wxPanel"
-
-#~ msgid ""
-#~ "Unknown class \"%s\" found on line %i, and could not replace with a "
-#~ "wxPanel as child of \"%s:%s\""
-#~ msgstr ""
-#~ "Classe \"%s\" sconosciuta alla linea %i, non puo' essere sostituito con "
-#~ "un wxPanel come figlio di \"%s:%s\""
 
 #~ msgid ""
 #~ "Welcome to wxRichTextCtrl, a wxWidgets control for editing and presenting "

@@ -54,19 +54,19 @@ BEGIN_EVENT_TABLE(MenuEditor, wxDialog)
     EVT_LIST_ITEM_ACTIVATED(-1, MenuEditor::OnItemActivated)
 END_EVENT_TABLE()
 
-MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,wxT("Menu Editor"),wxDefaultPosition,wxDefaultSize)
+MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,_("Menu Editor"),wxDefaultPosition,wxDefaultSize)
 {
   wxBoxSizer *mainSizer;
   mainSizer = new wxBoxSizer(wxVERTICAL);
   wxBoxSizer *sizerTop;
   sizerTop = new wxBoxSizer(wxHORIZONTAL);
   m_menuList = new wxListCtrl(this,ID_DEFAULT,wxDefaultPosition,wxDefaultSize,wxLC_REPORT | wxLC_SINGLE_SEL | wxSTATIC_BORDER);
-  m_menuList->InsertColumn(0, wxT("Label"), wxLIST_FORMAT_LEFT, 150);
-  m_menuList->InsertColumn(1, wxT("Shortcut"), wxLIST_FORMAT_LEFT, 80);
-  m_menuList->InsertColumn(2, wxT("Id"), wxLIST_FORMAT_LEFT, 80);
-  m_menuList->InsertColumn(3, wxT("Name"), wxLIST_FORMAT_LEFT, 50);
-  m_menuList->InsertColumn(4, wxT("Help String"), wxLIST_FORMAT_LEFT, 150);
-  m_menuList->InsertColumn(5, wxT("Kind"), wxLIST_FORMAT_LEFT, 120);
+  m_menuList->InsertColumn(0, _("Label"), wxLIST_FORMAT_LEFT, 150);
+  m_menuList->InsertColumn(1, _("Shortcut"), wxLIST_FORMAT_LEFT, 80);
+  m_menuList->InsertColumn(2, _("Id"), wxLIST_FORMAT_LEFT, 80);
+  m_menuList->InsertColumn(3, _("Name"), wxLIST_FORMAT_LEFT, 50);
+  m_menuList->InsertColumn(4, _("Help String"), wxLIST_FORMAT_LEFT, 150);
+  m_menuList->InsertColumn(5, _("Kind"), wxLIST_FORMAT_LEFT, 120);
   int width = 0;
   for ( int i = 0; i < m_menuList->GetColumnCount(); ++i )
   {
@@ -75,45 +75,45 @@ MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,wxT("Menu 
   m_menuList->SetMinSize( wxSize( width, -1 ) );
   sizerTop->Add(m_menuList, 1, wxALL|wxEXPAND, 5);
   wxStaticBoxSizer *sizer1;
-  sizer1 = new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("Menu item")), wxVERTICAL);
+  sizer1 = new wxStaticBoxSizer(new wxStaticBox(this, -1, _("Menu item")), wxVERTICAL);
   wxFlexGridSizer *sizer11;
   sizer11 = new wxFlexGridSizer(4,2,0,0);
   sizer11->AddGrowableCol(1);
 
   wxStaticText *m_stLabel;
-  m_stLabel = new wxStaticText(this,ID_DEFAULT,wxT("Label"),wxDefaultPosition,wxDefaultSize,0);
+  m_stLabel = new wxStaticText(this,ID_DEFAULT,_("Label"),wxDefaultPosition,wxDefaultSize,0);
   sizer11->Add(m_stLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
   m_tcLabel = new wxTextCtrl(this,ID_LABEL,wxT(""),wxDefaultPosition,wxDefaultSize,wxTE_PROCESS_ENTER);
   sizer11->Add(m_tcLabel, 0, wxALL | wxEXPAND, 5);
 
   wxStaticText *m_stShortcut;
-  m_stShortcut = new wxStaticText(this,ID_DEFAULT,wxT("Shortcut"),wxDefaultPosition,wxDefaultSize,0);
+  m_stShortcut = new wxStaticText(this,ID_DEFAULT,_("Shortcut"),wxDefaultPosition,wxDefaultSize,0);
   sizer11->Add(m_stShortcut, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
   m_tcShortcut = new wxTextCtrl(this,ID_LABEL,wxT(""),wxDefaultPosition,wxDefaultSize,wxTE_PROCESS_ENTER);
   sizer11->Add(m_tcShortcut, 0, wxALL | wxEXPAND, 5);
 
   wxStaticText *m_stId;
-  m_stId = new wxStaticText(this,ID_DEFAULT,wxT("Id"),wxDefaultPosition,wxDefaultSize,0);
+  m_stId = new wxStaticText(this,ID_DEFAULT,_("Id"),wxDefaultPosition,wxDefaultSize,0);
   sizer11->Add(m_stId, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
   m_tcId = new wxTextCtrl(this,ID_DEFAULT,wxT(""),wxDefaultPosition,wxDefaultSize,wxTE_PROCESS_ENTER);
   sizer11->Add(m_tcId, 0, wxALL | wxEXPAND, 5);
 
   wxStaticText *m_stName;
-  m_stName = new wxStaticText(this,ID_DEFAULT,wxT("Name"),wxDefaultPosition,wxDefaultSize,0);
+  m_stName = new wxStaticText(this,ID_DEFAULT,_("Name"),wxDefaultPosition,wxDefaultSize,0);
   sizer11->Add(m_stName, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
   m_tcName = new wxTextCtrl(this,ID_DEFAULT,wxT(""),wxDefaultPosition,wxDefaultSize,wxTE_PROCESS_ENTER);
   sizer11->Add(m_tcName, 0, wxALL | wxEXPAND, 5);
 
   wxStaticText *m_stHelpString;
-  m_stHelpString = new wxStaticText(this,ID_DEFAULT,wxT("Help String"),wxDefaultPosition,wxDefaultSize,0);
+  m_stHelpString = new wxStaticText(this,ID_DEFAULT,_("Help String"),wxDefaultPosition,wxDefaultSize,0);
   sizer11->Add(m_stHelpString, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
   m_tcHelpString = new wxTextCtrl(this,ID_DEFAULT,wxT(""),wxDefaultPosition,wxDefaultSize,wxTE_PROCESS_ENTER);
   sizer11->Add(m_tcHelpString, 0, wxALL | wxEXPAND, 5);
 
   sizer1->Add(sizer11, 0, wxALL | wxEXPAND, 0);
 
-  wxString choices[] = {wxT("Normal"), wxT("Check"), wxT("Radio")};
-  m_rbItemKind = new wxRadioBox(this, -1, wxT("Kind"), wxDefaultPosition, wxDefaultSize,
+  wxString choices[] = {_("Normal"), _("Check"), _("Radio")};
+  m_rbItemKind = new wxRadioBox(this, -1, _("Kind"), wxDefaultPosition, wxDefaultSize,
     3, choices, 1, wxRA_SPECIFY_ROWS);
   sizer1->Add(m_rbItemKind, 0, wxALL | wxEXPAND, 5);
 
@@ -121,37 +121,37 @@ MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,wxT("Menu 
   sizer4 = new wxBoxSizer(wxHORIZONTAL);
 
   wxButton *m_bAdd;
-  m_bAdd = new wxButton(this,ID_ADDMENUITEM,wxT("&Add"),wxDefaultPosition,wxDefaultSize,0);
+  m_bAdd = new wxButton(this,ID_ADDMENUITEM,_("&Add"),wxDefaultPosition,wxDefaultSize,0);
   sizer4->Add(m_bAdd, 1, wxALL, 5);
 
   wxButton *m_bModify;
-  m_bModify = new wxButton(this,ID_MODIFYMENUITEM,wxT("&Modify"),wxDefaultPosition,wxDefaultSize,0);
+  m_bModify = new wxButton(this,ID_MODIFYMENUITEM,_("&Modify"),wxDefaultPosition,wxDefaultSize,0);
   sizer4->Add(m_bModify, 1, wxALL, 5);
 
   wxButton *m_bRemove;
-  m_bRemove = new wxButton(this,ID_REMOVEMENUITEM,wxT("&Remove"),wxDefaultPosition,wxDefaultSize,0);
+  m_bRemove = new wxButton(this,ID_REMOVEMENUITEM,_("&Remove"),wxDefaultPosition,wxDefaultSize,0);
   sizer4->Add(m_bRemove, 1, wxALL, 5);
 
   sizer1->Add(sizer4, 0, wxEXPAND, 5);
 
   wxButton *m_bAddSep;
-  m_bAddSep = new wxButton(this,ID_ADDSEPARATOR,wxT("Add &Separator"),wxDefaultPosition,wxDefaultSize,0);
+  m_bAddSep = new wxButton(this,ID_ADDSEPARATOR,_("Add &Separator"),wxDefaultPosition,wxDefaultSize,0);
   sizer1->Add(m_bAddSep, 0, wxALL|wxEXPAND, 5);
   sizerTop->Add(sizer1, 0, wxALL | wxEXPAND, 5);
   mainSizer->Add(sizerTop, 1, wxEXPAND, 5);
   wxBoxSizer *sizerMoveButtons;
   sizerMoveButtons = new wxBoxSizer(wxHORIZONTAL);
   wxButton *m_bUp;
-  m_bUp = new wxButton(this,ID_MENUUP,wxT("&Up"),wxDefaultPosition,wxDefaultSize,0);
+  m_bUp = new wxButton(this,ID_MENUUP,_("&Up"),wxDefaultPosition,wxDefaultSize,0);
   sizerMoveButtons->Add(m_bUp, 0, wxALL, 5);
   wxButton *m_bDown;
-  m_bDown = new wxButton(this,ID_MENUDOWN,wxT("&Down"),wxDefaultPosition,wxDefaultSize,0);
+  m_bDown = new wxButton(this,ID_MENUDOWN,_("&Down"),wxDefaultPosition,wxDefaultSize,0);
   sizerMoveButtons->Add(m_bDown, 0, wxALL, 5);
   wxButton *m_bLeft;
-  m_bLeft = new wxButton(this,ID_MENULEFT,wxT("<"),wxDefaultPosition,wxDefaultSize,0);
+  m_bLeft = new wxButton(this,ID_MENULEFT,_("<"),wxDefaultPosition,wxDefaultSize,0);
   sizerMoveButtons->Add(m_bLeft, 0, wxALL, 5);
   wxButton *m_bRight;
-  m_bRight = new wxButton(this,ID_MENURIGHT,wxT(">"),wxDefaultPosition,wxDefaultSize,0);
+  m_bRight = new wxButton(this,ID_MENURIGHT,_(">"),wxDefaultPosition,wxDefaultSize,0);
   sizerMoveButtons->Add(m_bRight, 0, wxALL, 5);
   wxStdDialogButtonSizer* sizerOkCancel = new wxStdDialogButtonSizer();
   sizerOkCancel->AddButton( new wxButton( this, wxID_OK ) );
@@ -481,7 +481,7 @@ void MenuEditor::OnRemoveMenuItem(wxCommandEvent& )
         if (nextIdent > curIdent)
         {
             int res = wxMessageBox(
-                wxT("The children of the selected item will be eliminated too. Are you sure you want to continue?"),
+                _("The children of the selected item will be eliminated too. Are you sure you want to continue?"),
                 wxT("wxFormBuilder"), wxYES_NO);
             if (res == wxYES)
             {

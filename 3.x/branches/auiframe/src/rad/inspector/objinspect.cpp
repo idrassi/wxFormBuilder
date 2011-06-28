@@ -1034,8 +1034,7 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
 				std::map< wxString, wxString >::const_iterator option = options.find( prop->GetLabel() );
 				if ( option != options.end() )
 				{
-					wxString localized = wxGetTranslation( option->second );
-					m_pg->SetPropertyHelpString( prop, localized );
+					m_pg->SetPropertyHelpString( prop, wxGetTranslation( option->second ) );
 				}
 			}
 		}
@@ -1079,8 +1078,7 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
 		{
 			desc += wxT("\n\n") + value + wxT(":\n") + help;
 		}
-		wxString localized = wxGetTranslation( desc );
-		result->SetHelpString( localized );
+		result->SetHelpString( wxGetTranslation( desc ) );
 
 	}
 	else if (type == PT_WXPOINT)
@@ -1156,8 +1154,7 @@ wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
 		{
 			wxPGProperty* child = wxStringProperty( it->m_name, wxPG_LABEL, wxEmptyString );
 			parent->AddChild( child );
-			wxString localized = wxGetTranslation( it->m_description );
-			m_pg->SetPropertyHelpString( child, localized );
+			m_pg->SetPropertyHelpString( child, wxGetTranslation( it->m_description ) );
 		}
 
 		parent->SetValueFromString( prop->GetValueAsString(), wxPG_FULL_VALUE );
@@ -1194,8 +1191,7 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
 			wxPGId id = m_pg->Append( GetProperty( prop ) );
 			if ( prop->GetType() != PT_OPTION )
 			{
-				wxString localized = wxGetTranslation( propInfo->GetDescription() );
-				m_pg->SetPropertyHelpString( id, localized );
+				m_pg->SetPropertyHelpString( id, wxGetTranslation( propInfo->GetDescription() ) );
 			}
 			wxString customEditor = propInfo->GetCustomEditor();
 			if ( !customEditor.empty() )
