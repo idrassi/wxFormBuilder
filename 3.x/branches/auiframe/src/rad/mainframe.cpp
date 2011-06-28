@@ -1444,8 +1444,8 @@ void MainFrame::OnFlatNotebookPageChanged( wxFlatNotebookEvent& event )
 #else
 void MainFrame::OnAuiNotebookPageChanged( wxAuiNotebookEvent& event )
 {
-	AppData()->GenerateCode( true );
 	UpdateFrame();
+	AppData()->GenerateCode( true );
 }
 #endif // WXFB_USE_AUI
 void MainFrame::OnFindDialog( wxCommandEvent& )

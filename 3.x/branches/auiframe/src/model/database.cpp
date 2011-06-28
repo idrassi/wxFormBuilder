@@ -1078,7 +1078,7 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 		}
 		catch( wxFBException& ex )
 		{
-			wxLogError( wxT("Error: %s\nWhile parsing property \"%s\" of class \"%s\""), ex.what(), _WXSTR(pname).c_str(), obj_info->GetClassName().c_str() );
+			wxLogError(_("Error: %s\nWhile parsing property \"%s\" of class \"%s\""), ex.what(), _WXSTR(pname).c_str(), obj_info->GetClassName().c_str() );
 			elem_prop = elem_prop->NextSiblingElement( PROPERTY_TAG, false );
 			continue;
 		}
@@ -1108,9 +1108,9 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 				std::string macro_description;
 				elem_opt->GetAttributeOrDefault( DESCRIPTION_TAG, &macro_description, "" );
 
-				opt_list->AddOption( _WXSTR(macro_name), _WXSTR(macro_description) );
+				opt_list->AddOption( _WXSTR( macro_name ), wxGetTranslation(_WXSTR( macro_description ) ) );
 
-				m_macroSet.insert( _WXSTR(macro_name) );
+				m_macroSet.insert(_WXSTR( macro_name ) );
 
 				elem_opt = elem_opt->NextSiblingElement( "option", false );
 			}
@@ -1130,7 +1130,7 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 
 				std::string child_description;
 				elem_child->GetAttributeOrDefault( DESCRIPTION_TAG, &child_description, "" );
-				child.m_description = _WXSTR( child_description );
+				child.m_description = wxGetTranslation(_WXSTR( child_description ) );
 
 				// Get default value
 				try
@@ -1155,9 +1155,7 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 		}
 
 		// create an instance of PropertyInfo
-		
-		wxGetTranslation( _WXSTR(description) );
-		PPropertyInfo prop_info( new PropertyInfo( _WXSTR(pname), ptype, _WXSTR(def_value), _WXSTR(description), _WXSTR(customEditor), opt_list, children ) );
+		PPropertyInfo prop_info( new PropertyInfo( _WXSTR(pname), ptype, _WXSTR(def_value), wxGetTranslation(_WXSTR(description) ), _WXSTR(customEditor), opt_list, children ) );
 
 		// add the PropertyInfo to the property
 		obj_info->AddPropertyInfo( prop_info );
@@ -1228,10 +1226,11 @@ void ObjectDatabase::ParseEvents( ticpp::Element* elem_obj, PObjectInfo obj_info
 
 		// create an instance of EventInfo
 		PEventInfo evt_info(
-		  new EventInfo( _WXSTR(evt_name),  _WXSTR(evt_class), _WXSTR(def_value), _WXSTR(description)));
+			new EventInfo( _WXSTR( evt_name ), _WXSTR( evt_class ), _WXSTR( def_value ),
+							wxGetTranslation(_WXSTR( description ) ) ) );
 
 		// add the EventInfo to the event
-		obj_info->AddEventInfo(evt_info);
+		obj_info->AddEventInfo( evt_info );
 
 		elem_evt = elem_evt->NextSiblingElement( EVENT_TAG, false );
 	}
@@ -1289,7 +1288,7 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		if ( !handle )
 		{
 			wxString error = wxString( dlerror(), wxConvUTF8 );
-			THROW_WXFBEX( wxT("Error loading library ") << path << wxT(" ") << error )
+			THROW_WXFBEX(_("Error loading library ") << path << wxT(" ") << error )
 		}
 		dlerror(); // reset errors
 
@@ -1302,7 +1301,7 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		if (dlsym_error)
 		{
 			wxString error = wxString( dlsym_error, wxConvUTF8 );
-			THROW_WXFBEX( path << wxT(" is not a valid component library: ") << error )
+			THROW_WXFBEX( path << _(" is not a valid component library: ") << error )
 			dlclose( handle );
 		}
 		else
@@ -1315,7 +1314,7 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		wxDynamicLibrary* library = new wxDynamicLibrary( path );
 		if ( !library->IsLoaded() )
 		{
-			THROW_WXFBEX( wxT("Error loading library ") << path )
+			THROW_WXFBEX(_("Error loading library ") << path )
 		}
 
 		m_libs.push_back( library );
@@ -1325,7 +1324,7 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 
 		if ( !(GetComponentLibrary && FreeComponentLibrary) )
 		{
-			THROW_WXFBEX( path << wxT(" is not a valid component library") )
+			THROW_WXFBEX( path << _(" is not a valid component library") )
 		}
 
 #endif
@@ -1376,7 +1375,7 @@ PropertyType ObjectDatabase::ParsePropertyType( wxString str )
 	else
 	{
 		result = PT_ERROR;
-		THROW_WXFBEX( wxString::Format( wxT("Unknown property type \"%s\""), str.c_str() ) );
+		THROW_WXFBEX( wxString::Format(_("Unknown property type \"%s\""), str.c_str() ) );
 	}
 
 	return result;
