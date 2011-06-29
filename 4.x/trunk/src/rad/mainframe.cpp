@@ -243,41 +243,47 @@ MainFrame::MainFrame( wxWindow *parent, int id, int style, wxPoint pos, wxSize s
 	wxAuiToolBar* mainbar = CreateFBAuiToolBar();
 
 	// TODO: Remove ICON_SIZE and TOOL_SIZE, use stock icons and add a function to resize bundled icons with system icons sizes
-	m_mgr.AddPane( mainbar, wxAuiPaneInfo().
-								Name("mainbar").Caption( _("Toolbar") ).
-								ToolbarPane().Top().
-								Direction( 1 ).Layer( 10 ).
-								BestSize( 750, 33 ).
-								LeftDockable( false ).RightDockable( false ).
-								CloseButton( false ) );
+    m_mgr.AddPane( mainbar, wxAuiPaneInfo().
+                    Name(wxT("toolbar")).Caption(_("Toolbar")).
+                    ToolbarPane().Gripper( false ).
+                    Dock().Top().
+                    Resizable().DockFixed( true ).Movable( false ).Floatable( false ).Layer( 10 ) );
 
-	m_mgr.AddPane( objectTree, wxAuiPaneInfo().
-								Name("tree").Caption( _("Object Tree") ).
-								Direction( 4 ).Layer( 1 ). 			// Left().
-								MinSize( 210, 60 ).
-								FloatingSize( 210, 420 ).
-								CloseButton( false ) );
+    m_mgr.AddPane( palette, wxAuiPaneInfo().
+                    Name(wxT("palette")).Caption(_("Component Palette")).
+                    CaptionVisible( false ).CloseButton( false ).
+                    MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).PaneBorder( false ).Gripper( false ).
+                    BottomDockable( false ).TopDockable( false ).LeftDockable( false ).RightDockable( false ).
+                    Dock().Top().
+                    Resizable().DockFixed( true ).Movable( false ).Floatable( false ).
+                    BestSize( wxSize( -1,66 ) ) );
 
-	m_mgr.AddPane( objectInspector, wxAuiPaneInfo().
-								Name("inspector").Caption( _("Object Properties") ).
-								Direction( 2 ).Layer( 1 ).			// Right().
-								MinSize( 240, 300 ).
-								FloatingSize( 270, 420 ).
-								CloseButton( false ) );
+    m_mgr.AddPane( designer, wxAuiPaneInfo().
+                    Name(wxT("editor")).Caption(_("Editor")).
+                    CentrePane().
+                    CaptionVisible( false ).CloseButton( false ).
+                    MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).PaneBorder( false ).Gripper( false ).
+                    BottomDockable( false ).TopDockable( false ).LeftDockable( false ).RightDockable( false ).
+                    Dock().Center().
+                    Resizable().DockFixed( true ).Movable( false ).Floatable( false ) );
 
-	m_mgr.AddPane( designer, wxAuiPaneInfo().
-								Name("editor").Caption( _("Editor") ).
-								Direction( 5 ).Layer( 0 ).			// Center().
-								CloseButton( false ) );
+    m_mgr.AddPane( objectTree, wxAuiPaneInfo().
+                    Name(wxT("tree")).Caption(_("Object Tree")).
+                    CaptionVisible( true ).CloseButton( false ).
+                    MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).PaneBorder( true ).Gripper( false ).
+                    BottomDockable( false ).TopDockable( false ).LeftDockable( true ).RightDockable( true ).
+                    Dock().Left().
+                    Resizable().DockFixed( false ).Movable( true ).Floatable( true ).
+                    FloatingSize( wxSize( 300,400 ) ).BestSize( wxSize( 300,-1 ) ).Layer( 1 ) );
 
-	m_mgr.AddPane( palette, wxAuiPaneInfo().
-								Name("palette").Caption( _("Component Palette") ).
-								Direction( 1 ).Layer( 0 ).Row( 1 ).	// Top().
-								MinSize( -1, 72 ).
-								MaxSize( -1, 72 ).
-								FloatingSize( 609, 120 ).
-								RightDockable( false ).LeftDockable( false ).
-								CloseButton( false ) );
+    m_mgr.AddPane( objectInspector, wxAuiPaneInfo().
+                    Name(wxT("inspector")).Caption(_("Object Properties")).
+                    CaptionVisible( true ).CloseButton( false ).
+                    MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).PaneBorder( true ).Gripper( false ).
+                    BottomDockable( false ).TopDockable( false ).LeftDockable( true ).RightDockable( true ).
+                    Dock().Right().
+                    Resizable().DockFixed( false ).Movable( true ).Floatable( true ).
+                    FloatingSize( wxSize( 300,400 ) ).BestSize( wxSize( 300,-1 ) ).Row( 1 ).Layer( 0 ) );
 
     m_mgr.AddPane( new AuiSettingsPanel( this, this ), wxAuiPaneInfo().
 								Name("settings").Caption( _("Dock Manager Settings") ).
