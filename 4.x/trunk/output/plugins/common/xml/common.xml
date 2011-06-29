@@ -227,7 +227,6 @@ Written by
 			<option name="wxTR_HAS_VARIABLE_ROW_HEIGHT" help="Use this style to cause row heights to be just big enough to fit the content. If not set, all rows use the largest row height. The default is that this flag is unset. Generic only." />
 			<option name="wxTR_SINGLE"                  help="For convenience to document that only one item may be selected at a time. Selecting another item causes the current selection, if any, to be deselected. This is the default." />
 			<option name="wxTR_MULTIPLE"                help="Use this style to allow a range of items to be selected. If a second range is selected, the current range, if any, is deselected." />
-			<option name="wxTR_EXTENDED"                help="Use this style to allow disjoint items to be selected. (Only partially implemented; may not work in all cases.)" />
 			<option name="wxTR_DEFAULT_STYLE"           help="The set of flags that are closest to the defaults for the native control for a particular toolkit." />
 			wxTR_DEFAULT_STYLE
 		</property>
