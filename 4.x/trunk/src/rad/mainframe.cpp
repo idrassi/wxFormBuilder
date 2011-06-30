@@ -1169,8 +1169,7 @@ void MainFrame::OnFind( wxFindDialogEvent& event )
 		event.SetClientData( m_findDialog );
 		m_notebook->GetPage( page )->GetEventHandler()->ProcessEvent( event );
 	}
-/*
-TODO: Find doesn't works...
+
 	for ( unsigned int idx = 0; idx < m_notebook->GetPageCount(); ++idx )
 	{
 		wxWindow *page = m_notebook->GetPage( idx );
@@ -1183,7 +1182,6 @@ TODO: Find doesn't works...
 			break;
 		}
 	}
-*/
 }
 /////////////////////////////////////////////////////////////////////////////
 wxMenuBar * MainFrame::CreateFBMenuBar()

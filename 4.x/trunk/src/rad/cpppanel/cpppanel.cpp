@@ -158,7 +158,7 @@ void CppPanel::OnFind( wxFindDialogEvent& event )
 	{
 		return;
 	}
-/* TODO: Fix this
+
 	wxAuiNotebook* notebook = wxDynamicCast( m_cppPanel->GetParent(), wxAuiNotebook );
 	if ( NULL == notebook )
 	{
@@ -174,13 +174,12 @@ void CppPanel::OnFind( wxFindDialogEvent& event )
 	wxString text = notebook->GetPageText( selection );
 	if ( "cpp" == text )
 	{
-		m_cppPanel->ProcessEvent( event );
+		m_cppPanel->GetEventHandler()->ProcessEvent( event );
 	}
 	else if ( "h" == text )
 	{
-		m_hPanel->ProcessEvent( event );
+		m_hPanel->GetEventHandler()->ProcessEvent( event );
 	}
-*/
 }
 
 void CppPanel::OnPropertyModified( wxFBPropertyEvent& event )
