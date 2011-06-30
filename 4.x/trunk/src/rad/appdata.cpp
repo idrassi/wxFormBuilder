@@ -932,10 +932,13 @@ bool ApplicationData::CanPasteObjectFromClipboard()
         }
 	}
 	
-	/** @todo fix this ... seems that this method is doing a segfault */
-	bool canPaste = true;//wxTheClipboard->IsSupported( wxFBDataObjectFormat );
+// fix this ... seems that this method is doing a segfault <-- Is it ok now? Test me
+//	bool canPaste = true;//wxTheClipboard->IsSupported( wxFBDataObjectFormat );
 
-	wxTheClipboard->Close();
+	bool canPaste = wxTheClipboard->IsSupported( wxFBDataObjectFormat );
+
+	if( wxTheClipboard->IsOpened() )
+		wxTheClipboard->Close();
 
 	return canPaste;
 }
