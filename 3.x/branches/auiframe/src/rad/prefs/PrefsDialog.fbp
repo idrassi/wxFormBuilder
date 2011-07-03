@@ -504,7 +504,7 @@
                                                                 <property name="vgap">0</property>
                                                                 <object class="sizeritem" expanded="0">
                                                                     <property name="border">5</property>
-                                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                                    <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                                                                     <property name="proportion">0</property>
                                                                     <object class="wxStaticText" expanded="0">
                                                                         <property name="BottomDockable">1</property>
@@ -591,8 +591,8 @@
                                                                 </object>
                                                                 <object class="sizeritem" expanded="0">
                                                                     <property name="border">5</property>
-                                                                    <property name="flag">wxALIGN_RIGHT|wxALL</property>
-                                                                    <property name="proportion">0</property>
+                                                                    <property name="flag">wxALIGN_RIGHT|wxALL|wxEXPAND</property>
+                                                                    <property name="proportion">1</property>
                                                                     <object class="wxBitmapComboBox" expanded="0">
                                                                         <property name="BottomDockable">1</property>
                                                                         <property name="LeftDockable">1</property>
@@ -694,7 +694,7 @@
                             <property name="depth">0</property>
                             <property name="label">GUI</property>
                             <property name="select">0</property>
-                            <object class="wxPanel" expanded="0">
+                            <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
                                 <property name="RightDockable">1</property>
@@ -772,7 +772,7 @@
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize"></event>
                                 <event name="OnUpdateUI"></event>
-                                <object class="wxBoxSizer" expanded="0">
+                                <object class="wxBoxSizer" expanded="1">
                                     <property name="minimum_size"></property>
                                     <property name="name">bszGUI</property>
                                     <property name="orient">wxVERTICAL</property>
@@ -1275,11 +1275,11 @@
                                             </object>
                                         </object>
                                     </object>
-                                    <object class="sizeritem" expanded="0">
+                                    <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND</property>
                                         <property name="proportion">1</property>
-                                        <object class="wxFlexGridSizer" expanded="0">
+                                        <object class="wxFlexGridSizer" expanded="1">
                                             <property name="cols">2</property>
                                             <property name="flexible_direction">wxBOTH</property>
                                             <property name="growablecols">0</property>
@@ -1411,7 +1411,7 @@
                                                     <property name="layer"></property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
-                                                    <property name="maximum_size">42,24</property>
+                                                    <property name="maximum_size">-1,-1</property>
                                                     <property name="min_size"></property>
                                                     <property name="minimize_button">0</property>
                                                     <property name="minimum_size">42,24</property>
@@ -1427,7 +1427,7 @@
                                                     <property name="resize">Resizable</property>
                                                     <property name="row"></property>
                                                     <property name="show">1</property>
-                                                    <property name="size">42,24</property>
+                                                    <property name="size">-1,-1</property>
                                                     <property name="style">wxCLRP_DEFAULT_STYLE</property>
                                                     <property name="subclass"></property>
                                                     <property name="toolbar_pane">0</property>
@@ -1585,7 +1585,7 @@
                                                     <property name="layer"></property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
-                                                    <property name="maximum_size">42,24</property>
+                                                    <property name="maximum_size">-1,-1</property>
                                                     <property name="min_size"></property>
                                                     <property name="minimize_button">0</property>
                                                     <property name="minimum_size">42,24</property>
@@ -1601,7 +1601,7 @@
                                                     <property name="resize">Resizable</property>
                                                     <property name="row"></property>
                                                     <property name="show">1</property>
-                                                    <property name="size">42,24</property>
+                                                    <property name="size">-1,-1</property>
                                                     <property name="style">wxCLRP_DEFAULT_STYLE</property>
                                                     <property name="subclass"></property>
                                                     <property name="toolbar_pane">0</property>
@@ -1779,7 +1779,7 @@
                                                     <property name="layer"></property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
-                                                    <property name="maximum_size">42,24</property>
+                                                    <property name="maximum_size">-1,-1</property>
                                                     <property name="min_size"></property>
                                                     <property name="minimize_button">0</property>
                                                     <property name="minimum_size">42,24</property>
@@ -1795,7 +1795,7 @@
                                                     <property name="resize">Resizable</property>
                                                     <property name="row"></property>
                                                     <property name="show">1</property>
-                                                    <property name="size">42,24</property>
+                                                    <property name="size">-1,-1</property>
                                                     <property name="style">wxCLRP_DEFAULT_STYLE</property>
                                                     <property name="subclass"></property>
                                                     <property name="toolbar_pane">0</property>
@@ -1953,10 +1953,10 @@
                                                     <property name="layer"></property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
-                                                    <property name="maximum_size">42,24</property>
+                                                    <property name="maximum_size">-1,-1</property>
                                                     <property name="min_size"></property>
                                                     <property name="minimize_button">0</property>
-                                                    <property name="minimum_size"></property>
+                                                    <property name="minimum_size">42,24</property>
                                                     <property name="moveable">1</property>
                                                     <property name="name">cpkActvGrdt</property>
                                                     <property name="pane_border">1</property>
@@ -1969,7 +1969,7 @@
                                                     <property name="resize">Resizable</property>
                                                     <property name="row"></property>
                                                     <property name="show">1</property>
-                                                    <property name="size"></property>
+                                                    <property name="size">-1,-1</property>
                                                     <property name="style">wxCLRP_DEFAULT_STYLE</property>
                                                     <property name="subclass"></property>
                                                     <property name="toolbar_pane">0</property>
@@ -2147,7 +2147,7 @@
                                                     <property name="layer"></property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
-                                                    <property name="maximum_size">42,24</property>
+                                                    <property name="maximum_size">-1,-1</property>
                                                     <property name="min_size"></property>
                                                     <property name="minimize_button">0</property>
                                                     <property name="minimum_size">42,24</property>
@@ -2163,7 +2163,7 @@
                                                     <property name="resize">Resizable</property>
                                                     <property name="row"></property>
                                                     <property name="show">1</property>
-                                                    <property name="size">42,24</property>
+                                                    <property name="size">-1,-1</property>
                                                     <property name="style">wxCLRP_DEFAULT_STYLE</property>
                                                     <property name="subclass"></property>
                                                     <property name="toolbar_pane">0</property>
@@ -2321,7 +2321,7 @@
                                                     <property name="layer"></property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
-                                                    <property name="maximum_size">42,24</property>
+                                                    <property name="maximum_size">-1,-1</property>
                                                     <property name="min_size"></property>
                                                     <property name="minimize_button">0</property>
                                                     <property name="minimum_size">42,24</property>
@@ -2337,7 +2337,7 @@
                                                     <property name="resize">Resizable</property>
                                                     <property name="row"></property>
                                                     <property name="show">1</property>
-                                                    <property name="size">42,24</property>
+                                                    <property name="size">-1,-1</property>
                                                     <property name="style"></property>
                                                     <property name="subclass"></property>
                                                     <property name="toolbar_pane">0</property>

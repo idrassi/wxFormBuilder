@@ -120,10 +120,13 @@ AboutDialog::AboutDialog(wxWindow *parent, int id) : wxDialog(parent,id,_("About
   // work around a wxMac bug
   htmlWin->SetSize(400, 600);
 #else
-  htmlWin->SetSize(htmlWin->GetInternalRepresentation()->GetWidth(),
-                   htmlWin->GetInternalRepresentation()->GetHeight());
+  #if wxVERSION_NUMBER < 2900
+    htmlWin->SetSize(htmlWin->GetInternalRepresentation()->GetWidth(),
+                     htmlWin->GetInternalRepresentation()->GetHeight());
+  #else
+    htmlWin->SetMinSize( wxSize( 400, 600 ) );
+  #endif
 #endif
-
 
   mainSizer->Add(htmlWin, 1, wxEXPAND | wxALL, 5);
   mainSizer->Add(new wxButton(this, wxID_OK, _("&OK")), 0, wxALIGN_CENTER | wxBOTTOM, 5);
@@ -131,7 +134,11 @@ AboutDialog::AboutDialog(wxWindow *parent, int id) : wxDialog(parent,id,_("About
   SetSizerAndFit(mainSizer);
 }
 
+AboutDialog::~AboutDialog()
+{
+}
+
 void AboutDialog::OnButtonEvent (wxCommandEvent &)
 {
-  Close();
+  Destroy();
 }

@@ -54,6 +54,7 @@ class AboutDialog : public wxDialog
   public:
     
     AboutDialog(wxWindow *parent, int id = -1);
+    ~AboutDialog();
     void OnButtonEvent (wxCommandEvent &event);
   
 };

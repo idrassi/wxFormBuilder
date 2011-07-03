@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxFormBuilder-3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-28 03:03+0100\n"
-"PO-Revision-Date: 2011-06-28 03:03+0100\n"
+"POT-Creation-Date: 2011-07-03 16:39+0100\n"
+"PO-Revision-Date: 2011-07-03 16:40+0100\n"
 "Last-Translator: Andrea Zanellato <zanellato.andrea@gmail.com>\n"
 "Language-Team: wxFormBuilder <wxformbuilder@gmail.com>\n"
 "Language: \n"
@@ -200,251 +200,259 @@ msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
 #: output/plugins/containers/xml/containers.xml:73
-#: output/plugins/containers/xml/containers.xml:133
+#: output/plugins/containers/xml/containers.xml:134
 #, no-wrap
 msgid "Size of page images"
 msgstr "Grandezza delle immagini delle pagine"
 
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/containers/xml/containers.xml:74
+#: output/plugins/containers/xml/containers.xml:135
+#: output/plugins/containers/xml/containers.xml:155
+#, no-wrap
+msgid "Use associated imagelist (if any) instead bitmaps"
+msgstr ""
+
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:75
+#: output/plugins/containers/xml/containers.xml:76
 #, no-wrap
 msgid "Place tabs on the top side."
 msgstr "Colloca le schede sul lato superiore."
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:76
+#: output/plugins/containers/xml/containers.xml:77
 #, no-wrap
 msgid "Place tabs on the left side."
 msgstr "Colloca le schede sul lato sinistro."
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:77
+#: output/plugins/containers/xml/containers.xml:78
 #, no-wrap
 msgid "Place tabs on the right side."
 msgstr "Colloca le schede sul lato destro."
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:78
+#: output/plugins/containers/xml/containers.xml:79
 #, no-wrap
 msgid "Place tabs under instead of above the notebook pages."
 msgstr "Colloca le schede sul lato inferiore."
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:79
+#: output/plugins/containers/xml/containers.xml:80
 #, no-wrap
 msgid "All tabs will have same width. (Windows only)"
 msgstr "Tutte le schede avranno la stessa larghezza. (Solo in Windows)"
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:80
+#: output/plugins/containers/xml/containers.xml:81
 #, no-wrap
 msgid "There can be several rows of tabs. (Windows only)"
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:81
+#: output/plugins/containers/xml/containers.xml:82
 #, no-wrap
 msgid "Display a solid colour on notebook pages, and not a gradient, which can reduce performance. (Windows only)"
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:82
+#: output/plugins/containers/xml/containers.xml:83
 #, no-wrap
 msgid "Show tabs in a flat style. (Windows only)"
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/containers/xml/containers.xml:84
+#: output/plugins/containers/xml/containers.xml:85
 #, no-wrap
 msgid "The page selection was changed. Processes a wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED event."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/containers/xml/containers.xml:85
+#: output/plugins/containers/xml/containers.xml:86
 #, no-wrap
 msgid "The page selection is about to be changed. Processes a wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING event. This event can be vetoed."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/containers/xml/containers.xml:90
-#: output/plugins/containers/xml/containers.xml:126
-#: output/plugins/containers/xml/containers.xml:146
+#: output/plugins/containers/xml/containers.xml:91
+#: output/plugins/containers/xml/containers.xml:127
+#: output/plugins/containers/xml/containers.xml:148
 #, no-wrap
 msgid "Page Image"
 msgstr "Immagine della Pagina"
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/containers/xml/containers.xml:91
-#: output/plugins/containers/xml/containers.xml:127
-#: output/plugins/containers/xml/containers.xml:147
-#: output/plugins/containers/xml/containers.xml:165
+#: output/plugins/containers/xml/containers.xml:92
+#: output/plugins/containers/xml/containers.xml:128
+#: output/plugins/containers/xml/containers.xml:149
+#: output/plugins/containers/xml/containers.xml:168
 #, no-wrap
 msgid "Select Page when Adding"
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:98
+#: output/plugins/containers/xml/containers.xml:99
 #, no-wrap
 msgid "Defined as wxAUI_NB_TOP | wxAUI_NB_TAB_SPLIT | wxAUI_NB_TAB_MOVE | wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_CLOSE_ON_ACTIVE_TAB."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:99
+#: output/plugins/containers/xml/containers.xml:100
 #, no-wrap
 msgid "Allows the tab control to be split by dragging a tab."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:100
+#: output/plugins/containers/xml/containers.xml:101
 #, no-wrap
 msgid "Allows a tab to be moved horizontally by dragging."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:101
+#: output/plugins/containers/xml/containers.xml:102
 #, no-wrap
 msgid "Allows a tab to be moved to another tab control."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:102
+#: output/plugins/containers/xml/containers.xml:103
 #, no-wrap
 msgid "With this style, all tabs have the same width."
 msgstr "Con questo stile, tutte le schede hanno la stessa larghezza."
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:103
+#: output/plugins/containers/xml/containers.xml:104
 #, no-wrap
 msgid "With this style, left and right scroll buttons are displayed."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:104
+#: output/plugins/containers/xml/containers.xml:105
 #, no-wrap
 msgid "With this style, a drop-down list of windows is available."
 msgstr "Con questo stile, verrà aggiunta una lista a discesa delle finestre."
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:105
+#: output/plugins/containers/xml/containers.xml:106
 #, no-wrap
 msgid "With this style, a close button is available on the tab bar."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:106
+#: output/plugins/containers/xml/containers.xml:107
 #, no-wrap
 msgid "With this style, the close button is visible on the active tab."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:107
+#: output/plugins/containers/xml/containers.xml:108
 #, no-wrap
 msgid "With this style, the close button is visible on all tabs."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:108
+#: output/plugins/containers/xml/containers.xml:109
 #, no-wrap
 msgid "With this style, tabs are drawn along the top of the notebook."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:109
+#: output/plugins/containers/xml/containers.xml:110
 #, no-wrap
 msgid "With this style, tabs are drawn along the bottom of the notebook."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/containers/xml/containers.xml:112
+#: output/plugins/containers/xml/containers.xml:113
 #, no-wrap
 msgid "Sets the tab height. By default, the tab control height is calculated by measuring the text height and bitmap sizes on the tab captions. Calling this method will override that calculation and set the tab control to the specified height parameter. A call to this method will override any call to SetUniformBitmapSize(). Specifying -1 as the height will return the control to its default auto-sizing behaviour."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/containers/xml/containers.xml:113
+#: output/plugins/containers/xml/containers.xml:114
 #, no-wrap
 msgid "SetUniformBitmapSize() ensures that all tabs will have the same height, even if some tabs don't have bitmaps. Passing wxDefaultSize to this function will instruct the control to use dynamic tab height, which is the default behaviour. Under the default behaviour, when a tab with a large bitmap is added, the tab control's height will automatically increase to accommodate the larger bitmap."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/containers/xml/containers.xml:114
+#: output/plugins/containers/xml/containers.xml:115
 #, no-wrap
 msgid "The page was closed."
 msgstr "La pagina è stata chiusa."
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/containers/xml/containers.xml:115
+#: output/plugins/containers/xml/containers.xml:116
 #, no-wrap
 msgid "The page selection was changed."
 msgstr "La selezione della pagina è cambiata."
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/containers/xml/containers.xml:116
+#: output/plugins/containers/xml/containers.xml:117
 #, no-wrap
 msgid "The page selection is changing."
 msgstr "La selezione della pagina sta cambiando."
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/containers/xml/containers.xml:121
+#: output/plugins/containers/xml/containers.xml:122
 #, no-wrap
 msgid "This event must be overridden to allow drag'n'drop among wxAuiNotebooks."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:135
-#: output/plugins/containers/xml/containers.xml:154
+#: output/plugins/containers/xml/containers.xml:137
+#: output/plugins/containers/xml/containers.xml:157
 #, no-wrap
 msgid "Choose the default location for the labels depending on the current platform (left everywhere except Mac where it is top)."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:136
-#: output/plugins/containers/xml/containers.xml:155
+#: output/plugins/containers/xml/containers.xml:138
+#: output/plugins/containers/xml/containers.xml:158
 #, no-wrap
 msgid "Place labels above the page area."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:137
-#: output/plugins/containers/xml/containers.xml:156
+#: output/plugins/containers/xml/containers.xml:139
+#: output/plugins/containers/xml/containers.xml:159
 #, no-wrap
 msgid "Place labels on the left side."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:138
-#: output/plugins/containers/xml/containers.xml:157
+#: output/plugins/containers/xml/containers.xml:140
+#: output/plugins/containers/xml/containers.xml:160
 #, no-wrap
 msgid "Place labels on the right side."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/containers/xml/containers.xml:139
-#: output/plugins/containers/xml/containers.xml:158
+#: output/plugins/containers/xml/containers.xml:141
+#: output/plugins/containers/xml/containers.xml:161
 #, no-wrap
 msgid "Place labels below the page area."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/containers/xml/containers.xml:140
+#: output/plugins/containers/xml/containers.xml:142
 #, no-wrap
 msgid "The page selection was changed. Processes a wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED event."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/containers/xml/containers.xml:141
+#: output/plugins/containers/xml/containers.xml:143
 #, no-wrap
 msgid "The page selection is about to be changed. Processes a wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING event. This event can be vetoed."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/containers/xml/containers.xml:159
+#: output/plugins/containers/xml/containers.xml:162
 #, no-wrap
 msgid "The page selection was changed. Processes a wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED event."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/containers/xml/containers.xml:160
+#: output/plugins/containers/xml/containers.xml:163
 #, no-wrap
 msgid "The page selection is about to be changed. Processes a wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING event. This event can be vetoed."
 msgstr ""
