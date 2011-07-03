@@ -54,6 +54,8 @@
 	#include <wx/srchctrl.h>
 #endif
 
+#include <wx/imaglist.h>
+
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -451,32 +453,63 @@ public:
 			obj->GetPropertyAsSize(wxT("size")),
 			style | obj->GetPropertyAsInteger(wxT("window_style")));
 
-		// dummy nodes
-		wxTreeItemId root = tc->AddRoot(wxT("root node"));
-		wxTreeItemId node1 = tc->AppendItem(root,wxT("node1"));
-		wxTreeItemId node2 = tc->AppendItem(root,wxT("node2"));
-		wxTreeItemId node3 = tc->AppendItem(node2,wxT("node3"));
-		if ( ( style & wxTR_HIDE_ROOT ) == 0 )
-		{
-			tc->Expand(root);
-		}
-		tc->Expand(node1);
-		tc->Expand(node2);
-		tc->Expand(node3);
-
 		return tc;
 	}
 
-	ticpp::Element* ExportToXrc(IObject *obj)
+	void OnCreated( wxObject* wxobject, wxWindow* /*wxparent*/ )
 	{
-		ObjectToXrcFilter xrc(obj, wxT("wxTreeCtrl"), obj->GetPropertyAsString(wxT("name")));
+		wxTreeCtrl* tc = wxDynamicCast( wxobject, wxTreeCtrl );
+		wxASSERT( tc != NULL );
+		if ( NULL == tc )
+		{
+			// very very strange
+			return;
+		}
+
+		IObject* obj = GetManager()->GetIObject( wxobject );
+		if ( obj->GetPropertyAsInteger( wxT("use_imagelist") ) )
+		{
+			size_t count = GetManager()->GetChildCount( wxobject );
+			for ( size_t i = 0; i < count; ++i )
+			{
+				wxObject* child = GetManager()->GetChild( wxobject, i );
+				IObject* childObj = GetManager()->GetIObject( child );
+				if ( wxT("wxImageList") == childObj->GetClassName() )
+				{
+					wxImageList* imgLst = wxDynamicCast( child, wxImageList );
+					if ( imgLst )
+					{
+						tc->AssignImageList( imgLst );
+						break;
+					}
+				}
+			}
+		}
+
+		// dummy nodes
+		wxTreeItemId root  = tc->AddRoot( wxT("root node"), 0 );
+		wxTreeItemId node1 = tc->AppendItem( root,  wxT("node1"), 1 );
+		wxTreeItemId node2 = tc->AppendItem( root,  wxT("node2"), 2 );
+		wxTreeItemId node3 = tc->AppendItem( node2, wxT("node3"), 3 );
+		if ( ( obj->GetPropertyAsInteger( wxT("style") ) & wxTR_HIDE_ROOT ) == 0 )
+		{
+			tc->Expand( root );
+		}
+		tc->Expand( node1 );
+		tc->Expand( node2 );
+		tc->Expand( node3 );
+	}
+
+	ticpp::Element* ExportToXrc( IObject *obj )
+	{
+		ObjectToXrcFilter xrc( obj, wxT("wxTreeCtrl"), obj->GetPropertyAsString( wxT("name") ) );
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, wxT("wxTreeCtrl"));
+		XrcToXfbFilter filter( xrcObj, wxT("wxTreeCtrl") );
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -1417,7 +1450,9 @@ MACRO(wxTR_ROW_LINES)
 MACRO(wxTR_HAS_VARIABLE_ROW_HEIGHT)
 MACRO(wxTR_SINGLE)
 MACRO(wxTR_MULTIPLE)
+#if wxVERSION_NUMBER < 2900
 MACRO(wxTR_EXTENDED)
+#endif
 MACRO(wxTR_DEFAULT_STYLE)
 
 // wxGrid
@@ -1442,7 +1477,11 @@ WINDOW_COMPONENT("wxGenericDirCtrl",GenericDirCtrlComponent)
 MACRO(wxDIRCTRL_DIR_ONLY)
 MACRO(wxDIRCTRL_3D_INTERNAL)
 MACRO(wxDIRCTRL_SELECT_FIRST)
+#if wxVERSION_NUMBER < 2900
 MACRO(wxDIRCTRL_SHOW_FILTERS)
+#else
+MACRO(wxDIRCTRL_MULTIPLE)
+#endif
 MACRO(wxDIRCTRL_EDIT_LABELS)
 
 END_LIBRARY()

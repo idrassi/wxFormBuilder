@@ -36,7 +36,7 @@ private:
 
 	void onClose( wxCloseEvent &event );
 	void onPaint( wxPaintEvent &event );
-	void onSize ( wxSizeEvent  &event );
+//	void onSize ( wxSizeEvent  &event );
 
 	int      m_hgtCaptText;
 	wxString m_strCaptText;

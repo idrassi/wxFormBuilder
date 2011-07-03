@@ -33,7 +33,13 @@
 #include "rad/pythonpanel/pythonpanel.h"
 #include "rad/xrcpanel/xrcpanel.h"
 #include "rad/geninheritclass/geninhertclass.h"
-#include "inspector/objinspect.h"
+
+#if wxVERSION_NUMBER < 2900
+	#include "inspector/objinspect.h"
+#else
+	#include "inspector/objinspect29.h"
+#endif
+
 #include "objecttree/objecttree.h"
 #include "palette.h"
 #include "rad/designer/visualeditor.h"
@@ -55,7 +61,11 @@
 #include <rad/appdata.h>
 #include "model/objectbase.h"
 
-#include <wx/wxScintilla/wxscintilla.h>
+#if wxVERSION_NUMBER < 2900
+	#include <wx/wxScintilla/wxscintilla.h>
+#else
+	#include <wx/stc/stc.h>
+#endif
 
 #include <wx/artprov.h>
 
@@ -188,7 +198,7 @@ public:
 			if ( propgrid != NULL )
 			{
 				wxFocusEvent focusEvent( wxEVT_KILL_FOCUS );
-				propgrid->ProcessEvent( focusEvent );
+				propgrid->GetEventHandler()->ProcessEvent( focusEvent );
 				break;
 			}
 			windowWithFocus = windowWithFocus->GetParent();
@@ -1117,8 +1127,16 @@ void MainFrame::OnCopy( wxCommandEvent &)
 {
 	wxWindow *focusedWindow = wxWindow::FindFocus();
 
+#if wxVERSION_NUMBER < 2900
 	if ( focusedWindow != NULL && focusedWindow->IsKindOf( CLASSINFO( wxScintilla ) ) )
+	{
 		( ( wxScintilla* )focusedWindow )->Copy();
+#else
+	if ( focusedWindow != NULL && focusedWindow->IsKindOf( CLASSINFO( wxStyledTextCtrl ) ) )
+	{
+		( ( wxStyledTextCtrl* )focusedWindow )->Copy();
+#endif
+	}
 	else
 	{
 		AppData()->CopyObject( AppData()->GetSelectedObject() );
@@ -1130,8 +1148,16 @@ void MainFrame::OnCut ( wxCommandEvent &)
 {
 	wxWindow *focusedWindow = wxWindow::FindFocus();
 
+#if wxVERSION_NUMBER < 2900
 	if ( focusedWindow != NULL && focusedWindow->IsKindOf( CLASSINFO( wxScintilla ) ) )
+	{
 		( ( wxScintilla* )focusedWindow )->Cut();
+#else
+	if ( focusedWindow != NULL && focusedWindow->IsKindOf( CLASSINFO( wxStyledTextCtrl ) ) )
+	{
+		( ( wxStyledTextCtrl* )focusedWindow )->Cut();
+#endif
+	}
 	else
 	{
 		AppData()->CutObject( AppData()->GetSelectedObject() );
@@ -1149,8 +1175,16 @@ void MainFrame::OnPaste ( wxCommandEvent &)
 {
 	wxWindow *focusedWindow = wxWindow::FindFocus();
 
+#if wxVERSION_NUMBER < 2900
 	if ( focusedWindow != NULL && focusedWindow->IsKindOf( CLASSINFO( wxScintilla ) ) )
+	{
 		( ( wxScintilla* )focusedWindow )->Paste();
+#else
+	if ( focusedWindow != NULL && focusedWindow->IsKindOf( CLASSINFO( wxStyledTextCtrl ) ) )
+	{
+		( ( wxStyledTextCtrl* )focusedWindow )->Paste();
+#endif
+	}
 	else
 	{
 		AppData()->PasteObject( AppData()->GetSelectedObject() );

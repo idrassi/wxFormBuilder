@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxFormBuilder-3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-28 03:30+0100\n"
+"POT-Creation-Date: 2011-06-28 19:27+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Andrea Zanellato <zanellato.andrea@gmail.com>\n"
 "Language-Team: wxFormBuilder <wxformbuilder@gmail.com>\n"
@@ -89,12 +89,52 @@ msgstr "Classe \"%s\" sconosciuta alla linea %i, sostituito con un wxPanel"
 msgid "Unknown class \"%s\" found on line %i, and could not replace with a wxPanel as child of \"%s:%s\""
 msgstr "Classe \"%s\" sconosciuta alla linea %i, non puo' essere sostituito con un wxPanel come figlio di \"%s:%s\""
 
-#: src/model/database.cpp:906
+#: src/model/database.cpp:258
+msgid "Unknown Object Type:"
+msgstr "Tipo Oggetto Sconosciuto: "
+
+#: src/model/database.cpp:259
+msgid "The most likely causes are that this copy of wxFormBuilder is out of date, or that there is a plugin missing.\n"
+msgstr "Le cause più probabili sono una copia di wxFormBuilder non aggiornata o un plugin mancante.\n"
+
+#: src/model/database.cpp:260
+msgid "Please check at"
+msgstr ""
+
+#: src/model/database.cpp:357
+msgid "Review your definitions file (objtypes.xml)"
+msgstr "Controlla il tuo file di definizioni (objtypes.xml)"
+
+#: src/model/database.cpp:534
+#, c-format
+msgid "The property named \"%s\" of class \"%s\" is not supported by this version of wxFormBuilder.\n"
+msgstr ""
+
+#: src/model/database.cpp:535
+msgid "If your project file was just converted from an older version, then the conversion was not complete.\n"
+msgstr ""
+
+#: src/model/database.cpp:536
+msgid ""
+"Otherwise, this project is from a newer version of wxFormBuilder.\n"
+"\n"
+msgstr "Oppure, questo progetto deriva da una versione di wxFormBuilder più recente.\n"
+
+#: src/model/database.cpp:537
+#, c-format
+msgid "The property's value is: %s\n"
+msgstr ""
+
+#: src/model/database.cpp:538
+msgid "If you save this project, YOU WILL LOSE DATA"
+msgstr ""
+
+#: src/model/database.cpp:908
 #, c-format
 msgid "Found second template definition for property \"%s\" for language \"%s\""
 msgstr "Trovato secondo modello di definizione per la proprietà \"%s\" per il linguaggio \"%s\""
 
-#: src/model/database.cpp:1081
+#: src/model/database.cpp:1083
 #, c-format
 msgid ""
 "Error: %s\n"
@@ -103,25 +143,25 @@ msgstr ""
 "Errore: %s\n"
 "Durante l'analisi della proprieta' \"%s\" della classe \"%s\""
 
-#: src/model/database.cpp:1291
-#: src/model/database.cpp:1317
+#: src/model/database.cpp:1295
+#: src/model/database.cpp:1321
 msgid "Error loading library "
 msgstr "Errore caricamento libreria"
 
-#: src/model/database.cpp:1304
+#: src/model/database.cpp:1308
 msgid " is not a valid component library: "
 msgstr " non e' una libreria di componente valida: "
 
-#: src/model/database.cpp:1327
+#: src/model/database.cpp:1331
 msgid " is not a valid component library"
 msgstr " non e' una libreria di componente valida"
 
-#: src/model/database.cpp:1378
+#: src/model/database.cpp:1382
 #, c-format
 msgid "Unknown property type \"%s\""
 msgstr "Tipo proprieta' sconosciuto \"%s\""
 
-#: src/model/database.cpp:1464
+#: src/model/database.cpp:1468
 #, c-format
 msgid "No Object Type found for \"%s\""
 msgstr "Nessun Tipo Oggetto trovato per \"%s\""
@@ -3305,23 +3345,8 @@ msgstr "E' stato richiesto il menu contestuale dell'oggetto selezionato, da un c
 #~ msgstr ""
 #~ "# Gestori di eventi virtuali, crea l'override nella tua classe derivata"
 
-#~ msgid "Unknown Object Type: "
-#~ msgstr "Tipo Oggetto Sconosciuto: "
-
-#~ msgid ""
-#~ "\n"
-#~ "The most likely causes are that this copy of wxFormBuilder is out of "
-#~ "date, or that there is a plugin missing.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Le cause piu' probabili sono una copia di wxFormBuilder non aggiornata o "
-#~ "un plug-in mancante.\n"
-
 #~ msgid "Please check at http://www.wxformbuilder.org\n"
 #~ msgstr "Per favore verifica su http://www.wxformbuilder.org\n"
-
-#~ msgid "Review your definitions file (objtypes.xml)"
-#~ msgstr "Controlla il tuo file di definizioni (objtypes.xml)"
 
 #~ msgid "SetDefaultLayoutProperties expects a subclass of sizeritembase"
 #~ msgstr ""

@@ -250,12 +250,12 @@ class SplitterWindowComponent : public ComponentBase
 			gravity = ( gravity > 1.0 ? 1.0 : gravity );
 			splitter->SetSashGravity( gravity );
 		}
-
+#if wxVERSION_NUMBER < 2900
 		if ( !obj->IsNull( wxT("sashsize") ) )
 		{
 			splitter->SetSashSize( obj->GetPropertyAsInteger( wxT("sashsize") ) );
 		}
-
+#endif
 		if ( !obj->IsNull( wxT("min_pane_size") ) )
 		{
 			int minPaneSize = obj->GetPropertyAsInteger( wxT("min_pane_size") );

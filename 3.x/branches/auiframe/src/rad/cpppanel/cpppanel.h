@@ -32,7 +32,12 @@
 
 class CodeEditor;
 
-class wxScintilla;
+#if wxVERSION_NUMBER < 2900
+	class wxScintilla;
+#else
+	class wxStyledTextCtrl;
+#endif
+
 #ifdef WXFB_USE_AUI
     #include <wx/aui/auibook.h>
 #else
@@ -62,7 +67,12 @@ private:
 	wxFlatNotebookImageList* m_icons;
 	wxFlatNotebook* m_notebook;
 #endif
+
+#if wxVERSION_NUMBER < 2900
 	void InitStyledTextCtrl( wxScintilla* stc );
+#else
+	void InitStyledTextCtrl( wxStyledTextCtrl* stc );
+#endif
 
 public:
 #ifdef WXFB_USE_AUI

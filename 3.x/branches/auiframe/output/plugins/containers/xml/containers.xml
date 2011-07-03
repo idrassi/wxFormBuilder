@@ -71,6 +71,7 @@ Written by
 		<inherits class="wxWindow" />
 		<property name="name" type="text">m_notebook</property>
 		<property name="bitmapsize" type="wxSize" help="Size of page images"/>
+		<property name="use_imagelist" type="bool" help="Use associated imagelist (if any) instead bitmaps"/>
 		<property name="style" type="bitlist">
 			<option name="wxNB_TOP"         help="Place tabs on the top side." />
 			<option name="wxNB_LEFT"        help="Place tabs on the left side." />
@@ -131,6 +132,7 @@ Written by
 		<inherits class="wxWindow" />
 		<property name="name" type="text">m_listbook</property>
 		<property name="bitmapsize" type="wxSize" help="Size of page images"/>
+		<property name="use_imagelist" type="bool" help="Use associated imagelist (if any) instead bitmaps"/>
 		<property name="style" type="bitlist">
 			<option name="wxLB_DEFAULT" help="Choose the default location for the labels depending on the current platform (left everywhere except Mac where it is top)." />
 			<option name="wxLB_TOP"     help="Place labels above the page area." />
@@ -150,6 +152,7 @@ Written by
 	<objectinfo class="wxChoicebook" icon="choicebook.xpm" type="choicebook">
 		<inherits class="wxWindow" />
 		<property name="name" type="text">m_choicebook</property>
+		<property name="use_imagelist" type="bool" help="Use associated imagelist (if any) instead bitmaps"/>
 		<property name="style" type="bitlist">
 			<option name="wxCHB_DEFAULT" help="Choose the default location for the labels depending on the current platform (left everywhere except Mac where it is top)." />
 			<option name="wxCHB_TOP"     help="Place labels above the page area." />

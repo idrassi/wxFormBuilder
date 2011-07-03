@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <!--
-wxFormBuilder - A Visual Dialog Editor for wxWidgets.
-Copyright (C) 2005 José Antonio Hurtado
+  wxFormBuilder - A Visual Dialog Editor for wxWidgets.
+  Copyright (C) 2005 José Antonio Hurtado
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-Written by
-  José Antonio Hurtado - joseantonio.hurtado@gmail.com
-  Juan Antonio Ortega  - jortegalalmolda@gmail.com
+  Written by
+    José Antonio Hurtado - joseantonio.hurtado@gmail.com
+    Juan Antonio Ortega  - jortegalalmolda@gmail.com
 -->
 <package name="Common" lib="libcommon" icon="button16x16.xpm" desc="wxWidgets common controls">
 
@@ -41,7 +41,7 @@ Written by
 
   <objectinfo class="wxBitmapButton" icon="bitmap_button.xpm" type="widget">
     <inherits class="wxButton">
-    	<property name="name">m_bpButton</property>
+        <property name="name">m_bpButton</property>
     </inherits>
     <property name="style" type="bitlist">
       <option name="wxBU_LEFT"      help="Left-justifies the bitmap label. WIN32 only."/>
@@ -132,9 +132,9 @@ Written by
       <option name="wxCB_SORT"          help="Sorts the entries in the list alphabetically."/>
       <option name="wxTE_PROCESS_ENTER" help="The control will generate the event wxEVT_COMMAND_TEXT_ENTER (otherwise pressing Enter key is either processed internally by the control or used for navigation between dialog controls)."/>
     </property>
-	<event name="OnCombobox" class="wxCommandEvent" help="Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on the list is selected. Note that calling GetValue returns the new value of selection." />
-	<event name="OnText" class="wxCommandEvent" help="Process a wxEVT_COMMAND_TEXT_UPDATED event, when the combobox text changes." />
-	<event name="OnTextEnter" class="wxCommandEvent" help="Process a wxEVT_COMMAND_TEXT_ENTER event, when &lt;RETURN&gt; is pressed in the combobox." />
+    <event name="OnCombobox" class="wxCommandEvent" help="Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on the list is selected. Note that calling GetValue returns the new value of selection." />
+    <event name="OnText" class="wxCommandEvent" help="Process a wxEVT_COMMAND_TEXT_UPDATED event, when the combobox text changes." />
+    <event name="OnTextEnter" class="wxCommandEvent" help="Process a wxEVT_COMMAND_TEXT_ENTER event, when &lt;RETURN&gt; is pressed in the combobox." />
   </objectinfo>
   
   <objectinfo class="wxBitmapComboBox" icon="combo_box.xpm" type="widget">
@@ -147,9 +147,9 @@ Written by
       <option name="wxCB_SORT"          help="Sorts the entries in the list alphabetically."/>
       <option name="wxTE_PROCESS_ENTER" help="The control will generate the event wxEVT_COMMAND_TEXT_ENTER (otherwise pressing Enter key is either processed internally by the control or used for navigation between dialog controls)."/>
     </property>
-	<event name="OnCombobox" class="wxCommandEvent" help="Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on the list is selected. Note that calling GetValue returns the new value of selection." />
-	<event name="OnText" class="wxCommandEvent" help="Process a wxEVT_COMMAND_TEXT_UPDATED event, when the combobox text changes." />
-	<event name="OnTextEnter" class="wxCommandEvent" help="Process a wxEVT_COMMAND_TEXT_ENTER event, when &lt;RETURN&gt; is pressed in the combobox." />
+    <event name="OnCombobox" class="wxCommandEvent" help="Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on the list is selected. Note that calling GetValue returns the new value of selection." />
+    <event name="OnText" class="wxCommandEvent" help="Process a wxEVT_COMMAND_TEXT_UPDATED event, when the combobox text changes." />
+    <event name="OnTextEnter" class="wxCommandEvent" help="Process a wxEVT_COMMAND_TEXT_ENTER event, when &lt;RETURN&gt; is pressed in the combobox." />
   </objectinfo>
 
   <objectinfo class="wxChoice" icon="choice.xpm" type="widget">
@@ -157,66 +157,7 @@ Written by
     <property name="name" type="text">m_choice</property>
     <property name="choices" type="stringlist" help="An array of strings with which to initialise the choice control." />
     <property name="selection" type="uint" help="Zero-based position of the selected choice.">0</property>
-	<event name="OnChoice" class="wxCommandEvent" help="Process a wxEVT_COMMAND_CHOICE_SELECTED event, when an item on the list is selected." />
-  </objectinfo>
-
-  <objectinfo class="wxListBox" icon="list_box.xpm" type="widget">
-    <inherits class="wxWindow" />
-    <property name="name" type="text">m_listBox</property>
-    <property name="choices" type="stringlist" help="Contents of the List Box."/>
-    <property name="style" type="bitlist" help="Note that wxLB_SINGLE, wxLB_MULTIPLE and wxLB_EXTENDED styles are mutually exclusive and you can specify at most one of them (single selection is the default).">
-      <option name="wxLB_SINGLE"               help="Single-selection list."/>
-      <option name="wxLB_MULTIPLE"             help="Multiple-selection list: the user can toggle multiple items on and off."/>
-      <option name="wxLB_EXTENDED"             help="Extended-selection list: the user can select multiple items using the SHIFT key and the mouse or special key combinations."/>
-      <option name="wxLB_HSCROLL"              help="Create horizontal scrollbar if contents are too wide (Windows only)."/>
-      <option name="wxLB_ALWAYS_SB"            help="Always show a vertical scrollbar."/>
-      <option name="wxLB_NEEDED_SB"            help="Only create a vertical scrollbar if needed."/>
-      <option name="wxLB_SORT"                 help="The listbox contents are sorted in alphabetical order."/>
-    </property>
-	<event name="OnListBox" class="wxCommandEvent" help="Process a wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the list is selected." />
-	<event name="OnListBoxDClick" class="wxCommandEvent" help="Process a wxEVT_COMMAND_LISTBOX_DOUBLECLICKED event, when the listbox is double-clicked." />
-  </objectinfo>
-
-  <objectinfo class="wxListCtrl" icon="list_ctrl.xpm" type="widget">
-    <inherits class="wxWindow" />
-    <property name="name" type="text">m_listCtrl</property>
-    <property name="style" type="bitlist">
-      <option name="wxLC_LIST"            help="Multicolumn list view, with optional small icons. Columns are computed automatically, i.e. you don't set columns as in wxLC_REPORT. In other words, the list wraps, unlike a wxListBox." />
-      <option name="wxLC_REPORT"          help="Single or multicolumn report view, with optional header." />
-      <option name="wxLC_VIRTUAL"         help="The application provides items text on demand. May only be used with wxLC_REPORT." />
-      <option name="wxLC_ICON"            help="Large icon view, with optional labels." />
-      <option name="wxLC_SMALL_ICON"      help="Small icon view, with optional labels." />
-      <option name="wxLC_ALIGN_TOP"       help="Icons align to the top. Windows default. (Windows only)" />
-      <option name="wxLC_ALIGN_LEFT"      help="Icons align to the left." />
-      <option name="wxLC_AUTOARRANGE"     help="Icons arrange themselves. (Windows only)" />
-      <option name="wxLC_EDIT_LABELS"     help="Labels are editable: the application will be notified when editing starts." />
-      <option name="wxLC_NO_SORT_HEADER"  help="Prevent headers from behaving like buttons in report mode. (Windows only)" />
-      <option name="wxLC_NO_HEADER"       help="No header in report mode." />
-      <option name="wxLC_SINGLE_SEL"      help="Single selection (default is multiple)." />
-      <option name="wxLC_SORT_ASCENDING"  help="Sort in ascending order (must still supply a comparison callback in SortItems." />
-      <option name="wxLC_SORT_DESCENDING" help="Sort in descending order (must still supply a comparison callback in SortItems." />
-      <option name="wxLC_HRULES"          help="Draws light horizontal rules between rows in report mode." />
-      <option name="wxLC_VRULES"          help="Draws light vertical rules between columns in report mode." />wxLC_ICON</property>
-	<event name="OnListBeginDrag" class="wxListEvent" help="Begin dragging with the left mouse button." />
-	<event name="OnListBeginRDrag" class="wxListEvent" help="Begin dragging with the right mouse button." />
-	<event name="OnListBeginLabelEdit" class="wxListEvent" help="Begin editing a label. This can be prevented by calling Veto()." />
-	<event name="OnListEndLabelEdit" class="wxListEvent" help="Finish editing a label. This can be prevented by calling Veto()." />
-	<event name="OnListDeleteItem" class="wxListEvent" help="Delete an item." />
-	<event name="OnListDeleteAllItems" class="wxListEvent" help="Delete all items." />
-	<event name="OnListItemSelected" class="wxListEvent" help="The item has been selected." />
-	<event name="OnListItemDeselected" class="wxListEvent" help="The item has been deselected." />
-	<event name="OnListItemActivated" class="wxListEvent" help="The item has been activated (ENTER or double click)." />
-	<event name="OnListItemFocused" class="wxListEvent" help="The currently focused item has changed." />
-	<event name="OnListItemMiddleClick" class="wxListEvent" help="The middle mouse button has been clicked on an item." />
-	<event name="OnListItemRightClick" class="wxListEvent" help="The right mouse button has been clicked on an item." />
-	<event name="OnListKeyDown" class="wxListEvent" help="A key has been pressed." />
-	<event name="OnListInsertItem" class="wxListEvent" help="An item has been inserted." />
-	<event name="OnListColClick" class="wxListEvent" help="A column (m_col) has been left-clicked." />
-	<event name="OnListColRightClick" class="wxListEvent" help="A column (m_col) has been right-clicked." />
-	<event name="OnListColBeginDrag" class="wxListEvent" help="The user started resizing a column - can be vetoed." />
-	<event name="OnListColDragging" class="wxListEvent" help="The divider between columns is being dragged." />
-	<event name="OnListColEndDrag" class="wxListEvent" help="A column has been resized by the user." />
-	<event name="OnListCacheHint" class="wxListEvent" help="Prepare cache for a virtual list control." />
+    <event name="OnChoice" class="wxCommandEvent" help="Process a wxEVT_COMMAND_CHOICE_SELECTED event, when an item on the list is selected." />
   </objectinfo>
 
   <objectinfo class="wxCheckBox" icon="checkbox.xpm" type="widget">
@@ -230,7 +171,7 @@ Written by
       <option name="wxALIGN_RIGHT" help="Makes the text appear on the left of the checkbox."/>
     </property>
     <property name="checked" type="bool">0</property>
-	<event name="OnCheckBox" class="wxCommandEvent" help="Process a wxEVT_COMMAND_CHECKBOX_CLICKED event, when the checkbox is clicked." />
+    <event name="OnCheckBox" class="wxCommandEvent" help="Process a wxEVT_COMMAND_CHECKBOX_CLICKED event, when the checkbox is clicked." />
   </objectinfo>
 
   <objectinfo class="wxRadioBox" icon="radio_box.xpm" type="widget">
@@ -244,7 +185,7 @@ Written by
       <option name="wxRA_SPECIFY_ROWS"          help="The major dimension parameter refers to the maximum number of rows."/>
       <option name="wxRA_SPECIFY_COLS"          help="The major dimension parameter refers to the maximum number of columns."/>
       <option name="wxRA_USE_CHECKBOX"          help="Use of the checkbox controls instead of radio buttons. (currently supported only on PalmOS)"/>wxRA_SPECIFY_COLS</property>
-	<event name="OnRadioBox" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RADIOBOX_SELECTED event, when a radiobutton is clicked." />
+    <event name="OnRadioBox" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RADIOBOX_SELECTED event, when a radiobutton is clicked." />
   </objectinfo>
 
   <objectinfo class="wxRadioButton" icon="radio_button.xpm" type="widget">
@@ -256,7 +197,7 @@ Written by
       <option name="wxRB_SINGLE"       help="In some circumstances, radio buttons that are not consecutive siblings trigger a hang bug in Windows (only). If this happens, add this style to mark the button as not belonging to a group, and implement the mutually-exclusive group behaviour yourself." />
       <option name="wxRB_USE_CHECKBOX" help="Use a checkbox button instead of radio button (currently supported only on PalmOS)." /></property>
     <property name="value" type="bool">0</property>
-	<event name="OnRadioButton" class="wxCommandEvent" help="Handles a toggle button click event." />
+    <event name="OnRadioButton" class="wxCommandEvent" help="Handles a toggle button click event." />
   </objectinfo>
 
   <objectinfo class="wxStaticLine" icon="static_line.xpm" type="widget">
@@ -285,26 +226,26 @@ Written by
       <option name="wxSL_BOTH"            help="Displays ticks on both sides." />
       <option name="wxSL_SELRANGE"        help="Allows the user to select a range on the slider. Windows only." />
       <option name="wxSL_INVERSE"         help="Inverses the mininum and maximum endpoints on the slider. Not compatible with wxSL_SELRANGE." />wxSL_HORIZONTAL</property>
-	<event name="OnScroll" class="wxScrollEvent" help="Process all scroll events." />
-	<event name="OnScrollTop" class="wxScrollEvent" help="Process wxEVT_SCROLL_TOP scroll-to-top events (minimum position)." />
-	<event name="OnScrollBottom" class="wxScrollEvent" help="Process wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position)." />
-	<event name="OnScrollLineUp" class="wxScrollEvent" help="Process wxEVT_SCROLL_LINEUP line up events." />
-	<event name="OnScrollLineDown" class="wxScrollEvent" help="Process wxEVT_SCROLL_LINEDOWN line down events." />
-	<event name="OnScrollPageUp" class="wxScrollEvent" help="Process wxEVT_SCROLL_PAGEUP page up events." />
-	<event name="OnScrollPageDown" class="wxScrollEvent" help="Process wxEVT_SCROLL_PAGEDOWN page down events." />
-	<event name="OnScrollThumbTrack" class="wxScrollEvent" help="Process wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent as the user drags the thumbtrack)." />
-	<event name="OnScrollThumbRelease" class="wxScrollEvent" help="Process wxEVT_SCROLL_THUMBRELEASE thumb release events." />
-	<event name="OnScrollChanged" class="wxScrollEvent" help="Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only)." />
-	<event name="OnCommandScroll" class="wxScrollEvent" help="Process all scroll events. Variant taking a window identifier." />
-	<event name="OnCommandScrollTop" class="wxScrollEvent" help="Process wxEVT_SCROLL_TOP scroll-to-top events (minimum position). Variant taking a window identifier." />
-	<event name="OnCommandScrollBottom" class="wxScrollEvent" help="Process wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position). Variant taking a window identifier." />
-	<event name="OnCommandScrollLineUp" class="wxScrollEvent" help="Process wxEVT_SCROLL_LINEUP line up events. Variant taking a window identifier." />
-	<event name="OnCommandScrollLineDown" class="wxScrollEvent" help="Process wxEVT_SCROLL_LINEDOWN line down events. Variant taking a window identifier." />
-	<event name="OnCommandScrollPageUp" class="wxScrollEvent" help="Process wxEVT_SCROLL_PAGEUP page up events. Variant taking a window identifier." />
-	<event name="OnCommandScrollPageDown" class="wxScrollEvent" help="Process wxEVT_SCROLL_PAGEDOWN page down events. Variant taking a window identifier." />
-	<event name="OnCommandScrollThumbTrack" class="wxScrollEvent" help="Process wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent as the user drags the thumbtrack). Variant taking a window identifier." />
-	<event name="OnCommandScrollThumbRelease" class="wxScrollEvent" help="Process wxEVT_SCROLL_THUMBRELEASE thumb release events. Variant taking a window identifier." />
-	<event name="OnCommandScrollChanged" class="wxScrollEvent" help="Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only). Variant taking a window identifier." />
+    <event name="OnScroll" class="wxScrollEvent" help="Process all scroll events." />
+    <event name="OnScrollTop" class="wxScrollEvent" help="Process wxEVT_SCROLL_TOP scroll-to-top events (minimum position)." />
+    <event name="OnScrollBottom" class="wxScrollEvent" help="Process wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position)." />
+    <event name="OnScrollLineUp" class="wxScrollEvent" help="Process wxEVT_SCROLL_LINEUP line up events." />
+    <event name="OnScrollLineDown" class="wxScrollEvent" help="Process wxEVT_SCROLL_LINEDOWN line down events." />
+    <event name="OnScrollPageUp" class="wxScrollEvent" help="Process wxEVT_SCROLL_PAGEUP page up events." />
+    <event name="OnScrollPageDown" class="wxScrollEvent" help="Process wxEVT_SCROLL_PAGEDOWN page down events." />
+    <event name="OnScrollThumbTrack" class="wxScrollEvent" help="Process wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent as the user drags the thumbtrack)." />
+    <event name="OnScrollThumbRelease" class="wxScrollEvent" help="Process wxEVT_SCROLL_THUMBRELEASE thumb release events." />
+    <event name="OnScrollChanged" class="wxScrollEvent" help="Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only)." />
+    <event name="OnCommandScroll" class="wxScrollEvent" help="Process all scroll events. Variant taking a window identifier." />
+    <event name="OnCommandScrollTop" class="wxScrollEvent" help="Process wxEVT_SCROLL_TOP scroll-to-top events (minimum position). Variant taking a window identifier." />
+    <event name="OnCommandScrollBottom" class="wxScrollEvent" help="Process wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position). Variant taking a window identifier." />
+    <event name="OnCommandScrollLineUp" class="wxScrollEvent" help="Process wxEVT_SCROLL_LINEUP line up events. Variant taking a window identifier." />
+    <event name="OnCommandScrollLineDown" class="wxScrollEvent" help="Process wxEVT_SCROLL_LINEDOWN line down events. Variant taking a window identifier." />
+    <event name="OnCommandScrollPageUp" class="wxScrollEvent" help="Process wxEVT_SCROLL_PAGEUP page up events. Variant taking a window identifier." />
+    <event name="OnCommandScrollPageDown" class="wxScrollEvent" help="Process wxEVT_SCROLL_PAGEDOWN page down events. Variant taking a window identifier." />
+    <event name="OnCommandScrollThumbTrack" class="wxScrollEvent" help="Process wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent as the user drags the thumbtrack). Variant taking a window identifier." />
+    <event name="OnCommandScrollThumbRelease" class="wxScrollEvent" help="Process wxEVT_SCROLL_THUMBRELEASE thumb release events. Variant taking a window identifier." />
+    <event name="OnCommandScrollChanged" class="wxScrollEvent" help="Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only). Variant taking a window identifier." />
   </objectinfo>
 
   <objectinfo class="wxGauge" icon="gauge.xpm" type="widget">
@@ -316,6 +257,111 @@ Written by
       <option name="wxGA_HORIZONTAL"   help="Creates a horizontal gauge. "/>
       <option name="wxGA_VERTICAL"     help="Creates a vertical gauge."/>
       <option name="wxGA_SMOOTH"       help="Creates smooth progress bar with one pixel wide update step (not supported by all platforms)."/>wxGA_HORIZONTAL</property>
+  </objectinfo>
+
+  <objectinfo class="wxListBox" icon="list_box.xpm" type="widget">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_listBox</property>
+    <property name="choices" type="stringlist" help="Contents of the List Box."/>
+    <property name="style" type="bitlist" help="Note that wxLB_SINGLE, wxLB_MULTIPLE and wxLB_EXTENDED styles are mutually exclusive and you can specify at most one of them (single selection is the default).">
+      <option name="wxLB_SINGLE"               help="Single-selection list."/>
+      <option name="wxLB_MULTIPLE"             help="Multiple-selection list: the user can toggle multiple items on and off."/>
+      <option name="wxLB_EXTENDED"             help="Extended-selection list: the user can select multiple items using the SHIFT key and the mouse or special key combinations."/>
+      <option name="wxLB_HSCROLL"              help="Create horizontal scrollbar if contents are too wide (Windows only)."/>
+      <option name="wxLB_ALWAYS_SB"            help="Always show a vertical scrollbar."/>
+      <option name="wxLB_NEEDED_SB"            help="Only create a vertical scrollbar if needed."/>
+      <option name="wxLB_SORT"                 help="The listbox contents are sorted in alphabetical order."/>
+    </property>
+    <event name="OnListBox" class="wxCommandEvent" help="Process a wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the list is selected." />
+    <event name="OnListBoxDClick" class="wxCommandEvent" help="Process a wxEVT_COMMAND_LISTBOX_DOUBLECLICKED event, when the listbox is double-clicked." />
+  </objectinfo>
+
+  <objectinfo class="wxListCtrl" icon="list_ctrl.xpm" type="listctrl" startgroup="1">
+    <inherits class="wxWindow" />
+    <property name="name" type="text">m_listCtrl</property>
+    <property name="use_imagelist" type="bool" help="Use associated imagelist (if any) instead bitmaps"/>
+    <property name="style" type="bitlist">
+      <option name="wxLC_LIST"            help="Multicolumn list view, with optional small icons. Columns are computed automatically, i.e. you don't set columns as in wxLC_REPORT. In other words, the list wraps, unlike a wxListBox." />
+      <option name="wxLC_REPORT"          help="Single or multicolumn report view, with optional header." />
+      <option name="wxLC_VIRTUAL"         help="The application provides items text on demand. May only be used with wxLC_REPORT." />
+      <option name="wxLC_ICON"            help="Large icon view, with optional labels." />
+      <option name="wxLC_SMALL_ICON"      help="Small icon view, with optional labels." />
+      <option name="wxLC_ALIGN_TOP"       help="Icons align to the top. Windows default. (Windows only)" />
+      <option name="wxLC_ALIGN_LEFT"      help="Icons align to the left." />
+      <option name="wxLC_AUTOARRANGE"     help="Icons arrange themselves. (Windows only)" />
+      <option name="wxLC_EDIT_LABELS"     help="Labels are editable: the application will be notified when editing starts." />
+      <option name="wxLC_NO_SORT_HEADER"  help="Prevent headers from behaving like buttons in report mode. (Windows only)" />
+      <option name="wxLC_NO_HEADER"       help="No header in report mode." />
+      <option name="wxLC_SINGLE_SEL"      help="Single selection (default is multiple)." />
+      <option name="wxLC_SORT_ASCENDING"  help="Sort in ascending order (must still supply a comparison callback in SortItems." />
+      <option name="wxLC_SORT_DESCENDING" help="Sort in descending order (must still supply a comparison callback in SortItems." />
+      <option name="wxLC_HRULES"          help="Draws light horizontal rules between rows in report mode." />
+      <option name="wxLC_VRULES"          help="Draws light vertical rules between columns in report mode." />wxLC_ICON</property>
+    <event name="OnListBeginDrag" class="wxListEvent" help="Begin dragging with the left mouse button." />
+    <event name="OnListBeginRDrag" class="wxListEvent" help="Begin dragging with the right mouse button." />
+    <event name="OnListBeginLabelEdit" class="wxListEvent" help="Begin editing a label. This can be prevented by calling Veto()." />
+    <event name="OnListEndLabelEdit" class="wxListEvent" help="Finish editing a label. This can be prevented by calling Veto()." />
+    <event name="OnListDeleteItem" class="wxListEvent" help="Delete an item." />
+    <event name="OnListDeleteAllItems" class="wxListEvent" help="Delete all items." />
+    <event name="OnListItemSelected" class="wxListEvent" help="The item has been selected." />
+    <event name="OnListItemDeselected" class="wxListEvent" help="The item has been deselected." />
+    <event name="OnListItemActivated" class="wxListEvent" help="The item has been activated (ENTER or double click)." />
+    <event name="OnListItemFocused" class="wxListEvent" help="The currently focused item has changed." />
+    <event name="OnListItemMiddleClick" class="wxListEvent" help="The middle mouse button has been clicked on an item." />
+    <event name="OnListItemRightClick" class="wxListEvent" help="The right mouse button has been clicked on an item." />
+    <event name="OnListKeyDown" class="wxListEvent" help="A key has been pressed." />
+    <event name="OnListInsertItem" class="wxListEvent" help="An item has been inserted." />
+    <event name="OnListColClick" class="wxListEvent" help="A column (m_col) has been left-clicked." />
+    <event name="OnListColRightClick" class="wxListEvent" help="A column (m_col) has been right-clicked." />
+    <event name="OnListColBeginDrag" class="wxListEvent" help="The user started resizing a column - can be vetoed." />
+    <event name="OnListColDragging" class="wxListEvent" help="The divider between columns is being dragged." />
+    <event name="OnListColEndDrag" class="wxListEvent" help="A column has been resized by the user." />
+    <event name="OnListCacheHint" class="wxListEvent" help="Prepare cache for a virtual list control." />
+  </objectinfo>
+
+  <objectinfo class="listcol" icon="list_col.xpm" type="listcol">
+    <property name="text"  type="text"    help="The title of the column.">Column</property>
+    <property name="width" type="int"     help="The column width.">30</property>
+    <property name="align" type="option"  help="The alignment for the item. Can be one of wxLIST_FORMAT_LEFT, wxLIST_FORMAT_RIGHT or wxLIST_FORMAT_CENTRE.">
+      <option name="wxLIST_FORMAT_LEFT"   />
+      <option name="wxLIST_FORMAT_RIGHT"  />
+      <option name="wxLIST_FORMAT_CENTRE" />
+      wxLIST_FORMAT_LEFT
+    </property>
+  </objectinfo>
+
+  <objectinfo class="listitem" icon="list_item.xpm" type="listitem">
+    <property name="text"         type="text"     help="The text label for the item."/>
+    <property name="textcolour"   type="wxColour" help="The text colour for the item."/>
+    <property name="bg"           type="wxColour" help="The background color for the item."/>
+    <property name="font"         type="wxFont"   help="The font for the item."/>
+    <property name="align"        type="option"   help="The alignment for the item. Can be one of wxLIST_FORMAT_LEFT, wxLIST_FORMAT_RIGHT or wxLIST_FORMAT_CENTRE.">
+      <option name="wxLIST_FORMAT_LEFT"           help="Align the item to the left."   />
+      <option name="wxLIST_FORMAT_RIGHT"          help="Align the item to the right."  />
+      <option name="wxLIST_FORMAT_CENTRE"         help="Align the item to the centre." />
+      wxLIST_FORMAT_LEFT
+    </property>
+    <property name="bitmap"       type="bitmap"  help="Add a bitmap to the (normal) wxImageList associated with the wxListCtrl parent and associate it with this item. If the imagelist is not defined it will be created implicitly."/>
+    <property name="bitmap-small" type="bitmap"  help="Add a bitmap in the 'small' wxImageList associated with the wxListCtrl parent and associate it with this item. If the 'small' imagelist is not defined it will be created implicitly."/>
+    <property name="image"        type="int"     help="The zero-based index of the image associated with the item in the (normal) image list."/>
+    <property name="image-small"  type="int"     help="The zero-based index of the image associated with the item in the 'small' image list."/>
+    <property name="col"          type="int"     help="The zero-based column index."/>
+    <property name="data"         type="int"     help="The client data for the item."/>
+    <property name="state"        type="bitlist" help="The item state. Can be any combination of the following values:&#x0A;&#8226; wxLIST_STATE_FOCUSED: The item has the focus.&#x0A;&#8226; wxLIST_STATE_SELECTED: The item is selected.">
+      <option name="wxLIST_STATE_FOCUSED"        help="The item has the focus." />
+      <option name="wxLIST_STATE_SELECTED"       help="The item is selected." />
+    </property>
+  </objectinfo>
+
+  <objectinfo class="wxImageList" icon="imaglist.xpm" type="imagelist" startgroup="1">
+    <property name="name" type="text">m_imgLst</property>
+    <property name="size" type="wxSize" help="The size of the images in the list (default: the size of the first bitmap)." />
+    <property name="mask" type="bool"   help="If masks should be created for all images (default: true).">1</property>
+  </objectinfo>
+
+  <objectinfo class="bitmapitem" icon="image.xpm" type="bitmapitem">
+    <property name="name"   type="text">bitmap</property>
+    <property name="bitmap" type="bitmap" help="Adds a new image by keeping its optional mask bitmap."/>
   </objectinfo>
 
 </package>

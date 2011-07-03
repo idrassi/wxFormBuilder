@@ -64,11 +64,19 @@ void LogStack();
 
 static const wxCmdLineEntryDesc s_cmdLineDesc[] =
 {
-	{ wxCMD_LINE_SWITCH, wxT("g"), wxT("generate"),	_("Generate code from passed file.") },
-	{ wxCMD_LINE_OPTION, wxT("l"), wxT("language"),	_("Override the code_generation property from the passed file and generate the passed languages. Separate multiple languages with commas.") },
-	{ wxCMD_LINE_SWITCH, wxT("h"), wxT("help"),		_("Show this help message."), wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_HELP  },
-	{ wxCMD_LINE_PARAM, NULL, NULL,	wxT("File to open."), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
+#if wxVERSION_NUMBER < 2900
+	{ wxCMD_LINE_SWITCH, wxT("g"), wxT("generate"), _("Generate code from passed file.") },
+	{ wxCMD_LINE_OPTION, wxT("l"), wxT("language"), _("Override the code_generation property from the passed file and generate the passed languages. Separate multiple languages with commas.") },
+	{ wxCMD_LINE_SWITCH, wxT("h"), wxT("help"),     _("Show this help message."), wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_HELP  },
+	{ wxCMD_LINE_PARAM,  NULL, NULL,                _("File to open."),           wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
 	{ wxCMD_LINE_NONE }
+#else
+	{ wxCMD_LINE_SWITCH, "g", "generate",   _("Generate code from passed file.") },
+	{ wxCMD_LINE_OPTION, "l", "language",   _("Override the code_generation property from the passed file and generate the passed languages. Separate multiple languages with commas.") },
+	{ wxCMD_LINE_SWITCH, "h", "help",       _("Show this help message."), wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_HELP  },
+	{ wxCMD_LINE_PARAM,  NULL, NULL,        _("File to open."),           wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
+	{ wxCMD_LINE_NONE }
+#endif
 };
 
 IMPLEMENT_APP( wxFormBuilderApp )
@@ -110,7 +118,7 @@ int wxFormBuilderApp::OnRun()
 
 	// Load locales (if localization is enabled)
 
-	bool enabled; int selection, lang;
+	bool enabled; int selection; int lang = 0;
 	wxConfigBase* config = wxConfigBase::Get();
 
 	config->Read( wxT("/preferences/locale/enabled"), &enabled, 0 );
@@ -386,7 +394,7 @@ wxFormBuilderApp::~wxFormBuilderApp()
 
 void wxFormBuilderApp::SelectLanguage( int lang )
 {
-    if ( !m_locale.Init( lang, wxLOCALE_CONV_ENCODING ) )
+    if ( !m_locale.Init( lang ) )
     {
         wxLogError( wxT("This language is not supported by the system.") );
         return;

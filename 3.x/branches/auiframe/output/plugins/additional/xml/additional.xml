@@ -23,11 +23,12 @@ Written by
 -->
 <package name="Additional" lib="libadditional" icon="tree_ctrl.xpm" desc="wxWidgets additional controls">
 
-  <objectinfo class="wxTreeCtrl" icon="tree_ctrl.xpm" type="widget">
+  <objectinfo class="wxTreeCtrl" icon="tree_ctrl.xpm" type="treectrl">
     <inherits class="wxTreeCtrlBase"/>
     <inherits class="wxWindow" />
     <property name="name" type="text">m_treeCtrl</property>
-    <property name="style" type="bitlist">
+    <property name="use_imagelist" type="bool"    help="Use associated imagelist (if any) instead bitmaps"/>
+    <property name="style"         type="bitlist">
       <option name="wxTR_EDIT_LABELS"             help="Use this style if you wish the user to be able to edit labels in the tree control." />
       <option name="wxTR_NO_BUTTONS"              help="For convenience to document that no buttons are to be drawn." />
       <option name="wxTR_HAS_BUTTONS"             help="Use this style to show + and - buttons to the left of parent items." />
@@ -42,10 +43,10 @@ Written by
       <option name="wxTR_MULTIPLE"                help="Use this style to allow a range of items to be selected. If a second range is selected, the current range, if any, is deselected." />
       <option name="wxTR_EXTENDED"                help="Use this style to allow disjoint items to be selected. (Only partially implemented; may not work in all cases.)" />
       <option name="wxTR_DEFAULT_STYLE"           help="The set of flags that are closest to the defaults for the native control for a particular toolkit." />wxTR_DEFAULT_STYLE</property>
-	<event name="OnTreeGetInfo" class="wxTreeEvent" help="Request information from the application." />
-	<event name="OnTreeSetInfo" class="wxTreeEvent" help="Information is being supplied." />
-	<event name="OnTreeItemGetTooltip" class="wxTreeEvent" help="The opportunity to set the item tooltip is being given to the application (call wxTreeEvent::SetToolTip). Windows only." />
-	<event name="OnTreeStateImageClick" class="wxTreeEvent" help="The state image has been clicked. Windows only." />
+    <event name="OnTreeGetInfo" class="wxTreeEvent" help="Request information from the application." />
+    <event name="OnTreeSetInfo" class="wxTreeEvent" help="Information is being supplied." />
+    <event name="OnTreeItemGetTooltip" class="wxTreeEvent" help="The opportunity to set the item tooltip is being given to the application (call wxTreeEvent::SetToolTip). Windows only." />
+    <event name="OnTreeStateImageClick" class="wxTreeEvent" help="The state image has been clicked. Windows only." />
   </objectinfo>
 
   <objectinfo class="wxHtmlWindow" icon="htmlwin.xpm" type="widget">
@@ -55,35 +56,35 @@ Written by
       <option name="wxHW_SCROLLBAR_NEVER" help="Never display scrollbars, not even when the page is larger than the window." />
       <option name="wxHW_SCROLLBAR_AUTO"  help="Display scrollbars only if page's size exceeds window's size." />
       <option name="wxHW_NO_SELECTION"    help="Don't allow the user to select text." />wxHW_SCROLLBAR_AUTO</property>
-	<event name="OnHtmlCellClicked" class="wxHtmlCellEvent" help="A wxHtmlCell was clicked." />
-	<event name="OnHtmlCellHover" class="wxHtmlCellEvent" help="The mouse passed over a wxHtmlCell." />
-	<event name="OnHtmlLinkClicked" class="wxHtmlLinkEvent" help="A wxHtmlCell which contains an hyperlink was clicked." />
+    <event name="OnHtmlCellClicked" class="wxHtmlCellEvent" help="A wxHtmlCell was clicked." />
+    <event name="OnHtmlCellHover" class="wxHtmlCellEvent" help="The mouse passed over a wxHtmlCell." />
+    <event name="OnHtmlLinkClicked" class="wxHtmlLinkEvent" help="A wxHtmlCell which contains an hyperlink was clicked." />
   </objectinfo>
 
   <objectinfo class="wxRichTextCtrl" icon="richtextctrl.xpm" type="expanded_widget">
     <inherits class="wxWindow">
-		<property name="window_style">wxVSCROLL|wxHSCROLL|wxNO_BORDER|wxWANTS_CHARS</property>
-	</inherits>
+        <property name="window_style">wxVSCROLL|wxHSCROLL|wxNO_BORDER|wxWANTS_CHARS</property>
+    </inherits>
     <property name="name" type="text">m_richText</property>
-	<property name="style" type="bitlist">
+    <property name="style" type="bitlist">
       <option name="wxTE_PROCESS_ENTER" help="The control will generate the event wxEVT_COMMAND_TEXT_ENTER (otherwise pressing Enter key is either processed internally by the control or used for navigation between dialog controls)."/>
       <option name="wxTE_PROCESS_TAB"   help="The control will receive wxEVT_CHAR events for TAB pressed - normally, TAB is used for passing to the next control in a dialog instead. For the control created with this style, you can still use Ctrl-Enter to pass to the next control from the keyboard."/>
       <option name="wxTE_READONLY"      help="The text will not be user-editable."/>
       <option name="wxTE_AUTO_URL"      help="Highlight the URLs and generate the wxTextUrl events when mouse events occur over them."/>
     </property>
-	<event name="OnText" class="wxCommandEvent" help="Respond to a wxEVT_COMMAND_TEXT_UPDATED event, generated when the text changes. Notice that this event will always be sent when the text controls contents changes - whether this is due to user input or comes from the program itself (for example, if SetValue() is called)" />
+    <event name="OnText" class="wxCommandEvent" help="Respond to a wxEVT_COMMAND_TEXT_UPDATED event, generated when the text changes. Notice that this event will always be sent when the text controls contents changes - whether this is due to user input or comes from the program itself (for example, if SetValue() is called)" />
     <event name="OnTextEnter" class="wxCommandEvent" help="Respond to a wxEVT_COMMAND_TEXT_ENTER event, generated when enter is pressed in a text control (which must have wxTE_PROCESS_ENTER style for this event to be generated)." />
     <event name="OnTextURL" class="wxTextUrlEvent" help="A mouse event occurred over an URL in the text control (wxMSW and wxGTK2 only)" />
     <event name="OnTextMaxLen" class="wxCommandEvent" help="User tried to enter more text into the control than the limit set by SetMaxLength." />
-	<event name="OnRichTextCharacter" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RICHTEXT_CHARACTER event, generated when the user presses a character key. Valid event functions: GetFlags, GetPosition, GetCharacter." />
-	<event name="OnRichTextDelete" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RICHTEXT_DELETE event, generated when the user presses the backspace or delete key. Valid event functions: GetFlags, GetPosition." />
-	<event name="OnRichTextReturn" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RICHTEXT_RETURN event, generated when the user presses the return key. Valid event functions: GetFlags, GetPosition." />
-	<event name="OnRichTextStyleChanged" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED event, generated when styling has been applied to the control. Valid event functions: GetPosition, GetRange." />
-	<event name="OnRichTextStyleSheetChanged" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING event, generated when the control's stylesheet has changed, for example the user added, edited or deleted a style. Valid event functions: GetRange, GetPosition." />
-	<event name="OnRichTextStyleSheetReplacing" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING event, generated when the control's stylesheet is about to be replaced, for example when a file is loaded into the control. Valid event functions: Veto, GetOldStyleSheet, GetNewStyleSheet." />
-	<event name="OnRichTextStyleSheetReplaced" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED event, generated when the control's stylesheet has been replaced, for example when a file is loaded into the control. Valid event functions: GetOldStyleSheet, GetNewStyleSheet." />
-	<event name="OnRichTextContentInserted" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED event, generated when content has been inserted into the control. Valid event functions: GetPosition, GetRange." />
-	<event name="OnRichTextContentDeleted" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED event, generated when content has been deleted from the control. Valid event functions: GetPosition, GetRange." />
+    <event name="OnRichTextCharacter" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RICHTEXT_CHARACTER event, generated when the user presses a character key. Valid event functions: GetFlags, GetPosition, GetCharacter." />
+    <event name="OnRichTextDelete" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RICHTEXT_DELETE event, generated when the user presses the backspace or delete key. Valid event functions: GetFlags, GetPosition." />
+    <event name="OnRichTextReturn" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RICHTEXT_RETURN event, generated when the user presses the return key. Valid event functions: GetFlags, GetPosition." />
+    <event name="OnRichTextStyleChanged" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED event, generated when styling has been applied to the control. Valid event functions: GetPosition, GetRange." />
+    <event name="OnRichTextStyleSheetChanged" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING event, generated when the control's stylesheet has changed, for example the user added, edited or deleted a style. Valid event functions: GetRange, GetPosition." />
+    <event name="OnRichTextStyleSheetReplacing" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING event, generated when the control's stylesheet is about to be replaced, for example when a file is loaded into the control. Valid event functions: Veto, GetOldStyleSheet, GetNewStyleSheet." />
+    <event name="OnRichTextStyleSheetReplaced" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED event, generated when the control's stylesheet has been replaced, for example when a file is loaded into the control. Valid event functions: GetOldStyleSheet, GetNewStyleSheet." />
+    <event name="OnRichTextContentInserted" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED event, generated when content has been inserted into the control. Valid event functions: GetPosition, GetRange." />
+    <event name="OnRichTextContentDeleted" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED event, generated when content has been deleted from the control. Valid event functions: GetPosition, GetRange." />
   </objectinfo>
 
   <objectinfo class="wxCheckListBox" icon="checklistbox.xpm" type="widget">
@@ -98,117 +99,117 @@ Written by
       <option name="wxLB_NEEDED_SB" help="Only create a vertical scrollbar if needed." />
       <option name="wxLB_SORT"      help="The listbox contents are sorted in alphabetical order." /></property>
     <property name="choices" type="stringlist" help="List of default values." />
-	<event name="OnCheckListBoxToggled" class="wxCommandEvent" help="Process a wxEVT_COMMAND_CHECKLISTBOX_TOGGLED event, when an item in the check list box is checked or unchecked." />
-	<event name="OnCheckListBox" class="wxCommandEvent" help="Process a wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the list is selected." />
-	<event name="OnCheckListBoxDClick" class="wxCommandEvent" help="Process a wxEVT_COMMAND_LISTBOX_DOUBLECLICKED event, when the listbox is double-clicked." />
+    <event name="OnCheckListBoxToggled" class="wxCommandEvent" help="Process a wxEVT_COMMAND_CHECKLISTBOX_TOGGLED event, when an item in the check list box is checked or unchecked." />
+    <event name="OnCheckListBox" class="wxCommandEvent" help="Process a wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the list is selected." />
+    <event name="OnCheckListBoxDClick" class="wxCommandEvent" help="Process a wxEVT_COMMAND_LISTBOX_DOUBLECLICKED event, when the listbox is double-clicked." />
   </objectinfo>
 
   <objectinfo class="wxGrid" icon="grid.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text">m_grid</property>
     <category name="Grid">
-    	<property name="rows" type="uint" help="Number of Rows.">5</property>
-    	<property name="cols" type="uint" help="Number of Columns.">5</property>
-		<property name="editing" type="bool" help="Allow editing grid contents.">1</property>
-		<property name="grid_lines" type="bool" help="Show grid lines.">1</property>
-		<property name="grid_line_color" type="wxColour" help="The colour used to draw grid lines."/>
-		<property name="drag_grid_size" type="bool" help="Allow sizing rows and columns by dragging gridlines.">0</property>
-		<property name="margin_width" type="uint" help="A grid may occupy more space than needed for its columns. This function allows to set how big this extra space is.">0</property>
-		<property name="margin_height" type="uint" help="A grid may occupy more space than needed for its rows. This function allows to set how big this extra space is.">0</property>
-	</category>
-	<category name="Columns">
-		<property name="column_sizes" type="uintlist" help="Comma separated list of column sizes. Note: wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used. The memory requirements for this could become prohibitive if your grid is very large."/>
-		<property name="autosize_cols" type="bool" help="Automatically sizes all columns to fit their contents. wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used. The memory requirements for this could become prohibitive if your grid is very large.">0</property>
-		<property name="drag_col_move" type="bool" help="Allow moving columns by dragging.">0</property>
-		<property name="drag_col_size" type="bool" help="Allow sizing columns by dragging.">1</property>
-		<property name="col_label_size" type="uint" help="Height of column labels">30</property>
-		<property name="col_label_values" type="stringlist" help="List of column labels."></property>
-		<property name="col_label_horiz_alignment" type="option" help="Horizontal alignment of column label text.">
-		  <option name="wxALIGN_LEFT" 	help="Align labels left."/>
-		  <option name="wxALIGN_CENTRE" 	help="Align labels centered."/>
-		  <option name="wxALIGN_RIGHT" 	help="Align labels right."/>
-		  wxALIGN_CENTRE
-		</property>
-		<property name="col_label_vert_alignment" type="option" help="Vertical alignment of column label text.">
-		  <option name="wxALIGN_TOP" 	help="Align labels top."/>
-		  <option name="wxALIGN_CENTRE" 	help="Align labels centered."/>
-		  <option name="wxALIGN_BOTTOM" 	help="Align labels bottom."/>
-		  wxALIGN_CENTRE
-		</property>
-	</category>
-	<category name="Rows">
-		<property name="row_sizes" type="uintlist" help="Comma separated list of row sizes. Note: wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used. The memory requirements for this could become prohibitive if your grid is very large."/>
-		<property name="autosize_rows" type="bool" help="Automatically sizes all rows to fit their contents. wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used. The memory requirements for this could become prohibitive if your grid is very large.">0</property>
-		<property name="drag_row_size" type="bool" help="Allow sizing rows by dragging.">1</property>
-		<property name="row_label_size" type="uint" help="Width of row labels">80</property>
-		<property name="row_label_values" type="stringlist" help="List of row labels."></property>
-		<property name="row_label_horiz_alignment" type="option" help="Horizontal alignment of row label text.">
-		  <option name="wxALIGN_LEFT" 	help="Align labels left."/>
-		  <option name="wxALIGN_CENTRE" 	help="Align labels centered."/>
-		  <option name="wxALIGN_RIGHT" 	help="Align labels right."/>
-		  wxALIGN_CENTRE
-		</property>
-		<property name="row_label_vert_alignment" type="option" help="Vertical alignment of row label text.">
-		  <option name="wxALIGN_TOP" 	help="Align labels top."/>
-		  <option name="wxALIGN_CENTRE" 	help="Align labels centered."/>
-		  <option name="wxALIGN_BOTTOM" 	help="Align labels bottom."/>
-		  wxALIGN_CENTRE
-		</property>
-	</category>
-	<category name="Label Appearance">
-		<property name="label_bg" type="wxColour" help="Background color for row and column labels."/>
-		<property name="label_font" type="wxFont" help="Font for row and column labels."/>
-		<property name="label_text" type="wxColour" help="Colour for row and column label text."/>z
-	</category>
-	<category name="Cell Defaults">
-		<property name="cell_bg" type="wxColour" help="Default cell background color."/>
-		<property name="cell_font" type="wxFont" help="Default cell font."/>
-    	<property name="cell_text" type="wxColour" help="Default cell text color."/>
-		<property name="cell_horiz_alignment" type="option" help="Default horizontal alignment of cell values.">
-		  <option name="wxALIGN_LEFT" 	help="Align left."/>
-		  <option name="wxALIGN_CENTRE" 	help="Align centered."/>
-		  <option name="wxALIGN_RIGHT" 	help="Align right."/>
-		  wxALIGN_LEFT
-		</property>
-		<property name="cell_vert_alignment" type="option" help="Default vertical alignment of cell values.">
-		  <option name="wxALIGN_TOP" 	help="Align top."/>
-		  <option name="wxALIGN_CENTRE" 	help="Align centered."/>
-		  <option name="wxALIGN_BOTTOM" 	help="Align bottom."/>
-		  wxALIGN_TOP
-		</property>
-	</category>
-	<event name="OnGridCellLeftClick" class="wxGridEvent" help="The user clicked a cell with the left mouse button. Processes a wxEVT_GRID_CELL_LEFT_CLICK." />
-	<event name="OnGridCellRightClick" class="wxGridEvent" help="The user clicked a cell with the right mouse button. Processes a wxEVT_GRID_CELL_RIGHT_CLICK." />
-	<event name="OnGridCellLeftDClick" class="wxGridEvent" help="The user double-clicked a cell with the left mouse button. Processes a wxEVT_GRID_CELL_LEFT_DCLICK." />
-	<event name="OnGridCellRightDClick" class="wxGridEvent" help="The user double-clicked a cell with the right mouse button. Processes a wxEVT_GRID_CELL_RIGHT_DCLICK." />
-	<event name="OnGridLabelLeftClick" class="wxGridEvent" help="The user clicked a label with the left mouse button. Processes a wxEVT_GRID_LABEL_LEFT_CLICK." />
-	<event name="OnGridLabelRightClick" class="wxGridEvent" help="The user clicked a label with the right mouse button. Processes a wxEVT_GRID_LABEL_RIGHT_CLICK." />
-	<event name="OnGridLabelLeftDClick" class="wxGridEvent" help="The user double-clicked a label with the left mouse button. Processes a wxEVT_GRID_LABEL_LEFT_DCLICK." />
-	<event name="OnGridLabelRightDClick" class="wxGridEvent" help="The user double-clicked a label with the right mouse button. Processes a wxEVT_GRID_LABEL_RIGHT_DCLICK." />
-	<event name="OnGridCellChange" class="wxGridEvent" help="The user changed the data in a cell. Processes a wxEVT_GRID_CELL_CHANGE." />
-	<event name="OnGridSelectCell" class="wxGridEvent" help="The user moved to, and selected a cell. Processes a wxEVT_GRID_SELECT_CELL." />
-	<event name="OnGridEditorHidden" class="wxGridEvent" help="The editor for a cell was hidden. Processes a wxEVT_GRID_EDITOR_HIDDEN." />
-	<event name="OnGridEditorShown" class="wxGridEvent" help="The editor for a cell was shown. Processes a wxEVT_GRID_EDITOR_SHOWN." />
-	<event name="OnGridCmdCellLeftClick" class="wxGridEvent" help="The user clicked a cell with the left mouse button; variant taking a window identifier. Processes a wxEVT_GRID_CELL_LEFT_CLICK." />
-	<event name="OnGridCmdCellRightClick" class="wxGridEvent" help="The user clicked a cell with the right mouse button; variant taking a window identifier. Processes a wxEVT_GRID_CELL_RIGHT_CLICK." />
-	<event name="OnGridCmdCellLeftDClick" class="wxGridEvent" help="The user double-clicked a cell with the left mouse button; variant taking a window identifier. Processes a wxEVT_GRID_CELL_LEFT_DCLICK." />
-	<event name="OnGridCmdCellRightDClick" class="wxGridEvent" help="The user double-clicked a cell with the right mouse button; variant taking a window identifier. Processes a wxEVT_GRID_CELL_RIGHT_DCLICK." />
-	<event name="OnGridCmdLabelLeftClick" class="wxGridEvent" help="The user clicked a label with the left mouse button; variant taking a window identifier. Processes a wxEVT_GRID_LABEL_LEFT_CLICK" />
-	<event name="OnGridCmdLabelRightClick" class="wxGridEvent" help="The user clicked a label with the right mouse button; variant taking a window identifier. Processes a wxEVT_GRID_LABEL_RIGHT_CLICK." />
-	<event name="OnGridCmdLabelLeftDClick" class="wxGridEvent" help="The user double-clicked a label with the left mouse button; variant taking a window identifier. Processes a wxEVT_GRID_LABEL_LEFT_DCLICK." />
-	<event name="OnGridCmdLabelRightDClick" class="wxGridEvent" help="The user double-clicked a label with the right mouse button; variant taking a window identifier. Processes a wxEVT_GRID_LABEL_RIGHT_DCLICK." />
-	<event name="OnGridCmdCellChange" class="wxGridEvent" help="The user changed the data in a cell; variant taking a window identifier. Processes a wxEVT_GRID_CELL_CHANGE." />
-	<event name="OnGridCmdSelectCell" class="wxGridEvent" help="The user moved to, and selected a cell; variant taking a window identifier. Processes a wxEVT_GRID_SELECT_CELL." />
-	<event name="OnGridCmdEditorHidden" class="wxGridEvent" help="The editor for a cell was hidden; variant taking a window identifier. Processes a wxEVT_GRID_EDITOR_HIDDEN." />
-	<event name="OnGridCmdEditorShown" class="wxGridEvent" help="The editor for a cell was shown; variant taking a window identifier. Processes a wxEVT_GRID_EDITOR_SHOWN." />
-	<event name="OnGridColSize" class="wxGridSizeEvent" help="The user resized a column by dragging it. Processes a wxEVT_GRID_COL_SIZE." />
-	<event name="OnGridRowSize" class="wxGridSizeEvent" help="The user resized a row by dragging it. Processes a wxEVT_GRID_ROW_SIZE." />
-	<event name="OnGridCmdColSize" class="wxGridSizeEvent" help="The user resized a column by dragging it; variant taking a window identifier. Processes a wxEVT_GRID_COL_SIZE." />
-	<event name="OnGridCmdRowSize" class="wxGridSizeEvent" help="The user resized a row by dragging it; variant taking a window identifier. Processes a wxEVT_GRID_ROW_SIZE." />
-	<event name="OnGridRangeSelect" class="wxGridRangeSelectEvent" help="The user selected a group of contiguous cells. Processes a wxEVT_GRID_RANGE_SELECT." />
-	<event name="OnGridCmdRangeSelect" class="wxGridRangeSelectEvent" help="The user selected a group of contiguous cells; variant taking a window identifier. Processes a wxEVT_GRID_RANGE_SELECT." />
-	<event name="OnGridEditorCreated" class="wxGridEditorCreatedEvent" help="The editor for a cell was created. Processes a wxEVT_GRID_EDITOR_CREATED." />
-	<event name="OnGridCmdEditorCreated" class="wxGridEditorCreatedEvent" help="The editor for a cell was created; variant taking a window identifier. Processes a wxEVT_GRID_EDITOR_CREATED." />
+        <property name="rows" type="uint" help="Number of Rows.">5</property>
+        <property name="cols" type="uint" help="Number of Columns.">5</property>
+        <property name="editing" type="bool" help="Allow editing grid contents.">1</property>
+        <property name="grid_lines" type="bool" help="Show grid lines.">1</property>
+        <property name="grid_line_color" type="wxColour" help="The colour used to draw grid lines."/>
+        <property name="drag_grid_size" type="bool" help="Allow sizing rows and columns by dragging gridlines.">0</property>
+        <property name="margin_width" type="uint" help="A grid may occupy more space than needed for its columns. This function allows to set how big this extra space is.">0</property>
+        <property name="margin_height" type="uint" help="A grid may occupy more space than needed for its rows. This function allows to set how big this extra space is.">0</property>
+    </category>
+    <category name="Columns">
+        <property name="column_sizes" type="uintlist" help="Comma separated list of column sizes. Note: wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used. The memory requirements for this could become prohibitive if your grid is very large."/>
+        <property name="autosize_cols" type="bool" help="Automatically sizes all columns to fit their contents. wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used. The memory requirements for this could become prohibitive if your grid is very large.">0</property>
+        <property name="drag_col_move" type="bool" help="Allow moving columns by dragging.">0</property>
+        <property name="drag_col_size" type="bool" help="Allow sizing columns by dragging.">1</property>
+        <property name="col_label_size" type="uint" help="Height of column labels">30</property>
+        <property name="col_label_values" type="stringlist" help="List of column labels."></property>
+        <property name="col_label_horiz_alignment" type="option" help="Horizontal alignment of column label text.">
+          <option name="wxALIGN_LEFT"     help="Align labels left."/>
+          <option name="wxALIGN_CENTRE"     help="Align labels centered."/>
+          <option name="wxALIGN_RIGHT"     help="Align labels right."/>
+          wxALIGN_CENTRE
+        </property>
+        <property name="col_label_vert_alignment" type="option" help="Vertical alignment of column label text.">
+          <option name="wxALIGN_TOP"     help="Align labels top."/>
+          <option name="wxALIGN_CENTRE"     help="Align labels centered."/>
+          <option name="wxALIGN_BOTTOM"     help="Align labels bottom."/>
+          wxALIGN_CENTRE
+        </property>
+    </category>
+    <category name="Rows">
+        <property name="row_sizes" type="uintlist" help="Comma separated list of row sizes. Note: wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used. The memory requirements for this could become prohibitive if your grid is very large."/>
+        <property name="autosize_rows" type="bool" help="Automatically sizes all rows to fit their contents. wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used. The memory requirements for this could become prohibitive if your grid is very large.">0</property>
+        <property name="drag_row_size" type="bool" help="Allow sizing rows by dragging.">1</property>
+        <property name="row_label_size" type="uint" help="Width of row labels">80</property>
+        <property name="row_label_values" type="stringlist" help="List of row labels."></property>
+        <property name="row_label_horiz_alignment" type="option" help="Horizontal alignment of row label text.">
+          <option name="wxALIGN_LEFT"     help="Align labels left."/>
+          <option name="wxALIGN_CENTRE"     help="Align labels centered."/>
+          <option name="wxALIGN_RIGHT"     help="Align labels right."/>
+          wxALIGN_CENTRE
+        </property>
+        <property name="row_label_vert_alignment" type="option" help="Vertical alignment of row label text.">
+          <option name="wxALIGN_TOP"     help="Align labels top."/>
+          <option name="wxALIGN_CENTRE"     help="Align labels centered."/>
+          <option name="wxALIGN_BOTTOM"     help="Align labels bottom."/>
+          wxALIGN_CENTRE
+        </property>
+    </category>
+    <category name="Label Appearance">
+        <property name="label_bg" type="wxColour" help="Background color for row and column labels."/>
+        <property name="label_font" type="wxFont" help="Font for row and column labels."/>
+        <property name="label_text" type="wxColour" help="Colour for row and column label text."/>z
+    </category>
+    <category name="Cell Defaults">
+        <property name="cell_bg" type="wxColour" help="Default cell background color."/>
+        <property name="cell_font" type="wxFont" help="Default cell font."/>
+        <property name="cell_text" type="wxColour" help="Default cell text color."/>
+        <property name="cell_horiz_alignment" type="option" help="Default horizontal alignment of cell values.">
+          <option name="wxALIGN_LEFT"     help="Align left."/>
+          <option name="wxALIGN_CENTRE"     help="Align centered."/>
+          <option name="wxALIGN_RIGHT"     help="Align right."/>
+          wxALIGN_LEFT
+        </property>
+        <property name="cell_vert_alignment" type="option" help="Default vertical alignment of cell values.">
+          <option name="wxALIGN_TOP"     help="Align top."/>
+          <option name="wxALIGN_CENTRE"     help="Align centered."/>
+          <option name="wxALIGN_BOTTOM"     help="Align bottom."/>
+          wxALIGN_TOP
+        </property>
+    </category>
+    <event name="OnGridCellLeftClick" class="wxGridEvent" help="The user clicked a cell with the left mouse button. Processes a wxEVT_GRID_CELL_LEFT_CLICK." />
+    <event name="OnGridCellRightClick" class="wxGridEvent" help="The user clicked a cell with the right mouse button. Processes a wxEVT_GRID_CELL_RIGHT_CLICK." />
+    <event name="OnGridCellLeftDClick" class="wxGridEvent" help="The user double-clicked a cell with the left mouse button. Processes a wxEVT_GRID_CELL_LEFT_DCLICK." />
+    <event name="OnGridCellRightDClick" class="wxGridEvent" help="The user double-clicked a cell with the right mouse button. Processes a wxEVT_GRID_CELL_RIGHT_DCLICK." />
+    <event name="OnGridLabelLeftClick" class="wxGridEvent" help="The user clicked a label with the left mouse button. Processes a wxEVT_GRID_LABEL_LEFT_CLICK." />
+    <event name="OnGridLabelRightClick" class="wxGridEvent" help="The user clicked a label with the right mouse button. Processes a wxEVT_GRID_LABEL_RIGHT_CLICK." />
+    <event name="OnGridLabelLeftDClick" class="wxGridEvent" help="The user double-clicked a label with the left mouse button. Processes a wxEVT_GRID_LABEL_LEFT_DCLICK." />
+    <event name="OnGridLabelRightDClick" class="wxGridEvent" help="The user double-clicked a label with the right mouse button. Processes a wxEVT_GRID_LABEL_RIGHT_DCLICK." />
+    <event name="OnGridCellChange" class="wxGridEvent" help="The user changed the data in a cell. Processes a wxEVT_GRID_CELL_CHANGE." />
+    <event name="OnGridSelectCell" class="wxGridEvent" help="The user moved to, and selected a cell. Processes a wxEVT_GRID_SELECT_CELL." />
+    <event name="OnGridEditorHidden" class="wxGridEvent" help="The editor for a cell was hidden. Processes a wxEVT_GRID_EDITOR_HIDDEN." />
+    <event name="OnGridEditorShown" class="wxGridEvent" help="The editor for a cell was shown. Processes a wxEVT_GRID_EDITOR_SHOWN." />
+    <event name="OnGridCmdCellLeftClick" class="wxGridEvent" help="The user clicked a cell with the left mouse button; variant taking a window identifier. Processes a wxEVT_GRID_CELL_LEFT_CLICK." />
+    <event name="OnGridCmdCellRightClick" class="wxGridEvent" help="The user clicked a cell with the right mouse button; variant taking a window identifier. Processes a wxEVT_GRID_CELL_RIGHT_CLICK." />
+    <event name="OnGridCmdCellLeftDClick" class="wxGridEvent" help="The user double-clicked a cell with the left mouse button; variant taking a window identifier. Processes a wxEVT_GRID_CELL_LEFT_DCLICK." />
+    <event name="OnGridCmdCellRightDClick" class="wxGridEvent" help="The user double-clicked a cell with the right mouse button; variant taking a window identifier. Processes a wxEVT_GRID_CELL_RIGHT_DCLICK." />
+    <event name="OnGridCmdLabelLeftClick" class="wxGridEvent" help="The user clicked a label with the left mouse button; variant taking a window identifier. Processes a wxEVT_GRID_LABEL_LEFT_CLICK" />
+    <event name="OnGridCmdLabelRightClick" class="wxGridEvent" help="The user clicked a label with the right mouse button; variant taking a window identifier. Processes a wxEVT_GRID_LABEL_RIGHT_CLICK." />
+    <event name="OnGridCmdLabelLeftDClick" class="wxGridEvent" help="The user double-clicked a label with the left mouse button; variant taking a window identifier. Processes a wxEVT_GRID_LABEL_LEFT_DCLICK." />
+    <event name="OnGridCmdLabelRightDClick" class="wxGridEvent" help="The user double-clicked a label with the right mouse button; variant taking a window identifier. Processes a wxEVT_GRID_LABEL_RIGHT_DCLICK." />
+    <event name="OnGridCmdCellChange" class="wxGridEvent" help="The user changed the data in a cell; variant taking a window identifier. Processes a wxEVT_GRID_CELL_CHANGE." />
+    <event name="OnGridCmdSelectCell" class="wxGridEvent" help="The user moved to, and selected a cell; variant taking a window identifier. Processes a wxEVT_GRID_SELECT_CELL." />
+    <event name="OnGridCmdEditorHidden" class="wxGridEvent" help="The editor for a cell was hidden; variant taking a window identifier. Processes a wxEVT_GRID_EDITOR_HIDDEN." />
+    <event name="OnGridCmdEditorShown" class="wxGridEvent" help="The editor for a cell was shown; variant taking a window identifier. Processes a wxEVT_GRID_EDITOR_SHOWN." />
+    <event name="OnGridColSize" class="wxGridSizeEvent" help="The user resized a column by dragging it. Processes a wxEVT_GRID_COL_SIZE." />
+    <event name="OnGridRowSize" class="wxGridSizeEvent" help="The user resized a row by dragging it. Processes a wxEVT_GRID_ROW_SIZE." />
+    <event name="OnGridCmdColSize" class="wxGridSizeEvent" help="The user resized a column by dragging it; variant taking a window identifier. Processes a wxEVT_GRID_COL_SIZE." />
+    <event name="OnGridCmdRowSize" class="wxGridSizeEvent" help="The user resized a row by dragging it; variant taking a window identifier. Processes a wxEVT_GRID_ROW_SIZE." />
+    <event name="OnGridRangeSelect" class="wxGridRangeSelectEvent" help="The user selected a group of contiguous cells. Processes a wxEVT_GRID_RANGE_SELECT." />
+    <event name="OnGridCmdRangeSelect" class="wxGridRangeSelectEvent" help="The user selected a group of contiguous cells; variant taking a window identifier. Processes a wxEVT_GRID_RANGE_SELECT." />
+    <event name="OnGridEditorCreated" class="wxGridEditorCreatedEvent" help="The editor for a cell was created. Processes a wxEVT_GRID_EDITOR_CREATED." />
+    <event name="OnGridCmdEditorCreated" class="wxGridEditorCreatedEvent" help="The editor for a cell was created; variant taking a window identifier. Processes a wxEVT_GRID_EDITOR_CREATED." />
   </objectinfo>
 
   <objectinfo class="wxToggleButton" icon="toggle_button.xpm" type="widget">
@@ -216,7 +217,7 @@ Written by
     <property name="name" type="text">m_toggleBtn</property>
     <property name="label" type="wxString_i18n">Toggle me!</property>
     <property name="value" type="bool">0</property>
-	<event name="OnToggleButton" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RADIOBUTTON_SELECTED event, when the radiobutton is clicked." />
+    <event name="OnToggleButton" class="wxCommandEvent" help="Process a wxEVT_COMMAND_RADIOBUTTON_SELECTED event, when the radiobutton is clicked." />
   </objectinfo>
 
   <objectinfo class="wxSearchCtrl" icon="search.xpm" type="widget">
@@ -265,8 +266,8 @@ Written by
         </property>
         <property name="value" type="wxFont"/>
         <property name="max_point_size" type="uint" help="Sets the maximum point size value allowed for the user-chosen font. The default value is 100. Note that big fonts can require a lot of memory and CPU time both for creation and for rendering; thus, specially because the user has the option to specify the fontsize through a text control (see wxFNTP_USE_TEXTCTRL), it's a good idea to put a limit to the maximum font size when huge fonts do not make much sense.">
-			100
-		</property>
+            100
+        </property>
         <event name="OnFontChanged" class="wxFontPickerEvent" help="The user changed the font selected in the control either using the button or using text control (see wxFNTP_USE_TEXTCTRL; note that in this case the event is fired only if the user's input is valid, i.e. recognizable)."/>
   </objectinfo>
 
@@ -274,14 +275,14 @@ Written by
         <inherits class="wxWindow"/>
         <property name="name" type="text">m_filePicker</property>
         <property name="style" type="bitlist">
-			<option name="wxFLP_DEFAULT_STYLE" help="The default style: includes wxFLP_OPEN | wxFLP_FILE_MUST_EXIST and, under wxMSW only, wxFLP_USE_TEXTCTRL."/>
-			<option name="wxFLP_USE_TEXTCTRL" help="Creates a text control to the left of the picker button which is completely managed by the wxFilePickerCtrl and which can be used by the user to specify a path (see SetPath). The text control is automatically synchronized with button's value. Use functions defined in wxPickerBase to modify the text control."/>
-			<option name="wxFLP_OPEN" help="Creates a picker which allows the user to select a file to open."/>
-			<option name="wxFLP_SAVE" help="Creates a picker which allows the user to select a file to save."/>
-			<option name="wxFLP_OVERWRITE_PROMPT" help="Can be combined with wxFLP_SAVE only: ask confirmation to the user before selecting a file."/>
-			<option name="wxFLP_FILE_MUST_EXIST" help="Can be combined with wxFLP_OPEN only: the selected file must be an existing file."/>
-			<option name="wxFLP_CHANGE_DIR" help="Change current working directory on each user file selection change."/>
-			wxFLP_DEFAULT_STYLE
+            <option name="wxFLP_DEFAULT_STYLE" help="The default style: includes wxFLP_OPEN | wxFLP_FILE_MUST_EXIST and, under wxMSW only, wxFLP_USE_TEXTCTRL."/>
+            <option name="wxFLP_USE_TEXTCTRL" help="Creates a text control to the left of the picker button which is completely managed by the wxFilePickerCtrl and which can be used by the user to specify a path (see SetPath). The text control is automatically synchronized with button's value. Use functions defined in wxPickerBase to modify the text control."/>
+            <option name="wxFLP_OPEN" help="Creates a picker which allows the user to select a file to open."/>
+            <option name="wxFLP_SAVE" help="Creates a picker which allows the user to select a file to save."/>
+            <option name="wxFLP_OVERWRITE_PROMPT" help="Can be combined with wxFLP_SAVE only: ask confirmation to the user before selecting a file."/>
+            <option name="wxFLP_FILE_MUST_EXIST" help="Can be combined with wxFLP_OPEN only: the selected file must be an existing file."/>
+            <option name="wxFLP_CHANGE_DIR" help="Change current working directory on each user file selection change."/>
+            wxFLP_DEFAULT_STYLE
         </property>
         <property name="value" type="wxString"/>
         <property name="message" type="wxString_i18n">Select a file</property>
@@ -293,11 +294,11 @@ Written by
         <inherits class="wxWindow"/>
         <property name="name" type="text">m_dirPicker</property>
         <property name="style" type="bitlist">
-			<option name="wxDIRP_DEFAULT_STYLE" help="The default style: includes wxDIRP_DIR_MUST_EXIST and, under wxMSW only, wxDIRP_USE_TEXTCTRL."/>
-			<option name="wxDIRP_USE_TEXTCTRL" help="Creates a text control to the left of the picker button which is completely managed by the wxDirPickerCtrl and which can be used by the user to specify a path (see SetPath). The text control is automatically synchronized with button's value. Use functions defined in wxPickerBase to modify the text control."/>
-			<option name="wxDIRP_DIR_MUST_EXIST" help="Creates a picker which allows to select only existing directories. wxGTK control always adds this flag internally as it does not support its absence."/>
-			<option name="wxDIRP_CHANGE_DIR" help="Change current working directory on each user directory selection change."/>
-			wxDIRP_DEFAULT_STYLE
+            <option name="wxDIRP_DEFAULT_STYLE" help="The default style: includes wxDIRP_DIR_MUST_EXIST and, under wxMSW only, wxDIRP_USE_TEXTCTRL."/>
+            <option name="wxDIRP_USE_TEXTCTRL" help="Creates a text control to the left of the picker button which is completely managed by the wxDirPickerCtrl and which can be used by the user to specify a path (see SetPath). The text control is automatically synchronized with button's value. Use functions defined in wxPickerBase to modify the text control."/>
+            <option name="wxDIRP_DIR_MUST_EXIST" help="Creates a picker which allows to select only existing directories. wxGTK control always adds this flag internally as it does not support its absence."/>
+            <option name="wxDIRP_CHANGE_DIR" help="Change current working directory on each user directory selection change."/>
+            wxDIRP_DEFAULT_STYLE
         </property>
         <property name="value" type="wxString"/>
         <property name="message" type="wxString_i18n">Select a folder</property>
@@ -313,7 +314,7 @@ Written by
       <option name="wxDP_SHOWCENTURY" help="Forces display of the century in the default date format. Without this style the century could be displayed, or not, depending on the default date representation in the system." />
       <option name="wxDP_ALLOWNONE"   help="With this style, the control allows the user to not enter any valid date at all. Without it - the default - the control always has some valid date." />
       <option name="wxDP_DEFAULT"     help="Creates a control with the style that is best supported for the current platform (currently wxDP_SPIN under Windows and wxDP_DROPDOWN elsewhere)." />wxDP_DEFAULT</property>
-	<event name="OnDateChanged" class="wxDateEvent" help="This event fires when the user changes the current selection in the control." />
+    <event name="OnDateChanged" class="wxDateEvent" help="This event fires when the user changes the current selection in the control." />
   </objectinfo>
 
   <objectinfo class="wxCalendarCtrl" startgroup="1" icon="calendar.xpm" type="widget">
@@ -345,26 +346,26 @@ Written by
     <property name="style" type="option">
       <option name="wxSB_HORIZONTAL" help="Specifies a horizontal scrollbar." />
       <option name="wxSB_VERTICAL"   help="Specifies a vertical scrollbar." />wxSB_HORIZONTAL</property>
-	<event name="OnScroll" class="wxScrollEvent" help="Process all scroll events." />
-	<event name="OnScrollTop" class="wxScrollEvent" help="Process wxEVT_SCROLL_TOP scroll-to-top events (minimum position)." />
-	<event name="OnScrollBottom" class="wxScrollEvent" help="Process wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position)." />
-	<event name="OnScrollLineUp" class="wxScrollEvent" help="Process wxEVT_SCROLL_LINEUP line up events." />
-	<event name="OnScrollLineDown" class="wxScrollEvent" help="Process wxEVT_SCROLL_LINEDOWN line down events." />
-	<event name="OnScrollPageUp" class="wxScrollEvent" help="Process wxEVT_SCROLL_PAGEUP page up events." />
-	<event name="OnScrollPageDown" class="wxScrollEvent" help="Process wxEVT_SCROLL_PAGEDOWN page down events." />
-	<event name="OnScrollThumbTrack" class="wxScrollEvent" help="Process wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent as the user drags the thumbtrack)." />
-	<event name="OnScrollThumbRelease" class="wxScrollEvent" help="Process wxEVT_SCROLL_THUMBRELEASE thumb release events." />
-	<event name="OnScrollChanged" class="wxScrollEvent" help="Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only)." />
-	<event name="OnCommandScroll" class="wxScrollEvent" help="Process all scroll events. Variant taking a window identifier." />
-	<event name="OnCommandScrollTop" class="wxScrollEvent" help="Process wxEVT_SCROLL_TOP scroll-to-top events (minimum position). Variant taking a window identifier." />
-	<event name="OnCommandScrollBottom" class="wxScrollEvent" help="Process wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position). Variant taking a window identifier." />
-	<event name="OnCommandScrollLineUp" class="wxScrollEvent" help="Process wxEVT_SCROLL_LINEUP line up events. Variant taking a window identifier." />
-	<event name="OnCommandScrollLineDown" class="wxScrollEvent" help="Process wxEVT_SCROLL_LINEDOWN line down events. Variant taking a window identifier." />
-	<event name="OnCommandScrollPageUp" class="wxScrollEvent" help="Process wxEVT_SCROLL_PAGEUP page up events. Variant taking a window identifier." />
-	<event name="OnCommandScrollPageDown" class="wxScrollEvent" help="Process wxEVT_SCROLL_PAGEDOWN page down events. Variant taking a window identifier." />
-	<event name="OnCommandScrollThumbTrack" class="wxScrollEvent" help="Process wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent as the user drags the thumbtrack). Variant taking a window identifier." />
-	<event name="OnCommandScrollThumbRelease" class="wxScrollEvent" help="Process wxEVT_SCROLL_THUMBRELEASE thumb release events. Variant taking a window identifier." />
-	<event name="OnCommandScrollChanged" class="wxScrollEvent" help="Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only). Variant taking a window identifier." />
+    <event name="OnScroll" class="wxScrollEvent" help="Process all scroll events." />
+    <event name="OnScrollTop" class="wxScrollEvent" help="Process wxEVT_SCROLL_TOP scroll-to-top events (minimum position)." />
+    <event name="OnScrollBottom" class="wxScrollEvent" help="Process wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position)." />
+    <event name="OnScrollLineUp" class="wxScrollEvent" help="Process wxEVT_SCROLL_LINEUP line up events." />
+    <event name="OnScrollLineDown" class="wxScrollEvent" help="Process wxEVT_SCROLL_LINEDOWN line down events." />
+    <event name="OnScrollPageUp" class="wxScrollEvent" help="Process wxEVT_SCROLL_PAGEUP page up events." />
+    <event name="OnScrollPageDown" class="wxScrollEvent" help="Process wxEVT_SCROLL_PAGEDOWN page down events." />
+    <event name="OnScrollThumbTrack" class="wxScrollEvent" help="Process wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent as the user drags the thumbtrack)." />
+    <event name="OnScrollThumbRelease" class="wxScrollEvent" help="Process wxEVT_SCROLL_THUMBRELEASE thumb release events." />
+    <event name="OnScrollChanged" class="wxScrollEvent" help="Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only)." />
+    <event name="OnCommandScroll" class="wxScrollEvent" help="Process all scroll events. Variant taking a window identifier." />
+    <event name="OnCommandScrollTop" class="wxScrollEvent" help="Process wxEVT_SCROLL_TOP scroll-to-top events (minimum position). Variant taking a window identifier." />
+    <event name="OnCommandScrollBottom" class="wxScrollEvent" help="Process wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position). Variant taking a window identifier." />
+    <event name="OnCommandScrollLineUp" class="wxScrollEvent" help="Process wxEVT_SCROLL_LINEUP line up events. Variant taking a window identifier." />
+    <event name="OnCommandScrollLineDown" class="wxScrollEvent" help="Process wxEVT_SCROLL_LINEDOWN line down events. Variant taking a window identifier." />
+    <event name="OnCommandScrollPageUp" class="wxScrollEvent" help="Process wxEVT_SCROLL_PAGEUP page up events. Variant taking a window identifier." />
+    <event name="OnCommandScrollPageDown" class="wxScrollEvent" help="Process wxEVT_SCROLL_PAGEDOWN page down events. Variant taking a window identifier." />
+    <event name="OnCommandScrollThumbTrack" class="wxScrollEvent" help="Process wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent as the user drags the thumbtrack). Variant taking a window identifier." />
+    <event name="OnCommandScrollThumbRelease" class="wxScrollEvent" help="Process wxEVT_SCROLL_THUMBRELEASE thumb release events. Variant taking a window identifier." />
+    <event name="OnCommandScrollChanged" class="wxScrollEvent" help="Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only). Variant taking a window identifier." />
   </objectinfo>
 
   <objectinfo class="wxSpinCtrl" icon="spin_ctrl.xpm" type="widget">
@@ -377,8 +378,8 @@ Written by
     <property name="style" type="bitlist">
       <option name="wxSP_ARROW_KEYS"     help="The user can use arrow keys to change the value." />
       <option name="wxSP_WRAP"           help="The value wraps at the minimum and maximum." />wxSP_ARROW_KEYS</property>
-	<event name="OnSpinCtrl" class="wxSpinEvent" help="Generated whenever the numeric value of the spinctrl is updated." />
-	<event name="OnSpinCtrlText" class="wxCommandEvent" help="Generated whenever the user modifies the text in the edit part of the spin control directly." />
+    <event name="OnSpinCtrl" class="wxSpinEvent" help="Generated whenever the numeric value of the spinctrl is updated." />
+    <event name="OnSpinCtrlText" class="wxCommandEvent" help="Generated whenever the user modifies the text in the edit part of the spin control directly." />
   </objectinfo>
 
   <objectinfo class="wxSpinButton" icon="spinbtn.xpm" type="widget">
@@ -389,74 +390,74 @@ Written by
       <option name="wxSP_VERTICAL"   help="Specifies a vertical spin button." />
       <option name="wxSP_ARROW_KEYS" help="The user can use arrow keys to change the value." />
       <option name="wxSP_WRAP"       help="The value wraps at the minimum and maximum." /></property>
-	<event name="OnSpin" class="wxSpinEvent" help="Generated whenever an arrow is pressed." />
-	<event name="OnSpinUp" class="wxSpinEvent" help="Generated when left/up arrow is pressed." />
-	<event name="OnSpinDown" class="wxSpinEvent" help="Generated when right/down arrow is pressed." />
+    <event name="OnSpin" class="wxSpinEvent" help="Generated whenever an arrow is pressed." />
+    <event name="OnSpinUp" class="wxSpinEvent" help="Generated when left/up arrow is pressed." />
+    <event name="OnSpinDown" class="wxSpinEvent" help="Generated when right/down arrow is pressed." />
   </objectinfo>
 
   <objectinfo class="wxHyperlinkCtrl" icon="hyperlink_ctrl.xpm" type="widget">
     <inherits class="wxWindow" />
     <property name="name" type="text">m_hyperlink</property>
-	<property name="label" type="wxString_i18n" help="Text of the hyperlink">wxFB Website</property>
-	<property name="url" type="wxString" help="Target of the hyperlink">http://www.wxformbuilder.org</property>
-	<property name="hover_color" type="wxColour" help="The colour used to print the label of the hyperlink when the mouse is over the control."/>
-	<property name="normal_color" type="wxColour" help="The colour used to print the label when the link has never been clicked before (i.e. the link has not been visited) and the mouse is not over the control."/>
-	<property name="visited_color" type="wxColour" help="The colour used to print the label when the mouse is not over the control and the link has already been clicked before (i.e. the link has been visited)."/>
+    <property name="label" type="wxString_i18n" help="Text of the hyperlink">wxFB Website</property>
+    <property name="url" type="wxString" help="Target of the hyperlink">http://www.wxformbuilder.org</property>
+    <property name="hover_color" type="wxColour" help="The colour used to print the label of the hyperlink when the mouse is over the control."/>
+    <property name="normal_color" type="wxColour" help="The colour used to print the label when the link has never been clicked before (i.e. the link has not been visited) and the mouse is not over the control."/>
+    <property name="visited_color" type="wxColour" help="The colour used to print the label when the mouse is not over the control and the link has already been clicked before (i.e. the link has been visited)."/>
     <property name="style" type="bitlist">
-		<option name="wxHL_ALIGN_LEFT" help="Align the text to the left."/>
-		<option name="wxHL_ALIGN_RIGHT" help="Align the text to the right."/>
-		<option name="wxHL_ALIGN_CENTRE" help="Center the text (horizontally)."/>
-		<option name="wxHL_CONTEXTMENU" help="Pop up a context menu when the hyperlink is right-clicked. The context menu contains a &quot;Copy URL&quot; menu item which is automatically handled by the hyperlink and which just copies in the clipboard the URL (not the label) of the control."/>
-		<option name="wxHL_DEFAULT_STYLE" help="The default style for wxHyperlinkCtrl: wxNO_BORDER|wxHL_CONTEXTMENU|wxHL_ALIGN_CENTRE."/>
-		wxHL_DEFAULT_STYLE
-	</property>
-	<event name="OnHyperlink" class="wxHyperlinkEvent" help="The hyperlink was (left) clicked. If this event is not handled in user's code (or it's skipped; see wxEvent::Skip), then a call to wxLaunchDefaultBrowser is done with the hyperlink's URL."/>
+        <option name="wxHL_ALIGN_LEFT" help="Align the text to the left."/>
+        <option name="wxHL_ALIGN_RIGHT" help="Align the text to the right."/>
+        <option name="wxHL_ALIGN_CENTRE" help="Center the text (horizontally)."/>
+        <option name="wxHL_CONTEXTMENU" help="Pop up a context menu when the hyperlink is right-clicked. The context menu contains a &quot;Copy URL&quot; menu item which is automatically handled by the hyperlink and which just copies in the clipboard the URL (not the label) of the control."/>
+        <option name="wxHL_DEFAULT_STYLE" help="The default style for wxHyperlinkCtrl: wxNO_BORDER|wxHL_CONTEXTMENU|wxHL_ALIGN_CENTRE."/>
+        wxHL_DEFAULT_STYLE
+    </property>
+    <event name="OnHyperlink" class="wxHyperlinkEvent" help="The hyperlink was (left) clicked. If this event is not handled in user's code (or it's skipped; see wxEvent::Skip), then a call to wxLaunchDefaultBrowser is done with the hyperlink's URL."/>
   </objectinfo>
 
   <objectinfo class="wxGenericDirCtrl" icon="genericdir_ctrl.xpm" type="expanded_widget">
-	<inherits class="wxTreeCtrlBase"/>
+    <inherits class="wxTreeCtrlBase"/>
     <inherits class="wxWindow">
-		<property name="window_style">wxSUNKEN_BORDER</property>
-	</inherits>
+        <property name="window_style">wxSUNKEN_BORDER</property>
+    </inherits>
     <property name="name" type="text">m_genericDirCtrl</property>
-	<property name="defaultfolder" type="wxString_i18n" help="Initial Directory."/>
-	<property name="filter" type="wxString_i18n" help="A filter string, using the same syntax as that for wxFileDialog. This may be empty if filters are not being used. Example: &quot;All files (*.*)|*.*|JPEG files (*.jpg)|*.jpg&quot;."/>
-	<property name="defaultfilter" type="uint" help="The zero-indexed default filter setting.">0</property>
-	<property name="show_hidden" type="bool" help="Show hidden files">0</property>
-	<property name="style" type="bitlist">
-		<option name="wxDIRCTRL_DIR_ONLY" help="Only show directories, and not files."/>
-		<option name="wxDIRCTRL_3D_INTERNAL" help="Use 3D borders for internal controls."/>
-		<option name="wxDIRCTRL_SELECT_FIRST" help="When setting the default path, select the first file in the directory."/>
-		<option name="wxDIRCTRL_SHOW_FILTERS" help="Show the drop-down filter list."/>
-		<option name="wxDIRCTRL_EDIT_LABELS" help="Allow the folder and file labels to be editable."/>
-		wxDIRCTRL_3D_INTERNAL
-	</property>
+    <property name="defaultfolder" type="wxString_i18n" help="Initial Directory."/>
+    <property name="filter" type="wxString_i18n" help="A filter string, using the same syntax as that for wxFileDialog. This may be empty if filters are not being used. Example: &quot;All files (*.*)|*.*|JPEG files (*.jpg)|*.jpg&quot;."/>
+    <property name="defaultfilter" type="uint" help="The zero-indexed default filter setting.">0</property>
+    <property name="show_hidden" type="bool" help="Show hidden files">0</property>
+    <property name="style" type="bitlist">
+        <option name="wxDIRCTRL_DIR_ONLY" help="Only show directories, and not files."/>
+        <option name="wxDIRCTRL_3D_INTERNAL" help="Use 3D borders for internal controls."/>
+        <option name="wxDIRCTRL_SELECT_FIRST" help="When setting the default path, select the first file in the directory."/>
+        <option name="wxDIRCTRL_SHOW_FILTERS" help="Show the drop-down filter list."/>
+        <option name="wxDIRCTRL_EDIT_LABELS" help="Allow the folder and file labels to be editable."/>
+        wxDIRCTRL_3D_INTERNAL
+    </property>
   </objectinfo>
 
   <objectinfo class="CustomControl" icon="custom_control.xpm" type="widget">
     <inherits class="wxWindow"/>
-	<property name="name" type="text" help="The control is added to a sizer using this name.">m_customControl</property>
-	<property name="class" type="text" help="The control is generated to XRC with this class."/>
+    <property name="name" type="text" help="The control is added to a sizer using this name.">m_customControl</property>
+    <property name="class" type="text" help="The control is generated to XRC with this class."/>
     <property name="declaration" type="text" help="Code to generate for the declaration of this control."/>
     <property name="construction" type="text" help="Code to generate for the construction of this control."/>
-	<property name="include" type="text" help="Code to generate for the include statements for this control."/>
-	<property name="settings" type="text" help="Code to generate for the settings of this control."/>
+    <property name="include" type="text" help="Code to generate for the include statements for this control."/>
+    <property name="settings" type="text" help="Code to generate for the settings of this control."/>
   </objectinfo>
 
   <objectinfo class="wxMediaCtrl" startgroup="1" icon="media_ctrl.xpm" type="widget">
-	<inherits class="wxControl" />	
-	<inherits class="wxWindow" />
-		<property name="name" type="text">m_mediaCtrl</property>
-		<property name="file" type="file" help="The path to media file."/>
-		<property name="play" type="bool" help="Play the media file"/>
-		<property name="playback_rate" type="float" help="Sets the playback rate, or speed of the media, to that referred by dRate. 1.0 represents normal speed, while 2.0 represents twice the normal speed of the media, for example. Not supported on the GStreamer (Unix) backend.">1</property>
-		<property name="volume" type="float" help="Sets the volume of the media from a 0.0 to 1.0 range to that referred by dVolume. 1.0 represents full volume, while 0.5 represents half (50 percent) volume, for example. Note that this may not be exact due to conversion and rounding errors, although setting the volume to full or none is always exact.">1</property>
-		<property name="player_controls" type="option">
-			<option name="STEP" help="wxMEDIACTRLPLAYERCONTROLS_STEP, Step controls like fastfoward, step one frame etc. "/>		
-			<option name="VOLUME" help="wxMEDIACTRLPLAYERCONTROLS_VOLUME, Volume controls like the speaker icon, volume slider, etc. "/>
-			<option name="DEFAULT" help="wxMEDIACTRLPLAYERCONTROLS_DEFAULT, Default controls for the toolkit. Currently a typedef for wxMEDIACTRLPLAYERCONTROLS_STEP and wxMEDIACTRLPLAYERCONTROLS_VOLUME. "/>
-			<option name="NONE" help="wxMEDIACTRLPLAYERCONTROLS_NONE, No controls. return wxMediaCtrl to it's default state. "/>
-		</property>
+    <inherits class="wxControl" />
+    <inherits class="wxWindow" />
+        <property name="name" type="text">m_mediaCtrl</property>
+        <property name="file" type="file" help="The path to media file."/>
+        <property name="play" type="bool" help="Play the media file"/>
+        <property name="playback_rate" type="float" help="Sets the playback rate, or speed of the media, to that referred by dRate. 1.0 represents normal speed, while 2.0 represents twice the normal speed of the media, for example. Not supported on the GStreamer (Unix) backend.">1</property>
+        <property name="volume" type="float" help="Sets the volume of the media from a 0.0 to 1.0 range to that referred by dVolume. 1.0 represents full volume, while 0.5 represents half (50 percent) volume, for example. Note that this may not be exact due to conversion and rounding errors, although setting the volume to full or none is always exact.">1</property>
+        <property name="player_controls" type="option">
+            <option name="STEP" help="wxMEDIACTRLPLAYERCONTROLS_STEP, Step controls like fastfoward, step one frame etc. "/>        
+            <option name="VOLUME" help="wxMEDIACTRLPLAYERCONTROLS_VOLUME, Volume controls like the speaker icon, volume slider, etc. "/>
+            <option name="DEFAULT" help="wxMEDIACTRLPLAYERCONTROLS_DEFAULT, Default controls for the toolkit. Currently a typedef for wxMEDIACTRLPLAYERCONTROLS_STEP and wxMEDIACTRLPLAYERCONTROLS_VOLUME. "/>
+            <option name="NONE" help="wxMEDIACTRLPLAYERCONTROLS_NONE, No controls. return wxMediaCtrl to it's default state. "/>
+        </property>
   </objectinfo>
 
 </package>
