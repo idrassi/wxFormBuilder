@@ -23,7 +23,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "wx/wx.h"
 #include "component.h"
 
 #define XRC_TYPE_TEXT    0
@@ -44,9 +43,9 @@ namespace ticpp
 }
 
 /**
- * Filter for exporting an objetc to XRC format.
+ * Filter for exporting an object to XRC format.
  *
- * This class helps exporting an objetc to XRC format. Just it's needed to setup
+ * This class helps exporting an object to XRC format. Just it's needed to setup
  * the properties names' "mapping" with their types, and the XML element will be
  * created in XRC format.
  *
@@ -63,11 +62,20 @@ namespace ticpp
  */
 class ObjectToXrcFilter
 {
- public:
+public:
+/**
+  Constructor specifying the class name, instance name
+  @param obj The object itself
+  @param classname The object class name (e.g. wxButton)
+  @param objname The name for the instance (e.g. m_button1)
+  @param base ???
+  @param isAbstract Specifies that the object is not a wxWindow derived class.
+  (e.g. wxImageList)
+*/
   ObjectToXrcFilter(IObject *obj,
                     const wxString &classname,
-                    const wxString &objname = wxT(""),
-                    const wxString &base = wxT(""));
+                    const wxString &objname = wxEmptyString,
+                    const wxString &base = wxEmptyString, bool isAbstract = false);
 
   ~ObjectToXrcFilter();
 
@@ -107,10 +115,22 @@ class ObjectToXrcFilter
 class XrcToXfbFilter
 {
  public:
-
+/**
+  Constructor specifying the class name and type
+  @param obj The object itself
+  @param classname The object class name (e.g. wxButton)
+  @param isAbstract Specifies that the object is not a wxWindow derived class.
+  (e.g. wxImageList)
+*/
   XrcToXfbFilter(ticpp::Element *obj,
-                 const wxString &classname);
+                 const wxString &classname, bool isAbstract = false);
 
+/**
+  Constructor specifying the class name, instance name and type
+  @param obj The object itself
+  @param classname The object class name (e.g. wxButton)
+  @param objname The name for the instance (e.g. m_button1)
+*/
   XrcToXfbFilter(ticpp::Element *obj,
                  const wxString &classname,
                  const wxString &objname);

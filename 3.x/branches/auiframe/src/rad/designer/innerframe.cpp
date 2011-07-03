@@ -60,7 +60,7 @@ public:
 	           long style = 0 );
 
 	void OnPaint( wxPaintEvent &event );
-	void OnSize( wxSizeEvent &event );
+//	void OnSize( wxSizeEvent &event );
 	void OnLeftClick ( wxMouseEvent &event );
 	void SetTitle( const wxString &title ) { m_titleText = title; }
 	wxString GetTitle() { return m_titleText; }
@@ -72,7 +72,7 @@ public:
 BEGIN_EVENT_TABLE( wxInnerFrame::TitleBar, wxPanel )
 EVT_LEFT_DOWN( wxInnerFrame::TitleBar::OnLeftClick )
 EVT_PAINT( wxInnerFrame::TitleBar::OnPaint )
-EVT_SIZE( wxInnerFrame::TitleBar::OnSize )
+//EVT_SIZE( wxInnerFrame::TitleBar::OnSize )
 END_EVENT_TABLE()
 
 wxInnerFrame::TitleBar::TitleBar ( wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style )
@@ -106,14 +106,14 @@ void wxInnerFrame::TitleBar::OnLeftClick ( wxMouseEvent &event )
 {
 	GetParent()->GetEventHandler()->ProcessEvent( event );
 }
-
+/*
 void wxInnerFrame::TitleBar::OnSize ( wxSizeEvent& )
 {
 	wxClientDC dc( this );
 	wxBufferedDC bdc( &dc, GetClientSize() );
 	DrawTitleBar( bdc );
 }
-
+*/
 void wxInnerFrame::TitleBar::OnPaint ( wxPaintEvent& )
 {
 	wxPaintDC dc( this );
@@ -303,10 +303,6 @@ wxInnerFrame::wxInnerFrame( wxWindow *parent, wxWindowID id,
 	horiSizer->Add( m_frameContent, 1, wxGROW );
 	sizer->Add( horiSizer, 1, wxGROW | wxBOTTOM | wxRIGHT, 2 );
 
-	SetSizer( sizer );
-	SetAutoLayout( true );
-	Layout();
-
 	m_minSize = m_titleBar->GetMinSize();
 	m_minSize.x += 8;
 	m_minSize.y += 10;
@@ -316,6 +312,10 @@ wxInnerFrame::wxInnerFrame( wxWindow *parent, wxWindowID id,
 	{
 		SetSize( GetBestSize() );
 	}
+
+	SetSizer( sizer );
+	SetAutoLayout( true );
+	Layout();
 }
 
 wxSize wxInnerFrame::DoGetBestSize() const

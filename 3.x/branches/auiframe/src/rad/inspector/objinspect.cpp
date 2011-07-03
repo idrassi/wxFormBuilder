@@ -38,7 +38,6 @@
 
 #define WXFB_PROPERTY_GRID 1000
 #define WXFB_EVENT_GRID    1001
-
 // -----------------------------------------------------------------------
 // wxSlider-based property editor
 // -----------------------------------------------------------------------
@@ -703,8 +702,7 @@ wxBitmapWithResourcePropertyClass::~wxBitmapWithResourcePropertyClass()
 
 void wxBitmapWithResourcePropertyClass::DoSetValue ( wxPGVariant value )
 {
-	wxString* pObj = (wxString*)wxPGVariantToVoidPtr( value );
-	wxString newValue = *pObj;
+	wxString newValue = value.GetString();//wxString* pObj = (wxString*)wxPGVariantToVoidPtr( value ); wxString newValue = *pObj;
 
     TypeConv::ParseBitmapWithResource( newValue, &m_image, &m_source, &m_icoSize );
 
@@ -975,7 +973,7 @@ int ObjectInspector::StringToBits(const wxString& strVal, wxPGChoices& constants
 
 wxPGProperty* ObjectInspector::GetProperty(PProperty prop)
 {
-	wxPGProperty *result;
+	wxPGProperty *result = NULL;
 	PropertyType type = prop->GetType();
 	wxString name = prop->GetName();
 	wxVariant vTrue = wxVariant( true, wxT("true") );
@@ -1188,6 +1186,7 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
 		// we do not want to duplicate inherited properties
 		if ( properties.find( propName ) == properties.end() )
 		{
+
 			wxPGId id = m_pg->Append( GetProperty( prop ) );
 			if ( prop->GetType() != PT_OPTION )
 			{
@@ -1275,9 +1274,8 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
 		{
 			wxPGProperty *pgProp = wxStringProperty( eventInfo->GetName(), wxPG_LABEL, event->GetValue() );
 			wxPGId id = m_eg->Append( pgProp );
-			wxString localized = eventInfo->GetDescription();
-			m_eg->SetPropertyHelpString( id, localized );
 
+			m_eg->SetPropertyHelpString( id, wxGetTranslation( eventInfo->GetDescription() ) );
 			if (m_style != wxFB_OI_MULTIPAGE_STYLE)
 			{
 				// Most common classes will be showed with a slightly different

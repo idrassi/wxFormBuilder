@@ -255,9 +255,10 @@ PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase par
 
 	if (!objInfo)
 	{
-		THROW_WXFBEX( 	wxT("Unknown Object Type: ") << _WXSTR(classname) << wxT("\n")
-						wxT("The most likely causes are that this copy of wxFormBuilder is out of date, or that there is a plugin missing.\n")
-						wxT("Please check at http://www.wxFormBuilder.org") << wxT("\n") )
+		wxString msg = wxString(_("Unknown Object Type:") ) + wxT(" ") + _WXSTR( classname ) + wxT("\n") +
+						wxString(_("The most likely causes are that this copy of wxFormBuilder is out of date, or that there is a plugin missing.\n") ) +
+						wxString(_("Please check at") ) + wxT(" http://www.wxformbuilder.org\n");
+		THROW_WXFBEX( msg );
 	}
 
 	PObjectType objType = objInfo->GetObjectType();
@@ -353,7 +354,7 @@ PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase par
 							created = true;
 						}
 						else
-							wxLogError(wxT("Review your definitions file (objtypes.xml)"));
+							wxLogError(_("Review your definitions file (objtypes.xml)"));
 					}
 				}
 			}
@@ -530,11 +531,11 @@ PObjectBase ObjectDatabase::CreateObject( ticpp::Element* xml_obj, PObjectBase p
 					std::string value = xml_prop->GetText( false );
 					if ( !value.empty() )
 					{
-						wxLogError( wxT("The property named \"%s\" of class \"%s\" is not supported by this version of wxFormBuilder.\n")
-									wxT("If your project file was just converted from an older version, then the conversion was not complete.\n")
-									wxT("Otherwise, this project is from a newer version of wxFormBuilder.\n\n")
-									wxT("The property's value is: %s\n")
-									wxT("If you save this project, YOU WILL LOSE DATA"), _WXSTR(prop_name).c_str(), _WXSTR(class_name).c_str(), _WXSTR(value).c_str() );
+						wxLogError( wxString(_("The property named \"%s\" of class \"%s\" is not supported by this version of wxFormBuilder.\n") ) +
+									wxString(_("If your project file was just converted from an older version, then the conversion was not complete.\n") ) +
+									wxString(_("Otherwise, this project is from a newer version of wxFormBuilder.\n\n") ) +
+									wxString(_("The property's value is: %s\n") ) +
+									wxString(_("If you save this project, YOU WILL LOSE DATA") ), _WXSTR(prop_name).c_str(), _WXSTR(class_name).c_str(), _WXSTR(value).c_str() );
 					}
 				}
 
@@ -684,7 +685,11 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 							if ( !addedPackage.second )
 							{
 								addedPackage.first->second->AppendPackage( packageIt->second );
+#if wxVERSION_NUMBER < 2900
 								Debug::Print( wxT("Merged plugins named \"%s\""), packageIt->second->GetPackageName().c_str() );
+#else
+								Debug::Print( "Merged plugins named " + packageIt->second->GetPackageName() );
+#endif
 							}
 
 						}
@@ -841,6 +846,9 @@ bool ObjectDatabase::HasCppProperties(wxString type)
 			type == wxT("choicebook")		||
 			type == wxT("auinotebook")		||
 			type == wxT("widget")			||
+			type == wxT("listctrl")			||
+			type == wxT("listcol")			||
+			type == wxT("treectrl")			||
 			type == wxT("expanded_widget")	||
 			type == wxT("statusbar")		||
 			type == wxT("component")		||
@@ -854,6 +862,7 @@ bool ObjectDatabase::HasCppProperties(wxString type)
 			type == wxT("splitter")			||
 			type == wxT("sizer")			||
 			type == wxT("treelistctrl")		||
+			type == wxT("imagelist")		||
 			type == wxT("gbsizer")
 			);
 }
@@ -1253,6 +1262,10 @@ bool ObjectDatabase::ShowInPalette(wxString type)
 			type == wxT("choicebook")			||
 			type == wxT("auinotebook")			||
 			type == wxT("widget")				||
+			type == wxT("listctrl")				||
+			type == wxT("listcol")				||
+			type == wxT("listitem")				||
+			type == wxT("treectrl")				||
 			type == wxT("expanded_widget")		||
 			type == wxT("statusbar")			||
 			type == wxT("component")			||
@@ -1261,6 +1274,8 @@ bool ObjectDatabase::ShowInPalette(wxString type)
 			type == wxT("treelistctrl")			||
 			type == wxT("treelistctrlcolumn")	||
 			type == wxT("toolbar")				||
+			type == wxT("imagelist")			||
+			type == wxT("bitmapitem")			||
 			type == wxT("splitter")
 			);
 }
@@ -1324,13 +1339,19 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 
 		if ( !(GetComponentLibrary && FreeComponentLibrary) )
 		{
+#if wxVERSION_NUMBER < 2900
 			THROW_WXFBEX( path << _(" is not a valid component library") )
-		}
-
+#else
+			THROW_WXFBEX( path << wxString(_(" is not a valid component library") ) )
 #endif
+		}
+#endif //__WXMAC__
 
+#if wxVERSION_NUMBER < 2900
 		Debug::Print( wxT("[Database::ImportComponentLibrary] Importing %s library"), path.c_str() );
-
+#else
+		Debug::Print("[Database::ImportComponentLibrary] Importing <" + path + "> library");
+#endif
 	// Get the component library
 	IComponentLibrary* comp_lib = GetComponentLibrary( (IManager*)manager.get() );
 
@@ -1351,7 +1372,11 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		}
 		else
 		{
-			Debug::Print( wxT("ObjectInfo for <%s> not found while loading library <%s>"), class_name.c_str(), path.c_str() );
+#if wxVERSION_NUMBER < 2900
+			Debug::Print( wxT("ObjectInfo for <%s> not found while loading library <%s>"), class_name.c_str(), path.c_str() );THROW_WXFBEX( path << _(" is not a valid component library") )
+#else
+			Debug::Print( "ObjectInfo for <" + class_name + "> not found while loading library <" + path + ">" );
+#endif
 		}
 	}
 

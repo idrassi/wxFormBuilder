@@ -176,8 +176,8 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 				wxFontContainer font = TypeConv::StringToFont( value );
 
 				int pointSize = font.GetPointSize();
+#if wxVERSION_NUMBER < 2900
 				wxString size = pointSize <= 0 ? wxT("wxNORMAL_FONT->GetPointSize()") : wxString::Format( wxT("%i"), pointSize ).c_str();
-
 				result	= wxString::Format( wxT("wxFont( %s, %i, %i, %i, %s, %s )"),
 				                           size.c_str(),
 				                           font.GetFamily(),
@@ -186,6 +186,17 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 				                           ( font.GetUnderlined() ? wxT("true") : wxT("false") ),
 				                           ( font.m_faceName.empty() ? wxT("wxEmptyString") : wxString::Format( wxT("wxT(\"%s\")"), font.m_faceName.c_str() ).c_str() )
 				                         );
+#else
+				wxString size = pointSize <= 0 ? "wxNORMAL_FONT->GetPointSize()" : wxString::Format( "%i", pointSize );
+				result	= wxString::Format("wxFont( %s, %i, %i, %i, %s, %s )",
+				                           size,
+				                           font.GetFamily(),
+				                           font.GetStyle(),
+				                           font.GetWeight(),
+				                           ( font.GetUnderlined() ? "true" : "false" ),
+				                           ( font.m_faceName.empty() ? "wxEmptyString" : wxString::Format( "wxT(\"%s\")", font.m_faceName ) )
+				                         );
+#endif
 			}
 			else
 			{
@@ -1212,16 +1223,21 @@ void CppCodeGenerator::GenEnumIds( PObjectBase class_obj )
 			macros.erase( it );
 		}
 
-		it = macros.begin();
-		if ( it != macros.end() )
+		unsigned int idx;
+		unsigned int count = macros.size();
+		wxString sId;
+
+		for ( idx = 0; idx < count; idx++ )
 		{
-			m_header->WriteLn( wxString::Format( wxT("%s = %i,"), it->c_str(), m_firstID ) );
-			it++;
-			while ( it != macros.end() )
-			{
-				m_header->WriteLn( *it + wxT(",") );
-				it++;
-			}
+			sId = macros.at( idx );
+
+			if ( idx == 0 )
+				sId = wxString::Format( wxT("%s = %i"), sId.c_str(), m_firstID );
+
+			if ( idx < (count-1) )
+				sId << wxT(",");
+
+			m_header->WriteLn( sId );
 		}
 
 		//m_header->WriteLn(id);

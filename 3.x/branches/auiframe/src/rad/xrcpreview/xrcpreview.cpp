@@ -47,7 +47,7 @@ public:
 	wxMenu(),
 	m_window( window )
 	{
-		Append( MENU_DELETE, wxT("Close Preview") );
+		Append( MENU_DELETE, _("Close Preview") );
 	}
 
 	void OnMenuEvent ( wxCommandEvent& event )

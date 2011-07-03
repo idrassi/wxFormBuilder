@@ -30,11 +30,11 @@
 
 BEGIN_EVENT_TABLE( Title, wxPanel )
 	EVT_PAINT( Title::onPaint )
-	EVT_SIZE( Title::onSize )
+//	EVT_SIZE( Title::onSize )
 	EVT_CLOSE( Title::onClose )
 END_EVENT_TABLE()
 
-Title::Title(wxWindow *parent,const wxString &title) : wxPanel(parent,-1)
+Title::Title( wxWindow *parent, const wxString &title ) : wxPanel( parent, wxID_ANY )
 {
 /*
 	wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
@@ -49,32 +49,33 @@ Title::Title(wxWindow *parent,const wxString &title) : wxPanel(parent,-1)
 	m_colCaptText = getColourFromConfig( wxT("/preferences/gui/CaptionTextColour"),           wxSYS_COLOUR_CAPTIONTEXT );
 	m_colActvCapt = getColourFromConfig( wxT("/preferences/gui/CaptionActiveColour"),         wxSYS_COLOUR_ACTIVECAPTION );
 	m_colActvGrdt = getColourFromConfig( wxT("/preferences/gui/CaptionActiveGradientColour"), wxSYS_COLOUR_GRADIENTACTIVECAPTION );
-
-	SetBackgroundColour( m_colActvCapt );
 /*
 	m_lblCaptText->SetBackgroundColour( m_colActvCapt );
 	m_lblCaptText->SetForegroundColour( m_colCaptText );
 	m_lblCaptText->SetFont( wxFont( 8, wxSWISS, wxNORMAL, wxBOLD, 0, wxT("") ) );
-*/
+
 	SetSize( -1, m_hgtCaptText );
-/*
+
 	sizer->Add( m_lblCaptText, 0, wxALL | wxEXPAND, 2 );
 	SetSizer(sizer);
 	Fit();*/
+	this->SetBackgroundColour( m_colActvCapt );
+	this->SetMinSize( wxSize( -1, m_hgtCaptText ) );
+	this->Layout();
 }
 
-wxWindow * Title::CreateTitle (wxWindow *inner, const wxString &title)
+wxWindow * Title::CreateTitle ( wxWindow *inner, const wxString &title )
 {
 	wxWindow *parent = inner->GetParent();
 
-	wxPanel *container = new wxPanel(parent, -1);
-	Title *titleWin = new Title(container,title);
-	inner->Reparent(container);
+	wxPanel *container = new wxPanel( parent, wxID_ANY );
+	Title *titleWin = new Title( container, title );
+	inner->Reparent( container );
 
-	wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-	sizer->Add(titleWin,0,wxEXPAND);
-	sizer->Add(inner,1,wxEXPAND);
-	container->SetSizer(sizer);
+	wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
+	sizer->Add( titleWin, 0, wxEXPAND );
+	sizer->Add( inner, 1, wxEXPAND );
+	container->SetSizer( sizer );
 
 	return container;
 }
@@ -154,15 +155,15 @@ void Title::drawTitle( wxDC &dc )
 	int marginH = ( height - th ) / 2; 
 	dc.DrawLabel( m_strCaptText, wxRect( marginH + 2, marginH, tw, th ) );
 }
-
-void Title::onSize ( wxSizeEvent& )
+/*
+void Title::onSize ( wxSizeEvent& WXUNUSED(event) )
 {
 	wxClientDC dc( this );
 	wxBufferedDC bdc( &dc, GetClientSize() );
 	drawTitle( bdc );
 }
-
-void Title::onPaint ( wxPaintEvent& )
+*/
+void Title::onPaint ( wxPaintEvent& WXUNUSED(event) )
 {
 	wxPaintDC dc( this );
 	wxBufferedDC bdc( &dc, GetClientSize() );

@@ -44,7 +44,7 @@ bool wxFBIPC::VerifySingleInstance( const wxString& file, bool switchTo )
 	wxFileName path( file );
 	if ( !path.IsOk() )
 	{
-		wxLogError( wxT("This path is invalid: %s"), file.c_str() );
+		wxLogError(_("This path is invalid: %s"), file.c_str() );
 		return false;
 	}
 
@@ -52,7 +52,7 @@ bool wxFBIPC::VerifySingleInstance( const wxString& file, bool switchTo )
 	{
 		if ( !path.MakeAbsolute() )
 		{
-			wxLogError( wxT("Could not make path absolute: %s"), file.c_str() );
+			wxLogError(_("Could not make path absolute: %s"), file.c_str() );
 			return false;
 		}
 	}
@@ -142,25 +142,41 @@ bool wxFBIPC::VerifySingleInstance( const wxString& file, bool switchTo )
 		#ifdef __WXMSW__
 			connection.reset( client->MakeConnection( wxT("localhost"), name, name ) );
 		#else
+
+			#if wxVERSION_NUMBER >= 2900
+			const void *pid;
+			#endif
+
 			bool connected = false;
 			for ( int i = m_port; i < m_port + 20; ++i )
 			{
 				wxString nameWithPort = wxString::Format( wxT("%i%s"), i, name.c_str() );
+
+			#if wxVERSION_NUMBER < 2900
 				connection.reset( client->MakeConnection( wxT("127.0.0.1"), nameWithPort, name ) );
+			#else
+				connection.reset( client->MakeConnection( "localhost", nameWithPort, name ) );
+			#endif
+
 				if ( NULL != connection.get() )
 				{
 					connected = true;
+
+			#if wxVERSION_NUMBER < 2900
 					wxChar* pid = connection->Request( wxT("PID"), NULL );
+			#else
+					pid = connection->Request( "PID", NULL );
+			#endif
 					if ( NULL != pid )
 					{
-						wxLogStatus( wxT("%s already open in process %s"), file.c_str(), pid );
+						wxLogStatus(_("%s already open in process %s"), file.c_str(), pid );
 					}
 					break;
 				}
 			}
 			if ( !connected )
 			{
-				wxLogError( wxT("There is a lockfile named '%s', but unable to make a connection to that instance."), name.c_str() );
+				wxLogError(_("There is a lockfile named '%s', but unable to make a connection to that instance."), name.c_str() );
 			}
 		#endif
 
@@ -204,13 +220,17 @@ bool wxFBIPC::CreateServer( const wxString& name )
 			}
 			else
 			{
+#if wxVERSION_NUMBER < 2900
 				Debug::Print( wxT("Server Creation Failed. %s"), nameWithPort.c_str() );
+#else
+				Debug::Print( "Server Creation Failed. " + nameWithPort );
+#endif
 			}
 		}
 	}
 	#endif
 
-	wxLogError( wxT("Failed to create an IPC service with name %s"), name.c_str() );
+	wxLogError(_("Failed to create an IPC service with name %s"), name.c_str() );
 	return false;
 }
 
@@ -249,7 +269,11 @@ wxConnectionBase* AppClient::OnMakeConnection()
 	return new AppConnection;
 }
 
-wxChar* AppConnection::OnRequest( const wxString& /*topic*/, const wxString& /*item*/, int* size, wxIPCFormat /*format*/ )
+#if wxVERSION_NUMBER < 2900
+	wxChar* AppConnection::OnRequest( const wxString& /*topic*/, const wxString& /*item*/, int* size, wxIPCFormat /*format*/ )
+#else
+	const void* AppConnection::OnRequest( const wxString& WXUNUSED(topic), const wxString& WXUNUSED(item), size_t *size, wxIPCFormat WXUNUSED(format) ) 
+#endif
 {
 	unsigned long pid = ::wxGetProcessId();
 	if ( 0 == pid )
@@ -262,11 +286,17 @@ wxChar* AppConnection::OnRequest( const wxString& /*topic*/, const wxString& /*i
 	}
 	else
 	{
+#if wxVERSION_NUMBER < 2900
 		int length = m_data.Printf( wxT("%lu"), pid );
+
 		if ( NULL != size )
 		{
 			*size = (length + 1) * sizeof(wxChar);
 		}
+
 		return const_cast< wxChar* >( m_data.c_str() );
+#else
+		return NULL; //m_data.wchar_str() TODO: IPC in wx 2.9
+#endif
 	}
 }

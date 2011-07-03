@@ -76,20 +76,36 @@ public:
 	virtual void Clear() = 0;
 };
 
-class wxScintilla;
+#if wxVERSION_NUMBER < 2900
+	class wxScintilla;
+#else
+	class wxStyledTextCtrl;
+#endif
 
 class TCCodeWriter : public CodeWriter
 {
 private:
+
+#if wxVERSION_NUMBER < 2900
 	wxScintilla *m_tc;
+#else
+	wxStyledTextCtrl *m_tc;
+#endif
 
 protected:
 	void DoWrite( wxString code );
 
 public:
 	TCCodeWriter();
+
+#if wxVERSION_NUMBER < 2900
 	TCCodeWriter( wxScintilla *tc );
 	void SetTextCtrl( wxScintilla* tc );
+#else
+	TCCodeWriter( wxStyledTextCtrl *tc );
+	void SetTextCtrl( wxStyledTextCtrl* tc );
+#endif
+
 	void Clear();
 };
 

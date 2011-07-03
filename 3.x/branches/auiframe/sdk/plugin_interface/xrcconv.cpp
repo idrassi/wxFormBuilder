@@ -140,18 +140,25 @@ static wxString ReplaceSynonymous( const wxString &bitlist )
 ObjectToXrcFilter::ObjectToXrcFilter( 	IObject *obj,
 										const wxString &classname,
 										const wxString &objname,
-										const wxString &base )
+										const wxString &base, bool isAbstract )
 {
 	m_obj = obj;
-	m_xrcObj = new ticpp::Element( "object" );
+	if ( !isAbstract )
+	{
+		m_xrcObj = new ticpp::Element("object");
 
-	m_xrcObj->SetAttribute( "class", classname.mb_str( wxConvUTF8 ) );
+		m_xrcObj->SetAttribute( "class", classname.mb_str( wxConvUTF8 ) );
 
-	if ( objname != wxT( "" ) )
-		m_xrcObj->SetAttribute( "name", objname.mb_str( wxConvUTF8 ) );
+		if ( objname != wxEmptyString )
+			m_xrcObj->SetAttribute( "name", objname.mb_str( wxConvUTF8 ) );
 
-	if ( base != wxT( "" ) )
-		m_xrcObj->SetAttribute( "base", base.mb_str( wxConvUTF8 ) );
+		if ( base != wxEmptyString )
+			m_xrcObj->SetAttribute( "base", base.mb_str( wxConvUTF8 ) );
+	}
+	else
+	{
+		m_xrcObj = new ticpp::Element( classname.mb_str( wxConvUTF8 ) );
+	}
 }
 
 ObjectToXrcFilter::~ObjectToXrcFilter()
@@ -460,23 +467,30 @@ XrcToXfbFilter::XrcToXfbFilter( ticpp::Element *obj,
 		AddProperty( wxT("name" ), objname, XRC_TYPE_TEXT );
 }
 
-XrcToXfbFilter::XrcToXfbFilter( ticpp::Element *obj, const wxString &classname )
+XrcToXfbFilter::XrcToXfbFilter( ticpp::Element *obj, const wxString &classname, bool isAbstract )
 {
 	m_xrcObj = obj;
-	m_xfbObj = new ticpp::Element( "object" );
-
-	m_xfbObj->SetAttribute( "class", classname.mb_str( wxConvUTF8 ) );
-
-	try
+	if ( !isAbstract )
 	{
-		std::string name;
-		obj->GetAttribute( "name", &name );
-		wxString objname( name.c_str(), wxConvUTF8 );
-		AddPropertyValue( wxT("name" ), objname );
+		m_xfbObj = new ticpp::Element( "object" );
+
+		m_xfbObj->SetAttribute( "class", classname.mb_str( wxConvUTF8 ) );
+
+		try
+		{
+			std::string name;
+			obj->GetAttribute( "name", &name );
+			wxString objname( name.c_str(), wxConvUTF8 );
+			AddPropertyValue( wxT("name" ), objname );
+		}
+		catch( ticpp::Exception& ex )
+		{
+			wxLogDebug( wxString( ex.m_details.c_str(), wxConvUTF8 ) );
+		}
 	}
-	catch( ticpp::Exception& ex )
+	else
 	{
-		wxLogDebug( wxString( ex.m_details.c_str(), wxConvUTF8 ) );
+		m_xfbObj = new ticpp::Element( classname.mb_str( wxConvUTF8 ) );
 	}
 }
 
