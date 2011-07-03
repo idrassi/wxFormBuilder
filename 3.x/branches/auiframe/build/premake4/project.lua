@@ -30,11 +30,10 @@ project "wxFormBuilder"
 	end
 
 	defines				{ "NO_GCC_PRAGMA", "SCI_NAMESPACE", "TIXML_USE_TICPP", "UNICODE", "_UNICODE", "__WX__", "WXUSINGDLL", "WXUSINGDLL_FNB" }
-	includedirs 		{ "../../src", "../../src/boost", "../../src/controls/include", "../../sdk/tinyxml", "../../sdk/plugin_interface" }
-	files				{ "../../src/**.h", "../../src/**.hh", "../../src/**.hpp", "../../src/**.cc", "../../src/**.cpp" }
-    excludes            { "../../src/controls/include/wx/propgrid/**", "../../src/controls/src/propgrid/**",
-                          "../../src/controls/include/wx/wxScintilla/**", "../../src/controls/src/wxScintilla/**",
-                          "../../src/rad/inspector/objinspect.h", "../../src/rad/inspector/objinspect.cpp" }
+	includedirs 		{ "../../src", "../../src/boost", "../../sdk/tinyxml", "../../sdk/plugin_interface", "../../wx29/include" }
+	files				{ "../../src/**.h", "../../src/**.hh", "../../src/**.hpp", "../../src/**.cc", "../../src/**.cpp", "../../wx29/src/**.cpp",
+                          "../../wx29/include/**.h", "../../src/**.fbp" }
+    excludes            { "../../src/controls/**", "../../src/rad/inspector/objinspect.h", "../../src/rad/inspector/objinspect.cpp" }
 	flags 				{ "ExtraWarnings", "Unicode" }
 	libdirs 			{ "../../sdk/lib", "../../output/lib/wxformbuilder" }
 	links 				{ "fbPluginInterface", "ticpp" }

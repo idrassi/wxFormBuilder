@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxFormBuilder-3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-27 21:51+0100\n"
-"PO-Revision-Date: 2011-06-28 03:02+0100\n"
+"POT-Creation-Date: 2011-07-03 16:39+0100\n"
+"PO-Revision-Date: 2011-07-03 16:39+0100\n"
 "Last-Translator: Andrea Zanellato <zanellato.andrea@gmail.com>\n"
 "Language-Team: wxFormBuilder <wxformbuilder@gmail.com>\n"
 "Language: \n"
@@ -18,99 +18,99 @@ msgstr ""
 "X-Poedit-SearchPath-0: plugins/additional\n"
 "X-Poedit-SearchPath-1: output/plugins/additional/xml\n"
 
-#: plugins/additional/additional.cpp:219
+#: plugins/additional/additional.cpp:221
 msgid "Welcome to wxRichTextCtrl, a wxWidgets control for editing and presenting styled text and images"
 msgstr "Benvenuto in wxRichTextCtrl, un controllo wxWidgets per l'editing e la presentazione di in testo stilizzato con presenza di immagini"
 
-#: plugins/additional/additional.cpp:224
+#: plugins/additional/additional.cpp:226
 msgid "by Julian Smart"
 msgstr "di Julian Smart"
 
-#: plugins/additional/additional.cpp:236
+#: plugins/additional/additional.cpp:238
 msgid "What can you do with this thing? "
 msgstr "Cosa ci puoi fare?"
 
-#: plugins/additional/additional.cpp:238
+#: plugins/additional/additional.cpp:240
 msgid " Well, you can change text "
 msgstr "Beh, puoi cambiare il"
 
-#: plugins/additional/additional.cpp:241
+#: plugins/additional/additional.cpp:243
 msgid "colour, like this red bit."
 msgstr "colore del testo, come questo rosso."
 
-#: plugins/additional/additional.cpp:245
+#: plugins/additional/additional.cpp:247
 msgid " And this blue bit."
 msgstr "E questo blu."
 
-#: plugins/additional/additional.cpp:248
+#: plugins/additional/additional.cpp:250
 msgid " Naturally you can make things "
 msgstr "Puoi farci diverse cose"
 
-#: plugins/additional/additional.cpp:250
+#: plugins/additional/additional.cpp:252
 msgid "bold "
 msgstr "grassetto"
 
-#: plugins/additional/additional.cpp:253
+#: plugins/additional/additional.cpp:255
 msgid "or italic "
 msgstr "oppure italico"
 
-#: plugins/additional/additional.cpp:256
+#: plugins/additional/additional.cpp:258
 msgid "or underlined."
 msgstr "o sottolineato."
 
-#: plugins/additional/additional.cpp:260
+#: plugins/additional/additional.cpp:262
 msgid " Different font sizes on the same line is allowed, too."
 msgstr "Sono permesse anche grandezze di carattere diverse sulla stessa linea."
 
-#: plugins/additional/additional.cpp:263
+#: plugins/additional/additional.cpp:265
 msgid " Next we'll show an indented paragraph."
 msgstr "Di seguito viene dimostrata una indentazione di paragrafo."
 
-#: plugins/additional/additional.cpp:268
+#: plugins/additional/additional.cpp:270
 msgid "Indented paragraph."
 msgstr "Paragrafo indentato."
 
-#: plugins/additional/additional.cpp:273
+#: plugins/additional/additional.cpp:275
 msgid "Next, we'll show a first-line indent, achieved using BeginLeftIndent(100, -40)."
 msgstr "Di seguito, dimostreremo una indentazione di linea di testa, usando BeginLeftIndent(100, -40)."
 
-#: plugins/additional/additional.cpp:278
+#: plugins/additional/additional.cpp:280
 msgid "It was in January, the most down-trodden month of an Edinburgh winter."
 msgstr "Era Gennaio, il mese invernale più freddo in Edimburgo."
 
-#: plugins/additional/additional.cpp:283
+#: plugins/additional/additional.cpp:285
 msgid "Numbered bullets are possible, again using subindents:"
 msgstr "Punti di paragrafo numerati"
 
-#: plugins/additional/additional.cpp:288
+#: plugins/additional/additional.cpp:290
 msgid "This is my first item. Note that wxRichTextCtrl doesn't automatically do numbering, but this will be added later."
 msgstr "questo è il mio primo oggetto. Notare che wxRichTextCtrl non numera automaticamente, ma può essere aggiunto in seguito."
 
-#: plugins/additional/additional.cpp:294
+#: plugins/additional/additional.cpp:296
 msgid "This is my second item."
 msgstr "Il mio secondo oggetto."
 
-#: plugins/additional/additional.cpp:299
+#: plugins/additional/additional.cpp:301
 msgid "The following paragraph is right-indented:"
 msgstr "Il paragrafo seguente ha una indentazione a destra:"
 
-#: plugins/additional/additional.cpp:304
+#: plugins/additional/additional.cpp:306
 msgid "It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable."
 msgstr "Era Gennaio, il mese invernale più freddo in Edimburgo. Una donna attraente entra nel locale, nulla di strano."
 
-#: plugins/additional/additional.cpp:319
+#: plugins/additional/additional.cpp:321
 msgid "This line contains tabs:\tFirst tab\tSecond tab\tThird tab"
 msgstr "Questa linea contiene:\tPrima scheda\tSeconda scheda\tTerza scheda"
 
-#: plugins/additional/additional.cpp:322
+#: plugins/additional/additional.cpp:324
 msgid "Other notable features of wxRichTextCtrl include:"
 msgstr "Altre particolari caratteristiche di wxRichTextCtrl sono:"
 
-#: plugins/additional/additional.cpp:326
+#: plugins/additional/additional.cpp:328
 msgid "Compatibility with wxTextCtrl API"
 msgstr "Compatibilità con le API di wxTextCtrl"
 
-#: plugins/additional/additional.cpp:329
+#: plugins/additional/additional.cpp:331
 msgid ""
 "\n"
 "Note: this content was generated programmatically and copied from the sample. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!"
@@ -118,1514 +118,1520 @@ msgstr ""
 "\n"
 "Nota: questo contenuto e' stato generato a livello di codice e copiato dall'applicazione di esempio. Le immagini vengono caricate da XPM inline."
 
-#: plugins/additional/additional.cpp:361
+#: plugins/additional/additional.cpp:363
 msgid "This is a dummy page."
 msgstr "Questa e' una pagina fittizia."
 
-#. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:31
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/additional/xml/additional.xml:30
 #, no-wrap
-msgid "Use this style if you wish the user to be able to edit labels in the tree control."
+msgid "Use associated imagelist (if any) instead bitmaps"
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:32
 #, no-wrap
-msgid "For convenience to document that no buttons are to be drawn."
+msgid "Use this style if you wish the user to be able to edit labels in the tree control."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:33
 #, no-wrap
-msgid "Use this style to show + and - buttons to the left of parent items."
+msgid "For convenience to document that no buttons are to be drawn."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:34
 #, no-wrap
-msgid "Use this style to show Mac-style twister buttons to the left of parent items. If both wxTR_HAS_BUTTONS and wxTR_TWIST_BUTTONS are given, twister buttons are generated."
+msgid "Use this style to show + and - buttons to the left of parent items."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:35
 #, no-wrap
-msgid "Use this style to hide vertical level connectors."
+msgid "Use this style to show Mac-style twister buttons to the left of parent items. If both wxTR_HAS_BUTTONS and wxTR_TWIST_BUTTONS are given, twister buttons are generated."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:36
 #, no-wrap
-msgid "Use this style to have the background colour and the selection highlight extend over the entire horizontal row of the tree control window. (This flag is ignored under Windows unless you specify wxTR_NO_LINES as well.)"
+msgid "Use this style to hide vertical level connectors."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:37
 #, no-wrap
-msgid "Use this style to show lines between root nodes. Only applicable if wxTR_HIDE_ROOT is set and wxTR_NO_LINES is not set."
+msgid "Use this style to have the background colour and the selection highlight extend over the entire horizontal row of the tree control window. (This flag is ignored under Windows unless you specify wxTR_NO_LINES as well.)"
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:38
 #, no-wrap
-msgid "Use this style to suppress the display of the root node, effectively causing the first-level nodes to appear as a series of root nodes."
+msgid "Use this style to show lines between root nodes. Only applicable if wxTR_HIDE_ROOT is set and wxTR_NO_LINES is not set."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:39
 #, no-wrap
-msgid "Use this style to draw a contrasting border between displayed rows."
+msgid "Use this style to suppress the display of the root node, effectively causing the first-level nodes to appear as a series of root nodes."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:40
 #, no-wrap
-msgid "Use this style to cause row heights to be just big enough to fit the content. If not set, all rows use the largest row height. The default is that this flag is unset. Generic only."
+msgid "Use this style to draw a contrasting border between displayed rows."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:41
 #, no-wrap
-msgid "For convenience to document that only one item may be selected at a time. Selecting another item causes the current selection, if any, to be deselected. This is the default."
+msgid "Use this style to cause row heights to be just big enough to fit the content. If not set, all rows use the largest row height. The default is that this flag is unset. Generic only."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:42
 #, no-wrap
-msgid "Use this style to allow a range of items to be selected. If a second range is selected, the current range, if any, is deselected."
+msgid "For convenience to document that only one item may be selected at a time. Selecting another item causes the current selection, if any, to be deselected. This is the default."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:43
 #, no-wrap
-msgid "Use this style to allow disjoint items to be selected. (Only partially implemented; may not work in all cases.)"
+msgid "Use this style to allow a range of items to be selected. If a second range is selected, the current range, if any, is deselected."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:44
 #, no-wrap
-msgid "The set of flags that are closest to the defaults for the native control for a particular toolkit."
+msgid "Use this style to allow disjoint items to be selected. (Only partially implemented; may not work in all cases.)"
 msgstr ""
 
-#. type: Attribute 'help' of: <package><objectinfo><event>
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:45
 #, no-wrap
-msgid "Request information from the application."
+msgid "The set of flags that are closest to the defaults for the native control for a particular toolkit."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:46
 #, no-wrap
-msgid "Information is being supplied."
+msgid "Request information from the application."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:47
 #, no-wrap
-msgid "The opportunity to set the item tooltip is being given to the application (call wxTreeEvent::SetToolTip). Windows only."
+msgid "Information is being supplied."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:48
 #, no-wrap
-msgid "The state image has been clicked. Windows only."
+msgid "The opportunity to set the item tooltip is being given to the application (call wxTreeEvent::SetToolTip). Windows only."
 msgstr ""
 
-#. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:55
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/additional/xml/additional.xml:49
 #, no-wrap
-msgid "Never display scrollbars, not even when the page is larger than the window."
+msgid "The state image has been clicked. Windows only."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:56
 #, no-wrap
-msgid "Display scrollbars only if page's size exceeds window's size."
+msgid "Never display scrollbars, not even when the page is larger than the window."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:57
 #, no-wrap
-msgid "Don't allow the user to select text."
+msgid "Display scrollbars only if page's size exceeds window's size."
 msgstr ""
 
-#. type: Attribute 'help' of: <package><objectinfo><event>
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:58
 #, no-wrap
-msgid "A wxHtmlCell was clicked."
+msgid "Don't allow the user to select text."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:59
 #, no-wrap
-msgid "The mouse passed over a wxHtmlCell."
+msgid "A wxHtmlCell was clicked."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:60
 #, no-wrap
-msgid "A wxHtmlCell which contains an hyperlink was clicked."
+msgid "The mouse passed over a wxHtmlCell."
 msgstr ""
 
-#. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:69
-#: output/plugins/additional/xml/additional.xml:226
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/additional/xml/additional.xml:61
 #, no-wrap
-msgid "The control will generate the event wxEVT_COMMAND_TEXT_ENTER (otherwise pressing Enter key is either processed internally by the control or used for navigation between dialog controls)."
+msgid "A wxHtmlCell which contains an hyperlink was clicked."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:70
 #: output/plugins/additional/xml/additional.xml:227
 #, no-wrap
-msgid "The control will receive wxEVT_CHAR events for TAB pressed - normally, TAB is used for passing to the next control in a dialog instead. For the control created with this style, you can still use Ctrl-Enter to pass to the next control from the keyboard."
+msgid "The control will generate the event wxEVT_COMMAND_TEXT_ENTER (otherwise pressing Enter key is either processed internally by the control or used for navigation between dialog controls)."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:71
+#: output/plugins/additional/xml/additional.xml:228
 #, no-wrap
-msgid "The text will not be user-editable."
+msgid "The control will receive wxEVT_CHAR events for TAB pressed - normally, TAB is used for passing to the next control in a dialog instead. For the control created with this style, you can still use Ctrl-Enter to pass to the next control from the keyboard."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:72
 #, no-wrap
-msgid "Highlight the URLs and generate the wxTextUrl events when mouse events occur over them."
+msgid "The text will not be user-editable."
 msgstr ""
 
-#. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:74
-#: output/plugins/additional/xml/additional.xml:237
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/additional/xml/additional.xml:73
 #, no-wrap
-msgid "Respond to a wxEVT_COMMAND_TEXT_UPDATED event, generated when the text changes. Notice that this event will always be sent when the text controls contents changes - whether this is due to user input or comes from the program itself (for example, if SetValue() is called)"
+msgid "Highlight the URLs and generate the wxTextUrl events when mouse events occur over them."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:75
 #: output/plugins/additional/xml/additional.xml:238
 #, no-wrap
-msgid "Respond to a wxEVT_COMMAND_TEXT_ENTER event, generated when enter is pressed in a text control (which must have wxTE_PROCESS_ENTER style for this event to be generated)."
+msgid "Respond to a wxEVT_COMMAND_TEXT_UPDATED event, generated when the text changes. Notice that this event will always be sent when the text controls contents changes - whether this is due to user input or comes from the program itself (for example, if SetValue() is called)"
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:76
+#: output/plugins/additional/xml/additional.xml:239
 #, no-wrap
-msgid "A mouse event occurred over an URL in the text control (wxMSW and wxGTK2 only)"
+msgid "Respond to a wxEVT_COMMAND_TEXT_ENTER event, generated when enter is pressed in a text control (which must have wxTE_PROCESS_ENTER style for this event to be generated)."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:77
 #, no-wrap
-msgid "User tried to enter more text into the control than the limit set by SetMaxLength."
+msgid "A mouse event occurred over an URL in the text control (wxMSW and wxGTK2 only)"
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:78
 #, no-wrap
-msgid "Process a wxEVT_COMMAND_RICHTEXT_CHARACTER event, generated when the user presses a character key. Valid event functions: GetFlags, GetPosition, GetCharacter."
+msgid "User tried to enter more text into the control than the limit set by SetMaxLength."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:79
 #, no-wrap
-msgid "Process a wxEVT_COMMAND_RICHTEXT_DELETE event, generated when the user presses the backspace or delete key. Valid event functions: GetFlags, GetPosition."
+msgid "Process a wxEVT_COMMAND_RICHTEXT_CHARACTER event, generated when the user presses a character key. Valid event functions: GetFlags, GetPosition, GetCharacter."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:80
 #, no-wrap
-msgid "Process a wxEVT_COMMAND_RICHTEXT_RETURN event, generated when the user presses the return key. Valid event functions: GetFlags, GetPosition."
+msgid "Process a wxEVT_COMMAND_RICHTEXT_DELETE event, generated when the user presses the backspace or delete key. Valid event functions: GetFlags, GetPosition."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:81
 #, no-wrap
-msgid "Process a wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED event, generated when styling has been applied to the control. Valid event functions: GetPosition, GetRange."
+msgid "Process a wxEVT_COMMAND_RICHTEXT_RETURN event, generated when the user presses the return key. Valid event functions: GetFlags, GetPosition."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:82
 #, no-wrap
-msgid "Process a wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING event, generated when the control's stylesheet has changed, for example the user added, edited or deleted a style. Valid event functions: GetRange, GetPosition."
+msgid "Process a wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED event, generated when styling has been applied to the control. Valid event functions: GetPosition, GetRange."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:83
 #, no-wrap
-msgid "Process a wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING event, generated when the control's stylesheet is about to be replaced, for example when a file is loaded into the control. Valid event functions: Veto, GetOldStyleSheet, GetNewStyleSheet."
+msgid "Process a wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING event, generated when the control's stylesheet has changed, for example the user added, edited or deleted a style. Valid event functions: GetRange, GetPosition."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:84
 #, no-wrap
-msgid "Process a wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED event, generated when the control's stylesheet has been replaced, for example when a file is loaded into the control. Valid event functions: GetOldStyleSheet, GetNewStyleSheet."
+msgid "Process a wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING event, generated when the control's stylesheet is about to be replaced, for example when a file is loaded into the control. Valid event functions: Veto, GetOldStyleSheet, GetNewStyleSheet."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:85
 #, no-wrap
-msgid "Process a wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED event, generated when content has been inserted into the control. Valid event functions: GetPosition, GetRange."
+msgid "Process a wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED event, generated when the control's stylesheet has been replaced, for example when a file is loaded into the control. Valid event functions: GetOldStyleSheet, GetNewStyleSheet."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:86
 #, no-wrap
-msgid "Process a wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED event, generated when content has been deleted from the control. Valid event functions: GetPosition, GetRange."
+msgid "Process a wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED event, generated when content has been inserted into the control. Valid event functions: GetPosition, GetRange."
 msgstr ""
 
-#. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:93
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/additional/xml/additional.xml:87
 #, no-wrap
-msgid "Single-selection list."
+msgid "Process a wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED event, generated when content has been deleted from the control. Valid event functions: GetPosition, GetRange."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:94
 #, no-wrap
-msgid "Multiple-selection list: the user can toggle multiple items on and off."
+msgid "Single-selection list."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:95
 #, no-wrap
-msgid "Extended-selection list: the user can select multiple items using the SHIFT key and the mouse or special key combinations."
+msgid "Multiple-selection list: the user can toggle multiple items on and off."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:96
 #, no-wrap
-msgid "Create horizontal scrollbar if contents are too wide (Windows only)."
+msgid "Extended-selection list: the user can select multiple items using the SHIFT key and the mouse or special key combinations."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:97
 #, no-wrap
-msgid "Always show a vertical scrollbar."
+msgid "Create horizontal scrollbar if contents are too wide (Windows only)."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:98
 #, no-wrap
-msgid "Only create a vertical scrollbar if needed."
+msgid "Always show a vertical scrollbar."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:99
 #, no-wrap
+msgid "Only create a vertical scrollbar if needed."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/additional/xml/additional.xml:100
+#, no-wrap
 msgid "The listbox contents are sorted in alphabetical order."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:100
+#: output/plugins/additional/xml/additional.xml:101
 #, no-wrap
 msgid "List of default values."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:101
+#: output/plugins/additional/xml/additional.xml:102
 #, no-wrap
 msgid "Process a wxEVT_COMMAND_CHECKLISTBOX_TOGGLED event, when an item in the check list box is checked or unchecked."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:102
+#: output/plugins/additional/xml/additional.xml:103
 #, no-wrap
 msgid "Process a wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the list is selected."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:103
+#: output/plugins/additional/xml/additional.xml:104
 #, no-wrap
 msgid "Process a wxEVT_COMMAND_LISTBOX_DOUBLECLICKED event, when the listbox is double-clicked."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:110
+#: output/plugins/additional/xml/additional.xml:111
 #, no-wrap
 msgid "Number of Rows."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:111
+#: output/plugins/additional/xml/additional.xml:112
 #, no-wrap
 msgid "Number of Columns."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:112
+#: output/plugins/additional/xml/additional.xml:113
 #, no-wrap
 msgid "Allow editing grid contents."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:113
+#: output/plugins/additional/xml/additional.xml:114
 #, no-wrap
 msgid "Show grid lines."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:114
+#: output/plugins/additional/xml/additional.xml:115
 #, no-wrap
 msgid "The colour used to draw grid lines."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:115
+#: output/plugins/additional/xml/additional.xml:116
 #, no-wrap
 msgid "Allow sizing rows and columns by dragging gridlines."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:116
+#: output/plugins/additional/xml/additional.xml:117
 #, no-wrap
 msgid "A grid may occupy more space than needed for its columns. This function allows to set how big this extra space is."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:117
+#: output/plugins/additional/xml/additional.xml:118
 #, no-wrap
 msgid "A grid may occupy more space than needed for its rows. This function allows to set how big this extra space is."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:120
+#: output/plugins/additional/xml/additional.xml:121
 #, no-wrap
 msgid "Comma separated list of column sizes. Note: wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used. The memory requirements for this could become prohibitive if your grid is very large."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:121
+#: output/plugins/additional/xml/additional.xml:122
 #, no-wrap
 msgid "Automatically sizes all columns to fit their contents. wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used. The memory requirements for this could become prohibitive if your grid is very large."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:122
+#: output/plugins/additional/xml/additional.xml:123
 #, no-wrap
 msgid "Allow moving columns by dragging."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:123
+#: output/plugins/additional/xml/additional.xml:124
 #, no-wrap
 msgid "Allow sizing columns by dragging."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:124
+#: output/plugins/additional/xml/additional.xml:125
 #, no-wrap
 msgid "Height of column labels"
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:125
+#: output/plugins/additional/xml/additional.xml:126
 #, no-wrap
 msgid "List of column labels."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:126
+#: output/plugins/additional/xml/additional.xml:127
 #, no-wrap
 msgid "Horizontal alignment of column label text."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property><option>
-#: output/plugins/additional/xml/additional.xml:127
-#: output/plugins/additional/xml/additional.xml:146
+#: output/plugins/additional/xml/additional.xml:128
+#: output/plugins/additional/xml/additional.xml:147
 #, no-wrap
 msgid "Align labels left."
 msgstr "Allinea le etichette a sinistra."
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property><option>
-#: output/plugins/additional/xml/additional.xml:128
-#: output/plugins/additional/xml/additional.xml:134
-#: output/plugins/additional/xml/additional.xml:147
-#: output/plugins/additional/xml/additional.xml:153
+#: output/plugins/additional/xml/additional.xml:129
+#: output/plugins/additional/xml/additional.xml:135
+#: output/plugins/additional/xml/additional.xml:148
+#: output/plugins/additional/xml/additional.xml:154
 #, no-wrap
 msgid "Align labels centered."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property><option>
-#: output/plugins/additional/xml/additional.xml:129
-#: output/plugins/additional/xml/additional.xml:148
+#: output/plugins/additional/xml/additional.xml:130
+#: output/plugins/additional/xml/additional.xml:149
 #, no-wrap
 msgid "Align labels right."
 msgstr "Allinea le etichette a destra."
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:132
+#: output/plugins/additional/xml/additional.xml:133
 #, no-wrap
 msgid "Vertical alignment of column label text."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property><option>
-#: output/plugins/additional/xml/additional.xml:133
-#: output/plugins/additional/xml/additional.xml:152
+#: output/plugins/additional/xml/additional.xml:134
+#: output/plugins/additional/xml/additional.xml:153
 #, no-wrap
 msgid "Align labels top."
 msgstr "Allinea le etichette in alto."
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property><option>
-#: output/plugins/additional/xml/additional.xml:135
-#: output/plugins/additional/xml/additional.xml:154
+#: output/plugins/additional/xml/additional.xml:136
+#: output/plugins/additional/xml/additional.xml:155
 #, no-wrap
 msgid "Align labels bottom."
 msgstr "Allinea le etichette in basso."
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:140
+#: output/plugins/additional/xml/additional.xml:141
 #, no-wrap
 msgid "Comma separated list of row sizes. Note: wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used. The memory requirements for this could become prohibitive if your grid is very large."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:141
+#: output/plugins/additional/xml/additional.xml:142
 #, no-wrap
 msgid "Automatically sizes all rows to fit their contents. wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used. The memory requirements for this could become prohibitive if your grid is very large."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:142
+#: output/plugins/additional/xml/additional.xml:143
 #, no-wrap
 msgid "Allow sizing rows by dragging."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:143
+#: output/plugins/additional/xml/additional.xml:144
 #, no-wrap
 msgid "Width of row labels"
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:144
+#: output/plugins/additional/xml/additional.xml:145
 #, no-wrap
 msgid "List of row labels."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:145
+#: output/plugins/additional/xml/additional.xml:146
 #, no-wrap
 msgid "Horizontal alignment of row label text."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:151
+#: output/plugins/additional/xml/additional.xml:152
 #, no-wrap
 msgid "Vertical alignment of row label text."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:159
+#: output/plugins/additional/xml/additional.xml:160
 #, no-wrap
 msgid "Background color for row and column labels."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:160
+#: output/plugins/additional/xml/additional.xml:161
 #, no-wrap
 msgid "Font for row and column labels."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:161
+#: output/plugins/additional/xml/additional.xml:162
 #, no-wrap
 msgid "Colour for row and column label text."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:164
+#: output/plugins/additional/xml/additional.xml:165
 #, no-wrap
 msgid "Default cell background color."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:165
+#: output/plugins/additional/xml/additional.xml:166
 #, no-wrap
 msgid "Default cell font."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:166
+#: output/plugins/additional/xml/additional.xml:167
 #, no-wrap
 msgid "Default cell text color."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:167
+#: output/plugins/additional/xml/additional.xml:168
 #, no-wrap
 msgid "Default horizontal alignment of cell values."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property><option>
-#: output/plugins/additional/xml/additional.xml:168
+#: output/plugins/additional/xml/additional.xml:169
 #, no-wrap
 msgid "Align left."
 msgstr "Allinea a sinistra."
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property><option>
-#: output/plugins/additional/xml/additional.xml:169
-#: output/plugins/additional/xml/additional.xml:175
+#: output/plugins/additional/xml/additional.xml:170
+#: output/plugins/additional/xml/additional.xml:176
 #, no-wrap
 msgid "Align centered."
 msgstr "Allinea al centro."
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property><option>
-#: output/plugins/additional/xml/additional.xml:170
+#: output/plugins/additional/xml/additional.xml:171
 #, no-wrap
 msgid "Align right."
 msgstr "Allinea a destra."
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property>
-#: output/plugins/additional/xml/additional.xml:173
+#: output/plugins/additional/xml/additional.xml:174
 #, no-wrap
 msgid "Default vertical alignment of cell values."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property><option>
-#: output/plugins/additional/xml/additional.xml:174
+#: output/plugins/additional/xml/additional.xml:175
 #, no-wrap
 msgid "Align top."
 msgstr "Allinea in alto."
 
 #. type: Attribute 'help' of: <package><objectinfo><category><property><option>
-#: output/plugins/additional/xml/additional.xml:176
+#: output/plugins/additional/xml/additional.xml:177
 #, no-wrap
 msgid "Align bottom."
 msgstr "Allinea in basso."
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:180
+#: output/plugins/additional/xml/additional.xml:181
 #, no-wrap
 msgid "The user clicked a cell with the left mouse button. Processes a wxEVT_GRID_CELL_LEFT_CLICK."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:181
+#: output/plugins/additional/xml/additional.xml:182
 #, no-wrap
 msgid "The user clicked a cell with the right mouse button. Processes a wxEVT_GRID_CELL_RIGHT_CLICK."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:182
+#: output/plugins/additional/xml/additional.xml:183
 #, no-wrap
 msgid "The user double-clicked a cell with the left mouse button. Processes a wxEVT_GRID_CELL_LEFT_DCLICK."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:183
+#: output/plugins/additional/xml/additional.xml:184
 #, no-wrap
 msgid "The user double-clicked a cell with the right mouse button. Processes a wxEVT_GRID_CELL_RIGHT_DCLICK."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:184
+#: output/plugins/additional/xml/additional.xml:185
 #, no-wrap
 msgid "The user clicked a label with the left mouse button. Processes a wxEVT_GRID_LABEL_LEFT_CLICK."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:185
+#: output/plugins/additional/xml/additional.xml:186
 #, no-wrap
 msgid "The user clicked a label with the right mouse button. Processes a wxEVT_GRID_LABEL_RIGHT_CLICK."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:186
+#: output/plugins/additional/xml/additional.xml:187
 #, no-wrap
 msgid "The user double-clicked a label with the left mouse button. Processes a wxEVT_GRID_LABEL_LEFT_DCLICK."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:187
+#: output/plugins/additional/xml/additional.xml:188
 #, no-wrap
 msgid "The user double-clicked a label with the right mouse button. Processes a wxEVT_GRID_LABEL_RIGHT_DCLICK."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:188
+#: output/plugins/additional/xml/additional.xml:189
 #, no-wrap
 msgid "The user changed the data in a cell. Processes a wxEVT_GRID_CELL_CHANGE."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:189
+#: output/plugins/additional/xml/additional.xml:190
 #, no-wrap
 msgid "The user moved to, and selected a cell. Processes a wxEVT_GRID_SELECT_CELL."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:190
+#: output/plugins/additional/xml/additional.xml:191
 #, no-wrap
 msgid "The editor for a cell was hidden. Processes a wxEVT_GRID_EDITOR_HIDDEN."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:191
+#: output/plugins/additional/xml/additional.xml:192
 #, no-wrap
 msgid "The editor for a cell was shown. Processes a wxEVT_GRID_EDITOR_SHOWN."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:192
+#: output/plugins/additional/xml/additional.xml:193
 #, no-wrap
 msgid "The user clicked a cell with the left mouse button; variant taking a window identifier. Processes a wxEVT_GRID_CELL_LEFT_CLICK."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:193
+#: output/plugins/additional/xml/additional.xml:194
 #, no-wrap
 msgid "The user clicked a cell with the right mouse button; variant taking a window identifier. Processes a wxEVT_GRID_CELL_RIGHT_CLICK."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:194
+#: output/plugins/additional/xml/additional.xml:195
 #, no-wrap
 msgid "The user double-clicked a cell with the left mouse button; variant taking a window identifier. Processes a wxEVT_GRID_CELL_LEFT_DCLICK."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:195
+#: output/plugins/additional/xml/additional.xml:196
 #, no-wrap
 msgid "The user double-clicked a cell with the right mouse button; variant taking a window identifier. Processes a wxEVT_GRID_CELL_RIGHT_DCLICK."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:196
+#: output/plugins/additional/xml/additional.xml:197
 #, no-wrap
 msgid "The user clicked a label with the left mouse button; variant taking a window identifier. Processes a wxEVT_GRID_LABEL_LEFT_CLICK"
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:197
+#: output/plugins/additional/xml/additional.xml:198
 #, no-wrap
 msgid "The user clicked a label with the right mouse button; variant taking a window identifier. Processes a wxEVT_GRID_LABEL_RIGHT_CLICK."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:198
+#: output/plugins/additional/xml/additional.xml:199
 #, no-wrap
 msgid "The user double-clicked a label with the left mouse button; variant taking a window identifier. Processes a wxEVT_GRID_LABEL_LEFT_DCLICK."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:199
+#: output/plugins/additional/xml/additional.xml:200
 #, no-wrap
 msgid "The user double-clicked a label with the right mouse button; variant taking a window identifier. Processes a wxEVT_GRID_LABEL_RIGHT_DCLICK."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:200
+#: output/plugins/additional/xml/additional.xml:201
 #, no-wrap
 msgid "The user changed the data in a cell; variant taking a window identifier. Processes a wxEVT_GRID_CELL_CHANGE."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:201
+#: output/plugins/additional/xml/additional.xml:202
 #, no-wrap
 msgid "The user moved to, and selected a cell; variant taking a window identifier. Processes a wxEVT_GRID_SELECT_CELL."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:202
+#: output/plugins/additional/xml/additional.xml:203
 #, no-wrap
 msgid "The editor for a cell was hidden; variant taking a window identifier. Processes a wxEVT_GRID_EDITOR_HIDDEN."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:203
+#: output/plugins/additional/xml/additional.xml:204
 #, no-wrap
 msgid "The editor for a cell was shown; variant taking a window identifier. Processes a wxEVT_GRID_EDITOR_SHOWN."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:204
+#: output/plugins/additional/xml/additional.xml:205
 #, no-wrap
 msgid "The user resized a column by dragging it. Processes a wxEVT_GRID_COL_SIZE."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:205
+#: output/plugins/additional/xml/additional.xml:206
 #, no-wrap
 msgid "The user resized a row by dragging it. Processes a wxEVT_GRID_ROW_SIZE."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:206
+#: output/plugins/additional/xml/additional.xml:207
 #, no-wrap
 msgid "The user resized a column by dragging it; variant taking a window identifier. Processes a wxEVT_GRID_COL_SIZE."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:207
+#: output/plugins/additional/xml/additional.xml:208
 #, no-wrap
 msgid "The user resized a row by dragging it; variant taking a window identifier. Processes a wxEVT_GRID_ROW_SIZE."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:208
+#: output/plugins/additional/xml/additional.xml:209
 #, no-wrap
 msgid "The user selected a group of contiguous cells. Processes a wxEVT_GRID_RANGE_SELECT."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:209
+#: output/plugins/additional/xml/additional.xml:210
 #, no-wrap
 msgid "The user selected a group of contiguous cells; variant taking a window identifier. Processes a wxEVT_GRID_RANGE_SELECT."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:210
+#: output/plugins/additional/xml/additional.xml:211
 #, no-wrap
 msgid "The editor for a cell was created. Processes a wxEVT_GRID_EDITOR_CREATED."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:211
+#: output/plugins/additional/xml/additional.xml:212
 #, no-wrap
 msgid "The editor for a cell was created; variant taking a window identifier. Processes a wxEVT_GRID_EDITOR_CREATED."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:219
+#: output/plugins/additional/xml/additional.xml:220
 #, no-wrap
 msgid "Process a wxEVT_COMMAND_RADIOBUTTON_SELECTED event, when the radiobutton is clicked."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:228
+#: output/plugins/additional/xml/additional.xml:229
 #, no-wrap
 msgid "By default, the Windows text control doesn't show the selection when it doesn't have focus - use this style to force it to always show it. It doesn't do anything under other platforms."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:229
+#: output/plugins/additional/xml/additional.xml:230
 #, no-wrap
 msgid "The text in the control will be left-justified (default)."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:230
+#: output/plugins/additional/xml/additional.xml:231
 #, no-wrap
 msgid "The text in the control will be centered (currently wxMSW and wxGTK2 only). "
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:231
+#: output/plugins/additional/xml/additional.xml:232
 #, no-wrap
 msgid "The text in the control will be right-justified (currently wxMSW and wxGTK2 only)."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:232
+#: output/plugins/additional/xml/additional.xml:233
 #, no-wrap
 msgid "On PocketPC and Smartphone, causes the first letter to be capitalized."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:235
+#: output/plugins/additional/xml/additional.xml:236
 #, no-wrap
 msgid "Shows or hides the search button."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:236
+#: output/plugins/additional/xml/additional.xml:237
 #, no-wrap
 msgid "Shows or hides the cancel button."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:239
+#: output/plugins/additional/xml/additional.xml:240
 #, no-wrap
 msgid "Respond to a wxEVT_SEARCHCTRL_SEARCH_BTN event, generated when the search button is clicked. Note that this does not initiate a search."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:240
+#: output/plugins/additional/xml/additional.xml:241
 #, no-wrap
 msgid "Respond to a wxEVT_SEARCHCTRL_CANCEL_BTN event, generated when the cancel button is clicked."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:247
+#: output/plugins/additional/xml/additional.xml:248
 #, no-wrap
 msgid "The default style: 0."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:248
+#: output/plugins/additional/xml/additional.xml:249
 #, no-wrap
 msgid "Creates a text control to the left of the picker button which is completely managed by the wxColourPickerCtrl and which can be used by the user to specify a colour. The text control is automatically synchronized with button's value. Use functions defined in wxPickerBase to modify the text control."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:249
+#: output/plugins/additional/xml/additional.xml:250
 #, no-wrap
 msgid "Shows the colour in HTML form (AABBCC) as colour button label (instead of no label at all)."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:253
+#: output/plugins/additional/xml/additional.xml:254
 #, no-wrap
 msgid "The user changed the colour selected in the control either using the button or using text control (see wxCLRP_USE_TEXTCTRL; note that in this case the event is fired only if the user's input is valid, i.e. recognizable)."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:260
+#: output/plugins/additional/xml/additional.xml:261
 #, no-wrap
 msgid "The default style: wxFNTP_FONTDESC_AS_LABEL | wxFNTP_USEFONT_FOR_LABEL."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:261
+#: output/plugins/additional/xml/additional.xml:262
 #, no-wrap
 msgid "Creates a text control to the left of the picker button which is completely managed by the wxFontPickerCtrl and which can be used by the user to specify a font (see SetSelectedFont). The text control is automatically synchronized with button's value. Use functions defined in wxPickerBase to modify the text control."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:262
+#: output/plugins/additional/xml/additional.xml:263
 #, no-wrap
 msgid "Keeps the label of the button updated with the fontface name and the font size. E.g. choosing &quot;Times New Roman bold, italic with size 10&quot; from the fontdialog, will update the label (overwriting any previous label) with the &quot;Times New Roman, 10&quot; text."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:263
+#: output/plugins/additional/xml/additional.xml:264
 #, no-wrap
 msgid "Uses the currently selected font to draw the label of the button."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:267
+#: output/plugins/additional/xml/additional.xml:268
 #, no-wrap
 msgid "Sets the maximum point size value allowed for the user-chosen font. The default value is 100. Note that big fonts can require a lot of memory and CPU time both for creation and for rendering; thus, specially because the user has the option to specify the fontsize through a text control (see wxFNTP_USE_TEXTCTRL), it's a good idea to put a limit to the maximum font size when huge fonts do not make much sense."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:270
+#: output/plugins/additional/xml/additional.xml:271
 #, no-wrap
 msgid "The user changed the font selected in the control either using the button or using text control (see wxFNTP_USE_TEXTCTRL; note that in this case the event is fired only if the user's input is valid, i.e. recognizable)."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:277
+#: output/plugins/additional/xml/additional.xml:278
 #, no-wrap
 msgid "The default style: includes wxFLP_OPEN | wxFLP_FILE_MUST_EXIST and, under wxMSW only, wxFLP_USE_TEXTCTRL."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:278
+#: output/plugins/additional/xml/additional.xml:279
 #, no-wrap
 msgid "Creates a text control to the left of the picker button which is completely managed by the wxFilePickerCtrl and which can be used by the user to specify a path (see SetPath). The text control is automatically synchronized with button's value. Use functions defined in wxPickerBase to modify the text control."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:279
+#: output/plugins/additional/xml/additional.xml:280
 #, no-wrap
 msgid "Creates a picker which allows the user to select a file to open."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:280
+#: output/plugins/additional/xml/additional.xml:281
 #, no-wrap
 msgid "Creates a picker which allows the user to select a file to save."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:281
+#: output/plugins/additional/xml/additional.xml:282
 #, no-wrap
 msgid "Can be combined with wxFLP_SAVE only: ask confirmation to the user before selecting a file."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:282
+#: output/plugins/additional/xml/additional.xml:283
 #, no-wrap
 msgid "Can be combined with wxFLP_OPEN only: the selected file must be an existing file."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:283
+#: output/plugins/additional/xml/additional.xml:284
 #, no-wrap
 msgid "Change current working directory on each user file selection change."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:289
+#: output/plugins/additional/xml/additional.xml:290
 #, no-wrap
 msgid "The user changed the file selected in the control either using the button or using text control (see wxFLP_USE_TEXTCTRL; note that in this case the event is fired only if the user's input is valid, e.g. an existing file path if wxFLP_FILE_MUST_EXIST was given)."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:296
+#: output/plugins/additional/xml/additional.xml:297
 #, no-wrap
 msgid "The default style: includes wxDIRP_DIR_MUST_EXIST and, under wxMSW only, wxDIRP_USE_TEXTCTRL."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:297
+#: output/plugins/additional/xml/additional.xml:298
 #, no-wrap
 msgid "Creates a text control to the left of the picker button which is completely managed by the wxDirPickerCtrl and which can be used by the user to specify a path (see SetPath). The text control is automatically synchronized with button's value. Use functions defined in wxPickerBase to modify the text control."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:298
+#: output/plugins/additional/xml/additional.xml:299
 #, no-wrap
 msgid "Creates a picker which allows to select only existing directories. wxGTK control always adds this flag internally as it does not support its absence."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:299
+#: output/plugins/additional/xml/additional.xml:300
 #, no-wrap
 msgid "Change current working directory on each user directory selection change."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:304
+#: output/plugins/additional/xml/additional.xml:305
 #, no-wrap
 msgid "The user changed the directory selected in the control either using the button or using text control (see wxDIRP_USE_TEXTCTRL; note that in this case the event is fired only if the user's input is valid, e.g. an existing directory path)."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:311
+#: output/plugins/additional/xml/additional.xml:312
 #, no-wrap
 msgid "Creates a control without a month calendar drop down but with spin-control-like arrows to change individual date components. This style is not supported by the generic version."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:312
+#: output/plugins/additional/xml/additional.xml:313
 #, no-wrap
 msgid "Creates a control with a month calendar drop-down part from which the user can select a date."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:313
+#: output/plugins/additional/xml/additional.xml:314
 #, no-wrap
 msgid "Forces display of the century in the default date format. Without this style the century could be displayed, or not, depending on the default date representation in the system."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:314
+#: output/plugins/additional/xml/additional.xml:315
 #, no-wrap
 msgid "With this style, the control allows the user to not enter any valid date at all. Without it - the default - the control always has some valid date."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:315
+#: output/plugins/additional/xml/additional.xml:316
 #, no-wrap
 msgid "Creates a control with the style that is best supported for the current platform (currently wxDP_SPIN under Windows and wxDP_DROPDOWN elsewhere)."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:316
+#: output/plugins/additional/xml/additional.xml:317
 #, no-wrap
 msgid "This event fires when the user changes the current selection in the control."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:323
+#: output/plugins/additional/xml/additional.xml:324
 #, no-wrap
 msgid "Show Sunday as the first day in the week."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:324
+#: output/plugins/additional/xml/additional.xml:325
 #, no-wrap
 msgid "Show Monday as the first day in the week."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:325
+#: output/plugins/additional/xml/additional.xml:326
 #, no-wrap
 msgid "Highlight holidays in the calendar."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:326
+#: output/plugins/additional/xml/additional.xml:327
 #, no-wrap
 msgid "Disable the year changing."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:327
+#: output/plugins/additional/xml/additional.xml:328
 #, no-wrap
 msgid "Disable the month (and, implicitly, the year) changing."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:328
+#: output/plugins/additional/xml/additional.xml:329
 #, no-wrap
 msgid "Show the neighbouring weeks in the previous and next months."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:329
+#: output/plugins/additional/xml/additional.xml:330
 #, no-wrap
 msgid "Use alternative, more compact, style for the month and year selection controls."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:330
+#: output/plugins/additional/xml/additional.xml:331
 #, no-wrap
 msgid "A day was double clicked in the calendar."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:331
+#: output/plugins/additional/xml/additional.xml:332
 #, no-wrap
 msgid "The selected date changed."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:332
+#: output/plugins/additional/xml/additional.xml:333
 #, no-wrap
 msgid "The selected day changed."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:333
+#: output/plugins/additional/xml/additional.xml:334
 #, no-wrap
 msgid "The selected month changed."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:334
+#: output/plugins/additional/xml/additional.xml:335
 #, no-wrap
 msgid "The selected year changed."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:335
+#: output/plugins/additional/xml/additional.xml:336
 #, no-wrap
 msgid "User clicked on the week day header."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:341
+#: output/plugins/additional/xml/additional.xml:342
 #, no-wrap
 msgid "The position of the scrollbar in scroll units."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:342
+#: output/plugins/additional/xml/additional.xml:343
 #, no-wrap
 msgid "The maximum position of the scrollbar."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:343
+#: output/plugins/additional/xml/additional.xml:344
 #, no-wrap
 msgid "The size of the thumb, or visible portion of the scrollbar, in scroll units."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:344
+#: output/plugins/additional/xml/additional.xml:345
 #, no-wrap
 msgid "This is the number of scroll units that will be scrolled when the user pages up or down."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:346
+#: output/plugins/additional/xml/additional.xml:347
 #, no-wrap
 msgid "Specifies a horizontal scrollbar."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:347
+#: output/plugins/additional/xml/additional.xml:348
 #, no-wrap
 msgid "Specifies a vertical scrollbar."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:348
+#: output/plugins/additional/xml/additional.xml:349
 #, no-wrap
 msgid "Process all scroll events."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:349
+#: output/plugins/additional/xml/additional.xml:350
 #, no-wrap
 msgid "Process wxEVT_SCROLL_TOP scroll-to-top events (minimum position)."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:350
+#: output/plugins/additional/xml/additional.xml:351
 #, no-wrap
 msgid "Process wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position)."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:351
+#: output/plugins/additional/xml/additional.xml:352
 #, no-wrap
 msgid "Process wxEVT_SCROLL_LINEUP line up events."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:352
+#: output/plugins/additional/xml/additional.xml:353
 #, no-wrap
 msgid "Process wxEVT_SCROLL_LINEDOWN line down events."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:353
+#: output/plugins/additional/xml/additional.xml:354
 #, no-wrap
 msgid "Process wxEVT_SCROLL_PAGEUP page up events."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:354
+#: output/plugins/additional/xml/additional.xml:355
 #, no-wrap
 msgid "Process wxEVT_SCROLL_PAGEDOWN page down events."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:355
+#: output/plugins/additional/xml/additional.xml:356
 #, no-wrap
 msgid "Process wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent as the user drags the thumbtrack)."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:356
+#: output/plugins/additional/xml/additional.xml:357
 #, no-wrap
 msgid "Process wxEVT_SCROLL_THUMBRELEASE thumb release events."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:357
+#: output/plugins/additional/xml/additional.xml:358
 #, no-wrap
 msgid "Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only)."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:358
+#: output/plugins/additional/xml/additional.xml:359
 #, no-wrap
 msgid "Process all scroll events. Variant taking a window identifier."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:359
+#: output/plugins/additional/xml/additional.xml:360
 #, no-wrap
 msgid "Process wxEVT_SCROLL_TOP scroll-to-top events (minimum position). Variant taking a window identifier."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:360
+#: output/plugins/additional/xml/additional.xml:361
 #, no-wrap
 msgid "Process wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position). Variant taking a window identifier."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:361
+#: output/plugins/additional/xml/additional.xml:362
 #, no-wrap
 msgid "Process wxEVT_SCROLL_LINEUP line up events. Variant taking a window identifier."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:362
+#: output/plugins/additional/xml/additional.xml:363
 #, no-wrap
 msgid "Process wxEVT_SCROLL_LINEDOWN line down events. Variant taking a window identifier."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:363
+#: output/plugins/additional/xml/additional.xml:364
 #, no-wrap
 msgid "Process wxEVT_SCROLL_PAGEUP page up events. Variant taking a window identifier."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:364
+#: output/plugins/additional/xml/additional.xml:365
 #, no-wrap
 msgid "Process wxEVT_SCROLL_PAGEDOWN page down events. Variant taking a window identifier."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:365
+#: output/plugins/additional/xml/additional.xml:366
 #, no-wrap
 msgid "Process wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent as the user drags the thumbtrack). Variant taking a window identifier."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:366
+#: output/plugins/additional/xml/additional.xml:367
 #, no-wrap
 msgid "Process wxEVT_SCROLL_THUMBRELEASE thumb release events. Variant taking a window identifier."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:367
+#: output/plugins/additional/xml/additional.xml:368
 #, no-wrap
 msgid "Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only). Variant taking a window identifier."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:374
+#: output/plugins/additional/xml/additional.xml:375
 #, no-wrap
 msgid "Minimal value."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:375
+#: output/plugins/additional/xml/additional.xml:376
 #, no-wrap
 msgid "Maximal value."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:376
+#: output/plugins/additional/xml/additional.xml:377
 #, no-wrap
 msgid "Initial value."
-msgstr ""
-
-#. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:378
-#: output/plugins/additional/xml/additional.xml:390
-#, no-wrap
-msgid "The user can use arrow keys to change the value."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:379
 #: output/plugins/additional/xml/additional.xml:391
 #, no-wrap
-msgid "The value wraps at the minimum and maximum."
+msgid "The user can use arrow keys to change the value."
 msgstr ""
 
-#. type: Attribute 'help' of: <package><objectinfo><event>
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:380
+#: output/plugins/additional/xml/additional.xml:392
 #, no-wrap
-msgid "Generated whenever the numeric value of the spinctrl is updated."
+msgid "The value wraps at the minimum and maximum."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:381
 #, no-wrap
-msgid "Generated whenever the user modifies the text in the edit part of the spin control directly."
+msgid "Generated whenever the numeric value of the spinctrl is updated."
 msgstr ""
 
-#. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:388
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/additional/xml/additional.xml:382
 #, no-wrap
-msgid "Specifies a horizontal spin button (note that this style is not supported in wxGTK)."
+msgid "Generated whenever the user modifies the text in the edit part of the spin control directly."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
 #: output/plugins/additional/xml/additional.xml:389
 #, no-wrap
-msgid "Specifies a vertical spin button."
+msgid "Specifies a horizontal spin button (note that this style is not supported in wxGTK)."
 msgstr ""
 
-#. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:392
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/additional/xml/additional.xml:390
 #, no-wrap
-msgid "Generated whenever an arrow is pressed."
+msgid "Specifies a vertical spin button."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:393
 #, no-wrap
-msgid "Generated when left/up arrow is pressed."
+msgid "Generated whenever an arrow is pressed."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
 #: output/plugins/additional/xml/additional.xml:394
 #, no-wrap
-msgid "Generated when right/down arrow is pressed."
+msgid "Generated when left/up arrow is pressed."
 msgstr ""
 
-#. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:400
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/additional/xml/additional.xml:395
 #, no-wrap
-msgid "Text of the hyperlink"
+msgid "Generated when right/down arrow is pressed."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
 #: output/plugins/additional/xml/additional.xml:401
 #, no-wrap
-msgid "Target of the hyperlink"
+msgid "Text of the hyperlink"
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
 #: output/plugins/additional/xml/additional.xml:402
 #, no-wrap
-msgid "The colour used to print the label of the hyperlink when the mouse is over the control."
+msgid "Target of the hyperlink"
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
 #: output/plugins/additional/xml/additional.xml:403
 #, no-wrap
-msgid "The colour used to print the label when the link has never been clicked before (i.e. the link has not been visited) and the mouse is not over the control."
+msgid "The colour used to print the label of the hyperlink when the mouse is over the control."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
 #: output/plugins/additional/xml/additional.xml:404
 #, no-wrap
+msgid "The colour used to print the label when the link has never been clicked before (i.e. the link has not been visited) and the mouse is not over the control."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/additional/xml/additional.xml:405
+#, no-wrap
 msgid "The colour used to print the label when the mouse is not over the control and the link has already been clicked before (i.e. the link has been visited)."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:406
+#: output/plugins/additional/xml/additional.xml:407
 #, no-wrap
 msgid "Align the text to the left."
 msgstr "Allinea il testo a sinistra."
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:407
+#: output/plugins/additional/xml/additional.xml:408
 #, no-wrap
 msgid "Align the text to the right."
 msgstr "Allinea il testo a destra."
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:408
+#: output/plugins/additional/xml/additional.xml:409
 #, no-wrap
 msgid "Center the text (horizontally)."
 msgstr "Allinea il testo al centro orizzontalmente."
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:409
+#: output/plugins/additional/xml/additional.xml:410
 #, no-wrap
 msgid "Pop up a context menu when the hyperlink is right-clicked. The context menu contains a &quot;Copy URL&quot; menu item which is automatically handled by the hyperlink and which just copies in the clipboard the URL (not the label) of the control."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:410
+#: output/plugins/additional/xml/additional.xml:411
 #, no-wrap
 msgid "The default style for wxHyperlinkCtrl: wxNO_BORDER|wxHL_CONTEXTMENU|wxHL_ALIGN_CENTRE."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><event>
-#: output/plugins/additional/xml/additional.xml:413
+#: output/plugins/additional/xml/additional.xml:414
 #, no-wrap
 msgid "The hyperlink was (left) clicked. If this event is not handled in user's code (or it's skipped; see wxEvent::Skip), then a call to wxLaunchDefaultBrowser is done with the hyperlink's URL."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:422
+#: output/plugins/additional/xml/additional.xml:423
 #, no-wrap
 msgid "Initial Directory."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:423
+#: output/plugins/additional/xml/additional.xml:424
 #, no-wrap
 msgid "A filter string, using the same syntax as that for wxFileDialog. This may be empty if filters are not being used. Example: &quot;All files (*.*)|*.*|JPEG files (*.jpg)|*.jpg&quot;."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:424
+#: output/plugins/additional/xml/additional.xml:425
 #, no-wrap
 msgid "The zero-indexed default filter setting."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:425
+#: output/plugins/additional/xml/additional.xml:426
 #, no-wrap
 msgid "Show hidden files"
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:427
+#: output/plugins/additional/xml/additional.xml:428
 #, no-wrap
 msgid "Only show directories, and not files."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:428
+#: output/plugins/additional/xml/additional.xml:429
 #, no-wrap
 msgid "Use 3D borders for internal controls."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:429
+#: output/plugins/additional/xml/additional.xml:430
 #, no-wrap
 msgid "When setting the default path, select the first file in the directory."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:430
+#: output/plugins/additional/xml/additional.xml:431
 #, no-wrap
 msgid "Show the drop-down filter list."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:431
+#: output/plugins/additional/xml/additional.xml:432
 #, no-wrap
 msgid "Allow the folder and file labels to be editable."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:438
+#: output/plugins/additional/xml/additional.xml:439
 #, no-wrap
 msgid "The control is added to a sizer using this name."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:439
+#: output/plugins/additional/xml/additional.xml:440
 #, no-wrap
 msgid "The control is generated to XRC with this class."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:440
+#: output/plugins/additional/xml/additional.xml:441
 #, no-wrap
 msgid "Code to generate for the declaration of this control."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:441
+#: output/plugins/additional/xml/additional.xml:442
 #, no-wrap
 msgid "Code to generate for the construction of this control."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:442
+#: output/plugins/additional/xml/additional.xml:443
 #, no-wrap
 msgid "Code to generate for the include statements for this control."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:443
+#: output/plugins/additional/xml/additional.xml:444
 #, no-wrap
 msgid "Code to generate for the settings of this control."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:450
+#: output/plugins/additional/xml/additional.xml:451
 #, no-wrap
 msgid "The path to media file."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:451
+#: output/plugins/additional/xml/additional.xml:452
 #, no-wrap
 msgid "Play the media file"
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:452
+#: output/plugins/additional/xml/additional.xml:453
 #, no-wrap
 msgid "Sets the playback rate, or speed of the media, to that referred by dRate. 1.0 represents normal speed, while 2.0 represents twice the normal speed of the media, for example. Not supported on the GStreamer (Unix) backend."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property>
-#: output/plugins/additional/xml/additional.xml:453
+#: output/plugins/additional/xml/additional.xml:454
 #, no-wrap
 msgid "Sets the volume of the media from a 0.0 to 1.0 range to that referred by dVolume. 1.0 represents full volume, while 0.5 represents half (50 percent) volume, for example. Note that this may not be exact due to conversion and rounding errors, although setting the volume to full or none is always exact."
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:455
+#: output/plugins/additional/xml/additional.xml:456
 #, no-wrap
 msgid "wxMEDIACTRLPLAYERCONTROLS_STEP, Step controls like fastfoward, step one frame etc. "
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:456
+#: output/plugins/additional/xml/additional.xml:457
 #, no-wrap
 msgid "wxMEDIACTRLPLAYERCONTROLS_VOLUME, Volume controls like the speaker icon, volume slider, etc. "
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:457
+#: output/plugins/additional/xml/additional.xml:458
 #, no-wrap
 msgid "wxMEDIACTRLPLAYERCONTROLS_DEFAULT, Default controls for the toolkit. Currently a typedef for wxMEDIACTRLPLAYERCONTROLS_STEP and wxMEDIACTRLPLAYERCONTROLS_VOLUME. "
 msgstr ""
 
 #. type: Attribute 'help' of: <package><objectinfo><property><option>
-#: output/plugins/additional/xml/additional.xml:458
+#: output/plugins/additional/xml/additional.xml:459
 #, no-wrap
 msgid "wxMEDIACTRLPLAYERCONTROLS_NONE, No controls. return wxMediaCtrl to it's default state. "
 msgstr ""

@@ -4,9 +4,10 @@ MacOSX / Linux / BSD ( wxGTK )
 
 - Use the way to compile it like described in wxWidgets docs/gtk/install.txt without make install command (local build)
 
-- Execute create_build_files.sh in build dir from a terminal
+- Execute build/premake4/create_build_files.sh from a terminal
 
 Codelite:
+- Open build/codelite/wxFormBuilder.workspace
 
 - Go to Settings -> Environment Variables: create a new set (or use Default one) and add something like:
 

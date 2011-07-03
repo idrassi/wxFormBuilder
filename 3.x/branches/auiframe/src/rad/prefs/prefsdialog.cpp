@@ -42,12 +42,12 @@ _PrefsDialog::_PrefsDialog( wxWindow* parent, wxWindowID id, const wxString& tit
 	
 	lblLang = new wxStaticText( pnlBoxLang, wxID_ANY, _("Locale to use:"), wxDefaultPosition, wxDefaultSize, 0 );
 	lblLang->Wrap( -1 );
-	fgsLang->Add( lblLang, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgsLang->Add( lblLang, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	bcbLang = new wxBitmapComboBox( pnlBoxLang, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY ); 
 	bcbLang->SetToolTip( _("Select language to use") );
 	
-	fgsLang->Add( bcbLang, 0, wxALIGN_RIGHT|wxALL, 5 );
+	fgsLang->Add( bcbLang, 1, wxALIGN_RIGHT|wxALL|wxEXPAND, 5 );
 	
 	bszBoxLang->Add( fgsLang, 0, wxEXPAND, 5 );
 	
@@ -116,9 +116,8 @@ _PrefsDialog::_PrefsDialog( wxWindow* parent, wxWindowID id, const wxString& tit
 	txtNormCapt->Wrap( -1 );
 	fgsColors->Add( txtNormCapt, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	cpkNormCapt = new wxColourPickerCtrl( pnlGUI, wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( 42,24 ), wxCLRP_DEFAULT_STYLE );
+	cpkNormCapt = new wxColourPickerCtrl( pnlGUI, wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( -1,-1 ), wxCLRP_DEFAULT_STYLE );
 	cpkNormCapt->SetMinSize( wxSize( 42,24 ) );
-	cpkNormCapt->SetMaxSize( wxSize( 42,24 ) );
 	
 	fgsColors->Add( cpkNormCapt, 0, 0, 5 );
 	
@@ -126,9 +125,8 @@ _PrefsDialog::_PrefsDialog( wxWindow* parent, wxWindowID id, const wxString& tit
 	txtActvCapt->Wrap( -1 );
 	fgsColors->Add( txtActvCapt, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	cpkActvCapt = new wxColourPickerCtrl( pnlGUI, wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( 42,24 ), wxCLRP_DEFAULT_STYLE );
+	cpkActvCapt = new wxColourPickerCtrl( pnlGUI, wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( -1,-1 ), wxCLRP_DEFAULT_STYLE );
 	cpkActvCapt->SetMinSize( wxSize( 42,24 ) );
-	cpkActvCapt->SetMaxSize( wxSize( 42,24 ) );
 	
 	fgsColors->Add( cpkActvCapt, 0, 0, 5 );
 	
@@ -142,9 +140,8 @@ _PrefsDialog::_PrefsDialog( wxWindow* parent, wxWindowID id, const wxString& tit
 	txtNormGrdt->Wrap( -1 );
 	fgsColors->Add( txtNormGrdt, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	cpkNormGrdt = new wxColourPickerCtrl( pnlGUI, wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( 42,24 ), wxCLRP_DEFAULT_STYLE );
+	cpkNormGrdt = new wxColourPickerCtrl( pnlGUI, wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( -1,-1 ), wxCLRP_DEFAULT_STYLE );
 	cpkNormGrdt->SetMinSize( wxSize( 42,24 ) );
-	cpkNormGrdt->SetMaxSize( wxSize( 42,24 ) );
 	
 	fgsColors->Add( cpkNormGrdt, 0, 0, 5 );
 	
@@ -152,8 +149,8 @@ _PrefsDialog::_PrefsDialog( wxWindow* parent, wxWindowID id, const wxString& tit
 	txtActvGrdt->Wrap( -1 );
 	fgsColors->Add( txtActvGrdt, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	cpkActvGrdt = new wxColourPickerCtrl( pnlGUI, wxID_ANY, *wxBLACK, wxDefaultPosition, wxDefaultSize, wxCLRP_DEFAULT_STYLE );
-	cpkActvGrdt->SetMaxSize( wxSize( 42,24 ) );
+	cpkActvGrdt = new wxColourPickerCtrl( pnlGUI, wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( -1,-1 ), wxCLRP_DEFAULT_STYLE );
+	cpkActvGrdt->SetMinSize( wxSize( 42,24 ) );
 	
 	fgsColors->Add( cpkActvGrdt, 0, 0, 5 );
 	
@@ -167,9 +164,8 @@ _PrefsDialog::_PrefsDialog( wxWindow* parent, wxWindowID id, const wxString& tit
 	txtNormCaptText->Wrap( -1 );
 	fgsColors->Add( txtNormCaptText, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	cpkNormCaptText = new wxColourPickerCtrl( pnlGUI, wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( 42,24 ), wxCLRP_DEFAULT_STYLE );
+	cpkNormCaptText = new wxColourPickerCtrl( pnlGUI, wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( -1,-1 ), wxCLRP_DEFAULT_STYLE );
 	cpkNormCaptText->SetMinSize( wxSize( 42,24 ) );
-	cpkNormCaptText->SetMaxSize( wxSize( 42,24 ) );
 	
 	fgsColors->Add( cpkNormCaptText, 0, 0, 5 );
 	
@@ -177,9 +173,8 @@ _PrefsDialog::_PrefsDialog( wxWindow* parent, wxWindowID id, const wxString& tit
 	txtActvCaptText->Wrap( -1 );
 	fgsColors->Add( txtActvCaptText, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	cpkActvCaptText = new wxColourPickerCtrl( pnlGUI, wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( 42,24 ), 0 );
+	cpkActvCaptText = new wxColourPickerCtrl( pnlGUI, wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	cpkActvCaptText->SetMinSize( wxSize( 42,24 ) );
-	cpkActvCaptText->SetMaxSize( wxSize( 42,24 ) );
 	
 	fgsColors->Add( cpkActvCaptText, 0, wxEXPAND, 5 );
 	
