@@ -1,0 +1,26 @@
+MacOSX / Linux / BSD ( wxGTK )
+-----
+- Checkout from wxWidgets SVN trunk version in some path (something like ~/Dev/wx29x/ )
+
+- Use the way to compile it like described in wxWidgets docs/gtk/install.txt without make install command (local build)
+
+- Execute create_build_files.sh in build dir from a terminal
+
+Codelite:
+
+- Go to Settings -> Environment Variables: create a new set (or use Default one) and add something like:
+
+    29xRelease=~/Dev/wx29x/buildgtk
+    29xDebug=~/Dev/wx29x/buildgtkd
+
+- Go to Workspace menu -> Workspace Settings... -> Code Completion -> Search Paths and add a search path that will looks like:
+
+    path/to/wx29x/include 
+
+    so CodeLite will find correct include files instead those installed in your system (if any) for code completion
+
+Windows ( wxMSW )
+-------
+
+TODO!
+
