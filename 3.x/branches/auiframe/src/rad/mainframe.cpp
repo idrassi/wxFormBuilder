@@ -222,10 +222,8 @@ wxFrame( parent, id, wxEmptyString, pos, size, wxDEFAULT_FRAME_STYLE ),
 #ifndef WXFB_USE_AUI
 m_leftSplitterWidth( 300 ),
 m_rightSplitterWidth( -300 ),
-#endif
 m_style( style ),
 m_page_selection( 0 ),
-#ifndef WXFB_USE_AUI
 m_rightSplitter_sash_pos( 300 ),
 m_autoSash( false ), // autosash function is temporarily disabled due to possible bug(?) in wxMSW event system (workaround is needed)
 #endif
@@ -315,22 +313,21 @@ m_findDialog( NULL )
                 Dock().Right().
                 Resizable().DockFixed( false ).Movable( true ).Floatable( true ).
                 FloatingSize( wxSize( 300,400 ) ).BestSize( wxSize( 300,-1 ) ).Row( 1 ).Layer( 0 ) );
-
 /*
   m_mgr.AddPane(new AuiSettingsPanel( this, this ),
                 wxAuiPaneInfo().Name(wxT("settings")).
                 Caption( _("Dock Manager Settings") ).
                 Dockable(false).Float().Hide());
 */
+	wxConfigBase *config = wxConfigBase::Get();
+
+	wxString Perspective;
+	if ( config->Read( wxT("/mainframe/aui/perspective"), &Perspective ) )
+		m_mgr.LoadPerspective(Perspective);
+
 	m_mgr.Update();
+#endif
 
-  wxConfigBase *config = wxConfigBase::Get();
-
-  wxString Perspective;
-  if ( config->Read( wxT("/mainframe/aui/perspective"), &Perspective ) )
-    m_mgr.LoadPerspective(Perspective);
-
-#endif // WXFB_USE_AUI
 	RestorePosition( wxT("mainframe") );
 	Layout();
 
@@ -338,6 +335,7 @@ m_findDialog( NULL )
 	m_cpp = NULL;
 	m_xrc = NULL;
 	m_python = NULL;
+
 #ifndef WXFB_USE_AUI
 	switch ( style )
 	{
@@ -391,9 +389,10 @@ m_findDialog( NULL )
 			CreateWideGui();
 	}
 #endif // WXFB_USE_AUI
+
 	AppData()->AddHandler( this->GetEventHandler() );
 
-	wxTheApp->SetTopWindow( this );
+//	wxTheApp->SetTopWindow( this );
 
 	m_focusKillEvtHandler = new FocusKillerEvtHandler;
 	PushEventHandler( m_focusKillEvtHandler );
@@ -1642,11 +1641,6 @@ wxToolBar * MainFrame::CreateFBToolBar()
 #endif
 {
 #ifdef WXFB_USE_AUITOOLBAR
-  if ( m_toolbar )
-  {
-    m_mgr.DetachPane(m_toolbar);
-    m_toolbar->Destroy();
-  }
 /*
   wxAuiToolBarItemArray append_items;
   wxAuiToolBarItemArray prepend_items;
@@ -1662,7 +1656,7 @@ wxToolBar * MainFrame::CreateFBToolBar()
 */
 	m_toolbar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 #else
-	m_toolbar = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_toolbar = CreateToolBar();
 #endif
 	m_toolbar->SetToolBitmapSize( wxSize( TOOL_SIZE, TOOL_SIZE ) );
 	m_toolbar->AddTool( ID_NEW_PRJ,  _("New Project"),  AppBitmaps::GetBitmap( wxT("new"), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _("New Project (Ctrl+N)"), _("Start a new project."), NULL );
