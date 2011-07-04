@@ -1641,20 +1641,7 @@ wxToolBar * MainFrame::CreateFBToolBar()
 #endif
 {
 #ifdef WXFB_USE_AUITOOLBAR
-/*
-  wxAuiToolBarItemArray append_items;
-  wxAuiToolBarItemArray prepend_items;
-  wxAuiToolBarItem item;
-//  wxAuiToolBarItem item_separator;
-//  item_separator.SetKind( wxITEM_SEPARATOR );
-
-  item.SetKind( wxITEM_NORMAL );
-  item.SetId( ID_AUI_SETTINGS );
-  item.SetLabel( _("Customize...") );
-  item.SetBitmap( AppBitmaps::GetBitmap( wxT("generate"), 16 ) );
-  append_items.Add( item );
-*/
-	m_toolbar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_toolbar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_OVERFLOW );
 #else
 	m_toolbar = CreateToolBar();
 #endif
@@ -1688,7 +1675,7 @@ wxToolBar * MainFrame::CreateFBToolBar()
 	m_toolbar->AddTool( ID_BORDER_RIGHT,  wxEmptyString, AppBitmaps::GetBitmap( wxT("right"),  TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _("Right Border"),  _("A border will be added on the right side of the item."), NULL );
 	m_toolbar->AddTool( ID_BORDER_TOP,    wxEmptyString, AppBitmaps::GetBitmap( wxT("top"),    TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _("Top Border"),    _("A border will be added on the top of the item."), NULL );
 	m_toolbar->AddTool( ID_BORDER_BOTTOM, wxEmptyString, AppBitmaps::GetBitmap( wxT("bottom"), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _("Bottom Border"), _("A border will be added on the bottom of the item."), NULL );
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUITOOLBAR
 //  m_toolbar->SetCustomOverflowItems( prepend_items, append_items );
 #endif
 	m_toolbar->Realize();

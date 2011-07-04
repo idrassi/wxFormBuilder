@@ -75,6 +75,11 @@ void wxFbPalette::PopulateToolbar( PObjectPackage pkg, wxAuiToolBar *toolbar )
 void wxFbPalette::PopulateToolbar( PObjectPackage pkg, wxToolBar *toolbar )
 #endif
 {
+#ifdef WXFB_USE_AUITOOLBAR
+	wxAuiToolBarItemArray auitb_items;
+	wxAuiToolBarItemArray auitb_pItms;
+#endif
+
 	unsigned int j = 0;
 	while ( j < pkg->GetObjectCount() )
 	{
@@ -82,6 +87,12 @@ void wxFbPalette::PopulateToolbar( PObjectPackage pkg, wxToolBar *toolbar )
 		if ( info->IsStartOfGroup() )
 		{
 			toolbar->AddSeparator();
+
+#ifdef WXFB_USE_AUITOOLBAR
+			wxAuiToolBarItem sep;
+			sep.SetKind( wxITEM_SEPARATOR );
+			auitb_items.Add( sep );
+#endif
 		}
 		if ( NULL == info->GetComponent() )
 		{
@@ -102,6 +113,14 @@ void wxFbPalette::PopulateToolbar( PObjectPackage pkg, wxToolBar *toolbar )
 				button->SetToolTip( widget );
 				toolbar->AddControl( button );
 			#else
+				#ifdef WXFB_USE_AUITOOLBAR
+					wxAuiToolBarItem item;
+					item.SetKind( wxITEM_NORMAL );
+					item.SetId( nextId );
+					item.SetLabel( widget );
+					item.SetBitmap( icon );
+					auitb_items.Add( item );
+				#endif
 				toolbar->AddTool(nextId++, widget, icon, widget);
 			#endif
 
@@ -109,6 +128,9 @@ void wxFbPalette::PopulateToolbar( PObjectPackage pkg, wxToolBar *toolbar )
 		}
 		j++;
 	}
+#ifdef WXFB_USE_AUITOOLBAR
+	toolbar->SetCustomOverflowItems( auitb_items, auitb_pItms );
+#endif
 }
 
 void wxFbPalette::Create()
