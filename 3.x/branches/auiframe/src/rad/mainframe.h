@@ -87,6 +87,8 @@ private:
 
 #ifdef WXFB_USE_AUITOOLBAR
   wxAuiToolBar *m_toolbar;
+#else
+  wxToolBar *m_toolbar;
 #endif
 
 #ifdef WXFB_USE_AUI
@@ -211,8 +213,7 @@ public:
   wxMenuBar *CreateFBMenuBar();
 
 #ifdef WXFB_USE_AUITOOLBAR
-  wxAuiToolBar *GetToolBar() { return m_toolbar; }
-  wxAuiToolBar *RecreateFBAuiToolBar();
+  wxAuiToolBar *CreateFBToolBar();
 #else
   wxToolBar *CreateFBToolBar();
 #endif
