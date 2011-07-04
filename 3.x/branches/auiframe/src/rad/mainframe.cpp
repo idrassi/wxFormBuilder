@@ -259,15 +259,16 @@ m_findDialog( NULL )
 	SetStatusBarPane( 0 );
 	int widths[3] = { -1, -1, 300 };
 	SetStatusWidths( sizeof( widths ) / sizeof( int ), widths );
+
+    m_toolbar = NULL;
+
 #ifndef WXFB_USE_AUI
 	CreateFBToolBar();
-#endif
+#else
 	/////////////////////////////////////////////////////////////////////////////
 	// Create the gui
 	/////////////////////////////////////////////////////////////////////////////
 
-#ifdef WXFB_USE_AUI
-    m_toolbar = NULL;
 	wxWindow *objectTree      = CreateObjectTree(this);
 	wxWindow *objectInspector = CreateObjectInspector(this);
 	wxWindow *palette         = CreateComponentPalette(this);
@@ -275,7 +276,7 @@ m_findDialog( NULL )
 
 	m_mgr.SetManagedWindow(this);
 
-	m_mgr.AddPane( RecreateFBAuiToolBar(), wxAuiPaneInfo().Name(wxT("toolbar")).Caption(wxT("Toolbar")).
+	m_mgr.AddPane( CreateFBToolBar(), wxAuiPaneInfo().Name(wxT("toolbar")).Caption(wxT("Toolbar")).
                 ToolbarPane().Gripper( false ).
                 Dock().Top().
                 Resizable().DockFixed( true ).Movable( false ).Floatable( false ).Layer( 10 ) );
@@ -948,11 +949,7 @@ void MainFrame::UpdateLayoutTools()
 	int orient = 0;
 
 	bool gotLayoutSettings = AppData()->GetLayoutSettings( AppData()->GetSelectedObject(), &flag, &option, &border, &orient );
-#ifdef WXFB_USE_AUITOOLBAR
-    wxAuiToolBar* m_toolbar = GetToolBar();
-#else
-	wxToolBar* m_toolbar = GetToolBar();
-#endif
+
 	wxMenu* menuEdit = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu( _("&Edit") ) );
 
 	// Enable the layout tools if there are layout settings, else disable the tools
@@ -1022,9 +1019,6 @@ void MainFrame::UpdateFrame()
 	// Enable/Disable toolbar and menu entries
 	wxMenu* menuEdit = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu( _("&Edit") ) );
 
-#ifndef WXFB_USE_AUITOOLBAR
-	wxToolBar* m_toolbar = GetToolBar();
-#endif
 	bool redo = AppData()->CanRedo();
 	menuEdit->Enable( wxID_REDO, redo );
 	m_toolbar->EnableTool( wxID_REDO, redo );
@@ -1647,8 +1641,12 @@ wxMenuBar * MainFrame::CreateFBMenuBar()
 	return menuBar;
 }
 #ifdef WXFB_USE_AUITOOLBAR
-wxAuiToolBar * MainFrame::RecreateFBAuiToolBar()
+wxAuiToolBar * MainFrame::CreateFBToolBar()
+#else
+wxToolBar * MainFrame::CreateFBToolBar()
+#endif
 {
+#ifdef WXFB_USE_AUITOOLBAR
   if ( m_toolbar )
   {
     m_mgr.DetachPane(m_toolbar);
@@ -1667,11 +1665,9 @@ wxAuiToolBar * MainFrame::RecreateFBAuiToolBar()
   item.SetBitmap( AppBitmaps::GetBitmap( wxT("generate"), 16 ) );
   append_items.Add( item );
 */
-  m_toolbar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_toolbar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 #else
-wxToolBar * MainFrame::CreateFBToolBar()
-{
-	wxToolBar* m_toolbar = CreateToolBar();
+	m_toolbar = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 #endif
 	m_toolbar->SetToolBitmapSize( wxSize( TOOL_SIZE, TOOL_SIZE ) );
 	m_toolbar->AddTool( ID_NEW_PRJ,  _("New Project"),  AppBitmaps::GetBitmap( wxT("new"), TOOL_SIZE ), wxNullBitmap, wxITEM_NORMAL, _("New Project (Ctrl+N)"), _("Start a new project."), NULL );
