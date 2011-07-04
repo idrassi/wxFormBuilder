@@ -40,7 +40,8 @@
     #include <wx/wxFlatNotebook/wxFlatNotebook.h>
 #endif
 
-#ifdef WXFB_USE_AUITOOLBAR
+#ifndef WXFB_USE_AUITOOLBAR
+    #include <wx/toolbar.h>
     #include <wx/spinctrl.h>
 #endif
 
