@@ -37,7 +37,7 @@
 #if wxVERSION_NUMBER < 2900
 	#include "inspector/objinspect.h"
 #else
-	#include "inspector/objinspect29.h"
+	#include "objinspect29.h"
 #endif
 
 #include "objecttree/objecttree.h"
@@ -45,7 +45,7 @@
 #include "rad/designer/visualeditor.h"
 
 #ifdef WXFB_USE_AUI
-//    #include "rad/aui/settingspanel.h"
+//	#include "rad/aui/settingspanel.h"
 #endif
 
 #include "model/xrcfilter.h"
@@ -154,7 +154,7 @@ EVT_MENU( ID_CLIPBOARD_COPY,  MainFrame::OnClipboardCopy )
 EVT_MENU( ID_CLIPBOARD_PASTE, MainFrame::OnClipboardPaste )
 
 #ifdef WXFB_USE_AUI
-//EVT_MENU( ID_AUI_SETTINGS, MainFrame::OnAuiSettings )
+//	EVT_MENU( ID_AUI_SETTINGS, MainFrame::OnAuiSettings )
 #endif
 
 EVT_UPDATE_UI( ID_CLIPBOARD_PASTE, MainFrame::OnClipboardPasteUpdateUI )
@@ -275,12 +275,12 @@ m_findDialog( NULL )
 
 	m_mgr.SetManagedWindow(this);
 
-	m_mgr.AddPane( RecreateFBAuiToolBar(), wxAuiPaneInfo().Name(wxT("toolbar")).Caption(_("Toolbar")).
+	m_mgr.AddPane( RecreateFBAuiToolBar(), wxAuiPaneInfo().Name(wxT("toolbar")).Caption(wxT("Toolbar")).
                 ToolbarPane().Gripper( false ).
                 Dock().Top().
                 Resizable().DockFixed( true ).Movable( false ).Floatable( false ).Layer( 10 ) );
 
-	m_mgr.AddPane( palette, wxAuiPaneInfo().Name(wxT("palette")).Caption(_("Component Palette")).
+	m_mgr.AddPane( palette, wxAuiPaneInfo().Name(wxT("palette")).Caption(wxT("Component Palette")).
                 CaptionVisible( false ).CloseButton( false ).
                 MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).PaneBorder( false ).Gripper( false ).
                 BottomDockable( false ).TopDockable( false ).LeftDockable( false ).RightDockable( false ).
@@ -289,7 +289,7 @@ m_findDialog( NULL )
                 BestSize( wxSize( -1,66 ) ) );
 
 	m_mgr.AddPane( designer,
-                wxAuiPaneInfo().Name(wxT("editor")).Caption(_("Editor")).
+                wxAuiPaneInfo().Name(wxT("editor")).Caption(wxT("Editor")).
                 CentrePane().
                 CaptionVisible( false ).CloseButton( false ).
                 MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).PaneBorder( false ).Gripper( false ).
@@ -298,7 +298,7 @@ m_findDialog( NULL )
                 Resizable().DockFixed( true ).Movable( false ).Floatable( false ) );
 
 	m_mgr.AddPane( objectTree,
-                wxAuiPaneInfo().Name(wxT("tree")).Caption(_("Object Tree")).
+                wxAuiPaneInfo().Name(wxT("tree")).Caption(wxT("Object Tree")).
                 CaptionVisible( true ).CloseButton( false ).
                 MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).PaneBorder( true ).Gripper( false ).
                 BottomDockable( false ).TopDockable( false ).LeftDockable( true ).RightDockable( true ).
@@ -307,13 +307,14 @@ m_findDialog( NULL )
                 FloatingSize( wxSize( 300,400 ) ).BestSize( wxSize( 300,-1 ) ).Layer( 1 ) );
 
 	m_mgr.AddPane(objectInspector,
-                wxAuiPaneInfo().Name(wxT("inspector")).Caption(_("Object Properties")).
+                wxAuiPaneInfo().Name(wxT("inspector")).Caption(wxT("Object Properties")).
                 CaptionVisible( true ).CloseButton( false ).
                 MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).PaneBorder( true ).Gripper( false ).
                 BottomDockable( false ).TopDockable( false ).LeftDockable( true ).RightDockable( true ).
                 Dock().Right().
                 Resizable().DockFixed( false ).Movable( true ).Floatable( true ).
                 FloatingSize( wxSize( 300,400 ) ).BestSize( wxSize( 300,-1 ) ).Row( 1 ).Layer( 0 ) );
+
 /*
   m_mgr.AddPane(new AuiSettingsPanel( this, this ),
                 wxAuiPaneInfo().Name(wxT("settings")).
@@ -396,34 +397,33 @@ m_findDialog( NULL )
 	m_focusKillEvtHandler = new FocusKillerEvtHandler;
 	PushEventHandler( m_focusKillEvtHandler );
 
-#ifdef WXFB_USE_AUI
-    m_notebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::OnAuiNotebookPageChanged ), 0, this );
-#else
+#ifndef WXFB_USE_AUI
 	// So splitter windows can be restored correctly
 	Connect( wxEVT_IDLE, wxIdleEventHandler( MainFrame::OnIdle ) );
+#endif
 
+#ifdef WXFB_USE_AUIBOOK
+    m_notebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::OnAuiNotebookPageChanged ), 0, this );
+#else
 	// So we don't respond to a FlatNoteBookPageChanged event during construction
 	m_notebook->Connect( wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CHANGED, wxFlatNotebookEventHandler( MainFrame::OnFlatNotebookPageChanged ), 0, this );
 #endif
 };
 
-
 MainFrame::~MainFrame()
 {
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
     m_notebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::OnAuiNotebookPageChanged ), 0, this );
 #else
 	m_notebook->Disconnect( wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CHANGED, wxFlatNotebookEventHandler( MainFrame::OnFlatNotebookPageChanged ), 0, this );
 #endif
 
-#ifdef __WXMAC__
+#ifdef WXFB_USE_AUI
+    m_mgr.UnInit();
+#elif __WXMAC__
     // work around problem on wxMac
     m_rightSplitter->GetWindow1()->GetSizer()->Detach(m_notebook);
     m_notebook->Destroy();
-#endif
-
-#ifdef WXFB_USE_AUI
-    m_mgr.UnInit();
 #endif
 
 	// the focus killer event handler
@@ -532,14 +532,18 @@ void MainFrame::SavePosition( const wxString &name )
 		}
 	}
 #endif // WXFB_USE_AUI
-	config->SetPath( wxT("..") );
-#ifdef WXFB_USE_AUI
-	config->Write( wxT("/mainframe/editor/auinbook_style"), m_notebook->GetWindowStyleFlag() );
 
-    wxString Perspective = m_mgr.SavePerspective();
-    config->Write( wxT("/mainframe/aui/perspective"), Perspective );
+	config->SetPath( wxT("..") );
+
+#ifdef WXFB_USE_AUIBOOK
+	config->Write( wxT("/mainframe/editor/auinbook_style"), m_notebook->GetWindowStyleFlag() );
 #else
 	config->Write( wxT("/mainframe/editor/notebook_style"), m_notebook->GetWindowStyleFlag() );
+#endif
+
+#ifdef WXFB_USE_AUI
+    wxString Perspective = m_mgr.SavePerspective();
+    config->Write( wxT("/mainframe/aui/perspective"), Perspective );
 #endif
 }
 
@@ -944,7 +948,7 @@ void MainFrame::UpdateLayoutTools()
 	int orient = 0;
 
 	bool gotLayoutSettings = AppData()->GetLayoutSettings( AppData()->GetSelectedObject(), &flag, &option, &border, &orient );
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUITOOLBAR
     wxAuiToolBar* m_toolbar = this->GetToolBar();
 #else
 	wxToolBar* m_toolbar = GetToolBar();
@@ -1016,7 +1020,7 @@ void MainFrame::UpdateFrame()
 	// Enable/Disable toolbar and menu entries
 	wxMenu* menuEdit = GetMenuBar()->GetMenu( GetMenuBar()->FindMenu( _("&Edit") ) );
 
-#ifndef WXFB_USE_AUI
+#ifndef WXFB_USE_AUITOOLBAR
 	wxToolBar* m_toolbar = GetToolBar();
 #endif
 	bool redo = AppData()->CanRedo();
@@ -1309,15 +1313,13 @@ void MainFrame::OnChangeBorder( wxCommandEvent& e )
 void MainFrame::OnXrcPreview( wxCommandEvent& WXUNUSED( e ) )
 {
 	AppData()->ShowXrcPreview();
-#ifdef WXFB_USE_AUI
-/* what is this for?
+/*
 	wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
 	for ( int i = 0, count = all_panes.GetCount(); i < count; ++i )
 	{
 		wxAuiPaneInfo info = all_panes.Item( i );
 	}
 */
-#endif
 }
 
 void MainFrame::OnGenInhertedClass( wxCommandEvent& WXUNUSED( e ) )
@@ -1382,11 +1384,13 @@ bool MainFrame::SaveWarning()
 
 	return ( result != wxCANCEL );
 }
-#ifndef WXFB_USE_AUI
+
+#ifndef WXFB_USE_AUIBOOK
 void MainFrame::OnFlatNotebookPageChanged( wxFlatNotebookEvent& event )
 {
 	UpdateFrame();
 
+#ifndef WXFB_USE_AUI
 	if ( m_autoSash )
 	{
 		m_page_selection = event.GetSelection();
@@ -1471,6 +1475,7 @@ void MainFrame::OnFlatNotebookPageChanged( wxFlatNotebookEvent& event )
 			}
 		}
 	}
+#endif //WXFB_USE_AUI
 
 	AppData()->GenerateCode( true );
 }
@@ -1480,7 +1485,8 @@ void MainFrame::OnAuiNotebookPageChanged( wxAuiNotebookEvent& event )
 	UpdateFrame();
 	AppData()->GenerateCode( true );
 }
-#endif // WXFB_USE_AUI
+#endif //WXFB_USE_AUIBOOK
+
 void MainFrame::OnFindDialog( wxCommandEvent& )
 {
 	if ( NULL == m_findDialog )
@@ -1499,7 +1505,7 @@ void MainFrame::OnFindClose( wxFindDialogEvent& )
 
 void MainFrame::OnFind( wxFindDialogEvent& event )
 {
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
 	wxWindow* page = m_notebook->GetPage( m_notebook->GetSelection() );
 #else
 	wxWindow* page = m_notebook->GetCurrentPage();
@@ -1638,7 +1644,7 @@ wxMenuBar * MainFrame::CreateFBMenuBar()
 
 	return menuBar;
 }
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUITOOLBAR
 wxAuiToolBar * MainFrame::RecreateFBAuiToolBar()
 {
   if ( m_toolbar )
@@ -1708,7 +1714,7 @@ wxWindow * MainFrame::CreateDesignerWindow( wxWindow *parent )
 	long editStyle;
 	wxConfigBase* config = wxConfigBase::Get();
 
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
 	long cppStyle;
 	config->Read( wxT("/mainframe/editor/auinbook_style"), &editStyle, wxAUI_NB_TAB_MOVE | wxAUI_NB_WINDOWLIST_BUTTON | wxAUI_NB_SCROLL_BUTTONS );
 	config->Read( wxT("/mainframe/editor/cpp/auinbook_style"), &cppStyle, wxAUI_NB_WINDOWLIST_BUTTON );
@@ -1754,7 +1760,7 @@ wxWindow * MainFrame::CreateDesignerWindow( wxWindow *parent )
 
 wxWindow * MainFrame::CreateComponentPalette ( wxWindow *parent )
 {
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
 	long nbStyle;
 	wxConfigBase *config = wxConfigBase::Get();
 	config->Read( wxT("/palette/auinbook_style"), &nbStyle, wxAUI_NB_TAB_MOVE | wxAUI_NB_WINDOWLIST_BUTTON );
@@ -1786,19 +1792,8 @@ wxWindow * MainFrame::CreateObjectInspector( wxWindow *parent )
 	m_objInsp = new ObjectInspector( parent, -1, style );
 	return m_objInsp;
 }
+
 #ifdef WXFB_USE_AUI
-/*
-void MainFrame::OnAuiSettings(wxCommandEvent& WXUNUSED(evt))
-{
-    // show the settings pane, and float it
-    wxAuiPaneInfo& floating_pane = m_mgr.GetPane( wxT("settings") ).Float().Show();
-
-    if (floating_pane.floating_pos == wxDefaultPosition)
-        floating_pane.FloatingPosition(GetStartPosition());
-
-    m_mgr.Update();
-}
-*/
 wxAuiDockArt* MainFrame::GetDockArt()
 {
     return m_mgr.GetArtProvider();
@@ -1816,6 +1811,7 @@ wxPoint MainFrame::GetStartPosition()
     wxPoint pt = ClientToScreen(wxPoint(0,0));
     return wxPoint(pt.x + x, pt.y + x);
 }*/
+
 #else
 void MainFrame::CreateWideGui()
 {
@@ -1918,4 +1914,4 @@ void MainFrame::OnSplitterChanged( wxSplitterEvent &event )
 	// update position
 	m_rightSplitter_sash_pos = event.GetSashPosition();
 }
-#endif // WXFB_USE_AUI
+#endif //WXFB_USE_AUI

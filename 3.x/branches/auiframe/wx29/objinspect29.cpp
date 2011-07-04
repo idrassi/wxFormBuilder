@@ -42,7 +42,6 @@
 #include "rad/wxfbevent.h"
 #include "rad/appdata.h"
 
-
 #include <wx/tokenzr.h>
 #include <wx/config.h>
 
@@ -581,7 +580,8 @@ ObjectInspector::ObjectInspector( wxWindow* parent, int id, int style )
 	long nbStyle;
 
 	wxConfigBase* config = wxConfigBase::Get();
-#ifdef WXFB_USE_AUI
+
+#ifdef WXFB_USE_AUIBOOK
     config->Read( wxT("/mainframe/objectInspector/auinbook_style"), &nbStyle, wxAUI_NB_WINDOWLIST_BUTTON | wxAUI_NB_SCROLL_BUTTONS );
 
     m_nb = new wxAuiNotebook( this, -1, wxDefaultPosition, wxDefaultSize, nbStyle );
@@ -607,7 +607,7 @@ ObjectInspector::ObjectInspector( wxWindow* parent, int id, int style )
 	m_pg = CreatePropertyGridManager(m_nb, WXFB_PROPERTY_GRID);
 	m_eg = CreatePropertyGridManager(m_nb, WXFB_EVENT_GRID);
 
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
 	m_nb->AddPage( m_pg, _("Properties"), false, AppBitmaps::GetBitmap( wxT("properties"), 16 ) );
 	m_nb->AddPage( m_eg, _("Events"),     false, AppBitmaps::GetBitmap( wxT("events"), 16 ) );
 #else
@@ -629,7 +629,7 @@ void ObjectInspector::SavePosition()
 	// Save Layout
 	wxConfigBase* config = wxConfigBase::Get();
 	config->Write( wxT("/mainframe/objectInspector/DescBoxHeight" ), m_pg->GetDescBoxHeight() );
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
     config->Write( wxT("/mainframe/objectInspector/auinbook_style"), m_nb->GetWindowStyleFlag() );
 #else
 	config->Write( wxT("/mainframe/objectInspector/notebook_style"), m_nb->GetWindowStyleFlag() );

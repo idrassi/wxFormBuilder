@@ -30,9 +30,9 @@ project "wxFormBuilder"
 	end
 
 	defines				{ "NO_GCC_PRAGMA", "SCI_NAMESPACE", "TIXML_USE_TICPP", "UNICODE", "_UNICODE", "__WX__", "WXUSINGDLL", "WXUSINGDLL_FNB" }
-	includedirs 		{ "../../src", "../../src/boost", "../../sdk/tinyxml", "../../sdk/plugin_interface", "../../wx29/include" }
-	files				{ "../../src/**.h", "../../src/**.hh", "../../src/**.hpp", "../../src/**.cc", "../../src/**.cpp", "../../wx29/src/**.cpp",
-                          "../../wx29/include/**.h", "../../src/**.fbp" }
+	includedirs 		{ "../../src", "../../src/boost", "../../sdk/tinyxml", "../../sdk/plugin_interface", "../../wx29", "../../wx29/include" }
+	files				{ "../../src/**.h", "../../src/**.hh", "../../src/**.hpp", "../../src/**.cc", "../../src/**.cpp", "../../src/**.fbp",
+                          "../../wx29/**.*" }
     excludes            { "../../src/controls/**", "../../src/rad/inspector/objinspect.h", "../../src/rad/inspector/objinspect.cpp" }
 	flags 				{ "ExtraWarnings", "Unicode" }
 	libdirs 			{ "../../sdk/lib", "../../output/lib/wxformbuilder" }

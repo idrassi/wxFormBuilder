@@ -27,13 +27,21 @@
 #define __MAIN_FRAME__
 
 #include "wx/wx.h"
+
 #ifdef WXFB_USE_AUI
     #include <wx/aui/aui.h>
-    #include <wx/spinctrl.h>
-    #include <wx/artprov.h>
+#else
+    #include <wx/splitter.h>
+#endif
+
+#ifdef WXFB_USE_AUIBOOK
+    #include <wx/aui/auibook.h>
 #else
     #include <wx/wxFlatNotebook/wxFlatNotebook.h>
-    #include <wx/splitter.h>
+#endif
+
+#ifdef WXFB_USE_AUITOOLBAR
+    #include <wx/spinctrl.h>
 #endif
 
 #include <wx/fdrepdlg.h>
@@ -69,21 +77,27 @@ private:
   wxLogWindow * m_log;
 #endif //__WXFB_DEBUG__
 
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
   wxAuiNotebook *m_notebook;
-  wxAuiToolBar *m_toolbar;
   wxImageList *m_icons;
+#else
+  wxFlatNotebook *m_notebook;
+  wxFlatNotebookImageList m_icons;
+#endif
+
+#ifdef WXFB_USE_AUITOOLBAR
+  wxAuiToolBar *m_toolbar;
+#endif
+
+#ifdef WXFB_USE_AUI
   wxAuiManager m_mgr;
 #else
   wxSplitterWindow *m_leftSplitter;
   wxSplitterWindow *m_rightSplitter;
   int m_leftSplitterWidth;
   int m_rightSplitterWidth;
-
-  //wxFrameManager m_mgr;
-  wxFlatNotebook *m_notebook;
-  wxFlatNotebookImageList m_icons;
 #endif
+
   wxFbPalette *m_palette;
   ObjectTree *m_objTree;
   ObjectInspector *m_objInsp;
@@ -111,12 +125,14 @@ private:
   void UpdateRecentProjects();
   void OnOpenRecent(wxCommandEvent &event);
   void UpdateLayoutTools();
+
 #ifdef WXFB_USE_AUI
   //wxPoint GetStartPosition();
 #else
   // Used to correctly restore splitter position
   void OnIdle( wxIdleEvent& );
 #endif
+
   wxFindReplaceData m_findData;
   wxFindReplaceDialog* m_findDialog;
 
@@ -157,14 +173,18 @@ public:
   void OnChangeBorder(wxCommandEvent& e);
   void OnXrcPreview(wxCommandEvent& e);
   void OnGenInhertedClass(wxCommandEvent& e);
-#ifdef WXFB_USE_AUI
-  //void OnAuiSettings (wxCommandEvent &event);
+
+#ifdef WXFB_USE_AUIBOOK
   void OnAuiNotebookPageChanged( wxAuiNotebookEvent& event );
-  wxAuiDockArt* GetDockArt();
-  void DoUpdate();
 #else
   void OnFlatNotebookPageChanged( wxFlatNotebookEvent& event );
 #endif
+
+#ifdef WXFB_USE_AUI
+  wxAuiDockArt* GetDockArt();
+  void DoUpdate();
+#endif
+
   void OnProjectLoaded( wxFBEvent& event );
   void OnProjectSaved( wxFBEvent& event );
   void OnObjectExpanded( wxFBObjectEvent& event );
@@ -175,9 +195,11 @@ public:
   void OnEventHandlerModified( wxFBEventHandlerEvent& event );
   void OnCodeGeneration( wxFBEvent& event );
   void OnProjectRefresh( wxFBEvent& event );
+
 #ifndef WXFB_USE_AUI
   void OnSplitterChanged( wxSplitterEvent &event );
 #endif
+
   void OnPreferences( wxCommandEvent &event );
 
   void InsertRecentProject(const wxString &file);
@@ -187,15 +209,19 @@ public:
   wxWindow  *CreateObjectTree       (wxWindow *parent);
   wxWindow  *CreateObjectInspector  (wxWindow *parent);
   wxMenuBar *CreateFBMenuBar();
-#ifdef WXFB_USE_AUI
+
+#ifdef WXFB_USE_AUITOOLBAR
   wxAuiToolBar *GetToolBar() { return m_toolbar; }
   wxAuiToolBar *RecreateFBAuiToolBar();
 #else
   wxToolBar *CreateFBToolBar();
+#endif
 
+#ifndef WXFB_USE_AUI
   void CreateWideGui();
   void CreateClassicGui();
 #endif
+
   void OnFindDialog( wxCommandEvent& event );
   void OnFind( wxFindDialogEvent& event );
   void OnFindClose( wxFindDialogEvent& event );

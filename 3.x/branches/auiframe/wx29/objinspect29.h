@@ -30,7 +30,7 @@
     #error "Please set wxUSE_PROPGRID to 1 and rebuild the library."
 #endif
 
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
     #include <wx/aui/auibook.h>
 #else
     #include <wx/wxFlatNotebook/wxFlatNotebook.h>
@@ -64,12 +64,14 @@ class ObjectInspector : public wxPanel
   ObjInspectorEventMap m_eventMap;
 
   PObjectBase m_currentSel;
-#ifdef WXFB_USE_AUI
+
+#ifdef WXFB_USE_AUIBOOK
     wxAuiNotebook* m_nb;
 #else
     wxFlatNotebook* m_nb;
     wxFlatNotebookImageList m_icons;
 #endif
+
   wxPropertyGridManager* m_pg;
   wxPropertyGridManager* m_eg;
   int m_style;

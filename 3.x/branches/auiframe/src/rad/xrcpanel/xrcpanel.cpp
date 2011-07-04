@@ -46,7 +46,7 @@
 	#include <wx/stc/stc.h>
 #endif
 
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
     #include <wx/aui/auibook.h>
 #else
     #include <wx/wxFlatNotebook/wxFlatNotebook.h>
@@ -135,7 +135,7 @@ void XrcPanel::InitStyledTextCtrl( wxStyledTextCtrl *stc )
 
 void XrcPanel::OnFind( wxFindDialogEvent& event )
 {
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
     wxAuiNotebook* notebook = wxDynamicCast( this->GetParent(), wxAuiNotebook );
 #else
 	wxFlatNotebook* notebook = wxDynamicCast( this->GetParent(), wxFlatNotebook );
