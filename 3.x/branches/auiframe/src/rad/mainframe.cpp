@@ -421,10 +421,12 @@ MainFrame::~MainFrame()
 
 #ifdef WXFB_USE_AUI
     m_mgr.UnInit();
-#elif __WXMAC__
-    // work around problem on wxMac
-    m_rightSplitter->GetWindow1()->GetSizer()->Detach(m_notebook);
-    m_notebook->Destroy();
+#else
+	#if __WXMAC__
+		// work around problem on wxMac
+		m_rightSplitter->GetWindow1()->GetSizer()->Detach(m_notebook);
+		m_notebook->Destroy();
+	#endif
 #endif
 
 	// the focus killer event handler
@@ -1309,13 +1311,6 @@ void MainFrame::OnChangeBorder( wxCommandEvent& e )
 void MainFrame::OnXrcPreview( wxCommandEvent& WXUNUSED( e ) )
 {
 	AppData()->ShowXrcPreview();
-/*
-	wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
-	for ( int i = 0, count = all_panes.GetCount(); i < count; ++i )
-	{
-		wxAuiPaneInfo info = all_panes.Item( i );
-	}
-*/
 }
 
 void MainFrame::OnGenInhertedClass( wxCommandEvent& WXUNUSED( e ) )
