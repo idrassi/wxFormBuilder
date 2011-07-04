@@ -51,7 +51,7 @@
 	#include <wx/stc/stc.h>
 #endif
 
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
     #include <wx/aui/auibook.h>
 BEGIN_EVENT_TABLE ( CppPanel,  wxAuiNotebook )
 #else
@@ -70,7 +70,7 @@ BEGIN_EVENT_TABLE ( CppPanel,  wxPanel )
 	EVT_FIND_NEXT( wxID_ANY, CppPanel::OnFind )
 END_EVENT_TABLE()
 
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
 CppPanel::CppPanel( wxWindow * parent, wxWindowID id,
 					const wxPoint& pos, const wxSize& size, long style )
 		: wxAuiNotebook( parent, id, pos, size, style )
@@ -80,14 +80,10 @@ CppPanel::CppPanel( wxWindow *parent, int id )
 wxPanel( parent, id ),
 m_icons( new wxFlatNotebookImageList )
 #endif
-
-#ifndef WXFB_USE_AUI
-
-#endif
 {
 	AppData()->AddHandler( this->GetEventHandler() );
 
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
 	m_cppPanel = new CodeEditor( this, -1 );
 #else
 	wxBoxSizer *top_sizer = new wxBoxSizer( wxVERTICAL );
@@ -110,7 +106,7 @@ m_icons( new wxFlatNotebookImageList )
 
 	InitStyledTextCtrl( m_cppPanel->GetTextCtrl() );
 
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
     AddPage( m_cppPanel, wxT( "cpp" ), false, AppBitmaps::GetBitmap( wxT("c++"), 16 ) );
 
 	m_hPanel = new CodeEditor( this, -1 );
@@ -121,7 +117,7 @@ m_icons( new wxFlatNotebookImageList )
 
 	InitStyledTextCtrl( m_hPanel->GetTextCtrl() );
 
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
 	AddPage( m_hPanel, wxT( "h" ), false, AppBitmaps::GetBitmap( wxT("h"), 16 ) );
 #else
 	m_notebook->AddPage( m_hPanel, wxT( "h" ), false, 1 );
@@ -140,14 +136,14 @@ m_icons( new wxFlatNotebookImageList )
 
 CppPanel::~CppPanel()
 {
-#ifndef WXFB_USE_AUI
+#ifndef WXFB_USE_AUIBOOK
 	delete m_icons;
 #endif
 
 	AppData()->RemoveHandler( this->GetEventHandler() );
 	wxConfigBase *config = wxConfigBase::Get();
 
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
 	config->Write( wxT("/mainframe/editor/cpp/auinbook_style"), this->GetWindowStyleFlag() );
 #else
 	config->Write( wxT("/mainframe/editor/cpp/notebook_style"), m_notebook->GetWindowStyleFlag() );
@@ -220,7 +216,7 @@ void CppPanel::InitStyledTextCtrl( wxStyledTextCtrl *stc )
 
 void CppPanel::OnFind( wxFindDialogEvent& event )
 {
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
     wxAuiNotebook* languageBook = wxDynamicCast( this->GetParent(), wxAuiNotebook );
 #else
 	wxFlatNotebook* languageBook = wxDynamicCast( this->GetParent(), wxFlatNotebook );
@@ -241,7 +237,7 @@ void CppPanel::OnFind( wxFindDialogEvent& event )
 	{
 		return;
 	}
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
     wxAuiNotebook* notebook = wxDynamicCast( m_cppPanel->GetParent(), wxAuiNotebook );
 #else
 	wxFlatNotebook* notebook = wxDynamicCast( m_cppPanel->GetParent(), wxFlatNotebook );

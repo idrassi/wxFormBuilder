@@ -42,7 +42,7 @@
 
 	#include "rad/inspector/objinspect.h"
 #else
-	#include "rad/inspector/objinspect29.h"
+	#include "objinspect29.h"
 #endif
 
 ////////////////////////////////////

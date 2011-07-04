@@ -27,7 +27,7 @@
 #define __OBJ_INSPECT__
 
 #include "wx/wx.h"
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
     #include <wx/aui/auibook.h>
 #else
     #include <wx/wxFlatNotebook/wxFlatNotebook.h>
@@ -86,7 +86,7 @@ class ObjectInspector : public wxPanel
   ObjInspectorEventMap m_eventMap;
 
   PObjectBase m_currentSel;
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
     wxAuiNotebook* m_nb;
 #else
     wxFlatNotebook* m_nb;

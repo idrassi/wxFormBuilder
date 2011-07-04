@@ -38,7 +38,7 @@ class CodeEditor;
 	class wxStyledTextCtrl;
 #endif
 
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
     #include <wx/aui/auibook.h>
 #else
 class wxFlatNotebook;
@@ -52,7 +52,7 @@ class wxFBObjectEvent;
 class wxFBEventHandlerEvent;
 
 class CppPanel : public
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
  wxAuiNotebook
 #else
  wxPanel
@@ -63,7 +63,7 @@ private:
 	CodeEditor* m_hPanel;
 	PTCCodeWriter m_hCW;
 	PTCCodeWriter m_cppCW;
-#ifndef WXFB_USE_AUI
+#ifndef WXFB_USE_AUIBOOK
 	wxFlatNotebookImageList* m_icons;
 	wxFlatNotebook* m_notebook;
 #endif
@@ -75,7 +75,7 @@ private:
 #endif
 
 public:
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
 	CppPanel( wxWindow* parent, wxWindowID id = wxID_ANY,
 			const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
 			long style = wxAUI_NB_DEFAULT_STYLE );

@@ -39,7 +39,7 @@
 
 #define ID_PALETTE_BUTTON 999
 
-#ifndef WXFB_USE_AUI
+#ifndef WXFB_USE_AUIBOOK
     #ifdef __WXGTK__
         #if wxCHECK_VERSION( 2, 8, 0 )
             #define DRAG_OPTION 0
@@ -53,7 +53,7 @@
 
 wxWindowID wxFbPalette::nextId = wxID_HIGHEST + 1000;
 
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
 BEGIN_EVENT_TABLE( wxFbPalette, wxAuiNotebook )
 #else
 BEGIN_EVENT_TABLE( wxFbPalette, wxPanel )
@@ -63,13 +63,13 @@ BEGIN_EVENT_TABLE( wxFbPalette, wxPanel )
 	#else
 		EVT_TOOL(-1, wxFbPalette::OnButtonClick)
 	#endif
-    #ifndef WXFB_USE_AUI
+    #ifndef WXFB_USE_AUITOOLBAR
 	    EVT_SPIN_UP( -1, wxFbPalette::OnSpinUp )
 	    EVT_SPIN_DOWN( -1, wxFbPalette::OnSpinDown )
     #endif
 END_EVENT_TABLE()
 
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
 wxFbPalette::wxFbPalette( wxWindow *parent, int id, long style )
 			: wxAuiNotebook( parent, id, wxDefaultPosition, wxDefaultSize, style )
 #else
@@ -78,7 +78,7 @@ wxFbPalette::wxFbPalette( wxWindow *parent, int id )
 #endif
 {
 }
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUITOOLBAR
 void wxFbPalette::PopulateToolbar( PObjectPackage pkg, wxAuiToolBar *toolbar )
 #else
 void wxFbPalette::PopulateToolbar( PObjectPackage pkg, wxToolBar *toolbar )
@@ -122,7 +122,7 @@ void wxFbPalette::PopulateToolbar( PObjectPackage pkg, wxToolBar *toolbar )
 
 void wxFbPalette::Create()
 {
-#ifndef WXFB_USE_AUI
+#ifndef WXFB_USE_AUIBOOK
 	wxBoxSizer *top_sizer = new wxBoxSizer( wxVERTICAL );
 
 	long nbStyle;
@@ -136,7 +136,7 @@ void wxFbPalette::Create()
 
 	Debug::Print( wxT( "[Palette] Pages %d" ), pkg_count );
 
-#ifndef WXFB_USE_AUI
+#ifndef WXFB_USE_AUIBOOK
 	// Populate icon vector
 	for ( unsigned int j = 0; j < pkg_count;j++ )
 	{
@@ -152,9 +152,13 @@ void wxFbPalette::Create()
 	{
 		PObjectPackage pkg = AppData()->GetPackage( i );
 		wxString pkg_name = pkg->GetPackageName();
-#ifdef WXFB_USE_AUI
+
+#ifdef WXFB_USE_AUITOOLBAR
+	#ifdef WXFB_USE_AUIBOOK
 		wxAuiToolBar *toolbar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_OVERFLOW );
-		toolbar->SetToolBitmapSize( wxSize( 22, 22 ) );
+	#else
+		wxAuiToolBar *toolbar = new wxAuiToolBar( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_OVERFLOW );
+	#endif
 #else
 		wxPanel *panel = new wxPanel( m_notebook, -1 );
 		//panel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) );
@@ -169,15 +173,18 @@ void wxFbPalette::Create()
 		wxBoxSizer *sbSizer = new wxBoxSizer( wxHORIZONTAL );
 
 		wxToolBar *toolbar = new wxToolBar( tbPanel, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT );
-		toolbar->SetToolBitmapSize( wxSize( 22, 22 ) );
 		//toolbar->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) );
 #endif
+		toolbar->SetToolBitmapSize( wxSize( 22, 22 ) );
+
 		PopulateToolbar( pkg, toolbar );
 		m_tv.push_back( toolbar );
 
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
 		AddPage( toolbar, pkg_name, false, pkg->GetPackageIcon() );
-#else
+#endif
+
+#ifndef WXFB_USE_AUITOOLBAR
 		tbSizer->Add( toolbar, 1, wxEXPAND | wxALIGN_CENTER_VERTICAL );
 		tbPanel->SetSizer( tbSizer );
 
@@ -196,11 +203,17 @@ void wxFbPalette::Create()
 
 		sizer->Fit( panel );
 		sizer->SetSizeHints( panel );
+#endif
 
+#ifndef WXFB_USE_AUIBOOK
+	#ifndef WXFB_USE_AUITOOLBAR
 		m_notebook->AddPage( panel, pkg_name, false, i );
+	#else
+		m_notebook->AddPage( toolbar, pkg_name, false, i );
+	#endif
 #endif
 	}
-#ifndef WXFB_USE_AUI
+#ifndef WXFB_USE_AUIBOOK
 	//Title *title = new Title( this, wxT("Component Palette") );
 	//top_sizer->Add(title,0,wxEXPAND,0);
 	top_sizer->Add( m_notebook, 1, wxEXPAND, 0 );
@@ -210,7 +223,7 @@ void wxFbPalette::Create()
 	top_sizer->SetSizeHints( this );
 #endif
 }
-#ifndef WXFB_USE_AUI
+#ifndef WXFB_USE_AUITOOLBAR
 void wxFbPalette::OnSpinUp( wxSpinEvent& )
 {
 	int page = m_notebook->GetSelection();
@@ -249,7 +262,7 @@ void wxFbPalette::OnSpinDown( wxSpinEvent& )
 
 	toolbar->Realize();
 }
-#endif // WXFB_USE_AUI
+#endif // WXFB_USE_AUITOOLBAR
 
 void wxFbPalette::OnButtonClick( wxCommandEvent &event )
 {
@@ -262,7 +275,7 @@ void wxFbPalette::OnButtonClick( wxCommandEvent &event )
 #else
 	for ( unsigned int i = 0; i < m_tv.size(); i++ )
 	{
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUITOOLBAR
 		if ( m_tv[i]->FindTool( event.GetId() ) )
 #else
 		if ( m_tv[i]->FindById( event.GetId() ) )
@@ -278,7 +291,7 @@ void wxFbPalette::OnButtonClick( wxCommandEvent &event )
 
 wxFbPalette::~wxFbPalette()
 {
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
 	size_t pageCount = GetPageCount();
 #else
 	size_t pageCount = m_notebook->GetPageCount();
@@ -288,14 +301,18 @@ wxFbPalette::~wxFbPalette()
 	{
 		wxString pages;
 
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
 		std::vector<wxWindow*> auibars;
 		arrangeTabOrder( auibars );
 		size_t idx;
 
 		for ( size_t i = 0; i < pageCount; ++i )
 		{
+#ifdef WXFB_USE_AUITOOLBAR
 			wxAuiToolBar* tbar = dynamic_cast< wxAuiToolBar* >( auibars.at( i ) );
+#else
+			wxToolBar* tbar = dynamic_cast< wxAuiToolBar* >( auibars.at( i ) );
+#endif
 			idx = 0;
 
 			while ( tbar != m_tv[idx] )
@@ -314,9 +331,11 @@ wxFbPalette::~wxFbPalette()
 
 			pages << m_notebook->GetPageText( i ) << separator;
 		}
-#endif
+#endif //WXFB_USE_AUIBOOK
+
 		wxConfigBase* config = wxConfigBase::Get();
-#ifdef WXFB_USE_AUI
+
+#ifdef WXFB_USE_AUIBOOK
 		config->Write( wxT("/palette/auinbook_style"), GetWindowStyleFlag() );
 #else
 		config->Write( wxT("/palette/notebook_style"), m_notebook->GetWindowStyleFlag() );
@@ -324,7 +343,7 @@ wxFbPalette::~wxFbPalette()
 		config->Write( wxT("/palette/pageOrder"), pages );
 	}
 }
-#ifdef WXFB_USE_AUI
+#ifdef WXFB_USE_AUIBOOK
 // Workaround for incorrect tab order in wxAuiNotebook
 // Got from Eran's codelite notebook_ex.cpp ( GetEditorsInOrder() )
 void wxFbPalette::arrangeTabOrder( std::vector<wxWindow*> &pages )
@@ -379,4 +398,4 @@ void wxFbPalette::arrangeTabOrder( std::vector<wxWindow*> &pages )
 		pages.insert( pages.begin(), all_pages.begin(), all_pages.end() );
 	}
 }
-#endif
+#endif //WXFB_USE_AUIBOOK

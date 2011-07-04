@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxFormBuilder-3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-03 20:52+0100\n"
+"POT-Creation-Date: 2011-07-03 23:21+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Andrea Zanellato <zanellato.andrea@gmail.com>\n"
 "Language-Team: wxFormBuilder <wxformbuilder@gmail.com>\n"
@@ -146,7 +146,7 @@ msgstr "Visualizza questo messaggio di aiuto."
 #: src/maingui.cpp:71
 #: src/maingui.cpp:77
 msgid "File to open."
-msgstr ""
+msgstr "File da aprire."
 
 #: src/maingui.cpp:166
 msgid "You must pass a path to a project file. Nothing to generate."
@@ -217,7 +217,7 @@ msgstr "Le cause più probabili sono una copia di wxFormBuilder non aggiornata o
 
 #: src/model/database.cpp:260
 msgid "Please check at"
-msgstr ""
+msgstr "Puoi controllare su"
 
 #: src/model/database.cpp:357
 msgid "Review your definitions file (objtypes.xml)"
@@ -500,12 +500,12 @@ msgstr "<< Compatto"
 msgid "Expand >>"
 msgstr "Espandi"
 
-#: src/controls/src/wxFlatNotebook/wxFlatNotebook.cpp:1659
+#: src/controls/src/wxFlatNotebook/wxFlatNotebook.cpp:1658
 #, c-format
 msgid "Old Page Index = %i"
 msgstr "Indice Precedente = %i"
 
-#: src/controls/src/wxFlatNotebook/wxFlatNotebook.cpp:1668
+#: src/controls/src/wxFlatNotebook/wxFlatNotebook.cpp:1663
 #, c-format
 msgid "OnDropTarget: index by HitTest = %i"
 msgstr "OnDropTarget: index by HitTest = %i"
@@ -515,31 +515,31 @@ msgid "Toolbar"
 msgstr "Barra degli strumenti"
 
 #: src/rad/mainframe.cpp:283
-#: src/rad/mainframe.cpp:1831
-#: src/rad/mainframe.cpp:1872
+#: src/rad/mainframe.cpp:1830
+#: src/rad/mainframe.cpp:1871
 msgid "Component Palette"
 msgstr "Tavolozza Componenti "
 
 #: src/rad/mainframe.cpp:292
-#: src/rad/mainframe.cpp:1840
-#: src/rad/mainframe.cpp:1873
+#: src/rad/mainframe.cpp:1839
+#: src/rad/mainframe.cpp:1872
 msgid "Editor"
 msgstr "Editor"
 
 #: src/rad/mainframe.cpp:301
-#: src/rad/mainframe.cpp:1826
-#: src/rad/mainframe.cpp:1866
+#: src/rad/mainframe.cpp:1825
+#: src/rad/mainframe.cpp:1865
 msgid "Object Tree"
 msgstr "Albero Oggetti"
 
 #: src/rad/mainframe.cpp:310
-#: src/rad/mainframe.cpp:1841
-#: src/rad/mainframe.cpp:1867
+#: src/rad/mainframe.cpp:1840
+#: src/rad/mainframe.cpp:1866
 msgid "Object Properties"
 msgstr "Proprietà Oggetti"
 
 #: src/rad/mainframe.cpp:569
-#: src/rad/mainframe.cpp:1672
+#: src/rad/mainframe.cpp:1671
 msgid "Save Project"
 msgstr "Salva Progetto"
 
@@ -558,7 +558,7 @@ msgid "Overwrite the file"
 msgstr "Sovrascrivi file"
 
 #: src/rad/mainframe.cpp:616
-#: src/rad/mainframe.cpp:1671
+#: src/rad/mainframe.cpp:1670
 msgid "Open Project"
 msgstr "Apri Progetto"
 
@@ -572,7 +572,7 @@ msgid "Open recent project"
 msgstr "Apri progetto recente"
 
 #: src/rad/mainframe.cpp:662
-#: src/rad/mainframe.cpp:1543
+#: src/rad/mainframe.cpp:1542
 msgid "Import XRC file"
 msgstr "Importazione file XRC"
 
@@ -585,81 +585,81 @@ msgstr "Errore caricamento XRC"
 msgid "Error Loading XRC: %s"
 msgstr "Errore caricamento XRC: %s"
 
-#: src/rad/mainframe.cpp:737
+#: src/rad/mainframe.cpp:736
 msgid "Project Loaded!"
 msgstr "Progetto caricato!"
 
-#: src/rad/mainframe.cpp:742
-#: src/rad/mainframe.cpp:825
-#: src/rad/mainframe.cpp:923
+#: src/rad/mainframe.cpp:741
+#: src/rad/mainframe.cpp:824
+#: src/rad/mainframe.cpp:922
 #, c-format
 msgid "Name: %s | Class: %s"
 msgstr "Nome: %s | Classe: %s"
 
-#: src/rad/mainframe.cpp:751
+#: src/rad/mainframe.cpp:750
 msgid "Project Saved!"
 msgstr "Progetto salvato!"
 
-#: src/rad/mainframe.cpp:821
+#: src/rad/mainframe.cpp:820
 msgid "\"Unknown\""
 msgstr "\"Sconosciuto\""
 
-#: src/rad/mainframe.cpp:840
+#: src/rad/mainframe.cpp:839
 #, c-format
 msgid "Object '%s' of class '%s' created."
 msgstr "Oggetto '%s' della classe '%s' creato."
 
-#: src/rad/mainframe.cpp:846
+#: src/rad/mainframe.cpp:845
 msgid "Impossible to create the object. Did you forget to add a sizer/parent object or turn on/off an AUI management?"
 msgstr "Impossibile creare l'oggetto. Ti sei dimenticato di aggiungere un oggetto sizer/padre oppure attivare/disattivare la gestione AUI?"
 
-#: src/rad/mainframe.cpp:858
+#: src/rad/mainframe.cpp:857
 #, c-format
 msgid "Object '%s' removed."
 msgstr "Oggetto '%s' rimosso."
 
-#: src/rad/mainframe.cpp:880
+#: src/rad/mainframe.cpp:879
 #, c-format
 msgid "Name: %s %s"
 msgstr "Nome: %s %s"
 
-#: src/rad/mainframe.cpp:885
+#: src/rad/mainframe.cpp:884
 msgid "Property Modified!"
 msgstr "Proprietà Modificata!"
 
-#: src/rad/mainframe.cpp:898
+#: src/rad/mainframe.cpp:897
 #, c-format
 msgid "Event handler '%s' of object '%s' modified."
 msgstr "Gestore evento '%s' dell'oggetto '%s' modificato."
 
-#: src/rad/mainframe.cpp:913
+#: src/rad/mainframe.cpp:912
 msgid "Code Generated!"
 msgstr "Codice Generato!"
 
-#: src/rad/mainframe.cpp:953
-#: src/rad/mainframe.cpp:1018
-#: src/rad/mainframe.cpp:1635
+#: src/rad/mainframe.cpp:952
+#: src/rad/mainframe.cpp:1017
+#: src/rad/mainframe.cpp:1634
 msgid "&Edit"
 msgstr "&Modifica"
 
-#: src/rad/mainframe.cpp:1006
+#: src/rad/mainframe.cpp:1005
 msgid "untitled"
 msgstr "Senza nome"
 
-#: src/rad/mainframe.cpp:1032
+#: src/rad/mainframe.cpp:1031
 msgid "Designer"
 msgstr "Editor"
 
-#: src/rad/mainframe.cpp:1342
+#: src/rad/mainframe.cpp:1341
 msgid "You must set the \"file\" property of the project before generating inherited classes."
 msgstr "Devi impostare la proprietà \"file\" del progetto prima di generare le classi eredi."
 
-#: src/rad/mainframe.cpp:1363
+#: src/rad/mainframe.cpp:1362
 #, c-format
 msgid "Class(es) generated to '%s'."
 msgstr "Classe(i) generata(e) in '%s'."
 
-#: src/rad/mainframe.cpp:1372
+#: src/rad/mainframe.cpp:1371
 msgid ""
 "Current project file has been modified...\n"
 "Do you want to save the changes?"
@@ -667,484 +667,484 @@ msgstr ""
 "Il progetto corrente e' stato modificato...\n"
 "Vuoi salvarne i cambiamenti?"
 
-#: src/rad/mainframe.cpp:1373
+#: src/rad/mainframe.cpp:1372
 msgid "Save project"
 msgstr "Salva Progetto"
 
-#: src/rad/mainframe.cpp:1489
+#: src/rad/mainframe.cpp:1488
 msgid "Find"
 msgstr "Cerca"
 
-#: src/rad/mainframe.cpp:1533
+#: src/rad/mainframe.cpp:1532
 msgid "&New Project"
 msgstr "&Nuovo Progetto"
 
-#: src/rad/mainframe.cpp:1533
+#: src/rad/mainframe.cpp:1532
 msgid "Create an empty project"
 msgstr "Crea progetto vuoto"
 
-#: src/rad/mainframe.cpp:1537
+#: src/rad/mainframe.cpp:1536
 msgid "&Open..."
 msgstr "&Apri..."
 
-#: src/rad/mainframe.cpp:1537
+#: src/rad/mainframe.cpp:1536
 msgid "Open a project"
 msgstr "Apri Progetto"
 
-#: src/rad/mainframe.cpp:1538
+#: src/rad/mainframe.cpp:1537
 msgid "&Save"
 msgstr "&Salva"
 
-#: src/rad/mainframe.cpp:1538
+#: src/rad/mainframe.cpp:1537
 msgid "Save current project"
 msgstr "Salva progetto corrente"
 
-#: src/rad/mainframe.cpp:1539
+#: src/rad/mainframe.cpp:1538
 msgid "Save &As..."
 msgstr "Sa&lva come..."
 
-#: src/rad/mainframe.cpp:1539
+#: src/rad/mainframe.cpp:1538
 msgid "Save current project as..."
 msgstr "Salva progetto corrente come..."
 
-#: src/rad/mainframe.cpp:1543
+#: src/rad/mainframe.cpp:1542
 msgid "&Import XRC..."
 msgstr "&Importazione XRC..."
 
-#: src/rad/mainframe.cpp:1549
+#: src/rad/mainframe.cpp:1548
 msgid "&Generate Code"
 msgstr "&Genera Codice"
 
-#: src/rad/mainframe.cpp:1549
-#: src/rad/mainframe.cpp:1682
+#: src/rad/mainframe.cpp:1548
+#: src/rad/mainframe.cpp:1681
 msgid "Generate Code"
 msgstr "Codice Generato"
 
-#: src/rad/mainframe.cpp:1554
+#: src/rad/mainframe.cpp:1553
 msgid "E&xit"
 msgstr "&Esci"
 
-#: src/rad/mainframe.cpp:1554
+#: src/rad/mainframe.cpp:1553
 msgid "Quit wxFormBuilder"
 msgstr "Termina wxFormBuilder"
 
-#: src/rad/mainframe.cpp:1557
+#: src/rad/mainframe.cpp:1556
 msgid "&Undo"
 msgstr "&Annulla"
 
-#: src/rad/mainframe.cpp:1557
+#: src/rad/mainframe.cpp:1556
 msgid "Undo changes"
 msgstr "Annulla cambiamenti"
 
-#: src/rad/mainframe.cpp:1558
+#: src/rad/mainframe.cpp:1557
 msgid "&Redo"
 msgstr "&Ripeti"
 
-#: src/rad/mainframe.cpp:1558
+#: src/rad/mainframe.cpp:1557
 msgid "Redo changes"
 msgstr "Ripete modifiche"
 
-#: src/rad/mainframe.cpp:1560
+#: src/rad/mainframe.cpp:1559
 msgid "Co&py"
 msgstr "&Copia"
 
-#: src/rad/mainframe.cpp:1560
+#: src/rad/mainframe.cpp:1559
 msgid "Copy selected object"
 msgstr "Copia oggetto selezionato"
 
-#: src/rad/mainframe.cpp:1561
+#: src/rad/mainframe.cpp:1560
 msgid "&Cut"
 msgstr "Tag&lia"
 
-#: src/rad/mainframe.cpp:1561
+#: src/rad/mainframe.cpp:1560
 msgid "Cut selected object"
 msgstr "Taglia oggetto selezionato"
 
-#: src/rad/mainframe.cpp:1562
+#: src/rad/mainframe.cpp:1561
 msgid "Past&e"
 msgstr "&Incolla"
 
-#: src/rad/mainframe.cpp:1562
+#: src/rad/mainframe.cpp:1561
 msgid "Paste on selected object"
 msgstr "Incolla oggetto selezionato"
 
-#: src/rad/mainframe.cpp:1563
+#: src/rad/mainframe.cpp:1562
 msgid "&Delete"
 msgstr "Eli&mina"
 
-#: src/rad/mainframe.cpp:1563
+#: src/rad/mainframe.cpp:1562
 msgid "Delete selected object"
 msgstr "Elimina oggetto selezionato"
 
-#: src/rad/mainframe.cpp:1566
+#: src/rad/mainframe.cpp:1565
 msgid "Copy Object To Clipboard"
 msgstr "Copia Oggetto Negli Appunti"
 
-#: src/rad/mainframe.cpp:1566
+#: src/rad/mainframe.cpp:1565
 msgid "Copy Object to Clipboard"
 msgstr "Copia Oggetto negli Appunti"
 
-#: src/rad/mainframe.cpp:1570
+#: src/rad/mainframe.cpp:1569
 msgid "Paste Object From Clipboard"
 msgstr "Incolla Oggetto Dagli Appunti"
 
-#: src/rad/mainframe.cpp:1570
+#: src/rad/mainframe.cpp:1569
 msgid "Paste Object from Clipboard"
 msgstr "Incolla Oggetto dagli Appunti"
 
-#: src/rad/mainframe.cpp:1576
+#: src/rad/mainframe.cpp:1575
 msgid "Toggle E&xpand"
 msgstr "Scambia E&xpand"
 
-#: src/rad/mainframe.cpp:1576
+#: src/rad/mainframe.cpp:1575
 msgid "Toggle wxEXPAND flag of sizeritem properties"
 msgstr "Scambia la proprietà wxEXPAND di un sizeritem"
 
-#: src/rad/mainframe.cpp:1580
+#: src/rad/mainframe.cpp:1579
 msgid "Toggle &Stretch"
 msgstr "Scambia Stretc&h"
 
-#: src/rad/mainframe.cpp:1580
+#: src/rad/mainframe.cpp:1579
 msgid "Toggle option property of sizeritem properties"
 msgstr "Scambia la proprietà proportion di un sizeritem"
 
-#: src/rad/mainframe.cpp:1584
+#: src/rad/mainframe.cpp:1583
 msgid "Move Up"
 msgstr "Sposta Sù"
 
-#: src/rad/mainframe.cpp:1584
+#: src/rad/mainframe.cpp:1583
 msgid "Move Up selected object"
 msgstr "Sposta Su l'oggetto selezionato"
 
-#: src/rad/mainframe.cpp:1585
+#: src/rad/mainframe.cpp:1584
 msgid "Move Down"
 msgstr "Sposta Giù"
 
-#: src/rad/mainframe.cpp:1585
+#: src/rad/mainframe.cpp:1584
 msgid "Move Down selected object"
 msgstr "Sposta Giù l'oggetto selezionato"
 
-#: src/rad/mainframe.cpp:1586
+#: src/rad/mainframe.cpp:1585
 msgid "Move Left"
 msgstr "Sposta a Sinistra"
 
-#: src/rad/mainframe.cpp:1586
+#: src/rad/mainframe.cpp:1585
 msgid "Move Left selected object"
 msgstr "Sposta a Sinistra l'oggetto selezionato"
 
-#: src/rad/mainframe.cpp:1587
+#: src/rad/mainframe.cpp:1586
 msgid "Move Right"
 msgstr "Sposta a Destra"
 
-#: src/rad/mainframe.cpp:1587
+#: src/rad/mainframe.cpp:1586
 msgid "Move Right selected object"
 msgstr "Sposta a Destra l'oggetto selezionato"
 
-#: src/rad/mainframe.cpp:1589
+#: src/rad/mainframe.cpp:1588
 msgid "&Find"
 msgstr "Cerca"
 
-#: src/rad/mainframe.cpp:1589
+#: src/rad/mainframe.cpp:1588
 msgid "Find text in the active code viewer"
 msgstr "Ricerca testo nel visualizzatore di codice attivo"
 
-#: src/rad/mainframe.cpp:1592
+#: src/rad/mainframe.cpp:1591
 msgid "Align &Left"
 msgstr "Allinea &Sinistra"
 
-#: src/rad/mainframe.cpp:1592
+#: src/rad/mainframe.cpp:1591
 msgid "Align item to the left"
 msgstr "Allinea l'oggetto a sinistra"
 
-#: src/rad/mainframe.cpp:1596
+#: src/rad/mainframe.cpp:1595
 msgid "Align Center &Horizontal"
 msgstr "Allinea Centrato &Orizzontalmente"
 
-#: src/rad/mainframe.cpp:1596
+#: src/rad/mainframe.cpp:1595
 msgid "Align item to the center horizontally"
 msgstr "Allinea l'oggetto al centro orizzontalmente"
 
-#: src/rad/mainframe.cpp:1600
+#: src/rad/mainframe.cpp:1599
 msgid "Align Ri&ght"
 msgstr "Allinea Destra"
 
-#: src/rad/mainframe.cpp:1600
+#: src/rad/mainframe.cpp:1599
 msgid "Align item to the right"
 msgstr "Allinea l'oggetto a destra"
 
-#: src/rad/mainframe.cpp:1604
+#: src/rad/mainframe.cpp:1603
 msgid "Align &Top"
 msgstr "Allinea Sop&ra"
 
-#: src/rad/mainframe.cpp:1604
+#: src/rad/mainframe.cpp:1603
 msgid "Align item to the top"
 msgstr "Allinea l'oggetto nel punto superiore"
 
-#: src/rad/mainframe.cpp:1608
+#: src/rad/mainframe.cpp:1607
 msgid "Align Center &Vertical"
 msgstr "Allinea Centrato &Verticalmente"
 
-#: src/rad/mainframe.cpp:1608
+#: src/rad/mainframe.cpp:1607
 msgid "Align item to the center vertically"
 msgstr "Allinea l'oggetto al centro verticalmente"
 
-#: src/rad/mainframe.cpp:1612
+#: src/rad/mainframe.cpp:1611
 msgid "Align &Bottom"
 msgstr "Allinea So&tto"
 
-#: src/rad/mainframe.cpp:1612
+#: src/rad/mainframe.cpp:1611
 msgid "Align item to the bottom"
 msgstr "Allinea l'oggetto nel punto inferiore"
 
-#: src/rad/mainframe.cpp:1617
+#: src/rad/mainframe.cpp:1616
 msgid "Prefere&nces"
 msgstr "&Preferenze"
 
-#: src/rad/mainframe.cpp:1617
+#: src/rad/mainframe.cpp:1616
 msgid "Change global preferences"
 msgstr "Modifica le impostazioni"
 
-#: src/rad/mainframe.cpp:1620
+#: src/rad/mainframe.cpp:1619
 msgid "&XRC Window"
 msgstr "Finestra &XRC"
 
-#: src/rad/mainframe.cpp:1620
+#: src/rad/mainframe.cpp:1619
 msgid "Show a preview of the XRC window"
 msgstr "Visualizza l'anteprima nella finestra XRC"
 
-#: src/rad/mainframe.cpp:1625
+#: src/rad/mainframe.cpp:1624
 msgid "&Generate Inherited Class"
 msgstr "&Genera Classi Eredi"
 
-#: src/rad/mainframe.cpp:1625
+#: src/rad/mainframe.cpp:1624
 msgid "Creates the needed files and class for proper inheritance of your designed GUI"
 msgstr "Crea i files delle classi eredi che verranno utilizzate nel tuo progetto GUI"
 
-#: src/rad/mainframe.cpp:1630
+#: src/rad/mainframe.cpp:1629
 msgid "&About..."
 msgstr "&Informazioni..."
 
-#: src/rad/mainframe.cpp:1630
+#: src/rad/mainframe.cpp:1629
 msgid "Show about dialog"
 msgstr "Mostra la finestra delle informazioni sul programma"
 
-#: src/rad/mainframe.cpp:1634
+#: src/rad/mainframe.cpp:1633
 msgid "&File"
 msgstr "&File"
 
-#: src/rad/mainframe.cpp:1636
+#: src/rad/mainframe.cpp:1635
 msgid "&View"
 msgstr "&Visualizza"
 
-#: src/rad/mainframe.cpp:1637
+#: src/rad/mainframe.cpp:1636
 msgid "&Tools"
 msgstr "&Strumenti"
 
-#: src/rad/mainframe.cpp:1638
+#: src/rad/mainframe.cpp:1637
 msgid "&Help"
 msgstr "&Aiuto"
 
-#: src/rad/mainframe.cpp:1670
+#: src/rad/mainframe.cpp:1669
 msgid "New Project"
 msgstr "Nuovo Progetto"
 
-#: src/rad/mainframe.cpp:1670
+#: src/rad/mainframe.cpp:1669
 msgid "New Project (Ctrl+N)"
 msgstr "Nuovo Progetto (Ctrl+N)"
 
-#: src/rad/mainframe.cpp:1670
+#: src/rad/mainframe.cpp:1669
 msgid "Start a new project."
 msgstr "Inizia un nuovo progetto."
 
-#: src/rad/mainframe.cpp:1671
+#: src/rad/mainframe.cpp:1670
 msgid "Open Project (Ctrl+O)"
 msgstr "Apri Progetto (Ctrl+O)"
 
-#: src/rad/mainframe.cpp:1671
+#: src/rad/mainframe.cpp:1670
 msgid "Open an existing project."
 msgstr "Apre un progetto esistente."
 
-#: src/rad/mainframe.cpp:1672
+#: src/rad/mainframe.cpp:1671
 msgid "Save Project (Ctrl+S)"
 msgstr "Salva Progetto (Ctrl+S)"
 
-#: src/rad/mainframe.cpp:1672
+#: src/rad/mainframe.cpp:1671
 msgid "Save the current project."
 msgstr "Salva il progetto corrente."
 
-#: src/rad/mainframe.cpp:1674
+#: src/rad/mainframe.cpp:1673
 msgid "Undo"
 msgstr "Annulla"
 
-#: src/rad/mainframe.cpp:1674
+#: src/rad/mainframe.cpp:1673
 msgid "Undo (Ctrl+Z)"
 msgstr "Annulla (Ctrl+Z)"
 
-#: src/rad/mainframe.cpp:1674
+#: src/rad/mainframe.cpp:1673
 msgid "Undo the last action."
 msgstr "Annulla l'ultima operazione."
 
-#: src/rad/mainframe.cpp:1675
+#: src/rad/mainframe.cpp:1674
 msgid "Redo"
 msgstr "Ripeti"
 
-#: src/rad/mainframe.cpp:1675
+#: src/rad/mainframe.cpp:1674
 msgid "Redo (Ctrl+Y)"
 msgstr "Ripeti (Ctrl+Y)"
 
-#: src/rad/mainframe.cpp:1675
+#: src/rad/mainframe.cpp:1674
 msgid "Redo the last action that was undone."
 msgstr "Ripete l'ultima azione annullata."
 
-#: src/rad/mainframe.cpp:1677
+#: src/rad/mainframe.cpp:1676
 msgid "Cut"
 msgstr "Taglia"
 
-#: src/rad/mainframe.cpp:1677
+#: src/rad/mainframe.cpp:1676
 msgid "Cut (Ctrl+X)"
 msgstr "Taglia (Ctrl+X)"
 
-#: src/rad/mainframe.cpp:1677
+#: src/rad/mainframe.cpp:1676
 msgid "Remove the selected object and place it on the clipboard."
 msgstr "Rimuove l'oggetto selezionato e lo copia negli appunti."
 
-#: src/rad/mainframe.cpp:1678
+#: src/rad/mainframe.cpp:1677
 msgid "Copy"
 msgstr "Copia"
 
-#: src/rad/mainframe.cpp:1678
+#: src/rad/mainframe.cpp:1677
 msgid "Copy (Ctrl+C)"
 msgstr "Copia (Ctrl+C)"
 
-#: src/rad/mainframe.cpp:1678
+#: src/rad/mainframe.cpp:1677
 msgid "Copy the selected object to the clipboard."
 msgstr "Copia l'oggetto selezionato negli appunti."
 
-#: src/rad/mainframe.cpp:1679
+#: src/rad/mainframe.cpp:1678
 msgid "Paste"
 msgstr "Incolla"
 
-#: src/rad/mainframe.cpp:1679
+#: src/rad/mainframe.cpp:1678
 msgid "Paste (Ctrl+V)"
 msgstr "Incolla (Ctrl+V)"
 
-#: src/rad/mainframe.cpp:1679
+#: src/rad/mainframe.cpp:1678
 msgid "Insert an object from the clipboard."
 msgstr "Inserisce l'oggetto dagli appunti."
 
-#: src/rad/mainframe.cpp:1680
+#: src/rad/mainframe.cpp:1679
 msgid "Delete"
 msgstr "Elimina"
 
-#: src/rad/mainframe.cpp:1680
+#: src/rad/mainframe.cpp:1679
 msgid "Delete (Ctrl+D)"
 msgstr "Elimina (Ctrl+D)"
 
-#: src/rad/mainframe.cpp:1680
+#: src/rad/mainframe.cpp:1679
 msgid "Remove the selected object."
 msgstr "Elimina l'oggetto selezionato."
 
-#: src/rad/mainframe.cpp:1682
+#: src/rad/mainframe.cpp:1681
 msgid "Generate Code (F8)"
 msgstr "Genera Codice (F8)"
 
-#: src/rad/mainframe.cpp:1682
+#: src/rad/mainframe.cpp:1681
 msgid "Create code from the current project."
 msgstr "Crea il codice dal progetto corrente."
 
-#: src/rad/mainframe.cpp:1684
+#: src/rad/mainframe.cpp:1683
 msgid "Align Left"
 msgstr "Allinea Sinistra"
 
-#: src/rad/mainframe.cpp:1684
+#: src/rad/mainframe.cpp:1683
 msgid "The item will be aligned to the left of the space alotted to it by the sizer."
 msgstr "L'oggetto verrà allineato a sinistra nello spazio assegnato dal sizer."
 
-#: src/rad/mainframe.cpp:1685
+#: src/rad/mainframe.cpp:1684
 msgid "Align Center Horizontally"
 msgstr "Allinea Centrato Orizzontalmente"
 
-#: src/rad/mainframe.cpp:1685
+#: src/rad/mainframe.cpp:1684
 msgid "The item will be centered horizontally in the space alotted to it by the sizer."
 msgstr "L'oggetto verrà centrato orizzontalmente nello spazio assegnato dal sizer."
 
-#: src/rad/mainframe.cpp:1686
+#: src/rad/mainframe.cpp:1685
 msgid "Align Right"
 msgstr "Allinea Destra"
 
-#: src/rad/mainframe.cpp:1686
+#: src/rad/mainframe.cpp:1685
 msgid "The item will be aligned to the right of the space alotted to it by the sizer."
 msgstr "L'oggetto verrà allineato a destra nello spazio assegnato dal sizer."
 
-#: src/rad/mainframe.cpp:1688
+#: src/rad/mainframe.cpp:1687
 msgid "Align Top"
 msgstr "Allinea Sopra"
 
-#: src/rad/mainframe.cpp:1688
+#: src/rad/mainframe.cpp:1687
 msgid "The item will be aligned to the top of the space alotted to it by the sizer."
 msgstr "L'oggetto verrà allineato in alto nello spazio assegnato dal sizer."
 
-#: src/rad/mainframe.cpp:1689
+#: src/rad/mainframe.cpp:1688
 msgid "Align Center Vertically"
 msgstr "Allinea Centrato Verticalmente"
 
-#: src/rad/mainframe.cpp:1689
+#: src/rad/mainframe.cpp:1688
 msgid "The item will be centered vertically within space alotted to it by the sizer."
 msgstr "L'oggetto verrà centrato verticalmente nello spazio assegnato dal sizer."
 
-#: src/rad/mainframe.cpp:1690
+#: src/rad/mainframe.cpp:1689
 msgid "Align Bottom"
 msgstr "Allinea Sotto"
 
-#: src/rad/mainframe.cpp:1690
+#: src/rad/mainframe.cpp:1689
 msgid "The item will be aligned to the bottom of the space alotted to it by the sizer."
 msgstr "L'oggetto verrà allineato in basso nello spazio assegnato dal sizer."
 
-#: src/rad/mainframe.cpp:1692
+#: src/rad/mainframe.cpp:1691
 msgid "Expand (Alt+W)"
 msgstr "Espandi (Alt+W)"
 
-#: src/rad/mainframe.cpp:1692
+#: src/rad/mainframe.cpp:1691
 msgid "The item will be expanded to fill the space assigned to the item."
 msgstr "L'oggetto verrà espanso nel proprio spazio assegnato."
 
-#: src/rad/mainframe.cpp:1693
+#: src/rad/mainframe.cpp:1692
 msgid "Stretch (Alt+S)"
 msgstr "Allunga (Alt+S)"
 
-#: src/rad/mainframe.cpp:1693
+#: src/rad/mainframe.cpp:1692
 msgid "The item will grow and shrink with the sizer."
 msgstr "L'oggetto adatterà la propria dimensione in base al sizer."
 
-#: src/rad/mainframe.cpp:1695
+#: src/rad/mainframe.cpp:1694
 msgid "Left Border"
 msgstr "Bordo Sinistro"
 
-#: src/rad/mainframe.cpp:1695
+#: src/rad/mainframe.cpp:1694
 msgid "A border will be added on the left side of the item."
 msgstr "Verrà aggiunto un bordo alla sinistra dell'oggetto."
 
-#: src/rad/mainframe.cpp:1696
+#: src/rad/mainframe.cpp:1695
 msgid "Right Border"
 msgstr "Bordo Destro"
 
-#: src/rad/mainframe.cpp:1696
+#: src/rad/mainframe.cpp:1695
 msgid "A border will be added on the right side of the item."
 msgstr "Verrà aggiunto un bordo alla destra dell'oggetto."
 
-#: src/rad/mainframe.cpp:1697
+#: src/rad/mainframe.cpp:1696
 msgid "Top Border"
 msgstr "Bordo Sopra"
 
-#: src/rad/mainframe.cpp:1697
+#: src/rad/mainframe.cpp:1696
 msgid "A border will be added on the top of the item."
 msgstr "Verrà aggiunto un bordo sul lato superiore dell'oggetto."
 
-#: src/rad/mainframe.cpp:1698
+#: src/rad/mainframe.cpp:1697
 msgid "Bottom Border"
 msgstr "Bordo Sotto"
 
-#: src/rad/mainframe.cpp:1698
+#: src/rad/mainframe.cpp:1697
 msgid "A border will be added on the bottom of the item."
 msgstr "Verrà aggiunto un bordo nel lato inferiore dell'oggetto."
 
@@ -1169,7 +1169,7 @@ msgid "Developed by:"
 msgstr "Sviluppato da:"
 
 #: src/rad/about.cpp:102
-#: src/rad/about.cpp:129
+#: src/rad/about.cpp:132
 msgid "&OK"
 msgstr "&Ok"
 
@@ -1447,127 +1447,6 @@ msgstr "Non Trovato!"
 msgid "This object cannot be pasted because it is from a newer version of wxFormBuilder"
 msgstr "Questo oggetto non può essere incollato perché appartiene a una versione di wxFormBuilder più recente"
 
-#: src/rad/inspector/objinspect29.cpp:268
-#: src/rad/inspector/objinspect.cpp:497
-msgid "Path to the image file."
-msgstr "Percorso al file immagine."
-
-#: src/rad/inspector/objinspect29.cpp:420
-#: src/rad/inspector/objinspect.cpp:649
-msgid "wxArtID unique identifier of the bitmap. IDs with prefix 'gtk-' are available under wxGTK only."
-msgstr "Identificativo univoco dell'immagine. Gli ID con prefisso 'gtk-' sono disponibili solamente per wxGTK."
-
-#: src/rad/inspector/objinspect29.cpp:436
-#: src/rad/inspector/objinspect.cpp:665
-msgid "wxArtClient identifier of the client (i.e. who is asking for the bitmap)."
-msgstr "Identificativo del client richiedente (il tipo di controllo nel quale verrà utilizzata l'immagine)."
-
-#: src/rad/inspector/objinspect29.cpp:442
-#: src/rad/inspector/objinspect.cpp:671
-msgid "Windows Only. Name of the resource in the .rc file."
-msgstr "Solo per Windows. Nome della risorsa contenuta in un file .rc."
-
-#: src/rad/inspector/objinspect29.cpp:447
-#: src/rad/inspector/objinspect.cpp:676
-msgid "Load From File:\n"
-msgstr "Carica Da File:\n"
-
-#: src/rad/inspector/objinspect29.cpp:448
-#: src/rad/inspector/objinspect.cpp:677
-msgid ""
-"Load the image from a file on disk.\n"
-"\n"
-msgstr ""
-"Carica l'immagine da un file su disco.\n"
-"\n"
-
-#: src/rad/inspector/objinspect29.cpp:449
-#: src/rad/inspector/objinspect.cpp:678
-msgid "Load From Embedded File:\n"
-msgstr "Carica Da File Incorporato:\n"
-
-#: src/rad/inspector/objinspect29.cpp:450
-#: src/rad/inspector/objinspect.cpp:679
-msgid ""
-"C++ Only. Embed the image file in the exe and load it.\n"
-"For other languages, behaves like \"Load From File\".\n"
-"\n"
-msgstr ""
-"Solo per C++. Incorpora il file immagine all'interno dell'eseguibile caricandolo.\n"
-"Per gli altri linguaggi si comporta come \"Carica Da File\".\n"
-"\n"
-
-#: src/rad/inspector/objinspect29.cpp:451
-#: src/rad/inspector/objinspect.cpp:680
-msgid "Load From Resource:\n"
-msgstr "Carica Da Risorsa:\n"
-
-#: src/rad/inspector/objinspect29.cpp:452
-#: src/rad/inspector/objinspect.cpp:681
-msgid ""
-"Windows Only. Load the image from a BITMAP resource in a .rc file\n"
-"\n"
-msgstr ""
-"Solo per Windows. Carica l'immagine da una risorsa BITMAP contenuta in un file .rc.\n"
-"\n"
-
-#: src/rad/inspector/objinspect29.cpp:453
-#: src/rad/inspector/objinspect.cpp:682
-msgid "Load From Icon Resource:\n"
-msgstr "Carica Da Risorsa Icona:\n"
-
-#: src/rad/inspector/objinspect29.cpp:454
-#: src/rad/inspector/objinspect.cpp:683
-msgid ""
-"Windows Only. Load the image from a ICON resource in a .rc file\n"
-"\n"
-msgstr ""
-"Solo per Windows. Carica l'immagine da una risorsa ICON contenuta in un file .rc.\n"
-"\n"
-
-#: src/rad/inspector/objinspect29.cpp:455
-#: src/rad/inspector/objinspect.cpp:684
-msgid "Load From Art Provider:\n"
-msgstr "Carica Da Art Provider:\n"
-
-#: src/rad/inspector/objinspect29.cpp:456
-#: src/rad/inspector/objinspect.cpp:685
-msgid ""
-"Query registered providers for bitmap with given ID.\n"
-"\n"
-msgstr ""
-"Interroga i provider registrati per un bitmap di un dato ID.\n"
-"\n"
-
-#: src/rad/inspector/objinspect29.cpp:463
-#: src/rad/inspector/objinspect.cpp:692
-msgid "The size of the icon to use from a ICON resource with multiple icons in it."
-msgstr "La grandezza dell'icona da usare da una risorsa ICON contenente multiple icone."
-
-#: src/rad/inspector/objinspect29.cpp:611
-#: src/rad/inspector/objinspect29.cpp:614
-#: src/rad/inspector/objinspect.cpp:826
-#: src/rad/inspector/objinspect.cpp:829
-msgid "Properties"
-msgstr "Proprietà"
-
-#: src/rad/inspector/objinspect29.cpp:612
-#: src/rad/inspector/objinspect29.cpp:615
-#: src/rad/inspector/objinspect.cpp:827
-#: src/rad/inspector/objinspect.cpp:830
-msgid "Events"
-msgstr "Eventi"
-
-#: src/rad/inspector/objinspect29.cpp:947
-#: src/rad/inspector/objinspect.cpp:1166
-msgid "Property type Unknown"
-msgstr "Tipo Proprietà Sconosciuto"
-
-#: src/rad/inspector/objinspect29.cpp:1160
-#: src/rad/inspector/objinspect.cpp:1391
-msgid "You have to remove all child widgets first."
-msgstr "Devi prima rimuovere tutti i controlli inseriti."
-
 #: src/rad/inspector/objinspect.cpp:110
 msgid "Slider editor can only be used with wxFloatProperty or derivative."
 msgstr "Lo slider editor può essere utilizzato solamente da wxFloatProperty o derivata."
@@ -1579,6 +1458,106 @@ msgstr "Larghezza"
 #: src/rad/inspector/objinspect.cpp:326
 msgid "Height"
 msgstr "Altezza"
+
+#: src/rad/inspector/objinspect.cpp:497
+msgid "Path to the image file."
+msgstr "Percorso al file immagine."
+
+#: src/rad/inspector/objinspect.cpp:649
+msgid "wxArtID unique identifier of the bitmap. IDs with prefix 'gtk-' are available under wxGTK only."
+msgstr "Identificativo univoco dell'immagine. Gli ID con prefisso 'gtk-' sono disponibili solamente per wxGTK."
+
+#: src/rad/inspector/objinspect.cpp:665
+msgid "wxArtClient identifier of the client (i.e. who is asking for the bitmap)."
+msgstr "Identificativo del client richiedente (il tipo di controllo nel quale verrà utilizzata l'immagine)."
+
+#: src/rad/inspector/objinspect.cpp:671
+msgid "Windows Only. Name of the resource in the .rc file."
+msgstr "Solo per Windows. Nome della risorsa contenuta in un file .rc."
+
+#: src/rad/inspector/objinspect.cpp:676
+msgid "Load From File:\n"
+msgstr "Carica Da File:\n"
+
+#: src/rad/inspector/objinspect.cpp:677
+msgid ""
+"Load the image from a file on disk.\n"
+"\n"
+msgstr ""
+"Carica l'immagine da un file su disco.\n"
+"\n"
+
+#: src/rad/inspector/objinspect.cpp:678
+msgid "Load From Embedded File:\n"
+msgstr "Carica Da File Incorporato:\n"
+
+#: src/rad/inspector/objinspect.cpp:679
+msgid ""
+"C++ Only. Embed the image file in the exe and load it.\n"
+"For other languages, behaves like \"Load From File\".\n"
+"\n"
+msgstr ""
+"Solo per C++. Incorpora il file immagine all'interno dell'eseguibile caricandolo.\n"
+"Per gli altri linguaggi si comporta come \"Carica Da File\".\n"
+"\n"
+
+#: src/rad/inspector/objinspect.cpp:680
+msgid "Load From Resource:\n"
+msgstr "Carica Da Risorsa:\n"
+
+#: src/rad/inspector/objinspect.cpp:681
+msgid ""
+"Windows Only. Load the image from a BITMAP resource in a .rc file\n"
+"\n"
+msgstr ""
+"Solo per Windows. Carica l'immagine da una risorsa BITMAP contenuta in un file .rc.\n"
+"\n"
+
+#: src/rad/inspector/objinspect.cpp:682
+msgid "Load From Icon Resource:\n"
+msgstr "Carica Da Risorsa Icona:\n"
+
+#: src/rad/inspector/objinspect.cpp:683
+msgid ""
+"Windows Only. Load the image from a ICON resource in a .rc file\n"
+"\n"
+msgstr ""
+"Solo per Windows. Carica l'immagine da una risorsa ICON contenuta in un file .rc.\n"
+"\n"
+
+#: src/rad/inspector/objinspect.cpp:684
+msgid "Load From Art Provider:\n"
+msgstr "Carica Da Art Provider:\n"
+
+#: src/rad/inspector/objinspect.cpp:685
+msgid ""
+"Query registered providers for bitmap with given ID.\n"
+"\n"
+msgstr ""
+"Interroga i provider registrati per un bitmap di un dato ID.\n"
+"\n"
+
+#: src/rad/inspector/objinspect.cpp:692
+msgid "The size of the icon to use from a ICON resource with multiple icons in it."
+msgstr "La grandezza dell'icona da usare da una risorsa ICON contenente multiple icone."
+
+#: src/rad/inspector/objinspect.cpp:826
+#: src/rad/inspector/objinspect.cpp:829
+msgid "Properties"
+msgstr "Proprietà"
+
+#: src/rad/inspector/objinspect.cpp:827
+#: src/rad/inspector/objinspect.cpp:830
+msgid "Events"
+msgstr "Eventi"
+
+#: src/rad/inspector/objinspect.cpp:1166
+msgid "Property type Unknown"
+msgstr "Tipo Proprietà Sconosciuto"
+
+#: src/rad/inspector/objinspect.cpp:1391
+msgid "You have to remove all child widgets first."
+msgstr "Devi prima rimuovere tutti i controlli inseriti."
 
 #: src/rad/designer/visualeditor.cpp:169
 msgid "wxObject was NULL!"
