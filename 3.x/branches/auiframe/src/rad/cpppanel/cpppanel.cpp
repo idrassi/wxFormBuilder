@@ -53,11 +53,11 @@
 
 #ifdef WXFB_USE_AUIBOOK
     #include <wx/aui/auibook.h>
-BEGIN_EVENT_TABLE ( CppPanel,  wxAuiNotebook )
 #else
     #include <wx/wxFlatNotebook/wxFlatNotebook.h>
-BEGIN_EVENT_TABLE ( CppPanel,  wxPanel )
 #endif
+
+BEGIN_EVENT_TABLE ( CppPanel,  wxPanel )
 	EVT_FB_CODE_GENERATION( CppPanel::OnCodeGeneration )
 	EVT_FB_PROJECT_REFRESH( CppPanel::OnProjectRefresh )
 	EVT_FB_PROPERTY_MODIFIED( CppPanel::OnPropertyModified )
@@ -70,26 +70,25 @@ BEGIN_EVENT_TABLE ( CppPanel,  wxPanel )
 	EVT_FIND_NEXT( wxID_ANY, CppPanel::OnFind )
 END_EVENT_TABLE()
 
-#ifdef WXFB_USE_AUIBOOK
-CppPanel::CppPanel( wxWindow * parent, wxWindowID id,
-					const wxPoint& pos, const wxSize& size, long style )
-		: wxAuiNotebook( parent, id, pos, size, style )
-#else
 CppPanel::CppPanel( wxWindow *parent, int id )
 :
-wxPanel( parent, id ),
-m_icons( new wxFlatNotebookImageList )
+wxPanel( parent, id )
+#ifndef WXFB_USE_AUIBOOK
+, m_icons( new wxFlatNotebookImageList )
 #endif
 {
 	AppData()->AddHandler( this->GetEventHandler() );
 
-#ifdef WXFB_USE_AUIBOOK
-	m_cppPanel = new CodeEditor( this, -1 );
-#else
 	wxBoxSizer *top_sizer = new wxBoxSizer( wxVERTICAL );
  
 	long nbStyle;
 	wxConfigBase* config = wxConfigBase::Get();
+
+#ifdef WXFB_USE_AUIBOOK
+	config->Read( wxT("/mainframe/editor/cpp/auinbook_style"), &nbStyle, wxAUI_NB_WINDOWLIST_BUTTON );
+
+	m_notebook = new wxAuiNotebook( this, -1, wxDefaultPosition, wxDefaultSize, nbStyle );
+#else
 	config->Read( wxT("/mainframe/editor/cpp/notebook_style"), &nbStyle, wxFNB_NO_X_BUTTON | wxFNB_NO_NAV_BUTTONS | wxFNB_NODRAG | wxFNB_FF2 | wxFNB_CUSTOM_DLG );
 
 	m_notebook = new wxFlatNotebook( this, -1, wxDefaultPosition, wxDefaultSize, FNB_STYLE_OVERRIDES( nbStyle ) );
@@ -100,28 +99,27 @@ m_icons( new wxFlatNotebookImageList )
 	m_icons->Add( AppBitmaps::GetBitmap( wxT("h"), 16 ) );
 
 	m_notebook->SetImageList( m_icons );
+#endif
 
 	m_cppPanel = new CodeEditor( m_notebook, -1 );
-#endif
 
 	InitStyledTextCtrl( m_cppPanel->GetTextCtrl() );
 
-#ifdef WXFB_USE_AUIBOOK
-    AddPage( m_cppPanel, wxT( "cpp" ), false, AppBitmaps::GetBitmap( wxT("c++"), 16 ) );
-
-	m_hPanel = new CodeEditor( this, -1 );
-#else
 	m_hPanel = new CodeEditor( m_notebook, -1 );
+
+#ifdef WXFB_USE_AUIBOOK
+    m_notebook->AddPage( m_cppPanel, wxT( "cpp" ), false, AppBitmaps::GetBitmap( wxT("c++"), 16 ) );
+#else
 	m_notebook->AddPage( m_cppPanel, wxT( "cpp" ), false, 0 );
 #endif
 
 	InitStyledTextCtrl( m_hPanel->GetTextCtrl() );
 
 #ifdef WXFB_USE_AUIBOOK
-	AddPage( m_hPanel, wxT( "h" ), false, AppBitmaps::GetBitmap( wxT("h"), 16 ) );
+	m_notebook->AddPage( m_hPanel, wxT( "h" ), false, AppBitmaps::GetBitmap( wxT("h"), 16 ) );
 #else
 	m_notebook->AddPage( m_hPanel, wxT( "h" ), false, 1 );
-
+#endif
 	top_sizer->Add( m_notebook, 1, wxEXPAND, 0 );
 
 	SetSizer( top_sizer );
@@ -129,7 +127,7 @@ m_icons( new wxFlatNotebookImageList )
 	//top_sizer->SetSizeHints( this );
 	top_sizer->Fit( this );
 	top_sizer->Layout();
-#endif
+
 	m_hCW = PTCCodeWriter( new TCCodeWriter( m_hPanel->GetTextCtrl() ) );
 	m_cppCW = PTCCodeWriter( new TCCodeWriter( m_cppPanel->GetTextCtrl() ) );
 }
@@ -144,7 +142,7 @@ CppPanel::~CppPanel()
 	wxConfigBase *config = wxConfigBase::Get();
 
 #ifdef WXFB_USE_AUIBOOK
-	config->Write( wxT("/mainframe/editor/cpp/auinbook_style"), this->GetWindowStyleFlag() );
+	config->Write( wxT("/mainframe/editor/cpp/auinbook_style"), m_notebook->GetWindowStyleFlag() );
 #else
 	config->Write( wxT("/mainframe/editor/cpp/notebook_style"), m_notebook->GetWindowStyleFlag() );
 #endif
