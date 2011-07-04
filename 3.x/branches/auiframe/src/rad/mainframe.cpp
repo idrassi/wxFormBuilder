@@ -949,7 +949,7 @@ void MainFrame::UpdateLayoutTools()
 
 	bool gotLayoutSettings = AppData()->GetLayoutSettings( AppData()->GetSelectedObject(), &flag, &option, &border, &orient );
 #ifdef WXFB_USE_AUITOOLBAR
-    wxAuiToolBar* m_toolbar = this->GetToolBar();
+    wxAuiToolBar* m_toolbar = GetToolBar();
 #else
 	wxToolBar* m_toolbar = GetToolBar();
 #endif
@@ -996,6 +996,8 @@ void MainFrame::UpdateLayoutTools()
 	m_toolbar->ToggleTool( ID_BORDER_RIGHT,    ( ( flag & wxRIGHT ) != 0 ) && gotLayoutSettings );
 	m_toolbar->ToggleTool( ID_BORDER_LEFT,     ( ( flag & wxLEFT ) != 0 ) && gotLayoutSettings );
 	m_toolbar->ToggleTool( ID_BORDER_BOTTOM,   ( ( flag & wxBOTTOM ) != 0 ) && gotLayoutSettings );
+
+	m_toolbar->Refresh();
 }
 
 void MainFrame::UpdateFrame()
@@ -1665,7 +1667,7 @@ wxAuiToolBar * MainFrame::RecreateFBAuiToolBar()
   item.SetBitmap( AppBitmaps::GetBitmap( wxT("generate"), 16 ) );
   append_items.Add( item );
 */
-  m_toolbar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_OVERFLOW );
+  m_toolbar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 #else
 wxToolBar * MainFrame::CreateFBToolBar()
 {
@@ -1711,34 +1713,15 @@ wxToolBar * MainFrame::CreateFBToolBar()
 
 wxWindow * MainFrame::CreateDesignerWindow( wxWindow *parent )
 {
-	long editStyle;
+	long nbStyle;
 	wxConfigBase* config = wxConfigBase::Get();
 
 #ifdef WXFB_USE_AUIBOOK
-	long cppStyle;
-	config->Read( wxT("/mainframe/editor/auinbook_style"), &editStyle, wxAUI_NB_TAB_MOVE | wxAUI_NB_WINDOWLIST_BUTTON | wxAUI_NB_SCROLL_BUTTONS );
-	config->Read( wxT("/mainframe/editor/cpp/auinbook_style"), &cppStyle, wxAUI_NB_WINDOWLIST_BUTTON );
-
-	m_notebook   = new wxAuiNotebook( parent, ID_EDITOR_FNB, wxDefaultPosition, wxDefaultSize, editStyle );
-	m_visualEdit = new VisualEditor( m_notebook );
-	m_cpp        = new CppPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, cppStyle );
-	m_python     = new PythonPanel( m_notebook, wxID_ANY );
-	m_xrc        = new XrcPanel( m_notebook, wxID_ANY );
-
-	m_notebook->AddPage( m_visualEdit, wxT("Designer"), false, AppBitmaps::GetBitmap( wxT("designer"), 16 ) );
-	m_notebook->AddPage( m_cpp,        wxT("C++"),      false, AppBitmaps::GetBitmap( wxT("cpp"),      16 ) );
-	m_notebook->AddPage( m_python,     wxT("Python"),   false, AppBitmaps::GetBitmap( wxT("py"),       16 ) );
-	m_notebook->AddPage( m_xrc,        wxT("XRC"),      false, AppBitmaps::GetBitmap( wxT("xrc"),      16 ) );
+	config->Read( wxT("/mainframe/editor/auinbook_style"), &nbStyle, wxAUI_NB_TAB_MOVE | wxAUI_NB_WINDOWLIST_BUTTON | wxAUI_NB_SCROLL_BUTTONS );
+	m_notebook   = new wxAuiNotebook( parent, ID_EDITOR_FNB, wxDefaultPosition, wxDefaultSize, nbStyle );
 #else
-	config->Read( wxT("/mainframe/editor/notebook_style"), &editStyle, wxFNB_BOTTOM | wxFNB_NO_X_BUTTON | wxFNB_NO_NAV_BUTTONS | wxFNB_NODRAG  | wxFNB_FF2 | wxFNB_CUSTOM_DLG );
-
-	m_notebook   = new wxFlatNotebook( parent, ID_EDITOR_FNB, wxDefaultPosition, wxDefaultSize, FNB_STYLE_OVERRIDES( editStyle ) );
-	m_visualEdit = new VisualEditor( m_notebook );
-	m_cpp        = new CppPanel( m_notebook, wxID_ANY );
-	m_python     = new PythonPanel( m_notebook, wxID_ANY );
-	m_xrc        = new XrcPanel( m_notebook, wxID_ANY );
-
-	m_notebook->SetCustomizeOptions( wxFNB_CUSTOM_TAB_LOOK | wxFNB_CUSTOM_ORIENTATION | wxFNB_CUSTOM_LOCAL_DRAG );
+	config->Read( wxT("/mainframe/editor/notebook_style"), &nbStyle, wxFNB_BOTTOM | wxFNB_NO_X_BUTTON | wxFNB_NO_NAV_BUTTONS | wxFNB_NODRAG  | wxFNB_FF2 | wxFNB_CUSTOM_DLG );
+	m_notebook   = new wxFlatNotebook( parent, ID_EDITOR_FNB, wxDefaultPosition, wxDefaultSize, FNB_STYLE_OVERRIDES( nbStyle ) );
 
 	// Set notebook icons
 	m_icons.Add( AppBitmaps::GetBitmap( wxT("designer"), 16 ) );
@@ -1747,6 +1730,20 @@ wxWindow * MainFrame::CreateDesignerWindow( wxWindow *parent )
 	m_icons.Add( AppBitmaps::GetBitmap( wxT("xrc"),      16 ) );
 	m_notebook->SetImageList( &m_icons );
 
+	m_notebook->SetCustomizeOptions( wxFNB_CUSTOM_TAB_LOOK | wxFNB_CUSTOM_ORIENTATION | wxFNB_CUSTOM_LOCAL_DRAG );
+#endif
+
+	m_visualEdit = new VisualEditor( m_notebook );
+	m_cpp        = new CppPanel( m_notebook, wxID_ANY );
+	m_python     = new PythonPanel( m_notebook, wxID_ANY );
+	m_xrc        = new XrcPanel( m_notebook, wxID_ANY );
+
+#ifdef WXFB_USE_AUIBOOK
+	m_notebook->AddPage( m_visualEdit, wxT("Designer"), false, AppBitmaps::GetBitmap( wxT("designer"), 16 ) );
+	m_notebook->AddPage( m_cpp,        wxT("C++"),      false, AppBitmaps::GetBitmap( wxT("cpp"),      16 ) );
+	m_notebook->AddPage( m_python,     wxT("Python"),   false, AppBitmaps::GetBitmap( wxT("py"),       16 ) );
+	m_notebook->AddPage( m_xrc,        wxT("XRC"),      false, AppBitmaps::GetBitmap( wxT("xrc"),      16 ) );
+#else
 	m_notebook->AddPage( m_visualEdit, wxT("Designer"), false, 0 );
 	m_notebook->AddPage( m_cpp,        wxT("C++"),      false, 1 );
 	m_notebook->AddPage( m_python,     wxT("Python"),   false, 2 );
@@ -1760,17 +1757,10 @@ wxWindow * MainFrame::CreateDesignerWindow( wxWindow *parent )
 
 wxWindow * MainFrame::CreateComponentPalette ( wxWindow *parent )
 {
-#ifdef WXFB_USE_AUIBOOK
-	long nbStyle;
-	wxConfigBase *config = wxConfigBase::Get();
-	config->Read( wxT("/palette/auinbook_style"), &nbStyle, wxAUI_NB_TAB_MOVE | wxAUI_NB_WINDOWLIST_BUTTON );
-
-	m_palette = new wxFbPalette( parent, wxID_ANY, nbStyle );
-#else
 	// la paleta de componentes, no es un observador propiamente dicho, ya
 	// que no responde ante los eventos de la aplicación
 	m_palette = new wxFbPalette( parent, -1 );
-#endif
+
 	m_palette->Create();
 	//m_palette->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) );
 

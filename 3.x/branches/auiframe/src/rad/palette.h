@@ -37,6 +37,7 @@
 #ifdef WXFB_USE_AUITOOLBAR
     #include <wx/aui/auibar.h>
 #else
+    #include <wx/toolbar.h>
     #include <wx/spinbutt.h>
 #endif
 
@@ -50,16 +51,13 @@ typedef std::vector<wxAuiToolBar*> ToolbarVector;
 typedef std::vector<wxToolBar*> ToolbarVector;
 #endif
 
-class wxFbPalette : public
-#ifdef WXFB_USE_AUIBOOK
-  wxAuiNotebook
-#else
-  wxPanel
-#endif
+class wxFbPalette : public wxPanel
 {
 private:
 
-#ifndef WXFB_USE_AUIBOOK
+#ifdef WXFB_USE_AUIBOOK
+  wxAuiNotebook *m_notebook;
+#else
   wxFlatNotebook *m_notebook;
   wxFlatNotebookImageList m_icons;
 #endif
@@ -70,23 +68,18 @@ private:
 #ifdef WXFB_USE_AUITOOLBAR
   void PopulateToolbar( PObjectPackage pkg, wxAuiToolBar *toolbar );
 #else
-  std::vector<int> m_posVector;
+  std::vector<int> m_posVector; // Used by wxSpinCtrl, not needed in auibar
   void PopulateToolbar( PObjectPackage pkg, wxToolBar *toolbar );
 #endif
 
-#ifdef WXFB_USE_AUIBOOK
-  void arrangeTabOrder( std::vector< wxWindow* > &pages ); // TODO: set the wx version when it will be fixed
+#if 0
+  void arrangeTabOrder( std::vector< wxWindow* > &pages ); // ifdef WXFB_USE_AUIBOOK TODO: set the wx version when it will be fixed
 #endif
 
   DECLARE_EVENT_TABLE()
 
 public:
-#ifdef WXFB_USE_AUIBOOK
-  wxFbPalette( wxWindow *parent, int id = wxID_ANY,
-               long style = wxAUI_NB_TAB_MOVE | wxAUI_NB_WINDOWLIST_BUTTON );
-#else
   wxFbPalette(wxWindow *parent,int id);
-#endif
   ~wxFbPalette();
 
   /**

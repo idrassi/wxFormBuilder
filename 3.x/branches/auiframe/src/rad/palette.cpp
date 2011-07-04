@@ -53,11 +53,7 @@
 
 wxWindowID wxFbPalette::nextId = wxID_HIGHEST + 1000;
 
-#ifdef WXFB_USE_AUIBOOK
-BEGIN_EVENT_TABLE( wxFbPalette, wxAuiNotebook )
-#else
 BEGIN_EVENT_TABLE( wxFbPalette, wxPanel )
-#endif
 	#ifdef __WXMAC__
 		EVT_BUTTON( -1, wxFbPalette::OnButtonClick )
 	#else
@@ -69,15 +65,10 @@ BEGIN_EVENT_TABLE( wxFbPalette, wxPanel )
     #endif
 END_EVENT_TABLE()
 
-#ifdef WXFB_USE_AUIBOOK
-wxFbPalette::wxFbPalette( wxWindow *parent, int id, long style )
-			: wxAuiNotebook( parent, id, wxDefaultPosition, wxDefaultSize, style )
-#else
-wxFbPalette::wxFbPalette( wxWindow *parent, int id )
-			: wxPanel( parent, id ), m_notebook( NULL )
-#endif
+wxFbPalette::wxFbPalette( wxWindow *parent, int id ) : wxPanel( parent, id ), m_notebook( NULL )
 {
 }
+
 #ifdef WXFB_USE_AUITOOLBAR
 void wxFbPalette::PopulateToolbar( PObjectPackage pkg, wxAuiToolBar *toolbar )
 #else
@@ -122,44 +113,46 @@ void wxFbPalette::PopulateToolbar( PObjectPackage pkg, wxToolBar *toolbar )
 
 void wxFbPalette::Create()
 {
-#ifndef WXFB_USE_AUIBOOK
 	wxBoxSizer *top_sizer = new wxBoxSizer( wxVERTICAL );
 
 	long nbStyle;
 	wxConfigBase* config = wxConfigBase::Get();
+
+#ifdef WXFB_USE_AUIBOOK
+	config->Read( wxT("/palette/auinbook_style"), &nbStyle, wxAUI_NB_TAB_MOVE | wxAUI_NB_WINDOWLIST_BUTTON );
+
+	m_notebook = new wxAuiNotebook( this, -1, wxDefaultPosition, wxDefaultSize, nbStyle );
+#else
 	config->Read( wxT( "/palette/notebook_style" ), &nbStyle, wxFNB_NO_X_BUTTON | wxFNB_NO_NAV_BUTTONS | DRAG_OPTION | wxFNB_DROPDOWN_TABS_LIST  | wxFNB_VC8 | wxFNB_CUSTOM_DLG );
 
 	m_notebook = new wxFlatNotebook( this, -1, wxDefaultPosition, wxDefaultSize, FNB_STYLE_OVERRIDES( nbStyle ) );
 	m_notebook->SetCustomizeOptions( wxFNB_CUSTOM_TAB_LOOK | wxFNB_CUSTOM_ORIENTATION | wxFNB_CUSTOM_LOCAL_DRAG );
 #endif
+
 	unsigned int pkg_count = AppData()->GetPackageCount();
 
 	Debug::Print( wxT( "[Palette] Pages %d" ), pkg_count );
 
-#ifndef WXFB_USE_AUIBOOK
 	// Populate icon vector
 	for ( unsigned int j = 0; j < pkg_count;j++ )
 	{
 		PObjectPackage pkg = AppData()->GetPackage( j );
 
+#ifndef WXFB_USE_AUIBOOK
 		m_icons.Add( pkg->GetPackageIcon() );
+#endif
 	}
 
+#ifndef WXFB_USE_AUIBOOK
 	// Add icons to notebook
 	m_notebook->SetImageList( &m_icons );
 #endif
+
 	for ( unsigned int i = 0; i < pkg_count;i++ )
 	{
 		PObjectPackage pkg = AppData()->GetPackage( i );
 		wxString pkg_name = pkg->GetPackageName();
 
-#ifdef WXFB_USE_AUITOOLBAR
-	#ifdef WXFB_USE_AUIBOOK
-		wxAuiToolBar *toolbar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_OVERFLOW );
-	#else
-		wxAuiToolBar *toolbar = new wxAuiToolBar( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_OVERFLOW );
-	#endif
-#else
 		wxPanel *panel = new wxPanel( m_notebook, -1 );
 		//panel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) );
 		wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
@@ -168,6 +161,9 @@ void wxFbPalette::Create()
 		//tbPanel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) );
 		wxBoxSizer *tbSizer = new wxBoxSizer( wxHORIZONTAL );
 
+#ifdef WXFB_USE_AUITOOLBAR
+		wxAuiToolBar *toolbar = new wxAuiToolBar( tbPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_OVERFLOW );
+#else
 		wxPanel *sbPanel = new wxPanel( panel, -1 );
 		//sbPanel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) );
 		wxBoxSizer *sbSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -180,40 +176,34 @@ void wxFbPalette::Create()
 		PopulateToolbar( pkg, toolbar );
 		m_tv.push_back( toolbar );
 
-#ifdef WXFB_USE_AUIBOOK
-		AddPage( toolbar, pkg_name, false, pkg->GetPackageIcon() );
-#endif
-
-#ifndef WXFB_USE_AUITOOLBAR
 		tbSizer->Add( toolbar, 1, wxEXPAND | wxALIGN_CENTER_VERTICAL );
 		tbPanel->SetSizer( tbSizer );
 
+#ifndef WXFB_USE_AUITOOLBAR
 		wxSpinButton *sb = new wxSpinButton( sbPanel, -1, wxDefaultPosition, wxDefaultSize, wxSP_HORIZONTAL );
 		sb->SetRange( 0, ( int )pkg->GetObjectCount() - 1 );
 		sb->SetValue( 0 );
 		m_posVector.push_back( 0 );
 		sbSizer->Add( sb, 0, wxEXPAND );//wxALL | wxALIGN_TOP, 0);
 		sbPanel->SetSizer( sbSizer );
-
+#endif
 		sizer->Add( tbPanel, 1, wxEXPAND, 0 );
-		sizer->Add( sbPanel, 0, wxEXPAND, 0 );
 
+#ifndef WXFB_USE_AUITOOLBAR
+		sizer->Add( sbPanel, 0, wxEXPAND, 0 );
+#endif
 		panel->SetAutoLayout( true );
 		panel->SetSizer( sizer );
 
 		sizer->Fit( panel );
 		sizer->SetSizeHints( panel );
-#endif
 
-#ifndef WXFB_USE_AUIBOOK
-	#ifndef WXFB_USE_AUITOOLBAR
+#ifdef WXFB_USE_AUIBOOK
+		m_notebook->AddPage( panel, pkg_name, false, pkg->GetPackageIcon() );
+#else
 		m_notebook->AddPage( panel, pkg_name, false, i );
-	#else
-		m_notebook->AddPage( toolbar, pkg_name, false, i );
-	#endif
 #endif
 	}
-#ifndef WXFB_USE_AUIBOOK
 	//Title *title = new Title( this, wxT("Component Palette") );
 	//top_sizer->Add(title,0,wxEXPAND,0);
 	top_sizer->Add( m_notebook, 1, wxEXPAND, 0 );
@@ -221,7 +211,6 @@ void wxFbPalette::Create()
 	SetSizer( top_sizer );
 	top_sizer->Fit( this );
 	top_sizer->SetSizeHints( this );
-#endif
 }
 #ifndef WXFB_USE_AUITOOLBAR
 void wxFbPalette::OnSpinUp( wxSpinEvent& )
@@ -291,11 +280,8 @@ void wxFbPalette::OnButtonClick( wxCommandEvent &event )
 
 wxFbPalette::~wxFbPalette()
 {
-#ifdef WXFB_USE_AUIBOOK
-	size_t pageCount = GetPageCount();
-#else
 	size_t pageCount = m_notebook->GetPageCount();
-#endif
+
 	wxString      separator = wxT(",");
 	if ( pageCount > 0 )
 	{
@@ -303,7 +289,7 @@ wxFbPalette::~wxFbPalette()
 
 #ifdef WXFB_USE_AUIBOOK
 		std::vector<wxWindow*> auibars;
-		arrangeTabOrder( auibars );
+//		arrangeTabOrder( auibars );
 		size_t idx;
 
 		for ( size_t i = 0; i < pageCount; ++i )
@@ -321,7 +307,7 @@ wxFbPalette::~wxFbPalette()
 			if ( i == pageCount - 1 )
 				separator = wxT("");
 
-			pages << GetPageText( idx ) << separator;
+			pages << m_notebook->GetPageText( idx ) << separator;
 		}
 #else
 		for ( size_t i = 0; i < pageCount; ++i )
@@ -343,18 +329,20 @@ wxFbPalette::~wxFbPalette()
 		config->Write( wxT("/palette/pageOrder"), pages );
 	}
 }
-#ifdef WXFB_USE_AUIBOOK
+#if 0
+//ifdef WXFB_USE_AUIBOOK
+
 // Workaround for incorrect tab order in wxAuiNotebook
 // Got from Eran's codelite notebook_ex.cpp ( GetEditorsInOrder() )
 void wxFbPalette::arrangeTabOrder( std::vector<wxWindow*> &pages )
 {
 	std::vector<wxWindow*> all_pages;
 	std::set<wxAuiTabCtrl*> ctrls;
-	for (size_t pg = 0; pg < GetPageCount(); ++pg) {
+	for (size_t pg = 0; pg < m_notebook->GetPageCount(); ++pg) {
 		wxAuiTabCtrl* ctrl;
 		int ctrl_idx;
-		wxWindow* win = GetPage(pg);
-		if (win && FindTab(win, &ctrl, &ctrl_idx)) {
+		wxWindow* win = m_notebook->GetPage(pg);
+		if (win && m_notebook->FindTab(win, &ctrl, &ctrl_idx)) {
 			ctrls.insert(ctrl);
 			all_pages.push_back(win);
 		}

@@ -39,11 +39,12 @@ class CodeEditor;
 #endif
 
 #ifdef WXFB_USE_AUIBOOK
-    #include <wx/aui/auibook.h>
+    class wxAuiNotebook;
 #else
-class wxFlatNotebook;
-class wxFlatNotebookImageList;
+	class wxFlatNotebook;
+	class wxFlatNotebookImageList;
 #endif
+
 class wxFindDialogEvent;
 
 class wxFBEvent;
@@ -51,19 +52,17 @@ class wxFBPropertyEvent;
 class wxFBObjectEvent;
 class wxFBEventHandlerEvent;
 
-class CppPanel : public
-#ifdef WXFB_USE_AUIBOOK
- wxAuiNotebook
-#else
- wxPanel
-#endif
+class CppPanel : public wxPanel
 {
 private:
 	CodeEditor* m_cppPanel;
 	CodeEditor* m_hPanel;
 	PTCCodeWriter m_hCW;
 	PTCCodeWriter m_cppCW;
-#ifndef WXFB_USE_AUIBOOK
+
+#ifdef WXFB_USE_AUIBOOK
+	wxAuiNotebook* m_notebook;
+#else
 	wxFlatNotebookImageList* m_icons;
 	wxFlatNotebook* m_notebook;
 #endif
@@ -75,13 +74,7 @@ private:
 #endif
 
 public:
-#ifdef WXFB_USE_AUIBOOK
-	CppPanel( wxWindow* parent, wxWindowID id = wxID_ANY,
-			const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-			long style = wxAUI_NB_DEFAULT_STYLE );
-#else
 	CppPanel( wxWindow *parent, int id );
-#endif
 	~CppPanel();
 
 	void OnPropertyModified( wxFBPropertyEvent& event );
