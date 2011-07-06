@@ -18,18 +18,27 @@ void wxFBSettings::Load()
 
 	wxString sColActvCapt;
 	wxString sColActvGrdt;
-	wxString sColCaptText;
+	wxString sColActvText;
+	wxString sColNormCapt;
+	wxString sColNormGrdt;
+	wxString sColNormText;
 
-	config->Read( wxT("/preferences/gui/UseCustomPrefs"),              &UseCustomPrefs, 0 );
-	config->Read( wxT("/preferences/gui/CaptionActiveColour"),         &sColActvCapt, TypeConv::SystemColourToString( wxSYS_COLOUR_ACTIVECAPTION ) );
-	config->Read( wxT("/preferences/gui/CaptionActiveGradientColour"), &sColActvGrdt, TypeConv::SystemColourToString( wxSYS_COLOUR_GRADIENTACTIVECAPTION ) );
-	config->Read( wxT("/preferences/gui/CaptionTextColour"),           &sColCaptText, TypeConv::SystemColourToString( wxSYS_COLOUR_CAPTIONTEXT ) );
-	config->Read( wxT("/preferences/gui/CaptionGradientVertical"),     &UseGradientVertical, 0  );
-	config->Read( wxT("/preferences/gui/CaptionHeight"),               &CaptionTextHeight, 18 );
+	config->Read( wxT("/preferences/gui/UseCustomPrefs"),             &UseCustomPrefs, 0 );
+	config->Read( wxT("/preferences/gui/CaptionActiveColor"),         &sColActvCapt, TypeConv::SystemColourToString( wxSYS_COLOUR_ACTIVECAPTION ) );
+	config->Read( wxT("/preferences/gui/CaptionActiveColorGradient"), &sColActvGrdt, TypeConv::SystemColourToString( wxSYS_COLOUR_GRADIENTACTIVECAPTION ) );
+	config->Read( wxT("/preferences/gui/CaptionActiveColorText"),     &sColActvText, TypeConv::SystemColourToString( wxSYS_COLOUR_CAPTIONTEXT ) );
+	config->Read( wxT("/preferences/gui/CaptionNormalColor"),         &sColNormCapt, TypeConv::SystemColourToString( wxSYS_COLOUR_INACTIVECAPTION ) );
+	config->Read( wxT("/preferences/gui/CaptionNormalColorGradient"), &sColNormGrdt, TypeConv::SystemColourToString( wxSYS_COLOUR_GRADIENTINACTIVECAPTION ) );
+	config->Read( wxT("/preferences/gui/CaptionNormalColorText"),     &sColNormText, TypeConv::SystemColourToString( wxSYS_COLOUR_INACTIVECAPTIONTEXT ) );
+	config->Read( wxT("/preferences/gui/UseGradientVertical"),        &UseGradientVertical, 0  );
+	config->Read( wxT("/preferences/gui/CaptionTextHeight"),          &CaptionTextHeight, 18 );
 
 	CaptionActiveColor         = TypeConv::StringToColour( sColActvCapt );
 	CaptionActiveColorGradient = TypeConv::StringToColour( sColActvGrdt );
-	CaptionActiveColorText     = TypeConv::StringToColour( sColCaptText );
+	CaptionActiveColorText     = TypeConv::StringToColour( sColActvText );
+	CaptionNormalColor         = TypeConv::StringToColour( sColNormCapt );
+	CaptionNormalColorGradient = TypeConv::StringToColour( sColNormGrdt );
+	CaptionNormalColorText     = TypeConv::StringToColour( sColNormText );
 
 	if ( CaptionTextHeight < 0 )   CaptionTextHeight = 0;
 	if ( CaptionTextHeight > 100 ) CaptionTextHeight = 100;
@@ -42,14 +51,20 @@ void wxFBSettings::Save()
 {
 	wxConfigBase* config = wxConfigBase::Get();
 
+	if ( config == NULL ) return;
+
+	config->Write( wxT("/preferences/gui/UseCustomPrefs"),             UseCustomPrefs );
+	config->Write( wxT("/preferences/gui/CaptionActiveColor"),         TypeConv::ColourToString( CaptionActiveColor ) );
+	config->Write( wxT("/preferences/gui/CaptionActiveColorGradient"), TypeConv::ColourToString( CaptionActiveColorGradient ) );
+	config->Write( wxT("/preferences/gui/CaptionActiveColorText"),     TypeConv::ColourToString( CaptionActiveColorText ) );
+	config->Write( wxT("/preferences/gui/CaptionNormalColor"),         TypeConv::ColourToString( CaptionNormalColor ) );
+	config->Write( wxT("/preferences/gui/CaptionNormalColorGradient"), TypeConv::ColourToString( CaptionNormalColorGradient ) );
+	config->Write( wxT("/preferences/gui/CaptionNormalColorText"),     TypeConv::ColourToString( CaptionNormalColorText ) );
+	config->Write( wxT("/preferences/gui/UseGradientVertical"),        UseGradientVertical );
+	config->Write( wxT("/preferences/gui/CaptionTextHeight"),          CaptionTextHeight );
+
 	config->Write( wxT("/preferences/locale/enabled"),  IsLocaleEnabled );
 	config->Write( wxT("/preferences/locale/language"), LocaleSelected );
 
-	config->Write( wxT("/preferences/gui/CaptionActiveColour"),         TypeConv::ColourToString( CaptionActiveColor ) );
-	config->Write( wxT("/preferences/gui/CaptionActiveGradientColour"), TypeConv::ColourToString( CaptionActiveColorGradient ) );
-	config->Write( wxT("/preferences/gui/CaptionTextColour"),           TypeConv::ColourToString( CaptionActiveColorText ) );
-	config->Write( wxT("/preferences/gui/CaptionGradientVertical"),     UseGradientVertical );
-	config->Write( wxT("/preferences/gui/CaptionHeight"),               CaptionTextHeight );
-
-	delete wxConfigBase::Set((wxConfigBase *) NULL);
+	config->Flush();
 }
