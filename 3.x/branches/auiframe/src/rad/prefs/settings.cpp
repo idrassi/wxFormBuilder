@@ -16,12 +16,16 @@ void wxFBSettings::Load()
 {
 	wxConfigBase* config = wxConfigBase::Get();
 
+	if ( config == NULL ) return;
+
 	wxString sColActvCapt;
 	wxString sColActvGrdt;
 	wxString sColActvText;
 	wxString sColNormCapt;
 	wxString sColNormGrdt;
 	wxString sColNormText;
+
+	config->Read( wxT("/mainframe/aui/perspective"),                  &Perspective );
 
 	config->Read( wxT("/preferences/gui/UseCustomPrefs"),             &UseCustomPrefs,      0 );
 	config->Read( wxT("/preferences/gui/UseGradientVertical"),        &UseGradientVertical, 0 );
@@ -52,6 +56,8 @@ void wxFBSettings::Save()
 	wxConfigBase* config = wxConfigBase::Get();
 
 	if ( config == NULL ) return;
+
+	config->Write( wxT("/mainframe/aui/perspective"),                  Perspective );
 
 	config->Write( wxT("/preferences/gui/UseCustomPrefs"),             UseCustomPrefs );
 	config->Write( wxT("/preferences/gui/CaptionActiveColor"),         TypeConv::ColourToString( CaptionActiveColor ) );

@@ -23,6 +23,8 @@ public:
 	wxColour CaptionNormalColor;
 	wxColour CaptionNormalColorGradient;
 	wxColour CaptionNormalColorText;
+	wxString Perspective;
+	
 
 	bool     IsLocaleEnabled;
 	int      LocaleSelected;

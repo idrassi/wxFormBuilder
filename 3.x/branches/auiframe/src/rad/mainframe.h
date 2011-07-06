@@ -41,7 +41,7 @@
     #include <wx/wxFlatNotebook/wxFlatNotebook.h>
 #endif
 
-#ifdef WXFB_USE_AUITOOLBAR
+#if defined(WXFB_USE_AUITOOLBAR) && defined(WXFB_USE_AUI)
     #include <wx/aui/auibar.h>
 #else
     #include <wx/toolbar.h>
@@ -89,7 +89,7 @@ private:
   wxFlatNotebookImageList m_icons;
 #endif
 
-#ifdef WXFB_USE_AUITOOLBAR
+#if defined(WXFB_USE_AUITOOLBAR) && defined(WXFB_USE_AUI)
   wxAuiToolBar *m_toolbar;
 #else
   wxToolBar *m_toolbar;
@@ -179,6 +179,7 @@ public:
   void OnChangeBorder(wxCommandEvent& e);
   void OnXrcPreview(wxCommandEvent& e);
   void OnGenInhertedClass(wxCommandEvent& e);
+  void OnChangeLog(wxCommandEvent& e);
 
 #ifdef WXFB_USE_AUIBOOK
   void OnAuiNotebookPageChanged( wxAuiNotebookEvent& event );
@@ -216,7 +217,7 @@ public:
   wxWindow  *CreateObjectInspector  (wxWindow *parent);
   wxMenuBar *CreateFBMenuBar();
 
-#ifdef WXFB_USE_AUITOOLBAR
+#if defined(WXFB_USE_AUITOOLBAR) && defined(WXFB_USE_AUI)
   wxAuiToolBar *CreateFBToolBar();
 #else
   wxToolBar *CreateFBToolBar();

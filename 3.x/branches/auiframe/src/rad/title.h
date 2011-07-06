@@ -31,7 +31,6 @@ class Title : public wxPanel
 {
 private:
 	void drawTitle( wxDC &dc );
-	bool isDark( const wxColour& color );
 
 	void onPaint( wxPaintEvent &event );
 
@@ -52,6 +51,8 @@ public:
 	Title(wxWindow *parent,const wxString &title=wxT("No title"));
 
 	static wxWindow* CreateTitle (wxWindow *inner, const wxString &title);
+
+	static bool IsDark( const wxColour& color );
 };
 
 #endif //__TITLE_H__

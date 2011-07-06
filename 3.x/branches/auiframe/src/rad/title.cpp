@@ -110,7 +110,7 @@ void Title::drawTitle( wxDC &dc )
 	}
 
 	// Draw title text
-	if ( isDark( m_colActvText ) && isDark( m_colActvGrdt ) && !m_bUseCustPrefs )
+	if ( IsDark( m_colActvText ) && IsDark( m_colActvGrdt ) && !m_bUseCustPrefs )
 		dc.SetTextForeground( *wxWHITE );
 
 	else
@@ -125,7 +125,7 @@ void Title::drawTitle( wxDC &dc )
 	dc.DrawLabel( m_strCaptText, wxRect( marginH + 2, marginH, tw, th ) );
 }
 
-bool Title::isDark(const wxColour& color)
+bool Title::IsDark(const wxColour& color)
 {
 	int evg = (color.Red() + color.Green() + color.Blue())/3;
 	if (evg < 127)
