@@ -274,21 +274,21 @@ m_findDialog( NULL )
 
 	m_mgr.SetManagedWindow(this);
 
-	m_mgr.AddPane( CreateFBToolBar(), wxAuiPaneInfo().Name(wxT("toolbar")).Caption(wxT("Toolbar")).
+	m_mgr.AddPane( CreateFBToolBar(), wxAuiPaneInfo().Name(wxT("toolbar")).
                 ToolbarPane().Gripper( false ).
                 Dock().Top().
                 Resizable().DockFixed( true ).Movable( false ).Floatable( false ).Layer( 10 ) );
 
-	m_mgr.AddPane( palette, wxAuiPaneInfo().Name(wxT("palette")).Caption(wxT("Component Palette")).
+	m_mgr.AddPane( palette, wxAuiPaneInfo().Name(wxT("palette")).
                 CaptionVisible( false ).CloseButton( false ).
                 MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).PaneBorder( false ).Gripper( false ).
                 BottomDockable( false ).TopDockable( false ).LeftDockable( false ).RightDockable( false ).
                 Dock().Top().
                 Resizable().DockFixed( true ).Movable( false ).Floatable( false ).
-                BestSize( wxSize( -1,66 ) ) );
+                BestSize( wxSize( -1, 66 ) ) );
 
 	m_mgr.AddPane( designer,
-                wxAuiPaneInfo().Name(wxT("editor")).Caption(wxT("Editor")).
+                wxAuiPaneInfo().Name(wxT("editor")).
                 CentrePane().
                 CaptionVisible( false ).CloseButton( false ).
                 MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).PaneBorder( false ).Gripper( false ).
@@ -297,7 +297,7 @@ m_findDialog( NULL )
                 Resizable().DockFixed( true ).Movable( false ).Floatable( false ) );
 
 	m_mgr.AddPane( objectTree,
-                wxAuiPaneInfo().Name(wxT("tree")).Caption(wxT("Object Tree")).
+                wxAuiPaneInfo().Name(wxT("objtree")).
                 CaptionVisible( true ).CloseButton( false ).
                 MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).PaneBorder( true ).Gripper( false ).
                 BottomDockable( false ).TopDockable( false ).LeftDockable( true ).RightDockable( true ).
@@ -306,7 +306,7 @@ m_findDialog( NULL )
                 FloatingSize( wxSize( 300,400 ) ).BestSize( wxSize( 300,-1 ) ).Layer( 1 ) );
 
 	m_mgr.AddPane(objectInspector,
-                wxAuiPaneInfo().Name(wxT("inspector")).Caption(wxT("Object Properties")).
+                wxAuiPaneInfo().Name(wxT("inspector")).
                 CaptionVisible( true ).CloseButton( false ).
                 MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).PaneBorder( true ).Gripper( false ).
                 BottomDockable( false ).TopDockable( false ).LeftDockable( true ).RightDockable( true ).
@@ -325,7 +325,16 @@ m_findDialog( NULL )
 	if ( config->Read( wxT("/mainframe/aui/perspective"), &Perspective ) )
 		m_mgr.LoadPerspective(Perspective);
 
+wxString a = m_mgr.GetPane(wxT("palette")).caption;
+wxString b = m_mgr.GetPane(wxT("tree")).caption;
+wxString c = m_mgr.GetPane(wxT("inspector")).caption;
+
+wxLogDebug( wxT("%s %s %s"), &a, &b, &c );
+
 	m_mgr.Update();
+	m_mgr.SetArtProvider( new wxFBAuiDockArt() );
+
+wxLogDebug( wxT("after SetArtProvider:\n%s %s %s"), &a, &b, &c );
 #endif
 
 	RestorePosition( wxT("mainframe") );
@@ -1029,7 +1038,7 @@ void MainFrame::UpdateFrame()
 	m_toolbar->EnableTool( wxID_UNDO, undo );
 
 	bool copy = AppData()->CanCopyObject();
-	bool isEditor = ( _("Designer") != m_notebook->GetPageText( m_notebook->GetSelection() ) );
+	bool isEditor = ( wxT("Designer") != m_notebook->GetPageText( m_notebook->GetSelection() ) );
 	menuEdit->Enable( wxID_FIND, isEditor );
 
 	menuEdit->Enable( ID_CLIPBOARD_COPY, copy );
@@ -1512,10 +1521,7 @@ void MainFrame::OnFind( wxFindDialogEvent& event )
 void MainFrame::OnPreferences( wxCommandEvent& )
 {
 	PrefsDialog dlg( this );
-	if ( dlg.ShowModal() == wxID_OK )
-	{
-		
-	}
+	dlg.ShowModal();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1641,7 +1647,7 @@ wxToolBar * MainFrame::CreateFBToolBar()
 #endif
 {
 #ifdef WXFB_USE_AUITOOLBAR
-	m_toolbar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_OVERFLOW );
+	m_toolbar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_HORZ_LAYOUT );
 #else
 	m_toolbar = CreateToolBar();
 #endif

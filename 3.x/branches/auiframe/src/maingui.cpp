@@ -43,6 +43,7 @@
 
 #include "utils/debug.h"
 #include "utils/typeconv.h"
+#include "rad/prefs/settings.h"
 #include "model/objectbase.h"
 
 // Abnormal Termination Handling
@@ -384,6 +385,8 @@ int wxFormBuilderApp::OnExit()
     // Allow clipboard data to persist after close
     wxTheClipboard->Flush();
     wxTheClipboard->Close();
+
+	wxFBSettings::Free();
 
 	return wxApp::OnExit();
 }
