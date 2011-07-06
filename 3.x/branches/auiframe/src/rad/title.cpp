@@ -46,12 +46,15 @@ Title::Title( wxWindow *parent, const wxString &title ) : wxPanel( parent, wxID_
 	config->Read( wxT("/preferences/gui/CaptionGradientVertical"), &m_bGradVert, false );
 	config->Read( wxT("/preferences/gui/CaptionHeight"), &m_hgtCaptText, 18 );
 
-	m_colCaptText = getColourFromConfig( wxT("/preferences/gui/CaptionTextColour"),           wxSYS_COLOUR_CAPTIONTEXT );
-	m_colActvCapt = getColourFromConfig( wxT("/preferences/gui/CaptionActiveColour"),         wxSYS_COLOUR_ACTIVECAPTION );
-	m_colActvGrdt = getColourFromConfig( wxT("/preferences/gui/CaptionActiveGradientColour"), wxSYS_COLOUR_GRADIENTACTIVECAPTION );
+	m_colActvText = getColourFromConfig( wxT("/preferences/gui/CaptionActiveColorText"),     wxSYS_COLOUR_CAPTIONTEXT );
+	m_colActvCapt = getColourFromConfig( wxT("/preferences/gui/CaptionActiveColor"),         wxSYS_COLOUR_ACTIVECAPTION );
+	m_colActvGrdt = getColourFromConfig( wxT("/preferences/gui/CaptionActiveColorGradient"), wxSYS_COLOUR_GRADIENTACTIVECAPTION );
+	m_colNormText = getColourFromConfig( wxT("/preferences/gui/CaptionNormalColorText"),     wxSYS_COLOUR_INACTIVECAPTIONTEXT );
+	m_colNormCapt = getColourFromConfig( wxT("/preferences/gui/CaptionNormalColor"),         wxSYS_COLOUR_INACTIVECAPTION );
+	m_colNormGrdt = getColourFromConfig( wxT("/preferences/gui/CaptionNormalColorGradient"), wxSYS_COLOUR_GRADIENTINACTIVECAPTION );
 /*
 	m_lblCaptText->SetBackgroundColour( m_colActvCapt );
-	m_lblCaptText->SetForegroundColour( m_colCaptText );
+	m_lblCaptText->SetForegroundColour( m_colActvText );
 	m_lblCaptText->SetFont( wxFont( 8, wxSWISS, wxNORMAL, wxBOLD, 0, wxT("") ) );
 
 	SetSize( -1, m_hgtCaptText );
@@ -146,7 +149,7 @@ void Title::drawTitle( wxDC &dc )
 	font.SetPointSize( 9 );
 	font.SetWeight( wxBOLD );
 
-	dc.SetTextForeground( m_colCaptText );
+	dc.SetTextForeground( m_colActvText );
 	dc.SetFont( font );
 
 	// text vertical adjustment
@@ -173,9 +176,13 @@ void Title::onPaint ( wxPaintEvent& WXUNUSED(event) )
 void Title::onClose ( wxCloseEvent& )
 {
 	wxConfigBase* config = wxConfigBase::Get();
-	config->Write( wxT("/preferences/gui/CaptionActiveColour"),         TypeConv::ColourToString( m_colActvCapt ) );
-	config->Write( wxT("/preferences/gui/CaptionActiveGradientColour"), TypeConv::ColourToString( m_colActvGrdt ) );
-	config->Write( wxT("/preferences/gui/CaptionTextColour"),           TypeConv::ColourToString( m_colCaptText ) );
-	config->Write( wxT("/preferences/gui/CaptionGradientVertical"),     m_bGradVert );
-	config->Write( wxT("/preferences/gui/CaptionHeight"),               m_hgtCaptText );
+	config->Write( wxT("/preferences/gui/CaptionActiveColor"),         TypeConv::ColourToString( m_colActvCapt ) );
+	config->Write( wxT("/preferences/gui/CaptionActiveColorGradient"), TypeConv::ColourToString( m_colActvGrdt ) );
+	config->Write( wxT("/preferences/gui/CaptionActiveColorText"),     TypeConv::ColourToString( m_colActvText ) );
+	config->Write( wxT("/preferences/gui/CaptionNormalColor"),         TypeConv::ColourToString( m_colNormCapt ) );
+	config->Write( wxT("/preferences/gui/CaptionNormalColorGradient"), TypeConv::ColourToString( m_colNormGrdt ) );
+	config->Write( wxT("/preferences/gui/CaptionNormalColorText"),     TypeConv::ColourToString( m_colNormText ) );
+
+	config->Write( wxT("/preferences/gui/CaptionGradientVertical"),    m_bGradVert );
+	config->Write( wxT("/preferences/gui/CaptionHeight"),              m_hgtCaptText );
 }

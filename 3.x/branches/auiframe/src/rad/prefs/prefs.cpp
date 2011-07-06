@@ -27,6 +27,9 @@ _PrefsPageGUICaps( parent )
 	cpkActvCapt->SetColour      ( conf->CaptionActiveColor );
 	cpkActvGrdt->SetColour      ( conf->CaptionActiveColorGradient );
 	cpkActvCaptText->SetColour  ( conf->CaptionActiveColorText );
+	cpkNormCapt->SetColour      ( conf->CaptionNormalColor );
+	cpkNormGrdt->SetColour      ( conf->CaptionNormalColorGradient );
+	cpkNormCaptText->SetColour  ( conf->CaptionNormalColorText );
 }
 
 void PrefsPageGUICaps::SetValues()
@@ -36,6 +39,9 @@ void PrefsPageGUICaps::SetValues()
 	conf->CaptionActiveColor         = cpkActvCapt->GetColour();
 	conf->CaptionActiveColorGradient = cpkActvGrdt->GetColour();
 	conf->CaptionActiveColorText     = cpkActvCaptText->GetColour();
+	conf->CaptionNormalColor         = cpkNormCapt->GetColour();
+	conf->CaptionNormalColorGradient = cpkNormGrdt->GetColour();
+	conf->CaptionNormalColorText     = cpkNormCaptText->GetColour();
 	conf->UseGradientVertical        = choGrdtDir->GetSelection();
 	conf->UseCustomPrefs             = chkCustPrefs->IsChecked();
 	conf->CaptionTextHeight          = spnCaptHeight->GetValue();
@@ -50,7 +56,10 @@ void PrefsPageGUICaps::OnUpdateUI( wxUpdateUIEvent& event )
 	                conf->CaptionTextHeight          != spnCaptHeight->GetValue()   ||
 	                conf->CaptionActiveColor         != cpkActvCapt->GetColour()    ||
 	                conf->CaptionActiveColorGradient != cpkActvGrdt->GetColour()    ||
-	                conf->CaptionActiveColorText     != cpkActvCaptText->GetColour();
+	                conf->CaptionActiveColorText     != cpkActvCaptText->GetColour()||
+	                conf->CaptionNormalColor         != cpkNormCapt->GetColour()    ||
+	                conf->CaptionNormalColorGradient != cpkNormGrdt->GetColour()    ||
+	                conf->CaptionNormalColorText     != cpkNormCaptText->GetColour();
 
 	event.SetInt( conf->IsDirty );
 	event.Skip();
@@ -116,6 +125,8 @@ _PrefsDialog( parent )
 	tbkPrefs->AddPage   ( pnlGUI,     _("GUI"),      false, 1 );
 	tbkPrefs->AddSubPage( pnlGuiCaps, _("Captions"), false, 0 );
 	tbkPrefs->AddPage   ( pnlLang,    _("Language"), false, 2 );
+
+	tbkPrefs->ExpandNode( 0, true );
 
 	buttonSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PrefsDialog::OnOK ), NULL, this );
 	buttonSizerApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PrefsDialog::OnApply ), NULL, this );

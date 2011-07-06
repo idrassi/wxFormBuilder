@@ -40,9 +40,12 @@ private:
 
 	int      m_hgtCaptText;
 	wxString m_strCaptText;
-	wxColour m_colCaptText;
+	wxColour m_colActvText;
 	wxColour m_colActvCapt;
 	wxColour m_colActvGrdt;
+	wxColour m_colNormText;
+	wxColour m_colNormCapt;
+	wxColour m_colNormGrdt;
 	bool     m_bGradVert;
 
 	DECLARE_EVENT_TABLE()
