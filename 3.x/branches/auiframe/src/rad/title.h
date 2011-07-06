@@ -30,15 +30,14 @@
 class Title : public wxPanel
 {
 private:
-	wxColour getColourFromConfig( const wxString& confpath, wxSystemColour sys_colour );
-
 	void drawTitle( wxDC &dc );
+	bool isDark( const wxColour& color );
 
-	void onClose( wxCloseEvent &event );
 	void onPaint( wxPaintEvent &event );
-//	void onSize ( wxSizeEvent  &event );
 
 	int      m_hgtCaptText;
+	bool     m_bUseCustPrefs;
+	bool     m_bGradVert;
 	wxString m_strCaptText;
 	wxColour m_colActvText;
 	wxColour m_colActvCapt;
@@ -46,7 +45,6 @@ private:
 	wxColour m_colNormText;
 	wxColour m_colNormCapt;
 	wxColour m_colNormGrdt;
-	bool     m_bGradVert;
 
 	DECLARE_EVENT_TABLE()
 
