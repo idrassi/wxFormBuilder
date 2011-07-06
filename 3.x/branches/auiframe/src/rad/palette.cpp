@@ -32,6 +32,7 @@
 #include "rad/title.h"
 #include "wx/config.h"
 #include <rad/appdata.h>
+#include "auitbarart.h"
 
 #ifdef __WXMAC__
 	#include <wx/tooltip.h>
@@ -129,6 +130,7 @@ void wxFbPalette::PopulateToolbar( PObjectPackage pkg, wxToolBar *toolbar )
 		j++;
 	}
 #ifdef WXFB_USE_AUITOOLBAR
+	toolbar->SetArtProvider( new wxFBAuiToolBarArt() );
 	toolbar->SetCustomOverflowItems( auitb_items, auitb_pItms );
 #endif
 }

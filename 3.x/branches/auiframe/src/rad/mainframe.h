@@ -30,6 +30,7 @@
 
 #ifdef WXFB_USE_AUI
     #include <wx/aui/aui.h>
+    #include "auidockart.h"
 #else
     #include <wx/splitter.h>
 #endif
