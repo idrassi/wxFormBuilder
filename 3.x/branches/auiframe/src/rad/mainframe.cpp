@@ -24,7 +24,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "mainframe.h"
 
-#include "wx/config.h"
+#include "rad/prefs/settings.h"
 #include "utils/debug.h"
 #include "utils/typeconv.h"
 #include "rad/title.h"
@@ -68,6 +68,8 @@
 #endif
 
 #include <wx/artprov.h>
+#include <wx/config.h>
+#include <wx/stdpaths.h>
 
 #define ID_NEW_PRJ       104
 #define ID_GENERATE_CODE 105
@@ -100,6 +102,8 @@
 
 #define ID_PREVIEW_XRC     136
 #define ID_GEN_INHERIT_CLS 137
+
+#define ID_CHANGELOG 138
 
 #define ID_CLIPBOARD_COPY 143
 #define ID_CLIPBOARD_PASTE 144
@@ -149,6 +153,8 @@ EVT_MENU_RANGE( ID_BORDER_LEFT, ID_BORDER_BOTTOM, MainFrame::OnChangeBorder )
 
 EVT_MENU( ID_PREVIEW_XRC,     MainFrame::OnXrcPreview )
 EVT_MENU( ID_GEN_INHERIT_CLS, MainFrame::OnGenInhertedClass )
+
+EVT_MENU( ID_CHANGELOG, MainFrame::OnChangeLog )
 
 EVT_MENU( ID_CLIPBOARD_COPY,  MainFrame::OnClipboardCopy )
 EVT_MENU( ID_CLIPBOARD_PASTE, MainFrame::OnClipboardPaste )
@@ -260,9 +266,11 @@ m_findDialog( NULL )
 
     m_toolbar = NULL;
 
-#ifndef WXFB_USE_AUI
+#if !defined(WXFB_USE_AUITOOLBAR) || !defined(WXFB_USE_AUI)
 	CreateFBToolBar();
-#else
+#endif
+
+#ifdef WXFB_USE_AUI
 	/////////////////////////////////////////////////////////////////////////////
 	// Create the gui
 	/////////////////////////////////////////////////////////////////////////////
@@ -272,20 +280,27 @@ m_findDialog( NULL )
 	wxWindow *palette         = CreateComponentPalette(this);
 	wxWindow *designer        = CreateDesignerWindow(this);
 
+	int wdt, hgt;
+	wxClientDisplayRect( 0, 0, &wdt, &hgt );
+	wdt  = wdt * 0.20;
+	hgt  = hgt * 0.60;
+
 	m_mgr.SetManagedWindow(this);
+
+#if defined(WXFB_USE_AUITOOLBAR) && defined(WXFB_USE_AUI)
 
 	m_mgr.AddPane( CreateFBToolBar(), wxAuiPaneInfo().Name(wxT("toolbar")).
                 ToolbarPane().Gripper( false ).
                 Dock().Top().
                 Resizable().DockFixed( true ).Movable( false ).Floatable( false ).Layer( 10 ) );
-
+#endif
 	m_mgr.AddPane( palette, wxAuiPaneInfo().Name(wxT("palette")).
                 CaptionVisible( false ).CloseButton( false ).
                 MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).PaneBorder( false ).Gripper( false ).
                 BottomDockable( false ).TopDockable( false ).LeftDockable( false ).RightDockable( false ).
                 Dock().Top().
                 Resizable().DockFixed( true ).Movable( false ).Floatable( false ).
-                BestSize( wxSize( -1, 66 ) ) );
+                BestSize( wxSize( -1, palette->GetSize().GetHeight() ) ) );
 
 	m_mgr.AddPane( designer,
                 wxAuiPaneInfo().Name(wxT("editor")).
@@ -303,7 +318,7 @@ m_findDialog( NULL )
                 BottomDockable( false ).TopDockable( false ).LeftDockable( true ).RightDockable( true ).
                 Dock().Left().
                 Resizable().DockFixed( false ).Movable( true ).Floatable( true ).
-                FloatingSize( wxSize( 300,400 ) ).BestSize( wxSize( 300,-1 ) ).Layer( 1 ) );
+                FloatingSize( wxSize( wdt, hgt ) ).BestSize( wxSize( wdt, -1 ) ).Layer( 1 ) );
 
 	m_mgr.AddPane(objectInspector,
                 wxAuiPaneInfo().Name(wxT("inspector")).
@@ -312,30 +327,41 @@ m_findDialog( NULL )
                 BottomDockable( false ).TopDockable( false ).LeftDockable( true ).RightDockable( true ).
                 Dock().Right().
                 Resizable().DockFixed( false ).Movable( true ).Floatable( true ).
-                FloatingSize( wxSize( 300,400 ) ).BestSize( wxSize( 300,-1 ) ).Row( 1 ).Layer( 0 ) );
-/*
-  m_mgr.AddPane(new AuiSettingsPanel( this, this ),
-                wxAuiPaneInfo().Name(wxT("settings")).
-                Caption( _("Dock Manager Settings") ).
-                Dockable(false).Float().Hide());
-*/
-	wxConfigBase *config = wxConfigBase::Get();
+                FloatingSize( wxSize( wdt, hgt ) ).BestSize( wxSize( wdt, -1 ) ).Row( 1 ).Layer( 0 ) );
 
-	wxString Perspective;
-	if ( config->Read( wxT("/mainframe/aui/perspective"), &Perspective ) )
-		m_mgr.LoadPerspective(Perspective);
+	wxFBSettings* conf        = wxFBSettings::Get();
+	wxString      Perspective = conf->Perspective;
 
-wxString a = m_mgr.GetPane(wxT("palette")).caption;
-wxString b = m_mgr.GetPane(wxT("tree")).caption;
-wxString c = m_mgr.GetPane(wxT("inspector")).caption;
+	if ( !Perspective.empty() )
+		m_mgr.LoadPerspective( Perspective );
 
-wxLogDebug( wxT("%s %s %s"), &a, &b, &c );
-
-	m_mgr.Update();
 	m_mgr.SetArtProvider( new wxFBAuiDockArt() );
 
-wxLogDebug( wxT("after SetArtProvider:\n%s %s %s"), &a, &b, &c );
-#endif
+	if ( conf->UseCustomPrefs )
+	{
+//		m_mgr.GetArtProvider()->SetMetric( wxAUI_DOCKART_GRADIENT_TYPE, wxAUI_GRADIENT_HORIZONTAL );
+
+		m_mgr.GetArtProvider()->SetColor( wxAUI_DOCKART_ACTIVE_CAPTION_COLOUR,            conf->CaptionActiveColor );
+		m_mgr.GetArtProvider()->SetColor( wxAUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR,   conf->CaptionActiveColorGradient );
+		m_mgr.GetArtProvider()->SetColor( wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR,       conf->CaptionActiveColorText );
+		m_mgr.GetArtProvider()->SetColor( wxAUI_DOCKART_INACTIVE_CAPTION_COLOUR,          conf->CaptionNormalColor );
+		m_mgr.GetArtProvider()->SetColor( wxAUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR, conf->CaptionNormalColorGradient );
+		m_mgr.GetArtProvider()->SetColor( wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR,     conf->CaptionNormalColorText );
+	}
+/*
+	if ( !conf->UseCustomPrefs && Title::IsDark( conf->CaptionActiveColorGradient ) )
+		m_mgr.GetArtProvider()->SetColor( wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR, *wxWHITE );
+	else
+		m_mgr.GetArtProvider()->SetColor( wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR, conf->CaptionActiveColorText );
+
+	if ( !conf->UseCustomPrefs && Title::IsDark( conf->CaptionNormalColorGradient ) )
+		m_mgr.GetArtProvider()->SetColor( wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR, *wxWHITE );
+	else
+		m_mgr.GetArtProvider()->SetColor( wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR, conf->CaptionNormalColorText );
+*/
+	m_mgr.Update();
+
+#endif //WXFB_USE_AUI
 
 	RestorePosition( wxT("mainframe") );
 	Layout();
@@ -1363,6 +1389,32 @@ void MainFrame::OnGenInhertedClass( wxCommandEvent& WXUNUSED( e ) )
 	wxMessageBox( wxString::Format( _("Class(es) generated to \'%s\'."), filePath.c_str() ), wxT("wxFormBuilder") );
 }
 
+void MainFrame::OnChangeLog( wxCommandEvent& WXUNUSED( e ) )
+{
+	wxDialog* dlg = new wxDialog( this, wxID_ANY, _("Changelog"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxCLOSE_BOX|wxRESIZE_BORDER );
+
+	dlg->SetSizeHints( wxSize( 600, 400 ), wxDefaultSize );
+
+	wxBoxSizer* sizer;
+	sizer = new wxBoxSizer( wxVERTICAL );
+	
+	wxTextCtrl* txt = new wxTextCtrl( dlg, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH );
+	sizer->Add( txt, 1, wxALL|wxEXPAND, 5 );
+	
+	dlg->SetSizer( sizer );
+	dlg->Layout();
+	sizer->Fit( dlg );
+	
+	dlg->Centre( wxBOTH );
+
+	wxStandardPathsBase& stdPaths = wxStandardPaths::Get();
+	wxString dataDir = stdPaths.GetDataDir();
+	dataDir.Replace( wxT(" wxFormBuilder"), wxT("wxformbuilder") );
+	
+	txt->LoadFile( dataDir + wxFILE_SEP_PATH + wxT("Changelog.txt") );
+	dlg->ShowModal();
+}
+
 bool MainFrame::SaveWarning()
 {
 	int result = wxYES;
@@ -1630,6 +1682,10 @@ wxMenuBar * MainFrame::CreateFBMenuBar()
 	wxMenu *menuHelp = new wxMenu;
 	menuHelp->Append( wxID_ABOUT, wxString(_("&About...") ) + wxT('\t') + wxT("F1"), _("Show about dialog") );
 
+	item = new wxMenuItem( menuView, ID_CHANGELOG, wxString(_("&Changelog") ), _("Show the Changelog file") );
+	item->SetBitmap( wxArtProvider::GetBitmap( wxART_INFORMATION, wxART_MENU ) );
+	item = menuHelp->Append( item );
+
 	// now append the freshly created menu to the menu bar...
 	wxMenuBar *menuBar = new wxMenuBar();
 	menuBar->Append( menuFile,  _("&File") );
@@ -1640,13 +1696,13 @@ wxMenuBar * MainFrame::CreateFBMenuBar()
 
 	return menuBar;
 }
-#ifdef WXFB_USE_AUITOOLBAR
+#if defined(WXFB_USE_AUITOOLBAR) && defined(WXFB_USE_AUI)
 wxAuiToolBar * MainFrame::CreateFBToolBar()
 #else
 wxToolBar * MainFrame::CreateFBToolBar()
 #endif
 {
-#ifdef WXFB_USE_AUITOOLBAR
+#if defined(WXFB_USE_AUITOOLBAR) && defined(WXFB_USE_AUI)
 	m_toolbar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_HORZ_LAYOUT );
 #else
 	m_toolbar = CreateToolBar();
@@ -1681,7 +1737,7 @@ wxToolBar * MainFrame::CreateFBToolBar()
 	m_toolbar->AddTool( ID_BORDER_RIGHT,  wxEmptyString, AppBitmaps::GetBitmap( wxT("right"),  TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _("Right Border"),  _("A border will be added on the right side of the item."), NULL );
 	m_toolbar->AddTool( ID_BORDER_TOP,    wxEmptyString, AppBitmaps::GetBitmap( wxT("top"),    TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _("Top Border"),    _("A border will be added on the top of the item."), NULL );
 	m_toolbar->AddTool( ID_BORDER_BOTTOM, wxEmptyString, AppBitmaps::GetBitmap( wxT("bottom"), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, _("Bottom Border"), _("A border will be added on the bottom of the item."), NULL );
-#ifdef WXFB_USE_AUITOOLBAR
+#if defined(WXFB_USE_AUITOOLBAR) && defined(WXFB_USE_AUI)
 //  m_toolbar->SetCustomOverflowItems( prepend_items, append_items );
 #endif
 	m_toolbar->Realize();
