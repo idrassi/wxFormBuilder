@@ -130,7 +130,8 @@ protected:
 		ID_CLASS,
 		ID_INDENT,
 		ID_UNINDENT,
-		ID_IFTYPEEQUAL
+		ID_IFTYPEEQUAL,
+		ID_IFGREATER
 	} Ident;
 
 	bool IsEqual(const wxString& value, const wxString& set);
@@ -159,7 +160,7 @@ protected:
 	*/
 	Token GetNextToken();
 
-
+	bool ParseIfGreater();
 	bool ParseInnerTemplate();
 	bool ParseWxParent();
 	bool ParseParent();

@@ -747,42 +747,125 @@ public:
 class ListCtrlComponent : public ComponentBase
 {
 public:
-	wxObject* Create(IObject *obj, wxObject *parent)
+	wxObject* Create( IObject *obj, wxObject *parent )
 	{
-		wxListCtrl *lc = new wxListCtrl((wxWindow*)parent, -1,
-			obj->GetPropertyAsPoint(wxT("pos")),
-			obj->GetPropertyAsSize(wxT("size")),
-			(obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style"))) & ~wxLC_VIRTUAL);
+		wxListCtrl *lc = new wxListCtrl( ( wxWindow* )parent, wxID_ANY, obj->GetPropertyAsPoint(wxT("pos")),
+		                                 obj->GetPropertyAsSize( wxT("size") ),
+		                               ( obj->GetPropertyAsInteger( wxT("style") ) |
+		                                 obj->GetPropertyAsInteger( wxT("window_style") ) ) & ~wxLC_VIRTUAL );
+		return lc;
+	}
 
-
-		// Refilling
-		int i,j;
-		wxString buf;
-		if ( (lc->GetWindowStyle() & wxLC_REPORT) != 0 )
+	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
+	{
+		wxListCtrl* lc = wxDynamicCast( wxobject, wxListCtrl );
+		if ( lc == NULL )
 		{
-			for (i=0;i<4;i++)
-			{
-				buf.Printf(wxT("Label %d"),i);
-				lc->InsertColumn(i, buf, wxLIST_FORMAT_LEFT, 80);
-			}
+			wxLogDebug( wxT("wxListView == NULL!") );
+			return;
 		}
 
-		for (j=0;j<10;j++)
+		int       count = GetManager()->GetChildCount( wxobject );
+		wxObject* child;
+		IObject*  childObj;
+
+		for ( int i = 0; i < count; i++ )
 		{
-			long temp;
-			buf.Printf(wxT("Cell (0,%d)"),j);
-			temp = lc->InsertItem(j,buf);
-			if ( (lc->GetWindowStyle() & wxLC_REPORT) != 0 )
+			child    = GetManager()->GetChild( lc, i );
+			childObj = GetManager()->GetIObject( child );
+
+			if ( childObj->GetClassName() == wxT("wxImageList") )
 			{
-				for (i=1;i<4;i++)
+				wxImageList* imageList = wxDynamicCast( child, wxImageList );
+				wxString     assignAs  = childObj->GetPropertyAsString( wxT("assign_as") );
+
+				if ( (!assignAs.empty()) && (imageList != NULL) )
 				{
-					buf.Printf(wxT("Cell (%d,%d)"),i,j);
-					lc->SetItem(temp,i,buf);
+					int which;
+
+					if ( assignAs == wxT("wxIMAGE_LIST_NORMAL") )
+					{
+						which = wxIMAGE_LIST_NORMAL;
+					}
+					else if ( assignAs == wxT("wxIMAGE_LIST_SMALL") )
+					{
+						which = wxIMAGE_LIST_SMALL;
+					}
+					else
+						which = wxIMAGE_LIST_STATE;
+
+					lc->AssignImageList( imageList, which );
 				}
 			}
 		}
 
-		return lc;
+		long item = -1;
+
+		for ( int i = 0; i < count; i++ )
+		{
+			child    = GetManager()->GetChild( lc, i );
+			childObj = GetManager()->GetIObject( child );
+
+			if ( (childObj->GetClassName() == wxT("listcol")) && ((lc->GetWindowStyle() & wxLC_REPORT) != 0) )
+			{
+				wxListItem itemCol;
+
+				if ( !childObj->IsNull( wxT("text") ) )
+					itemCol.SetText(  childObj->GetPropertyAsString ( wxT("text") ) );
+
+				if ( !childObj->IsNull( wxT("width") ) )
+					itemCol.SetWidth( childObj->GetPropertyAsInteger( wxT("width") ) );
+
+				if ( !childObj->IsNull( wxT("image") ) )
+					itemCol.SetImage( childObj->GetPropertyAsInteger( wxT("image") ) );
+
+				wxString alignment = childObj->GetPropertyAsString( wxT("align") );
+				if ( alignment == wxT("wxLIST_FORMAT_LEFT") )
+				{
+					itemCol.SetAlign( wxLIST_FORMAT_LEFT );
+				}
+				else if ( alignment == wxT("wxLIST_FORMAT_RIGHT") )
+				{
+					itemCol.SetAlign( wxLIST_FORMAT_RIGHT );
+				}
+				else
+					itemCol.SetAlign( wxLIST_FORMAT_CENTRE );
+
+				lc->InsertColumn( lc->GetColumnCount(), itemCol );
+			}
+		}
+
+		int col = item = -1;
+
+		for ( int i = 0; i < count; i++ )
+		{
+			child    = GetManager()->GetChild( lc, i );
+			childObj = GetManager()->GetIObject( child );
+
+			if ( childObj->GetClassName() == wxT("listitem") )
+			{
+				wxListItem itm;
+				itm.m_itemId = lc->InsertItem( ++item, childObj->GetPropertyAsString ( wxT("text") ),
+				                                       childObj->GetPropertyAsInteger( wxT("image") ) );
+
+				col = childObj->GetPropertyAsInteger( wxT("col") );
+				if ( ((lc->GetWindowStyle() & wxLC_REPORT) != 0) && (col > -1) )
+					itm.SetColumn( col );
+
+				if ( !childObj->IsNull( wxT("textcolour") ) )
+					itm.SetTextColour( childObj->GetPropertyAsColour( wxT("textcolour") ) );
+
+				if ( !childObj->IsNull( wxT("bg") ) )
+					itm.SetBackgroundColour( childObj->GetPropertyAsColour( wxT("bg") ) );
+
+				if ( !childObj->IsNull( wxT("font") ) )
+					itm.SetFont( childObj->GetPropertyAsFont( wxT("font") ) );
+
+				itm.SetState( childObj->GetPropertyAsInteger( wxT("state") ) );
+
+				lc->SetItem( itm );
+			}
+		}
 	}
 
 	ticpp::Element* ExportToXrc(IObject *obj)
@@ -820,6 +903,9 @@ class ListColComponent : public ComponentBase
 		else
 			xrc.AddPropertyValue(wxT("align"), wxT("wxLIST_FORMAT_CENTRE"));
 
+		if ( obj->GetPropertyAsInteger( wxT("image" ) ) > -1 )
+			xrc.AddProperty( wxT("image"), wxT("image"), XRC_TYPE_INTEGER );
+
 		return xrc.GetXrcObject();
 	}
 
@@ -848,6 +934,8 @@ class ListColComponent : public ComponentBase
 		{
 		}
 
+		filter.AddProperty( wxT("image"), wxT("image"), XRC_TYPE_INTEGER );
+
 		return filter.GetXfbObject();
 	}
 };
@@ -857,36 +945,44 @@ class ListItemComponent : public ComponentBase
 	ticpp::Element* ExportToXrc( IObject *obj )
 	{
 		ObjectToXrcFilter xrc( obj, wxT("listitem"), obj->GetPropertyAsString( wxT("name") ) );
-		xrc.AddProperty( wxT("text"),         wxT("text"),         XRC_TYPE_TEXT );
-		xrc.AddProperty( wxT("textcolour"),   wxT("textcolour"),   XRC_TYPE_COLOUR );
-		xrc.AddProperty( wxT("bg"),           wxT("bg"),           XRC_TYPE_COLOUR );
-		xrc.AddProperty( wxT("font"),         wxT("font"),         XRC_TYPE_FONT );
-		xrc.AddProperty( wxT("align"),        wxT("align"),        XRC_TYPE_INTEGER );
-		xrc.AddProperty( wxT("bitmap"),       wxT("bitmap"),       XRC_TYPE_BITMAP );
-		xrc.AddProperty( wxT("bitmap-small"), wxT("bitmap-small"), XRC_TYPE_BITMAP );
-		xrc.AddProperty( wxT("image"),        wxT("image"),        XRC_TYPE_INTEGER );
-		xrc.AddProperty( wxT("image-small"),  wxT("image-small"),  XRC_TYPE_INTEGER );
-		xrc.AddProperty( wxT("col"),          wxT("col"),          XRC_TYPE_INTEGER );
-		xrc.AddProperty( wxT("data"),         wxT("data"),         XRC_TYPE_INTEGER );
-		xrc.AddProperty( wxT("state"),        wxT("state"),        XRC_TYPE_BITLIST );
+		if ( !obj->IsNull( wxT("text" ) ) )
+			xrc.AddProperty( wxT("text"), wxT("text"), XRC_TYPE_TEXT );
+
+		if ( !obj->IsNull( wxT("textcolour" ) ) )
+			xrc.AddProperty( wxT("textcolour"), wxT("textcolour"), XRC_TYPE_COLOUR );
+
+		if ( !obj->IsNull( wxT("bg" ) ) )
+			xrc.AddProperty( wxT("bg" ), wxT("bg" ), XRC_TYPE_COLOUR );
+
+		if ( !obj->IsNull( wxT("font" ) ) )
+			xrc.AddProperty( wxT("font" ), wxT("font" ), XRC_TYPE_FONT );
+
+		if ( obj->GetPropertyAsInteger( wxT("image" ) ) > -1 )
+			xrc.AddProperty( wxT("image"), wxT("image"), XRC_TYPE_INTEGER );
+
+		if ( obj->GetPropertyAsInteger( wxT("image-small" ) ) > -1 )
+			xrc.AddProperty( wxT("image-small"), wxT("image-small"), XRC_TYPE_INTEGER );
+
+		if ( obj->GetPropertyAsInteger( wxT("col" ) ) > -1 )
+			xrc.AddProperty( wxT("col"), wxT("col"), XRC_TYPE_INTEGER );
+
+		if ( !obj->IsNull( wxT("state" ) ) )
+			xrc.AddProperty( wxT("state"), wxT("state"), XRC_TYPE_BITLIST );
+
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
 		XrcToXfbFilter filter( xrcObj, wxT("listitem" ) );
-		filter.AddProperty( wxT("text"),         wxT("text"),         XRC_TYPE_TEXT );
-		filter.AddProperty( wxT("textcolour"),   wxT("textcolour"),   XRC_TYPE_COLOUR );
-		filter.AddProperty( wxT("bg"),           wxT("bg"),           XRC_TYPE_COLOUR );
-		filter.AddProperty( wxT("font"),         wxT("font"),         XRC_TYPE_FONT );
-		filter.AddProperty( wxT("align"),        wxT("align"),        XRC_TYPE_STRINGLIST );
-		filter.AddProperty( wxT("bitmap"),       wxT("bitmap"),       XRC_TYPE_BITMAP );
-		filter.AddProperty( wxT("bitmap-small"), wxT("bitmap-small"), XRC_TYPE_BITMAP );
-		filter.AddProperty( wxT("image"),        wxT("image"),        XRC_TYPE_INTEGER );
-		filter.AddProperty( wxT("image-small"),  wxT("image-small"),  XRC_TYPE_INTEGER );
-		filter.AddProperty( wxT("col"),          wxT("col"),          XRC_TYPE_INTEGER );
-		filter.AddProperty( wxT("data"),         wxT("data"),         XRC_TYPE_INTEGER );
-		filter.AddProperty( wxT("state"),        wxT("state"),        XRC_TYPE_BITLIST );
+		filter.AddProperty( wxT("text"),         wxT("text"),        XRC_TYPE_TEXT );
+		filter.AddProperty( wxT("textcolour"),   wxT("textcolour"),  XRC_TYPE_COLOUR );
+		filter.AddProperty( wxT("bg"),           wxT("bg"),          XRC_TYPE_COLOUR );
+		filter.AddProperty( wxT("font"),         wxT("font"),        XRC_TYPE_FONT );
+		filter.AddProperty( wxT("image"),        wxT("image"),       XRC_TYPE_INTEGER );
+		filter.AddProperty( wxT("image-small"),  wxT("image-small"), XRC_TYPE_INTEGER );
+		filter.AddProperty( wxT("col"),          wxT("col"),         XRC_TYPE_INTEGER );
+		filter.AddProperty( wxT("state"),        wxT("state"),       XRC_TYPE_BITLIST );
 		return filter.GetXfbObject();
 	}
 };
@@ -1794,7 +1890,12 @@ class ImageListComponent : public ComponentBase
 
 	ticpp::Element* ExportToXrc( IObject *obj )
 	{
-		ObjectToXrcFilter xrc( obj, wxT("imagelist"), obj->GetPropertyAsString( wxT("name") ), wxEmptyString, true);
+		wxString xrcPropName = wxT("imagelist");
+
+		if ( obj->GetPropertyAsString( wxT("assign_as") ) == wxT("wxIMAGE_LIST_SMALL") )
+			xrcPropName = wxT("imagelist-small");
+
+		ObjectToXrcFilter xrc( obj, xrcPropName, obj->GetPropertyAsString( wxT("name") ), wxEmptyString, true);
 		xrc.AddProperty( wxT("size"), wxT("size"), XRC_TYPE_SIZE );
 		xrc.AddProperty( wxT("mask"), wxT("mask"), XRC_TYPE_BOOL );
 		return xrc.GetXrcObject();
@@ -1802,7 +1903,11 @@ class ImageListComponent : public ComponentBase
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter( xrcObj, wxT("imagelist"), true );
+		std::string name;
+		xrcObj->GetAttribute( "class", &name );
+		wxString classname( name.c_str(), wxConvUTF8 );
+
+		XrcToXfbFilter filter( xrcObj, classname, true );
 		filter.AddProperty( wxT("size"), wxT("size"), XRC_TYPE_SIZE );
 		filter.AddProperty( wxT("mask"), wxT("mask"), XRC_TYPE_BOOL );
 		return filter.GetXfbObject();
@@ -1819,9 +1924,18 @@ class BitmapItemComponent : public ComponentBase
 		wxString        bmpProp  = obj->GetPropertyAsString( wxT("bitmap") );
 		wxString        filename = bmpProp.BeforeFirst( wxT(';') );
 
-		if ( !bmpProp.empty() && ! filename.empty() && !( bmpProp.size() < ( filename.size() + 2 ) ) )
+wxLogDebug( wxT("\n\nprop:%s\nfile:%s\nprop size:%i\nfile size:%i\n"), bmpProp, filename, bmpProp.size(), filename.size() );
+
+		if ( !bmpProp.empty() && ! filename.empty()
+				#if wxVERSION_NUMBER < 2900
+				&& !( bmpProp.size() < ( filename.size() + 2 ) )
+				#else
+				 ) // TODO wxBitmapWithResourceProp disabled
+				#endif
 		{
+#if wxVERSION_NUMBER < 2900
 			wxString source = bmpProp.substr( filename.size() + 2 );
+
 			if ( source.StartsWith( _("Load From File") ) || source.StartsWith(_("Load From Embedded File" ) ) )
 			{
 				bmpItem->SetText( filename.mb_str( wxConvUTF8 ) );
@@ -1830,6 +1944,9 @@ class BitmapItemComponent : public ComponentBase
 			{
 				bmpItem->SetAttribute( "stock_id", filename.mb_str( wxConvUTF8 ) );
 			}
+#else
+			bmpItem->SetText( filename.mb_str( wxConvUTF8 ) ); // TODO wxBitmapWithResourceProp disabled
+#endif
 		}
 		return bmpItem;
 	}

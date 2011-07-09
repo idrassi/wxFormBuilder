@@ -2493,12 +2493,12 @@ void ApplicationData::ShowXrcPreview()
 
 	if ( form == NULL )
 	{
-		wxMessageBox( _( "Please select a form and try again." ), _( "XRC Preview" ), wxICON_ERROR );
+		wxMessageBox(_( "Please select a form and try again." ), _( "XRC Preview" ), wxICON_ERROR | wxOK | wxCENTRE );
 		return;
 	}
 	else if( form->GetPropertyAsInteger( wxT("aui_managed") ) )
 	{
-		wxMessageBox( _( "XRC preview doesn't support AUI-managed frames." ), _( "XRC Preview" ), wxICON_ERROR );
+		wxMessageBox(_( "XRC preview doesn't support AUI-managed frames." ), _( "XRC Preview" ), wxICON_ERROR | wxOK | wxCENTRE );
 		return;
 	}
 

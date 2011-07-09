@@ -203,8 +203,11 @@ Written by
   </templates>
 
   <templates class="wxListCtrl">
-    <template name="declaration">#class* $name;</template>
-    <template name="construction">$name = new #class( #wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, wxDefaultValidator, $window_name @} );</template>
+    <template name="declaration">#class* $name; #nl wxListItem* m_listItem;</template>
+    <template name="construction">
+		$name = new #class( #wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, wxDefaultValidator, $window_name @} ); #nl
+		m_listItem = new wxListItem(); #nl
+	</template>
     <template name="include">@#include &lt;wx/listctrl.h&gt;</template>
 	<template name="evt_entry_OnListBeginDrag">EVT_LIST_BEGIN_DRAG( $id, #handler )</template>
 	<template name="evt_connect_OnListBeginDrag">$name->Connect( wxEVT_COMMAND_LIST_BEGIN_DRAG, #handler, NULL, this );</template>
@@ -246,6 +249,30 @@ Written by
 	<template name="evt_connect_OnListColEndDrag">$name->Connect( wxEVT_COMMAND_LIST_COL_END_DRAG, #handler, NULL, this );</template>
 	<template name="evt_entry_OnListCacheHint">EVT_LIST_CACHE_HINT( $id, #handler )</template>
 	<template name="evt_connect_OnListCacheHint">$name->Connect( wxEVT_COMMAND_LIST_CACHE_HINT, #handler, NULL, this );</template>
+  </templates>
+
+  <templates class="listcol">
+	<template name="construction">
+		#ifnotnull $text  @{ m_listItem->SetText( wxT("$text") ); #nl @}
+		#ifnotnull $width @{ m_listItem->SetWidth( $width ); #nl @}
+		#ifnotnull $align @{ m_listItem->SetAlign( $align ); #nl @}
+		#ifgreater $image "-1" @{ m_listItem->SetImage( $image ); #nl @}
+		#parent $name->InsertColumn( #parent $name->GetColumnCount(), *m_listItem ); #nl
+	</template>
+  </templates>
+
+  <templates class="listitem">
+	<template name="construction">
+		m_listItem = new wxListItem(); m_listItem->SetId( #parent $name->GetItemCount() ); #nl
+		#ifnotnull $text @{ m_listItem->SetText( wxT("$text") ); #nl @}
+		#ifgreater $col "-1" @{ m_listItem->SetColumn( $col ); #nl @}
+		#ifgreater $image "-1" @{ m_listItem->SetImage( $image ); #nl @}
+		#ifnotnull $textcolour @{ m_listItem->SetTextColour( $textcolour ); #nl @}
+		#ifnotnull $bg @{ m_listItem->SetBackgroundColour( $bg ); #nl @}
+		#ifnotnull $font @{ m_listItem->SetFont( $font ); #nl @}
+		#ifnotnull $state @{ m_listItem->SetState( $state ); #nl @}
+		#parent $name->InsertItem( *m_listItem ); #nl
+	</template>
   </templates>
 
   <templates class="wxChoice">
@@ -343,6 +370,20 @@ Written by
 	<template name="evt_connect_OnCommandScrollThumbRelease">$name->Connect( wxEVT_SCROLL_THUMBRELEASE, #handler, NULL, this );</template>
 	<template name="evt_entry_OnCommandScrollChanged">EVT_COMMAND_SCROLL_CHANGED( $id, #handler )</template>
 	<template name="evt_connect_OnCommandScrollChanged">$name->Connect( wxEVT_SCROLL_CHANGED, #handler, NULL, this );</template>
+  </templates>
+
+  <templates class="wxImageList">
+	<template name="include">@#include &lt;wx/imaglist.h&gt;</template>
+	<template name="declaration">#class* $name;</template>
+	<template name="construction">
+		wxSize $name #append Size = $size; #nl
+		$name = new #class( $name #append Size.GetWidth(), $name #append Size.GetHeight(), $mask );
+	</template>
+	<template name="after_addchild">#parent $name->AssignImageList( $name, $assign_as );</template>
+  </templates>
+
+  <templates class="bitmapitem">
+	<template name="construction">#ifnotnull $bitmap @{ #parent $name->Add( $bitmap ); @}</template>
   </templates>
 
 </codegen>

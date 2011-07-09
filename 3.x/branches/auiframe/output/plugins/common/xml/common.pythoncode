@@ -179,7 +179,10 @@ Python code generation written by
   </templates>
 
   <templates class="wxListCtrl">
-	<template name="construction">self.$name = #class( #wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, wx.DefaultValidator, $window_name @} )</template>
+	<template name="construction">
+		self.$name = #class( #wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, wx.DefaultValidator, $window_name @} ) #nl
+		self.m_listItem = wx.ListItem() #nl
+	</template>
 	<template name="evt_connect_OnListBeginDrag">self.$name.Bind( wx.EVT_LIST_BEGIN_DRAG, #handler )</template>
 	<template name="evt_connect_OnListBeginRDrag">self.$name.Bind( wx.EVT_LIST_BEGIN_RDRAG, #handler )</template>
 	<template name="evt_connect_OnListBeginLabelEdit">self.$name.Bind( wx.EVT_LIST_BEGIN_LABEL_EDIT, #handler )</template>
@@ -200,6 +203,29 @@ Python code generation written by
 	<template name="evt_connect_OnListColDragging">self.$name.Bind( wx.EVT_LIST_COL_DRAGGING, #handler )</template>
 	<template name="evt_connect_OnListColEndDrag">self.$name.Bind( wx.EVT_LIST_COL_END_DRAG, #handler )</template>
 	<template name="evt_connect_OnListCacheHint">self.$name.Bind( wx.EVT_LIST_CACHE_HINT, #handler )</template>
+  </templates>
+
+  <templates class="listcol">
+	<template name="construction">
+		self.m_listItem.SetText( u"$text" ) #nl
+		self.m_listItem.SetWidth( $width ) #nl
+		self.m_listItem.SetAlign( $align ) #nl
+		self.m_listItem.SetImage( $image ) #nl
+		self.#parent $name.InsertColumnItem( self.#parent $name.GetColumnCount(), self.m_listItem ) #nl
+	</template>
+  </templates>
+
+  <templates class="listitem">
+	<template name="construction">
+		self.#parent $name.InsertImageStringItem( self.#parent $name.GetItemCount(), u"$text", $image ) #nl
+		self.m_listItem = self.#parent $name.GetItem( self.#parent $name.GetItemCount() - 1, 0 ) #nl
+		#ifgreater $col "-1" @{ self.m_listItem.SetColumn( $col ) #nl @}
+		#ifnotnull $textcolour @{ self.m_listItem.SetTextColour( $textcolour ) #nl @}
+		#ifnotnull $bg @{ self.m_listItem.SetBackgroundColour( $bg ) #nl @}
+		#ifnotnull $font @{ self.m_listItem.SetFont( $font ) #nl @}
+		#ifnotnull $state @{ self.m_listItem.SetState( $state ) #nl @}
+		self.#parent $name.SetItem( self.m_listItem ) #nl
+	</template>
   </templates>
 
   <templates class="wxChoice">
@@ -249,6 +275,18 @@ Python code generation written by
 	<template name="evt_connect_OnCommandScrollThumbTrack">self.$name.Bind( wx.EVT_COMMAND_SCROLL_THUMBTRACK, #handler )</template>
 	<template name="evt_connect_OnCommandScrollThumbRelease">self.$name.Bind( wx.EVT_COMMAND_SCROLL_THUMBRELEASE, #handler )</template>
 	<template name="evt_connect_OnCommandScrollChanged">self.$name.Bind( wx.EVT_COMMAND_SCROLL_CHANGED, #handler )</template>
+  </templates>
+
+  <templates class="wxImageList">
+	<template name="construction">
+		$name #append Size = $size #nl
+		self.$name = #class( $name #append Size.GetWidth(), $name #append Size.GetHeight(), $mask )
+	</template>
+	<template name="after_addchild">self.#parent $name.AssignImageList( self.$name, $assign_as )</template>
+  </templates>
+
+  <templates class="bitmapitem">
+	<template name="construction">#ifnotnull $bitmap @{ self.#parent $name.Add( $bitmap ) @} </template>
   </templates>
 
 </codegen>

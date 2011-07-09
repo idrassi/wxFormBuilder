@@ -319,44 +319,42 @@
     <event name="OnListCacheHint" class="wxListEvent" help="Prepare cache for a virtual list control." />
   </objectinfo>
 
+  <objectinfo class="listitem" icon="list_item.xpm" type="listitem">
+    <property name="text"         type="text"     help="The text label for the item.">Item</property>
+    <property name="textcolour"   type="wxColour" help="The text colour for the item."/>
+    <property name="bg"           type="wxColour" help="The background color for the item."/>
+    <property name="font"         type="wxFont"   help="The font for the item."/>
+    <property name="image"        type="int"      help="The zero-based index of the image associated with the item in the (normal) image list.">-1</property>
+    <property name="image-small"  type="int"      help="The zero-based index of the image associated with the item in the 'small' image list.">-1</property>
+    <property name="col"          type="int"      help="The zero-based column index.">-1</property>
+    <property name="state"        type="bitlist"  help="The item state. Can be any combination of the following values:&#x0A;&#8226; wxLIST_STATE_FOCUSED: The item has the focus.&#x0A;&#8226; wxLIST_STATE_SELECTED: The item is selected.">
+      <option name="wxLIST_STATE_FOCUSED"         help="The item has the focus." />
+      <option name="wxLIST_STATE_SELECTED"        help="The item is selected." />
+    </property>
+  </objectinfo>
+
   <objectinfo class="listcol" icon="list_col.xpm" type="listcol">
     <property name="text"  type="text"    help="The title of the column.">Column</property>
-    <property name="width" type="int"     help="The column width.">30</property>
+    <property name="width" type="int"     help="The column width.">80</property>
     <property name="align" type="option"  help="The alignment for the item. Can be one of wxLIST_FORMAT_LEFT, wxLIST_FORMAT_RIGHT or wxLIST_FORMAT_CENTRE.">
       <option name="wxLIST_FORMAT_LEFT"   />
       <option name="wxLIST_FORMAT_RIGHT"  />
       <option name="wxLIST_FORMAT_CENTRE" />
       wxLIST_FORMAT_LEFT
     </property>
-  </objectinfo>
-
-  <objectinfo class="listitem" icon="list_item.xpm" type="listitem">
-    <property name="text"         type="text"     help="The text label for the item."/>
-    <property name="textcolour"   type="wxColour" help="The text colour for the item."/>
-    <property name="bg"           type="wxColour" help="The background color for the item."/>
-    <property name="font"         type="wxFont"   help="The font for the item."/>
-    <property name="align"        type="option"   help="The alignment for the item. Can be one of wxLIST_FORMAT_LEFT, wxLIST_FORMAT_RIGHT or wxLIST_FORMAT_CENTRE.">
-      <option name="wxLIST_FORMAT_LEFT"           help="Align the item to the left."   />
-      <option name="wxLIST_FORMAT_RIGHT"          help="Align the item to the right."  />
-      <option name="wxLIST_FORMAT_CENTRE"         help="Align the item to the centre." />
-      wxLIST_FORMAT_LEFT
-    </property>
-    <property name="bitmap"       type="bitmap"  help="Add a bitmap to the (normal) wxImageList associated with the wxListCtrl parent and associate it with this item. If the imagelist is not defined it will be created implicitly."/>
-    <property name="bitmap-small" type="bitmap"  help="Add a bitmap in the 'small' wxImageList associated with the wxListCtrl parent and associate it with this item. If the 'small' imagelist is not defined it will be created implicitly."/>
-    <property name="image"        type="int"     help="The zero-based index of the image associated with the item in the (normal) image list."/>
-    <property name="image-small"  type="int"     help="The zero-based index of the image associated with the item in the 'small' image list."/>
-    <property name="col"          type="int"     help="The zero-based column index."/>
-    <property name="data"         type="int"     help="The client data for the item."/>
-    <property name="state"        type="bitlist" help="The item state. Can be any combination of the following values:&#x0A;&#8226; wxLIST_STATE_FOCUSED: The item has the focus.&#x0A;&#8226; wxLIST_STATE_SELECTED: The item is selected.">
-      <option name="wxLIST_STATE_FOCUSED"        help="The item has the focus." />
-      <option name="wxLIST_STATE_SELECTED"       help="The item is selected." />
-    </property>
+    <property name="image" type="int" help="The zero-based index of the image associated with the item in the (small) image list.">-1</property>
   </objectinfo>
 
   <objectinfo class="wxImageList" icon="imaglist.xpm" type="imagelist" startgroup="1">
-    <property name="name" type="text">m_imgLst</property>
-    <property name="size" type="wxSize" help="The size of the images in the list (default: the size of the first bitmap)." />
-    <property name="mask" type="bool"   help="If masks should be created for all images (default: true).">1</property>
+    <property name="name"      type="text">m_imgLst</property>
+    <property name="size"      type="wxSize" help="The size of the images in the list (default: the size of the first bitmap)." />
+    <property name="mask"      type="bool"   help="If masks should be created for all images (default: true).">1</property>
+    <property name="assign_as" type="option" help="Sets the image list associated with the control and takes ownership of it (i.e. the control will, unlike when using SetImageList, delete the list when destroyed). which is one of wxIMAGE_LIST_NORMAL, wxIMAGE_LIST_SMALL, wxIMAGE_LIST_STATE (the last is unimplemented).">
+      <option name="wxIMAGE_LIST_NORMAL"     help="The normal (large icon) image list." />
+      <option name="wxIMAGE_LIST_SMALL"      help="The small icon image list." />
+      <option name="wxIMAGE_LIST_STATE"      help="The user-defined state image list (unimplemented)." />
+      wxIMAGE_LIST_STATE
+    </property>
   </objectinfo>
 
   <objectinfo class="bitmapitem" icon="image.xpm" type="bitmapitem">
