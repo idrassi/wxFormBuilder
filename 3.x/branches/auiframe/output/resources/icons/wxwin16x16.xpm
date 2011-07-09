@@ -1,5 +1,5 @@
 /* XPM */ 
-static const unsigned char * wxwin16x16_xpm[] = {
+static const char * wxwin16x16_xpm[] = {
 "16 16 140 2",
 "  	c None",
 "! 	c black",

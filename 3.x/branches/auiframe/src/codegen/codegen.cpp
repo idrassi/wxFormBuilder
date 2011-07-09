@@ -137,6 +137,9 @@ bool TemplateParser::ParseMacro()
 	case ID_IFTYPEEQUAL:
 		ParseIfTypeEqual();
 		break;
+	case ID_IFGREATER:
+		return ParseIfGreater();
+		break;
 	default:
 		THROW_WXFBEX( wxT("Invalid Macro Type") );
 		break;
@@ -532,6 +535,35 @@ void TemplateParser::ignore_whitespaces()
 	}
 }
 
+bool TemplateParser::ParseIfGreater()
+{
+	// ignore leading whitespace
+	ignore_whitespaces();
+
+	// Get the property
+	wxString childName;
+	PProperty property( GetProperty( &childName ) );
+	if ( property )
+	{
+		// Get the value to compare to
+		int value = wxAtoi( ExtractLiteral() );
+
+		// Get the property value to compare to
+		int propValue = property->GetValueAsInteger();
+
+		wxString inner_template = ExtractInnerTemplate();
+
+		if ( propValue > value )
+		{
+			// Generate the code from the block
+			PTemplateParser parser = CreateParser( this, inner_template );
+			m_out << parser->ParseTemplate();
+
+			return true;
+		}
+	}
+	return false;
+}
 
 bool TemplateParser::ParseIfNotNull()
 {
@@ -836,6 +868,8 @@ TemplateParser::Ident TemplateParser::SearchIdent(wxString ident)
 		return ID_UNINDENT;
 	else if (ident == wxT("iftypeequal") )
 		return ID_IFTYPEEQUAL;
+	else if (ident == wxT("ifgreater") )
+		return ID_IFGREATER;
 	else
 		THROW_WXFBEX( wxString::Format( wxT("Unknown macro: \"%s\""), ident.c_str() ) );
 }

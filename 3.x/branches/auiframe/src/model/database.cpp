@@ -848,6 +848,7 @@ bool ObjectDatabase::HasCppProperties(wxString type)
 			type == wxT("widget")			||
 			type == wxT("listctrl")			||
 			type == wxT("listcol")			||
+			type == wxT("listitem")			||
 			type == wxT("treectrl")			||
 			type == wxT("expanded_widget")	||
 			type == wxT("statusbar")		||
@@ -863,6 +864,7 @@ bool ObjectDatabase::HasCppProperties(wxString type)
 			type == wxT("sizer")			||
 			type == wxT("treelistctrl")		||
 			type == wxT("imagelist")		||
+			type == wxT("bitmapitem")		||
 			type == wxT("gbsizer")
 			);
 }

@@ -214,23 +214,23 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
 				int pointSize = font.GetPointSize();
 #if wxVERSION_NUMBER < 2900
 				wxString size = pointSize <= 0 ? wxT("wx.NORMAL_FONT.GetPointSize()") : wxString::Format( wxT("%i"), pointSize ).c_str();
-				result	= wxString::Format( wxT("wxFont( %s, %i, %i, %i, %s, %s )"),
+				result	= wxString::Format( wxT("wx.Font( %s, %i, %i, %i, %s, %s )"),
 				                           size.c_str(),
 				                           font.GetFamily(),
 				                           font.GetStyle(),
 				                           font.GetWeight(),
 				                           ( font.GetUnderlined() ? wxT("True") : wxT("False") ),
-				                           ( font.m_faceName.empty() ? wxT("wx.EmptyString") : wxString::Format( wxT("wxT(\"%s\")"), font.m_faceName.c_str() ).c_str() )
+				                           ( font.m_faceName.empty() ? wxT("wx.EmptyString") : wxString::Format( wxT("u\"%s\""), font.m_faceName.c_str() ).c_str() )
 				                         );
 #else
 				wxString size = pointSize <= 0 ? "wx.NORMAL_FONT.GetPointSize()" : wxString::Format( "%i", pointSize );
-				result	= wxString::Format("wxFont( %s, %i, %i, %i, %s, %s )",
+				result	= wxString::Format("wx.Font( %s, %i, %i, %i, %s, %s )",
 				                           size,
 				                           font.GetFamily(),
 				                           font.GetStyle(),
 				                           font.GetWeight(),
 				                           ( font.GetUnderlined() ? "True" : "False" ),
-				                           ( font.m_faceName.empty() ? "wx.EmptyString" : wxString::Format( "wxT(\"%s\")", font.m_faceName ) )
+				                           ( font.m_faceName.empty() ? "wx.EmptyString" : wxString::Format( "u\"%s\"", font.m_faceName ) )
 				                         );
 #endif
 			}
@@ -1132,6 +1132,7 @@ void PythonCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
                   type == wxT("menu")         ||
                   type == wxT("submenu")      ||
                   type == wxT("toolbar")      ||
+                  type == wxT("imagelist")    ||
                   type == wxT("tool")         ||
                   type == wxT("listbook")     ||
                   type == wxT("notebook")     ||
