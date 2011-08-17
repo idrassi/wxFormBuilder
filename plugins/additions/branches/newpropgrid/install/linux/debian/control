@@ -1,0 +1,28 @@
+Source: libwxadditions28
+Priority: extra
+XSBC-Original-Maintainer: Ryan Mulder <rjmyst3@gmail.com>
+Maintainer: Ubuntu MOTU Developers <ubuntu-motu@lists.ubuntu.com>
+Build-Depends: debhelper (>= 5), libwxgtk2.8-dev (>= 2.8.4), libwxgtk2.8-dbg (>= 2.8.4), libgtk2.0-dev
+Standards-Version: 3.8.0
+Section: libs
+ 
+Package: libwxadditions28-dev
+Section: libdevel
+Architecture: any
+Depends: libwxadditions28 (= ${binary:Version})
+Description: more widgets
+ widgets galore
+
+Package: libwxadditions28
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: more widgets
+ widgets galore
+
+Package: libwxadditions28-dbg
+Section: libs
+Architecture: any
+Depends: libwxadditions28 (= ${binary:Version}), ${shlibs:Depends}
+Description: more widgets
+ widgets galore
