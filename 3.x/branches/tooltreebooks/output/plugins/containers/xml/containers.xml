@@ -164,5 +164,51 @@ Written by
 		<property name="label" type="wxString_i18n">a page</property>
 		<property name="select" type="bool" help="Select Page when Adding">0</property>
 	</objectinfo>
-    
+
+	<objectinfo class="wxTreebook" icon="treebook.xpm" type="treebook">
+		<inherits class="wxWindow"/>
+		<property name="name" 		type="text">m_treebook</property>
+		<property name="bitmapsize" type="wxSize" help="Size of page images"/>
+		<property name="style" 		type="bitlist">
+			<option name="wxBK_DEFAULT" help="Choose the default location for the tree depending on the current platform"/>
+			<option name="wxBK_TOP"     help="Place labels above the page area."/>
+			<option name="wxBK_LEFT"    help="Place labels on the left side."/>
+			<option name="wxBK_RIGHT"   help="Place labels on the right side."/>
+			<option name="wxBK_BOTTOM"  help="Place labels below the page area."/>wxBK_DEFAULT</property>
+		<event name="OnTreebookPageChanged" 	class="wxTreebookEvent" help="The page selection was changed. Processes a wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED event."/>
+		<event name="OnTreebookPageChanging" 	class="wxTreebookEvent" help="The page selection is about to be changed. Processes a wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING event. This event can be vetoed."/>
+		<event name="OnTreebookNodeCollapsed" 	class="wxTreebookEvent" help="The page node is going to be collapsed. Processes a wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED event."/>
+		<event name="OnTreebookNodeExpanded" 	class="wxTreebookEvent" help="The page node is going to be expanded. Processes a wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED event."/>
+	</objectinfo>
+
+	<objectinfo class="treebookpage" icon="treebook.xpm" type="treebookpage">
+		<property name="depth" 	type="int" 		help="Adds a new child-page to the last top-level page">0</property>
+		<property name="label" 	type="wxString_i18n">a page</property>
+		<property name="bitmap" type="bitmap" 	help="Page Image"/>
+		<property name="image" type="int" 		help="wxImageList Index"/>
+		<property name="expanded" type="bool" 	help="Expands the current treebookpage node"/>
+		<property name="select" type="bool" 	help="Select Page when Adding">0</property>
+	</objectinfo>
+
+	<objectinfo class="wxToolbook" icon="toolbook.xpm" type="toolbook">
+		<inherits class="wxWindow"/>
+		<property name="name" 		type="text">m_toolbook</property>
+		<property name="bitmapsize" type="wxSize" help="Size of page images"/>
+		<property name="style" 		type="bitlist">
+			<option name="wxBK_DEFAULT" help="Choose the default location for the toolbar depending on the current platform"/>
+			<option name="wxBK_TOP"     help="Place labels above the page area."/>
+			<option name="wxBK_LEFT"    help="Place labels on the left side."/>
+			<option name="wxBK_RIGHT"   help="Place labels on the right side."/>
+			<option name="wxBK_BOTTOM"  help="Place labels below the page area."/>wxBK_DEFAULT</property>
+		<event name="OnToolbookPageChanged" 	class="wxToolbookEvent" help="The page selection was changed. Processes a wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED event."/>
+		<event name="OnToolbookPageChanging" 	class="wxToolbookEvent" help="The page selection is about to be changed. Processes a wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING event. This event can be vetoed."/>
+	</objectinfo>
+
+	<objectinfo class="toolbookpage" icon="toolbook.xpm" type="toolbookpage">
+		<property name="label" 	type="wxString_i18n">a page</property>
+		<property name="bitmap" type="bitmap" 	help="Page Image"/>
+		<property name="image" type="int" 		help="wxImageList Index"/>
+		<property name="select" type="bool" 	help="Select Page when Adding">0</property>
+	</objectinfo>
+
 </package>
