@@ -27,6 +27,7 @@ void wxFBSettings::Load()
 
 	config->Read( wxT("/mainframe/aui/perspective"),                  &Perspective );
 
+	config->Read( wxT("/preferences/gui/UseAUI"),                     &UseAUI,              0 );
 	config->Read( wxT("/preferences/gui/UseCustomPrefs"),             &UseCustomPrefs,      0 );
 	config->Read( wxT("/preferences/gui/UseGradientVertical"),        &UseGradientVertical, 0 );
 	config->Read( wxT("/preferences/gui/CaptionTextHeight"),          &CaptionTextHeight,  18 );
@@ -59,6 +60,7 @@ void wxFBSettings::Save()
 
 	config->Write( wxT("/mainframe/aui/perspective"),                  Perspective );
 
+	config->Write( wxT("/preferences/gui/UseAUI"),                     UseAUI );
 	config->Write( wxT("/preferences/gui/UseCustomPrefs"),             UseCustomPrefs );
 	config->Write( wxT("/preferences/gui/CaptionActiveColor"),         TypeConv::ColourToString( CaptionActiveColor ) );
 	config->Write( wxT("/preferences/gui/CaptionActiveColorGradient"), TypeConv::ColourToString( CaptionActiveColorGradient ) );

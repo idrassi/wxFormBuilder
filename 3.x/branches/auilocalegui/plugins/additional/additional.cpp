@@ -141,21 +141,21 @@ public:
 	{
 		return new wxCalendarCtrl((wxWindow *)parent,-1,
 			wxDefaultDateTime,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 	}
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxCalendarCtrl"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxCalendarCtrl"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxCalendarCtrl"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxCalendarCtrl"));
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -168,21 +168,21 @@ public:
 	{
 		return new wxDatePickerCtrl((wxWindow *)parent,-1,
 			wxDefaultDateTime,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 	}
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxDatePickerCtrl"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxDatePickerCtrl"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxDatePickerCtrl"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxDatePickerCtrl"));
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -196,9 +196,9 @@ public:
 		wxRichTextCtrl* richText = new wxRichTextCtrl( 	(wxWindow*)parent,
 															wxID_ANY,
 															wxEmptyString,
-															obj->GetPropertyAsPoint(_("pos")),
-															obj->GetPropertyAsSize(_("size")),
-															obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+															obj->GetPropertyAsPoint(wxT("pos")),
+															obj->GetPropertyAsSize(wxT("size")),
+															obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 
 		wxFont textFont = wxFont(12, wxROMAN, wxNORMAL, wxNORMAL);
 		wxFont boldFont = wxFont(12, wxROMAN, wxNORMAL, wxBOLD);
@@ -216,12 +216,12 @@ public:
 		r.BeginBold();
 
 		r.BeginFontSize(14);
-		r.WriteText(wxT("Welcome to wxRichTextCtrl, a wxWidgets control for editing and presenting styled text and images"));
+		r.WriteText(_("Welcome to wxRichTextCtrl, a wxWidgets control for editing and presenting styled text and images"));
 		r.EndFontSize();
 		r.Newline();
 
 		r.BeginItalic();
-		r.WriteText(wxT("by Julian Smart"));
+		r.WriteText(_("by Julian Smart"));
 		r.EndItalic();
 
 		r.EndBold();
@@ -233,75 +233,75 @@ public:
 
 		r.Newline();
 
-		r.WriteText(wxT("What can you do with this thing? "));
+		r.WriteText(_("What can you do with this thing? "));
 		r.WriteImage(wxBitmap(smiley_xpm));
-		r.WriteText(wxT(" Well, you can change text "));
+		r.WriteText(_(" Well, you can change text "));
 
 		r.BeginTextColour(wxColour(255, 0, 0));
-		r.WriteText(wxT("colour, like this red bit."));
+		r.WriteText(_("colour, like this red bit."));
 		r.EndTextColour();
 
 		r.BeginTextColour(wxColour(0, 0, 255));
-		r.WriteText(wxT(" And this blue bit."));
+		r.WriteText(_(" And this blue bit."));
 		r.EndTextColour();
 
-		r.WriteText(wxT(" Naturally you can make things "));
+		r.WriteText(_(" Naturally you can make things "));
 		r.BeginBold();
-		r.WriteText(wxT("bold "));
+		r.WriteText(_("bold "));
 		r.EndBold();
 		r.BeginItalic();
-		r.WriteText(wxT("or italic "));
+		r.WriteText(_("or italic "));
 		r.EndItalic();
 		r.BeginUnderline();
-		r.WriteText(wxT("or underlined."));
+		r.WriteText(_("or underlined."));
 		r.EndUnderline();
 
 		r.BeginFontSize(14);
-		r.WriteText(wxT(" Different font sizes on the same line is allowed, too."));
+		r.WriteText(_(" Different font sizes on the same line is allowed, too."));
 		r.EndFontSize();
 
-		r.WriteText(wxT(" Next we'll show an indented paragraph."));
+		r.WriteText(_(" Next we'll show an indented paragraph."));
 
 		r.BeginLeftIndent(60);
 		r.Newline();
 
-		r.WriteText(wxT("Indented paragraph."));
+		r.WriteText(_("Indented paragraph."));
 		r.EndLeftIndent();
 
 		r.Newline();
 
-		r.WriteText(wxT("Next, we'll show a first-line indent, achieved using BeginLeftIndent(100, -40)."));
+		r.WriteText(_("Next, we'll show a first-line indent, achieved using BeginLeftIndent(100, -40)."));
 
 		r.BeginLeftIndent(100, -40);
 		r.Newline();
 
-		r.WriteText(wxT("It was in January, the most down-trodden month of an Edinburgh winter."));
+		r.WriteText(_("It was in January, the most down-trodden month of an Edinburgh winter."));
 		r.EndLeftIndent();
 
 		r.Newline();
 
-		r.WriteText(wxT("Numbered bullets are possible, again using subindents:"));
+		r.WriteText(_("Numbered bullets are possible, again using subindents:"));
 
 		r.BeginNumberedBullet(1, 100, 60);
 		r.Newline();
 
-		r.WriteText(wxT("This is my first item. Note that wxRichTextCtrl doesn't automatically do numbering, but this will be added later."));
+		r.WriteText(_("This is my first item. Note that wxRichTextCtrl doesn't automatically do numbering, but this will be added later."));
 		r.EndNumberedBullet();
 
 		r.BeginNumberedBullet(2, 100, 60);
 		r.Newline();
 
-		r.WriteText(wxT("This is my second item."));
+		r.WriteText(_("This is my second item."));
 		r.EndNumberedBullet();
 
 		r.Newline();
 
-		r.WriteText(wxT("The following paragraph is right-indented:"));
+		r.WriteText(_("The following paragraph is right-indented:"));
 
 		r.BeginRightIndent(200);
 		r.Newline();
 
-		r.WriteText(wxT("It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable."));
+		r.WriteText(_("It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable."));
 		r.EndRightIndent();
 
 		r.Newline();
@@ -316,17 +316,17 @@ public:
 		attr.SetTabs(tabs);
 		r.SetDefaultStyle(attr);
 
-		r.WriteText(wxT("This line contains tabs:\tFirst tab\tSecond tab\tThird tab"));
+		r.WriteText(_("This line contains tabs:\tFirst tab\tSecond tab\tThird tab"));
 
 		r.Newline();
-		r.WriteText(wxT("Other notable features of wxRichTextCtrl include:"));
+		r.WriteText(_("Other notable features of wxRichTextCtrl include:"));
 
 		r.BeginSymbolBullet(wxT('*'), 100, 60);
 		r.Newline();
-		r.WriteText(wxT("Compatibility with wxTextCtrl API"));
+		r.WriteText(_("Compatibility with wxTextCtrl API"));
 		r.EndSymbolBullet();
 
-		r.WriteText(wxT("\nNote: this content was generated programmatically and copied from the sample. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!"));
+		r.WriteText(_("\nNote: this content was generated programmatically and copied from the sample. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!"));
 
 		r.EndSuppressUndo();
 
@@ -335,14 +335,14 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("unknown"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("unknown"), obj->GetPropertyAsString(wxT("name")));
 		//xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxRichTextCtrl"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxRichTextCtrl"));
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -354,13 +354,11 @@ public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		wxHtmlWindow *hw = new wxHtmlWindow((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 
-		wxString dummy_page(
-			wxT("<b>wxHtmlWindow</b><br />")
-			wxT("This is a dummy page.</body></html>"));
+		wxString dummy_page( wxT("<b>wxHtmlWindow</b><br />") + wxString(_("This is a dummy page.") ) + wxT("</body></html>") );
 
 		hw->SetPage(dummy_page);
 
@@ -369,14 +367,14 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxHtmlWindow"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxHtmlWindow"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxHtmlWindow"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxHtmlWindow"));
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -390,12 +388,12 @@ public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		wxToggleButton* window = new wxToggleButton((wxWindow *)parent,-1,
-			obj->GetPropertyAsString(_("label")),
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsString(wxT("label")),
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("window_style")));
 
-		window->SetValue( ( obj->GetPropertyAsInteger(_("value")) != 0 ) );
+		window->SetValue( ( obj->GetPropertyAsInteger(wxT("value")) != 0 ) );
 		window->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ToggleButtonComponent::OnToggle ), NULL, this );
 		return window;
 	}
@@ -407,7 +405,7 @@ public:
 		{
 			wxString value;
 			value.Printf( wxT("%i"), window->GetValue() ? 1 : 0 );
-			GetManager()->ModifyProperty( window, _("value"), value );
+			GetManager()->ModifyProperty( window, wxT("value"), value );
 			window->SetFocus();
 		}
 	}
@@ -424,19 +422,19 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxToggleButton"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxToggleButton"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
-		xrc.AddProperty(_("label"),_("label"), XRC_TYPE_TEXT);
-		xrc.AddProperty(_("value"),_("checked"), XRC_TYPE_BOOL);
+		xrc.AddProperty(wxT("label"),wxT("label"), XRC_TYPE_TEXT);
+		xrc.AddProperty(wxT("value"),wxT("checked"), XRC_TYPE_BOOL);
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxToggleButton"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxToggleButton"));
 		filter.AddWindowProperties();
-		filter.AddProperty(_("label"),_("label"), XRC_TYPE_TEXT);
-		filter.AddProperty(_("checked"),_("value"), XRC_TYPE_BOOL);
+		filter.AddProperty(wxT("label"),wxT("label"), XRC_TYPE_TEXT);
+		filter.AddProperty(wxT("checked"),wxT("value"), XRC_TYPE_BOOL);
 		return filter.GetXfbObject();
 	}
 
@@ -447,17 +445,17 @@ class TreeCtrlComponent : public ComponentBase
 public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
-		int style = obj->GetPropertyAsInteger(_("style"));
+		int style = obj->GetPropertyAsInteger(wxT("style"));
 		wxTreeCtrl *tc = new wxTreeCtrl((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			style | obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			style | obj->GetPropertyAsInteger(wxT("window_style")));
 
 		// dummy nodes
 		wxTreeItemId root = tc->AddRoot(wxT("root node"));
-		wxTreeItemId node1 = tc->AppendItem(root,wxT("node1"));
-		wxTreeItemId node2 = tc->AppendItem(root,wxT("node2"));
-		wxTreeItemId node3 = tc->AppendItem(node2,wxT("node3"));
+		wxTreeItemId node1 = tc->AppendItem(root,_("node1"));
+		wxTreeItemId node2 = tc->AppendItem(root,_("node2"));
+		wxTreeItemId node3 = tc->AppendItem(node2,_("node3"));
 		if ( ( style & wxTR_HIDE_ROOT ) == 0 )
 		{
 			tc->Expand(root);
@@ -471,14 +469,14 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxTreeCtrl"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc( obj, wxT("wxTreeCtrl"), obj->GetPropertyAsString( wxT("name") ) );
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxTreeCtrl"));
+		XrcToXfbFilter filter( xrcObj, wxT("wxTreeCtrl") );
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -490,9 +488,9 @@ public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		wxScrollBar *sb = new wxScrollBar((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 
         sb->SetScrollbar(obj->GetPropertyAsInteger(_T("value")),
             obj->GetPropertyAsInteger(_T("thumbsize")),
@@ -503,23 +501,23 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxScrollBar"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxScrollBar"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
-		xrc.AddProperty(_("value"), _("value"), XRC_TYPE_INTEGER);
-		xrc.AddProperty(_("thumbsize"), _("thumbsize"), XRC_TYPE_INTEGER);
-		xrc.AddProperty(_("range"), _("range"), XRC_TYPE_INTEGER);
-		xrc.AddProperty(_("pagesize"), _("pagesize"), XRC_TYPE_INTEGER);
+		xrc.AddProperty(wxT("value"), wxT("value"), XRC_TYPE_INTEGER);
+		xrc.AddProperty(wxT("thumbsize"), wxT("thumbsize"), XRC_TYPE_INTEGER);
+		xrc.AddProperty(wxT("range"), wxT("range"), XRC_TYPE_INTEGER);
+		xrc.AddProperty(wxT("pagesize"), wxT("pagesize"), XRC_TYPE_INTEGER);
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxScrollBar"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxScrollBar"));
 		filter.AddWindowProperties();
-		filter.AddProperty(_("value"), _("value"), XRC_TYPE_INTEGER);
-		filter.AddProperty(_("thumbsize"), _("thumbsize"), XRC_TYPE_INTEGER);
-		filter.AddProperty(_("range"), _("range"), XRC_TYPE_INTEGER);
-		filter.AddProperty(_("pagesize"), _("pagesize"), XRC_TYPE_INTEGER);
+		filter.AddProperty(wxT("value"), wxT("value"), XRC_TYPE_INTEGER);
+		filter.AddProperty(wxT("thumbsize"), wxT("thumbsize"), XRC_TYPE_INTEGER);
+		filter.AddProperty(wxT("range"), wxT("range"), XRC_TYPE_INTEGER);
+		filter.AddProperty(wxT("pagesize"), wxT("pagesize"), XRC_TYPE_INTEGER);
 		return filter.GetXfbObject();
 	}
 };
@@ -530,13 +528,13 @@ public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		wxSpinCtrl* window = new wxSpinCtrl((wxWindow *)parent,-1,
-			obj->GetPropertyAsString(_("value")),
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")),
-			obj->GetPropertyAsInteger(_("min")),
-			obj->GetPropertyAsInteger(_("max")),
-			obj->GetPropertyAsInteger(_("initial")));
+			obj->GetPropertyAsString(wxT("value")),
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")),
+			obj->GetPropertyAsInteger(wxT("min")),
+			obj->GetPropertyAsInteger(wxT("max")),
+			obj->GetPropertyAsInteger(wxT("initial")));
 
 		window->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( SpinCtrlComponent::OnSpin ), NULL, this );
 		return window;
@@ -549,7 +547,7 @@ public:
 		{
 			wxString value;
 			value.Printf( wxT("%i"), window->GetValue() );
-			GetManager()->ModifyProperty( window, _("initial"), value );
+			GetManager()->ModifyProperty( window, wxT("initial"), value );
 			window->SetFocus();
 		}
 	}
@@ -566,22 +564,22 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxSpinCtrl"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxSpinCtrl"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
-		xrc.AddProperty(_("initial"),_("value"), XRC_TYPE_TEXT);
-		xrc.AddProperty(_("min"),_("min"), XRC_TYPE_INTEGER);
-		xrc.AddProperty(_("max"),_("max"), XRC_TYPE_INTEGER);
+		xrc.AddProperty(wxT("initial"),wxT("value"), XRC_TYPE_TEXT);
+		xrc.AddProperty(wxT("min"),wxT("min"), XRC_TYPE_INTEGER);
+		xrc.AddProperty(wxT("max"),wxT("max"), XRC_TYPE_INTEGER);
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxSpinCtrl"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxSpinCtrl"));
 		filter.AddWindowProperties();
-		filter.AddProperty(_("value"),_("value"), XRC_TYPE_TEXT);
-		filter.AddProperty(_("value"),_("initial"), XRC_TYPE_TEXT);
-		filter.AddProperty(_("min"),_("min"), XRC_TYPE_INTEGER);
-		filter.AddProperty(_("max"),_("max"), XRC_TYPE_INTEGER);
+		filter.AddProperty(wxT("value"),wxT("value"), XRC_TYPE_TEXT);
+		filter.AddProperty(wxT("value"),wxT("initial"), XRC_TYPE_TEXT);
+		filter.AddProperty(wxT("min"),wxT("min"), XRC_TYPE_INTEGER);
+		filter.AddProperty(wxT("max"),wxT("max"), XRC_TYPE_INTEGER);
 
 		return filter.GetXfbObject();
 	}
@@ -593,21 +591,21 @@ public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		return new wxSpinButton((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 	}
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxSpinButton"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxSpinButton"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxSpinButton"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxSpinButton"));
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -619,30 +617,30 @@ public:
 
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
-		wxArrayString choices (obj->GetPropertyAsArrayString(_("choices")));
+		wxArrayString choices (obj->GetPropertyAsArrayString(wxT("choices")));
 		wxCheckListBox *cl =
 			new wxCheckListBox((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
 			choices,
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 
 		return cl;
 	}
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxCheckListBox"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxCheckListBox"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
-		xrc.AddProperty(_("choices"), _("content"), XRC_TYPE_STRINGLIST);
+		xrc.AddProperty(wxT("choices"), wxT("content"), XRC_TYPE_STRINGLIST);
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxCheckListBox"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxCheckListBox"));
 		filter.AddWindowProperties();
-		filter.AddProperty(_("content"), _("choices"), XRC_TYPE_STRINGLIST);
+		filter.AddProperty(wxT("content"), wxT("choices"), XRC_TYPE_STRINGLIST);
 		return filter.GetXfbObject();
 	}
 };
@@ -654,84 +652,84 @@ public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		wxGrid *grid = new wxGrid((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("window_style")));
 
 		grid->CreateGrid(
-			obj->GetPropertyAsInteger(_("rows")),
-			obj->GetPropertyAsInteger(_("cols")));
+			obj->GetPropertyAsInteger(wxT("rows")),
+			obj->GetPropertyAsInteger(wxT("cols")));
 
-		grid->EnableDragColMove( obj->GetPropertyAsInteger( _("drag_col_move") ) != 0 );
-		grid->EnableDragColSize( obj->GetPropertyAsInteger( _("drag_col_size") ) != 0 );
-		grid->EnableDragGridSize( obj->GetPropertyAsInteger( _("drag_grid_size") ) != 0 );
-		grid->EnableDragRowSize( obj->GetPropertyAsInteger( _("drag_row_size") ) != 0 );
-		grid->EnableEditing( obj->GetPropertyAsInteger( _("editing") ) != 0 );
-		grid->EnableGridLines( obj->GetPropertyAsInteger( _("grid_lines") ) != 0 );
-		if ( !obj->IsNull( _("grid_line_color") ) )
+		grid->EnableDragColMove( obj->GetPropertyAsInteger( wxT("drag_col_move") ) != 0 );
+		grid->EnableDragColSize( obj->GetPropertyAsInteger( wxT("drag_col_size") ) != 0 );
+		grid->EnableDragGridSize( obj->GetPropertyAsInteger( wxT("drag_grid_size") ) != 0 );
+		grid->EnableDragRowSize( obj->GetPropertyAsInteger( wxT("drag_row_size") ) != 0 );
+		grid->EnableEditing( obj->GetPropertyAsInteger( wxT("editing") ) != 0 );
+		grid->EnableGridLines( obj->GetPropertyAsInteger( wxT("grid_lines") ) != 0 );
+		if ( !obj->IsNull( wxT("grid_line_color") ) )
 		{
-			grid->SetGridLineColour( obj->GetPropertyAsColour( _("grid_line_color") ) );
+			grid->SetGridLineColour( obj->GetPropertyAsColour( wxT("grid_line_color") ) );
 		}
-		grid->SetMargins( obj->GetPropertyAsInteger( _("margin_width") ), obj->GetPropertyAsInteger( _("margin_height") ) );
+		grid->SetMargins( obj->GetPropertyAsInteger( wxT("margin_width") ), obj->GetPropertyAsInteger( wxT("margin_height") ) );
 
 		// Label Properties
-		grid->SetColLabelAlignment( obj->GetPropertyAsInteger( _("col_label_horiz_alignment") ), obj->GetPropertyAsInteger( _("col_label_vert_alignment") ) );
-		grid->SetColLabelSize( obj->GetPropertyAsInteger( _("col_label_size") ) );
+		grid->SetColLabelAlignment( obj->GetPropertyAsInteger( wxT("col_label_horiz_alignment") ), obj->GetPropertyAsInteger( wxT("col_label_vert_alignment") ) );
+		grid->SetColLabelSize( obj->GetPropertyAsInteger( wxT("col_label_size") ) );
 
-		wxArrayString columnLabels = obj->GetPropertyAsArrayString( _("col_label_values") );
+		wxArrayString columnLabels = obj->GetPropertyAsArrayString( wxT("col_label_values") );
 		for ( int i = 0; i < (int)columnLabels.size() && i < grid->GetNumberCols(); ++i )
 		{
 			grid->SetColLabelValue( i, columnLabels[i] );
 		}
 
-		wxArrayInt columnSizes = obj->GetPropertyAsArrayInt( _("column_sizes") );
+		wxArrayInt columnSizes = obj->GetPropertyAsArrayInt( wxT("column_sizes") );
 		for ( int i = 0; i < (int)columnSizes.size() && i < grid->GetNumberCols(); ++i )
 		{
 			grid->SetColSize( i, columnSizes[i] );
 		}
 
-		grid->SetRowLabelAlignment( obj->GetPropertyAsInteger( _("row_label_horiz_alignment") ), obj->GetPropertyAsInteger( _("row_label_vert_alignment") ) );
-		grid->SetRowLabelSize( obj->GetPropertyAsInteger( _("row_label_size") ) );
+		grid->SetRowLabelAlignment( obj->GetPropertyAsInteger( wxT("row_label_horiz_alignment") ), obj->GetPropertyAsInteger( wxT("row_label_vert_alignment") ) );
+		grid->SetRowLabelSize( obj->GetPropertyAsInteger( wxT("row_label_size") ) );
 
-		wxArrayString rowLabels = obj->GetPropertyAsArrayString( _("row_label_values") );
+		wxArrayString rowLabels = obj->GetPropertyAsArrayString( wxT("row_label_values") );
 		for ( int i = 0; i < (int)rowLabels.size() && i < grid->GetNumberRows(); ++i )
 		{
 			grid->SetRowLabelValue( i, rowLabels[i] );
 		}
 
-		wxArrayInt rowSizes = obj->GetPropertyAsArrayInt( _("row_sizes") );
+		wxArrayInt rowSizes = obj->GetPropertyAsArrayInt( wxT("row_sizes") );
 		for ( int i = 0; i < (int)rowSizes.size() && i < grid->GetNumberRows(); ++i )
 		{
 			grid->SetRowSize( i, rowSizes[i] );
 		}
 
-		if ( !obj->IsNull( _("label_bg") ) )
+		if ( !obj->IsNull( wxT("label_bg") ) )
 		{
-			grid->SetLabelBackgroundColour( obj->GetPropertyAsColour( _("label_bg") ) );
+			grid->SetLabelBackgroundColour( obj->GetPropertyAsColour( wxT("label_bg") ) );
 		}
-		if ( !obj->IsNull( _("label_text") ) )
+		if ( !obj->IsNull( wxT("label_text") ) )
 		{
-			grid->SetLabelTextColour( obj->GetPropertyAsColour( _("label_text") ) );
+			grid->SetLabelTextColour( obj->GetPropertyAsColour( wxT("label_text") ) );
 		}
-		if ( !obj->IsNull( _("label_font") ) )
+		if ( !obj->IsNull( wxT("label_font") ) )
 		{
-			grid->SetLabelFont( obj->GetPropertyAsFont( _("label_font") ) );
+			grid->SetLabelFont( obj->GetPropertyAsFont( wxT("label_font") ) );
 		}
 
 		// Default Cell Properties
-		grid->SetDefaultCellAlignment( obj->GetPropertyAsInteger( _("cell_horiz_alignment") ), obj->GetPropertyAsInteger( _("cell_vert_alignment") ) );
+		grid->SetDefaultCellAlignment( obj->GetPropertyAsInteger( wxT("cell_horiz_alignment") ), obj->GetPropertyAsInteger( wxT("cell_vert_alignment") ) );
 
-		if ( !obj->IsNull( _("cell_bg") ) )
+		if ( !obj->IsNull( wxT("cell_bg") ) )
 		{
-			grid->SetDefaultCellBackgroundColour( obj->GetPropertyAsColour( _("cell_bg") ) );
+			grid->SetDefaultCellBackgroundColour( obj->GetPropertyAsColour( wxT("cell_bg") ) );
 		}
-		if ( !obj->IsNull( _("cell_text") ) )
+		if ( !obj->IsNull( wxT("cell_text") ) )
 		{
-			grid->SetDefaultCellTextColour( obj->GetPropertyAsColour( _("cell_text") ) );
+			grid->SetDefaultCellTextColour( obj->GetPropertyAsColour( wxT("cell_text") ) );
 		}
-		if ( !obj->IsNull( _("cell_font") ) )
+		if ( !obj->IsNull( wxT("cell_font") ) )
 		{
-			grid->SetDefaultCellFont( obj->GetPropertyAsFont( _("cell_font") ) );
+			grid->SetDefaultCellFont( obj->GetPropertyAsFont( wxT("cell_font") ) );
 		}
 
 		// Example Cell Values
@@ -743,11 +741,11 @@ public:
 			}
 		}
 
-		if ( obj->GetPropertyAsInteger( _("autosize_rows") ) != 0 )
+		if ( obj->GetPropertyAsInteger( wxT("autosize_rows") ) != 0 )
 		{
 			grid->AutoSizeRows();
 		}
-		if ( obj->GetPropertyAsInteger( _("autosize_cols") ) != 0 )
+		if ( obj->GetPropertyAsInteger( wxT("autosize_cols") ) != 0 )
 		{
 			grid->AutoSizeColumns();
 		}
@@ -759,14 +757,14 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxGrid"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxGrid"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxGrid"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxGrid"));
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -793,7 +791,7 @@ void ComponentEvtHandler::OnGridColSize( wxGridSizeEvent& )
 	}
 	sizes = sizes.substr( 0, sizes.length() - 1 );
 
-	m_manager->ModifyProperty( m_window, _("column_sizes"), sizes, true );
+	m_manager->ModifyProperty( m_window, wxT("column_sizes"), sizes, true );
 }
 
 void ComponentEvtHandler::OnGridRowSize( wxGridSizeEvent& )
@@ -811,7 +809,7 @@ void ComponentEvtHandler::OnGridRowSize( wxGridSizeEvent& )
 	}
 	sizes = sizes.substr( 0, sizes.length() - 1 );
 
-	m_manager->ModifyProperty( m_window, _("row_sizes"), sizes, true );
+	m_manager->ModifyProperty( m_window, wxT("row_sizes"), sizes, true );
 }
 
 #if wxCHECK_VERSION( 2, 8, 0 )
@@ -872,11 +870,11 @@ public:
 	{
 		wxColourPickerCtrl* colourpicker = new wxColourPickerCtrl(
 			(wxWindow*)parent,
-			obj->GetPropertyAsInteger(_("id")),
-			obj->GetPropertyAsColour(_("colour")),
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style"))
+			obj->GetPropertyAsInteger(wxT("id")),
+			obj->GetPropertyAsColour(wxT("colour")),
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style"))
 			);
 
 		colourpicker->PushEventHandler( new ComponentEvtHandler( colourpicker, GetManager() ) );
@@ -885,16 +883,16 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxColourPickerCtrl"), obj->GetPropertyAsString(_("name")));
-		xrc.AddProperty(_("colour"),_("value"),XRC_TYPE_COLOUR);
+		ObjectToXrcFilter xrc(obj, wxT("wxColourPickerCtrl"), obj->GetPropertyAsString(wxT("name")));
+		xrc.AddProperty(wxT("colour"),wxT("value"),XRC_TYPE_COLOUR);
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxColourPickerCtrl"));
-		filter.AddProperty(_("value"),_("colour"),XRC_TYPE_COLOUR);
+		XrcToXfbFilter filter(xrcObj, wxT("wxColourPickerCtrl"));
+		filter.AddProperty(wxT("value"),wxT("colour"),XRC_TYPE_COLOUR);
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -906,7 +904,7 @@ void ComponentEvtHandler::OnColourPickerColourChanged( wxColourPickerEvent& )
 	if ( window != NULL )
 	{
 		wxColour colour = window->GetColour();
-		m_manager->ModifyProperty( window, _("colour"), wxString::Format(wxT("%d,%d,%d"),colour.Red(),colour.Green(),colour.Blue())  );
+		m_manager->ModifyProperty( window, wxT("colour"), wxString::Format(wxT("%d,%d,%d"),colour.Red(),colour.Green(),colour.Blue())  );
 	}
 }
 
@@ -917,16 +915,16 @@ public:
 	{
 		wxFontPickerCtrl* picker = new wxFontPickerCtrl(
 			(wxWindow*)parent,
-			obj->GetPropertyAsInteger(_("id")),
-			obj->GetPropertyAsFont(_("value")),
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style"))
+			obj->GetPropertyAsInteger(wxT("id")),
+			obj->GetPropertyAsFont(wxT("value")),
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style"))
 			);
 
-		if ( !obj->IsNull( _("max_point_size") ) )
+		if ( !obj->IsNull( wxT("max_point_size") ) )
 		{
-			picker->SetMaxPointSize( obj->GetPropertyAsInteger( _("max_point_size") ) );
+			picker->SetMaxPointSize( obj->GetPropertyAsInteger( wxT("max_point_size") ) );
 		}
 
 		picker->PushEventHandler( new ComponentEvtHandler( picker, GetManager() ) );
@@ -935,10 +933,10 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxFontPickerCtrl"), obj->GetPropertyAsString(_("name")));
-		if ( !obj->IsNull( _("value") ) )
+		ObjectToXrcFilter xrc(obj, wxT("wxFontPickerCtrl"), obj->GetPropertyAsString(wxT("name")));
+		if ( !obj->IsNull( wxT("value") ) )
 		{
-			xrc.AddProperty(_("value"),_("value"),XRC_TYPE_FONT);
+			xrc.AddProperty(wxT("value"),wxT("value"),XRC_TYPE_FONT);
 		}
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
@@ -946,8 +944,8 @@ public:
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxFontPickerCtrl"));
-		filter.AddProperty(_("value"),_("value"),XRC_TYPE_FONT);
+		XrcToXfbFilter filter(xrcObj, wxT("wxFontPickerCtrl"));
+		filter.AddProperty(wxT("value"),wxT("value"),XRC_TYPE_FONT);
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -959,7 +957,7 @@ void ComponentEvtHandler::OnFontPickerFontChanged( wxFontPickerEvent& )
 	if ( window != NULL )
 	{
 		wxFont font = window->GetSelectedFont();
-		m_manager->ModifyProperty( window, _("value"), wxString::Format( wxT("%s,%d,%d,%d"), font.GetFaceName().c_str(), font.GetStyle(), font.GetWeight(), font.GetPointSize() ) );
+		m_manager->ModifyProperty( window, wxT("value"), wxString::Format( wxT("%s,%d,%d,%d"), font.GetFaceName().c_str(), font.GetStyle(), font.GetWeight(), font.GetPointSize() ) );
 	}
 }
 
@@ -970,13 +968,13 @@ public:
 	{
 		wxFilePickerCtrl* picker = new wxFilePickerCtrl(
 			(wxWindow*)parent,
-			obj->GetPropertyAsInteger(_("id")),
-			obj->GetPropertyAsString(_("value")),
-			obj->GetPropertyAsString(_("message")),
-			obj->GetPropertyAsString(_("wildcard")),
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style"))
+			obj->GetPropertyAsInteger(wxT("id")),
+			obj->GetPropertyAsString(wxT("value")),
+			obj->GetPropertyAsString(wxT("message")),
+			obj->GetPropertyAsString(wxT("wildcard")),
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style"))
 			);
 
 		picker->PushEventHandler( new ComponentEvtHandler( picker, GetManager() ) );
@@ -985,20 +983,20 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxFilePickerCtrl"), obj->GetPropertyAsString(_("name")));
-		xrc.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
-		xrc.AddProperty(_("message"),_("message"),XRC_TYPE_TEXT);
-		xrc.AddProperty(_("wildcard"),_("wildcard"),XRC_TYPE_TEXT);
+		ObjectToXrcFilter xrc(obj, wxT("wxFilePickerCtrl"), obj->GetPropertyAsString(wxT("name")));
+		xrc.AddProperty(wxT("value"),wxT("value"),XRC_TYPE_TEXT);
+		xrc.AddProperty(wxT("message"),wxT("message"),XRC_TYPE_TEXT);
+		xrc.AddProperty(wxT("wildcard"),wxT("wildcard"),XRC_TYPE_TEXT);
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxFilePickerCtrl"));
-		filter.AddProperty(_("value"),_("value"),XRC_TYPE_FONT);
-		filter.AddProperty(_("message"),_("message"),XRC_TYPE_TEXT);
-		filter.AddProperty(_("wildcard"),_("wildcard"),XRC_TYPE_TEXT);
+		XrcToXfbFilter filter(xrcObj, wxT("wxFilePickerCtrl"));
+		filter.AddProperty(wxT("value"),wxT("value"),XRC_TYPE_FONT);
+		filter.AddProperty(wxT("message"),wxT("message"),XRC_TYPE_TEXT);
+		filter.AddProperty(wxT("wildcard"),wxT("wildcard"),XRC_TYPE_TEXT);
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -1009,7 +1007,7 @@ void ComponentEvtHandler::OnFilePickerFileChanged( wxFileDirPickerEvent& )
 	wxFilePickerCtrl* window = wxDynamicCast( m_window, wxFilePickerCtrl );
 	if ( window != NULL )
 	{
-		m_manager->ModifyProperty( window, _("value"), window->GetPath() );
+		m_manager->ModifyProperty( window, wxT("value"), window->GetPath() );
 	}
 }
 
@@ -1020,12 +1018,12 @@ public:
 	{
 		wxDirPickerCtrl* picker = new wxDirPickerCtrl(
 			(wxWindow*)parent,
-			obj->GetPropertyAsInteger(_("id")),
-			obj->GetPropertyAsString(_("value")),
-			obj->GetPropertyAsString(_("message")),
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style"))
+			obj->GetPropertyAsInteger(wxT("id")),
+			obj->GetPropertyAsString(wxT("value")),
+			obj->GetPropertyAsString(wxT("message")),
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style"))
 			);
 
 		picker->PushEventHandler( new ComponentEvtHandler( picker, GetManager() ) );
@@ -1034,18 +1032,18 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxDirPickerCtrl"), obj->GetPropertyAsString(_("name")));
-		xrc.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
-		xrc.AddProperty(_("message"),_("message"),XRC_TYPE_TEXT);
+		ObjectToXrcFilter xrc(obj, wxT("wxDirPickerCtrl"), obj->GetPropertyAsString(wxT("name")));
+		xrc.AddProperty(wxT("value"),wxT("value"),XRC_TYPE_TEXT);
+		xrc.AddProperty(wxT("message"),wxT("message"),XRC_TYPE_TEXT);
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxDirPickerCtrl"));
-		filter.AddProperty(_("value"),_("value"),XRC_TYPE_FONT);
-		filter.AddProperty(_("message"),_("message"),XRC_TYPE_TEXT);
+		XrcToXfbFilter filter(xrcObj, wxT("wxDirPickerCtrl"));
+		filter.AddProperty(wxT("value"),wxT("value"),XRC_TYPE_FONT);
+		filter.AddProperty(wxT("message"),wxT("message"),XRC_TYPE_TEXT);
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -1056,7 +1054,7 @@ void ComponentEvtHandler::OnDirPickerDirChanged( wxFileDirPickerEvent& )
 	wxDirPickerCtrl* window = wxDynamicCast( m_window, wxDirPickerCtrl );
 	if ( window != NULL )
 	{
-		m_manager->ModifyProperty( window, _("value"), window->GetPath() );
+		m_manager->ModifyProperty( window, wxT("value"), window->GetPath() );
 	}
 }
 
@@ -1067,24 +1065,24 @@ public:
 	{
 		wxHyperlinkCtrl* ctrl = new wxHyperlinkCtrl(
 			(wxWindow*)parent, -1,
-			obj->GetPropertyAsString(_("label")),
-			obj->GetPropertyAsString(_("url")),
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style"))
+			obj->GetPropertyAsString(wxT("label")),
+			obj->GetPropertyAsString(wxT("url")),
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style"))
 			);
 
-		if ( !obj->IsNull( _("hover_color") ) )
+		if ( !obj->IsNull( wxT("hover_color") ) )
 		{
-			ctrl->SetHoverColour( obj->GetPropertyAsColour( _("hover_color") ) );
+			ctrl->SetHoverColour( obj->GetPropertyAsColour( wxT("hover_color") ) );
 		}
-		if ( !obj->IsNull( _("normal_color") ) )
+		if ( !obj->IsNull( wxT("normal_color") ) )
 		{
-			ctrl->SetNormalColour( obj->GetPropertyAsColour( _("normal_color") ) );
+			ctrl->SetNormalColour( obj->GetPropertyAsColour( wxT("normal_color") ) );
 		}
-		if ( !obj->IsNull( _("visited_color") ) )
+		if ( !obj->IsNull( wxT("visited_color") ) )
 		{
-			ctrl->SetVisitedColour( obj->GetPropertyAsColour( _("visited_color") ) );
+			ctrl->SetVisitedColour( obj->GetPropertyAsColour( wxT("visited_color") ) );
 		}
 
 		return ctrl;
@@ -1092,24 +1090,24 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxHyperlinkCtrl"), obj->GetPropertyAsString(_("name")));
-		xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
-		xrc.AddPropertyValue(_("url"), obj->GetPropertyAsString(_("url")));
+		ObjectToXrcFilter xrc(obj, wxT("wxHyperlinkCtrl"), obj->GetPropertyAsString(wxT("name")));
+		xrc.AddProperty(wxT("label"),wxT("label"),XRC_TYPE_TEXT);
+		xrc.AddPropertyValue(wxT("url"), obj->GetPropertyAsString(wxT("url")));
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxHyperlinkCtrl"));
-		filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
+		XrcToXfbFilter filter(xrcObj, wxT("wxHyperlinkCtrl"));
+		filter.AddProperty(wxT("label"),wxT("label"),XRC_TYPE_TEXT);
 
 		try
 		{
 			ticpp::Element *urlElement = xrcObj->FirstChildElement("url");
 			wxString url(urlElement->GetText().c_str(), wxConvUTF8);
 
-			filter.AddPropertyValue(_("url"), url);
+			filter.AddPropertyValue(wxT("url"), url);
 		}
 		catch(ticpp::Exception&)
 		{
@@ -1130,35 +1128,35 @@ public:
 		wxGenericDirCtrl* ctrl = new wxGenericDirCtrl(
 			(wxWindow*)parent,
 			wxID_ANY,
-			obj->GetPropertyAsString(_("defaultfolder")),
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")),
-			obj->GetPropertyAsString(_("filter")),
-			obj->GetPropertyAsInteger(_("defaultfilter"))
+			obj->GetPropertyAsString(wxT("defaultfolder")),
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")),
+			obj->GetPropertyAsString(wxT("filter")),
+			obj->GetPropertyAsInteger(wxT("defaultfilter"))
 			);
 
-		ctrl->ShowHidden( obj->GetPropertyAsInteger( _("show_hidden") ) != 0 );
+		ctrl->ShowHidden( obj->GetPropertyAsInteger( wxT("show_hidden") ) != 0 );
 		ctrl->GetTreeCtrl()->PushEventHandler( new GenericDirCtrlEvtHandler( ctrl, GetManager() ) );
 		return ctrl;
 	}
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxGenericDirCtrl"), obj->GetPropertyAsString(_("name")));
-		xrc.AddProperty(_("defaultfolder"),_("defaultfolder"),XRC_TYPE_TEXT);
-		xrc.AddProperty(_("filter"),_("filter"),XRC_TYPE_TEXT);
-		xrc.AddProperty(_("defaultfilter"),_("defaultfilter"),XRC_TYPE_INTEGER);
+		ObjectToXrcFilter xrc(obj, wxT("wxGenericDirCtrl"), obj->GetPropertyAsString(wxT("name")));
+		xrc.AddProperty(wxT("defaultfolder"),wxT("defaultfolder"),XRC_TYPE_TEXT);
+		xrc.AddProperty(wxT("filter"),wxT("filter"),XRC_TYPE_TEXT);
+		xrc.AddProperty(wxT("defaultfilter"),wxT("defaultfilter"),XRC_TYPE_INTEGER);
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxGenericDirCtrl"));
-		filter.AddProperty(_("defaultfolder"),_("defaultfolder"),XRC_TYPE_TEXT);
-		filter.AddProperty(_("filter"),_("filter"),XRC_TYPE_TEXT);
-		filter.AddProperty(_("defaultfilter"),_("defaultfilter"),XRC_TYPE_INTEGER);
+		XrcToXfbFilter filter(xrcObj, wxT("wxGenericDirCtrl"));
+		filter.AddProperty(wxT("defaultfolder"),wxT("defaultfolder"),XRC_TYPE_TEXT);
+		filter.AddProperty(wxT("filter"),wxT("filter"),XRC_TYPE_TEXT);
+		filter.AddProperty(wxT("defaultfilter"),wxT("defaultfilter"),XRC_TYPE_INTEGER);
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -1180,7 +1178,7 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, obj->GetPropertyAsString(_("class")), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, obj->GetPropertyAsString(wxT("class")), obj->GetPropertyAsString(wxT("name")));
 		return xrc.GetXrcObject();
 	}
 };
@@ -1192,19 +1190,19 @@ public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		wxSearchCtrl* sc = new wxSearchCtrl((wxWindow *)parent, wxID_ANY,
-			obj->GetPropertyAsString(_("value")),
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsString(wxT("value")),
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 
-		if ( !obj->IsNull( _("search_button") ) )
+		if ( !obj->IsNull( wxT("search_button") ) )
 		{
-			sc->ShowSearchButton( obj->GetPropertyAsInteger( _("search_button") ) );
+			sc->ShowSearchButton( obj->GetPropertyAsInteger( wxT("search_button") ) );
 		}
 		
-		if ( !obj->IsNull( _("cancel_button") ) )
+		if ( !obj->IsNull( wxT("cancel_button") ) )
 		{
-			sc->ShowCancelButton( obj->GetPropertyAsInteger( _("cancel_button") ) );
+			sc->ShowCancelButton( obj->GetPropertyAsInteger( wxT("cancel_button") ) );
 		}
 
 		sc->PushEventHandler( new ComponentEvtHandler( sc, GetManager() ) );
@@ -1215,21 +1213,21 @@ public:
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		#if wxCHECK_VERSION( 2, 8, 0 )
-		ObjectToXrcFilter xrc(obj, _("unknown"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("unknown"), obj->GetPropertyAsString(wxT("name")));
 		return xrc.GetXrcObject();
 		#elif wxCHECK_VERSION( 2, 9, 0 )
-		ObjectToXrcFilter xrc(obj, _("wxSearchCtrl"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxSearchCtrl"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
-		xrc.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
+		xrc.AddProperty(wxT("value"),wxT("value"),XRC_TYPE_TEXT);
 		return xrc.GetXrcObject();
 		#endif
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxSearchCtrl"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxSearchCtrl"));
 		filter.AddWindowProperties();
-		filter.AddProperty(_("value"),_("value"),XRC_TYPE_TEXT);
+		filter.AddProperty(wxT("value"),wxT("value"),XRC_TYPE_TEXT);
 		return filter.GetXfbObject();
 	}
 
@@ -1240,7 +1238,7 @@ void ComponentEvtHandler::OnText( wxCommandEvent& event)
 	wxSearchCtrl* sc = wxDynamicCast( m_window, wxSearchCtrl );
 	if ( sc != NULL )
 	{
-		m_manager->ModifyProperty( m_window, _("value"), sc->GetValue() );
+		m_manager->ModifyProperty( m_window, wxT("value"), sc->GetValue() );
 		sc->SetInsertionPointEnd();
 		sc->SetFocus();
 	}
@@ -1254,27 +1252,27 @@ class MediaCtrlComponent : public ComponentBase
 public:
     wxObject* Create(IObject *obj, wxObject *parent)
 	{
-		wxMediaCtrl* mc = new wxMediaCtrl((wxWindow *)parent, wxID_ANY, wxT(""),obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+		wxMediaCtrl* mc = new wxMediaCtrl((wxWindow *)parent, wxID_ANY, wxT(""),obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 		
-		if ( !obj->IsNull( _("file") ) )
+		if ( !obj->IsNull( wxT("file") ) )
 		{
-			if( mc->Load( obj->GetPropertyAsString( _("file") ) ) )
+			if( mc->Load( obj->GetPropertyAsString( wxT("file") ) ) )
 			{
-				if (!obj->IsNull( _("playback_rate"))) mc->SetPlaybackRate(obj->GetPropertyAsFloat(_("playback_rate")));
-				if (!obj->IsNull( _("volume")) && (obj->GetPropertyAsFloat(_("volume"))>=0)&&(obj->GetPropertyAsFloat(_("volume"))<=1)) 
-						mc->SetPlaybackRate(obj->GetPropertyAsFloat(_("volume")));
-				if (!obj->IsNull(_("player_controls")))
+				if (!obj->IsNull( wxT("playback_rate"))) mc->SetPlaybackRate(obj->GetPropertyAsFloat(wxT("playback_rate")));
+				if (!obj->IsNull( wxT("volume")) && (obj->GetPropertyAsFloat(wxT("volume"))>=0)&&(obj->GetPropertyAsFloat(wxT("volume"))<=1)) 
+						mc->SetPlaybackRate(obj->GetPropertyAsFloat(wxT("volume")));
+				if (!obj->IsNull(wxT("player_controls")))
 				{
-					if(  obj->GetPropertyAsString( _("player_controls") ) == wxT("STEP") )	mc->ShowPlayerControls(wxMEDIACTRLPLAYERCONTROLS_STEP);
-					if(  obj->GetPropertyAsString( _("player_controls") ) == wxT("VOLUME") )	mc->ShowPlayerControls(wxMEDIACTRLPLAYERCONTROLS_VOLUME);
-					if(  obj->GetPropertyAsString( _("player_controls") ) == wxT("DEFAULT") )	mc->ShowPlayerControls(wxMEDIACTRLPLAYERCONTROLS_DEFAULT);
-					if(  obj->GetPropertyAsString( _("player_controls") ) == wxT("NONE") )	mc->ShowPlayerControls(wxMEDIACTRLPLAYERCONTROLS_NONE);
+					if(  obj->GetPropertyAsString( wxT("player_controls") ) == wxT("STEP") )	mc->ShowPlayerControls(wxMEDIACTRLPLAYERCONTROLS_STEP);
+					if(  obj->GetPropertyAsString( wxT("player_controls") ) == wxT("VOLUME") )	mc->ShowPlayerControls(wxMEDIACTRLPLAYERCONTROLS_VOLUME);
+					if(  obj->GetPropertyAsString( wxT("player_controls") ) == wxT("DEFAULT") )	mc->ShowPlayerControls(wxMEDIACTRLPLAYERCONTROLS_DEFAULT);
+					if(  obj->GetPropertyAsString( wxT("player_controls") ) == wxT("NONE") )	mc->ShowPlayerControls(wxMEDIACTRLPLAYERCONTROLS_NONE);
 						
 				}
 				
-				if ( !obj->IsNull( _("play") ) && ( obj->GetPropertyAsInteger( _("play") ) == 1 ) ) mc->Play();
+				if ( !obj->IsNull( wxT("play") ) && ( obj->GetPropertyAsInteger( wxT("play") ) == 1 ) ) mc->Play();
 				else
 					mc->Stop();
 				
@@ -1282,7 +1280,7 @@ public:
 			}
 		}
 		
-		if(!obj->IsNull(_("style"))) mc->ShowPlayerControls(wxMEDIACTRLPLAYERCONTROLS_STEP);
+		if(!obj->IsNull(wxT("style"))) mc->ShowPlayerControls(wxMEDIACTRLPLAYERCONTROLS_STEP);
 
 		mc->PushEventHandler( new ComponentEvtHandler( mc, GetManager() ) );
 
@@ -1291,14 +1289,14 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxMediaCtrl"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxMediaCtrl"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxMediaCtrl"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxMediaCtrl"));
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}

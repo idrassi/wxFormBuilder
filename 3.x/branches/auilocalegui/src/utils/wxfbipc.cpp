@@ -44,7 +44,7 @@ bool wxFBIPC::VerifySingleInstance( const wxString& file, bool switchTo )
 	wxFileName path( file );
 	if ( !path.IsOk() )
 	{
-		wxLogError( wxT("This path is invalid: %s"), file.c_str() );
+		wxLogError(_("This path is invalid: %s"), file.c_str() );
 		return false;
 	}
 
@@ -52,7 +52,7 @@ bool wxFBIPC::VerifySingleInstance( const wxString& file, bool switchTo )
 	{
 		if ( !path.MakeAbsolute() )
 		{
-			wxLogError( wxT("Could not make path absolute: %s"), file.c_str() );
+			wxLogError(_("Could not make path absolute: %s"), file.c_str() );
 			return false;
 		}
 	}
@@ -210,7 +210,7 @@ bool wxFBIPC::CreateServer( const wxString& name )
 	}
 	#endif
 
-	wxLogError( wxT("Failed to create an IPC service with name %s"), name.c_str() );
+	wxLogError(_("Failed to create an IPC service with name %s"), name.c_str() );
 	return false;
 }
 

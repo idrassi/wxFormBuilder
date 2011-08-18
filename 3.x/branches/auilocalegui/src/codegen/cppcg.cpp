@@ -230,12 +230,12 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 
 			if ( path.StartsWith( wxT( "file:" ) ) )
 			{
-				wxLogWarning( wxT( "C++ code generation does not support using URLs for bitmap properties:\n%s" ), path.c_str() );
-				result = wxT( "wxNullBitmap" );
+				wxLogWarning(_("C++ code generation does not support using URLs for bitmap properties:\n%s"), path.c_str() );
+				result = wxT("wxNullBitmap");
 				break;
 			}
 
-			if ( source == wxT( "Load From File" ) )
+			if ( source == _("Load From File") )
 			{
 				wxString absPath;
 				try
@@ -262,7 +262,7 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 					result << wxT( "wxBitmap( wxT(\"" ) << CppCodeGenerator::ConvertCppString( file ) << wxT( "\"), wxBITMAP_TYPE_ANY )" );
 				}
 			}
-			else if ( source == wxT( "Load From Embedded File" ) )
+			else if ( source == _("Load From Embedded File") )
 			{
 				wxString absPath;
 				try
@@ -287,11 +287,11 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 					result << CppCodeGenerator::ConvertEmbeddedBitmapName( path ) <<  wxT("_to_wx_bitmap()");
 				}
 			}
-			else if ( source == wxT( "Load From Resource" ) )
+			else if ( source == _("Load From Resource") )
 			{
 				result << wxT( "wxBitmap( wxT(\"" ) << path << wxT( "\"), wxBITMAP_TYPE_RESOURCE )" );
 			}
-			else if ( source == wxT( "Load From Icon Resource" ) )
+			else if ( source == _("Load From Icon Resource") )
 			{
 				if ( wxDefaultSize == icoSize )
 				{
@@ -302,7 +302,7 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 					result.Printf( wxT( "wxIcon( wxT(\"%s\"), wxBITMAP_TYPE_ICO_RESOURCE, %i, %i )" ), path.c_str(), icoSize.GetWidth(), icoSize.GetHeight() );
 				}
 			}
-			else if ( source == wxT("Load From Art Provider") )
+			else if ( source == _("Load From Art Provider") )
 			{
 				wxString rid = path.BeforeFirst( wxT(':') );
 				if( rid.StartsWith( wxT("gtk-") ) ) rid = wxT("wxT(\"") + rid + wxT("\")");
@@ -412,7 +412,7 @@ void CppCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectB
 		return;
 	}
 	
-	m_inheritedCodeParser.ParseCFiles(userClasses->GetPropertyAsString( _("name") ));
+	m_inheritedCodeParser.ParseCFiles(userClasses->GetPropertyAsString( wxT("name") ));
 	
 	//(FileCodeWriter*)m_header->
 	wxString type = userClasses->GetPropertyAsString( wxT("type") );
@@ -451,7 +451,7 @@ void CppCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectB
 	code = GetCode( userClasses, type + wxT("_cons_def") );
 	m_source->WriteLn( code );
 	m_source->WriteLn( wxT("{") );
-	userCode = m_inheritedCodeParser.GetFunctionContents( userClasses->GetPropertyAsString( _("name") ) );
+	userCode = m_inheritedCodeParser.GetFunctionContents( userClasses->GetPropertyAsString( wxT("name") ) );
 	if ( !userCode.IsEmpty() )
 	{
 		m_source->WriteLn( userCode, true );
@@ -473,7 +473,7 @@ void CppCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectB
 		code = GetCode( userClasses, wxT("event_handler_comment") );
 		m_header->WriteLn( code );
 
-		wxString className = userClasses->GetPropertyAsString( _( "name") );
+		wxString className = userClasses->GetPropertyAsString( wxT("name") );
 		std::set<wxString> generatedHandlers;
 		for ( size_t i = 0; i < events.size(); i++ )
 		{
@@ -536,7 +536,7 @@ void CppCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectB
 
 	m_header->WriteLn( wxT("};") );
 	m_header->WriteLn( wxEmptyString );
-	code = GetCode( userClasses, wxT( "guard_macro_close" ) );
+	code = GetCode( userClasses, wxT("guard_macro_close") );
 	m_header->WriteLn( code );
 
 	userCode = m_inheritedCodeParser.GetRemainingFunctions();
@@ -559,7 +559,7 @@ bool CppCodeGenerator::GenerateCode( PObjectBase project )
 {
 	if ( !project )
 	{
-		wxLogError( wxT( "There is no project to generate code" ) );
+		wxLogError(_("There is no project to generate code") );
 		return false;
 	}
 
@@ -574,8 +574,8 @@ bool CppCodeGenerator::GenerateCode( PObjectBase project )
 	if ( i18nProperty && i18nProperty->GetValueAsInteger() )
 		m_i18n = true;
 
-	m_useConnect = !( _( "table" ) == project->GetPropertyAsString( _( "event_generation" ) ) );
-	m_disconnectEvents = ( project->GetPropertyAsInteger( _( "disconnect_events" ) ) != 0 );
+	m_useConnect = !( wxT("table") == project->GetPropertyAsString( wxT("event_generation") ) );
+	m_disconnectEvents = ( project->GetPropertyAsInteger( wxT("disconnect_events") ) != 0 );
 
 	m_header->Clear();
 	m_source->Clear();
@@ -593,7 +593,7 @@ bool CppCodeGenerator::GenerateCode( PObjectBase project )
 	PProperty propFile = project->GetProperty( wxT( "file" ) );
 	if ( !propFile )
 	{
-		wxLogError( wxT( "Missing \"file\" property on Project Object" ) );
+		wxLogError(_("Missing \"file\" property on Project Object") );
 		return false;
 	}
 
@@ -798,10 +798,10 @@ void CppCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &even
 		return;
 	}
 
-	PProperty propName = class_obj->GetProperty( wxT( "name" ) );
+	PProperty propName = class_obj->GetProperty( wxT("name") );
 	if ( !propName )
 	{
-		wxLogError( wxT( "Missing \"name\" property on \"%s\" class. Review your XML object description" ),
+		wxLogError(_("Missing \"name\" property on \"%s\" class. Review your XML object description"),
 		            class_obj->GetClassName().c_str() );
 		return;
 	}
@@ -809,7 +809,7 @@ void CppCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &even
 	wxString class_name = propName->GetValue();
 	if ( class_name.empty() )
 	{
-		wxLogError( wxT( "Object name cannot be null" ) );
+		wxLogError(_("Object name cannot be null") );
 		return;
 	}
 
@@ -1069,7 +1069,7 @@ wxString CppCodeGenerator::GetCode( PObjectBase obj, wxString name )
 
 	if ( !code_info )
 	{
-		wxString msg( wxString::Format( wxT( "Missing \"%s\" template for \"%s\" class. Review your XML object description" ),
+		wxString msg( wxString::Format(_("Missing \"%s\" template for \"%s\" class. Review your XML object description"),
 		                                name.c_str(), obj->GetClassName().c_str() ) );
 		wxLogError( msg );
 		return wxT( "" );
@@ -1088,7 +1088,7 @@ void CppCodeGenerator::GenClassDeclaration( PObjectBase class_obj, bool use_enum
 	PProperty propName = class_obj->GetProperty( wxT( "name" ) );
 	if ( !propName )
 	{
-		wxLogError( wxT( "Missing \"name\" property on \"%s\" class. Review your XML object description" ),
+		wxLogError(_("Missing \"name\" property on \"%s\" class. Review your XML object description"),
 		            class_obj->GetClassName().c_str() );
 		return;
 	}
@@ -1291,9 +1291,9 @@ void CppCodeGenerator::GenSubclassSets( PObjectBase obj, std::set< wxString >* s
 
 			if ( delimiter != wxNOT_FOUND || nameVal.empty() )
 			{
-				wxLogError	( 	_( "Invalid Value for Property\n\tObject: %s\n\tProperty: %s\n\tValue: %s" ),
-				              obj->GetPropertyAsString( _( "name" ) ).c_str(),
-				              _( "subclass" ),
+				wxLogError (_("Invalid Value for Property\n\tObject: %s\n\tProperty: %s\n\tValue: %s"),
+				              obj->GetPropertyAsString( wxT("name") ).c_str(),
+				              wxT("subclass"),
 				              originalValue.c_str()
 				           );
 				return;
@@ -1624,7 +1624,7 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 					break;
 				}
 				default:
-					wxLogError( wxT( "Missing subwindows for wxSplitterWindow widget." ) );
+					wxLogError(_("Missing subwindows for wxSplitterWindow widget.") );
 					break;
 			}
 		}
@@ -1696,17 +1696,17 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 	{
 		// If loading bitmap from ICON resource, and size is not set, set size to toolbars bitmapsize
 		// So hacky, yet so useful ...
-		wxSize toolbarsize = obj->GetParent()->GetPropertyAsSize( _( "bitmapsize" ) );
+		wxSize toolbarsize = obj->GetParent()->GetPropertyAsSize( wxT("bitmapsize") );
 		if ( wxDefaultSize != toolbarsize )
 		{
-			PProperty prop = obj->GetProperty( _( "bitmap" ) );
+			PProperty prop = obj->GetProperty( wxT("bitmap") );
 			if ( prop )
 			{
 				wxString oldVal = prop->GetValueAsString();
 				wxString path, source;
 				wxSize toolsize;
 				TypeConv::ParseBitmapWithResource( oldVal, &path, &source, &toolsize );
-				if ( wxT( "Load From Icon Resource" ) == source && wxDefaultSize == toolsize )
+				if (_("Load From Icon Resource") == source && wxDefaultSize == toolsize )
 				{
 					prop->SetValue( wxString::Format( wxT( "%s; %s [%i; %i]" ), path.c_str(), source.c_str(), toolbarsize.GetWidth(), toolbarsize.GetHeight() ) );
 					m_source->WriteLn( GetCode( obj, wxT( "construction" ) ) );
@@ -1792,7 +1792,7 @@ void CppCodeGenerator::GenDefines( PObjectBase project )
 	unsigned int id = m_firstID;
 	if ( id < 1000 )
 	{
-		wxLogWarning( wxT( "First ID is Less than 1000" ) );
+		wxLogWarning(_("First ID is Less than 1000") );
 	}
 	for ( it = macros.begin() ; it != macros.end(); it++ )
 	{
@@ -1963,7 +1963,7 @@ void CppCodeGenerator::FindEmbeddedBitmapProperties( PObjectBase obj, std::set<w
 				inc << wxT( "#include \"" ) << relPath << wxT( "\"" );
 				embedset.insert( inc );
 			}
-			else if ( source == wxT("Load From Embedded File") )
+			else if ( source == _("Load From Embedded File") )
 			{
 				wxString absPath = TypeConv::MakeAbsolutePath( path, AppData()->GetProjectPath() );
 				wxString includePath = FileToCArray::Generate( absPath );

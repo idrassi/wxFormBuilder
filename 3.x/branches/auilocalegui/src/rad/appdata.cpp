@@ -755,8 +755,11 @@ void ApplicationData::CreateObject( wxString name )
 {
 	try
 	{
+#if wxVERSION_NUMBER < 2900
 		Debug::Print( wxT( "[ApplicationData::CreateObject] New %s" ), name.c_str() );
-
+#else
+		Debug::Print( "[ApplicationData::CreateObject] New " + name );
+#endif
 		PObjectBase old_selected = GetSelectedObject();
 		PObjectBase parent = old_selected;
 		PObjectBase obj;
@@ -1163,20 +1166,20 @@ void ApplicationData::MergeProject( PObjectBase project )
 
 	// Merge bitmaps and icons properties
 	PObjectBase thisProject = GetProjectData();
-	PProperty prop = thisProject->GetProperty( _("bitmaps") );
+	PProperty prop = thisProject->GetProperty( wxT("bitmaps") );
 	if ( prop )
 	{
 		wxString value = prop->GetValue();
 		value.Trim();
-		value << wxT(" ") << project->GetPropertyAsString( _("bitmaps") );
+		value << wxT(" ") << project->GetPropertyAsString( wxT("bitmaps") );
 		prop->SetValue( value );
 	}
-	prop = thisProject->GetProperty( _("icons") );
+	prop = thisProject->GetProperty( wxT("icons") );
 	if ( prop )
 	{
 		wxString value = prop->GetValue();
 		value.Trim();
-		value << wxT(" ") << project->GetPropertyAsString( _("icons") );
+		value << wxT(" ") << project->GetPropertyAsString( wxT("icons") );
 		prop->SetValue( value );
 	}
 
@@ -1309,17 +1312,13 @@ bool ApplicationData::LoadProject( const wxString &file, bool checkSingleInstanc
 
 		if ( newer )
 		{
-			wxMessageBox( wxT( "This project file is newer than this version of wxFormBuilder.\n" )
-			              wxT( "It cannot be opened.\n\n" )
-			              wxT( "Please download an updated version from http://www.wxFormBuilder.org" ), _( "New Version" ), wxICON_ERROR );
+			wxMessageBox( _("This project file is newer than this version of wxFormBuilder.\nIt cannot be opened.\n\nPlease download an updated version from http://www.wxformbuilder.org" ), _( "New Version" ), wxICON_ERROR );
 			return false;
 		}
 
 		if ( older )
 		{
-			if ( wxYES == wxMessageBox( wxT( "This project file is not of the current version.\n" )
-			                            wxT( "Would you to attempt automatic conversion?\n\n" )
-			                            wxT( "NOTE: This will modify your project file on disk!" ), _( "Old Version" ), wxYES_NO ) )
+			if ( wxYES == wxMessageBox( _( "This project file is not of the current version.\nWould you to attempt automatic conversion?\n\nNOTE: This will modify your project file on disk!" ), _( "Old Version" ), wxYES_NO ) )
 			{
 				// we make a backup of the project
 				::wxCopyFile( file, file + wxT( ".bak" ) );
@@ -1480,7 +1479,7 @@ void ApplicationData::ConvertProjectProperties( ticpp::Element* project, const w
 				wxString name;
 				wxFileName::SplitPath( path, NULL, NULL, &name, NULL );
 				wxFileDialog dialog( wxTheApp->GetTopWindow(), _( "Save \"user_headers\"" ), ::wxPathOnly( path ),
-				                     name + wxT( "_user_headers.txt" ), wxT( "All files (*.*)|*.*" ), wxFD_SAVE );
+				                     name + wxT( "_user_headers.txt" ), wxString(_("All files") ) + wxT(" (*.*)|*.*" ), wxFD_SAVE );
 
 				if ( dialog.ShowModal() == wxID_OK )
 				{
@@ -2000,7 +1999,7 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
 
 		if ( !( baseNameProp && nameProp && fileProp && typeProp && genfileProp ) )
 		{
-			wxLogWarning( wxT("Missing Property") );
+			wxLogWarning( _("Missing Property") );
 			return;
 		}
 
@@ -2011,7 +2010,7 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
             return;
         }
 
-        const wxString& genFileValue = project->GetPropertyAsString( _("file") );
+        const wxString& genFileValue = project->GetPropertyAsString( wxT("file") );
         wxFileName genFile( genFileValue );
         if ( !genFile.MakeAbsolute( path ) )
         {
@@ -2026,7 +2025,7 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
             return;
         }
 
-		baseNameProp->SetValue( form->GetPropertyAsString( _("name") ) );
+		baseNameProp->SetValue( form->GetPropertyAsString( wxT("name") ) );
 		nameProp->SetValue( className );
 		fileProp->SetValue( inherFile.GetName() );
 		genfileProp->SetValue( genFile.GetFullPath() );
@@ -2034,7 +2033,7 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
 		
 		// Determine if Microsoft BOM should be used
 		bool useMicrosoftBOM = false;
-		PProperty pUseMicrosoftBOM = project->GetProperty( _("use_microsoft_bom") );
+		PProperty pUseMicrosoftBOM = project->GetProperty( wxT("use_microsoft_bom") );
 
 		if ( pUseMicrosoftBOM )
 		{
@@ -2043,7 +2042,7 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
 
 		// Determine if Utf8 or Ansi is to be created
 		bool useUtf8 = false;
-		PProperty pUseUtf8 = project->GetProperty( _("encoding") );
+		PProperty pUseUtf8 = project->GetProperty( wxT("encoding") );
 
 		if ( pUseUtf8 )
 		{
@@ -2077,7 +2076,7 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
 			codegen.GenerateInheritedClass( obj, form );
 		}
 
-		wxLogStatus( wxT( "Class generated at \'%s\'." ), path.c_str() );
+		wxLogStatus( _( "Class generated at \'%s\'." ), path.c_str() );
 	}
 	catch( wxFBException& ex )
 	{
@@ -2264,8 +2263,9 @@ void ApplicationData::CheckProjectTree( PObjectBase obj )
 		PObjectBase child = obj->GetChild( i );
 
 		if ( child->GetParent() != obj )
-			wxLogError( wxString::Format( wxT( "Parent of object \'%s\' is wrong!" ), child->GetPropertyAsString( wxT( "name" ) ).c_str() ) );
-
+		{
+			wxLogError( wxString::Format( _( "Parent of object \'%s\' is wrong!" ), child->GetPropertyAsString( wxT( "name" ) ).c_str() ) );
+		}
 		CheckProjectTree( child );
 	}
 }
@@ -2493,12 +2493,12 @@ void ApplicationData::ShowXrcPreview()
 
 	if ( form == NULL )
 	{
-		wxMessageBox( wxT( "Please select a form and try again." ), wxT( "XRC Preview" ), wxICON_ERROR );
+		wxMessageBox(_( "Please select a form and try again." ), _( "XRC Preview" ), wxICON_ERROR | wxOK | wxCENTRE );
 		return;
 	}
 	else if( form->GetPropertyAsInteger( wxT("aui_managed") ) )
 	{
-		wxMessageBox( wxT( "XRC preview doesn't support AUI-managed frames." ), wxT( "XRC Preview" ), wxICON_ERROR );
+		wxMessageBox(_( "XRC preview doesn't support AUI-managed frames." ), _( "XRC Preview" ), wxICON_ERROR | wxOK | wxCENTRE );
 		return;
 	}
 
@@ -2561,7 +2561,12 @@ void ApplicationData::NotifyEvent( wxFBEvent& event )
 	if ( count == 0 )
 	{
 		count++;
+
+#if wxVERSION_NUMBER < 2900
 		Debug::Print( wxT( "event: %s" ), event.GetEventName().c_str() );
+#else
+		Debug::Print( "event: " + event.GetEventName() );
+#endif
 		std::vector< wxEvtHandler* >::iterator handler;
 
 		for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )
@@ -2571,7 +2576,11 @@ void ApplicationData::NotifyEvent( wxFBEvent& event )
 	}
 	else
 	{
+#if wxVERSION_NUMBER < 2900
 		Debug::Print( wxT( "Pending event: %s" ), event.GetEventName().c_str() );
+#else
+		Debug::Print( "Pending event: " + event.GetEventName() );
+#endif
 		std::vector< wxEvtHandler* >::iterator handler;
 
 		for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )
@@ -2663,7 +2672,7 @@ wxString ApplicationData::GetPathProperty( const wxString& pathName )
 
 		if ( pathEntry.empty() )
 		{
-			THROW_WXFBEX( wxT( "You must set the \"") + pathName + wxT("\" property of the project to a valid path for output files" ) );
+			THROW_WXFBEX( _( "You must set the \"") + pathName + _("\" property of the project to a valid path for output files" ) );
 		}
 
 		path = wxFileName::DirName( pathEntry );
@@ -2674,7 +2683,7 @@ wxString ApplicationData::GetPathProperty( const wxString& pathName )
 
 			if ( projectPath.empty() )
 			{
-				THROW_WXFBEX( wxT( "You must save the project when using a relative path for output files" ) );
+				THROW_WXFBEX( _( "You must save the project when using a relative path for output files" ) );
 			}
 
 			path = wxFileName(  projectPath + 
@@ -2692,7 +2701,9 @@ wxString ApplicationData::GetPathProperty( const wxString& pathName )
 
 	if ( !path.DirExists() )
 	{
-		THROW_WXFBEX( wxT( "Invalid Path: " ) << path.GetPath() << wxT( "\nYou must set the \"") + pathName + wxT("\" property of the project to a valid path for output files" ) );
+		THROW_WXFBEX( _( "Invalid Path: " ) << path.GetPath() <<
+					_( "\nYou must set the \"") + pathName +
+					_("\" property of the project to a valid path for output files" ) );
 	}
 
 	return path.GetPath( wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR );

@@ -6,48 +6,54 @@
 class PrefsPageGUI : public _PrefsPageGUI
 {
 public:
-	PrefsPageGUI( wxWindow* parent );
+    PrefsPageGUI( wxWindow* parent );
+
+    void SetValues();
+
+private:
+    void OnUpdateUI( wxUpdateUIEvent& event );
 };
 
 class PrefsPageGUICaps : public _PrefsPageGUICaps
 {
 public:
-	PrefsPageGUICaps( wxWindow* parent );
+    PrefsPageGUICaps( wxWindow* parent );
 
-	void SetValues();
+    void SetValues();
 
 private:
-	void OnUpdateUI        ( wxUpdateUIEvent& event );
-	void OnToggleCustPrefs ( wxCommandEvent&  event );
+    void OnUpdateUI        ( wxUpdateUIEvent& event );
+    void OnToggleCustPrefs ( wxCommandEvent&  event );
 };
 
 class PrefsPageLocale : public _PrefsPageLocale
 {
 public:
-	PrefsPageLocale( wxWindow* parent );
+    PrefsPageLocale( wxWindow* parent );
 
-	void SetValues();
+    void SetValues();
 
 private:
-	void OnUpdateUI     ( wxUpdateUIEvent& event );
-	void OnToggleLocale ( wxCommandEvent&  event );
+    void OnUpdateUI     ( wxUpdateUIEvent& event );
+    void OnToggleLocale ( wxCommandEvent&  event );
 };
 
 class PrefsDialog : public _PrefsDialog
 {
 public:
-	PrefsDialog( wxWindow* parent );
+    PrefsDialog( wxWindow* parent );
 
-	void SaveConfig();
-	void SetValues();
+    void SaveConfig();
+    void SetValues();
 
 private:
-	void OnUpdateUI( wxUpdateUIEvent& event );
-	void OnOK      ( wxCommandEvent&  event );
-	void OnApply   ( wxCommandEvent&  event );
+    void OnUpdateUI( wxUpdateUIEvent& event );
+    void OnOK      ( wxCommandEvent&  event );
+    void OnApply   ( wxCommandEvent&  event );
 
-	PrefsPageGUICaps* pnlGuiCaps;
-	PrefsPageLocale*  pnlLang;
+    PrefsPageGUI*     pnlGUI;
+    PrefsPageGUICaps* pnlGuiCaps;
+    PrefsPageLocale*  pnlLang;
 };
 
 #endif // __PREFS_H__

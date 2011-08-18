@@ -26,17 +26,21 @@
 #define __MAINGUI__
 
 #include <wx/app.h>
+#include <wx/intl.h>
 
 class MainFrame;
 
-class MyApp : public wxApp
+class wxFormBuilderApp : public wxApp
 {
 private:
-  wxLog * m_old_log;
+  void SelectLanguage( int lang );
+
+  wxLog *       m_old_log;
   wxLogWindow * m_log;
 
-  MainFrame *m_frame;
-  
+  MainFrame *   m_frame;
+  wxLocale      m_locale;
+
 public:
   bool OnInit();
   #if wxUSE_ON_FATAL_EXCEPTION && wxUSE_STACKWALKER
@@ -44,14 +48,17 @@ public:
   #endif
   int OnRun();
   int OnExit();
-  ~MyApp();
-  
+  ~wxFormBuilderApp();
+
+  /** Add locale support from a component **/
+  void AddPluginLocaleCatalog( const wxString& catalog ) { m_locale.AddCatalog( catalog ); }
+
   #ifdef __WXMAC__
   wxString m_mac_file_name;
   void MacOpenFile(const wxString &fileName);
   #endif
 };
 
-DECLARE_APP(MyApp)
+DECLARE_APP(wxFormBuilderApp)
 
 #endif //__MAINGUI__

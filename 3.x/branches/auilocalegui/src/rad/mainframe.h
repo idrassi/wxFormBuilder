@@ -26,10 +26,10 @@
 #ifndef __MAIN_FRAME__
 #define __MAIN_FRAME__
 
-#include "wx/wx.h"
+#include <wx/wx.h>
 #include <wx/wxFlatNotebook/wxFlatNotebook.h>
-//#include "wx/aui/aui.h"
-#include "wx/splitter.h"
+#include <wx/aui/aui.h>
+#include <wx/splitter.h>
 #include <wx/fdrepdlg.h>
 
 
@@ -69,7 +69,7 @@ class MainFrame : public wxFrame
   int m_leftSplitterWidth;
   int m_rightSplitterWidth;
 
-  //wxFrameManager m_mgr;
+  wxAuiManager m_mgr;
   wxFlatNotebook *m_notebook;
   wxFlatNotebookImageList m_icons;
   wxFbPalette *m_palette;
@@ -80,6 +80,7 @@ class MainFrame : public wxFrame
   PythonPanel *m_python;
   XrcPanel *m_xrc;
   int m_style;
+  static bool ms_bUseAUI;
 
   // Save which page is selected
   int m_page_selection;
@@ -143,6 +144,7 @@ class MainFrame : public wxFrame
   void OnChangeBorder(wxCommandEvent& e);
   void OnXrcPreview(wxCommandEvent& e);
   void OnGenInhertedClass(wxCommandEvent& e);
+  void OnChangeLog(wxCommandEvent& e);
 
   void OnFlatNotebookPageChanged( wxFlatNotebookEvent& event );
 
@@ -158,6 +160,8 @@ class MainFrame : public wxFrame
   void OnProjectRefresh( wxFBEvent& event );
 
   void OnSplitterChanged( wxSplitterEvent &event );
+
+  void OnPreferences( wxCommandEvent &event );
 
   void InsertRecentProject(const wxString &file);
 

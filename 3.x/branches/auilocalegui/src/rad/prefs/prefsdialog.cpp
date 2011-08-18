@@ -18,23 +18,21 @@ _PrefsPageGUI::_PrefsPageGUI( wxWindow* parent, wxWindowID id, const wxPoint& po
 	wxBoxSizer* sizerGUI;
 	sizerGUI = new wxBoxSizer( wxVERTICAL );
 	
-	
-	sizerGUI->Add( 0, 0, 1, 0, 5 );
-	
-	wxStaticText* lblGUI;
-	lblGUI = new wxStaticText( this, wxID_ANY, _("This is where you can configure wxFormBuilder appearance. The first sub-page deals with caption's metrics and colours."), wxDefaultPosition, wxDefaultSize, 0 );
-	lblGUI->Wrap( -1 );
-	sizerGUI->Add( lblGUI, 0, wxALL|wxEXPAND, 5 );
-	
-	
-	sizerGUI->Add( 0, 0, 1, 0, 5 );
+	chkUseAUI = new wxCheckBox( this, wxID_ANY, _("Use Advanced User Interface"), wxDefaultPosition, wxDefaultSize, 0 );
+	sizerGUI->Add( chkUseAUI, 0, wxALL, 5 );
 	
 	this->SetSizer( sizerGUI );
 	this->Layout();
+	
+	// Connect Events
+	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( _PrefsPageGUI::OnUpdateUI ) );
 }
 
 _PrefsPageGUI::~_PrefsPageGUI()
 {
+	// Disconnect Events
+	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( _PrefsPageGUI::OnUpdateUI ) );
+	
 }
 
 _PrefsPageGUICaps::_PrefsPageGUICaps( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )

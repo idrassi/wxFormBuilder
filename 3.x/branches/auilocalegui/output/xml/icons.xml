@@ -6,7 +6,7 @@
 	<icon name="app32" 			file="logo.png"/>
 
 	<!-- Toolbar Icons -->
-	<icon name="new" 		file="new.png"		/>
+	<icon name="new" 		file="file_new.png"	/>
 	<icon name="open" 		file="open.png"		/>
 	<icon name="save" 		file="save.png"		/>
 	<icon name="undo" 		file="undo.png"		/>
@@ -36,11 +36,19 @@
 	<!-- <icon name="unknown" file="unknown.xpm"/> -->
 
 	<!-- Visual Editor -->
-	<icon name="cpp" 			file="cpp.png"		/>
-	<icon name="h" 				file="h.png"		/>
 	<icon name="designer"		file="designer.png"	/>
-	<icon name="c++" 			file="c++.png"		/>
-	<icon name="xrc" 			file="xrc.png"		/>
+	<icon name="cpp" 			file="file_cpp.png"	/>
+	<icon name="c++" 			file="file_cpp.png"	/>
+	<icon name="h" 				file="file_h.png"	/>
+	<icon name="py" 			file="file_py.png"	/>
+	<icon name="xrc" 			file="file_xml.png"	/>
 
+	<!-- Object Properties -->
+	<icon name="properties" 	file="properties.png"	/>
+	<icon name="events" 		file="events.png"		/>
+
+	<!-- Settings Dialog -->
+	<icon name="language" 		file="language.png"	/>
+	<icon name="default" 		file="default.png"	/>
 
 </icons>
