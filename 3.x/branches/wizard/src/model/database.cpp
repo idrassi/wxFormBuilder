@@ -848,7 +848,8 @@ bool ObjectDatabase::HasCppProperties(wxString type)
 			type == wxT("splitter")			||
 			type == wxT("sizer")			||
 			type == wxT("treelistctrl")		||
-			type == wxT("gbsizer")
+			type == wxT("gbsizer")          ||
+            type == wxT("WizardPageSimple")
 			);
 }
 
@@ -1232,6 +1233,8 @@ void ObjectDatabase::ParseEvents( ticpp::Element* elem_obj, PObjectInfo obj_info
 bool ObjectDatabase::ShowInPalette(wxString type)
 {
 	return (type == wxT("form")					||
+            type == wxT("wizard")               ||
+            type == wxT("WizardPageSimple")     ||
 			type == wxT("menubar_form")			||
 			type == wxT("toolbar_form")			||
 			type == wxT("sizer")				||

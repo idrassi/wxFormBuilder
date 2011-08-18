@@ -521,6 +521,7 @@ PObjectBase ApplicationData::GetSelectedObject()
 PObjectBase ApplicationData::GetSelectedForm()
 {		
 	if( ( m_selObj->GetObjectTypeName() == wxT( "form" ) ) ||
+        ( m_selObj->GetObjectTypeName() == wxT("wizard") ) ||
 		( m_selObj->GetObjectTypeName() == wxT( "menubar_form" ) ) ||
 		( m_selObj->GetObjectTypeName() == wxT( "toolbar_form" ) ) )
 		return m_selObj;

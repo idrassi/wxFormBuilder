@@ -1010,6 +1010,20 @@ void PythonCodeGenerator::GenConstructor( PObjectBase class_obj, const EventVect
 	GenEvents( class_obj, events );
 
 	m_source->Unindent();
+
+    if ( class_obj->GetObjectTypeName() == wxT("wizard") && class_obj->GetChildCount() > 0 )
+    {
+        m_source->WriteLn( wxT("def add_page(self, page):") );
+        m_source->Indent();
+        m_source->WriteLn( wxT("if self.m_pages:") );
+        m_source->Indent();
+        m_source->WriteLn( wxT("previous_page = self.m_pages[-1]") );
+        m_source->WriteLn( wxT("page.SetPrev(previous_page)") );
+        m_source->WriteLn( wxT("previous_page.SetNext(page)") );
+        m_source->Unindent();
+        m_source->WriteLn( wxT("self.m_pages.append(page)") );
+        m_source->Unindent();
+    }
 }
 
 void PythonCodeGenerator::GenDestructor( PObjectBase class_obj, const EventVector &events )
@@ -1126,7 +1140,8 @@ void PythonCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 				type == wxT("notebook")	||
 				type == wxT("auinotebook")	||
 				type == wxT("treelistctrl")	||
-				type == wxT("flatnotebook")
+				type == wxT("flatnotebook") ||
+                type == wxT("wizard")
 			)
 		{
 			wxString afterAddChild = GetCode( obj, wxT("after_addchild") );
