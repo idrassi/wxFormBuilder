@@ -297,6 +297,8 @@ PObjectBase TemplateParser::GetWxParent()
 	candidates.push_back( m_obj->FindNearAncestor( wxT("flatnotebook") ) );
 	candidates.push_back( m_obj->FindNearAncestor( wxT("listbook") ) );
 	candidates.push_back( m_obj->FindNearAncestor( wxT("choicebook") ) );
+	candidates.push_back( m_obj->FindNearAncestor( wxT("toolbook") ) );
+	candidates.push_back( m_obj->FindNearAncestor( wxT("treebook") ) );
 	candidates.push_back( m_obj->FindNearAncestor( wxT("auinotebook") ) );
 	candidates.push_back( m_obj->FindNearAncestor( wxT("toolbar") ) );
 

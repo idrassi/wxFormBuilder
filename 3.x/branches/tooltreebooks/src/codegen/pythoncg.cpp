@@ -1176,6 +1176,25 @@ void PythonCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 		m_source->WriteLn( GetCode( obj, wxT("page_add") ) );
 		GenSettings( obj->GetObjectInfo(), obj );
 	}
+	else if ( type == wxT("toolbookpage") )
+	{
+		GenConstruction( obj->GetChild( 0 ), false );
+		GenSettings( obj->GetObjectInfo(), obj );
+		m_source->WriteLn( GetCode( obj, wxT("page_add") ) );
+	}
+	else if ( type == wxT("treebookpage") )
+	{
+		GenConstruction( obj->GetChild( 0 ), false );
+		if ( obj->GetPropertyAsInteger( wxT("depth") ) == 0 )
+		{
+		    m_source->WriteLn( GetCode( obj, wxT("page_add") ) );
+		}
+        else if ( obj->GetPropertyAsInteger( wxT("depth") ) > 0 )
+        {
+            m_source->WriteLn( GetCode( obj, wxT("subpage_add") ) );
+        }
+		GenSettings( obj->GetObjectInfo(), obj );
+	}
 	else if ( type == wxT("treelistctrlcolumn") )
 	{
 		m_source->WriteLn( GetCode( obj, wxT("column_add") ) );

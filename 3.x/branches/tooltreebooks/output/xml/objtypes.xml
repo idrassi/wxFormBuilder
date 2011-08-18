@@ -65,6 +65,8 @@
     <childtype name="flatnotebook" nmax="0" />
     <childtype name="listbook" nmax="0" />
     <childtype name="choicebook" nmax="0" />
+    <childtype name="toolbook" nmax="0" />
+    <childtype name="treebook" nmax="0" />
     <childtype name="treelistctrl" nmax="0" />
     <childtype name="splitter" nmax="0" />
   </objtype>
@@ -107,6 +109,8 @@
     <childtype name="flatnotebook" nmax="1" aui_nmax="1" />
     <childtype name="listbook" nmax="1" aui_nmax="1" />
     <childtype name="choicebook" nmax="1" aui_nmax="1" />
+    <childtype name="toolbook" nmax="1" aui_nmax="1" />
+    <childtype name="treebook" nmax="1" aui_nmax="1" />
 	<childtype name="auinotebook" nmax="1" aui_nmax="1" />
     <childtype name="splitter" nmax="1" aui_nmax="1" />
     <childtype name="toolbar" nmax="1" aui_nmax="1" />
@@ -123,6 +127,8 @@
     <childtype name="flatnotebook" nmax="1" aui_nmax="1" />
     <childtype name="listbook" nmax="1" aui_nmax="1" />
     <childtype name="choicebook" nmax="1" aui_nmax="1" />
+    <childtype name="toolbook" nmax="1" aui_nmax="1" />
+    <childtype name="treebook" nmax="1" aui_nmax="1" />
 	<childtype name="auinotebook" nmax="1" aui_nmax="1" />
     <childtype name="splitter" nmax="1" aui_nmax="1" />
     <childtype name="toolbar" nmax="1" aui_nmax="1" />
@@ -166,6 +172,22 @@
   </objtype>
 
   <objtype name="choicebookpage" item="1">
+    <childtype name="container" nmax="1" aui_nmax="1" />
+  </objtype>
+
+  <objtype name="toolbook" >
+    <childtype name="toolbookpage" />
+  </objtype>
+
+  <objtype name="toolbookpage" item="1">
+    <childtype name="container" nmax="1" aui_nmax="1" />
+  </objtype>
+
+  <objtype name="treebook" >
+    <childtype name="treebookpage" />
+  </objtype>
+
+  <objtype name="treebookpage" item="1">
     <childtype name="container" nmax="1" aui_nmax="1" />
   </objtype>
 
