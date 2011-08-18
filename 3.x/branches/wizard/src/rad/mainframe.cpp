@@ -721,6 +721,7 @@ void MainFrame::OnObjectSelected( wxFBObjectEvent& event )
 					// If selected object is not a Frame or a Panel or a dialog, we won't
 					// adjust the sash position
 					if ( obj->GetObjectTypeName() == wxT("form") ||
+                         obj->GetObjectTypeName() == wxT("wizard")       ||
 						 obj->GetObjectTypeName() == wxT("menubar_form") ||
 					     obj->GetObjectTypeName() == wxT("toolbar_form") )
 					{

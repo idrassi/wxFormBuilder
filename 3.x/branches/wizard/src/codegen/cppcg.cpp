@@ -1496,6 +1496,16 @@ void CppCodeGenerator::GenConstructor( PObjectBase class_obj, const EventVector 
 	if ( !afterAddChild.empty() )
 	{
 		m_source->WriteLn( afterAddChild );
+        if ( class_obj->GetObjectTypeName() == wxT("wizard") && class_obj->GetChildCount() > 0 )
+        {
+            m_source->WriteLn( wxT("for ( unsigned int i = 1; i < m_pages.GetCount(); i++ )") );
+            m_source->WriteLn( wxT("{") );
+            m_source->Indent();
+            m_source->WriteLn( wxT("m_pages.Item( i )->SetPrev( m_pages.Item( i - 1 ) );") );
+            m_source->WriteLn( wxT("m_pages.Item( i - 1 )->SetNext( m_pages.Item( i ) );") );
+            m_source->Unindent();
+            m_source->WriteLn( wxT("}") );
+        }
 	}
 
 	if ( m_useConnect && !events.empty() )
@@ -1680,7 +1690,8 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 	          type == wxT( "flatnotebookpage" )	||
 	          type == wxT( "listbookpage" )		||
 	          type == wxT( "choicebookpage" )	||
-	          type == wxT( "auinotebookpage" )
+	          type == wxT( "auinotebookpage" )  ||
+              type == wxT("WizardPageSimple")
 	        )
 	{
 		GenConstruction( obj->GetChild( 0 ), false );

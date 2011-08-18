@@ -377,6 +377,7 @@ PObjectBase ObjectBase::FindParentForm()
 	PObjectBase retObj = this->FindNearAncestor( wxT( "form" ) );
 	if( retObj == NULL ) retObj = this->FindNearAncestor( wxT( "menubar_form" ) );
 	if( retObj == NULL ) retObj = this->FindNearAncestor( wxT( "toolbar_form" ) );
+    if( retObj == NULL ) retObj = this->FindNearAncestor( wxT("wizard") );
 	
 	return retObj;
 }
