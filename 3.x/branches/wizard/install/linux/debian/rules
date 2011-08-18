@@ -1,0 +1,67 @@
+#!/usr/bin/make -f
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+get-orig-source:
+	svn export https://wxformbuilder.svn.sourceforge.net/svnroot/wxformbuilder/3.x/trunk wxformbuilder
+	
+	cd $(CURDIR)/wxformbuilder && install/linux/create_src_tarball
+	rm -rf $(CURDIR)/wxformbuilder
+
+configure: configure-stamp
+configure-stamp:
+	dh_testdir
+	touch configure-stamp
+
+build: build-stamp
+
+build-stamp: configure-stamp 
+	dh_testdir
+	$(MAKE) CONFIG=Release
+	touch $@
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp configure-stamp
+	$(MAKE) CONFIG=Release clean
+	dh_clean 
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k 
+	dh_installdirs
+	$(CURDIR)/install/linux/wxfb_export.sh $(CURDIR)/debian/wxformbuilder/usr
+	
+	# Changelog installed separately
+	rm -f $(CURDIR)/debian/wxformbuilder/usr/share/wxformbuilder/Changelog.txt
+	
+	# Another copy of the GPL is not necessary
+	rm -f $(CURDIR)/debian/wxformbuilder/usr/share/wxformbuilder/license.txt
+
+binary-indep: build install
+
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs $(CURDIR)/output/Changelog.txt 
+	dh_installdocs $(CURDIR)/README.txt
+	dh_install --sourcedir=$(CURDIR)/install/linux/data/gnome --autodest \*
+	dh_installmenu
+	dh_installmime
+	dh_desktop
+	dh_installman $(CURDIR)/install/linux/data/wxformbuilder.1
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install configure
