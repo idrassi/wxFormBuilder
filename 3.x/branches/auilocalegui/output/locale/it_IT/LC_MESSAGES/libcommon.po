@@ -1,0 +1,1745 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: wxFormBuilder-3.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-07-03 16:39+0100\n"
+"PO-Revision-Date: 2011-07-03 16:39+0100\n"
+"Last-Translator: Andrea Zanellato <zanellato.andrea@gmail.com>\n"
+"Language-Team: wxFormBuilder <wxformbuilder@gmail.com>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;help\n"
+"X-Poedit-Basepath: ../../../../\n"
+"X-Poedit-Language: Italian\n"
+"X-Poedit-Country: ITALY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SearchPath-0: plugins/common\n"
+"X-Poedit-SearchPath-1: output/plugins/common/xml\n"
+
+#: plugins/common/common.cpp:940
+msgid "wxRadioBox must have at least one choice"
+msgstr "wxRadioBox deve contenere almeno una opzione"
+
+#: plugins/common/common.cpp:947
+msgid "majorDimension must be greater than zero."
+msgstr "majorDimension deve essere maggiore di zero."
+
+#: plugins/common/common.cpp:1436
+msgid "Drop Down Item 1"
+msgstr "Voce di menù 1"
+
+#: plugins/common/common.cpp:1437
+msgid "Drop Down Item 2"
+msgstr "Voce di menù 2"
+
+#: plugins/common/common.cpp:1438
+msgid "Drop Down Item 3"
+msgstr "Voce di menù 3"
+
+#: plugins/common/common.cpp:1825
+msgid "Load From File"
+msgstr ""
+
+#: plugins/common/common.cpp:1825
+msgid "Load From Embedded File"
+msgstr ""
+
+#: plugins/common/common.cpp:1829
+msgid "Load From Art Provider"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:30
+#, no-wrap
+msgid "Left-justifies the label. Windows and GTK+ only."
+msgstr "Giustifica l'etichetta a sinistra. Solo per Windows e GTK+."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:31
+#, no-wrap
+msgid "Aligns the label to the top of the button. Windows and GTK+ only."
+msgstr "Allinea l'etichetta nella parte superiore del pulsante. Solo per Windows e GTK+."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:32
+#, no-wrap
+msgid "Right-justifies the bitmap label. Windows and GTK+ only."
+msgstr "Giustifica  a destra l'etichetta del bitmap. Solo per Windows e GTK+."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:33
+#, no-wrap
+msgid "Aligns the label to the bottom of the button. Windows and GTK+ only."
+msgstr "Allinea l'etichetta nella parte inferiore del pulsante. Solo per Windows e GTK+."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:34
+#, no-wrap
+msgid "Creates the button as small as possible instead of making it of the standard size (which is the default behaviour)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:35
+#, no-wrap
+msgid "Creates a flat button. Windows and GTK+ only."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:39
+#, no-wrap
+msgid "Process a wxEVT_COMMAND_BUTTON_CLICKED event, when the button is clicked"
+msgstr "Elabora un evento wxEVT_COMMAND_BUTTON_CLICKED quando viene premuto il pulsante"
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:47
+#, no-wrap
+msgid "Left-justifies the bitmap label. WIN32 only."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:48
+#, no-wrap
+msgid "Aligns the bitmap label to the top of the button. WIN32 only."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:49
+#, no-wrap
+msgid "Right-justifies the bitmap label. WIN32 only."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:50
+#, no-wrap
+msgid "Aligns the bitmap label to the bottom of the button. WIN32 only."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:51
+#, no-wrap
+msgid "If this is specified, the button will be drawn automatically using the label bitmap only, providing a 3D-look border. If this style is not specified, the button will be drawn without borders and using all provided bitmaps. (Windows Only)"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:54
+#, no-wrap
+msgid "This is the bitmap shown in the default state, it must be always valid while all the other bitmaps are optional and don't have to be set."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:55
+#, no-wrap
+msgid "Bitmap shown when the button is disabled."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:56
+#, no-wrap
+msgid "Bitmap shown when the button is pushed (e.g. while the user keeps the mouse button pressed on it)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:57
+#, no-wrap
+msgid "Bitmap shown when the button has keyboard focus but is not pressed."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:58
+#, no-wrap
+msgid "Bitmap shown when the mouse is over the button (but it is not pressed). Notice that if hover bitmap is not specified but the current platform UI uses hover images for the buttons (such as Windows XP or GTK+), then the focus bitmap is used for hover state as well. This makes it possible to set focus bitmap only to get reasonably good behaviour on all platforms."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:65
+#, no-wrap
+msgid "Align the text to the left."
+msgstr "Allinea il testo a sinistra."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:66
+#, no-wrap
+msgid "Align the text to the right."
+msgstr "Allinea il testo a destra."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:67
+#, no-wrap
+msgid "Center the text (horizontally)."
+msgstr "Centra il testo (orizzontalmente)."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:68
+#, no-wrap
+msgid "By default, the control will adjust its size to exactly fit to the size of the text when SetLabel is called. If this style flag is given, the control will not change its size (this style is especially useful with controls which also have wxALIGN_RIGHT or CENTER style because otherwise they won't make sense any longer after a call to SetLabel)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:71
+#, no-wrap
+msgid "Wraps the control's label so that each of its lines becomes at most this many pixels wide if possible (the lines are broken at words boundaries so it might not be the case if words are too long). If width is negative, no wrapping is done."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:78
+#: output/plugins/common/xml/common.xml:133
+#: output/plugins/common/xml/common.xml:148
+#, no-wrap
+msgid "The control will generate the event wxEVT_COMMAND_TEXT_ENTER (otherwise pressing Enter key is either processed internally by the control or used for navigation between dialog controls)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:79
+#, no-wrap
+msgid "The control will receive wxEVT_CHAR events for TAB pressed - normally, TAB is used for passing to the next control in a dialog instead. For the control created with this style, you can still use Ctrl-Enter to pass to the next control from the keyboard."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:80
+#, no-wrap
+msgid "The text control allows multiple lines."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:81
+#, no-wrap
+msgid "The text will be echoed as asterisks."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:82
+#, no-wrap
+msgid "The text will not be user-editable."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:83
+#, no-wrap
+msgid "Use rich text control under Windows, this allows to have more than 64KB of text in the control even under Win9x. This style is ignored under other platforms."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:84
+#, no-wrap
+msgid "Use rich text control version 2.0 or 3.0 under Windows, this style is ignored under other platforms."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:85
+#, no-wrap
+msgid "Highlight the URLs and generate the wxTextUrl events when mouse events occur over them. This style is only supported for wxTE_RICH Windows and multi-line wxGTK2 text controls."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:86
+#, no-wrap
+msgid "By default, the Windows text control doesn't show the selection when it doesn't have focus - use this style to force it to always show it. It doesn't do anything under other platforms."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:87
+#, no-wrap
+msgid "A horizontal scrollbar will be created and used, so that text won't be wrapped. No effect under wxGTK1."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:88
+#, no-wrap
+msgid "The text control will not be created with a vertical scrollbar."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:89
+#, no-wrap
+msgid "The text in the control will be left-justified (default)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:90
+#, no-wrap
+msgid "The text in the control will be centered (currently wxMSW and wxGTK2 only). "
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:91
+#, no-wrap
+msgid "The text in the control will be right-justified (currently wxMSW and wxGTK2 only)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:92
+#, no-wrap
+msgid "Same as wxHSCROLL style: don't wrap at all, show horizontal scrollbar instead."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:93
+#, no-wrap
+msgid "Wrap the lines too long to be shown entirely at any position (wxUniv and wxGTK2 only)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:94
+#, no-wrap
+msgid "Wrap the lines too long to be shown entirely at word boundaries (wxUniv and wxGTK2 only)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:95
+#, no-wrap
+msgid "On PocketPC and Smartphone, causes the first letter to be capitalized."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:98
+#, no-wrap
+msgid "The maximum length of user-entered text."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:99
+#, no-wrap
+msgid "Respond to a wxEVT_COMMAND_TEXT_UPDATED event, generated when the text changes. Notice that this event will always be sent when the text controls contents changes - whether this is due to user input or comes from the program itself (for example, if SetValue() is called)"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:100
+#, no-wrap
+msgid "Respond to a wxEVT_COMMAND_TEXT_ENTER event, generated when enter is pressed in a text control (which must have wxTE_PROCESS_ENTER style for this event to be generated)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:101
+#, no-wrap
+msgid "A mouse event occurred over an URL in the text control (wxMSW and wxGTK2 only)"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:102
+#, no-wrap
+msgid "User tried to enter more text into the control than the limit set by SetMaxLength."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:115
+#, no-wrap
+msgid "The default style: wxNO_BORDER."
+msgstr "Stile predefinito: wxNO_BORDER."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:116
+#, no-wrap
+msgid "By default, the control will adjust its size to exactly fit to the size of the animation when SetAnimation is called. If this style flag is given, the control will not change its size."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:118
+#, no-wrap
+msgid "Full file path (only *.gif and *.ani files are supported)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:127
+#, no-wrap
+msgid "Contents of the Combo Box"
+msgstr "Contenuto del Combo Box"
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:129
+#, no-wrap
+msgid "Creates a combobox with a permanently displayed list. Windows only."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:130
+#, no-wrap
+msgid "Creates a combobox with a drop-down list."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:131
+#: output/plugins/common/xml/common.xml:146
+#, no-wrap
+msgid "Same as wxCB_DROPDOWN but only the strings specified as the combobox choices can be selected, it is impossible to select (even from a program) a string which is not in the choices list."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:132
+#: output/plugins/common/xml/common.xml:147
+#, no-wrap
+msgid "Sorts the entries in the list alphabetically."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:135
+#: output/plugins/common/xml/common.xml:150
+#, no-wrap
+msgid "Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on the list is selected. Note that calling GetValue returns the new value of selection."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:136
+#: output/plugins/common/xml/common.xml:151
+#, no-wrap
+msgid "Process a wxEVT_COMMAND_TEXT_UPDATED event, when the combobox text changes."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:137
+#: output/plugins/common/xml/common.xml:152
+#, no-wrap
+msgid "Process a wxEVT_COMMAND_TEXT_ENTER event, when &lt;RETURN&gt; is pressed in the combobox."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:144
+#, no-wrap
+msgid "Contents of the Combo Box. Use format bitmap:choice "
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:158
+#, no-wrap
+msgid "An array of strings with which to initialise the choice control."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:159
+#, no-wrap
+msgid "Zero-based position of the selected choice."
+msgstr "Posizione in base zero della scelta selezionata."
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:160
+#, no-wrap
+msgid "Process a wxEVT_COMMAND_CHOICE_SELECTED event, when an item on the list is selected."
+msgstr "Elabora un evento wxEVT_COMMAND_CHOICE_SELECTED quando viene selezionato un oggetto nella lista."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:168
+#, no-wrap
+msgid "Create a 2-state checkbox. This is the default."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:169
+#, no-wrap
+msgid "Create a 3-state checkbox. Not implemented in wxMGL, wxOS2 and wxGTK built against GTK+ 1.2."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:170
+#, no-wrap
+msgid "By default a user can't set a 3-state checkbox to the third state. It can only be done from code. Using this flags allows the user to set the checkbox to the third state by clicking."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:171
+#, no-wrap
+msgid "Makes the text appear on the left of the checkbox."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:174
+#, no-wrap
+msgid "Process a wxEVT_COMMAND_CHECKBOX_CLICKED event, when the checkbox is clicked."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:181
+#, no-wrap
+msgid "Contents of the Radio Box."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:182
+#, no-wrap
+msgid "Zero-based position of the selected button."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:183
+#, no-wrap
+msgid "Specifies the maximum number of rows (if style contains wxRA_SPECIFY_ROWS) or columns (if style contains wxRA_SPECIFY_COLS) for a two-dimensional radiobox."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:185
+#, no-wrap
+msgid "The major dimension parameter refers to the maximum number of rows."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:186
+#, no-wrap
+msgid "The major dimension parameter refers to the maximum number of columns."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:187
+#, no-wrap
+msgid "Use of the checkbox controls instead of radio buttons. (currently supported only on PalmOS)"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:188
+#, no-wrap
+msgid "Process a wxEVT_COMMAND_RADIOBOX_SELECTED event, when a radiobutton is clicked."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:196
+#, no-wrap
+msgid "Marks the beginning of a new group of radio buttons."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:197
+#, no-wrap
+msgid "In some circumstances, radio buttons that are not consecutive siblings trigger a hang bug in Windows (only). If this happens, add this style to mark the button as not belonging to a group, and implement the mutually-exclusive group behaviour yourself."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:198
+#, no-wrap
+msgid "Use a checkbox button instead of radio button (currently supported only on PalmOS)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:200
+#, no-wrap
+msgid "Handles a toggle button click event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:207
+#, no-wrap
+msgid "Creates a horizontal line."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:208
+#, no-wrap
+msgid "Creates a vertical line."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:214
+#, no-wrap
+msgid "Initial position for the slider."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:215
+#, no-wrap
+msgid "Minimum slider position."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:216
+#, no-wrap
+msgid "Maximum slider position."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:218
+#, no-wrap
+msgid "Displays the slider horizontally."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:219
+#, no-wrap
+msgid "Displays the slider vertically."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:220
+#, no-wrap
+msgid "Displays tick marks."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:221
+#, no-wrap
+msgid "Displays minimum, maximum and value labels."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:222
+#, no-wrap
+msgid "Displays ticks on the left and forces the slider to be vertical."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:223
+#, no-wrap
+msgid "Displays ticks on the right and forces the slider to be vertical."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:224
+#, no-wrap
+msgid "Displays ticks on the top."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:225
+#, no-wrap
+msgid "Displays ticks on the bottom (this is the default)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:226
+#, no-wrap
+msgid "Displays ticks on both sides."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:227
+#, no-wrap
+msgid "Allows the user to select a range on the slider. Windows only."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:228
+#, no-wrap
+msgid "Inverses the mininum and maximum endpoints on the slider. Not compatible with wxSL_SELRANGE."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:229
+#, no-wrap
+msgid "Process all scroll events."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:230
+#, no-wrap
+msgid "Process wxEVT_SCROLL_TOP scroll-to-top events (minimum position)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:231
+#, no-wrap
+msgid "Process wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:232
+#, no-wrap
+msgid "Process wxEVT_SCROLL_LINEUP line up events."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:233
+#, no-wrap
+msgid "Process wxEVT_SCROLL_LINEDOWN line down events."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:234
+#, no-wrap
+msgid "Process wxEVT_SCROLL_PAGEUP page up events."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:235
+#, no-wrap
+msgid "Process wxEVT_SCROLL_PAGEDOWN page down events."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:236
+#, no-wrap
+msgid "Process wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent as the user drags the thumbtrack)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:237
+#, no-wrap
+msgid "Process wxEVT_SCROLL_THUMBRELEASE thumb release events."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:238
+#, no-wrap
+msgid "Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:239
+#, no-wrap
+msgid "Process all scroll events. Variant taking a window identifier."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:240
+#, no-wrap
+msgid "Process wxEVT_SCROLL_TOP scroll-to-top events (minimum position). Variant taking a window identifier."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:241
+#, no-wrap
+msgid "Process wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position). Variant taking a window identifier."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:242
+#, no-wrap
+msgid "Process wxEVT_SCROLL_LINEUP line up events. Variant taking a window identifier."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:243
+#, no-wrap
+msgid "Process wxEVT_SCROLL_LINEDOWN line down events. Variant taking a window identifier."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:244
+#, no-wrap
+msgid "Process wxEVT_SCROLL_PAGEUP page up events. Variant taking a window identifier."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:245
+#, no-wrap
+msgid "Process wxEVT_SCROLL_PAGEDOWN page down events. Variant taking a window identifier."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:246
+#, no-wrap
+msgid "Process wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent as the user drags the thumbtrack). Variant taking a window identifier."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:247
+#, no-wrap
+msgid "Process wxEVT_SCROLL_THUMBRELEASE thumb release events. Variant taking a window identifier."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:248
+#, no-wrap
+msgid "Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only). Variant taking a window identifier."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:254
+#, no-wrap
+msgid "Integer range (maximum value) of the gauge."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:255
+#, no-wrap
+msgid "Initial position for the gauge."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:257
+#, no-wrap
+msgid "Creates a horizontal gauge. "
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:258
+#, no-wrap
+msgid "Creates a vertical gauge."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:259
+#, no-wrap
+msgid "Creates smooth progress bar with one pixel wide update step (not supported by all platforms)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:265
+#, no-wrap
+msgid "Contents of the List Box."
+msgstr "Contenuto del List Box."
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:266
+#, no-wrap
+msgid "Note that wxLB_SINGLE, wxLB_MULTIPLE and wxLB_EXTENDED styles are mutually exclusive and you can specify at most one of them (single selection is the default)."
+msgstr "Notare che gli stili wxLB_SINGLE, wxLB_MULTIPLE e wxLB_EXTENDED si escludono a vicenda ed è possibile specificare al massimo uno di essi (predefinito: selezione singola)."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:267
+#, no-wrap
+msgid "Single-selection list."
+msgstr "Lista di selezione singola."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:268
+#, no-wrap
+msgid "Multiple-selection list: the user can toggle multiple items on and off."
+msgstr "Lista di selezione multipla: l'utente può invertire la selezione degli oggetti."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:269
+#, no-wrap
+msgid "Extended-selection list: the user can select multiple items using the SHIFT key and the mouse or special key combinations."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:270
+#, no-wrap
+msgid "Create horizontal scrollbar if contents are too wide (Windows only)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:271
+#, no-wrap
+msgid "Always show a vertical scrollbar."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:272
+#, no-wrap
+msgid "Only create a vertical scrollbar if needed."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:273
+#, no-wrap
+msgid "The listbox contents are sorted in alphabetical order."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:275
+#, no-wrap
+msgid "Process a wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the list is selected."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:276
+#, no-wrap
+msgid "Process a wxEVT_COMMAND_LISTBOX_DOUBLECLICKED event, when the listbox is double-clicked."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:282
+#, no-wrap
+msgid "Use associated imagelist (if any) instead bitmaps"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:284
+#, no-wrap
+msgid "Multicolumn list view, with optional small icons. Columns are computed automatically, i.e. you don't set columns as in wxLC_REPORT. In other words, the list wraps, unlike a wxListBox."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:285
+#, no-wrap
+msgid "Single or multicolumn report view, with optional header."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:286
+#, no-wrap
+msgid "The application provides items text on demand. May only be used with wxLC_REPORT."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:287
+#, no-wrap
+msgid "Large icon view, with optional labels."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:288
+#, no-wrap
+msgid "Small icon view, with optional labels."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:289
+#, no-wrap
+msgid "Icons align to the top. Windows default. (Windows only)"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:290
+#, no-wrap
+msgid "Icons align to the left."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:291
+#, no-wrap
+msgid "Icons arrange themselves. (Windows only)"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:292
+#, no-wrap
+msgid "Labels are editable: the application will be notified when editing starts."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:293
+#, no-wrap
+msgid "Prevent headers from behaving like buttons in report mode. (Windows only)"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:294
+#, no-wrap
+msgid "No header in report mode."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:295
+#, no-wrap
+msgid "Single selection (default is multiple)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:296
+#, no-wrap
+msgid "Sort in ascending order (must still supply a comparison callback in SortItems."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:297
+#, no-wrap
+msgid "Sort in descending order (must still supply a comparison callback in SortItems."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:298
+#, no-wrap
+msgid "Draws light horizontal rules between rows in report mode."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:299
+#, no-wrap
+msgid "Draws light vertical rules between columns in report mode."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:300
+#, no-wrap
+msgid "Begin dragging with the left mouse button."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:301
+#, no-wrap
+msgid "Begin dragging with the right mouse button."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:302
+#, no-wrap
+msgid "Begin editing a label. This can be prevented by calling Veto()."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:303
+#, no-wrap
+msgid "Finish editing a label. This can be prevented by calling Veto()."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:304
+#, no-wrap
+msgid "Delete an item."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:305
+#, no-wrap
+msgid "Delete all items."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:306
+#, no-wrap
+msgid "The item has been selected."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:307
+#, no-wrap
+msgid "The item has been deselected."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:308
+#, no-wrap
+msgid "The item has been activated (ENTER or double click)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:309
+#, no-wrap
+msgid "The currently focused item has changed."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:310
+#, no-wrap
+msgid "The middle mouse button has been clicked on an item."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:311
+#, no-wrap
+msgid "The right mouse button has been clicked on an item."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:312
+#, no-wrap
+msgid "A key has been pressed."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:313
+#, no-wrap
+msgid "An item has been inserted."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:314
+#, no-wrap
+msgid "A column (m_col) has been left-clicked."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:315
+#, no-wrap
+msgid "A column (m_col) has been right-clicked."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:316
+#, no-wrap
+msgid "The user started resizing a column - can be vetoed."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:317
+#, no-wrap
+msgid "The divider between columns is being dragged."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:318
+#, no-wrap
+msgid "A column has been resized by the user."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/common.xml:319
+#, no-wrap
+msgid "Prepare cache for a virtual list control."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:323
+#, no-wrap
+msgid "The title of the column."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:324
+#, no-wrap
+msgid "The column width."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:325
+#: output/plugins/common/xml/common.xml:338
+#, no-wrap
+msgid "The alignment for the item. Can be one of wxLIST_FORMAT_LEFT, wxLIST_FORMAT_RIGHT or wxLIST_FORMAT_CENTRE."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:334
+#, fuzzy, no-wrap
+msgid "The text label for the item."
+msgstr "Allinea il testo a destra."
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:335
+#, no-wrap
+msgid "The text colour for the item."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:336
+#, no-wrap
+msgid "The background color for the item."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:337
+#, no-wrap
+msgid "The font for the item."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:339
+#, fuzzy, no-wrap
+msgid "Align the item to the left."
+msgstr "Allinea il testo a sinistra."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:340
+#, fuzzy, no-wrap
+msgid "Align the item to the right."
+msgstr "Allinea il testo a destra."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:341
+#, fuzzy, no-wrap
+msgid "Align the item to the centre."
+msgstr "Allinea il testo a sinistra."
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:344
+#, no-wrap
+msgid "Add a bitmap to the (normal) wxImageList associated with the wxListCtrl parent and associate it with this item. If the imagelist is not defined it will be created implicitly."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:345
+#, no-wrap
+msgid "Add a bitmap in the 'small' wxImageList associated with the wxListCtrl parent and associate it with this item. If the 'small' imagelist is not defined it will be created implicitly."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:346
+#, no-wrap
+msgid "The zero-based index of the image associated with the item in the (normal) image list."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:347
+#, no-wrap
+msgid "The zero-based index of the image associated with the item in the 'small' image list."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:348
+#, no-wrap
+msgid "The zero-based column index."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:349
+#, no-wrap
+msgid "The client data for the item."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:350
+#, no-wrap
+msgid "The item state. Can be any combination of the following values:&#x0A;&#8226; wxLIST_STATE_FOCUSED: The item has the focus.&#x0A;&#8226; wxLIST_STATE_SELECTED: The item is selected."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:351
+#, no-wrap
+msgid "The item has the focus."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/common.xml:352
+#, no-wrap
+msgid "The item is selected."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:358
+#, no-wrap
+msgid "The size of the images in the list (default: the size of the first bitmap)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:359
+#, no-wrap
+msgid "If masks should be created for all images (default: true)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/common.xml:364
+#, no-wrap
+msgid "Adds a new image by keeping its optional mask bitmap."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/menutoolbar.xml:28
+#, no-wrap
+msgid "Number of fields in the statusbar."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/menutoolbar.xml:30
+#, no-wrap
+msgid "On Windows, displays a gripper at right-hand side of the status bar."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/menutoolbar.xml:38
+#: output/plugins/common/xml/forms.xml:152
+#, no-wrap
+msgid "Allows the menu bar to be detached (wxGTK only)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/menutoolbar.xml:54
+#, no-wrap
+msgid "Text for the menu item, as shown on the menu. An accelerator key can be specified using the ampersand &quot;&amp;&quot; character."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/menutoolbar.xml:55
+#, no-wrap
+msgid "Optional shortcut keyboard shortcut. Remarks: The general syntax is any combination of &quot;CTRL&quot;, &quot;ALT&quot; and &quot;SHIFT&quot; strings (case doesn't matter) separated by either '-' or '+' characters and followed by the accelerator itself. The accelerator may be any alphanumeric character, any function key (from F1 to F12)"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/menutoolbar.xml:56
+#, no-wrap
+msgid "Optional help string that will be shown on the status bar."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/menutoolbar.xml:58
+#, no-wrap
+msgid "Bitmap for the menu item. (Windows and GTK+ only) This doubles as the checked bitmap is the menu item is wxITEM_CHECK."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/menutoolbar.xml:59
+#, no-wrap
+msgid "Unchecked bitmap for the menu item. This will be shown if the menu item is wxITEM_CHECK and it is currently unchecked. (Windows only)"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/menutoolbar.xml:63
+#, no-wrap
+msgid "Creates a normal menu item."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/menutoolbar.xml:64
+#, no-wrap
+msgid "Creates a checkable menu item."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/menutoolbar.xml:65
+#, no-wrap
+msgid "radio item to the end of the menu. All consequent radio items form a group and when an item in the group is checked, all the others are automatically unchecked. (Only on Windows and GTK)"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/menutoolbar.xml:68
+#, no-wrap
+msgid "Process a menu selection event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/menutoolbar.xml:69
+#: output/plugins/common/xml/menutoolbar.xml:136
+#, no-wrap
+msgid "Process a wxEVT_UPDATE_UI event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/menutoolbar.xml:79
+#: output/plugins/common/xml/menutoolbar.xml:99
+#: output/plugins/common/xml/forms.xml:159
+#, no-wrap
+msgid "Default size of each tool bitmap. The default bitmap size is 16 by 15 pixels."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/menutoolbar.xml:80
+#: output/plugins/common/xml/menutoolbar.xml:100
+#: output/plugins/common/xml/forms.xml:160
+#, no-wrap
+msgid "Values to be used as margins for the toolbar."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/menutoolbar.xml:81
+#: output/plugins/common/xml/menutoolbar.xml:101
+#: output/plugins/common/xml/forms.xml:161
+#, no-wrap
+msgid "Value used for spacing tools. Remarks: The packing is used for spacing in the vertical direction if the toolbar is horizontal, and for spacing in the horizontal direction if the toolbar is vertical."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/menutoolbar.xml:82
+#: output/plugins/common/xml/menutoolbar.xml:102
+#: output/plugins/common/xml/forms.xml:162
+#, no-wrap
+msgid "The default separator size. Remarks: This is the size between each toolbar tool."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/menutoolbar.xml:84
+#: output/plugins/common/xml/forms.xml:164
+#, no-wrap
+msgid "Gives the toolbar a flat look (Windows and GTK only)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/menutoolbar.xml:85
+#: output/plugins/common/xml/forms.xml:165
+#, no-wrap
+msgid "Makes the toolbar floatable and dockable (GTK only)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/menutoolbar.xml:86
+#: output/plugins/common/xml/forms.xml:166
+#, no-wrap
+msgid "Specifies horizontal layout."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/menutoolbar.xml:87
+#: output/plugins/common/xml/forms.xml:167
+#, no-wrap
+msgid "Specifies vertical layout."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/menutoolbar.xml:88
+#: output/plugins/common/xml/forms.xml:168
+#, no-wrap
+msgid "Shows the text in the toolbar buttons; by default only icons are shown."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/menutoolbar.xml:89
+#: output/plugins/common/xml/forms.xml:169
+#, no-wrap
+msgid "Specifies no icons in the toolbar buttons; by default they are shown."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/menutoolbar.xml:90
+#: output/plugins/common/xml/forms.xml:170
+#, no-wrap
+msgid "Specifies no divider (border) above the toolbar (Windows only)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/menutoolbar.xml:91
+#: output/plugins/common/xml/forms.xml:171
+#, no-wrap
+msgid "Specifies no alignment with the parent window (Windows only, not very useful)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/menutoolbar.xml:92
+#: output/plugins/common/xml/forms.xml:172
+#, no-wrap
+msgid "Shows the text and the icons alongside, not vertically stacked (Windows and GTK 2 only). This style must be used with wxTB_TEXT."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/menutoolbar.xml:93
+#: output/plugins/common/xml/forms.xml:173
+#, no-wrap
+msgid "Combination of wxTB_HORZ_LAYOUT and wxTB_TEXT."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/menutoolbar.xml:121
+#, no-wrap
+msgid "The primary tool bitmap."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/menutoolbar.xml:123
+#, no-wrap
+msgid "A normal toolbar button."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/menutoolbar.xml:124
+#, no-wrap
+msgid "A checkable tool (stays pressed after it has been toggled)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/menutoolbar.xml:125
+#, no-wrap
+msgid "A checkable tool which makes part of a radio group of tools each of which is automatically unchecked whenever another button in the group is checked."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/menutoolbar.xml:128
+#, no-wrap
+msgid "Specifies that a drop-down menu button will appear next to the tool button. Used only with wxAuiToolBar."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/menutoolbar.xml:129
+#, no-wrap
+msgid "Help string used in the tooltip."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/menutoolbar.xml:130
+#, no-wrap
+msgid "This string is shown in the statusbar (if any) of the parent frame when the mouse pointer is inside the tool."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/menutoolbar.xml:132
+#, no-wrap
+msgid "Process a wxEVT_COMMAND_TOOL_CLICKED event (a synonym for wxEVT_COMMAND_MENU_SELECTED). Pass the id of the tool."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/menutoolbar.xml:133
+#, no-wrap
+msgid "The same as OnToolClicked. (EVT_TOOL)"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/menutoolbar.xml:134
+#, no-wrap
+msgid "Process a wxEVT_COMMAND_TOOL_RCLICKED event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/menutoolbar.xml:135
+#, no-wrap
+msgid "Process a wxEVT_COMMAND_TOOL_ENTER event. This uses the tools parent ID, the ToolBar, so be sure you set it to something that is not the default. The value of wxCommandEvent::GetSelection is the tool id, or -1 if the mouse cursor has moved off a tool."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/menutoolbar.xml:137
+#, no-wrap
+msgid "Process a wxEVT_COMMAND_AUITOOLBAR_TOOL_DROPDOWN event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/menutoolbar.xml:138
+#, no-wrap
+msgid "Process a wxEVT_COMMAND_AUITOOLBAR_OVERFLOW_CLICK event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/menutoolbar.xml:139
+#, no-wrap
+msgid "Process a wxEVT_COMMAND_AUITOOLBAR_RIGHT_CLICK event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/menutoolbar.xml:140
+#, no-wrap
+msgid "Process a wxEVT_COMMAND_AUITOOLBAR_MIDDLE_CLICK event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/menutoolbar.xml:141
+#, no-wrap
+msgid "Process a wxEVT_COMMAND_AUITOOLBAR_BEGIN_DRAG event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/forms.xml:26
+#, no-wrap
+msgid "Process a wxEVT_ACTIVATE event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/forms.xml:27
+#, no-wrap
+msgid "Process a wxEVT_ACTIVATE_APP event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/forms.xml:28
+#, no-wrap
+msgid "Process a close event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/forms.xml:29
+#, no-wrap
+msgid "Process a hibernate event, supplying the member function. This event applies to wxApp only, and only on Windows SmartPhone and PocketPC. It is generated when the system is low on memory; the application should free up as much memory as possible, and restore full working state when it receives a wxEVT_ACTIVATE or wxEVT_ACTIVATE_APP event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/forms.xml:30
+#, no-wrap
+msgid "Process a wxEVT_ICONIZE event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/forms.xml:31
+#, no-wrap
+msgid "Process a wxEVT_IDLE event."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/forms.xml:35
+#: output/plugins/common/xml/forms.xml:36
+#: output/plugins/common/xml/forms.xml:37
+#: output/plugins/common/xml/forms.xml:38
+#: output/plugins/common/xml/forms.xml:39
+#: output/plugins/common/xml/forms.xml:40
+#, no-wrap
+msgid "Event is emmited under AUI-managed form only."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:53
+#, no-wrap
+msgid "Defined as wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN"
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:54
+#, no-wrap
+msgid "Display the frame iconized (minimized). Windows only."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:55
+#, no-wrap
+msgid "Puts a caption on the frame."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:56
+#, no-wrap
+msgid "Identical to wxICONIZE. Windows only."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:57
+#, no-wrap
+msgid "Displays a minimize box on the frame."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:58
+#, no-wrap
+msgid "Displays the frame maximized. Windows only."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:59
+#, no-wrap
+msgid "Displays a maximize box on the frame."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:60
+#, no-wrap
+msgid "Displays a close box on the frame."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:61
+#, no-wrap
+msgid "Stay on top of all other windows, see also wxFRAME_FLOAT_ON_PARENT."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:62
+#, no-wrap
+msgid "Displays a system menu."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:63
+#, no-wrap
+msgid "Displays a resizeable border around the window."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:64
+#, no-wrap
+msgid "Causes a frame with a small titlebar to be created; the frame does not appear in the taskbar under Windows or GTK+."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:65
+#, no-wrap
+msgid "Creates an otherwise normal frame but it does not appear in the taskbar under Windows or GTK+ (note that it will minimize to the desktop window under Windows which may seem strange to the users and thus it might be better to use this style only without wxMINIMIZE_BOX style). In wxGTK, the flag is respected only if GTK+ is at least version 2.2 and the window manager supports _NET_WM_STATE_SKIP_TASKBAR hint. Has no effect under other platforms."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:66
+#, no-wrap
+msgid "The frame will always be on top of its parent (unlike wxSTAY_ON_TOP). A frame created with this style must have a non-NULL parent."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:67
+#, no-wrap
+msgid "Windows with this style are allowed to have their shape changed with the SetShape method."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:71
+#, no-wrap
+msgid "Under Windows, puts a query button on the caption. When pressed, Windows will go into a context-sensitive help mode and wxWidgets will send a wxEVT_HELP event if the user clicked on an application window. You cannot use this style together with wxMAXIMIZE_BOX or wxMINIMIZE_BOX, so you should use wxDEFAULT_FRAME_STYLE & ~ (wxMINIMIZE_BOX | wxMAXIMIZE_BOX) for the frames having this style (the dialogs don't have a minimize or a maximize box by default). Note: The Project's &quot;help_provider&quot; property must be set for context-sensitive help to work."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:72
+#: output/plugins/common/xml/forms.xml:128
+#, no-wrap
+msgid "On Mac OS X, frames with this style will be shown with a metallic look. This is an extra style."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/forms.xml:74
+#: output/plugins/common/xml/forms.xml:130
+#, no-wrap
+msgid "Centers the dialog box on the display in the chosen direction."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/forms.xml:81
+#, no-wrap
+msgid "For XRC Only. Do not generate the first sizer if there is only one child."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/forms.xml:82
+#: output/plugins/common/xml/forms.xml:98
+#: output/plugins/common/xml/forms.xml:137
+#, no-wrap
+msgid "For C++ Only.&#x0A;The way how to declare and implement event handlers."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:83
+#: output/plugins/common/xml/forms.xml:99
+#: output/plugins/common/xml/forms.xml:138
+#, no-wrap
+msgid "Only declare event handlers as pure virtual methods."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:84
+#: output/plugins/common/xml/forms.xml:100
+#: output/plugins/common/xml/forms.xml:139
+#, no-wrap
+msgid "Declare event handlers but don't generate default implementation. Implementation should be done in separate .cpp file (Not in a generated!)."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:85
+#: output/plugins/common/xml/forms.xml:101
+#: output/plugins/common/xml/forms.xml:140
+#, no-wrap
+msgid "Declare event handlers as virtual methods and generate default implementation."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/forms.xml:88
+#, no-wrap
+msgid "Manage this frame by AUI manager."
+msgstr "Gestisci questo frame con AUI manager."
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/forms.xml:104
+#, no-wrap
+msgid "Process a wxEVT_INIT_DIALOG event. A wxEVT_INIT_DIALOG is sent as a dialog or panel is being initialised."
+msgstr "Elabora un evento wxEVT_INIT_DIALOG all'inizializzazione di una finestra di dialogo o un pannello."
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/forms.xml:105
+#, no-wrap
+msgid "Manage this panel by AUI manager."
+msgstr "Gestisci questo pannello con AUI manager."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:115
+#, no-wrap
+msgid "Puts a caption on the dialog box."
+msgstr "Aggiunge un titolo alla finestra."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:116
+#, no-wrap
+msgid "Equivalent to a combination of wxCAPTION, wxCLOSE_BOX and wxSYSTEM_MENU (the last one is not used under Unix)"
+msgstr "Equivalente alla combinazione di wxCAPTION, wxCLOSE_BOX e wxSYSTEM_MENU (l'ultimo viene ignorato sotto Unix)"
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:117
+#, no-wrap
+msgid "Display a resizeable frame around the window."
+msgstr "Visualizza un frame di ridimensionamento attorno alla finestra."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:118
+#, no-wrap
+msgid "Display a system menu."
+msgstr "Visualizza un menu di sistema."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:119
+#, no-wrap
+msgid "Displays a close box on the dialog."
+msgstr "Visualizza un pulsante di chiusura sulla barra del titolo della finestra."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:120
+#, no-wrap
+msgid "Displays a maximize box on the dialog."
+msgstr "Visualizza un pulsante di massimizzazione sulla barra del titolo della finestra."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:121
+#, no-wrap
+msgid "Displays a minimize box on the dialog."
+msgstr "Visualizza un pulsante di minimizzazione sulla barra del titolo della finestra."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:122
+#, no-wrap
+msgid "The dialog stays on top of all other windows."
+msgstr "La finestra di dialogo rimane al di sopra di tutte le altre finestre."
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:123
+#, no-wrap
+msgid "By default, a dialog created with a NULL parent window will be given the application's top level window as parent. Use this style to prevent this from happening and create an orphan dialog. This is not recommended for modal dialogs."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><property><option>
+#: output/plugins/common/xml/forms.xml:127
+#, no-wrap
+msgid "Under Windows, puts a query button on the caption. When pressed, Windows will go into a context-sensitive help mode and wxWidgets will send a wxEVT_HELP event if the user clicked on an application window. Note: The Project's &quot;help_provider&quot; property must be set for context-sensitive help to work."
+msgstr ""
+
+#. type: Attribute 'help' of: <package><objectinfo><event>
+#: output/plugins/common/xml/forms.xml:143
+#, no-wrap
+msgid "Process a wxEVT_INIT_DIALOG event. A wxEVT_INIT_DIALOG is sent as a dialog or panel is being initialized."
+msgstr "Elabora un evento wxEVT_INIT_DIALOG all'inizializzazione di una finestra di dialogo o un pannello."
+
+#. type: Attribute 'help' of: <package><objectinfo><property>
+#: output/plugins/common/xml/forms.xml:144
+#, no-wrap
+msgid "Manage this dialog by AUI manager."
+msgstr "Gestisci questa finestra di dialogo con AUI manager."
+
