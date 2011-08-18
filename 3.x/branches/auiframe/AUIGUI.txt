@@ -1,9 +1,0 @@
-The new AUI GUI is still sperimental, so I disabled it but can be enabled adding a
-WXFB_USE_AUI define to preprocessor in compile options.
-
-known bugs:
-
- - Adding a wxAuiNotebook make crash the application
- - wxScintilla CodeEditor and the main wxAuiToolBar don't update immediatly
-
-Andrea Zanellato
