@@ -31,8 +31,9 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_PREFS_CAPTIONS 10000
-#define ID_PREFS_LOCALE 10001
+#define ID_PREFS_GUI 10000
+#define ID_PREFS_CAPTIONS 10001
+#define ID_PREFS_LOCALE 10002
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class _PrefsPageGUI
@@ -42,12 +43,15 @@ class _PrefsPageGUI : public wxPanel
 	private:
 	
 	protected:
+		wxCheckBox* chkUseAUI;
 		
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnUpdateUI( wxUpdateUIEvent& event ) = 0;
 		
 	
 	public:
 		
-		_PrefsPageGUI( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL ); 
+		_PrefsPageGUI( wxWindow* parent, wxWindowID id = ID_PREFS_GUI, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL ); 
 		~_PrefsPageGUI();
 	
 };

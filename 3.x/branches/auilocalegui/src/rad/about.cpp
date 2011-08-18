@@ -31,10 +31,9 @@
 #include <wx/utils.h>
 
 #define ID_DEFAULT -1 // Default
-#define ID_OK 1000
 
 BEGIN_EVENT_TABLE(AboutDialog,wxDialog)
-  EVT_BUTTON(ID_OK,AboutDialog::OnButtonEvent)
+  EVT_BUTTON( wxID_OK,AboutDialog::OnButtonEvent )
 END_EVENT_TABLE()
 
 class HtmlWindow : public wxHtmlWindow
@@ -49,7 +48,7 @@ class HtmlWindow : public wxHtmlWindow
     {
       wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(wxT("html"));
       if (!ft) {
-        wxLogError(wxT("Impossible to determine the file type for extension html.\nPlease edit your MIME types."));
+        wxLogError(_("Impossible to determine the file type for extension html.\nPlease edit your MIME types."));
         return;
       }
 
@@ -71,7 +70,7 @@ class HtmlWindow : public wxHtmlWindow
     }
 };
 
-AboutDialog::AboutDialog(wxWindow *parent, int id) : wxDialog(parent,id,wxT("About..."),wxDefaultPosition,wxSize(485,470))//wxSize(308,248))
+AboutDialog::AboutDialog(wxWindow *parent, int id) : wxDialog(parent,id,_("About..."),wxDefaultPosition,wxSize(485,470))//wxSize(308,248))
 {
 #if 0
   wxBoxSizer *sizer2;
@@ -79,7 +78,7 @@ AboutDialog::AboutDialog(wxWindow *parent, int id) : wxDialog(parent,id,wxT("Abo
   m_staticText2 = new wxStaticText(this,ID_DEFAULT,wxT("wxFormBuilder"),wxDefaultPosition,wxDefaultSize,0);
   m_staticText2->SetFont(wxFont(12,74,90,92,false,wxT("Arial")));
   sizer2->Add(m_staticText2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5);
-  m_staticText3 = new wxStaticText(this,ID_DEFAULT,wxT("a RAD tool for wxWidgets framework"),wxDefaultPosition,wxDefaultSize,0);
+  m_staticText3 = new wxStaticText(this,ID_DEFAULT,_("a RAD tool for wxWidgets framework"),wxDefaultPosition,wxDefaultSize,0);
   sizer2->Add(m_staticText3, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5);
   m_staticText6 = new wxStaticText(this,ID_DEFAULT,wxT("(C) 2005 José Antonio Hurtado"),wxDefaultPosition,wxDefaultSize,0);
   sizer2->Add(m_staticText6, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5);
@@ -88,7 +87,7 @@ AboutDialog::AboutDialog(wxWindow *parent, int id) : wxDialog(parent,id,wxT("Abo
   m_panel1 = new wxPanel(this,ID_DEFAULT,wxDefaultPosition,wxDefaultSize,wxSUNKEN_BORDER|wxTAB_TRAVERSAL);
   wxBoxSizer *sizer3;
   sizer3 = new wxBoxSizer(wxVERTICAL);
-  m_staticText8 = new wxStaticText(m_panel1,ID_DEFAULT,wxT("Developed by:"),wxDefaultPosition,wxDefaultSize,0);
+  m_staticText8 = new wxStaticText(m_panel1,ID_DEFAULT,_("Developed by:"),wxDefaultPosition,wxDefaultSize,0);
   sizer3->Add(m_staticText8, 0, wxALL, 5);
   m_staticText9 = new wxStaticText(m_panel1,ID_DEFAULT,wxT("- José Antonio Hurtado"),wxDefaultPosition,wxDefaultSize,0);
   sizer3->Add(m_staticText9, 0, wxALL, 5);
@@ -100,7 +99,7 @@ AboutDialog::AboutDialog(wxWindow *parent, int id) : wxDialog(parent,id,wxT("Abo
   sizer2->Add(m_panel1, 1, wxALL|wxEXPAND, 5);
   window2 = new wxStaticLine(this,ID_DEFAULT,wxDefaultPosition,wxDefaultSize,wxLI_HORIZONTAL);
   sizer2->Add(window2, 0, wxALL|wxEXPAND, 5);
-  m_button1 = new wxButton(this,ID_OK,wxT("&OK"),wxDefaultPosition,wxDefaultSize,0);
+  m_button1 = new wxButton(this,ID_OK,_("&OK"),wxDefaultPosition,wxDefaultSize,0);
   sizer2->Add(m_button1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5);
   this->SetSizer(sizer2);
   this->SetAutoLayout(true);
@@ -121,18 +120,25 @@ AboutDialog::AboutDialog(wxWindow *parent, int id) : wxDialog(parent,id,wxT("Abo
   // work around a wxMac bug
   htmlWin->SetSize(400, 600);
 #else
-  htmlWin->SetSize(htmlWin->GetInternalRepresentation()->GetWidth(),
-                   htmlWin->GetInternalRepresentation()->GetHeight());
+  #if wxVERSION_NUMBER < 2900
+    htmlWin->SetSize(htmlWin->GetInternalRepresentation()->GetWidth(),
+                     htmlWin->GetInternalRepresentation()->GetHeight());
+  #else
+    htmlWin->SetMinSize( wxSize( 400, 600 ) );
+  #endif
 #endif
 
-
   mainSizer->Add(htmlWin, 1, wxEXPAND | wxALL, 5);
-  mainSizer->Add(new wxButton(this, wxID_OK, wxT("OK")), 0, wxALIGN_CENTER | wxBOTTOM, 5);
+  mainSizer->Add(new wxButton(this, wxID_OK, _("&OK")), 0, wxALIGN_CENTER | wxBOTTOM, 5);
 
   SetSizerAndFit(mainSizer);
 }
 
+AboutDialog::~AboutDialog()
+{
+}
+
 void AboutDialog::OnButtonEvent (wxCommandEvent &)
 {
-  Close();
+  Destroy();
 }

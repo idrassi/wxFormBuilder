@@ -187,11 +187,11 @@ void CppPanel::OnFind( wxFindDialogEvent& event )
 	wxString text = notebook->GetPageText( selection );
 	if ( wxT("cpp") == text )
 	{
-		m_cppPanel->ProcessEvent( event );
+		m_cppPanel->GetEventHandler()->ProcessEvent( event );
 	}
 	else if ( wxT("h") == text )
 	{
-		m_hPanel->ProcessEvent( event );
+		m_hPanel->GetEventHandler()->ProcessEvent( event );
 	}
 }
 
@@ -403,7 +403,7 @@ void CppPanel::OnCodeGeneration( wxFBEvent& event )
 
 			// Determine if Utf8 or Ansi is to be created
 			bool useUtf8 = false;
-			PProperty pUseUtf8 = project->GetProperty( _("encoding") );
+			PProperty pUseUtf8 = project->GetProperty( wxT("encoding") );
 
 			if ( pUseUtf8 )
 			{

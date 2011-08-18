@@ -34,13 +34,13 @@
 	}
 
 #define CHECK_VISUAL_EDITOR( RETURN ) \
-	CHECK_NULL( m_visualEdit, _("Visual Editor"), RETURN )
+	CHECK_NULL( m_visualEdit, wxT("Visual Editor"), RETURN )
 
 #define CHECK_WX_OBJECT( RETURN ) \
-	CHECK_NULL( wxobject, _("wxObject"), RETURN )
+	CHECK_NULL( wxobject, wxT("wxObject"), RETURN )
 
 #define CHECK_OBJECT_BASE( RETURN ) \
-	CHECK_NULL( obj, _("ObjectBase"), RETURN )
+	CHECK_NULL( obj, wxT("ObjectBase"), RETURN )
 
 // Classes to unset flags in VisualEditor during the destructor - this prevents
 // forgetting to unset the flag

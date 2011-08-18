@@ -6,32 +6,32 @@
 
 class wxFBSettings : public Singleton< wxFBSettings >
 {
-	friend class Singleton< wxFBSettings >;
+    friend class Singleton< wxFBSettings >;
 
 public:
-	void     Load();
-	void     Save();
+    void     Load();
+    void     Save();
 
-	bool     IsDirty;
+    bool     IsDirty;
 
-	bool     UseCustomPrefs;
-	bool     UseGradientVertical;
-	int      CaptionTextHeight;
-	wxColour CaptionActiveColor;
-	wxColour CaptionActiveColorGradient;
-	wxColour CaptionActiveColorText;
-	wxColour CaptionNormalColor;
-	wxColour CaptionNormalColorGradient;
-	wxColour CaptionNormalColorText;
-	wxString Perspective;
-	
+    bool     UseAUI;
+    bool     UseCustomPrefs;
+    bool     UseGradientVertical;
+    int      CaptionTextHeight;
+    wxColour CaptionActiveColor;
+    wxColour CaptionActiveColorGradient;
+    wxColour CaptionActiveColorText;
+    wxColour CaptionNormalColor;
+    wxColour CaptionNormalColorGradient;
+    wxColour CaptionNormalColorText;
+    wxString Perspective;
 
-	bool     IsLocaleEnabled;
-	int      LocaleSelected;
+    bool     IsLocaleEnabled;
+    int      LocaleSelected;
 
 protected:
-	wxFBSettings();
-	virtual ~wxFBSettings();
+    wxFBSettings();
+    virtual ~wxFBSettings();
 };
 
 #endif //__WXFB_SETTINGS_H__

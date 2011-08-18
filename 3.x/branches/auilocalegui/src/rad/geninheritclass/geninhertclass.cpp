@@ -29,13 +29,13 @@ GenInheritedClassDlg::GenInheritedClassDlg( wxWindow* parent, PObjectBase projec
 :
 GenInheritedClassDlgBase( parent )
 {
-	const wxString& projectName = project->GetPropertyAsString( _("name") );
+	const wxString& projectName = project->GetPropertyAsString( wxT("name") );
 
 	// Setup the initial values for the maps of class names and file names.
 	for ( unsigned int i = 0; i < project->GetChildCount(); ++i )
 	{
 		PObjectBase child = project->GetChild( i );
-		const wxString& formName = child->GetPropertyAsString( _("name") );
+		const wxString& formName = child->GetPropertyAsString( wxT("name") );
 		const wxString& name = projectName + formName;
 		m_classDetails.push_back( GenClassDetails( child, name, name ) );
 

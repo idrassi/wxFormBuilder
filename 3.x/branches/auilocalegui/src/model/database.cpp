@@ -31,6 +31,7 @@
 #include "utils/debug.h"
 #include "utils/wxfbexception.h"
 #include "rad/appdata.h"
+#include "maingui.h"
 #include <wx/filename.h>
 #include <wx/image.h>
 #include <wx/dir.h>
@@ -39,6 +40,7 @@
 #include <wx/tokenzr.h>
 #include <wx/stdpaths.h>
 #include <wx/app.h>
+#include <wx/intl.h>
 
 //#define DEBUG_PRINT(x) cout << x
 
@@ -253,9 +255,10 @@ PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase par
 
 	if (!objInfo)
 	{
-		THROW_WXFBEX( 	wxT("Unknown Object Type: ") << _WXSTR(classname) << wxT("\n")
-						wxT("The most likely causes are that this copy of wxFormBuilder is out of date, or that there is a plugin missing.\n")
-						wxT("Please check at http://www.wxFormBuilder.org") << wxT("\n") )
+		wxString msg = wxString(_("Unknown Object Type:") ) + wxT(" ") + _WXSTR( classname ) + wxT("\n") +
+						wxString(_("The most likely causes are that this copy of wxFormBuilder is out of date, or that there is a plugin missing.\n") ) +
+						wxString(_("Please check at") ) + wxT(" http://www.wxformbuilder.org\n");
+		THROW_WXFBEX( msg );
 	}
 
 	PObjectType objType = objInfo->GetObjectType();
@@ -351,7 +354,7 @@ PObjectBase ObjectDatabase::CreateObject( std::string classname, PObjectBase par
 							created = true;
 						}
 						else
-							wxLogError(wxT("Review your definitions file (objtypes.xml)"));
+							wxLogError(_("Review your definitions file (objtypes.xml)"));
 					}
 				}
 			}
@@ -528,11 +531,11 @@ PObjectBase ObjectDatabase::CreateObject( ticpp::Element* xml_obj, PObjectBase p
 					std::string value = xml_prop->GetText( false );
 					if ( !value.empty() )
 					{
-						wxLogError( wxT("The property named \"%s\" of class \"%s\" is not supported by this version of wxFormBuilder.\n")
-									wxT("If your project file was just converted from an older version, then the conversion was not complete.\n")
-									wxT("Otherwise, this project is from a newer version of wxFormBuilder.\n\n")
-									wxT("The property's value is: %s\n")
-									wxT("If you save this project, YOU WILL LOSE DATA"), _WXSTR(prop_name).c_str(), _WXSTR(class_name).c_str(), _WXSTR(value).c_str() );
+						wxLogError( wxString(_("The property named \"%s\" of class \"%s\" is not supported by this version of wxFormBuilder.\n") ) +
+									wxString(_("If your project file was just converted from an older version, then the conversion was not complete.\n") ) +
+									wxString(_("Otherwise, this project is from a newer version of wxFormBuilder.\n\n") ) +
+									wxString(_("The property's value is: %s\n") ) +
+									wxString(_("If you save this project, YOU WILL LOSE DATA") ), _WXSTR(prop_name).c_str(), _WXSTR(class_name).c_str(), _WXSTR(value).c_str() );
 					}
 				}
 
@@ -682,7 +685,11 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 							if ( !addedPackage.second )
 							{
 								addedPackage.first->second->AppendPackage( packageIt->second );
-								Debug::Print( _("Merged plugins named \"%s\""), packageIt->second->GetPackageName().c_str() );
+#if wxVERSION_NUMBER < 2900
+								Debug::Print( wxT("Merged plugins named \"%s\""), packageIt->second->GetPackageName().c_str() );
+#else
+								Debug::Print( "Merged plugins named " + packageIt->second->GetPackageName() );
+#endif
 							}
 
 						}
@@ -744,6 +751,7 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
 		// get the library to import
 		std::string lib;
 		root->GetAttributeOrDefault( "lib", &lib, "" );
+
 		if ( !lib.empty() )
 		{
 			// Allows plugin dependency dlls to be next to plugin dll in windows
@@ -766,6 +774,9 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
 
 			// Put Cwd back
 			wxFileName::SetCwd( workingDir );
+
+			// Add locale support to the loaded plugin
+			wxGetApp().AddPluginLocaleCatalog( _WXSTR( lib ) );
 		}
 
 		ticpp::Element* elem_obj = root->FirstChildElement( OBJINFO_TAG, false );
@@ -813,7 +824,7 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
                             typeName == wxT("gbsizer")  ||
                             typeName == wxT("menuitem")  )
 					{
-						class_info->AddBaseClassDefaultPropertyValue( baseIndex, _("permission"), _("none") );
+						class_info->AddBaseClassDefaultPropertyValue( baseIndex, wxT("permission"), wxT("none") );
 					}
 				}
 			}
@@ -1072,7 +1083,7 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 		}
 		catch( wxFBException& ex )
 		{
-			wxLogError( wxT("Error: %s\nWhile parsing property \"%s\" of class \"%s\""), ex.what(), _WXSTR(pname).c_str(), obj_info->GetClassName().c_str() );
+			wxLogError(_("Error: %s\nWhile parsing property \"%s\" of class \"%s\""), ex.what(), _WXSTR(pname).c_str(), obj_info->GetClassName().c_str() );
 			elem_prop = elem_prop->NextSiblingElement( PROPERTY_TAG, false );
 			continue;
 		}
@@ -1102,7 +1113,7 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 				std::string macro_description;
 				elem_opt->GetAttributeOrDefault( DESCRIPTION_TAG, &macro_description, "" );
 
-				opt_list->AddOption( _WXSTR(macro_name), _WXSTR(macro_description) );
+				opt_list->AddOption( _WXSTR( macro_name ), wxGetTranslation(_WXSTR( macro_description ) ) );
 
 				m_macroSet.insert( _WXSTR(macro_name) );
 
@@ -1124,7 +1135,7 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 
 				std::string child_description;
 				elem_child->GetAttributeOrDefault( DESCRIPTION_TAG, &child_description, "" );
-				child.m_description = _WXSTR( child_description );
+				child.m_description = wxGetTranslation(_WXSTR( child_description ) );
 
 				// Get default value
 				try
@@ -1149,7 +1160,7 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 		}
 
 		// create an instance of PropertyInfo
-		PPropertyInfo prop_info( new PropertyInfo( _WXSTR(pname), ptype, _WXSTR(def_value), _WXSTR(description), _WXSTR(customEditor), opt_list, children ) );
+		PPropertyInfo prop_info( new PropertyInfo( _WXSTR(pname), ptype, _WXSTR(def_value), wxGetTranslation(_WXSTR(description) ), _WXSTR(customEditor), opt_list, children ) );
 
 		// add the PropertyInfo to the property
 		obj_info->AddPropertyInfo( prop_info );
@@ -1220,7 +1231,8 @@ void ObjectDatabase::ParseEvents( ticpp::Element* elem_obj, PObjectInfo obj_info
 
 		// create an instance of EventInfo
 		PEventInfo evt_info(
-		  new EventInfo( _WXSTR(evt_name),  _WXSTR(evt_class), _WXSTR(def_value), _WXSTR(description)));
+			new EventInfo( _WXSTR( evt_name ), _WXSTR( evt_class ), _WXSTR( def_value ),
+							wxGetTranslation(_WXSTR( description ) ) ) );
 
 		// add the EventInfo to the event
 		obj_info->AddEventInfo(evt_info);
@@ -1281,7 +1293,7 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		if ( !handle )
 		{
 			wxString error = wxString( dlerror(), wxConvUTF8 );
-			THROW_WXFBEX( wxT("Error loading library ") << path << wxT(" ") << error )
+			THROW_WXFBEX(_("Error loading library ") << path << wxT(" ") << error )
 		}
 		dlerror(); // reset errors
 
@@ -1294,7 +1306,7 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		if (dlsym_error)
 		{
 			wxString error = wxString( dlsym_error, wxConvUTF8 );
-			THROW_WXFBEX( path << wxT(" is not a valid component library: ") << error )
+			THROW_WXFBEX( path << _(" is not a valid component library: ") << error )
 			dlclose( handle );
 		}
 		else
@@ -1307,7 +1319,7 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		wxDynamicLibrary* library = new wxDynamicLibrary( path );
 		if ( !library->IsLoaded() )
 		{
-			THROW_WXFBEX( wxT("Error loading library ") << path )
+			THROW_WXFBEX(_("Error loading library ") << path )
 		}
 
 		m_libs.push_back( library );
@@ -1317,13 +1329,19 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 
 		if ( !(GetComponentLibrary && FreeComponentLibrary) )
 		{
-			THROW_WXFBEX( path << wxT(" is not a valid component library") )
-		}
-
+#if wxVERSION_NUMBER < 2900
+			THROW_WXFBEX( path << _(" is not a valid component library") )
+#else
+			THROW_WXFBEX( path << wxString(_(" is not a valid component library") ) )
 #endif
+		}
+#endif //__WXMAC__
 
+#if wxVERSION_NUMBER < 2900
 		Debug::Print( wxT("[Database::ImportComponentLibrary] Importing %s library"), path.c_str() );
-
+#else
+		Debug::Print("[Database::ImportComponentLibrary] Importing <" + path + "> library");
+#endif
 	// Get the component library
 	IComponentLibrary* comp_lib = GetComponentLibrary( (IManager*)manager.get() );
 
@@ -1344,7 +1362,11 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		}
 		else
 		{
-			Debug::Print( wxT("ObjectInfo for <%s> not found while loading library <%s>"), class_name.c_str(), path.c_str() );
+#if wxVERSION_NUMBER < 2900
+			Debug::Print( wxT("ObjectInfo for <%s> not found while loading library <%s>"), class_name.c_str(), path.c_str() );THROW_WXFBEX( path << _(" is not a valid component library") )
+#else
+			Debug::Print( "ObjectInfo for <" + class_name + "> not found while loading library <" + path + ">" );
+#endif
 		}
 	}
 
@@ -1368,7 +1390,7 @@ PropertyType ObjectDatabase::ParsePropertyType( wxString str )
 	else
 	{
 		result = PT_ERROR;
-		THROW_WXFBEX( wxString::Format( wxT("Unknown property type \"%s\""), str.c_str() ) );
+		THROW_WXFBEX( wxString::Format(_("Unknown property type \"%s\""), str.c_str() ) );
 	}
 
 	return result;

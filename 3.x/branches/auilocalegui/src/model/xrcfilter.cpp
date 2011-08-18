@@ -36,7 +36,7 @@
 PObjectBase XrcLoader::GetProject( ticpp::Document* xrcDoc )
 {
 	assert( m_objDb );
-	Debug::Print( wxT( "[XrcFilter::GetProject]" ) );
+	Debug::Print( wxT("[XrcFilter::GetProject]") );
 
 	PObjectBase project( m_objDb->CreateObject( "Project" ) );
 
@@ -67,7 +67,7 @@ PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 	{
 		if ( className == "wxBitmap" )
 		{
-			PProperty bitmapsProp = parent->GetProperty( _( "bitmaps" ) );
+			PProperty bitmapsProp = parent->GetProperty( wxT("bitmaps") );
 			if ( bitmapsProp )
 			{
 				wxString value = bitmapsProp->GetValue();
@@ -80,7 +80,7 @@ PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 		}
 		if ( className == "wxIcon" )
 		{
-			PProperty iconsProp = parent->GetProperty( _( "icons" ) );
+			PProperty iconsProp = parent->GetProperty( wxT("icons") );
 			if ( iconsProp )
 			{
 				wxString value = iconsProp->GetValue();
@@ -175,7 +175,7 @@ PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 
 				if ( !object )
 				{
-					wxLogError( wxT( "CreateObject failed for class \"%s\", with parent \"%s\", found on line %i" ), _WXSTR( className ).c_str(), parent->GetClassName().c_str(), xrcObj->Row() );
+					wxLogError(_("CreateObject failed for class \"%s\", with parent \"%s\", found on line %i"), _WXSTR( className ).c_str(), parent->GetClassName().c_str(), xrcObj->Row() );
 				}
 				else
 				{
@@ -206,13 +206,13 @@ PObjectBase XrcLoader::GetObject( ticpp::Element *xrcObj, PObjectBase parent )
 		{
 			parent->AddChild( object );
 			object->SetParent( parent );
-			wxLogError( wxT( "Unknown class \"%s\" found on line %i, replaced with a wxPanel" ), _WXSTR( className ).c_str(), xrcObj->Row() );
+			wxLogError(_("Unknown class \"%s\" found on line %i, replaced with a wxPanel"), _WXSTR( className ).c_str(), xrcObj->Row() );
 		}
 		else
 		{
 			wxString msg( wxString::Format(
-			                  wxT( "Unknown class \"%s\" found on line %i, and could not replace with a wxPanel as child of \"%s:%s\"" ),
-			                  _WXSTR( className ).c_str(), xrcObj->Row(), parent->GetPropertyAsString( wxT( "name" ) ).c_str(), parent->GetClassName().c_str() ) );
+			                  _("Unknown class \"%s\" found on line %i, and could not replace with a wxPanel as child of \"%s:%s\""),
+			                  _WXSTR( className ).c_str(), xrcObj->Row(), parent->GetPropertyAsString( wxT("name") ).c_str(), parent->GetClassName().c_str() ) );
 
 			wxLogError( msg );
 		}

@@ -126,7 +126,7 @@ void PythonPanel::InitStyledTextCtrl( wxScintilla *stc )
 
 void PythonPanel::OnFind( wxFindDialogEvent& event )
 {
-	m_pythonPanel->ProcessEvent( event );
+	m_pythonPanel->GetEventHandler()->ProcessEvent( event );
 }
 
 void PythonPanel::OnPropertyModified( wxFBPropertyEvent& event )
@@ -326,7 +326,7 @@ void PythonPanel::OnCodeGeneration( wxFBEvent& event )
 
 			// Determine if Utf8 or Ansi is to be created
 			bool useUtf8 = false;
-			PProperty pUseUtf8 = project->GetProperty( _("encoding") );
+			PProperty pUseUtf8 = project->GetProperty( wxT("encoding") );
 
 			if ( pUseUtf8 )
 			{

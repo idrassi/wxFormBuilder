@@ -346,7 +346,7 @@ wxBitmap TypeConv::StringToBitmap( const wxString& filename )
     #endif
 	
 	// Get bitmap from art provider
-	if( filename.Contains( wxT("Load From Art Provider") ) )
+	if( filename.Contains( _("Load From Art Provider") ) )
 	{
 		wxString image = filename.BeforeLast( wxT(';') );
 		wxString rid = image.BeforeFirst( wxT(';') ).Trim();
@@ -416,7 +416,7 @@ void TypeConv::ParseBitmapWithResource( const wxString& value, wxString* image, 
     // Splitting bitmap resource property value - it is of the form "path; source [width; height]"
 
     *image = value;
-    *source = wxT("Load From File");
+    *source = _("Load From File");
     *icoSize = wxDefaultSize;
 
     wxArrayString children;
@@ -429,7 +429,7 @@ void TypeConv::ParseBitmapWithResource( const wxString& value, wxString* image, 
 		children.Add( child );
 	}
 
-	if( children.Index( wxT("Load From Art Provider") ) == wxNOT_FOUND )
+	if( children.Index(_("Load From Art Provider") ) == wxNOT_FOUND )
 	{
 		// "break;" was left out intentionally
 		long temp;
