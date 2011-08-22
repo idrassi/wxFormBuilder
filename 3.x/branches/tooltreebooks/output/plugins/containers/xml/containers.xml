@@ -168,7 +168,7 @@ Written by
     <objectinfo class="wxToolbook" icon="toolbook.xpm" type="toolbook">
         <inherits class="wxWindow"/>
         <property name="name"           type="text">m_toolbook</property>
-        <property name="bitmapsize"     type="wxSize" help="Size of page images">16,16</property>
+        <property name="bitmapsize"     type="wxSize" help="Size of page images" />
         <property name="style"          type="bitlist">
             <option name="wxBK_DEFAULT" help="Choose the default location for the toolbar depending on the current platform"/>
             <option name="wxBK_TOP"     help="Place labels above the page area."/>
@@ -182,7 +182,7 @@ Written by
     <objectinfo class="toolbookpage" icon="toolbook.xpm" type="toolbookpage">
         <property name="label"  type="wxString_i18n">a page</property>
         <property name="bitmap" type="bitmap" help="Page Image"/>
-        <property name="image"  type="int"    help="wxImageList Index">-1</property>
+        <!-- property name="image"  type="int"    help="wxImageList Index">-1</property -->
         <property name="select" type="bool"   help="Select Page when Adding">0</property>
     </objectinfo>
 
@@ -206,7 +206,7 @@ Written by
         <property name="depth"    type="int"    help="Adds a new child-page to the last top-level page.">0</property>
         <property name="label"    type="wxString_i18n">a page</property>
         <property name="bitmap"   type="bitmap" help="Page image"/>
-        <property name="image"    type="int"    help="wxImageList Index">-1</property>
+        <!-- property name="image"    type="int"    help="wxImageList Index">-1</property -->
         <property name="expanded" type="bool"   help="Expands the current treebookpage node.\nXRC: wxWidgets 2.9.3 or above"/>
         <property name="select"   type="bool"   help="Select Page when Adding">0</property>
     </objectinfo>

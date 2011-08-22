@@ -1,8 +1,5 @@
-wxTreebook component:
-
- - A better way to set depth index when removing a page (avoid to reset all page detph properties to 0)
  - Python code generation
 
-wxToolbook component
+ - Auto set the bitmapsize (?)
 
- - Python code generation
+ - wxToolbook don't updates images properly

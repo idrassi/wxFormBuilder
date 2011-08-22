@@ -65,6 +65,7 @@ protected:
 	void OnChoicebookPageChanged( wxChoicebookEvent& event );
     void OnToolbookToolClicked( wxCommandEvent& event );
     void OnToolbookPageChanged( wxToolbookEvent& event );
+    void OnToolbookIdle( wxIdleEvent& event );
     void OnTreebookPageChanged( wxTreebookEvent& event );
 	void OnAuiNotebookPageChanged( wxAuiNotebookEvent& event );
 	void OnSplitterSashChanged( wxSplitterEvent& event );
@@ -133,6 +134,7 @@ BEGIN_EVENT_TABLE( ComponentEvtHandler, wxEvtHandler )
 	EVT_CHOICEBOOK_PAGE_CHANGED( -1, ComponentEvtHandler::OnChoicebookPageChanged )
     EVT_TOOLBOOK_PAGE_CHANGED( wxID_ANY, ComponentEvtHandler::OnToolbookPageChanged )
     EVT_TOOL( wxID_ANY, ComponentEvtHandler::OnToolbookToolClicked )
+    EVT_IDLE( ComponentEvtHandler::OnToolbookIdle )
     EVT_TREEBOOK_PAGE_CHANGED( wxID_ANY, ComponentEvtHandler::OnTreebookPageChanged )
 	EVT_AUINOTEBOOK_PAGE_CHANGED( -1, ComponentEvtHandler::OnAuiNotebookPageChanged )
 	EVT_AUINOTEBOOK_PAGE_CLOSE( -1, ComponentEvtHandler::OnAuiNotebookPageClosed )
@@ -706,17 +708,19 @@ public:
                                             obj->GetPropertyAsInteger( wxT("window_style") ) );
 
         // wxToolbook needs necessarily a wxImageList
-        wxSize imageSize   = obj->GetPropertyAsSize( wxT("bitmapsize") );
-        int    imageWidth  = imageSize.GetWidth();
-        int    imageHeight = imageSize.GetHeight();
+        wxImage defImage  = wxBitmap( default_xpm ).ConvertToImage();
+        wxSize  bmpSize   = obj->GetPropertyAsSize( wxT("bitmapsize") );
+        int     bmpWidth  = bmpSize.GetWidth();
+        int     bmpHeight = bmpSize.GetHeight();
 
-        if ( imageWidth < 1 || imageHeight < 1 )
-            imageWidth  = imageHeight = 16;
+        if ( bmpSize == wxDefaultSize )
+        {
+            bmpWidth  = defImage.GetWidth();
+            bmpHeight = defImage.GetHeight();
+        }
 
-        wxImageList *imgList = new wxImageList( imageWidth, imageHeight );
-        wxImage     image    = wxBitmap( default_xpm ).ConvertToImage();
-
-        imgList->Add( image.Scale( imageWidth, imageHeight ) );
+        wxImageList *imgList = new wxImageList( bmpWidth, bmpHeight );
+        imgList->Add( defImage.Scale( bmpWidth, bmpHeight ) );
         book->AssignImageList( imgList );
 
         book->PushEventHandler( new ComponentEvtHandler( book, GetManager() ) );
@@ -730,13 +734,35 @@ public:
 
         if ( obj && book )
         {
-            // wxToolbook needs necessarily a wxImageList
-            wxSize imageSize = obj->GetPropertyAsSize( wxT("bitmapsize") );
+            size_t count = book->GetPageCount();
 
-            if ( imageSize.GetWidth() < 1 || imageSize.GetHeight() < 1 )
+            unsigned char *defBmp = wxBitmap( default_xpm ).ConvertToImage().GetData();
+            unsigned char *tmpBmp = NULL;
+            int w = -1;
+            int h = -1;
+
+            for ( size_t i = 0; i < count; i++ )
             {
-                GetManager()->ModifyProperty( wxobject, wxT("bitmapsize"), wxT("16,16"), false );
+                wxObject *child    = GetManager()->GetChild( wxobject, i );
+                IObject  *childObj = GetManager()->GetIObject( child );
+                wxBitmap  bmp      = childObj->GetPropertyAsBitmap( wxT("bitmap") );
+                wxSize    bmpSize  = wxSize( bmp.GetWidth(), bmp.GetHeight() );
+
+                tmpBmp = bmp.ConvertToImage().GetData();
+
+                if ( (bmpSize != wxDefaultSize) && (tmpBmp != defBmp) )
+                {
+                    w = bmp.GetWidth();
+                    h = bmp.GetHeight();
+                    break;
+                }
             }
+
+            book->Update();
+            book->Refresh();
+
+            GetManager()->ModifyProperty( wxobject, wxT("bitmapsize"),
+                                          wxString::Format( wxT("%i,%i"), w, h ), false );
         }
     }
 
@@ -764,7 +790,27 @@ void ComponentEvtHandler::OnToolbookPageChanged( wxToolbookEvent& event )
 
     if ( book && selection >= 0 && event.GetInt() == 1 )
     {
+        size_t count = m_manager->GetChildCount( m_window );
+        for ( size_t i = 0; i < count; i++ )
+        {
+            wxObject* wxChild = m_manager->GetChild( m_window, i );
+            IObject*  iChild = m_manager->GetIObject( wxChild );
+            if ( iChild )
+            {
+                if ( (int)i == selection && !iChild->GetPropertyAsInteger( wxT("select") ) )
+                {
+                    m_manager->ModifyProperty( wxChild, wxT("select"), wxT("1"), false );
+                }
+                else if ( (int)i != selection && iChild->GetPropertyAsInteger( wxT("select") ) )
+                {
+                    m_manager->ModifyProperty( wxChild, wxT("select"), wxT("0"), false );
+                }
+            }
+        }
+
+        book->Realize();
         m_manager->SelectObject( book->GetPage( selection ) );
+        event.Skip();
     }
 }
 
@@ -777,13 +823,25 @@ void ComponentEvtHandler::OnToolbookToolClicked( wxCommandEvent& event )
     {
         int       selection = event.GetId() - 1;
         wxWindow *page      = book->GetPage( selection );
-        book->ChangeSelection( selection );
+        book->SetSelection( selection );
         wxToolbookEvent evt( wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED, page->GetId() );
         evt.SetSelection( selection );
         evt.SetEventObject( page );
         evt.SetInt( 1 );
         book->GetEventHandler()->AddPendingEvent( evt );
     }
+
+    event.Skip();
+}
+
+void ComponentEvtHandler::OnToolbookIdle( wxIdleEvent& event )
+{
+    wxToolbook *book = wxDynamicCast( event.GetEventObject(), wxToolbook );
+    if ( book )
+    {
+        book->Realize();
+    }
+    event.Skip();
 }
 
 class ToolbookPageComponent : public ComponentBase
@@ -807,28 +865,22 @@ public:
         SuppressEventHandlers suppress( book );
 
         // Apply image to page
-        int      imageIndex = 0;
+        int      imgIndex = 0;
         wxBitmap bmp        = obj->GetPropertyAsBitmap( wxT("bitmap") );
 
-        if ( bmp.IsOk() )
-        {
-            IObject *parentObj = GetManager()->GetIObject( wxparent );
-            wxSize   imageSize = parentObj->GetPropertyAsSize( wxT("bitmapsize") );
-            int         width  = imageSize.GetWidth();
-            int         height = imageSize.GetHeight();
+        IObject *parentObj = GetManager()->GetIObject( wxparent );
+        wxSize   bmpSize = parentObj->GetPropertyAsSize( wxT("bitmapsize") );
+        int         width  = bmpSize.GetWidth();
+        int         height = bmpSize.GetHeight();
 
-            if ( width > 0 && height > 0 )
-            {
-                wxImageList *imageList = book->GetImageList();
-                if ( imageList )
-                {
-                    wxImage image = bmp.ConvertToImage();
-                    imageIndex = imageList->Add( image.Scale( width, height ) );
-                }
-            }
+        if ( width > 0 && height > 0 )
+        {
+            wxImageList *imageList = book->GetImageList();
+            wxImage      image     = bmp.ConvertToImage();
+            imgIndex = imageList->Add( image.Scale( width, height ) );
         }
 
-        book->AddPage( page, obj->GetPropertyAsString( wxT("label") ), false, imageIndex );
+        book->AddPage( page, obj->GetPropertyAsString( wxT("label") ), false, imgIndex );
 
         wxToolbookEvent evt( wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED, page->GetId() );
         evt.SetSelection( book->GetPageCount() - 1 );
@@ -847,11 +899,17 @@ public:
     {
         ObjectToXrcFilter xrc( obj, wxT("toolbookpage") );
         xrc.AddProperty( wxT("label"), wxT("label"), XRC_TYPE_TEXT );
+
         if ( !obj->IsNull( wxT("bitmap") ) )
         {
             xrc.AddProperty( wxT("bitmap"), wxT("bitmap"), XRC_TYPE_BITMAP );
-            xrc.AddProperty( wxT("image"),  wxT("image"),  XRC_TYPE_INTEGER );
         }
+/*
+        if ( obj->GetPropertyAsInteger( wxT("image" ) ) > -1 )
+        {
+            xrc.AddProperty( wxT("image"), wxT("image"), XRC_TYPE_INTEGER );
+        }
+*/
         xrc.AddProperty( wxT("select"), wxT("selected"), XRC_TYPE_BOOL );
         return xrc.GetXrcObject();
     }
@@ -862,8 +920,7 @@ public:
         filter.AddWindowProperties();
         filter.AddProperty( wxT("label"),    wxT("label"),  XRC_TYPE_TEXT );
         filter.AddProperty( wxT("bitmap"),   wxT("bitmap"), XRC_TYPE_BITMAP );
-        filter.AddProperty( wxT("image"),    wxT("image"),  XRC_TYPE_INTEGER );
-        filter.AddProperty( wxT("selected"), wxT("select"), XRC_TYPE_BOOL );
+//      filter.AddProperty( wxT("image"),    wxT("image"),  XRC_TYPE_INTEGER );
         return filter.GetXfbObject();
     }
 #endif
@@ -930,13 +987,8 @@ public:
 
 void ComponentEvtHandler::OnTreebookPageChanged( wxTreebookEvent& event )
 {
-    wxTreebook *book     = wxDynamicCast( m_window, wxTreebook );
-    int        selection = event.GetSelection();
-
-    if ( book && selection >= 0 )
-    {
-        m_manager->SelectObject( book->GetPage( selection ) );
-    }
+    OnBookPageChanged< wxTreebook >( event.GetSelection(), &event );
+    event.Skip();
 }
 
 class TreebookPageComponent : public ComponentBase
@@ -957,40 +1009,33 @@ public:
             return;
         }
 
-        // Prevent events during construction - two event handlers have been pushed onto the stack
-        // VObjEvtHandler and Component Event handler
-        wxEvtHandler *vobjEvtHandler = book->PopEventHandler();
-        wxEvtHandler *bookEvtHandler = book->PopEventHandler();
+        // Prevent event handling by wxFB - these aren't user generated events
+        SuppressEventHandlers suppress( book );
 
         // Apply image to page
-        int         imageIndex;
-        wxImageList *imgList    = book->GetImageList();
-        wxBitmap    bmp         = obj->GetPropertyAsBitmap( wxT("bitmap") );
-        wxSize      imageSize   = parentObj->GetPropertyAsSize( wxT("bitmapsize") );
-        int         imageWidth  = imageSize.GetWidth();
-        int         imageHeight = imageSize.GetHeight();
+        int         imgIndex;
+        wxImageList *imgList  = book->GetImageList();
+        wxBitmap    bmp       = obj->GetPropertyAsBitmap( wxT("bitmap") );
+        wxSize      bmpSize   = parentObj->GetPropertyAsSize( wxT("bitmapsize") );
+        int         bmpWidth  = bmpSize.GetWidth();
+        int         bmpHeight = bmpSize.GetHeight();
 
-        if ( !bmp.IsOk() )
+        if ( bmpWidth < 1 || bmpHeight < 1 )
         {
-            bmp = wxBitmap( default_xpm );
-        }
-
-        if ( imageWidth < 1 || imageHeight < 1 )
-        {
-            imageWidth  = bmp.GetWidth();
-            imageHeight = bmp.GetHeight();
+            bmpWidth  = bmp.GetWidth();
+            bmpHeight = bmp.GetHeight();
             GetManager()->ModifyProperty( wxparent, wxT("bitmapsize"),
-                                          wxString::Format( wxT("%i,%i"), imageWidth, imageHeight), false );
+                                          wxString::Format( wxT("%i,%i"), bmpWidth, bmpHeight), false );
         }
 
         if ( !imgList )
         {
-            imgList = new wxImageList( imageWidth, imageHeight );
+            imgList = new wxImageList( bmpWidth, bmpHeight );
             book->AssignImageList( imgList );
         }
 
         wxImage image = bmp.ConvertToImage();
-        imageIndex    = imgList->Add( image.Scale( imageWidth, imageHeight ) );
+        imgIndex    = imgList->Add( image.Scale( bmpWidth, bmpHeight ) );
 
         // Setup depth and add page to book
         if ( book->GetPageCount() == 0 )
@@ -1017,19 +1062,15 @@ public:
 
         if ( depth == 0 )
         {
-            book->AddPage( page, obj->GetPropertyAsString( wxT("label") ), true, imageIndex );
+            book->AddPage( page, obj->GetPropertyAsString( wxT("label") ), true, imgIndex );
         }
         else
         {
             // TODO : Set a different value in cpp/pythoncode than $depth - 1
-            book->InsertSubPage( gs_treeContext.Item( depth - 1 ), page, obj->GetPropertyAsString( wxT("label") ), true, imageIndex );
+            book->InsertSubPage( gs_treeContext.Item( depth - 1 ), page, obj->GetPropertyAsString( wxT("label") ), true, imgIndex );
         }
 
         gs_treeContext.Add( book->GetPageCount() - 1);
-
-        // Restore event handling
-        book->PushEventHandler( bookEvtHandler );
-        book->PushEventHandler( vobjEvtHandler );
     }
 
     void OnSelected( wxObject *wxobject )
@@ -1045,10 +1086,10 @@ public:
 
         if ( !obj->IsNull( wxT("bitmap") ) )
             xrc.AddProperty( wxT("bitmap"), wxT("bitmap"), XRC_TYPE_BITMAP );
-
+/*
         if ( obj->GetPropertyAsInteger( wxT("image" ) ) > -1 )
             xrc.AddProperty( wxT("image"), wxT("image"), XRC_TYPE_INTEGER );
-
+*/
         if ( obj->GetPropertyAsInteger( wxT("expanded" ) ) == 1 )
             xrc.AddProperty( wxT("expanded"), wxT("expanded"), XRC_TYPE_BOOL );
 
@@ -1063,7 +1104,7 @@ public:
         filter.AddProperty( wxT("depth"),    wxT("depth"),    XRC_TYPE_INTEGER );
         filter.AddProperty( wxT("label"),    wxT("label"),    XRC_TYPE_TEXT );
         filter.AddProperty( wxT("bitmap"),   wxT("bitmap"),   XRC_TYPE_BITMAP );
-        filter.AddProperty( wxT("image"),    wxT("image"),    XRC_TYPE_INTEGER );
+//      filter.AddProperty( wxT("image"),    wxT("image"),    XRC_TYPE_INTEGER );
         filter.AddProperty( wxT("expanded"), wxT("expanded"), XRC_TYPE_BOOL );
         filter.AddProperty( wxT("selected"), wxT("select"),   XRC_TYPE_BOOL );
         return filter.GetXfbObject();
