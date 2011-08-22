@@ -236,105 +236,105 @@ Written by
 		</template>
 	</templates>
 
-	<templates class="wxTreebook">
-		<template name="declaration">#class* $name;</template>
-		<template name="construction">$name = new #class( #wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @} );</template>
-		<template name="include">
-			@#include &lt;wx/treebook.h&gt;
-			#ifnotnull $bitmapsize
-			@{
-				#nl @#include &lt;wx/imaglist.h&gt;
-				#nl @#include &lt;wx/image.h&gt;
-			@}
-		</template>
-		<template name="settings">
-			#ifnotnull $bitmapsize
-			@{
-				wxSize $name #append ImageSize = $bitmapsize; #nl
-				int $name #append Index = 0; #nl
-				wxImageList* $name #append Images = new wxImageList( $name #append ImageSize.GetWidth(), $name #append ImageSize.GetHeight() ); #nl
-				$name->AssignImageList( $name #append Images ); #nl
-				wxBitmap $name #append Bitmap; #nl
-				wxImage $name #append Image;
-			@}
-		</template>
-		<template name="evt_entry_OnTreebookPageChanged">EVT_TREEBOOK_PAGE_CHANGED( $id, #handler )</template>
-		<template name="evt_connect_OnTreebookPageChanged">$name->Connect( wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED, #handler, NULL, this );</template>
-		<template name="evt_entry_OnTreebookPageChanging">EVT_TREEBOOK_PAGE_CHANGING( $id, #handler )</template>
-		<template name="evt_connect_OnTreebookPageChanging">$name->Connect( wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING, #handler, NULL, this );</template>
-		<template name="evt_entry_OnTreebookNodeCollapsed">EVT_TREEBOOK_NODE_COLLAPSED( $id, #handler )</template>
-		<template name="evt_connect_OnTreebookNodeCollapsed">$name->Connect( wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED, #handler, NULL, this );</template>
-		<template name="evt_entry_OnTreebookNodeExpanded">EVT_TREEBOOK_NODE_EXPANDED( $id, #handler )</template>
-		<template name="evt_connect_OnTreebookNodeExpanded">$name->Connect( wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED, #handler, NULL, this );</template>
-	</templates>
+    <templates class="wxTreebook">
+        <template name="declaration">#class* $name;</template>
+        <template name="construction">$name = new #class( #wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @} );</template>
+        <template name="include">
+            @#include &lt;wx/treebook.h&gt;
+            #ifnotnull $bitmapsize
+            @{
+                #nl @#include &lt;wx/imaglist.h&gt;
+                #nl @#include &lt;wx/image.h&gt;
+            @}
+        </template>
+        <template name="settings">
+            #ifnotnull $bitmapsize
+            @{
+                wxSize $name #append ImageSize = $bitmapsize; #nl
+                int $name #append Index = 0; #nl
+                wxImageList* $name #append Images = new wxImageList( $name #append ImageSize.GetWidth(), $name #append ImageSize.GetHeight() ); #nl
+                $name->AssignImageList( $name #append Images ); #nl
+                wxBitmap $name #append Bitmap; #nl
+                wxImage $name #append Image;
+            @}
+        </template>
+        <template name="evt_entry_OnTreebookPageChanged">EVT_TREEBOOK_PAGE_CHANGED( $id, #handler )</template>
+        <template name="evt_connect_OnTreebookPageChanged">$name->Connect( wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED, #handler, NULL, this );</template>
+        <template name="evt_entry_OnTreebookPageChanging">EVT_TREEBOOK_PAGE_CHANGING( $id, #handler )</template>
+        <template name="evt_connect_OnTreebookPageChanging">$name->Connect( wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING, #handler, NULL, this );</template>
+        <template name="evt_entry_OnTreebookNodeCollapsed">EVT_TREEBOOK_NODE_COLLAPSED( $id, #handler )</template>
+        <template name="evt_connect_OnTreebookNodeCollapsed">$name->Connect( wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED, #handler, NULL, this );</template>
+        <template name="evt_entry_OnTreebookNodeExpanded">EVT_TREEBOOK_NODE_EXPANDED( $id, #handler )</template>
+        <template name="evt_connect_OnTreebookNodeExpanded">$name->Connect( wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED, #handler, NULL, this );</template>
+    </templates>
 
-	<templates class="treebookpage">
-		<template name="page_add">#parent $name->AddPage( #child $name, $label, $select );</template>
-		<template name="subpage_add">#parent $name->InsertSubPage( $depth - 1, #child $name, $label, $select );</template>
-		<template name="settings">
-			#ifnotnull #parent $bitmapsize
-			@{
-				#ifnotnull $bitmap
-				@{
-					#parent $name #append Bitmap = $bitmap; #nl
-					if ( #parent $name #append Bitmap.Ok() ) #nl
-					@{ #indent #nl
-						#parent $name #append Image = #parent $name #append Bitmap.ConvertToImage(); #nl
-						#parent $name #append Images->Add( #parent $name #append Image.Scale( #parent $name #append ImageSize.GetWidth(), #parent $name #append ImageSize.GetHeight() ) ); #nl
-						#parent $name->SetPageImage( #parent $name #append Index, #parent $name #append Index ); #nl
-						#parent $name #append Index++; #unindent #nl
-					@}
-				@}
-			@}
-		</template>
-	</templates>
+    <templates class="treebookpage">
+        <template name="page_add">#parent $name->AddPage( #child $name, $label, $select );</template>
+        <template name="subpage_add">#parent $name->InsertSubPage( $depth - 1, #child $name, $label, $select );</template>
+        <template name="settings">
+            #ifnotnull #parent $bitmapsize
+            @{
+                #ifnotnull $bitmap
+                @{
+                    #parent $name #append Bitmap = $bitmap; #nl
+                    if ( #parent $name #append Bitmap.Ok() ) #nl
+                    @{ #indent #nl
+                        #parent $name #append Image = #parent $name #append Bitmap.ConvertToImage(); #nl
+                        #parent $name #append Images->Add( #parent $name #append Image.Scale( #parent $name #append ImageSize.GetWidth(), #parent $name #append ImageSize.GetHeight() ) ); #nl
+                        #parent $name->SetPageImage( #parent $name #append Index, #parent $name #append Index ); #nl
+                        #parent $name #append Index++; #unindent #nl
+                    @}
+                @}
+            @}
+        </template>
+    </templates>
 
-	<templates class="wxToolbook">
-		<template name="declaration">#class* $name;</template>
-		<template name="construction">$name = new #class( #wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @} );</template>
-		<template name="include">
-			@#include &lt;wx/toolbook.h&gt;
-			#ifnotnull $bitmapsize
-			@{
-				#nl @#include &lt;wx/imaglist.h&gt;
-				#nl @#include &lt;wx/image.h&gt;
-			@}
-		</template>
-		<template name="settings">
-			#ifnotnull $bitmapsize
-			@{
-				wxSize $name #append ImageSize = $bitmapsize; #nl
-				int $name #append Index = -1; #nl
-				wxImageList* $name #append Images = new wxImageList( $name #append ImageSize.GetWidth(), $name #append ImageSize.GetHeight() ); #nl
-				$name->AssignImageList( $name #append Images ); #nl
-				wxBitmap $name #append Bitmap; #nl
-				wxImage $name #append Image;
-			@}
-		</template>
-		<template name="evt_entry_OnToolbookPageChanged">EVT_TOOLBOOK_PAGE_CHANGED( $id, #handler )</template>
-		<template name="evt_connect_OnToolbookPageChanged">$name->Connect( wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED, #handler, NULL, this );</template>
-		<template name="evt_entry_OnToolbookPageChanging">EVT_TOOLBOOK_PAGE_CHANGING( $id, #handler )</template>
-		<template name="evt_connect_OnToolbookPageChanging">$name->Connect( wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING, #handler, NULL, this );</template>
-	</templates>
+    <templates class="wxToolbook">
+        <template name="declaration">#class* $name;</template>
+        <template name="construction">$name = new #class( #wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @} );</template>
+        <template name="include">
+            @#include &lt;wx/toolbook.h&gt;
+            #ifnotnull $bitmapsize
+            @{
+                #nl @#include &lt;wx/imaglist.h&gt;
+                #nl @#include &lt;wx/image.h&gt;
+            @}
+        </template>
+        <template name="settings">
+            #ifnotnull $bitmapsize
+            @{
+                wxSize $name #append ImageSize = $bitmapsize; #nl
+                int $name #append Index = -1; #nl
+                wxImageList* $name #append Images = new wxImageList( $name #append ImageSize.GetWidth(), $name #append ImageSize.GetHeight() ); #nl
+                $name->AssignImageList( $name #append Images ); #nl
+                wxBitmap $name #append Bitmap; #nl
+                wxImage $name #append Image;
+            @}
+        </template>
+        <template name="evt_entry_OnToolbookPageChanged">EVT_TOOLBOOK_PAGE_CHANGED( $id, #handler )</template>
+        <template name="evt_connect_OnToolbookPageChanged">$name->Connect( wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED, #handler, NULL, this );</template>
+        <template name="evt_entry_OnToolbookPageChanging">EVT_TOOLBOOK_PAGE_CHANGING( $id, #handler )</template>
+        <template name="evt_connect_OnToolbookPageChanging">$name->Connect( wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING, #handler, NULL, this );</template>
+    </templates>
 
-	<templates class="toolbookpage">
-		<template name="settings">
-			#ifnotnull #parent $bitmapsize
-			@{
-				#ifnotnull $bitmap
-				@{
-					#parent $name #append Bitmap = $bitmap; #nl
-					if ( #parent $name #append Bitmap.Ok() ) #nl
-					@{ #indent #nl
-						#parent $name #append Image = #parent $name #append Bitmap.ConvertToImage(); #nl
-						#parent $name #append Images->Add( #parent $name #append Image.Scale( #parent $name #append ImageSize.GetWidth(), #parent $name #append ImageSize.GetHeight() ) ); #nl
-						#parent $name->SetPageImage( #parent $name #append Index, #parent $name #append Index ); #nl
-						#parent $name #append Index++; #unindent #nl
-					@}
-				@}
-			@}
-		</template>
-		<template name="page_add">#parent $name->AddPage( #child $name, $label, $select, #parent $name #append Index );</template>
-	</templates>
+    <templates class="toolbookpage">
+        <template name="settings">
+            #ifnotnull #parent $bitmapsize
+            @{
+                #ifnotnull $bitmap
+                @{
+                    #parent $name #append Bitmap = $bitmap; #nl
+                    if ( #parent $name #append Bitmap.Ok() ) #nl
+                    @{ #indent #nl
+                        #parent $name #append Image = #parent $name #append Bitmap.ConvertToImage(); #nl
+                        #parent $name #append Images->Add( #parent $name #append Image.Scale( #parent $name #append ImageSize.GetWidth(), #parent $name #append ImageSize.GetHeight() ) ); #nl
+                        #parent $name->SetPageImage( #parent $name #append Index, #parent $name #append Index ); #nl
+                        #parent $name #append Index++; #unindent #nl
+                    @}
+                @}
+            @}
+        </template>
+        <template name="page_add">#parent $name->AddPage( #child $name, $label, $select, #parent $name #append Index );</template>
+    </templates>
 
 </codegen>
