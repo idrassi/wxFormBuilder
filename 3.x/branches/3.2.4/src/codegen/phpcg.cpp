@@ -21,12 +21,12 @@
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
-// Python code generation writen by
+// PHP code generation writen by
 //   Michal Bližňak - michal.bliznak@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "pythoncg.h"
+#include "phpcg.h"
 #include "codewriter.h"
 #include "utils/typeconv.h"
 #include "utils/debug.h"
@@ -41,7 +41,7 @@
 #include <wx/tokenzr.h>
 #include <wx/defs.h>
 
-PythonTemplateParser::PythonTemplateParser( PObjectBase obj, wxString _template, bool useI18N, bool useRelativePath, wxString basePath )
+PHPTemplateParser::PHPTemplateParser( PObjectBase obj, wxString _template, bool useI18N, bool useRelativePath, wxString basePath )
 :
 TemplateParser(obj,_template),
 m_i18n( useI18N ),
@@ -52,48 +52,48 @@ m_basePath( basePath )
 	{
 		m_basePath.clear();
 	}
-	
-	SetupModulePrefixes();
+
+	//SetupModulePrefixes();
 }
 
-PythonTemplateParser::PythonTemplateParser( const PythonTemplateParser & that, wxString _template )
+PHPTemplateParser::PHPTemplateParser( const PHPTemplateParser & that, wxString _template )
 :
 TemplateParser( that, _template ),
 m_i18n( that.m_i18n ),
 m_useRelativePath( that.m_useRelativePath ),
 m_basePath( that.m_basePath )
 {
-	SetupModulePrefixes();
+	//SetupModulePrefixes();
 }
 
-wxString PythonTemplateParser::RootWxParentToCode()
+wxString PHPTemplateParser::RootWxParentToCode()
 {
-	return wxT("self");
+	return wxT("$this");
 }
 
-PTemplateParser PythonTemplateParser::CreateParser( const TemplateParser* oldparser, wxString _template )
+PTemplateParser PHPTemplateParser::CreateParser( const TemplateParser* oldparser, wxString _template )
 {
-	const PythonTemplateParser* pythonOldParser = dynamic_cast< const PythonTemplateParser* >( oldparser );
-	if ( pythonOldParser != NULL )
+	const PHPTemplateParser* phpOldParser = dynamic_cast< const PHPTemplateParser* >( oldparser );
+	if ( phpOldParser != NULL )
 	{
-		PTemplateParser newparser( new PythonTemplateParser( *pythonOldParser, _template ) );
+		PTemplateParser newparser( new PHPTemplateParser( *phpOldParser, _template ) );
 		return newparser;
 	}
 	return PTemplateParser();
 }
 
 /**
-* Convert the value of the property to Python code
+* Convert the value of the property to PHP code
 */
-wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
+wxString PHPTemplateParser::ValueToCode( PropertyType type, wxString value )
 {
 	wxString result;
-	
+
 	switch ( type )
 	{
 	case PT_WXPARENT:
 		{
-			result = wxT("self.") + value;
+			result = wxT("$this->") + value;
 			break;
 		}
 	case PT_WXSTRING:
@@ -102,11 +102,11 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
 		{
 			if ( value.empty() )
 			{
-				result << wxT("wx.EmptyString");
+				result << wxT("wxEmptyString");
 			}
 			else
 			{
-				result << wxT("u\"") << PythonCodeGenerator::ConvertPythonString( value ) << wxT("\"");
+				result << wxT("\"") << PHPCodeGenerator::ConvertPHPString( value ) << wxT("\"");
 			}
 			break;
 		}
@@ -114,17 +114,17 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
 		{
 			if ( value.empty() )
 			{
-				result << wxT("wx.EmptyString");
+				result << wxT("wxEmptyString");
 			}
 			else
 			{
 				if ( m_i18n )
 				{
-					result << wxT("_(\"") << PythonCodeGenerator::ConvertPythonString(value) << wxT("\")");
+					result << wxT("_(\"") << PHPCodeGenerator::ConvertPHPString(value) << wxT("\")");
 				}
 				else
 				{
-					result << wxT("u\"") << PythonCodeGenerator::ConvertPythonString(value) << wxT("\"");
+					result << wxT("\"") << PHPCodeGenerator::ConvertPHPString(value) << wxT("\"");
 				}
 			}
 			break;
@@ -134,17 +134,6 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
 	case PT_OPTION:
 		{
 			result = value;
-			wxString pred = m_predModulePrefix[value];
-			
-			if( !pred.empty() )	result.Replace( wxT("wx"), pred );
-			else
-			{
-				if( result.StartsWith( wxT("XRCID") ) )
-					result.Prepend( wxT("wx.xrc.") );
-				else
-					result.Replace( wxT("wx"), wxT("wx.") );
-			}
-				
 			break;
 		}
 	case PT_TEXT:
@@ -158,21 +147,21 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
 	case PT_BITLIST:
 		{
 			result = ( value.empty() ? wxT("0") : value );
-			
+
 			wxString pred, bit;
 			wxStringTokenizer bits( result, wxT("|"), wxTOKEN_STRTOK );
-			
+
 			while( bits.HasMoreTokens() )
 			{
 				bit = bits.GetNextToken();
 				pred = m_predModulePrefix[bit];
-			
-				if( bit.Contains( wxT("wx") ) )
+
+				/*if( bit.Contains( wxT("wx") ) )
 				{
 					if( !pred.empty() )	result.Replace( bit, pred + bit.AfterFirst('x') );
 					else
-						result.Replace( bit, wxT("wx.") + bit.AfterFirst('x') );
-				}
+						result.Replace( bit, wxT("wx") + bit.AfterFirst('x') );
+				}*/
 			}
 			break;
 		}
@@ -180,11 +169,11 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
 		{
 			if ( value.empty() )
 			{
-				result = wxT("wx.DefaultPosition");
+				result = wxT("wxDefaultPosition");
 			}
 			else
 			{
-				result << wxT("wx.Point( ") << value << wxT(" )");
+				result << wxT("new wxPoint( ") << value << wxT(" )");
 			}
 			break;
 		}
@@ -192,17 +181,17 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
 		{
 			if ( value.empty() )
 			{
-				result = wxT("wx.DefaultSize");
+				result = wxT("wxDefaultSize");
 			}
 			else
 			{
-				result << wxT("wx.Size( ") << value << wxT(" )");
+				result << wxT("new wxSize( ") << value << wxT(" )");
 			}
 			break;
 		}
 	case PT_BOOL:
 		{
-			result = ( value == wxT("0") ? wxT("False") : wxT("True") );
+			result = ( value == wxT("0") ? wxT("false") : wxT("true") );
 			break;
 		}
 	case PT_WXFONT:
@@ -212,20 +201,20 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
 				wxFontContainer font = TypeConv::StringToFont( value );
 
 				int pointSize = font.GetPointSize();
-				wxString size = pointSize <= 0 ? wxT("wx.NORMAL_FONT.GetPointSize()") : wxString::Format( wxT("%i"), pointSize ).c_str();
+				wxString size = pointSize <= 0 ? wxT("10 /*wxNORMAL_FONT->GetPointSize() Not implemented on wxPHP*/") : wxString::Format( wxT("%i"), pointSize ).c_str();
 
-				result	= wxString::Format( wxT("wx.Font( %s, %i, %i, %i, %s, %s )" ),
+				result	= wxString::Format( wxT("new wxFont( %s, %i, %i, %i, %s, %s )" ),
 											size.c_str(),
 											font.GetFamily(),
 											font.GetStyle(),
 											font.GetWeight(),
-											( font.GetUnderlined() ? wxT("True") : wxT("False") ),
-											( font.m_faceName.empty() ? wxT("wx.EmptyString") : wxString::Format( wxT("\"%s\""), font.m_faceName.c_str() ).c_str() )
+											( font.GetUnderlined() ? wxT("true") : wxT("false") ),
+											( font.m_faceName.empty() ? wxT("wxEmptyString") : wxString::Format( wxT("\"%s\""), font.m_faceName.c_str() ).c_str() )
 											);
 			}
 			else
 			{
-				result = wxT("wx.NORMAL_FONT");
+				result = wxT("wxNORMAL_FONT");
 			}
 			break;
 		}
@@ -236,17 +225,17 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
 				if ( value.find_first_of( wxT("wx") ) == 0 )
 				{
 					// System Colour
-					result << wxT("wx.SystemSettings.GetColour( ") << ValueToCode( PT_OPTION, value ) << wxT(" )");
+					result << wxT("wxSystemSettings->GetColour( ") << ValueToCode( PT_OPTION, value ) << wxT(" )");
 				}
 				else
 				{
 					wxColour colour = TypeConv::StringToColour( value );
-					result = wxString::Format( wxT("wx.Colour( %i, %i, %i )"), colour.Red(), colour.Green(), colour.Blue() );
+					result = wxString::Format( wxT("new wxColour( %i, %i, %i )"), colour.Red(), colour.Green(), colour.Blue() );
 				}
 			}
 			else
 			{
-				result = wxT("wx.Colour()");
+				result = wxT("new wxColour()");
 			}
 			break;
 		}
@@ -260,18 +249,18 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
 			if ( path.empty() )
 			{
 				// Empty path, generate Null Bitmap
-				result = wxT("wx.NullBitmap");
+				result = wxT("wxNullBitmap");
 				break;
 			}
 
             if ( path.StartsWith( wxT("file:") ) )
             {
-                wxLogWarning( wxT("Python code generation does not support using URLs for bitmap properties:\n%s"), path.c_str() );
-                result = wxT("wx.NullBitmap");
+                wxLogWarning( wxT("PHP code generation does not support using URLs for bitmap properties:\n%s"), path.c_str() );
+                result = wxT("wxNullBitmap");
                 break;
             }
 
-            if ( source == wxT("Load From File") || source == wxT("Load From Embedded File"))
+            if ( source == wxT("Load From File") )
 			{
 			    wxString absPath;
 			    try
@@ -281,45 +270,30 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
 				catch( wxFBException& ex )
 				{
 				    wxLogError( ex.what() );
-				    result = wxT( "wx.NullBitmap" );
+				    result = wxT( "wxNullBitmap" );
 				    break;
 				}
 
 				wxString file = ( m_useRelativePath ? TypeConv::MakeRelativePath( absPath, m_basePath ) : absPath );
-				
-				result << wxT("wx.Bitmap( u\"") << PythonCodeGenerator::ConvertPythonString( file ) << wxT("\", wx.BITMAP_TYPE_ANY )");
+
+				result << wxT("new wxBitmap( \"") << PHPCodeGenerator::ConvertPHPString( file ) << wxT("\", wxBITMAP_TYPE_ANY )");
 			}
 			else if ( source == wxT("Load From Resource") )
 			{
-				result << wxT("wx.Bitmap( u\"") << path << wxT("\", wx.BITMAP_TYPE_RESOURCE )");
+				result << wxT("new wxBitmap( \"") << path << wxT("\", wxBITMAP_TYPE_RESOURCE )");
 			}
 			else if ( source == wxT("Load From Icon Resource") )
 			{
                 if ( wxDefaultSize == icoSize )
                 {
-                    result << wxT("wx.ICON( ") << path << wxT(" )");
+                    result << wxT("new wxICON( ") << path << wxT(" )");
                 }
                 else
                 {
-                    result.Printf( wxT("wx.Icon( u\"%s\", wx.BITMAP_TYPE_ICO_RESOURCE, %i, %i )"), path.c_str(), icoSize.GetWidth(), icoSize.GetHeight() );
+                    result.Printf( wxT("new wxIcon( \"%s\", wxBITMAP_TYPE_ICO_RESOURCE, %i, %i )"), path.c_str(), icoSize.GetWidth(), icoSize.GetHeight() );
                 }
 			}
-			else if ( source == wxT( "Load From Art Provider" ) )
-			{
-				wxString rid = path.BeforeFirst( wxT(':') );
-				
-				if( rid.StartsWith( wxT("gtk-") ) )
-				{
-					rid = wxT("u\"") + rid + wxT("\"");
-				}
-				else
-					rid.Replace( wxT("wx"), wxT("wx.") );
-				
-				wxString cid = path.AfterFirst( wxT(':') );
-				cid.Replace( wxT("wx"), wxT("wx.") );
-				
-				result = wxT("wx.ArtProvider.GetBitmap( ") + rid + wxT(", ") +  cid + wxT(" )");
-			}
+
 			break;
 		}
 	case PT_STRINGLIST:
@@ -346,7 +320,7 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PythonCodeGenerator::PythonCodeGenerator()
+PHPCodeGenerator::PHPCodeGenerator()
 {
 	SetupPredefinedMacros();
 	m_useRelativePath = false;
@@ -354,7 +328,7 @@ PythonCodeGenerator::PythonCodeGenerator()
 	m_firstID = 1000;
 }
 
-wxString PythonCodeGenerator::ConvertPythonString( wxString text )
+wxString PHPCodeGenerator::ConvertPHPString( wxString text )
 {
 	wxString result;
 
@@ -392,7 +366,7 @@ wxString PythonCodeGenerator::ConvertPythonString( wxString text )
 	return result;
 }
 
-void PythonCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectBase form )
+void PHPCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectBase form )
 {
 	if (!userClasses)
 	{
@@ -439,11 +413,11 @@ void PythonCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObje
 			PEvent event = events[i];
 			if ( generatedHandlers.find( event->GetValue() ) == generatedHandlers.end() )
 			{
-				m_source->WriteLn( wxString::Format( wxT("def %s( self, event ):"),  event->GetValue().c_str() ) );
+				m_source->WriteLn( wxString::Format( wxT("function %s( event ){"),  event->GetValue().c_str() ) );
 				m_source->Indent();
-				m_source->WriteLn( wxString::Format( wxT("# TODO: Implement %s"), event->GetValue().c_str() ) );
-				m_source->WriteLn( wxT("pass") );
+				m_source->WriteLn( wxString::Format( wxT("// TODO: Implement %s"), event->GetValue().c_str() ) );
 				m_source->Unindent();
+				m_source->WriteLn( wxT("}") );
 				m_source->WriteLn( wxEmptyString );
 				generatedHandlers.insert(event->GetValue());
 			}
@@ -454,7 +428,7 @@ void PythonCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObje
 	m_source->Unindent();
 }
 
-bool PythonCodeGenerator::GenerateCode( PObjectBase project )
+bool PHPCodeGenerator::GenerateCode( PObjectBase project )
 {
 	if (!project)
 	{
@@ -467,29 +441,29 @@ bool PythonCodeGenerator::GenerateCode( PObjectBase project )
 	if (i18nProperty && i18nProperty->GetValueAsInteger())
 		m_i18n = true;
 
-	m_disconnectEvents = ( project->GetPropertyAsInteger( wxT("disconnect_python_events") ) != 0 );
+	m_disconnectEvents = ( project->GetPropertyAsInteger( wxT("disconnect_php_events") ) != 0 );
 
 	m_source->Clear();
-	
-	// Insert python preamble
-	
-	wxString code = GetCode( project, wxT("python_preamble") );
+
+	// Insert php preamble
+
+	wxString code = GetCode( project, wxT("php_preamble") );
 	if ( !code.empty() )
 	{
 		m_source->WriteLn( code );
 		m_source->WriteLn( wxEmptyString );
 	}
-	
+
 	code = (
-		wxT("###########################################################################\n")
-		wxT("## Python code generated with wxFormBuilder (version ") wxT(__DATE__) wxT(")\n")
-		wxT("## http://www.wxformbuilder.org/\n")
-		wxT("##\n")
-		wxT("## PLEASE DO \"NOT\" EDIT THIS FILE!\n")
-		wxT("###########################################################################\n") );
+		wxT("/*\n")
+		wxT(" * PHP code generated with wxFormBuilder (version ") wxT(__DATE__) wxT(")\n")
+		wxT(" * http://www.wxformbuilder.org/\n")
+		wxT(" *\n")
+		wxT(" * PLEASE DO \"NOT\" EDIT THIS FILE!\n")
+		wxT(" */\n") );
 
 	m_source->WriteLn( code );
-	
+
 
 	PProperty propFile = project->GetProperty( wxT("file") );
 	if (!propFile)
@@ -524,27 +498,27 @@ bool PythonCodeGenerator::GenerateCode( PObjectBase project )
 	{
 		m_source->WriteLn( wxT("") );
 	}
-	
+
 	// Write internationalization support
 	if( m_i18n )
 	{
-		m_source->WriteLn( wxT("import gettext") );
-		m_source->WriteLn( wxT("_ = gettext.gettext") );
-		m_source->WriteLn( wxT("") );
+		//PHP gettext already implements this function
+		//m_source->WriteLn( wxT("function _(){ /*TODO: Implement this function on wxPHP*/ }") );
+		//m_source->WriteLn( wxT("") );
 	}
-	
+
 	// Generating "defines" for macros
 	GenDefines( project );
 
 	wxString eventHandlerPostfix;
-	PProperty eventKindProp = project->GetProperty( wxT("skip_python_events") );
+	PProperty eventKindProp = project->GetProperty( wxT("skip_php_events") );
 	if( eventKindProp->GetValueAsInteger() )
 	{
-		 eventHandlerPostfix = wxT("event.Skip()");
+		 eventHandlerPostfix = wxT("$event->Skip();");
 	}
 	else
-		eventHandlerPostfix = wxT("pass");
-		
+		eventHandlerPostfix = wxT("");
+
 	PProperty disconnectMode = project->GetProperty( wxT("disconnect_mode") );
 	m_disconnecMode = disconnectMode->GetValueAsString();
 
@@ -558,27 +532,27 @@ bool PythonCodeGenerator::GenerateCode( PObjectBase project )
 		GenClassDeclaration( child, false, wxT(""), events, eventHandlerPostfix );
 	}
 
-	code = GetCode( project, wxT("python_epilogue") );
+	code = GetCode( project, wxT("php_epilogue") );
 	if( !code.empty() ) m_source->WriteLn( code );
-	
+
 	return true;
 }
 
-void PythonCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &events, bool disconnect )
+void PHPCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &events, bool disconnect )
 {
 	if ( events.empty() )
 	{
 		return;
 	}
-	
+
 	if( disconnect )
 	{
-		m_source->WriteLn( wxT("# Disconnect Events") );
+		m_source->WriteLn( wxT("// Disconnect Events") );
 	}
 	else
 	{
 		m_source->WriteLn();
-		m_source->WriteLn( wxT("# Connect Events") );
+		m_source->WriteLn( wxT("// Connect Events") );
 	}
 
 	PProperty propName = class_obj->GetProperty( wxT("name") );
@@ -598,7 +572,7 @@ void PythonCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &e
 
 	wxString base_class;
 	wxString handlerName;
-	
+
 	PProperty propSubclass = class_obj->GetProperty( wxT("subclass") );
 	if ( propSubclass )
 	{
@@ -610,16 +584,16 @@ void PythonCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &e
 	}
 
 	if ( base_class.empty() )
-		base_class = wxT("wx.") + class_obj->GetClassName();
+		base_class = wxT("wx") + class_obj->GetClassName();
 
 	if ( events.size() > 0 )
 	{
 		for ( size_t i = 0; i < events.size(); i++ )
 		{
 			PEvent event = events[i];
-			
+
 			handlerName = event->GetValue();
-			
+
 			wxString templateName = wxString::Format( wxT("connect_%s"), event->GetName().c_str() );
 
 			PObjectBase obj = event->GetObject();
@@ -632,38 +606,38 @@ void PythonCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &e
 	}
 }
 
-bool PythonCodeGenerator::GenEventEntry( PObjectBase obj, PObjectInfo obj_info, const wxString& templateName, const wxString& handlerName, bool disconnect )
+bool PHPCodeGenerator::GenEventEntry( PObjectBase obj, PObjectInfo obj_info, const wxString& templateName, const wxString& handlerName, bool disconnect )
 {
 	wxString _template;
-	PCodeInfo code_info = obj_info->GetCodeInfo( wxT("Python") );
+	PCodeInfo code_info = obj_info->GetCodeInfo( wxT("PHP") );
 	if ( code_info )
 	{
 		_template = code_info->GetTemplate( wxString::Format( wxT("evt_%s%s"), disconnect ? wxT("dis") : wxT(""), templateName.c_str() ) );
 		if ( disconnect && _template.empty() )
 		{
 			_template = code_info->GetTemplate( wxT("evt_") + templateName );
-			_template.Replace( wxT("Bind"), wxT("Unbind"), true );
+			_template.Replace( wxT("Connect"), wxT("Disconnect"), true );
 		}
 
 		if ( !_template.empty() )
 		{
 			if( disconnect )
 			{
-				if( m_disconnecMode == wxT("handler_name")) _template.Replace( wxT("#handler"), wxT("handler = self.") + handlerName ); 
-				else if(m_disconnecMode == wxT("source_name")) _template.Replace( wxT("#handler"), wxT("None") ); //wxT("self.") + obj->GetProperty(wxT("name"))->GetValueAsString() ); 
+				if( m_disconnecMode == wxT("handler_name")) _template.Replace( wxT("#handler"), wxT("handler = array(@$this, \"") + handlerName + wxT("\")") );
+				else if(m_disconnecMode == wxT("source_name")) _template.Replace( wxT("#handler"), wxT("null") ); //wxT("$this->") + obj->GetProperty(wxT("name"))->GetValueAsString() );
 			}
 			else
-				_template.Replace( wxT("#handler"), wxT("self.") + handlerName ); 
-			
-			PythonTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
+				_template.Replace( wxT("#handler"), wxT("array(@$this, \"") + handlerName + wxT("\")") );
+
+			PHPTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 			m_source->WriteLn( parser.ParseTemplate() );
 			return true;
 		}
 	}
 
-	for ( unsigned int i = 0; i < obj_info->GetBaseClassCount(false); i++ )
+	for ( unsigned int i = 0; i < obj_info->GetBaseClassCount(); i++ )
 	{
-		PObjectInfo base_info = obj_info->GetBaseClass( i, false );
+		PObjectInfo base_info = obj_info->GetBaseClass( i );
 		if ( GenEventEntry( obj, base_info, templateName, handlerName, disconnect ) )
 		{
 			return true;
@@ -673,7 +647,7 @@ bool PythonCodeGenerator::GenEventEntry( PObjectBase obj, PObjectInfo obj_info, 
 	return false;
 }
 
-void PythonCodeGenerator::GenVirtualEventHandlers( const EventVector& events, const wxString& eventHandlerPostfix )
+void PHPCodeGenerator::GenVirtualEventHandlers( const EventVector& events, const wxString& eventHandlerPostfix )
 {
 	if ( events.size() > 0 )
 	{
@@ -682,13 +656,13 @@ void PythonCodeGenerator::GenVirtualEventHandlers( const EventVector& events, co
 		// execute properly.
 		// So we create a default handler which will skip the event.
 		m_source->WriteLn( wxEmptyString );
-		m_source->WriteLn( wxT("# Virtual event handlers, overide them in your derived class") );
+		m_source->WriteLn( wxT("// Virtual event handlers, overide them in your derived class") );
 
 		std::set<wxString> generatedHandlers;
 		for ( size_t i = 0; i < events.size(); i++ )
 		{
 			PEvent event = events[i];
-			wxString aux = wxT("def ") + event->GetValue() + wxT("( self, event ):");
+			wxString aux = wxT("function ") + event->GetValue() + wxT("( $event ){");
 
 			if (generatedHandlers.find(aux) == generatedHandlers.end())
 			{
@@ -696,7 +670,8 @@ void PythonCodeGenerator::GenVirtualEventHandlers( const EventVector& events, co
 				m_source->Indent();
 				m_source->WriteLn(eventHandlerPostfix);
 				m_source->Unindent();
-				
+				m_source->WriteLn(wxT("}"));
+
 				generatedHandlers.insert(aux);
 			}
 			if( i < (events.size()-1) )  m_source->WriteLn();
@@ -705,7 +680,7 @@ void PythonCodeGenerator::GenVirtualEventHandlers( const EventVector& events, co
 	}
 }
 
-void PythonCodeGenerator::GetGenEventHandlers( PObjectBase obj )
+void PHPCodeGenerator::GetGenEventHandlers( PObjectBase obj )
 {
 	GenDefinedEventHandlers( obj->GetObjectInfo(), obj );
 
@@ -716,15 +691,15 @@ void PythonCodeGenerator::GetGenEventHandlers( PObjectBase obj )
 	}
 }
 
-void PythonCodeGenerator::GenDefinedEventHandlers( PObjectInfo info, PObjectBase obj )
+void PHPCodeGenerator::GenDefinedEventHandlers( PObjectInfo info, PObjectBase obj )
 {
-	PCodeInfo code_info = info->GetCodeInfo( wxT( "Python" ) );
+	PCodeInfo code_info = info->GetCodeInfo( wxT( "PHP" ) );
 	if ( code_info )
 	{
 		wxString _template = code_info->GetTemplate( wxT("generated_event_handlers") );
 		if ( !_template.empty() )
 		{
-			PythonTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
+			PHPTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 			wxString code = parser.ParseTemplate();
 
 			if ( !code.empty() )
@@ -735,18 +710,18 @@ void PythonCodeGenerator::GenDefinedEventHandlers( PObjectInfo info, PObjectBase
 	}
 
 	// Proceeding recursively with the base classes
-	for ( unsigned int i = 0; i < info->GetBaseClassCount(false); i++ )
+	for ( unsigned int i = 0; i < info->GetBaseClassCount(); i++ )
 	{
-		PObjectInfo base_info = info->GetBaseClass( i, false );
+		PObjectInfo base_info = info->GetBaseClass( i );
 		GenDefinedEventHandlers( base_info, obj );
 	}
 }
 
 
-wxString PythonCodeGenerator::GetCode(PObjectBase obj, wxString name, bool silent)
+wxString PHPCodeGenerator::GetCode(PObjectBase obj, wxString name, bool silent)
 {
 	wxString _template;
-	PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( wxT("Python") );
+	PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( wxT("PHP") );
 
 	if (!code_info)
 	{
@@ -761,13 +736,13 @@ wxString PythonCodeGenerator::GetCode(PObjectBase obj, wxString name, bool silen
 
 	_template = code_info->GetTemplate(name);
 
-	PythonTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
+	PHPTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 	wxString code = parser.ParseTemplate();
 
 	return code;
 }
 
-void PythonCodeGenerator::GenClassDeclaration(PObjectBase class_obj, bool use_enum, const wxString& classDecoration, const EventVector &events, const wxString& eventHandlerPostfix)
+void PHPCodeGenerator::GenClassDeclaration(PObjectBase class_obj, bool use_enum, const wxString& classDecoration, const EventVector &events, const wxString& eventHandlerPostfix)
 {
 	PProperty propName = class_obj->GetProperty( wxT("name") );
 	if ( !propName )
@@ -783,30 +758,31 @@ void PythonCodeGenerator::GenClassDeclaration(PObjectBase class_obj, bool use_en
 		wxLogError( wxT("Object name can not be null") );
 		return;
 	}
-	
-	m_source->WriteLn( wxT("###########################################################################") );
-	m_source->WriteLn( wxT("## Class ") + class_name);
-	m_source->WriteLn( wxT("###########################################################################") );
+
+	m_source->WriteLn( wxT("/*") );
+	m_source->WriteLn( wxT(" * Class ") + class_name);
+	m_source->WriteLn( wxT(" */") );
 	m_source->WriteLn( );
 
-	m_source->WriteLn( wxT("class ") + classDecoration + class_name + wxT(" ( ") + GetCode( class_obj, wxT("base") ).Trim() + wxT(" ):") );
+	m_source->WriteLn( wxT("class ") + classDecoration + class_name + wxT(" extends ") + GetCode( class_obj, wxT("base") ).Trim() + wxT(" {") );
 	m_source->Indent();
 
 	// The constructor is also included within public
 	GenConstructor( class_obj, events );
 	GenDestructor( class_obj, events );
-	
+
 	m_source->WriteLn( wxT("") );
-	
+
 	// event handlers
 	GenVirtualEventHandlers(events, eventHandlerPostfix);
 	GetGenEventHandlers( class_obj );
-	
+
 	m_source->Unindent();
+	m_source->WriteLn( wxT("}") );
 	m_source->WriteLn( wxT("") );
 }
 
-void PythonCodeGenerator::GenSubclassSets( PObjectBase obj, std::set< wxString >* subclasses, std::vector< wxString >* headerIncludes )
+void PHPCodeGenerator::GenSubclassSets( PObjectBase obj, std::set< wxString >* subclasses, std::vector< wxString >* headerIncludes )
 {
 	// Call GenSubclassForwardDeclarations on all children as well
 	for ( unsigned int i = 0; i < obj->GetChildCount(); i++ )
@@ -876,18 +852,18 @@ void PythonCodeGenerator::GenSubclassSets( PObjectBase obj, std::set< wxString >
 	}
 }
 
-void PythonCodeGenerator::GenIncludes( PObjectBase project, std::vector<wxString>* includes, std::set< wxString >* templates )
+void PHPCodeGenerator::GenIncludes( PObjectBase project, std::vector<wxString>* includes, std::set< wxString >* templates )
 {
 	GenObjectIncludes( project, includes, templates );
 }
 
-void PythonCodeGenerator::GenObjectIncludes( PObjectBase project, std::vector< wxString >* includes, std::set< wxString >* templates )
+void PHPCodeGenerator::GenObjectIncludes( PObjectBase project, std::vector< wxString >* includes, std::set< wxString >* templates )
 {
 	// Fill the set
-	PCodeInfo code_info = project->GetObjectInfo()->GetCodeInfo( wxT("Python") );
+	PCodeInfo code_info = project->GetObjectInfo()->GetCodeInfo( wxT("PHP") );
 	if (code_info)
 	{
-		PythonTemplateParser parser( project, code_info->GetTemplate( wxT("include") ), m_i18n, m_useRelativePath, m_basePath );
+		PHPTemplateParser parser( project, code_info->GetTemplate( wxT("include") ), m_i18n, m_useRelativePath, m_basePath );
 		wxString include = parser.ParseTemplate();
 		if ( !include.empty() )
 		{
@@ -897,7 +873,7 @@ void PythonCodeGenerator::GenObjectIncludes( PObjectBase project, std::vector< w
 			}
 		}
 	}
-	
+
 	// Call GenIncludes on all children as well
 	for ( unsigned int i = 0; i < project->GetChildCount(); i++ )
 	{
@@ -908,7 +884,7 @@ void PythonCodeGenerator::GenObjectIncludes( PObjectBase project, std::vector< w
 	GenBaseIncludes( project->GetObjectInfo(), project, includes, templates );
 }
 
-void PythonCodeGenerator::GenBaseIncludes( PObjectInfo info, PObjectBase obj, std::vector< wxString >* includes, std::set< wxString >* templates )
+void PHPCodeGenerator::GenBaseIncludes( PObjectInfo info, PObjectBase obj, std::vector< wxString >* includes, std::set< wxString >* templates )
 {
 	if ( !info )
 	{
@@ -916,16 +892,16 @@ void PythonCodeGenerator::GenBaseIncludes( PObjectInfo info, PObjectBase obj, st
 	}
 
 	// Process all the base classes recursively
-	for ( unsigned int i = 0; i < info->GetBaseClassCount(false); i++ )
+	for ( unsigned int i = 0; i < info->GetBaseClassCount(); i++ )
 	{
-		PObjectInfo base_info = info->GetBaseClass( i, false );
+		PObjectInfo base_info = info->GetBaseClass( i );
 		GenBaseIncludes( base_info, obj, includes, templates );
 	}
 
-	PCodeInfo code_info = info->GetCodeInfo( wxT("Python") );
+	PCodeInfo code_info = info->GetCodeInfo( wxT("PHP") );
 	if ( code_info )
 	{
-		PythonTemplateParser parser( obj, code_info->GetTemplate( wxT("include") ), m_i18n, m_useRelativePath, m_basePath );
+		PHPTemplateParser parser( obj, code_info->GetTemplate( wxT("include") ), m_i18n, m_useRelativePath, m_basePath );
 		wxString include = parser.ParseTemplate();
 		if ( !include.empty() )
 		{
@@ -937,7 +913,7 @@ void PythonCodeGenerator::GenBaseIncludes( PObjectInfo info, PObjectBase obj, st
 	}
 }
 
-void PythonCodeGenerator::AddUniqueIncludes( const wxString& include, std::vector< wxString >* includes )
+void PHPCodeGenerator::AddUniqueIncludes( const wxString& include, std::vector< wxString >* includes )
 {
 	// Split on newlines to only generate unique include lines
 	// This strips blank lines and trims
@@ -965,7 +941,7 @@ void PythonCodeGenerator::AddUniqueIncludes( const wxString& include, std::vecto
 	}
 }
 
-void PythonCodeGenerator::FindDependencies( PObjectBase obj, std::set< PObjectInfo >& info_set )
+void PHPCodeGenerator::FindDependencies( PObjectBase obj, std::set< PObjectInfo >& info_set )
 {
 	unsigned int ch_count = obj->GetChildCount();
 	if (ch_count > 0)
@@ -980,7 +956,7 @@ void PythonCodeGenerator::FindDependencies( PObjectBase obj, std::set< PObjectIn
 	}
 }
 
-void PythonCodeGenerator::GenConstructor( PObjectBase class_obj, const EventVector &events )
+void PHPCodeGenerator::GenConstructor( PObjectBase class_obj, const EventVector &events )
 {
 	m_source->WriteLn();
 	// generate function definition
@@ -1010,43 +986,30 @@ void PythonCodeGenerator::GenConstructor( PObjectBase class_obj, const EventVect
 	GenEvents( class_obj, events );
 
 	m_source->Unindent();
-
-    if ( class_obj->GetObjectTypeName() == wxT("wizard") && class_obj->GetChildCount() > 0 )
-    {
-        m_source->WriteLn( wxT("def add_page(self, page):") );
-        m_source->Indent();
-        m_source->WriteLn( wxT("if self.m_pages:") );
-        m_source->Indent();
-        m_source->WriteLn( wxT("previous_page = self.m_pages[-1]") );
-        m_source->WriteLn( wxT("page.SetPrev(previous_page)") );
-        m_source->WriteLn( wxT("previous_page.SetNext(page)") );
-        m_source->Unindent();
-        m_source->WriteLn( wxT("self.m_pages.append(page)") );
-        m_source->Unindent();
-    }
+	m_source->WriteLn( wxT("}") );
+	m_source->WriteLn( wxT("") );
 }
 
-void PythonCodeGenerator::GenDestructor( PObjectBase class_obj, const EventVector &events )
+void PHPCodeGenerator::GenDestructor( PObjectBase class_obj, const EventVector &events )
 {
 	m_source->WriteLn();
 	// generate function definition
-	m_source->WriteLn( wxT("def __del__( self ):") );
+	m_source->WriteLn( wxT("function __destruct( ){") );
 	m_source->Indent();
-	
+
 	if ( m_disconnectEvents && !events.empty() )
 	{
 		GenEvents( class_obj, events, true );
 	}
-	else
-		if( !class_obj->GetPropertyAsInteger( wxT("aui_managed") ) ) m_source->WriteLn( wxT("pass") );
-		
+
 	// destruct objects
 	GenDestruction( class_obj );
-	
+
 	m_source->Unindent();
+	m_source->WriteLn( wxT("}") );
 }
 
-void PythonCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
+void PHPCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 {
 	wxString type = obj->GetObjectTypeName();
 	PObjectInfo info = obj->GetObjectInfo();
@@ -1054,7 +1017,7 @@ void PythonCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 	if ( ObjectDatabase::HasCppProperties( type ) )
 	{
 		m_source->WriteLn( GetCode( obj, wxT("construction") ) );
-		
+
 		GenSettings( obj->GetObjectInfo(), obj );
 
 		bool isWidget = !info->IsSubclassOf( wxT("sizer") );
@@ -1079,12 +1042,12 @@ void PythonCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 				// It's not a good practice to embed templates into the source code,
 				// because you will need to recompile...
 
-				wxString _template =	wxT("#wxparent $name.SetSizer( $name ) #nl")
-										wxT("#wxparent $name.Layout()")
+				wxString _template =	wxT("#wxparent $name->SetSizer( @$$name ); #nl")
+										wxT("#wxparent $name->Layout();")
 										wxT("#ifnull #parent $size")
-										wxT("@{ #nl $name.Fit( #wxparent $name ) @}");
+										wxT("@{ #nl @$$name->Fit( #wxparent $name ); @}");
 
-				PythonTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
+				PHPTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 				m_source->WriteLn(parser.ParseTemplate());
 			}
 		}
@@ -1096,10 +1059,10 @@ void PythonCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 				case 1:
 				{
 					PObjectBase sub1 = obj->GetChild(0)->GetChild(0);
-					wxString _template = wxT("self.$name.Initialize( ");
-					_template = _template + wxT("self.") + sub1->GetProperty( wxT("name") )->GetValue() + wxT(" )");
+					wxString _template = wxT("@$this->$name->Initialize( ");
+					_template = _template + wxT("@$this->") + sub1->GetProperty( wxT("name") )->GetValue() + wxT(" );");
 
-					PythonTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
+					PHPTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 					m_source->WriteLn(parser.ParseTemplate());
 					break;
 				}
@@ -1112,17 +1075,17 @@ void PythonCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 					wxString _template;
 					if ( obj->GetProperty( wxT("splitmode") )->GetValue() == wxT("wxSPLIT_VERTICAL") )
 					{
-						_template = wxT("self.$name.SplitVertically( ");
+						_template = wxT("@$this->$name->SplitVertically( ");
 					}
 					else
 					{
-						_template = wxT("self.$name.SplitHorizontally( ");
+						_template = wxT("@$this->$name->SplitHorizontally( ");
 					}
 
-					_template = _template + wxT("self.") + sub1->GetProperty( wxT("name") )->GetValue() +
-						wxT(", self.") + sub2->GetProperty( wxT("name") )->GetValue() + wxT(", $sashpos )");
+					_template = _template + wxT("@$this->") + sub1->GetProperty( wxT("name") )->GetValue() +
+						wxT(", @$this->") + sub2->GetProperty( wxT("name") )->GetValue() + wxT(", $sashpos );");
 
-					PythonTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
+					PHPTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 					m_source->WriteLn(parser.ParseTemplate());
 					break;
 				}
@@ -1135,13 +1098,11 @@ void PythonCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 				type == wxT("menu")		||
 				type == wxT("submenu")	||
 				type == wxT("toolbar")	||
-				type == wxT("tool")	||
 				type == wxT("listbook")	||
 				type == wxT("notebook")	||
 				type == wxT("auinotebook")	||
 				type == wxT("treelistctrl")	||
-				type == wxT("flatnotebook") ||
-                type == wxT("wizard")
+				type == wxT("flatnotebook")
 			)
 		{
 			wxString afterAddChild = GetCode( obj, wxT("after_addchild") );
@@ -1231,10 +1192,10 @@ void PythonCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 	}
 }
 
-void PythonCodeGenerator::GenDestruction( PObjectBase obj )
+void PHPCodeGenerator::GenDestruction( PObjectBase obj )
 {
 	wxString _template;
-	PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( wxT( "Python" ) );
+	PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( wxT( "PHP" ) );
 
 	if ( !code_info )
 	{
@@ -1245,14 +1206,14 @@ void PythonCodeGenerator::GenDestruction( PObjectBase obj )
 
 	if ( !_template.empty() )
 	{
-		PythonTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
+		PHPTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 		wxString code = parser.ParseTemplate();
 		if ( !code.empty() )
 		{
 			m_source->WriteLn( code );
 		}
 	}
-	
+
 	// Process child widgets
 	for ( unsigned int i = 0; i < obj->GetChildCount() ; i++ )
 	{
@@ -1261,7 +1222,7 @@ void PythonCodeGenerator::GenDestruction( PObjectBase obj )
 	}
 }
 
-void PythonCodeGenerator::FindMacros( PObjectBase obj, std::vector<wxString>* macros )
+void PHPCodeGenerator::FindMacros( PObjectBase obj, std::vector<wxString>* macros )
 {
 	// iterate through all of the properties of all objects, add the macros
 	// to the vector
@@ -1274,14 +1235,10 @@ void PythonCodeGenerator::FindMacros( PObjectBase obj, std::vector<wxString>* ma
 		{
 			wxString value = prop->GetValue();
 			if( value.IsEmpty() ) continue;
-			
-			//if( value.Contains( wxT("wx") ) && !value.Contains( wxT("wx.") ) ) value.Replace( wxT("wx"), wxT("wx.") );
-			value.Replace( wxT("wx"), wxT("wx.") );
-			
+
 			// Skip wx IDs
-			if ( ( ! value.Contains( wxT("XRCID" ) ) ) &&
-				 ( m_predMacros.end() == m_predMacros.find( value ) ) )
-			{
+            if ( m_predMacros.end() == m_predMacros.find( value ) )
+            {
                 if ( macros->end() == std::find( macros->begin(), macros->end(), value ) )
                 {
                     macros->push_back( value );
@@ -1296,7 +1253,7 @@ void PythonCodeGenerator::FindMacros( PObjectBase obj, std::vector<wxString>* ma
 	}
 }
 
-void PythonCodeGenerator::FindEventHandlers(PObjectBase obj, EventVector &events)
+void PHPCodeGenerator::FindEventHandlers(PObjectBase obj, EventVector &events)
 {
   unsigned int i;
   for (i=0; i < obj->GetEventCount(); i++)
@@ -1313,7 +1270,7 @@ void PythonCodeGenerator::FindEventHandlers(PObjectBase obj, EventVector &events
   }
 }
 
-void PythonCodeGenerator::GenDefines( PObjectBase project)
+void PHPCodeGenerator::GenDefines( PObjectBase project)
 {
 	std::vector< wxString > macros;
 	FindMacros( project, &macros );
@@ -1324,7 +1281,7 @@ void PythonCodeGenerator::GenDefines( PObjectBase project)
 	if ( it != macros.end() )
 	{
 		// The default macro is defined to wxID_ANY
-		m_source->WriteLn( wxT("ID_DEFAULT = wx.ID_ANY # Default") );
+		m_source->WriteLn( wxT("ID_DEFAULT = wxID_ANY // Default") );
 		macros.erase(it);
 	}
 
@@ -1336,16 +1293,16 @@ void PythonCodeGenerator::GenDefines( PObjectBase project)
 	for (it = macros.begin() ; it != macros.end(); it++)
 	{
 	    // Don't redefine wx IDs
-        m_source->WriteLn( wxString::Format( wxT("%s = %i"), it->c_str(), id ) );
+        m_source->WriteLn( wxString::Format( wxT("const %s = %i;"), it->c_str(), id ) );
         id++;
 	}
 	if( !macros.empty() ) m_source->WriteLn( wxT("") );
 }
 
-void PythonCodeGenerator::GenSettings(PObjectInfo info, PObjectBase obj)
+void PHPCodeGenerator::GenSettings(PObjectInfo info, PObjectBase obj)
 {
 	wxString _template;
-	PCodeInfo code_info = info->GetCodeInfo( wxT("Python") );
+	PCodeInfo code_info = info->GetCodeInfo( wxT("PHP") );
 
 	if ( !code_info )
 	{
@@ -1356,7 +1313,7 @@ void PythonCodeGenerator::GenSettings(PObjectInfo info, PObjectBase obj)
 
 	if ( !_template.empty() )
 	{
-		PythonTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
+		PHPTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 		wxString code = parser.ParseTemplate();
 		if ( !code.empty() )
 		{
@@ -1365,26 +1322,26 @@ void PythonCodeGenerator::GenSettings(PObjectInfo info, PObjectBase obj)
 	}
 
 	// Proceeding recursively with the base classes
-	for (unsigned int i=0; i< info->GetBaseClassCount(false); i++)
+	for (unsigned int i=0; i< info->GetBaseClassCount(); i++)
 	{
-		PObjectInfo base_info = info->GetBaseClass(i, false);
+		PObjectInfo base_info = info->GetBaseClass(i);
 		GenSettings(base_info,obj);
 	}
 }
 
-void PythonCodeGenerator::GenAddToolbar( PObjectInfo info, PObjectBase obj )
+void PHPCodeGenerator::GenAddToolbar( PObjectInfo info, PObjectBase obj )
 {
 	wxArrayString arrCode;
-	
+
 	GetAddToolbarCode( info, obj, arrCode );
-	
+
 	for( size_t i = 0; i < arrCode.GetCount(); i++ ) m_source->WriteLn( arrCode[i] );
 }
 
-void PythonCodeGenerator::GetAddToolbarCode( PObjectInfo info, PObjectBase obj, wxArrayString& codelines )
+void PHPCodeGenerator::GetAddToolbarCode( PObjectInfo info, PObjectBase obj, wxArrayString& codelines )
 {
 	wxString _template;
-	PCodeInfo code_info = info->GetCodeInfo( wxT( "Python" ) );
+	PCodeInfo code_info = info->GetCodeInfo( wxT( "PHP" ) );
 
 	if ( !code_info )
 		return;
@@ -1393,25 +1350,25 @@ void PythonCodeGenerator::GetAddToolbarCode( PObjectInfo info, PObjectBase obj, 
 
 	if ( !_template.empty() )
 	{
-		PythonTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
+		PHPTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 		wxString code = parser.ParseTemplate();
 		if ( !code.empty() )
 		{
 			if( codelines.Index( code ) == wxNOT_FOUND ) codelines.Add( code );
 		}
 	}
-	
+
 	// Proceeding recursively with the base classes
-	for ( unsigned int i = 0; i < info->GetBaseClassCount(false); i++ )
+	for ( unsigned int i = 0; i < info->GetBaseClassCount(); i++ )
 	{
-		PObjectInfo base_info = info->GetBaseClass( i, false );
+		PObjectInfo base_info = info->GetBaseClass( i );
 		GetAddToolbarCode( base_info, obj, codelines );
 	}
 }
 
 ///////////////////////////////////////////////////////////////////////
 
-void PythonCodeGenerator::UseRelativePath(bool relative, wxString basePath)
+void PHPCodeGenerator::UseRelativePath(bool relative, wxString basePath)
 {
 	bool result;
 	m_useRelativePath = relative;
@@ -1438,190 +1395,136 @@ return auxPath;
 #define ADD_PREDEFINED_MACRO(x) m_predMacros.insert( wxT(#x) )
 #define ADD_PREDEFINED_PREFIX(k, v) m_predModulePrefix[ wxT(#k) ] = wxT(#v)
 
-void PythonCodeGenerator::SetupPredefinedMacros()
+void PHPCodeGenerator::SetupPredefinedMacros()
 {
     /* no id matches this one when compared to it */
-    ADD_PREDEFINED_MACRO(wx.ID_NONE);
+    ADD_PREDEFINED_MACRO(wxID_NONE);
 
     /*  id for a separator line in the menu (invalid for normal item) */
-    ADD_PREDEFINED_MACRO(wx.ID_SEPARATOR);
+    ADD_PREDEFINED_MACRO(wxID_SEPARATOR);
 
-    ADD_PREDEFINED_MACRO(wx.ID_ANY);
+    ADD_PREDEFINED_MACRO(wxID_ANY);
 
-	ADD_PREDEFINED_MACRO(wx.ID_LOWEST);
+	ADD_PREDEFINED_MACRO(wxID_LOWEST);
 
-	ADD_PREDEFINED_MACRO(wx.ID_OPEN);
-	ADD_PREDEFINED_MACRO(wx.ID_CLOSE);
-	ADD_PREDEFINED_MACRO(wx.ID_NEW);
-	ADD_PREDEFINED_MACRO(wx.ID_SAVE);
-	ADD_PREDEFINED_MACRO(wx.ID_SAVEAS);
-	ADD_PREDEFINED_MACRO(wx.ID_REVERT);
-	ADD_PREDEFINED_MACRO(wx.ID_EXIT);
-	ADD_PREDEFINED_MACRO(wx.ID_UNDO);
-	ADD_PREDEFINED_MACRO(wx.ID_REDO);
-	ADD_PREDEFINED_MACRO(wx.ID_HELP);
-	ADD_PREDEFINED_MACRO(wx.ID_PRINT);
-	ADD_PREDEFINED_MACRO(wx.ID_PRINT_SETUP);
-	ADD_PREDEFINED_MACRO(wx.ID_PREVIEW);
-	ADD_PREDEFINED_MACRO(wx.ID_ABOUT);
-	ADD_PREDEFINED_MACRO(wx.ID_HELP_CONTENTS);
-	ADD_PREDEFINED_MACRO(wx.ID_HELP_COMMANDS);
-	ADD_PREDEFINED_MACRO(wx.ID_HELP_PROCEDURES);
-	ADD_PREDEFINED_MACRO(wx.ID_HELP_CONTEXT);
-	ADD_PREDEFINED_MACRO(wx.ID_CLOSE_ALL);
-    ADD_PREDEFINED_MACRO(wx.ID_PAGE_SETUP);
-    ADD_PREDEFINED_MACRO(wx.ID_HELP_INDEX);
-    ADD_PREDEFINED_MACRO(wx.ID_HELP_SEARCH);
-    ADD_PREDEFINED_MACRO(wx.ID_PREFERENCES);
+	ADD_PREDEFINED_MACRO(wxID_OPEN);
+	ADD_PREDEFINED_MACRO(wxID_CLOSE);
+	ADD_PREDEFINED_MACRO(wxID_NEW);
+	ADD_PREDEFINED_MACRO(wxID_SAVE);
+	ADD_PREDEFINED_MACRO(wxID_SAVEAS);
+	ADD_PREDEFINED_MACRO(wxID_REVERT);
+	ADD_PREDEFINED_MACRO(wxID_EXIT);
+	ADD_PREDEFINED_MACRO(wxID_UNDO);
+	ADD_PREDEFINED_MACRO(wxID_REDO);
+	ADD_PREDEFINED_MACRO(wxID_HELP);
+	ADD_PREDEFINED_MACRO(wxID_PRINT);
+	ADD_PREDEFINED_MACRO(wxID_PRINT_SETUP);
+	ADD_PREDEFINED_MACRO(wxID_PREVIEW);
+	ADD_PREDEFINED_MACRO(wxID_ABOUT);
+	ADD_PREDEFINED_MACRO(wxID_HELP_CONTENTS);
+	ADD_PREDEFINED_MACRO(wxID_HELP_COMMANDS);
+	ADD_PREDEFINED_MACRO(wxID_HELP_PROCEDURES);
+	ADD_PREDEFINED_MACRO(wxID_HELP_CONTEXT);
+	ADD_PREDEFINED_MACRO(wxID_CLOSE_ALL);
+    ADD_PREDEFINED_MACRO(wxID_PAGE_SETUP);
+    ADD_PREDEFINED_MACRO(wxID_HELP_INDEX);
+    ADD_PREDEFINED_MACRO(wxID_HELP_SEARCH);
+    ADD_PREDEFINED_MACRO(wxID_PREFERENCES);
 
-    ADD_PREDEFINED_MACRO(wx.ID_EDIT);
-	ADD_PREDEFINED_MACRO(wx.ID_CUT);
-	ADD_PREDEFINED_MACRO(wx.ID_COPY);
-	ADD_PREDEFINED_MACRO(wx.ID_PASTE);
-	ADD_PREDEFINED_MACRO(wx.ID_CLEAR);
-	ADD_PREDEFINED_MACRO(wx.ID_FIND);
+    ADD_PREDEFINED_MACRO(wxID_EDIT);
+	ADD_PREDEFINED_MACRO(wxID_CUT);
+	ADD_PREDEFINED_MACRO(wxID_COPY);
+	ADD_PREDEFINED_MACRO(wxID_PASTE);
+	ADD_PREDEFINED_MACRO(wxID_CLEAR);
+	ADD_PREDEFINED_MACRO(wxID_FIND);
 
-	ADD_PREDEFINED_MACRO(wx.ID_DUPLICATE);
-	ADD_PREDEFINED_MACRO(wx.ID_SELECTALL);
-	ADD_PREDEFINED_MACRO(wx.ID_DELETE);
-	ADD_PREDEFINED_MACRO(wx.ID_REPLACE);
-	ADD_PREDEFINED_MACRO(wx.ID_REPLACE_ALL);
-	ADD_PREDEFINED_MACRO(wx.ID_PROPERTIES);
+	ADD_PREDEFINED_MACRO(wxID_DUPLICATE);
+	ADD_PREDEFINED_MACRO(wxID_SELECTALL);
+	ADD_PREDEFINED_MACRO(wxID_DELETE);
+	ADD_PREDEFINED_MACRO(wxID_REPLACE);
+	ADD_PREDEFINED_MACRO(wxID_REPLACE_ALL);
+	ADD_PREDEFINED_MACRO(wxID_PROPERTIES);
 
-	ADD_PREDEFINED_MACRO(wx.ID_VIEW_DETAILS);
-	ADD_PREDEFINED_MACRO(wx.ID_VIEW_LARGEICONS);
-	ADD_PREDEFINED_MACRO(wx.ID_VIEW_SMALLICONS);
-	ADD_PREDEFINED_MACRO(wx.ID_VIEW_LIST);
-	ADD_PREDEFINED_MACRO(wx.ID_VIEW_SORTDATE);
-	ADD_PREDEFINED_MACRO(wx.ID_VIEW_SORTNAME);
-	ADD_PREDEFINED_MACRO(wx.ID_VIEW_SORTSIZE);
-	ADD_PREDEFINED_MACRO(wx.ID_VIEW_SORTTYPE);
+	ADD_PREDEFINED_MACRO(wxID_VIEW_DETAILS);
+	ADD_PREDEFINED_MACRO(wxID_VIEW_LARGEICONS);
+	ADD_PREDEFINED_MACRO(wxID_VIEW_SMALLICONS);
+	ADD_PREDEFINED_MACRO(wxID_VIEW_LIST);
+	ADD_PREDEFINED_MACRO(wxID_VIEW_SORTDATE);
+	ADD_PREDEFINED_MACRO(wxID_VIEW_SORTNAME);
+	ADD_PREDEFINED_MACRO(wxID_VIEW_SORTSIZE);
+	ADD_PREDEFINED_MACRO(wxID_VIEW_SORTTYPE);
 
-    ADD_PREDEFINED_MACRO(wx.ID_FILE);
-	ADD_PREDEFINED_MACRO(wx.ID_FILE1);
-	ADD_PREDEFINED_MACRO(wx.ID_FILE2);
-	ADD_PREDEFINED_MACRO(wx.ID_FILE3);
-	ADD_PREDEFINED_MACRO(wx.ID_FILE4);
-	ADD_PREDEFINED_MACRO(wx.ID_FILE5);
-	ADD_PREDEFINED_MACRO(wx.ID_FILE6);
-	ADD_PREDEFINED_MACRO(wx.ID_FILE7);
-	ADD_PREDEFINED_MACRO(wx.ID_FILE8);
-	ADD_PREDEFINED_MACRO(wx.ID_FILE9);
+    ADD_PREDEFINED_MACRO(wxID_FILE);
+	ADD_PREDEFINED_MACRO(wxID_FILE1);
+	ADD_PREDEFINED_MACRO(wxID_FILE2);
+	ADD_PREDEFINED_MACRO(wxID_FILE3);
+	ADD_PREDEFINED_MACRO(wxID_FILE4);
+	ADD_PREDEFINED_MACRO(wxID_FILE5);
+	ADD_PREDEFINED_MACRO(wxID_FILE6);
+	ADD_PREDEFINED_MACRO(wxID_FILE7);
+	ADD_PREDEFINED_MACRO(wxID_FILE8);
+	ADD_PREDEFINED_MACRO(wxID_FILE9);
 
 	/*  Standard button and menu IDs */
 
-	ADD_PREDEFINED_MACRO(wx.ID_OK);
-	ADD_PREDEFINED_MACRO(wx.ID_CANCEL);
+	ADD_PREDEFINED_MACRO(wxID_OK);
+	ADD_PREDEFINED_MACRO(wxID_CANCEL);
 
-	ADD_PREDEFINED_MACRO(wx.ID_APPLY);
-	ADD_PREDEFINED_MACRO(wx.ID_YES);
-	ADD_PREDEFINED_MACRO(wx.ID_NO);
-	ADD_PREDEFINED_MACRO(wx.ID_STATIC);
-	ADD_PREDEFINED_MACRO(wx.ID_FORWARD);
-	ADD_PREDEFINED_MACRO(wx.ID_BACKWARD);
-	ADD_PREDEFINED_MACRO(wx.ID_DEFAULT);
-	ADD_PREDEFINED_MACRO(wx.ID_MORE);
-	ADD_PREDEFINED_MACRO(wx.ID_SETUP);
-	ADD_PREDEFINED_MACRO(wx.ID_RESET);
-	ADD_PREDEFINED_MACRO(wx.ID_CONTEXT_HELP);
-	ADD_PREDEFINED_MACRO(wx.ID_YESTOALL);
-	ADD_PREDEFINED_MACRO(wx.ID_NOTOALL);
-	ADD_PREDEFINED_MACRO(wx.ID_ABORT);
-	ADD_PREDEFINED_MACRO(wx.ID_RETRY);
-	ADD_PREDEFINED_MACRO(wx.ID_IGNORE);
-    ADD_PREDEFINED_MACRO(wx.ID_ADD);
-    ADD_PREDEFINED_MACRO(wx.ID_REMOVE);
+	ADD_PREDEFINED_MACRO(wxID_APPLY);
+	ADD_PREDEFINED_MACRO(wxID_YES);
+	ADD_PREDEFINED_MACRO(wxID_NO);
+	ADD_PREDEFINED_MACRO(wxID_STATIC);
+	ADD_PREDEFINED_MACRO(wxID_FORWARD);
+	ADD_PREDEFINED_MACRO(wxID_BACKWARD);
+	ADD_PREDEFINED_MACRO(wxID_DEFAULT);
+	ADD_PREDEFINED_MACRO(wxID_MORE);
+	ADD_PREDEFINED_MACRO(wxID_SETUP);
+	ADD_PREDEFINED_MACRO(wxID_RESET);
+	ADD_PREDEFINED_MACRO(wxID_CONTEXT_HELP);
+	ADD_PREDEFINED_MACRO(wxID_YESTOALL);
+	ADD_PREDEFINED_MACRO(wxID_NOTOALL);
+	ADD_PREDEFINED_MACRO(wxID_ABORT);
+	ADD_PREDEFINED_MACRO(wxID_RETRY);
+	ADD_PREDEFINED_MACRO(wxID_IGNORE);
+    ADD_PREDEFINED_MACRO(wxID_ADD);
+    ADD_PREDEFINED_MACRO(wxID_REMOVE);
 
-	ADD_PREDEFINED_MACRO(wx.ID_UP);
-	ADD_PREDEFINED_MACRO(wx.ID_DOWN);
-	ADD_PREDEFINED_MACRO(wx.ID_HOME);
-	ADD_PREDEFINED_MACRO(wx.ID_REFRESH);
-	ADD_PREDEFINED_MACRO(wx.ID_STOP);
-	ADD_PREDEFINED_MACRO(wx.ID_INDEX);
+	ADD_PREDEFINED_MACRO(wxID_UP);
+	ADD_PREDEFINED_MACRO(wxID_DOWN);
+	ADD_PREDEFINED_MACRO(wxID_HOME);
+	ADD_PREDEFINED_MACRO(wxID_REFRESH);
+	ADD_PREDEFINED_MACRO(wxID_STOP);
+	ADD_PREDEFINED_MACRO(wxID_INDEX);
 
-	ADD_PREDEFINED_MACRO(wx.ID_BOLD);
-	ADD_PREDEFINED_MACRO(wx.ID_ITALIC);
-	ADD_PREDEFINED_MACRO(wx.ID_JUSTIFY_CENTER);
-	ADD_PREDEFINED_MACRO(wx.ID_JUSTIFY_FILL);
-	ADD_PREDEFINED_MACRO(wx.ID_JUSTIFY_RIGHT);
+	ADD_PREDEFINED_MACRO(wxID_BOLD);
+	ADD_PREDEFINED_MACRO(wxID_ITALIC);
+	ADD_PREDEFINED_MACRO(wxID_JUSTIFY_CENTER);
+	ADD_PREDEFINED_MACRO(wxID_JUSTIFY_FILL);
+	ADD_PREDEFINED_MACRO(wxID_JUSTIFY_RIGHT);
 
-	ADD_PREDEFINED_MACRO(wx.ID_JUSTIFY_LEFT);
-	ADD_PREDEFINED_MACRO(wx.ID_UNDERLINE);
-	ADD_PREDEFINED_MACRO(wx.ID_INDENT);
-	ADD_PREDEFINED_MACRO(wx.ID_UNINDENT);
-	ADD_PREDEFINED_MACRO(wx.ID_ZOOM_100);
-	ADD_PREDEFINED_MACRO(wx.ID_ZOOM_FIT);
-	ADD_PREDEFINED_MACRO(wx.ID_ZOOM_IN);
-	ADD_PREDEFINED_MACRO(wx.ID_ZOOM_OUT);
-	ADD_PREDEFINED_MACRO(wx.ID_UNDELETE);
-	ADD_PREDEFINED_MACRO(wx.ID_REVERT_TO_SAVED);
+	ADD_PREDEFINED_MACRO(wxID_JUSTIFY_LEFT);
+	ADD_PREDEFINED_MACRO(wxID_UNDERLINE);
+	ADD_PREDEFINED_MACRO(wxID_INDENT);
+	ADD_PREDEFINED_MACRO(wxID_UNINDENT);
+	ADD_PREDEFINED_MACRO(wxID_ZOOM_100);
+	ADD_PREDEFINED_MACRO(wxID_ZOOM_FIT);
+	ADD_PREDEFINED_MACRO(wxID_ZOOM_IN);
+	ADD_PREDEFINED_MACRO(wxID_ZOOM_OUT);
+	ADD_PREDEFINED_MACRO(wxID_UNDELETE);
+	ADD_PREDEFINED_MACRO(wxID_REVERT_TO_SAVED);
 
 	/*  System menu IDs (used by wxUniv): */
-    ADD_PREDEFINED_MACRO(wx.ID_SYSTEM_MENU);
-	ADD_PREDEFINED_MACRO(wx.ID_CLOSE_FRAME);
-	ADD_PREDEFINED_MACRO(wx.ID_MOVE_FRAME);
-	ADD_PREDEFINED_MACRO(wx.ID_RESIZE_FRAME);
-	ADD_PREDEFINED_MACRO(wx.ID_MAXIMIZE_FRAME);
-	ADD_PREDEFINED_MACRO(wx.ID_ICONIZE_FRAME);
-	ADD_PREDEFINED_MACRO(wx.ID_RESTORE_FRAME);
+    ADD_PREDEFINED_MACRO(wxID_SYSTEM_MENU);
+	ADD_PREDEFINED_MACRO(wxID_CLOSE_FRAME);
+	ADD_PREDEFINED_MACRO(wxID_MOVE_FRAME);
+	ADD_PREDEFINED_MACRO(wxID_RESIZE_FRAME);
+	ADD_PREDEFINED_MACRO(wxID_MAXIMIZE_FRAME);
+	ADD_PREDEFINED_MACRO(wxID_ICONIZE_FRAME);
+	ADD_PREDEFINED_MACRO(wxID_RESTORE_FRAME);
 
 	/*  IDs used by generic file dialog (13 consecutive starting from this value) */
-	ADD_PREDEFINED_MACRO(wx.ID_FILEDLGG);
+	ADD_PREDEFINED_MACRO(wxID_FILEDLGG);
 
-	ADD_PREDEFINED_MACRO(wx.ID_HIGHEST);
+	ADD_PREDEFINED_MACRO(wxID_HIGHEST);
 
-}
-
-void PythonTemplateParser::SetupModulePrefixes()
-{
-	// altered class names
-	ADD_PREDEFINED_PREFIX( wxCalendarCtrl, wx.calendar. );
-	ADD_PREDEFINED_PREFIX( wxRichTextCtrl, wx.richtext. );
-	ADD_PREDEFINED_PREFIX( wxHtmlWindow, wx.html. );
-	ADD_PREDEFINED_PREFIX( wxAuiNotebook, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxGrid, wx.grid. );
-	ADD_PREDEFINED_PREFIX( wxAnimationCtrl, wx.animate. );
-	
-	// altered macros
-	ADD_PREDEFINED_PREFIX( wxCAL_SHOW_HOLIDAYS, wx.calendar. );
-	ADD_PREDEFINED_PREFIX( wxCAL_MONDAY_FIRST, wx.calendar. );
-	ADD_PREDEFINED_PREFIX( wxCAL_NO_MONTH_CHANGE, wx.calendar. );
-	ADD_PREDEFINED_PREFIX( wxCAL_NO_YEAR_CHANGE, wx.calendar. );
-	ADD_PREDEFINED_PREFIX( wxCAL_SEQUENTIAL_MONTH_SELECTION, wx.calendar. );
-	ADD_PREDEFINED_PREFIX( wxCAL_SHOW_SURROUNDING_WEEKS, wx.calendar. );
-	ADD_PREDEFINED_PREFIX( wxCAL_SUNDAY_FIRST, wx.calendar. );
-	
-	ADD_PREDEFINED_PREFIX( wxHW_DEFAULT_STYLE, wx.html. );
-	ADD_PREDEFINED_PREFIX( wxHW_NO_SELECTION, wx.html. );
-	ADD_PREDEFINED_PREFIX( wxHW_SCROLLBAR_AUTO, wx.html. );
-	ADD_PREDEFINED_PREFIX( wxHW_SCROLLBAR_NEVER, wx.html. );
-	
-	ADD_PREDEFINED_PREFIX( wxAUI_NB_BOTTOM, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_NB_CLOSE_BUTTON, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_NB_CLOSE_ON_ACTIVE_TAB, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_NB_CLOSE_ON_ALL_TABS, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_NB_DEFAULT_STYLE, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_NB_LEFT, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_NB_MIDDLE_CLICK_CLOSE, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_NB_RIGHT, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_NB_SCROLL_BUTTONS, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_NB_TAB_EXTERNAL_MOVE, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_NB_TAB_FIXED_WIDTH, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_NB_TAB_MOVE, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_NB_TAB_SPLIT, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_NB_TOP, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_NB_WINDOWLIST_BUTTON, wx.aui. );
-	
-	ADD_PREDEFINED_PREFIX( wxAUI_TB_TEXT, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_TB_NO_TOOLTIPS, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_TB_NO_AUTORESIZE, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_TB_GRIPPER, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_TB_OVERFLOW, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_TB_VERTICAL, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_TB_HORZ_LAYOUT, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_TB_HORZ_TEXT, wx.aui. );
-	ADD_PREDEFINED_PREFIX( wxAUI_TB_DEFAULT_STYLE, wx.aui. );
-	
-	ADD_PREDEFINED_PREFIX( wxAC_DEFAULT_STYLE, wx.animate. );
-	ADD_PREDEFINED_PREFIX( wxAC_NO_AUTORESIZE, wx.animate. );
 }

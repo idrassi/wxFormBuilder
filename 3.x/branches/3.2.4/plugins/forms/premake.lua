@@ -1,7 +1,7 @@
 --*****************************************************************************
 --*	Author:		RJP Computing <rjpcomputing@gmail.com>
 --*	Date:		12/15/2006
---*	Version:	1.00-beta
+--*	Version:	1.00
 --* Copyright (C) 2006 RJP Computing
 --*
 --* This program is free software; you can redistribute it and/or
@@ -30,21 +30,28 @@ local wx_ver = "28"
 --**********************************
 
 -- Set the name of your package.
-package.name = "plugin-interface"
+package.name = "forms-components-plugin"
 -- Set this if you want a different name for your target than the package's name.
-local targetName = "fbPluginInterface"
+local targetName = "forms"
 -- Set the kind of package you want to create.
 --		Options: exe | winexe | lib | dll
-package.kind = "lib"
+package.kind = "dll"
 -- Set the files to include.
 package.files = { matchrecursive( "*.cpp", "*.h", "*.rc", "*.fbp" ) }
 -- Set the include paths.
-package.includepaths = { "../tinyxml" }
+package.includepaths = { "../../sdk/tinyxml", "../../sdk/plugin_interface" }
 -- Set the libraries it links to.
-package.links = { "TiCPP" }
-package.libdir = "../lib"
+package.links = { "plugin-interface", "TiCPP" }
+-- Setup the output directory options.
+--		Note: Use 'libdir' for "lib" kind only.
+if ( windows ) then
+	package.bindir = "../../output/plugins/forms"
+else
+	package.bindir = "../../output/lib/wxformbuilder"
+end
+--package.libdir = "../../lib"
 -- Set the defines.
-package.defines = { "TIXML_USE_TICPP" }
+package.defines = { "BUILD_DLL", "TIXML_USE_TICPP" }
 
 -- Hack the dll output to prefix 'lib' to the begining.
 package.targetprefix = "lib"
@@ -80,7 +87,7 @@ if ( options["disable-wx-debug"] and ( not windows ) ) then
 	debug_macro = { "NDEBUG", "__WXFB_DEBUG__" }
 else
 	debug_option = "--debug=yes"
-	debug_macro = { "DEBUG", "_DEBUG", "__WXDEBUG__", "__WXFB_DEBUG__"}
+	debug_macro = { "DEBUG", "_DEBUG", "__WXDEBUG__", "__WXFB_DEBUG__" }
 end
 
 -- Set the default targetName if none is specified.
@@ -99,6 +106,7 @@ if ( options["unicode"] ) then
 	table.insert( package.buildflags, "unicode" )
 end
 if ( string.find( target or "", ".*-gcc" ) or target == "gnu" ) then
+	table.insert( package.buildflags, "no-import-lib" )
 	table.insert( package.config["Debug"].buildoptions, "-O0" )
 	table.insert( package.config["Release"].buildoptions, "-fno-strict-aliasing" )
 end
@@ -207,13 +215,18 @@ if ( windows ) then
 	-- Set the Windows defines.
 	table.insert( package.defines, { "__WXMSW__", "WIN32", "_WINDOWS" } )
 else
---******* LINUX SETUP *************
---*	Settings that are Linux specific.
---*********************************
-	-- Ignore resource files in Linux.
+--******* LINUX/MAC SETUP *************
+--*	Settings that are Linux/Mac specific.
+--*************************************
+	-- Ignore resource files in Linux/Mac.
 	table.insert( package.excludes, matchrecursive( "*.rc" ) )
 
 	table.insert( package.buildoptions, "-fPIC" )
+
+	-- Add buildflag for proper dll building.
+	if ( macosx ) then
+		table.insert( package.buildflags, "dylib" )
+	end
 
 	-- Set wxWidgets build options.
 	table.insert( package.config["Debug"].buildoptions, "`wx-config "..debug_option.." --cflags`" )
