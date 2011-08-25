@@ -591,9 +591,11 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 	// Load some default templates
 	LoadCodeGen( m_xmlPath + wxT("properties.cppcode") );
 	LoadCodeGen( m_xmlPath + wxT("properties.pythoncode") );
+	LoadCodeGen( m_xmlPath + wxT("properties.phpcode") );
 	LoadPackage( m_xmlPath + wxT("default.xml"), m_iconPath );
 	LoadCodeGen( m_xmlPath + wxT("default.cppcode") );
 	LoadCodeGen( m_xmlPath + wxT("default.pythoncode") );
+	LoadCodeGen( m_xmlPath + wxT("default.phpcode") );
 
 	// Map to temporarily hold plugins.
 	// Used to both set page order and to prevent two plugins with the same name.
@@ -677,7 +679,11 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 							// Load the Python code tempates
 							xmlFileName.SetExt( wxT("pythoncode") );
 							LoadCodeGen( xmlFileName.GetFullPath() );
-							
+
+							// Load the PHP code tempates
+							xmlFileName.SetExt( wxT("phpcode") );
+							LoadCodeGen( xmlFileName.GetFullPath() );
+
 							std::pair< PackageMap::iterator, bool > addedPackage = packages.insert( PackageMap::value_type( packageIt->second->GetPackageName(), packageIt->second ) );
 							if ( !addedPackage.second )
 							{
@@ -848,7 +854,8 @@ bool ObjectDatabase::HasCppProperties(wxString type)
 			type == wxT("splitter")			||
 			type == wxT("sizer")			||
 			type == wxT("treelistctrl")		||
-			type == wxT("gbsizer")
+			type == wxT("gbsizer")          ||
+            type == wxT("WizardPageSimple")
 			);
 }
 
@@ -1232,6 +1239,8 @@ void ObjectDatabase::ParseEvents( ticpp::Element* elem_obj, PObjectInfo obj_info
 bool ObjectDatabase::ShowInPalette(wxString type)
 {
 	return (type == wxT("form")					||
+            type == wxT("wizard")               ||
+            type == wxT("WizardPageSimple")     ||
 			type == wxT("menubar_form")			||
 			type == wxT("toolbar_form")			||
 			type == wxT("sizer")				||

@@ -36,6 +36,7 @@
 #include "utils/wxfbexception.h"
 #include "codegen/cppcg.h"
 #include "codegen/pythoncg.h"
+#include "codegen/phpcg.h"
 #include "codegen/xrccg.h"
 #include "codegen/codewriter.h"
 #include "rad/xrcpreview/xrcpreview.h"
@@ -521,6 +522,7 @@ PObjectBase ApplicationData::GetSelectedObject()
 PObjectBase ApplicationData::GetSelectedForm()
 {		
 	if( ( m_selObj->GetObjectTypeName() == wxT( "form" ) ) ||
+        ( m_selObj->GetObjectTypeName() == wxT("wizard") ) ||
 		( m_selObj->GetObjectTypeName() == wxT( "menubar_form" ) ) ||
 		( m_selObj->GetObjectTypeName() == wxT( "toolbar_form" ) ) )
 		return m_selObj;
@@ -2073,6 +2075,17 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
 			PCodeWriter python_cw( new FileCodeWriter( fullPath + wxT(".py"), useMicrosoftBOM, useUtf8 ) );
 
 			codegen.SetSourceWriter( python_cw );
+
+			codegen.GenerateInheritedClass( obj, form );
+		}
+		else if( pCodeGen && TypeConv::FlagSet( wxT("PHP"), pCodeGen->GetValue() ) )
+		{
+			PHPCodeGenerator codegen;
+			
+			const wxString& fullPath = inherFile.GetFullPath();
+			PCodeWriter php_cw( new FileCodeWriter( fullPath + wxT(".php"), useMicrosoftBOM, useUtf8 ) );
+
+			codegen.SetSourceWriter( php_cw );
 
 			codegen.GenerateInheritedClass( obj, form );
 		}
