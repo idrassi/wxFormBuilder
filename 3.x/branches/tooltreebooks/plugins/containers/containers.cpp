@@ -37,6 +37,7 @@
 #include <wx/toolbook.h>
 #include <wx/treebook.h>
 #include <wx/dynarray.h>
+
 ///////////////////////////////////////////////////////////////////////////////
 
 // Used by wxTreebook to store its page indexes (depth property)
@@ -134,7 +135,6 @@ BEGIN_EVENT_TABLE( ComponentEvtHandler, wxEvtHandler )
 	EVT_CHOICEBOOK_PAGE_CHANGED( -1, ComponentEvtHandler::OnChoicebookPageChanged )
     EVT_TOOLBOOK_PAGE_CHANGED( wxID_ANY, ComponentEvtHandler::OnToolbookPageChanged )
     EVT_TOOL( wxID_ANY, ComponentEvtHandler::OnToolbookToolClicked )
-    EVT_IDLE( ComponentEvtHandler::OnToolbookIdle )
     EVT_TREEBOOK_PAGE_CHANGED( wxID_ANY, ComponentEvtHandler::OnTreebookPageChanged )
 	EVT_AUINOTEBOOK_PAGE_CHANGED( -1, ComponentEvtHandler::OnAuiNotebookPageChanged )
 	EVT_AUINOTEBOOK_PAGE_CLOSE( -1, ComponentEvtHandler::OnAuiNotebookPageClosed )
@@ -710,17 +710,31 @@ public:
         // wxToolbook needs necessarily a wxImageList
         wxImage defImage  = wxBitmap( default_xpm ).ConvertToImage();
         wxSize  bmpSize   = obj->GetPropertyAsSize( wxT("bitmapsize") );
-        int     bmpWidth  = bmpSize.GetWidth();
-        int     bmpHeight = bmpSize.GetHeight();
+        int     bmpWidth  = defImage.GetWidth();
+        int     bmpHeight = defImage.GetHeight();
 
-        if ( bmpSize == wxDefaultSize )
+        if ( bmpSize.GetWidth() < 1 || bmpSize.GetWidth() > 512 )
         {
-            bmpWidth  = defImage.GetWidth();
-            bmpHeight = defImage.GetHeight();
+            bmpWidth = 22;
+        }
+        else
+        {
+            bmpWidth = bmpSize.GetWidth();
         }
 
+        if ( bmpSize.GetHeight() < 1 || bmpSize.GetHeight() > 512 )
+        {
+            bmpHeight = 22;
+        }
+        else
+        {
+            bmpHeight = bmpSize.GetHeight();
+        }
+
+        defImage = defImage.Scale( bmpWidth, bmpHeight );
+
         wxImageList *imgList = new wxImageList( bmpWidth, bmpHeight );
-        imgList->Add( defImage.Scale( bmpWidth, bmpHeight ) );
+        imgList->Add( defImage );
         book->AssignImageList( imgList );
 
         book->PushEventHandler( new ComponentEvtHandler( book, GetManager() ) );
@@ -734,32 +748,22 @@ public:
 
         if ( obj && book )
         {
-            size_t count = book->GetPageCount();
+            SuppressEventHandlers suppress( book );
 
-            unsigned char *defBmp = wxBitmap( default_xpm ).ConvertToImage().GetData();
-            unsigned char *tmpBmp = NULL;
-            int w = -1;
-            int h = -1;
+            size_t count   = book->GetPageCount();
 
-            for ( size_t i = 0; i < count; i++ )
+            if ( count == 0 )
             {
-                wxObject *child    = GetManager()->GetChild( wxobject, i );
-                IObject  *childObj = GetManager()->GetIObject( child );
-                wxBitmap  bmp      = childObj->GetPropertyAsBitmap( wxT("bitmap") );
-                wxSize    bmpSize  = wxSize( bmp.GetWidth(), bmp.GetHeight() );
-
-                tmpBmp = bmp.ConvertToImage().GetData();
-
-                if ( (bmpSize != wxDefaultSize) && (tmpBmp != defBmp) )
-                {
-                    w = bmp.GetWidth();
-                    h = bmp.GetHeight();
-                    break;
-                }
+                GetManager()->ModifyProperty( wxobject, wxT("bitmapsize"), wxT("22,22"), false );
+                return;
             }
 
-            book->Update();
-            book->Refresh();
+            wxSize bmpSize = obj->GetPropertyAsSize( wxT("bitmapsize") );
+            int w = bmpSize.GetWidth();
+            int h = bmpSize.GetHeight();
+
+            if (  w < 1 || w > 512 ) w = 22;
+            if (  h < 1 || h > 512 ) h = 22;
 
             GetManager()->ModifyProperty( wxobject, wxT("bitmapsize"),
                                           wxString::Format( wxT("%i,%i"), w, h ), false );
@@ -785,8 +789,8 @@ public:
 
 void ComponentEvtHandler::OnToolbookPageChanged( wxToolbookEvent& event )
 {
-    wxToolbook *book     = wxDynamicCast( m_window, wxToolbook );
-    int        selection = event.GetSelection();
+    wxToolbook *book      = wxDynamicCast( m_window, wxToolbook );
+    int         selection = event.GetSelection();
 
     if ( book && selection >= 0 && event.GetInt() == 1 )
     {
@@ -808,7 +812,6 @@ void ComponentEvtHandler::OnToolbookPageChanged( wxToolbookEvent& event )
             }
         }
 
-        book->Realize();
         m_manager->SelectObject( book->GetPage( selection ) );
         event.Skip();
     }
@@ -834,16 +837,6 @@ void ComponentEvtHandler::OnToolbookToolClicked( wxCommandEvent& event )
     event.Skip();
 }
 
-void ComponentEvtHandler::OnToolbookIdle( wxIdleEvent& event )
-{
-    wxToolbook *book = wxDynamicCast( event.GetEventObject(), wxToolbook );
-    if ( book )
-    {
-        book->Realize();
-    }
-    event.Skip();
-}
-
 class ToolbookPageComponent : public ComponentBase
 {
 public:
@@ -865,28 +858,13 @@ public:
         SuppressEventHandlers suppress( book );
 
         // Apply image to page
-        int      imgIndex = 0;
-        wxBitmap bmp        = obj->GetPropertyAsBitmap( wxT("bitmap") );
-
-        IObject *parentObj = GetManager()->GetIObject( wxparent );
-        wxSize   bmpSize = parentObj->GetPropertyAsSize( wxT("bitmapsize") );
-        int         width  = bmpSize.GetWidth();
-        int         height = bmpSize.GetHeight();
-
-        if ( width > 0 && height > 0 )
-        {
-            wxImageList *imageList = book->GetImageList();
-            wxImage      image     = bmp.ConvertToImage();
-            imgIndex = imageList->Add( image.Scale( width, height ) );
-        }
+        wxImageList *ils      = book->GetImageList();
+        int          w        = ils->GetBitmap(0).GetWidth();
+        int          h        = ils->GetBitmap(0).GetHeight();
+        wxImage      image    = obj->GetPropertyAsBitmap( wxT("bitmap") ).ConvertToImage().Scale( w, h );
+        int          imgIndex = ils->Add( image );
 
         book->AddPage( page, obj->GetPropertyAsString( wxT("label") ), false, imgIndex );
-
-        wxToolbookEvent evt( wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED, page->GetId() );
-        evt.SetSelection( book->GetPageCount() - 1 );
-        evt.SetEventObject( page );
-        evt.SetInt( 1 );
-        book->GetEventHandler()->AddPendingEvent( evt );
     }
 
     void OnSelected( wxObject *wxobject )
@@ -1052,8 +1030,6 @@ public:
 
             GetManager()->ModifyProperty( wxobject, wxT("depth"),
                                           wxString::Format( wxT("%i"), depth ), false );
-
-            wxLogError(_("treebookpage has an invalid depth."), obj, book, page );
         }
         else if( depth < count )
         {

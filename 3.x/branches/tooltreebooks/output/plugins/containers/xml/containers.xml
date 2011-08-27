@@ -207,7 +207,7 @@ Written by
         <property name="label"    type="wxString_i18n">a page</property>
         <property name="bitmap"   type="bitmap" help="Page image"/>
         <!-- property name="image"    type="int"    help="wxImageList Index">-1</property -->
-        <property name="expanded" type="bool"   help="Expands the current treebookpage node.\nXRC: wxWidgets 2.9.3 or above"/>
+        <property name="expanded" type="bool"   help="Expands the current treebookpage node.&#x0A;XRC: wxWidgets 2.9.3 or above."/>
         <property name="select"   type="bool"   help="Select Page when Adding">0</property>
     </objectinfo>
 
