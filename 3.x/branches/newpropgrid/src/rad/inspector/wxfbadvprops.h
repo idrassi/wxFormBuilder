@@ -33,17 +33,17 @@
 #include <wx/propgrid/advprops.h>
 
 // -----------------------------------------------------------------------
-// wxSizeProperty
+// wxFBSizeProperty
 // -----------------------------------------------------------------------
 
-class wxSizeProperty : public wxPGProperty
+class wxFBSizeProperty : public wxPGProperty
 {
-    WX_PG_DECLARE_PROPERTY_CLASS( wxSizeProperty )
+    WX_PG_DECLARE_PROPERTY_CLASS( wxFBSizeProperty )
 public:
-    wxSizeProperty( const wxString& label = wxPG_LABEL,
+    wxFBSizeProperty( const wxString& label = wxPG_LABEL,
                     const wxString& name  = wxPG_LABEL,
                     const wxSize&   value = wxSize() );
-    virtual ~wxSizeProperty();
+    virtual ~wxFBSizeProperty();
 
 #if wxVERSION_NUMBER < 2900
     virtual void ChildChanged( wxVariant& thisValue,
@@ -62,17 +62,17 @@ protected:
 };
 
 // -----------------------------------------------------------------------
-// wxPointProperty
+// wxFBPointProperty
 // -----------------------------------------------------------------------
 
-class wxPointProperty : public wxPGProperty
+class wxFBPointProperty : public wxPGProperty
 {
-    WX_PG_DECLARE_PROPERTY_CLASS( wxPointProperty )
+    WX_PG_DECLARE_PROPERTY_CLASS( wxFBPointProperty )
 public:
-    wxPointProperty(const wxString& label = wxPG_LABEL,
+    wxFBPointProperty(const wxString& label = wxPG_LABEL,
                     const wxString& name  = wxPG_LABEL,
                     const wxPoint&  value = wxPoint() );
-    virtual ~wxPointProperty();
+    virtual ~wxFBPointProperty();
 
 #if wxVERSION_NUMBER < 2900
     virtual void ChildChanged( wxVariant& thisValue,
@@ -90,25 +90,26 @@ protected:
 };
 
 // -----------------------------------------------------------------------
-// wxBitmapWithResourceProperty TODO
+// wxFBBitmapProperty
 // -----------------------------------------------------------------------
-DECLARE_EVENT_TYPE( RECREATE_GRID_EVENT, wxID_ANY )
-DECLARE_EVENT_TYPE( REPLACE_PROPERTY_EVENT, wxID_ANY )
 
-class wxBitmapWithResourceProperty : public wxPGProperty
+class wxFBBitmapProperty : public wxPGProperty
 {
-    WX_PG_DECLARE_PROPERTY_CLASS( wxBitmapWithResourceProperty )
+    WX_PG_DECLARE_PROPERTY_CLASS( wxFBBitmapProperty )
 
 public:
-    wxBitmapWithResourceProperty( const wxString& label = wxPG_LABEL,
-                                       const wxString& name  = wxPG_LABEL,
-                                       const wxString& value = wxString() );
+    wxFBBitmapProperty( const wxString& label = wxPG_LABEL,
+                        const wxString& name  = wxPG_LABEL,
+                        const wxString& value = wxEmptyString );
 
-    virtual ~wxBitmapWithResourceProperty();
+    virtual ~wxFBBitmapProperty();
 
-//  virtual wxVariant DoGetValue() const;
-
-    void DoSetValue( wxVariant value );
+    wxPGProperty *CreatePropertySource();
+    wxPGProperty *CreatePropertyFilePath();
+    wxPGProperty *CreatePropertyResourceName();
+    wxPGProperty *CreatePropertyIconSize();
+    wxPGProperty *CreatePropertyArtId();
+    wxPGProperty *CreatePropertyArtClient();
 
 #if wxVERSION_NUMBER < 2900
     virtual void ChildChanged( wxVariant& thisValue,
@@ -117,14 +118,7 @@ public:
 #endif
                                     int childIndex,
                                     wxVariant& childValue ) const;
-    virtual void RefreshChildren();
-
 protected:
-    wxString m_image;;
-    wxString m_id;
-    wxString m_client;
-    wxString m_source;
-    wxSize m_icoSize;
 
 #if wxVERSION_NUMBER < 2900
     static wxPGChoices m_ids;
@@ -135,20 +129,6 @@ protected:
     static wxArrayString m_clients;
     wxArrayString m_strings;
 #endif
-
-private:
-    enum
-    {
-        SOURCE_FILE = 0,
-        SOURCE_RESOURCE,
-        SOURCE_ICON_RESOURCE
-    };
-
-    enum
-    {
-        ITEM_FILE_OR_RESOURCE = 0,
-        ITEM_SOURCE
-    };
 };
 
 // -----------------------------------------------------------------------

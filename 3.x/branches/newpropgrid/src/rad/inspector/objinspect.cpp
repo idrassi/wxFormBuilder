@@ -356,11 +356,11 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
     }
     else if (type == PT_WXPOINT)
     {
-        result = new wxPointProperty( name, wxPG_LABEL, prop->GetValueAsPoint() );
+        result = new wxFBPointProperty( name, wxPG_LABEL, prop->GetValueAsPoint() );
     }
     else if (type == PT_WXSIZE)
     {
-        result = new wxSizeProperty( name, wxPG_LABEL, prop->GetValueAsSize() );
+        result = new wxFBSizeProperty( name, wxPG_LABEL, prop->GetValueAsSize() );
     }
     else if (type == PT_WXFONT)
     {
@@ -402,7 +402,7 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
     else if (type == PT_BITMAP)
     {
         wxLogDebug( wxT("ObjectInspector::GetProperty:%s"), prop->GetValueAsString().c_str() );
-        result = new wxBitmapWithResourceProperty( name, wxPG_LABEL, prop->GetValueAsString() ); // TODO: wxBitmapWithResourceProperty
+        result = new wxFBBitmapProperty( name, wxPG_LABEL, prop->GetValueAsString() ); // TODO: wxBitmapWithResourceProperty
     }
     else if (type == PT_STRINGLIST)
     {
@@ -464,6 +464,13 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
             {
                 m_pg->SetPropertyHelpString( id, propInfo->GetDescription() );
             }
+
+            wxFBBitmapProperty *bp = wxDynamicCast( id, wxFBBitmapProperty );
+            if ( bp )
+            {
+                bp->CreatePropertySource();
+            }
+
             wxString customEditor = propInfo->GetCustomEditor();
             if ( !customEditor.empty() )
             {
@@ -583,6 +590,35 @@ wxLogDebug(msg);
 void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
 {
     wxPGProperty* propPtr = event.GetProperty();
+
+    wxPGProperty       *parent  = propPtr->GetParent();
+    wxFBBitmapProperty *bmpProp = wxDynamicCast( parent, wxFBBitmapProperty );
+
+    if ( bmpProp )
+    {
+#if wxVERSION_NUMBER >= 2900
+        // GetValue() returns wxVariant, but it is converted transparently to wxAny
+        wxAny value = propPtr->GetValue();
+#else
+        wxVariant value = propPtr->GetValue();
+#endif
+
+        // Also, handle the case where property value is unspecified
+        if ( value.IsNull() )
+            return;
+
+        // Handle changes in values, as needed
+        wxVariant thisValue  = WXVARIANT( bmpProp->GetValueAsString() );
+        wxVariant childValue = value;
+
+        wxLogDebug( wxT("OnPropertyGridChanged: thisValueAsString:%s childValueAsString:%s thisValue:%s childValue:%s" ), 
+                    bmpProp->GetValueAsString().c_str(), propPtr->GetValueAsString().c_str(),
+                    bmpProp->GetValue().GetString().c_str(), propPtr->GetValue().GetString().c_str() );
+
+        bmpProp->ChildChanged( thisValue, propPtr->GetIndexInParent(), childValue );
+//      bmpProp->RefreshChildren();
+    }
+
     ObjInspectorPropertyMap::iterator it = m_propMap.find( propPtr );
 
     if ( m_propMap.end() == it )
@@ -746,32 +782,16 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
             case PT_BITMAP:
             {
                 // Get property value
-                wxString path = m_pg->GetPropertyValueAsString( propPtr );
+                wxString path = propPtr->GetValueAsString();
 wxLogDebug( wxT("ObjectInspector::OnPropertyGridChanged: path:%s"), path.c_str() );
-                size_t semicolon_index = path.find_first_of( wxT(";") );
-                if ( semicolon_index != path.npos )
-                {
-                    path = TypeConv::MakeRelativeURL( path.substr( 0, semicolon_index ),
-                                                      AppData()->GetProjectPath() ) + path.substr( semicolon_index  );
-                }
+
+                path = TypeConv::MakeRelativeURL( path.AfterFirst(';').Trim( false ),
+                                                  AppData()->GetProjectPath() );
+
 wxLogDebug( wxT("ObjectInspector::OnPropertyGridChanged: path:%s"), path.c_str() );
-                // Save state from old property to use after grid is recreated
-                wxPGProperty* pwc = dynamic_cast< wxPGProperty* >( event.GetProperty() );
-                bool expanded = false;
-                if ( pwc )
-                {
-                    expanded = pwc->IsExpanded();
-                }
-                wxString name = event.GetPropertyName();
 
                 // Respond to property modification
                 AppData()->ModifyProperty( prop, path );
-
-                // It is bad to delete the property while handling an event from it!
-                wxCommandEvent e( RECREATE_GRID_EVENT );
-                e.SetString( name );
-                e.SetInt( expanded ? 1 : 0 );
-                AddPendingEvent( e );
 
                 break;
             }
