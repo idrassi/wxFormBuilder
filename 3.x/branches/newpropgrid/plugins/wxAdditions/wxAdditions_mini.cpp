@@ -207,11 +207,11 @@ public:
 
         return pg;
     }
-/*
+
     void Cleanup( wxObject* )
     {
         // Prevent assert for missing event handler
-    }*/
+    }
 };
 
 class PropertyGridManagerComponent : public ComponentBase
@@ -346,11 +346,11 @@ public:
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
 		wxFlatNotebook* book = new wxFlatNotebook((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+			obj->GetPropertyAsPoint(wxT("pos")),
+			obj->GetPropertyAsSize(wxT("size")),
+			obj->GetPropertyAsInteger(wxT("style")) | obj->GetPropertyAsInteger(wxT("window_style")));
 
-		if ( obj->GetPropertyAsInteger( _("has_images") ) != 0 )
+		if ( obj->GetPropertyAsInteger( wxT("has_images") ) != 0 )
 		{
 			wxFlatNotebookImageList* images = new wxFlatNotebookImageList();
 			book->SetImageList( images );
@@ -365,14 +365,14 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc(obj, _("wxFlatNotebook"), obj->GetPropertyAsString(_("name")));
+		ObjectToXrcFilter xrc(obj, wxT("wxFlatNotebook"), obj->GetPropertyAsString(wxT("name")));
 		xrc.AddWindowProperties();
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter(xrcObj, _("wxFlatNotebook"));
+		XrcToXfbFilter filter(xrcObj, wxT("wxFlatNotebook"));
 		filter.AddWindowProperties();
 		return filter.GetXfbObject();
 	}
@@ -404,33 +404,33 @@ public:
 
 		// Apply image to page
 		IObject* parentObj = GetManager()->GetIObject( wxparent );
-		if ( parentObj->GetPropertyAsInteger( _("has_images") ) != 0 )
+		if ( parentObj->GetPropertyAsInteger( wxT("has_images") ) != 0 )
 		{
-			if ( !obj->GetPropertyAsString( _("bitmap") ).empty() )
+			if ( !obj->GetPropertyAsString( wxT("bitmap") ).empty() )
 			{
 				wxFlatNotebookImageList* imageList = book->GetImageList();
-				if ( parentObj->GetPropertyAsInteger( _("auto_scale_images") ) != 0 )
+				if ( parentObj->GetPropertyAsInteger( wxT("auto_scale_images") ) != 0 )
 				{
-					wxImage image = obj->GetPropertyAsBitmap( _("bitmap") ).ConvertToImage();
+					wxImage image = obj->GetPropertyAsBitmap( wxT("bitmap") ).ConvertToImage();
 					imageList->Add( image.Scale( 16, 16 ) );
 				}
 				else
 				{
-					imageList->Add( obj->GetPropertyAsBitmap( _("bitmap") ) );
+					imageList->Add( obj->GetPropertyAsBitmap( wxT("bitmap") ) );
 				}
-				book->AddPage( page, obj->GetPropertyAsString( _("label") ), false, imageList->GetCount() - 1 );
+				book->AddPage( page, obj->GetPropertyAsString( wxT("label") ), false, imageList->GetCount() - 1 );
 			}
 			else
 			{
-				book->AddPage(page,obj->GetPropertyAsString(_("label")));
+				book->AddPage(page,obj->GetPropertyAsString(wxT("label")));
 			}
 		}
 		else
 		{
-			book->AddPage(page,obj->GetPropertyAsString(_("label")));
+			book->AddPage(page,obj->GetPropertyAsString(wxT("label")));
 		}
 
-		if ( obj->GetPropertyAsString( _("select") ) == wxT("0") && selection >= 0 )
+		if ( obj->GetPropertyAsString( wxT("select") ) == wxT("0") && selection >= 0 )
 		{
 			book->SetSelection( selection) ;
 		}
@@ -477,23 +477,23 @@ public:
 
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
-		ObjectToXrcFilter xrc( obj, _("notebookpage") );
-		xrc.AddProperty( _("label"), _("label"), XRC_TYPE_TEXT );
-		xrc.AddProperty( _("selected"), _("selected"), XRC_TYPE_BOOL );
-		if ( !obj->IsNull( _("bitmap") ) )
+		ObjectToXrcFilter xrc( obj, wxT("notebookpage") );
+		xrc.AddProperty( wxT("label"), wxT("label"), XRC_TYPE_TEXT );
+		xrc.AddProperty( wxT("selected"), wxT("selected"), XRC_TYPE_BOOL );
+		if ( !obj->IsNull( wxT("bitmap") ) )
 		{
-			xrc.AddProperty( _("bitmap"), _("bitmap"), XRC_TYPE_BITMAP );
+			xrc.AddProperty( wxT("bitmap"), wxT("bitmap"), XRC_TYPE_BITMAP );
 		}
 		return xrc.GetXrcObject();
 	}
 
 	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
 	{
-		XrcToXfbFilter filter( xrcObj, _("notebookpage") );
+		XrcToXfbFilter filter( xrcObj, wxT("notebookpage") );
 		filter.AddWindowProperties();
-		filter.AddProperty( _("selected"), _("selected"), XRC_TYPE_BOOL );
-		filter.AddProperty( _("label"), _("label"), XRC_TYPE_TEXT );
-		filter.AddProperty( _("bitmap"), _("bitmap"), XRC_TYPE_BITMAP );
+		filter.AddProperty( wxT("selected"), wxT("selected"), XRC_TYPE_BOOL );
+		filter.AddProperty( wxT("label"), wxT("label"), XRC_TYPE_TEXT );
+		filter.AddProperty( wxT("bitmap"), wxT("bitmap"), XRC_TYPE_BITMAP );
 		return filter.GetXfbObject();
 	}
 };
