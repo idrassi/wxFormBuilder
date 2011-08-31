@@ -41,24 +41,21 @@ class wxFBSizeProperty : public wxPGProperty
     WX_PG_DECLARE_PROPERTY_CLASS( wxFBSizeProperty )
 public:
     wxFBSizeProperty( const wxString& label = wxPG_LABEL,
-                    const wxString& name  = wxPG_LABEL,
-                    const wxSize&   value = wxSize() );
+                      const wxString& name  = wxPG_LABEL,
+                      const wxSize&   value = wxSize() );
     virtual ~wxFBSizeProperty();
 
 #if wxVERSION_NUMBER < 2900
-    virtual void ChildChanged( wxVariant& thisValue,
+    virtual void
 #else
-    virtual wxVariant ChildChanged( wxVariant& thisValue,
+    virtual wxVariant
 #endif
-                                    int childIndex,
-                                    wxVariant& childValue ) const;
+    ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const;
+
     virtual void RefreshChildren();
 
 protected:
-    // I stands for internal
-    void SetValueI( const wxSize& value ) {
-        m_value = WXVARIANT( value );
-    }
+    void DoSetValue( const wxSize& value ) { m_value = WXVARIANT( value ); }
 };
 
 // -----------------------------------------------------------------------
@@ -69,24 +66,22 @@ class wxFBPointProperty : public wxPGProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS( wxFBPointProperty )
 public:
-    wxFBPointProperty(const wxString& label = wxPG_LABEL,
-                    const wxString& name  = wxPG_LABEL,
-                    const wxPoint&  value = wxPoint() );
+    wxFBPointProperty( const wxString& label = wxPG_LABEL,
+                       const wxString& name  = wxPG_LABEL,
+                       const wxPoint&  value = wxPoint() );
     virtual ~wxFBPointProperty();
 
 #if wxVERSION_NUMBER < 2900
-    virtual void ChildChanged( wxVariant& thisValue,
+    virtual void
 #else
-    virtual wxVariant ChildChanged( wxVariant& thisValue,
+    virtual wxVariant
 #endif
-                                    int childIndex,
-                                    wxVariant& childValue ) const;
+    ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const;
+
     virtual void RefreshChildren();
 
 protected:
-    void SetValueI( const wxPoint& value ) {
-        m_value = WXVARIANT( value );
-    }
+    void DoSetValue( const wxPoint& value ) { m_value = WXVARIANT( value ); }
 };
 
 // -----------------------------------------------------------------------
@@ -100,7 +95,7 @@ class wxFBBitmapProperty : public wxPGProperty
 public:
     wxFBBitmapProperty( const wxString& label = wxPG_LABEL,
                         const wxString& name  = wxPG_LABEL,
-                        const wxString& value = wxEmptyString );
+                        const wxString& value = wxString() );
 
     virtual ~wxFBBitmapProperty();
 
@@ -112,12 +107,12 @@ public:
     wxPGProperty *CreatePropertyArtClient();
 
 #if wxVERSION_NUMBER < 2900
-    virtual void ChildChanged( wxVariant& thisValue,
+    virtual void
 #else
-    virtual wxVariant ChildChanged( wxVariant& thisValue,
+    virtual wxVariant
 #endif
-                                    int childIndex,
-                                    wxVariant& childValue ) const;
+    ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const;
+
 protected:
 
 #if wxVERSION_NUMBER < 2900

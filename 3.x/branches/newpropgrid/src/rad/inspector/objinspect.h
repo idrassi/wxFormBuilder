@@ -69,6 +69,9 @@ private:
 
     wxPropertyGridManager* m_pg;
     wxPropertyGridManager* m_eg;
+
+    wxString m_bmpValue;
+
     int m_style;
 
     int StringToBits( const wxString& strVal, wxPGChoices& constants );
