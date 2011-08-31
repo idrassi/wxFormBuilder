@@ -35,10 +35,10 @@
 WX_PG_IMPLEMENT_PROPERTY_CLASS( wxFBSizeProperty, wxPGProperty, wxSize, const wxSize&, TextCtrl )
 
 wxFBSizeProperty::wxFBSizeProperty( const wxString& label,
-                                const wxString& name,
-                                const wxSize&   value ) : wxPGProperty( label, name )
+                                    const wxString& name,
+                                    const wxSize&   value ) : wxPGProperty( label, name )
 {
-    SetValueI( value );
+    DoSetValue( value );
     AddPrivateChild( new wxIntProperty( wxT("Width"), wxPG_LABEL, value.x ) );
     AddPrivateChild( new wxIntProperty( wxT("Height"), wxPG_LABEL, value.y ) );
 }
@@ -48,30 +48,34 @@ wxFBSizeProperty::~wxFBSizeProperty() {}
 void wxFBSizeProperty::RefreshChildren()
 {
     if ( !GetChildCount() ) return;
+
 #if wxVERSION_NUMBER < 2900
     const wxSize& size = wxSizeFromVariant( m_value );
 #else
     const wxSize& size = wxSizeRefFromVariant( m_value );
 #endif
+
     Item(0)->SetValue( (long)size.x );
     Item(1)->SetValue( (long)size.y );
 }
 
 #if wxVERSION_NUMBER < 2900
-    void wxFBSizeProperty::ChildChanged( wxVariant& thisValue,
+    void
 #else
-    wxVariant wxFBSizeProperty::ChildChanged( wxVariant& thisValue,
+    wxVariant
 #endif
-                                        int childIndex,
-                                        wxVariant& childValue ) const
+
+wxFBSizeProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const
 {
 #if wxVERSION_NUMBER < 2900
     wxSize& size = wxSizeFromVariant( thisValue );
 #else
     wxSize& size = wxSizeRefFromVariant( thisValue );
 #endif
+
     int val = childValue.GetLong();
-    switch ( childIndex ) {
+    switch ( childIndex )
+    {
     case 0:
         size.x = val;
         break;
@@ -79,6 +83,7 @@ void wxFBSizeProperty::RefreshChildren()
         size.y = val;
         break;
     }
+
 #if wxVERSION_NUMBER >= 2900
     wxVariant newVariant;
     newVariant << size;
@@ -90,14 +95,13 @@ void wxFBSizeProperty::RefreshChildren()
 // wxFBPointProperty
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS( wxFBPointProperty, wxPGProperty,
-                                wxPoint, const wxPoint&, TextCtrl )
+WX_PG_IMPLEMENT_PROPERTY_CLASS( wxFBPointProperty, wxPGProperty, wxPoint, const wxPoint&, TextCtrl )
 
 wxFBPointProperty::wxFBPointProperty( const wxString& label,
-                                  const wxString& name,
-                                  const wxPoint&  value ) : wxPGProperty( label, name )
+                                      const wxString& name,
+                                      const wxPoint&  value ) : wxPGProperty( label, name )
 {
-    SetValueI( value );
+    DoSetValue( value );
     AddPrivateChild( new wxIntProperty( wxT("X"), wxPG_LABEL, value.x ) );
     AddPrivateChild( new wxIntProperty( wxT("Y"), wxPG_LABEL, value.y ) );
 }
@@ -107,37 +111,42 @@ wxFBPointProperty::~wxFBPointProperty() { }
 void wxFBPointProperty::RefreshChildren()
 {
     if ( !GetChildCount() ) return;
+
 #if wxVERSION_NUMBER < 2900
     const wxPoint& point = wxPointFromVariant( m_value );
 #else
     const wxPoint& point = wxPointRefFromVariant( m_value );
 #endif
+
     Item(0)->SetValue( (long)point.x );
     Item(1)->SetValue( (long)point.y );
 }
 
 #if wxVERSION_NUMBER < 2900
-    void wxFBPointProperty::ChildChanged( wxVariant& thisValue,
+    void
 #else
-    wxVariant wxFBPointProperty::ChildChanged( wxVariant& thisValue,
+    wxVariant
 #endif
-                                        int childIndex,
-                                        wxVariant& childValue ) const
+
+wxFBPointProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const
 {
 #if wxVERSION_NUMBER < 2900
     wxPoint& point = wxPointFromVariant( thisValue );
 #else
     wxPoint& point = wxPointRefFromVariant( thisValue );
 #endif
+
     int val = childValue.GetLong();
-    switch ( childIndex ) {
-        case 0:
-            point.x = val;
-            break;
-        case 1:
-            point.y = val;
-            break;
+    switch ( childIndex )
+    {
+    case 0:
+        point.x = val;
+        break;
+    case 1:
+        point.y = val;
+        break;
     }
+
 #if wxVERSION_NUMBER >= 2900
     wxVariant newVariant;
     newVariant << point;
@@ -149,7 +158,8 @@ void wxFBPointProperty::RefreshChildren()
 // wxFBBitmapProperty
 // -----------------------------------------------------------------------
 
-static long gs_imageFilterIndex = -1;
+// static long gs_imageFilterIndex = -1; TODO: new wxPropertyGrid misses the
+//                                             wxPG_FILE_FILTER_INDEX attribute ID
 static wxString gs_imageInitialPath = wxEmptyString;
 
 WX_PG_IMPLEMENT_PROPERTY_CLASS( wxFBBitmapProperty, wxPGProperty,
@@ -160,7 +170,8 @@ wxFBBitmapProperty::wxFBBitmapProperty( const wxString& label,
                                         const wxString& value )
 : wxPGProperty( label, name )
 {
-    m_value = WXVARIANT( value );
+    SetValue( WXVARIANT( value ) );
+    RefreshChildren();
 }
 
 wxPGProperty *wxFBBitmapProperty::CreatePropertySource()
@@ -170,7 +181,6 @@ wxPGProperty *wxFBBitmapProperty::CreatePropertySource()
 #else
     wxArrayString sourceChoices;
 #endif
-
     // Add 'source' property (common for all other children)
     sourceChoices.Add(_("Load From File") );
     sourceChoices.Add(_("Load From Embedded File") );
@@ -371,7 +381,7 @@ wxPGProperty *wxFBBitmapProperty::CreatePropertyArtId()
     artIdChoices.Add(wxT("gtk-zoom-out"));
 
     wxPGProperty *propArtId = new wxEnumProperty( wxT("id"), wxPG_LABEL, artIdChoices );
-    propArtId->SetHelpString( _("wxArtID unique identifier of the bitmap. IDs with prefix 'gtk-' are available under wxGTK only.") );
+    propArtId->SetHelpString(_("wxArtID unique identifier of the bitmap. IDs with prefix 'gtk-' are available under wxGTK only.") );
 
     return propArtId;
 }
@@ -394,7 +404,7 @@ wxPGProperty *wxFBBitmapProperty::CreatePropertyArtClient()
     artClientChoices.Add(wxT("wxART_OTHER"));
 
     wxPGProperty *propArtClient = new wxEnumProperty( wxT("client"), wxPG_LABEL, artClientChoices );
-    propArtClient->SetHelpString( _("wxArtClient identifier of the client (i.e. who is asking for the bitmap).") );
+    propArtClient->SetHelpString(_("wxArtClient identifier of the client (i.e. who is asking for the bitmap).") );
 
     return propArtClient;
 }
@@ -404,12 +414,13 @@ wxFBBitmapProperty::~wxFBBitmapProperty()
 }
 
 #if wxVERSION_NUMBER < 2900
-    void wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
+    void
 #else
-    wxVariant wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
+    wxVariant
 #endif
-                                                           int childIndex,
-                                                           wxVariant& childValue ) const
+wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
+                                  int        childIndex,
+                                  wxVariant& childValue ) const
 {
 wxLogDebug( wxT("ChildChanged: thisValue:%s childIndex:%i childValue:%s"), thisValue.GetString().c_str(), childIndex, childValue.GetString().c_str() );
 
@@ -421,15 +432,12 @@ wxLogDebug( wxT("ChildChanged: thisValue:%s childIndex:%i childValue:%s"), thisV
     {
         wxLogDebug( wxT("wxFBBitmapProperty creation failed.") );
 
-#if wxVERSION_NUMBER >= 2900
+#if wxVERSION_NUMBER < 2900
+        return;
+#else
         return thisValue;
 #endif
     }
-
-    wxString newValue, newImage, newResName, newIcoSize, newArtId, newArtClient;
-
-    // Get the new source
-    wxString newSource = wxGetTranslation( thisValue.GetString().BeforeFirst(';') );
 
     // Find the appropriate new state
     switch ( childIndex )
@@ -450,6 +458,7 @@ wxLogDebug( wxT("ChildChanged: thisValue:%s childIndex:%i childValue:%s"), thisV
                 }
             }       
 
+            // childValue.GetInteger() returns the chosen item index
             switch ( childValue.GetInteger() )
             {
                 // 'Load From File' and 'Load From Embedded File'
@@ -459,17 +468,17 @@ wxLogDebug( wxT("ChildChanged: thisValue:%s childIndex:%i childValue:%s"), thisV
                     wxPGProperty *propFilePath = bp->CreatePropertyFilePath();
 
                     bp->AppendChild( propFilePath );
-                    newValue  = newSource + wxT("; ");
                     break;
                 }
+                // 'Load From Resource'
                 case 2:
                 {
                     wxPGProperty *propResName = bp->CreatePropertyResourceName();
 
                     bp->AppendChild( propResName );
-                    newValue = newSource + wxT("; ");
                     break;
                 }
+                // 'Load From Icon Resource'
                 case 3:
                 {
                     wxPGProperty *propResName = bp->CreatePropertyResourceName();
@@ -477,10 +486,9 @@ wxLogDebug( wxT("ChildChanged: thisValue:%s childIndex:%i childValue:%s"), thisV
 
                     bp->AppendChild( propResName );
                     bp->AppendChild( propIcoSize );
-
-                    newValue   = newSource + wxT("; ; ") + propIcoSize->GetValueAsString();
                     break;
                 }
+                // 'Load From Art Provider'
                 case 4:
                 {
                     wxPGProperty *propArtId = bp->CreatePropertyArtId();
@@ -488,49 +496,39 @@ wxLogDebug( wxT("ChildChanged: thisValue:%s childIndex:%i childValue:%s"), thisV
 
                     bp->AppendChild( propArtId );
                     bp->AppendChild( propArtClient );
-
-                    newValue = newSource + wxT("; ; ");
                     break;
                 }
             }
             break;
         }
-
+/*
         // file_path || id || resource_name
         case 1:
         {
+            wxString newSource = wxGetTranslation( thisValue.GetString().BeforeFirst(';') );
+
             if ( (newSource == _("Load From File")) || (newSource == _("Load From Embedded File")) )
             {
-                wxImageFileProperty* pgProp = wxDynamicCast( Item( 1 ), wxImageFileProperty );
-                if ( pgProp )
+                // Save the initial file path TODO: Save the image filter index
+                wxImageFileProperty* imgFileProp = wxDynamicCast( Item( 1 ), wxImageFileProperty );
+                if ( imgFileProp )
                 {
-        //          g_imageFilterIndex = pgProp->GetFilterIndex();
+//                  g_imageFilterIndex = imgFileProp->GetFilterIndex();
 
                     wxFileName imgPath( childValue.GetString() );
                     gs_imageInitialPath = imgPath.GetPath();
-
-                    pgProp->SetValue( childValue );
-
-                    newValue = thisValue.GetString();
                 }
             }
             break;
-        }
-
-        // resource_name
-        case 2:
-        {
-            newValue = thisValue.GetString() + childValue.GetString();
-            break;
-        }
+        }*/
     }
 
-    bp->SetValue( WXVARIANT( newValue ) );
+    bp->SetValue( WXVARIANT( thisValue ) );
 
-    wxLogDebug( wxT("ChildChanged: New Value:%s"), newValue.c_str() );
+    wxLogDebug( wxT("ChildChanged: This Value:%s"), thisValue.GetString().c_str() );
 
 #if wxVERSION_NUMBER >= 2900
-    return WXVARIANT( newValue );
+    return WXVARIANT( thisValue );
 #endif
 }
 

@@ -442,9 +442,9 @@ void TypeConv::ParseBitmapWithResource( const wxString& value, wxString* image, 
 				children[2].ToLong( &temp );
 				icoSize->SetWidth( temp );
 			case 2:
-				*source = children[1];
+				*image = children[1];
 			case 1:
-				*image = children[0];
+				*source = children[0];
 			default:
 				break;
 		}
@@ -453,13 +453,13 @@ void TypeConv::ParseBitmapWithResource( const wxString& value, wxString* image, 
 	{
 		if( children.size() == 3 )
 		{
-			*image = children[0] + wxT(":") + children[1];
-			*source = children[2];
+			*image = children[2] + wxT(":") + children[1];
+			*source = children[0];
 		}
 		else
 		{
 			*image = wxT("");
-			*source = children[1];
+			*source = children[0];
 		}
 	}
 wxLogDebug( wxT("TypeConv:ParseBitmap: image:%s source:%s"), image->c_str(), source->c_str() );

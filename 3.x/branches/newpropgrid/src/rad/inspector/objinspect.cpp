@@ -402,7 +402,33 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
     else if (type == PT_BITMAP)
     {
         wxLogDebug( wxT("ObjectInspector::GetProperty:%s"), prop->GetValueAsString().c_str() );
-        result = new wxFBBitmapProperty( name, wxPG_LABEL, prop->GetValueAsString() ); // TODO: wxBitmapWithResourceProperty
+
+        wxFBBitmapProperty *bmpProp = new wxFBBitmapProperty( name, wxPG_LABEL, m_bmpValue );
+/*
+        bmpProp->CreatePropertySource();
+
+        wxVariant thisValue  = WXVARIANT( m_bmpValue );
+        wxVariant childValue;
+        int       childIndex = 0;
+        wxString  source     = m_bmpValue.BeforeFirst(';');
+
+        if ( source == wxString(_("Load From Resource") ) )
+        {
+            childIndex = 2;
+        }
+        else if ( source == wxString(_("Load From Icon Resource") ) )
+        {
+            childIndex = 3;
+        }
+        else if ( source == wxString(_("Load From Art Provider") ) )
+        {
+            childIndex = 4;
+        }
+        childValue = WXVARIANT( childIndex );
+
+        bmpProp->ChildChanged( thisValue, 0, childValue );
+*/
+        result = bmpProp;
     }
     else if (type == PT_STRINGLIST)
     {
@@ -608,7 +634,12 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
             return;
 
         // Handle changes in values, as needed
-        wxVariant thisValue  = WXVARIANT( bmpProp->GetValueAsString() );
+        if ( m_bmpValue.empty() )
+        {
+            m_bmpValue = bmpProp->GetValueAsString();
+        }
+
+        wxVariant thisValue  = WXVARIANT( m_bmpValue );
         wxVariant childValue = value;
 
         wxLogDebug( wxT("OnPropertyGridChanged: thisValueAsString:%s childValueAsString:%s thisValue:%s childValue:%s" ), 
@@ -782,14 +813,19 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
             case PT_BITMAP:
             {
                 // Get property value
-                wxString path = propPtr->GetValueAsString();
+                wxString path = event.GetPropertyValueAsString();
+/*
+                size_t   semicolon_index = path.find_first_of( wxT(";") );
+
+                if ( semicolon_index != path.npos )
+                {
 wxLogDebug( wxT("ObjectInspector::OnPropertyGridChanged: path:%s"), path.c_str() );
 
-                path = TypeConv::MakeRelativeURL( path.AfterFirst(';').Trim( false ),
-                                                  AppData()->GetProjectPath() );
-
+                    path = TypeConv::MakeRelativeURL( path.AfterFirst(';').Trim( false ),
+                                                      AppData()->GetProjectPath() );
+                }
 wxLogDebug( wxT("ObjectInspector::OnPropertyGridChanged: path:%s"), path.c_str() );
-
+*/
                 // Respond to property modification
                 AppData()->ModifyProperty( prop, path );
 
