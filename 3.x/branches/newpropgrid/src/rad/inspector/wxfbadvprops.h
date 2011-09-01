@@ -99,7 +99,7 @@ public:
 
     virtual ~wxFBBitmapProperty();
 
-    wxPGProperty *CreatePropertySource();
+    wxPGProperty *CreatePropertySource( int sourceIndex = 0 );
     wxPGProperty *CreatePropertyFilePath();
     wxPGProperty *CreatePropertyResourceName();
     wxPGProperty *CreatePropertyIconSize();

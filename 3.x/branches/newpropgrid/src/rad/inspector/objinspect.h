@@ -70,8 +70,6 @@ private:
     wxPropertyGridManager* m_pg;
     wxPropertyGridManager* m_eg;
 
-    wxString m_bmpValue;
-
     int m_style;
 
     int StringToBits( const wxString& strVal, wxPGChoices& constants );
@@ -138,7 +136,6 @@ private:
 
     void Create( bool force = false );
 
-    void OnPropertyGridChanging( wxPropertyGridEvent& event );
     void OnPropertyGridChanged( wxPropertyGridEvent& event );
     void OnEventGridChanged( wxPropertyGridEvent& event );
     void OnPropertyGridDblClick( wxPropertyGridEvent& event );

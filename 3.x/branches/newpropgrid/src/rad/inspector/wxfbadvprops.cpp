@@ -167,14 +167,12 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS( wxFBBitmapProperty, wxPGProperty,
 
 wxFBBitmapProperty::wxFBBitmapProperty( const wxString& label,
                                         const wxString& name,
-                                        const wxString& value )
-: wxPGProperty( label, name )
+                                        const wxString& value ) : wxPGProperty( label, name )
 {
     SetValue( WXVARIANT( value ) );
-    RefreshChildren();
 }
 
-wxPGProperty *wxFBBitmapProperty::CreatePropertySource()
+wxPGProperty *wxFBBitmapProperty::CreatePropertySource( int sourceIndex )
 {
 #if wxVERSION_NUMBER < 2900
     wxPGChoices sourceChoices;
@@ -188,7 +186,7 @@ wxPGProperty *wxFBBitmapProperty::CreatePropertySource()
     sourceChoices.Add(_("Load From Icon Resource") );
     sourceChoices.Add(_("Load From Art Provider") );
 
-    wxPGProperty *srcProp = new wxEnumProperty( wxT("source"), wxPG_LABEL, sourceChoices, 0 );
+    wxPGProperty *srcProp = new wxEnumProperty( wxT("source"), wxPG_LABEL, sourceChoices, sourceIndex );
     srcProp->SetHelpString( wxString(_("Load From File:\n") ) +
                             wxString(_("Load the image from a file on disk.\n\n") ) +
                             wxString(_("Load From Embedded File:\n") ) +
@@ -200,9 +198,6 @@ wxPGProperty *wxFBBitmapProperty::CreatePropertySource()
                             wxString(_("Load From Art Provider:\n") ) +
                             wxString(_("Query registered providers for bitmap with given ID.\n\n") ) );
     AppendChild( srcProp );
-
-    wxPGProperty *propFilePath = CreatePropertyFilePath();
-    AppendChild( propFilePath );
 
     return srcProp;
 }
@@ -380,7 +375,7 @@ wxPGProperty *wxFBBitmapProperty::CreatePropertyArtId()
     artIdChoices.Add(wxT("gtk-zoom-in"));
     artIdChoices.Add(wxT("gtk-zoom-out"));
 
-    wxPGProperty *propArtId = new wxEnumProperty( wxT("id"), wxPG_LABEL, artIdChoices );
+    wxPGProperty *propArtId = new wxEnumProperty( wxT("id"), wxPG_LABEL, artIdChoices, -1 );
     propArtId->SetHelpString(_("wxArtID unique identifier of the bitmap. IDs with prefix 'gtk-' are available under wxGTK only.") );
 
     return propArtId;
@@ -403,7 +398,7 @@ wxPGProperty *wxFBBitmapProperty::CreatePropertyArtClient()
     artClientChoices.Add(wxT("wxART_MESSAGE_BOX"));
     artClientChoices.Add(wxT("wxART_OTHER"));
 
-    wxPGProperty *propArtClient = new wxEnumProperty( wxT("client"), wxPG_LABEL, artClientChoices );
+    wxPGProperty *propArtClient = new wxEnumProperty( wxT("client"), wxPG_LABEL, artClientChoices, -1 );
     propArtClient->SetHelpString(_("wxArtClient identifier of the client (i.e. who is asking for the bitmap).") );
 
     return propArtClient;
@@ -468,6 +463,8 @@ wxLogDebug( wxT("ChildChanged: thisValue:%s childIndex:%i childValue:%s"), thisV
                     wxPGProperty *propFilePath = bp->CreatePropertyFilePath();
 
                     bp->AppendChild( propFilePath );
+
+                    propFilePath->SetValueFromString( thisValue.GetString().AfterFirst(';').Trim( false ) );
                     break;
                 }
                 // 'Load From Resource'
@@ -501,7 +498,7 @@ wxLogDebug( wxT("ChildChanged: thisValue:%s childIndex:%i childValue:%s"), thisV
             }
             break;
         }
-/*
+
         // file_path || id || resource_name
         case 1:
         {
@@ -520,12 +517,10 @@ wxLogDebug( wxT("ChildChanged: thisValue:%s childIndex:%i childValue:%s"), thisV
                 }
             }
             break;
-        }*/
+        }
     }
 
     bp->SetValue( WXVARIANT( thisValue ) );
-
-    wxLogDebug( wxT("ChildChanged: This Value:%s"), thisValue.GetString().c_str() );
 
 #if wxVERSION_NUMBER >= 2900
     return WXVARIANT( thisValue );
@@ -549,9 +544,9 @@ wxPGSliderEditor::~wxPGSliderEditor()
 
 // Create controls and initialize event handling.
 wxPGWindowList wxPGSliderEditor::CreateControls( wxPropertyGrid* propgrid,
-                                                 wxPGProperty* property,
-                                                 const wxPoint& pos,
-                                                 const wxSize& sz ) const
+                                                 wxPGProperty*   property,
+                                                 const wxPoint&  pos,
+                                                 const wxSize&   sz ) const
 {
     wxCHECK_MSG( property->IsKindOf( WX_PG_CLASSINFO( wxFloatProperty ) ),
                  NULL,
