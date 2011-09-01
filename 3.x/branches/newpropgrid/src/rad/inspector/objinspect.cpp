@@ -59,7 +59,6 @@
 DEFINE_EVENT_TYPE( RECREATE_GRID_EVENT )
 
 BEGIN_EVENT_TABLE(ObjectInspector, wxPanel)
-    EVT_PG_CHANGING(WXFB_PROPERTY_GRID, ObjectInspector::OnPropertyGridChanging)
     EVT_PG_CHANGED(WXFB_PROPERTY_GRID, ObjectInspector::OnPropertyGridChanged)
     EVT_PG_CHANGED(WXFB_EVENT_GRID, ObjectInspector::OnEventGridChanged)
     EVT_PG_DOUBLE_CLICK(WXFB_EVENT_GRID, ObjectInspector::OnEventGridDblClick)
@@ -401,33 +400,10 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
     }
     else if (type == PT_BITMAP)
     {
-        wxLogDebug( wxT("ObjectInspector::GetProperty:%s"), prop->GetValueAsString().c_str() );
+        wxLogDebug( wxT("ObjectInspector::GetProperty: propString:%s"), prop->GetValueAsString().c_str() );
 
-        wxFBBitmapProperty *bmpProp = new wxFBBitmapProperty( name, wxPG_LABEL, m_bmpValue );
-/*
-        bmpProp->CreatePropertySource();
+        wxFBBitmapProperty *bmpProp = new wxFBBitmapProperty( name, wxPG_LABEL, prop->GetValueAsString() );
 
-        wxVariant thisValue  = WXVARIANT( m_bmpValue );
-        wxVariant childValue;
-        int       childIndex = 0;
-        wxString  source     = m_bmpValue.BeforeFirst(';');
-
-        if ( source == wxString(_("Load From Resource") ) )
-        {
-            childIndex = 2;
-        }
-        else if ( source == wxString(_("Load From Icon Resource") ) )
-        {
-            childIndex = 3;
-        }
-        else if ( source == wxString(_("Load From Art Provider") ) )
-        {
-            childIndex = 4;
-        }
-        childValue = WXVARIANT( childIndex );
-
-        bmpProp->ChildChanged( thisValue, 0, childValue );
-*/
         result = bmpProp;
     }
     else if (type == PT_STRINGLIST)
@@ -484,17 +460,52 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
         // we do not want to duplicate inherited properties
         if ( properties.find( propName ) == properties.end() )
         {
+            wxPGProperty* id       = m_pg->Append( GetProperty( prop ) );
+            int           propType = prop->GetType();
 
-            wxPGProperty* id = m_pg->Append( GetProperty( prop ) );
-            if ( prop->GetType() != PT_OPTION )
+            if ( propType != PT_OPTION )
             {
                 m_pg->SetPropertyHelpString( id, propInfo->GetDescription() );
-            }
 
-            wxFBBitmapProperty *bp = wxDynamicCast( id, wxFBBitmapProperty );
-            if ( bp )
-            {
-                bp->CreatePropertySource();
+                if ( propType == PT_BITMAP )
+                {
+                    wxFBBitmapProperty *bp = wxDynamicCast( id, wxFBBitmapProperty );
+                    if ( bp )
+                    {
+                        wxString  propValue  = prop->GetValueAsString();
+                        wxVariant thisValue  = WXVARIANT( propValue );
+                        wxVariant childValue;
+                        int       childIndex = 0;
+                        wxString  source     = propValue.BeforeFirst(';');
+
+wxLogDebug( wxT("AddItems: propValue:%s intValue:%i"), propValue.c_str(), prop->GetValueAsInteger() );
+/*
+                        if ( source == wxString(_("Load From File") ) )
+                        {
+                            childIndex = 0;
+                        }*/
+                        if ( source == wxString(_("Load From Embedded File") ) )
+                        {
+                            childIndex = 1;
+                        }
+                        else if ( source == wxString(_("Load From Resource") ) )
+                        {
+                            childIndex = 2;
+                        }
+                        else if ( source == wxString(_("Load From Icon Resource") ) )
+                        {
+                            childIndex = 3;
+                        }
+                        else if ( source == wxString(_("Load From Art Provider") ) )
+                        {
+                            childIndex = 4;
+                        }
+                        childValue = WXVARIANT( childIndex );
+
+                        bp->CreatePropertySource( childIndex );
+                        bp->ChildChanged( thisValue, 0, childValue );
+                    }
+                }
             }
 
             wxString customEditor = propInfo->GetCustomEditor();
@@ -595,31 +606,15 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
     }
 }
 
-void ObjectInspector::OnPropertyGridChanging( wxPropertyGridEvent& event )
-{
-    wxPGProperty* propPtr = event.GetProperty();
-    ObjInspectorPropertyMap::iterator it = m_propMap.find( propPtr );
-
-wxString msg = wxT("ObjectInspector::OnPropertyGridChanging: ");
-    if ( it != m_propMap.end() )
-    {
-        PProperty prop = it->second;
-        if ( prop->GetType() == PT_BITMAP )
-        {
-            msg << event.GetValue().GetString();
-        }
-    }
-wxLogDebug(msg);
-    event.Skip();
-}
-
 void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
 {
     wxPGProperty* propPtr = event.GetProperty();
 
     wxPGProperty       *parent  = propPtr->GetParent();
     wxFBBitmapProperty *bmpProp = wxDynamicCast( parent, wxFBBitmapProperty );
+    wxString            bmpVal  = wxT("");
 
+    // Handle the main bitmap property
     if ( bmpProp )
     {
 #if wxVERSION_NUMBER >= 2900
@@ -633,21 +628,17 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
         if ( value.IsNull() )
             return;
 
-        // Handle changes in values, as needed
-        if ( m_bmpValue.empty() )
-        {
-            m_bmpValue = bmpProp->GetValueAsString();
-        }
+        bmpVal = bmpProp->GetValueAsString( wxPG_FULL_VALUE );
 
-        wxVariant thisValue  = WXVARIANT( m_bmpValue );
+        // Handle changes in values, as needed
+        wxVariant thisValue  = WXVARIANT( bmpVal );
         wxVariant childValue = value;
 
-        wxLogDebug( wxT("OnPropertyGridChanged: thisValueAsString:%s childValueAsString:%s thisValue:%s childValue:%s" ), 
-                    bmpProp->GetValueAsString().c_str(), propPtr->GetValueAsString().c_str(),
-                    bmpProp->GetValue().GetString().c_str(), propPtr->GetValue().GetString().c_str() );
+        wxLogDebug( wxT("OnPropertyGridChanged: thisValue:%s childValueAsString:%s childValue:%s" ), 
+                    thisValue.GetString().c_str(), propPtr->GetValueAsString().c_str(),
+                    childValue.GetString().c_str() );
 
         bmpProp->ChildChanged( thisValue, propPtr->GetIndexInParent(), childValue );
-//      bmpProp->RefreshChildren();
     }
 
     ObjInspectorPropertyMap::iterator it = m_propMap.find( propPtr );
@@ -813,21 +804,23 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
             case PT_BITMAP:
             {
                 // Get property value
-                wxString path = event.GetPropertyValueAsString();
-/*
-                size_t   semicolon_index = path.find_first_of( wxT(";") );
+                wxFileName fileName  = wxFileName( bmpVal.AfterFirst(';').Trim( false ) );
+                wxString   filePath  = fileName.GetFullPath();
+                wxString   basePath  = AppData()->GetProjectPath();
+                wxString   source    = bmpVal.BeforeFirst(';');
 
-                if ( semicolon_index != path.npos )
+                if ( fileName.IsOk() )
                 {
-wxLogDebug( wxT("ObjectInspector::OnPropertyGridChanged: path:%s"), path.c_str() );
-
-                    path = TypeConv::MakeRelativeURL( path.AfterFirst(';').Trim( false ),
-                                                      AppData()->GetProjectPath() );
-                }
-wxLogDebug( wxT("ObjectInspector::OnPropertyGridChanged: path:%s"), path.c_str() );
+                    bmpVal = source + wxT("; ") + TypeConv::MakeRelativeURL( filePath, basePath );
+/*                  
+                    wxVariant thisValue  = WXVARIANT( bmpVal ); TODO: Update the property
+                    wxVariant childValue = WXVARIANT( filePath );
+                    bmpProp->ChildChanged( thisValue, propPtr->GetIndexInParent(), childValue );
 */
+                }
+
                 // Respond to property modification
-                AppData()->ModifyProperty( prop, path );
+                AppData()->ModifyProperty( prop, bmpVal );
 
                 break;
             }
@@ -836,7 +829,6 @@ wxLogDebug( wxT("ObjectInspector::OnPropertyGridChanged: path:%s"), path.c_str()
                 AppData()->ModifyProperty( prop, event.GetPropertyValue() );
         }
     }
-    wxLogDebug( wxT("ObjectInspector::OnPropertyGridChanged done") );
 }
 
 void ObjectInspector::OnReCreateGrid( wxCommandEvent& event )
@@ -1006,6 +998,7 @@ void ObjectInspector::OnPropertyModified( wxFBPropertyEvent& event )
         }
         break;
     case PT_BITMAP:
+        pgProp->SetValueFromString(prop->GetValueAsString(), wxPG_FULL_VALUE);
         wxLogDebug( wxT("ObjectInspector::OnPropertyModified: %s"), prop->GetValueAsString().c_str() ); 
         break;
     default:
