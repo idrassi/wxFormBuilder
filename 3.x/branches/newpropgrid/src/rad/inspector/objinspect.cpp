@@ -402,9 +402,7 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
     {
         wxLogDebug( wxT("ObjectInspector::GetProperty: propString:%s"), prop->GetValueAsString().c_str() );
 
-        wxFBBitmapProperty *bmpProp = new wxFBBitmapProperty( name, wxPG_LABEL, prop->GetValueAsString() );
-
-        result = bmpProp;
+        result = new wxFBBitmapProperty( name, wxPG_LABEL, prop->GetValueAsString() );
     }
     else if (type == PT_STRINGLIST)
     {
@@ -476,7 +474,7 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
                         wxVariant thisValue  = WXVARIANT( propValue );
                         wxVariant childValue;
                         int       childIndex = 0;
-                        wxString  source     = propValue.BeforeFirst(';');
+                        wxString  source     = propValue.BeforeFirst( wxT(';') );
 
 wxLogDebug( wxT("AddItems: propValue:%s intValue:%i"), propValue.c_str(), prop->GetValueAsInteger() );
 /*
@@ -804,10 +802,10 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
             case PT_BITMAP:
             {
                 // Get property value
-                wxFileName fileName  = wxFileName( bmpVal.AfterFirst(';').Trim( false ) );
+                wxFileName fileName  = wxFileName( bmpVal.AfterFirst( wxT(';') ).Trim( false ) );
                 wxString   filePath  = fileName.GetFullPath();
                 wxString   basePath  = AppData()->GetProjectPath();
-                wxString   source    = bmpVal.BeforeFirst(';');
+                wxString   source    = bmpVal.BeforeFirst( wxT(';') );
 
                 if ( fileName.IsOk() )
                 {

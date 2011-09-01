@@ -464,7 +464,7 @@ wxLogDebug( wxT("ChildChanged: thisValue:%s childIndex:%i childValue:%s"), thisV
 
                     bp->AppendChild( propFilePath );
 
-                    propFilePath->SetValueFromString( thisValue.GetString().AfterFirst(';').Trim( false ) );
+                    propFilePath->SetValueFromString( thisValue.GetString().AfterFirst( wxT(';') ).Trim( false ) );
                     break;
                 }
                 // 'Load From Resource'
@@ -502,7 +502,7 @@ wxLogDebug( wxT("ChildChanged: thisValue:%s childIndex:%i childValue:%s"), thisV
         // file_path || id || resource_name
         case 1:
         {
-            wxString newSource = wxGetTranslation( thisValue.GetString().BeforeFirst(';') );
+            wxString newSource = wxGetTranslation( thisValue.GetString().BeforeFirst( wxT(';') ) );
 
             if ( (newSource == _("Load From File")) || (newSource == _("Load From Embedded File")) )
             {
