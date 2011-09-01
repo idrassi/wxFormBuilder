@@ -348,9 +348,9 @@ wxBitmap TypeConv::StringToBitmap( const wxString& filename )
 	// Get bitmap from art provider
 	if( filename.Contains( wxT("Load From Art Provider") ) )
 	{
-		wxString image = filename.BeforeLast( wxT(';') );
-		wxString rid = image.BeforeFirst( wxT(';') ).Trim();
-		wxString cid = image.AfterFirst( wxT(';') ).Trim();
+		wxString image = filename.AfterFirst( wxT(';') ).Trim( false );
+		wxString rid = image.BeforeFirst( wxT(';') ).Trim( false );
+		wxString cid = image.AfterFirst( wxT(';') ).Trim( false );
 		
 		if( rid.IsEmpty() || cid.IsEmpty() )
 		{
@@ -361,15 +361,10 @@ wxBitmap TypeConv::StringToBitmap( const wxString& filename )
 	}
 
 	// Get path from bitmap property
-    size_t semicolonIndex = filename.find( wxT(";") );
-    wxString path = filename;
-    if ( semicolonIndex != filename.npos )
-    {
-        path = filename.substr( 0, semicolonIndex );
-    }
+    wxString path = filename.AfterFirst( wxT(';') ).Trim( false );
 
 	// No value - default bitmap
-    if ( path.empty() )
+    if ( !wxFileName( path ).IsOk() )
     {
     	return AppBitmaps::GetBitmap( wxT("unknown") );
     }
