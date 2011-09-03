@@ -48,6 +48,8 @@
 #include <wx/wxScintilla/wxscintilla.h>
 #include <wx/wxFlatNotebook/wxFlatNotebook.h>
 
+#include <wx/filename.h>
+
 BEGIN_EVENT_TABLE ( CppPanel,  wxPanel )
 	EVT_FB_CODE_GENERATION( CppPanel::OnCodeGeneration )
 	EVT_FB_PROJECT_REFRESH( CppPanel::OnProjectRefresh )
@@ -187,11 +189,11 @@ void CppPanel::OnFind( wxFindDialogEvent& event )
 	wxString text = notebook->GetPageText( selection );
 	if ( wxT("cpp") == text )
 	{
-		m_cppPanel->ProcessEvent( event );
+		m_cppPanel->GetEventHandler()->ProcessEvent( event );
 	}
 	else if ( wxT("h") == text )
 	{
-		m_hPanel->ProcessEvent( event );
+		m_hPanel->GetEventHandler()->ProcessEvent( event );
 	}
 }
 
@@ -409,10 +411,10 @@ void CppPanel::OnCodeGeneration( wxFBEvent& event )
 			{
 				useUtf8 = ( pUseUtf8->GetValueAsString() != wxT("ANSI") );
 			}
+						
+			PCodeWriter h_cw( new FileCodeWriter( AppData()->GetIncludeOutputPath() + file + wxT( ".h" ), useMicrosoftBOM, useUtf8 ) );
 
-			PCodeWriter h_cw( new FileCodeWriter( path + file + wxT( ".h" ), useMicrosoftBOM, useUtf8 ) );
-
-			PCodeWriter cpp_cw( new FileCodeWriter( path + file + wxT( ".cpp" ), useMicrosoftBOM, useUtf8 ) );
+			PCodeWriter cpp_cw( new FileCodeWriter( AppData()->GetCPPOutputPath() + file + wxT( ".cpp" ), useMicrosoftBOM, useUtf8 ) );
 
 			codegen.SetHeaderWriter( h_cw );
 			codegen.SetSourceWriter( cpp_cw );

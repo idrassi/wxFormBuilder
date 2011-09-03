@@ -3,6 +3,9 @@
   <objectinfo class="Project" smallIcon="project.xpm" type="project">
     <property name="name" type="text">MyProject</property>
     <property name="path" type="path" help="The path to generated files">.</property>
+    <property name="cpp_path" type="path" help="The path to generated files">.</property>
+    <property name="h_path" type="path" help="The path to generated .h files.  If this path is not absolute, it will be relative to the location in the path property">.</property>
+    <property name="path" type="path" help="The path to generated .cpp files.  If this path is not absolute, it will be relative to the location in the path property">.</property>
 	<property name="embedded_files_path" type="path" help="The path to generated files for embedded files">res</property>
     <property name="file" type="text" help="The filenames for generated files" />
     <property name="relative_path" type="bool" help="Use relative paths for external files ( e.g. image files )">

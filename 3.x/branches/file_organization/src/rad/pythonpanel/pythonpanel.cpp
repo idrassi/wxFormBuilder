@@ -126,7 +126,7 @@ void PythonPanel::InitStyledTextCtrl( wxScintilla *stc )
 
 void PythonPanel::OnFind( wxFindDialogEvent& event )
 {
-	m_pythonPanel->ProcessEvent( event );
+	m_pythonPanel->GetEventHandler()->ProcessEvent( event );
 }
 
 void PythonPanel::OnPropertyModified( wxFBPropertyEvent& event )

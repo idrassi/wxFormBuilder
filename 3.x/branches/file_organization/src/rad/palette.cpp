@@ -78,7 +78,9 @@ void wxFbPalette::PopulateToolbar( PObjectPackage pkg, wxToolBar *toolbar )
 		}
 		if ( NULL == info->GetComponent() )
 		{
-			Debug::Print( _( "Missing Component for Class \"%s\" of Package \"%s\"." ), info->GetClassName().c_str(), pkg->GetPackageName().c_str() );
+			//char* cname = ;
+			//char* pname = ;
+			Debug::Print( _( "Missing Component for Class \"%s\" of Package \"%s\"." ), (const wxChar*)info->GetClassName().c_str() , (const wxChar*)pkg->GetPackageName().c_str() );
 		}
 		else
 		{
