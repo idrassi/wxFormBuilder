@@ -424,17 +424,18 @@ void TypeConv::ParseBitmapWithResource( const wxString& value, wxString* image, 
 		children.Add( child );
 	}
 
-	if( children.Index( wxT("Load From Art Provider") ) == wxNOT_FOUND )
+	if( children.Index( _("Load From Art Provider") ) == wxNOT_FOUND )
 	{
 		// "break;" was left out intentionally
 		long temp;
 		switch ( children.size() )
 		{
+            case 5:
 			case 4:
-				children[3].ToLong( &temp );
+				children[4].ToLong( &temp );
 				icoSize->SetHeight( temp );
 			case 3:
-				children[2].ToLong( &temp );
+				children[3].ToLong( &temp );
 				icoSize->SetWidth( temp );
 			case 2:
 				*image = children[1];
@@ -457,7 +458,7 @@ void TypeConv::ParseBitmapWithResource( const wxString& value, wxString* image, 
 			*source = children[0];
 		}
 	}
-wxLogDebug( wxT("TypeConv:ParseBitmap: image:%s source:%s"), image->c_str(), source->c_str() );
+wxLogDebug( wxT("TypeConv:ParseBitmap: source:%s image:%s "), source->c_str(), image->c_str() );
 }
 
 wxString TypeConv::MakeAbsolutePath ( const wxString& filename, const wxString& basePath )
