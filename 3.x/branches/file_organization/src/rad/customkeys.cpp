@@ -50,19 +50,19 @@ void CustomKeysEvtHandler::OnKeyPress(wxKeyEvent &event)
 
     PObjectBase obj = AppData()->GetSelectedObject();
     PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( wxT("C++") );
-
+	
     Debug::Print( wxT("#### Plantillas ####") );
-    Debug::Print((wxChar *)(code_info->GetTemplate( wxT("construction") ).c_str()));
-    Debug::Print((wxChar *)(code_info->GetTemplate( wxT("declaration") ).c_str()));
+    Debug::Print((code_info->GetTemplate( wxT("construction") ).c_str()));
+    Debug::Print((code_info->GetTemplate( wxT("declaration") ).c_str()));
 
     Debug::Print( wxT("#### Código ####") );
     {
       CppTemplateParser parser(obj,code_info->GetTemplate( wxT("construction") ), false, false, wxEmptyString );
-      Debug::Print((wxChar *)parser.ParseTemplate().c_str());
+      Debug::Print(parser.ParseTemplate().c_str());
     }
     {
       CppTemplateParser parser(obj,code_info->GetTemplate( wxT("declaration") ), false, false, wxEmptyString );
-      Debug::Print((wxChar *)parser.ParseTemplate().c_str());
+      Debug::Print(parser.ParseTemplate().c_str());
     }
   }
   else if (event.GetKeyCode() == 'C')

@@ -519,7 +519,7 @@ PObjectBase ApplicationData::GetSelectedObject()
 }
 
 PObjectBase ApplicationData::GetSelectedForm()
-{		
+{
 	if( ( m_selObj->GetObjectTypeName() == wxT( "form" ) ) ||
 		( m_selObj->GetObjectTypeName() == wxT( "menubar_form" ) ) ||
 		( m_selObj->GetObjectTypeName() == wxT( "toolbar_form" ) ) )
@@ -700,10 +700,10 @@ void ApplicationData::ExpandObject( PObjectBase obj, bool expand )
 {
 	PCommand command( new ExpandObjectCmd( obj, expand ) );
 	Execute( command );
-	
+
 	// collapse also all children ...
 	PropagateExpansion( obj, expand, !expand );
-	
+
 	NotifyObjectExpanded( obj );
 }
 
@@ -714,21 +714,21 @@ void ApplicationData::PropagateExpansion( PObjectBase obj, bool expand, bool up 
 		if( up )
 		{
 			PObjectBase child;
-			
+
 			for( size_t i = 0; i < obj->GetChildCount(); i++ )
 			{
 				child = obj->GetChild(i);
-				
+
 				PCommand command( new ExpandObjectCmd( child, expand ) );
 				Execute( command );
-				
+
 				PropagateExpansion( child, expand, up );
 			}
 		}
 		else
 		{
 			PropagateExpansion( obj->GetParent(), expand, up );
-			
+
 			PCommand command( new ExpandObjectCmd( obj, expand ) );
 			Execute( command );
 		}
@@ -745,7 +745,7 @@ bool ApplicationData::SelectObject( PObjectBase obj, bool force /*= false*/, boo
 	m_selObj = obj;
 
 	if ( notify )
-	{		
+	{
 		NotifyObjectSelected( obj, force );
 	}
 	return true;
@@ -755,7 +755,7 @@ void ApplicationData::CreateObject( wxString name )
 {
 	try
 	{
-		Debug::Print( wxT( "[ApplicationData::CreateObject] New %s" ), name.c_str() );
+		Debug::Print( wxT( "[ApplicationData::CreateObject] New %s" ), (const wxChar*)name.c_str() );
 
 		PObjectBase old_selected = GetSelectedObject();
 		PObjectBase parent = old_selected;
@@ -800,9 +800,9 @@ void ApplicationData::CreateObject( wxString name )
 
 		while ( obj && obj->GetObjectInfo()->GetObjectType()->IsItem() )
 			obj = ( obj->GetChildCount() > 0 ? obj->GetChild( 0 ) : PObjectBase() );
-			
+
 		NotifyObjectCreated( obj );
-			
+
 		if ( obj )
 		{
 			SelectObject( obj, true, true );
@@ -1580,7 +1580,7 @@ void ApplicationData::ConvertProjectProperties( ticpp::Element* project, const w
 			}
 		}
 	}
-	
+
 	// event_handler moved to the forms in version 1.10
 	if ( fileMajor < 1 || ( 1 == fileMajor && fileMinor < 10 ) )
 	{
@@ -1597,7 +1597,7 @@ void ApplicationData::ConvertProjectProperties( ticpp::Element* project, const w
 			{
 				object->LinkEndChild( ( *newProps.begin() )->Clone().get() );
 			}
-			
+
 			project->RemoveChild( *newProps.begin() );
 		}
 	}
@@ -2031,7 +2031,7 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
 		fileProp->SetValue( inherFile.GetName() );
 		genfileProp->SetValue( genFile.GetFullPath() );
 		typeProp->SetValue( form->GetClassName() );
-		
+
 		// Determine if Microsoft BOM should be used
 		bool useMicrosoftBOM = false;
 		PProperty pUseMicrosoftBOM = project->GetProperty( _("use_microsoft_bom") );
@@ -2054,11 +2054,17 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
 		if ( pCodeGen && TypeConv::FlagSet( wxT("C++"), pCodeGen->GetValue() ) )
 		{
 			CppCodeGenerator codegen;
-			const wxString& fullPath = inherFile.GetFullPath();
-			codegen.ParseFiles(fullPath + wxT(".h"), fullPath + wxT(".cpp"));
 			
-			PCodeWriter h_cw( new FileCodeWriter( fullPath + wxT(".h"), useMicrosoftBOM, useUtf8 ) );
-			PCodeWriter cpp_cw( new FileCodeWriter( fullPath + wxT(".cpp"), useMicrosoftBOM, useUtf8 ) );
+			inherFile.SetPath(GetIncludeOutputPath());
+			const wxString& fullPath_h = inherFile.GetFullPath();
+			
+			inherFile.SetPath(GetCPPOutputPath());
+			const wxString& fullPath_cpp = inherFile.GetFullPath();
+			
+			codegen.ParseFiles(fullPath_h + wxT(".h"), fullPath_cpp + wxT(".cpp"));
+
+			PCodeWriter h_cw( new FileCodeWriter( fullPath_h + wxT(".h"), useMicrosoftBOM, useUtf8 ) );
+			PCodeWriter cpp_cw( new FileCodeWriter( fullPath_cpp + wxT(".cpp"), useMicrosoftBOM, useUtf8 ) );
 
 			codegen.SetHeaderWriter( h_cw );
 			codegen.SetSourceWriter( cpp_cw );
@@ -2068,7 +2074,7 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
 		else if( pCodeGen && TypeConv::FlagSet( wxT("Python"), pCodeGen->GetValue() ) )
 		{
 			PythonCodeGenerator codegen;
-			
+
 			const wxString& fullPath = inherFile.GetFullPath();
 			PCodeWriter python_cw( new FileCodeWriter( fullPath + wxT(".py"), useMicrosoftBOM, useUtf8 ) );
 
@@ -2561,7 +2567,7 @@ void ApplicationData::NotifyEvent( wxFBEvent& event )
 	if ( count == 0 )
 	{
 		count++;
-		Debug::Print( wxT( "event: %s" ), event.GetEventName().c_str() );
+		Debug::Print( wxT( "event: %s" ), (const wxChar*)event.GetEventName().c_str() );
 		std::vector< wxEvtHandler* >::iterator handler;
 
 		for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )
@@ -2571,7 +2577,7 @@ void ApplicationData::NotifyEvent( wxFBEvent& event )
 	}
 	else
 	{
-		Debug::Print( wxT( "Pending event: %s" ), event.GetEventName().c_str() );
+		Debug::Print( wxT( "Pending event: %s" ), (const wxChar*)event.GetEventName().c_str() );
 		std::vector< wxEvtHandler* >::iterator handler;
 
 		for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )
@@ -2601,7 +2607,7 @@ void ApplicationData::NotifyObjectSelected( PObjectBase obj, bool force )
 {
 	wxFBObjectEvent event( wxEVT_FB_OBJECT_SELECTED, obj );
 	if( force ) event.SetString( wxT("force") );
-	
+
 	NotifyEvent( event );
 }
 
@@ -2677,13 +2683,13 @@ wxString ApplicationData::GetPathProperty( const wxString& pathName )
 				THROW_WXFBEX( wxT( "You must save the project when using a relative path for output files" ) );
 			}
 
-			path = wxFileName(  projectPath + 
-								wxFileName::GetPathSeparator() + 
-								pathEntry + 
+			path = wxFileName(  projectPath +
+								wxFileName::GetPathSeparator() +
+								pathEntry +
 								wxFileName::GetPathSeparator() );
-							
+
 			path.Normalize();
-			
+
 			// this approach is probably incorrect if the fb project is located under a symlink
 			/*path.SetCwd( projectPath );
 			path.MakeAbsolute();*/
@@ -2703,6 +2709,106 @@ wxString ApplicationData::GetPathProperty( const wxString& pathName )
 wxString ApplicationData::GetOutputPath()
 {
 	return GetPathProperty( wxT("path") );
+}
+
+
+wxString ApplicationData::GetIncludeOutputPath()
+{
+	PObjectBase project = GetProjectData();
+	wxFileName path;
+	wxString pathName = wxT("h_path");
+	// Get the output path
+	PProperty ppath = project->GetProperty( pathName );
+
+	if ( ppath )
+	{
+		wxString pathEntry = ppath->GetValue();
+
+		if ( pathEntry.empty() )
+		{
+			THROW_WXFBEX( wxT( "You must set the \"") + pathName + wxT("\" property of the project to a valid path for output files" ) );
+		}
+
+		path = wxFileName::DirName( pathEntry );
+
+		if ( !path.IsAbsolute() )
+		{
+			wxString projectPath = AppData()->GetOutputPath();
+
+			if ( projectPath.empty() )
+			{
+				THROW_WXFBEX( wxT( "You must save the project when using a relative path for output files" ) );
+			}
+
+			path = wxFileName(  projectPath +
+								wxFileName::GetPathSeparator() +
+								pathEntry +
+								wxFileName::GetPathSeparator() );
+
+			path.Normalize();
+
+			// this approach is probably incorrect if the fb project is located under a symlink
+			/*path.SetCwd( projectPath );
+			path.MakeAbsolute();*/
+		}
+	}
+
+	if ( !path.DirExists() )
+	{
+		THROW_WXFBEX( wxT( "Invalid Path: " ) << path.GetPath() << wxT( "\nYou must set the \"") + pathName + wxT("\" property of the project to a valid path for output files" ) );
+	}
+
+	return path.GetPath( wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR );
+}
+
+
+wxString ApplicationData::GetCPPOutputPath()
+{
+	PObjectBase project = GetProjectData();
+	wxFileName path;
+	wxString pathName = wxT("cpp_path");
+	// Get the output path
+	PProperty ppath = project->GetProperty( pathName );
+
+	if ( ppath )
+	{
+		wxString pathEntry = ppath->GetValue();
+
+		if ( pathEntry.empty() )
+		{
+			THROW_WXFBEX( wxT( "You must set the \"") + pathName + wxT("\" property of the project to a valid path for output files" ) );
+		}
+
+		path = wxFileName::DirName( pathEntry );
+
+		if ( !path.IsAbsolute() )
+		{
+			wxString projectPath = AppData()->GetOutputPath();
+
+			if ( projectPath.empty() )
+			{
+				THROW_WXFBEX( wxT( "You must save the project when using a relative path for output files" ) );
+			}
+
+			path = wxFileName(  projectPath +
+								wxFileName::GetPathSeparator() +
+								pathEntry +
+								wxFileName::GetPathSeparator() );
+
+			path.Normalize();
+
+			// this approach is probably incorrect if the fb project is located under a symlink
+			/*path.SetCwd( projectPath );
+			path.MakeAbsolute();*/
+		}
+	}
+
+	if ( !path.DirExists() )
+	{
+		THROW_WXFBEX( wxT( "Invalid Path: " ) << path.GetPath() << wxT( "\nYou must set the \"") + pathName + wxT("\" property of the project to a valid path for output files" ) );
+	}
+
+	return path.GetPath( wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR );
 }
 
 wxString ApplicationData::GetEmbeddedFilesOutputPath()

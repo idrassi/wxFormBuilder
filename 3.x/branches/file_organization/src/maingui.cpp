@@ -62,11 +62,19 @@ void LogStack();
 
 static const wxCmdLineEntryDesc s_cmdLineDesc[] =
 {
+#if wxCHECK_VERSION(2,9,2)
+	{ wxCMD_LINE_SWITCH, "g", "generate",	"Generate code from passed file." },
+	{ wxCMD_LINE_OPTION, "l", "language",	"Override the code_generation property from the passed file and generate the passed languages. Separate multiple languages with commas." },
+	{ wxCMD_LINE_SWITCH, "h", "help",		"Show this help message.", wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_HELP  },
+	{ wxCMD_LINE_PARAM, NULL, NULL,	"File to open.", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
+	{ wxCMD_LINE_NONE }
+#else
 	{ wxCMD_LINE_SWITCH, wxT("g"), wxT("generate"),	wxT("Generate code from passed file.") },
 	{ wxCMD_LINE_OPTION, wxT("l"), wxT("language"),	wxT("Override the code_generation property from the passed file and generate the passed languages. Separate multiple languages with commas.") },
 	{ wxCMD_LINE_SWITCH, wxT("h"), wxT("help"),		wxT("Show this help message."), wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_HELP  },
 	{ wxCMD_LINE_PARAM, NULL, NULL,	wxT("File to open."), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
 	{ wxCMD_LINE_NONE }
+#endif
 };
 
 IMPLEMENT_APP( MyApp )

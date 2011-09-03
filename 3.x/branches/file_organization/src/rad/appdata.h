@@ -366,6 +366,17 @@ class ApplicationData
 		Path where the files will be generated.
 		*/
 		wxString GetOutputPath();
+		
+		/**
+		Path where the .h include files will be generated.
+		*/
+		wxString GetIncludeOutputPath();
+		
+		
+		/**
+		Path where the .cpp source files will be generated.
+		*/
+		wxString GetCPPOutputPath();
 
 		/**
 		Path where the embedded bitmap files will be generated.
