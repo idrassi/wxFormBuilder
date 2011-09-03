@@ -106,6 +106,9 @@ public:
     wxPGProperty *CreatePropertyArtId();
     wxPGProperty *CreatePropertyArtClient();
 
+    wxString SetupImage( const wxString &imgPath = wxEmptyString );
+    wxString SetupResource( const wxString &resName = wxEmptyString );
+
 #if wxVERSION_NUMBER < 2900
     virtual void
 #else
