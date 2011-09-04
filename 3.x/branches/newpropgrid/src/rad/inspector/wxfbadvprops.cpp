@@ -499,12 +499,19 @@ wxLogDebug( wxT("wxFBBP::ChildChanged: thisValue:%s childIndex:%i childValue:%s 
                 {
                     wxPGProperty *propFilePath = bp->CreatePropertyFilePath();
 
-                    if ( !img.empty() )
-                        propFilePath->SetValue( WXVARIANT( img ) );
-
                     bp->AppendChild( propFilePath );
 
-                    newVal = src + wxT("; ") + img;
+                    if ( !img.empty() )
+                    {
+                        propFilePath->SetValue( WXVARIANT( img ) );
+                        newVal = src + wxT("; ") + img;
+                    }
+                    else
+                    {
+                        propFilePath->SetValueToUnspecified();
+                    }
+
+
                     break;
                 }
                 // 'Load From Resource'
@@ -589,6 +596,16 @@ wxLogDebug( wxT("wxFBBP::ChildChanged: thisValue:%s childIndex:%i childValue:%s 
 
                     wxFileName imgPath( childValue.GetString() );
                     gs_imageInitialPath = imgPath.GetPath();
+
+                    if ( !img.empty() )
+                    {
+                        imgFileProp->SetValue( WXVARIANT( img ) );
+                    }
+                    else
+                    {
+                        imgFileProp->SetValueToUnspecified();
+                    }
+                    newVal = src + wxT("; ") + img;
                 }
             }
             break;
@@ -601,12 +618,19 @@ wxLogDebug( wxT("wxFBBP::ChildChanged: thisValue:%s childIndex:%i childValue:%s 
         bp->SetValue( ret );
 
 #if wxVERSION_NUMBER >= 2900
-        wxLogDebug( wxT("wxFBBP::ChildChanged: thisValue:%s childIndex:%i childValue:%s (End)"),
-                        ret.GetString().c_str(), childIndex, childValue.GetString().c_str() );
+
         return ret;
 #else
         thisValue = ret;
+        wxLogDebug( wxT("wxFBBP::ChildChanged: thisValue:%s childIndex:%i childValue:%s (End)"),
+                        ret.GetString().c_str(), childIndex, childValue.GetString().c_str() );
+#endif
+    }
+    else
+    {
+#if wxVERSION_NUMBER >= 2900
 
+#else
         wxLogDebug( wxT("wxFBBP::ChildChanged: thisValue:%s childIndex:%i childValue:%s (End)"),
                         thisValue.GetString().c_str(), childIndex, childValue.GetString().c_str() );
 #endif
