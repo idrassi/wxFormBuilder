@@ -635,53 +635,53 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
 {
     wxPGProperty* propPtr = event.GetProperty();
 
-    wxPGProperty       *parent  = propPtr->GetParent();
-    wxFBBitmapProperty *bp = wxDynamicCast( parent, wxFBBitmapProperty );
-
-    // Handle the main bitmap property
-    if ( bp )
-    {
-#if wxVERSION_NUMBER >= 2900
-        // GetValue() returns wxVariant, but it is converted transparently to wxAny
-        wxAny
-#else
-        wxVariant
-#endif
-        childValue = propPtr->GetValue();
-
-        // Also, handle the case where property value is unspecified
-        if ( childValue.IsNull() )
-            return;
-
-        // bp->GetValue() have no updated value...
-        wxString bmpVal = bp->GetValueAsString( wxPG_FULL_VALUE );
-
-        // Handle changes in values, as needed
-        wxVariant    thisValue  = WXVARIANT( bmpVal );
-        unsigned int childIndex = propPtr->GetIndexInParent();
-
-wxLogDebug( wxT("OI::OnPGChanged: thisValue (AsString):%s"),  bp->GetValueAsString().c_str() );
-wxLogDebug( wxT("OI::OnPGChanged: childValue (AsString):%s"), propPtr->GetValueAsString().c_str() );
-wxLogDebug( wxT("OI::OnPGChanged: thisValue:%s childIndex:%i childValue:%s" ), 
-        thisValue.GetString().c_str(), childIndex, childValue.GetString().c_str() );
-
-        ObjInspectorPropertyMap::iterator itBmp = m_propMap.find( bp );
-        PProperty bmpProp = itBmp->second;
-
-#if wxVERSION_NUMBER >= 2900
-        wxVariant newVal = 
-#endif
-        bp->ChildChanged( thisValue, propPtr->GetIndexInParent(), childValue );
-
-#if wxVERSION_NUMBER >= 2900
-        AppData()->ModifyProperty( bmpProp, newVal.GetString() );
-#else
-        wxLogDebug( wxT("OI::OnPGChanged: Setting prop value to %s"), thisValue.GetString().c_str() );
-        AppData()->ModifyProperty( bmpProp, thisValue.GetString() );
-        wxLogDebug( wxT("OI::OnPGChanged: Changed prop value to %s"), bmpProp->GetValueAsString().c_str() );
-#endif
-    }
-
+//    wxPGProperty       *parent  = propPtr->GetParent();
+//    wxFBBitmapProperty *bp = wxDynamicCast( parent, wxFBBitmapProperty );
+//
+//    // Handle the main bitmap property
+//    if ( bp )
+//    {
+//#if wxVERSION_NUMBER >= 2900
+//        // GetValue() returns wxVariant, but it is converted transparently to wxAny
+//        wxAny
+//#else
+//        wxVariant
+//#endif
+//        childValue = propPtr->GetValue();
+//
+//        // Also, handle the case where property value is unspecified
+//        if ( childValue.IsNull() )
+//            return;
+//
+//        // bp->GetValue() have no updated value...
+//        wxString bmpVal = bp->GetValueAsString( wxPG_FULL_VALUE );
+//
+//        // Handle changes in values, as needed
+//        wxVariant    thisValue  = WXVARIANT( bmpVal );
+//        unsigned int childIndex = propPtr->GetIndexInParent();
+//
+//wxLogDebug( wxT("OI::OnPGChanged: thisValue (AsString):%s"),  bp->GetValueAsString().c_str() );
+//wxLogDebug( wxT("OI::OnPGChanged: childValue (AsString):%s"), propPtr->GetValueAsString().c_str() );
+//wxLogDebug( wxT("OI::OnPGChanged: thisValue:%s childIndex:%i childValue:%s" ), 
+//        thisValue.GetString().c_str(), childIndex, childValue.GetString().c_str() );
+//
+//        ObjInspectorPropertyMap::iterator itBmp = m_propMap.find( bp );
+//        PProperty bmpProp = itBmp->second;
+//
+//#if wxVERSION_NUMBER >= 2900
+//        wxVariant newVal = 
+//#endif
+//        bp->ChildChanged( thisValue, propPtr->GetIndexInParent(), childValue );
+//
+//#if wxVERSION_NUMBER >= 2900
+//        AppData()->ModifyProperty( bmpProp, newVal.GetString() );
+//#else
+//        wxLogDebug( wxT("OI::OnPGChanged: Setting prop value to %s"), thisValue.GetString().c_str() );
+//        AppData()->ModifyProperty( bmpProp, thisValue.GetString() );
+//        wxLogDebug( wxT("OI::OnPGChanged: Changed prop value to %s"), bmpProp->GetValueAsString().c_str() );
+//#endif
+//    }
+	
     ObjInspectorPropertyMap::iterator it = m_propMap.find( propPtr );
 
     if ( m_propMap.end() == it )
@@ -841,10 +841,41 @@ wxLogDebug( wxT("OI::OnPGChanged: thisValue:%s childIndex:%i childValue:%s" ),
             }
             case PT_BITMAP:
             {
-                wxString bmpVal = event.GetProperty()->GetParent()->GetValue().GetString();
-wxLogDebug( wxT("OI::OnPGChanged: bmpVal:%s"), bmpVal.c_str() );
+				
 
-//              AppData()->ModifyProperty( prop, bmpVal );
+#if wxVERSION_NUMBER >= 2900
+        // GetValue() returns wxVariant, but it is converted transparently to wxAny
+        wxAny
+#else
+        wxVariant
+#endif
+        childValue = event.GetProperty()->GetValue();
+
+        // Also, handle the case where property value is unspecified
+        if ( childValue.IsNull() )
+            return;
+
+        // bp->GetValue() have no updated value...
+        wxString bmpVal = propPtr->GetValueAsString( wxPG_FULL_VALUE );
+		//wxMessageBox(propPtr->GetValueAsString( wxPG_FULL_VALUE ));
+
+        // Handle changes in values, as needed
+        //wxVariant    thisValue  = bmpVal;
+
+#if wxVERSION_NUMBER >= 2900
+        wxVariant newVal = 
+#endif
+//        propPtr->ChildChanged( thisValue, event.GetProperty()->GetIndexInParent(), childValue );
+
+#if wxVERSION_NUMBER >= 2900
+        AppData()->ModifyProperty( prop, newVal.GetString() );
+#else
+        AppData()->ModifyProperty( prop, bmpVal);
+#endif
+				
+               // wxString bmpVal = event.GetProperty()->GetParent()->GetValue().GetString();
+
+              //AppData()->ModifyProperty( prop, bmpVal );
                 break;
             }
 
