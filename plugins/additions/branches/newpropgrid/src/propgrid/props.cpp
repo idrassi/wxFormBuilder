@@ -50,9 +50,10 @@
 
 #include <wx/filename.h>
 
-#include <wx/propgrid/propgrid.h>
+//#include <wx/propgrid/propgrid.h>
 
 #include <wx/propgrid/propdev.h>
+#include <wx/propgrid/editors.h>
 
 
 #define wxPG_CUSTOM_IMAGE_WIDTH     20 // for wxColourProperty etc.
@@ -155,6 +156,9 @@ bool wxStringProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 
 #ifndef wxUINT64_MAX
     #define wxUINT64_MAX wxULL(0xFFFFFFFFFFFFFFFF)
+#endif
+
+#ifndef wxUINT64_MIN
     #define wxUINT64_MIN wxULL(0)
 #endif
 

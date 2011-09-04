@@ -148,12 +148,13 @@ std::string TypeConv::_WxStringToString(const wxString &str)
 
 std::string TypeConv::_WxStringToAnsiString(const wxString &str)
 {
-//    std::string newstr( str.mb_str(wxConvISO8859_1) );
-    setlocale(LC_ALL, "");
-    size_t len = wcstombs(NULL, str.c_str(), 0);
-    std::vector<char> buf(len + 1);
-    wcstombs(&buf[0], str.c_str(), len);
-    return std::string(&buf[0]);
+    std::string newstr( str.mb_str(wxConvISO8859_1) );
+	return newstr;
+//    setlocale(LC_ALL, "");
+//    size_t len = wcstombs(NULL, str.char_str(), 0);
+//    std::vector<char> buf(len + 1);
+//    wcstombs(&buf[0], str.char_str(), len);
+//    return std::string(&buf[0]);
 }
 
 bool TypeConv::StringToPoint(const wxString &val, wxPoint *point)

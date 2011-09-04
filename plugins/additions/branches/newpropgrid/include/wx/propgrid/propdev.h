@@ -12,8 +12,11 @@
 #ifndef _WX_PROPGRID_PROPDEV_H_
 #define _WX_PROPGRID_PROPDEV_H_
 
+
 // -----------------------------------------------------------------------
 
+
+#include "propgrid.h"
 
 class WXDLLIMPEXP_PG wxArrayEditorDialog;
 
