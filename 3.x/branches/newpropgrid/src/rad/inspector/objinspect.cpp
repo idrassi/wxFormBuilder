@@ -57,6 +57,7 @@
 // ObjectInspector
 // -----------------------------------------------------------------------
 BEGIN_EVENT_TABLE(ObjectInspector, wxPanel)
+    EVT_PG_CHANGING(WXFB_PROPERTY_GRID, ObjectInspector::OnPropertyGridChanging)
     EVT_PG_CHANGED(WXFB_PROPERTY_GRID, ObjectInspector::OnPropertyGridChanged)
     EVT_PG_CHANGED(WXFB_EVENT_GRID, ObjectInspector::OnEventGridChanged)
     EVT_PG_DOUBLE_CLICK(WXFB_EVENT_GRID, ObjectInspector::OnEventGridDblClick)
@@ -609,6 +610,27 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
     }
 }
 
+void ObjectInspector::OnPropertyGridChanging( wxPropertyGridEvent& event )
+{
+    wxImageFileProperty *imgFileProp = wxDynamicCast( event.GetProperty(), wxImageFileProperty );
+
+    if ( imgFileProp )
+    {
+        // GetValue() returns the pending value, but is only supported by wxEVT_PG_CHANGING.
+        wxFBBitmapProperty *bmpProp = wxDynamicCast( imgFileProp->GetParent(), wxFBBitmapProperty );
+
+        if ( bmpProp )
+        {
+            wxString img = bmpProp->SetupImage( event.GetValue().GetString() );
+            if ( img == wxEmptyString )
+            {
+                event.Veto();
+                return;
+            }
+        }
+    }
+}
+
 void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
 {
     wxPGProperty* propPtr = event.GetProperty();
@@ -655,7 +677,7 @@ wxLogDebug( wxT("OI::OnPGChanged: thisValue:%s childIndex:%i childValue:%s" ),
         AppData()->ModifyProperty( bmpProp, newVal.GetString() );
 #else
         wxLogDebug( wxT("OI::OnPGChanged: Setting prop value to %s"), thisValue.GetString().c_str() );
-//      AppData()->ModifyProperty( bmpProp, thisValue.GetString() );
+        AppData()->ModifyProperty( bmpProp, thisValue.GetString() );
         wxLogDebug( wxT("OI::OnPGChanged: Changed prop value to %s"), bmpProp->GetValueAsString().c_str() );
 #endif
     }
@@ -979,7 +1001,7 @@ void ObjectInspector::OnPropertyModified( wxFBPropertyEvent& event )
         }
         break;
     case PT_BITMAP:
-        pgProp->SetValue( WXVARIANT( prop->GetValueAsString() ) );
+//      pgProp->SetValue( WXVARIANT( prop->GetValueAsString() ) );
         wxLogDebug( wxT("OI::OnPropertyModified: prop:%s"), prop->GetValueAsString().c_str() ); 
         break;
     default:

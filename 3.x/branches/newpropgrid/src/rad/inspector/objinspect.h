@@ -136,6 +136,7 @@ private:
 
     void Create( bool force = false );
 
+    void OnPropertyGridChanging( wxPropertyGridEvent& event );
     void OnPropertyGridChanged( wxPropertyGridEvent& event );
     void OnEventGridChanged( wxPropertyGridEvent& event );
     void OnPropertyGridDblClick( wxPropertyGridEvent& event );
