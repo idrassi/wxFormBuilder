@@ -223,11 +223,11 @@ void ObjectToXrcFilter::AddProperty( const wxString &objPropName,
 				}
 
 				wxString source = bitmapProp.substr( filename.size() + 2 );
-				if ( source.StartsWith( wxT( "Load From File" ) ) || source.StartsWith( wxT( "Load From Embedded File" ) ) )
+				if ( source.StartsWith( _("Load From File") ) || source.StartsWith( _("Load From Embedded File") ) )
 				{
 					LinkText( filename, &propElement );
 				}
-				else if( source.Contains( wxT("Load From Art Provider") ) )
+				else if( source.Contains( _("Load From Art Provider") ) )
 				{
 					propElement.SetAttribute( "stock_id", filename.mb_str( wxConvUTF8 ) );
 					propElement.SetAttribute( "stock_client", source.BeforeFirst( wxT(';') ).mb_str( wxConvUTF8 ) );

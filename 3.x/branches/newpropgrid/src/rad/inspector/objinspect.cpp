@@ -641,7 +641,7 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
 wxLogDebug( wxT("OI::OnPGChanged: thisValue (AsString):%s"),  bp->GetValueAsString().c_str() );
 wxLogDebug( wxT("OI::OnPGChanged: childValue (AsString):%s"), propPtr->GetValueAsString().c_str() );
 wxLogDebug( wxT("OI::OnPGChanged: thisValue:%s childIndex:%i childValue:%s" ), 
-                thisValue.GetString().c_str(), childIndex, childValue.GetString().c_str() );
+        thisValue.GetString().c_str(), childIndex, childValue.GetString().c_str() );
 
         ObjInspectorPropertyMap::iterator itBmp = m_propMap.find( bp );
         PProperty bmpProp = itBmp->second;
@@ -651,14 +651,13 @@ wxLogDebug( wxT("OI::OnPGChanged: thisValue:%s childIndex:%i childValue:%s" ),
 #endif
         bp->ChildChanged( thisValue, propPtr->GetIndexInParent(), childValue );
 
-wxLogDebug( wxT("OI::OnPGChanged: Setting prop value to %s"), thisValue.GetString().c_str() );
-
 #if wxVERSION_NUMBER >= 2900
         AppData()->ModifyProperty( bmpProp, newVal.GetString() );
 #else
-        AppData()->ModifyProperty( bmpProp, thisValue.GetString() );
+        wxLogDebug( wxT("OI::OnPGChanged: Setting prop value to %s"), thisValue.GetString().c_str() );
+//      AppData()->ModifyProperty( bmpProp, thisValue.GetString() );
+        wxLogDebug( wxT("OI::OnPGChanged: Changed prop value to %s"), bmpProp->GetValueAsString().c_str() );
 #endif
-wxLogDebug( wxT("OI::OnPGChanged: Changed prop value to %s"), bmpProp->GetValueAsString().c_str() );
     }
 
     ObjInspectorPropertyMap::iterator it = m_propMap.find( propPtr );
@@ -823,7 +822,7 @@ wxLogDebug( wxT("OI::OnPGChanged: Changed prop value to %s"), bmpProp->GetValueA
                 wxString bmpVal = event.GetProperty()->GetParent()->GetValue().GetString();
 wxLogDebug( wxT("OI::OnPGChanged: bmpVal:%s"), bmpVal.c_str() );
 
-                AppData()->ModifyProperty( prop, bmpVal );
+//              AppData()->ModifyProperty( prop, bmpVal );
                 break;
             }
 
@@ -980,7 +979,7 @@ void ObjectInspector::OnPropertyModified( wxFBPropertyEvent& event )
         }
         break;
     case PT_BITMAP:
-        pgProp->SetValueFromString( prop->GetValueAsString(), wxPG_FULL_VALUE );
+        pgProp->SetValue( WXVARIANT( prop->GetValueAsString() ) );
         wxLogDebug( wxT("OI::OnPropertyModified: prop:%s"), prop->GetValueAsString().c_str() ); 
         break;
     default:
