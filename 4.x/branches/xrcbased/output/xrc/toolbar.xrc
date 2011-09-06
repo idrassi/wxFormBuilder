@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
+	<object class="wxToolBar" name="toolbar">
+		<style>wxTB_HORIZONTAL</style>
+		<bitmapsize></bitmapsize>
+		<margins></margins>
+		<packing>1</packing>
+		<separation>5</separation>
+		<object class="tool" name="btn_new_prj">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/file_new.png</bitmap>
+		</object>
+		<object class="tool" name="btn_open_prj">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/file_open.png</bitmap>
+		</object>
+		<object class="tool" name="btn_save_prj">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/file_save.png</bitmap>
+		</object>
+		<object class="separator" />
+		<object class="tool" name="btn_undo">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/edit_undo.png</bitmap>
+		</object>
+		<object class="tool" name="btn_redo">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/edit_redo.png</bitmap>
+		</object>
+		<object class="separator" />
+		<object class="tool" name="btn_cut">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/edit-cut.png</bitmap>
+		</object>
+		<object class="tool" name="btn_copy">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/edit-copy.png</bitmap>
+		</object>
+		<object class="tool" name="btn_paste">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/edit-paste.png</bitmap>
+		</object>
+		<object class="tool" name="btn_delete">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/delete.png</bitmap>
+		</object>
+		<object class="separator" />
+		<object class="tool" name="btn_gen">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/generate.png</bitmap>
+		</object>
+		<object class="separator" />
+		<object class="tool" name="btn_align_l">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/align_l.png</bitmap>
+			<radio>1</radio>
+		</object>
+		<object class="tool" name="btn_align_ch">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/align_ch.png</bitmap>
+			<radio>1</radio>
+		</object>
+		<object class="tool" name="btn_align_r">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/align_r.png</bitmap>
+			<radio>1</radio>
+		</object>
+		<object class="separator" />
+		<object class="tool" name="btn_align_t">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/align_t.png</bitmap>
+			<radio>1</radio>
+		</object>
+		<object class="tool" name="btn_align_cv">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/align_cv.png</bitmap>
+			<radio>1</radio>
+		</object>
+		<object class="tool" name="btn_align_b">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/align_b.png</bitmap>
+			<radio>1</radio>
+		</object>
+		<object class="separator" />
+		<object class="tool" name="btn_p_expand">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/p_expand.png</bitmap>
+			<toggle>1</toggle>
+		</object>
+		<object class="tool" name="btn_p_stretch">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/p_stretch.png</bitmap>
+			<toggle>1</toggle>
+		</object>
+		<object class="separator" />
+		<object class="tool" name="btn_border_l">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/border_l.png</bitmap>
+			<toggle>1</toggle>
+		</object>
+		<object class="tool" name="btn_border_r">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/border_r.png</bitmap>
+			<toggle>1</toggle>
+		</object>
+		<object class="tool" name="btn_border_t">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/border_t.png</bitmap>
+			<toggle>1</toggle>
+		</object>
+		<object class="tool" name="btn_border_b">
+			<label></label>
+			<tooltip></tooltip>
+			<longhelp></longhelp>
+			<bitmap>images/border_b.png</bitmap>
+			<toggle>1</toggle>
+		</object>
+	</object>
+</resource>

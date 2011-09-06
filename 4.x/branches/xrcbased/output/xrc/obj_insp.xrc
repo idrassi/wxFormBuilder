@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
+	<object class="wxPanel" name="obj_insp_panel">
+		<style>wxTAB_TRAVERSAL</style>
+		<size>210,420</size>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxEXPAND|wxLEFT</flag>
+				<border>5</border>
+				<object class="wxStaticText" name="obj_insp_title">
+					<font>
+						<size>8</size>
+						<family>default</family>
+						<style>normal</style>
+						<weight>bold</weight>
+						<underlined>0</underlined>
+					</font>
+					<label>Object Properties</label>
+					<wrap>-1</wrap>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>1</option>
+				<flag>wxEXPAND</flag>
+				<border>5</border>
+				<object class="wxNotebook" name="obj_insp_book">
+					<object class="notebookpage">
+						<label>Properties</label>
+						<selected>0</selected>
+						<object class="wxPanel" name="obj_insp_props_page">
+							<style>wxTAB_TRAVERSAL</style>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>1</option>
+									<flag>wxEXPAND</flag>
+									<border>5</border>
+									<object class="wxPropertyGridManager" name="obj_insp_props_pgman" />
+								</object>
+							</object>
+						</object>
+					</object>
+					<object class="notebookpage">
+						<label>Events</label>
+						<selected>0</selected>
+						<object class="wxPanel" name="obj_insp_events_page">
+							<style>wxTAB_TRAVERSAL</style>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>1</option>
+									<flag>wxEXPAND</flag>
+									<border>5</border>
+									<object class="wxPropertyGridManager" name="obj_insp_events_pgman" />
+								</object>
+							</object>
+						</object>
+					</object>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>
