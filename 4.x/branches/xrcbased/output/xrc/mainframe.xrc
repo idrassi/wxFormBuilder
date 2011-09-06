@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
+	<object class="wxFrame" name="mainframe">
+		<style>wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL</style>
+		<size>630,480</size>
+		<title>wxFormBuilder v4.0 - beta</title>
+		<centered>1</centered>
+		<aui_managed>0</aui_managed>
+		<object class="wxSplitterWindow" name="left_splitter">
+			<style>wxSP_3D</style>
+			<sashpos>120</sashpos>
+			<gravity>0</gravity>
+			<minsize>0</minsize>
+			<orientation>vertical</orientation>
+			<object class="wxPanel" name="obj_tree_pnl">
+				<style>wxTAB_TRAVERSAL</style>
+				<object class="wxBoxSizer">
+					<orient>wxVERTICAL</orient>
+				</object>
+			</object>
+			<object class="wxPanel" name="right panel">
+				<style>wxTAB_TRAVERSAL</style>
+				<object class="wxBoxSizer">
+					<orient>wxVERTICAL</orient>
+					<object class="sizeritem">
+						<option>0</option>
+						<flag>wxEXPAND | wxALL</flag>
+						<border>5</border>
+						<object class="wxPanel" name="palette_pnl">
+							<style>wxTAB_TRAVERSAL</style>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+							</object>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND</flag>
+						<border>5</border>
+						<object class="wxSplitterWindow" name="right_splitter">
+							<style>wxSP_3D</style>
+							<sashpos>360</sashpos>
+							<gravity>0</gravity>
+							<minsize>0</minsize>
+							<orientation>vertical</orientation>
+							<object class="wxPanel" name="editor_pnl">
+								<style>wxTAB_TRAVERSAL</style>
+								<object class="wxBoxSizer">
+									<orient>wxVERTICAL</orient>
+								</object>
+							</object>
+							<object class="wxPanel" name="obj_insp_pnl">
+								<style>wxTAB_TRAVERSAL</style>
+								<object class="wxBoxSizer">
+									<orient>wxVERTICAL</orient>
+								</object>
+							</object>
+						</object>
+					</object>
+				</object>
+			</object>
+		</object>
+		<object class="wxStatusBar" name="statusbar">
+			<style>wxST_SIZEGRIP</style>
+			<fields>3</fields>
+		</object>
+	</object>
+</resource>
