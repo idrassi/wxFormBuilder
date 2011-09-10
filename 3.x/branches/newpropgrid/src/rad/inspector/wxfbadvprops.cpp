@@ -32,6 +32,7 @@
 
 #include <wx/file.h>
 #include <wx/log.h>
+#include <wx/tokenzr.h>
 
 // -----------------------------------------------------------------------
 // wxFBSizeProperty
@@ -174,6 +175,53 @@ wxFBBitmapProperty::wxFBBitmapProperty( const wxString& label,
                                         const wxString& value ) : wxPGProperty( label, name )
 {
     SetValue( WXVARIANT( value ) );
+	
+}
+
+void wxFBBitmapProperty::CreateChildren()
+{
+	wxString  propValue  = m_value.GetString();
+	wxVariant thisValue  = WXVARIANT( propValue );
+	wxVariant childValue;
+	int       childIndex;
+	wxArrayString childVals = wxStringTokenize(propValue, wxT(';'), wxTOKEN_RET_EMPTY_ALL);
+	wxString  source;
+	if(childVals.Count() > 0)
+	{    
+		source = childVals.Item(0);
+	}
+	else
+	{
+		source = _("Load From File");
+	}
+	prevSrc = -1;
+	if ( source == wxString(_("Load From File") ) )
+	{
+		childIndex = 0;
+	}
+	else if ( source == wxString(_("Load From Embedded File") ) )
+	{
+		childIndex = 1;
+	}
+	else if ( source == wxString(_("Load From Resource") ) )
+	{
+		childIndex = 2;
+	}
+	else if ( source == wxString(_("Load From Icon Resource") ) )
+	{
+		childIndex = 3;
+	}
+	else if ( source == wxString(_("Load From Art Provider") ) )
+	{
+		childIndex = 4;
+	}
+
+	childValue = WXVARIANT( childIndex );
+
+	CreatePropertySource( childIndex );
+
+	ChildChanged( thisValue, 0, childValue );
+
 }
 
 wxPGProperty *wxFBBitmapProperty::CreatePropertySource( int sourceIndex )
@@ -212,10 +260,10 @@ wxPGProperty *wxFBBitmapProperty::CreatePropertyFilePath()
     wxPGProperty *propFilePath = new wxImageFileProperty( wxT("file_path"), wxPG_LABEL );
     propFilePath->SetHelpString(_("Path to the image file.") );
 
-    if ( !gs_imageInitialPath.empty() )
+    if ( !gs_imageInitialPath.IsEmpty() )
     {
-        wxVariant initialPath( gs_imageInitialPath );
-        propFilePath->SetAttribute( wxPG_FILE_INITIAL_PATH, initialPath );
+        //wxVariant initialPath( gs_imageInitialPath );
+        //propFilePath->SetAttribute( wxPG_FILE_INITIAL_PATH, initialPath );
     }
 
     return propFilePath;
@@ -421,55 +469,12 @@ wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
                                   int        childIndex,
                                   wxVariant& childValue ) const
 {
-wxLogDebug( wxT("wxFBBP::ChildChanged: thisValue:%s childIndex:%i childValue:%s (Begin)"),
-                thisValue.GetString().c_str(), childIndex, childValue.GetString().c_str() );
 
-    // Get our property instance
-    wxFBBitmapProperty *bp = ( wxFBBitmapProperty * )Item( 0 )->GetParent();
-
-    // Error check
-    if ( !bp )
-    {
-        wxLogDebug( wxT("wxFBBitmapProperty creation failed.") );
-
-#if wxVERSION_NUMBER < 2900
-        return;
-#else
-        return thisValue;
-#endif
-    }
-
+	wxFBBitmapProperty* bp = (wxFBBitmapProperty*)this;
+	
     wxString val = thisValue.GetString();
-    wxString newVal = val;
-
-    // 'source'
-    wxString src = wxGetTranslation( val.BeforeFirst( wxT(';') ) );
-
-    if ( src.empty() ) src = _("Load From File");
-
-    // 'id; client'
-    wxString art = val.AfterFirst( wxT(';') ).Trim( false );
-
-    wxString img = art;
-
-    // 'file_path'
-    if ( (src == _("Load From File")) || (src == _("Load From Embedded File")) )
-    {
-        img = bp->SetupImage( img );
-    }
-    else if ( (src == _("Load From Resource")) || (src == _("Load From Icon Resource")) )
-    {
-        img = bp->SetupResource( img );
-
-        if ( src == _("Load From Resource") )
-        {
-            childValue = WXVARIANT( 2 );
-        }
-        else
-        {
-            childValue = WXVARIANT( 3 );
-        }
-    }
+	wxArrayString childVals = wxStringTokenize(val, wxT(';'), wxTOKEN_RET_EMPTY_ALL);
+	wxString newVal;
 
     // Find the appropriate new state
     switch ( childIndex )
@@ -477,18 +482,17 @@ wxLogDebug( wxT("wxFBBP::ChildChanged: thisValue:%s childIndex:%i childValue:%s 
         // source
         case 0:
         {
-            unsigned int count = GetChildCount();
-
-            // Delete all children but 'source' one
-            for ( unsigned int i = 1; i < count; i++ )
+			unsigned int count = GetChildCount();
+            // remove all children but 'source' one
+          /* for ( unsigned int i = 1; i<count ;i++ )
             {
-                wxPGProperty *p = Item( i );
+                wxPGProperty *p = Item(i) ;
                 if ( p )
                 {
                     wxLogDebug( wxT("wxFBBP::ChildChanged: Removing:%s"), p->GetLabel().c_str() );
                     GetGrid()->RemoveProperty( p );
                 }
-            }       
+            }  */ 
 
             // childValue.GetInteger() returns the chosen item index
             switch ( childValue.GetInteger() )
@@ -497,86 +501,92 @@ wxLogDebug( wxT("wxFBBP::ChildChanged: thisValue:%s childIndex:%i childValue:%s 
                 case 0:
                 case 1:
                 {
-                    wxPGProperty *propFilePath = bp->CreatePropertyFilePath();
-
-                    bp->AppendChild( propFilePath );
-
-                    if ( !img.empty() )
-                    {
-                        propFilePath->SetValue( WXVARIANT( img ) );
-                        newVal = src + wxT("; ") + img;
-                    }
-                    else
-                    {
-                        propFilePath->SetValueToUnspecified();
-                    }
-
+					if(prevSrc != 0 && prevSrc!= 1)
+					{
+					   for ( unsigned int i = 1; i<count ;i++ )
+						{
+							wxPGProperty *p = Item(i) ;
+							if ( p)
+							{
+								wxLogDebug( wxT("wxFBBP::ChildChanged: Removing:%s"), p->GetLabel().c_str() );
+								GetGrid()->DeleteProperty( p );
+							}
+						} 
+						bp->AppendChild( bp->CreatePropertyFilePath() );
+					}
+					Item(1)->SetValue(childVals.Item(1));
+					newVal = Item(0)->GetValueAsString() + wxT("; ") + Item(1)->GetValueAsString();
 
                     break;
                 }
                 // 'Load From Resource'
                 case 2:
                 {
-                    wxPGProperty *propResName = bp->CreatePropertyResourceName();
-
-                    if ( !img.empty() )
-                        propResName->SetValue( WXVARIANT( img ) );
-
-                    bp->AppendChild( propResName );
-
-                    newVal = src + wxT("; ") + img;
+					if(prevSrc != 2)
+					{
+						for ( unsigned int i = 1; i<count ;i++ )
+						{
+							wxPGProperty *p = Item(i) ;
+							if ( p)
+							{
+								wxLogDebug( wxT("wxFBBP::ChildChanged: Removing:%s"), p->GetLabel().c_str() );
+								GetGrid()->DeleteProperty( p );
+							}
+						} 
+						
+						bp->AppendChild( bp->CreatePropertyResourceName() );  
+					}
+					
+					Item(1)->SetValue(childVals.Item(1));
+                    newVal = Item(0)->GetValueAsString() + wxT("; ") + Item(1)->GetValueAsString();
                     break;
                 }
                 // 'Load From Icon Resource'
                 case 3:
                 {
-                    wxPGProperty *propResName = bp->CreatePropertyResourceName();
-                    wxPGProperty *propIcoSize = bp->CreatePropertyIconSize();
-
-                    int w = wxAtoi( val.After( wxT('[') ).BeforeLast( wxT(';') ) );
-                    int h = wxAtoi( val.Before( wxT(']') ).AfterLast( wxT(';') ).Trim( false ) );
-
-                    if ( w < 1 ) w = -1;
-                    if ( h < 1 ) h = -1;
-
-                    propResName->SetValueFromString( img );
-                    propIcoSize->Item(0)->SetValue( w );
-                    propIcoSize->Item(1)->SetValue( h );
-
-                    bp->AppendChild( propResName );
-                    bp->AppendChild( propIcoSize );
-
-                    newVal = src + wxT("; ") + img + wxT("; ") + wxString::Format( wxT("[%i; %i]"), w, h );
+					if(prevSrc != 3)
+					{
+						for ( unsigned int i = 1; i<count ;i++ )
+						{
+							wxPGProperty *p = Item(i) ;
+							if ( p)
+							{
+								wxLogDebug( wxT("wxFBBP::ChildChanged: Removing:%s"), p->GetLabel().c_str() );
+								GetGrid()->DeleteProperty( p );
+							}
+						}  
+						
+						bp->AppendChild( bp->CreatePropertyResourceName() );
+						bp->AppendChild( bp->CreatePropertyIconSize() );
+					}
+					
+					Item(1)->SetValue(childVals.Item(1));
+					Item(2)->SetValue(childVals.Item(2));
+                    newVal = Item(0)->GetValueAsString() + wxT("; ") + Item(1)->GetValueAsString() + wxT("; ") + Item(2)->GetValueAsString() ;
                     break;
                 }
                 // 'Load From Art Provider'
                 case 4:
                 {
-                    wxPGProperty *propArtId     = bp->CreatePropertyArtId();
-                    wxPGProperty *propArtClient = bp->CreatePropertyArtClient();
+					if(prevSrc != 3)
+					{
+						for ( unsigned int i = 1; i<count ;i++ )
+						{
+							wxPGProperty *p = Item(i) ;
+							if ( p)
+							{
+								wxLogDebug( wxT("wxFBBP::ChildChanged: Removing:%s"), p->GetLabel().c_str() );
+								GetGrid()->DeleteProperty( p );
+							}
+						}  
 
-                    wxString sid = art.BeforeFirst( wxT(';') );
-                    wxString cid = art.AfterFirst( wxT(';') ).Trim( false );
+						bp->AppendChild( bp->CreatePropertyArtId() );
+						bp->AppendChild( bp->CreatePropertyArtClient() );
+					}
 
-                    int sidIdx = propArtId->GetChoices().Index( sid );
-                    int cidIdx = propArtClient->GetChoices().Index( cid );
-
-                    if ( sidIdx != wxNOT_FOUND )
-                    {
-                        sid = propArtId->GetChoices().GetLabel( sidIdx );
-                        propArtId->SetValueFromString( sid );
-                    }
-
-                    if ( cidIdx != wxNOT_FOUND )
-                    {
-                        cid = propArtClient->GetChoices().GetLabel( cidIdx );
-                        propArtClient->SetValueFromString( cid );
-                    }
-
-                    bp->AppendChild( propArtId );
-                    bp->AppendChild( propArtClient );
-
-                    newVal = src + wxT("; ") + sid + wxT("; ") + cid;
+					Item(1)->SetValue(childVals.Item(1));
+					Item(2)->SetValue(childVals.Item(2));
+                    newVal = Item(0)->GetValueAsString() + wxT("; ") + Item(1)->GetValueAsString() + wxT("; ") + Item(2)->GetValueAsString();
                     break;
                 }
             }
@@ -586,33 +596,34 @@ wxLogDebug( wxT("wxFBBP::ChildChanged: thisValue:%s childIndex:%i childValue:%s 
         // file_path || id || resource_name
         case 1:
         {
-            if ( (src == _("Load From File")) || (src == _("Load From Embedded File")) )
+            if ( (Item(0)->GetValueAsString() == _("Load From File")) || (Item(0)->GetValueAsString() == _("Load From Embedded File")) )
             {
                 // Save the initial file path TODO: Save the image filter index
-                wxImageFileProperty *imgFileProp = wxDynamicCast( Item( 1 ), wxImageFileProperty );
-                if ( imgFileProp )
+                if ( Item(1) )
                 {
-//                  g_imageFilterIndex = imgFileProp->GetFilterIndex();
-
-                    wxFileName imgPath( childValue.GetString() );
+					wxString img = childValue.GetString();
+					img = bp->SetupImage( img );
+                    wxFileName imgPath( img );
                     gs_imageInitialPath = imgPath.GetPath();
 
-                    if ( !img.empty() )
+                    if ( !img.IsEmpty() )
                     {
-                        imgFileProp->SetValue( WXVARIANT( img ) );
+                        Item(1)->SetValue( WXVARIANT( img ) );
                     }
                     else
                     {
-                        imgFileProp->SetValueToUnspecified();
+                        Item(1)->SetValueToUnspecified();
                     }
-                    newVal = src + wxT("; ") + img;
+                    newVal = Item(0)->GetValueAsString() + wxT("; ") + img;
                 }
             }
             break;
         }
     }
-
-    if ( newVal != val )
+	
+	bp->SetPrevSource(childValue.GetInteger());
+   
+ if ( newVal != val )
     {
         wxVariant ret = WXVARIANT( newVal );
         bp->SetValue( ret );
@@ -641,26 +652,44 @@ wxLogDebug( wxT("wxFBBP::ChildChanged: thisValue:%s childIndex:%i childValue:%s 
 #endif
 }
 
+void wxFBBitmapProperty::OnSetValue()
+{
+}
+
+wxString wxFBBitmapProperty::GetValueAsString( int argFlags ) const
+{
+    if(GetCount() == 0)
+	{
+		return m_value.GetString();
+	}
+    wxString text;
+    GenerateComposedValue(text, argFlags);
+    return text;
+}
+
 wxString wxFBBitmapProperty::SetupImage( const wxString &imgPath )
 {
-    wxString   res     = wxT("");
-    wxImage    img     = wxImage( imgPath );
+	if(!imgPath.IsEmpty())
+	{
+		wxString   res     = wxT("");
+		wxImage    img     = wxImage( imgPath );
 
-    if ( !img.IsOk() ) return res;
+		if ( !img.IsOk() ) return res;
 
-    wxFileName imgName = wxFileName( imgPath );
+		wxFileName imgName = wxFileName( imgPath );
 
-    // Setup for correct file_path
-    if ( imgName.IsAbsolute() )
-    {
-        return TypeConv::MakeRelativeURL( imgPath, AppData()->GetProjectPath() );
-    }
-    else
-    {
-        imgName.MakeAbsolute( AppData()->GetProjectPath() );
+		// Setup for correct file_path
+		if ( imgName.IsAbsolute() )
+		{
+			return TypeConv::MakeRelativeURL( imgPath, AppData()->GetProjectPath() );
+		}
+		else
+		{
+			imgName.MakeAbsolute( AppData()->GetProjectPath() );
 
-        if ( !imgName.FileExists() ) return res;
-    }
+			if ( !imgName.FileExists() ) return res;
+		}
+	}
     return imgPath;
 }
 
