@@ -467,47 +467,9 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
                     wxFBBitmapProperty *bp = wxDynamicCast( id, wxFBBitmapProperty );
                     if ( bp )
                     {
-                        wxString  propValue  = prop->GetValueAsString();
-                        wxVariant thisValue  = WXVARIANT( propValue );
-                        wxVariant childValue;
-                        int       childIndex = 0;
-                        wxString  source     = propValue.BeforeFirst( wxT(';') );
-
-wxLogDebug( wxT("OI::AddItems: prop (string):%s"), propValue.c_str() );
-
-                        if ( source == wxString(_("Load From Embedded File") ) )
-                        {
-                            childIndex = 1;
-                        }
-                        else if ( source == wxString(_("Load From Resource") ) )
-                        {
-                            childIndex = 2;
-                        }
-                        else if ( source == wxString(_("Load From Icon Resource") ) )
-                        {
-                            childIndex = 3;
-                        }
-                        else if ( source == wxString(_("Load From Art Provider") ) )
-                        {
-                            childIndex = 4;
-                        }
-
-                        childValue = WXVARIANT( childIndex );
-
-                        bp->CreatePropertySource( childIndex );
-
-                    #if wxVERSION_NUMBER >= 2900
-                        wxVariant newVal = 
-                    #endif
-                        bp->ChildChanged( thisValue, 0, childValue );
-
-wxLogDebug( wxT("OI::AddItems: Setting prop value to %s"), thisValue.GetString().c_str() );
-
-                    #if wxVERSION_NUMBER >= 2900
-                        AppData()->ModifyProperty( prop, newVal.GetString() );
-                    #else
-                        AppData()->ModifyProperty( prop, thisValue.GetString() );
-                    #endif
+                        bp->CreateChildren();
+						
+                        AppData()->ModifyProperty( prop, bp->GetValueAsString() );
                     }
                 }
             }
@@ -844,33 +806,32 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
 				
 
 #if wxVERSION_NUMBER >= 2900
-        // GetValue() returns wxVariant, but it is converted transparently to wxAny
-        wxAny
+				// GetValue() returns wxVariant, but it is converted transparently to wxAny
+				wxAny
 #else
-        wxVariant
+				wxVariant
 #endif
-        childValue = event.GetProperty()->GetValue();
+				childValue = event.GetProperty()->GetValue();
 
-        // Also, handle the case where property value is unspecified
-        if ( childValue.IsNull() )
-            return;
+				// Also, handle the case where property value is unspecified
+				if ( childValue.IsNull() )
+					return;
 
-        // bp->GetValue() have no updated value...
-        wxString bmpVal = propPtr->GetValueAsString( wxPG_FULL_VALUE );
-		//wxMessageBox(propPtr->GetValueAsString( wxPG_FULL_VALUE ));
+				// bp->GetValue() have no updated value...
+				wxString bmpVal = propPtr->GetValueAsString( wxPG_FULL_VALUE );
 
-        // Handle changes in values, as needed
-        //wxVariant    thisValue  = bmpVal;
+				// Handle changes in values, as needed
+				wxVariant    thisValue  = WXVARIANT(bmpVal);
 
 #if wxVERSION_NUMBER >= 2900
-        wxVariant newVal = 
+				wxVariant newVal = 
 #endif
-//        propPtr->ChildChanged( thisValue, event.GetProperty()->GetIndexInParent(), childValue );
+				propPtr->ChildChanged( thisValue, event.GetProperty()->GetIndexInParent(), childValue );
 
 #if wxVERSION_NUMBER >= 2900
-        AppData()->ModifyProperty( prop, newVal.GetString() );
+				AppData()->ModifyProperty( prop, newVal.GetString() );
 #else
-        AppData()->ModifyProperty( prop, bmpVal);
+				AppData()->ModifyProperty( prop, bmpVal);
 #endif
 				
                // wxString bmpVal = event.GetProperty()->GetParent()->GetValue().GetString();

@@ -100,14 +100,17 @@ public:
     virtual ~wxFBBitmapProperty();
 
     wxPGProperty *CreatePropertySource( int sourceIndex = 0 );
-    wxPGProperty *CreatePropertyFilePath();
+    wxPGProperty *CreatePropertyFilePath() ;
     wxPGProperty *CreatePropertyResourceName();
     wxPGProperty *CreatePropertyIconSize();
     wxPGProperty *CreatePropertyArtId();
     wxPGProperty *CreatePropertyArtClient();
 
-    wxString SetupImage( const wxString &imgPath = wxEmptyString );
-    wxString SetupResource( const wxString &resName = wxEmptyString );
+    wxString SetupImage( const wxString &imgPath = wxEmptyString ) ;
+    wxString SetupResource( const wxString &resName = wxEmptyString ) ;
+	
+	int prevSrc;
+	void SetPrevSource(int src){prevSrc = src;}
 
 #if wxVERSION_NUMBER < 2900
     virtual void
@@ -115,6 +118,11 @@ public:
     virtual wxVariant
 #endif
     ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const;
+	
+    virtual void OnSetValue();
+	void CreateChildren();
+	
+wxString GetValueAsString( int argFlags =0 ) const;
 
 protected:
 
@@ -127,6 +135,8 @@ protected:
     static wxArrayString m_clients;
     wxArrayString m_strings;
 #endif
+
+	
 };
 
 // -----------------------------------------------------------------------
