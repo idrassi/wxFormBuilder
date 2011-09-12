@@ -1,108 +1,167 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
-	<object class="wxPanel" name="editor_panel">
-		<style>wxTAB_TRAVERSAL</style>
-		<size>360,300</size>
-		<object class="wxBoxSizer">
-			<orient>wxVERTICAL</orient>
-			<object class="sizeritem">
-				<option>0</option>
-				<flag>wxEXPAND|wxLEFT</flag>
-				<border>5</border>
-				<object class="wxStaticText" name="editor_label">
-					<font>
-						<size>8</size>
-						<family>default</family>
-						<style>normal</style>
-						<weight>bold</weight>
-						<underlined>0</underlined>
-					</font>
-					<label>Editor</label>
-					<wrap>-1</wrap>
-				</object>
-			</object>
-			<object class="sizeritem">
-				<option>1</option>
-				<flag>wxEXPAND</flag>
-				<border>5</border>
-				<object class="wxNotebook" name="editor_book">
-					<object class="notebookpage">
-						<label>Designer</label>
-						<selected>0</selected>
-						<object class="wxPanel" name="designer_page">
-							<style>wxTAB_TRAVERSAL</style>
-							<object class="wxBoxSizer">
-								<orient>wxVERTICAL</orient>
-								<object class="sizeritem">
-									<option>1</option>
-									<flag>wxEXPAND</flag>
-									<border>5</border>
-									<object class="wxScrolledWindow" name="designer_scrollw">
-										<style>wxHSCROLL|wxVSCROLL</style>
-										<bg>#c0c0c0</bg>
-										<object class="wxBoxSizer">
-											<orient>wxVERTICAL</orient>
-											<object class="sizeritem">
-												<option>0</option>
-												<flag>wxLEFT|wxTOP</flag>
-												<border>5</border>
-												<object class="wxPanel" name="design_form_panel">
-													<style>wxRAISED_BORDER|wxTAB_TRAVERSAL</style>
-												</object>
-											</object>
-										</object>
-									</object>
-								</object>
-							</object>
-						</object>
-					</object>
-					<object class="notebookpage">
-						<label>C++</label>
-						<selected>0</selected>
-						<object class="wxPanel" name="editor_cpp_page">
-							<style>wxTAB_TRAVERSAL</style>
-							<object class="wxBoxSizer">
-								<orient>wxVERTICAL</orient>
-								<object class="sizeritem">
-									<option>1</option>
-									<flag>wxEXPAND | wxALL</flag>
-									<border>5</border>
-									<object class="wxNotebook" name="cpp_book">
-										<object class="notebookpage">
-											<label>cpp</label>
-											<selected>0</selected>
-											<object class="wxPanel" name="cpp_page">
-												<style>wxTAB_TRAVERSAL</style>
-											</object>
-										</object>
-										<object class="notebookpage">
-											<label>h</label>
-											<selected>0</selected>
-											<object class="wxPanel" name="h_page">
-												<style>wxTAB_TRAVERSAL</style>
-											</object>
-										</object>
-									</object>
-								</object>
-							</object>
-						</object>
-					</object>
-					<object class="notebookpage">
-						<label>Python</label>
-						<selected>0</selected>
-						<object class="wxPanel" name="editor_py_page">
-							<style>wxTAB_TRAVERSAL</style>
-						</object>
-					</object>
-					<object class="notebookpage">
-						<label>XRC</label>
-						<selected>0</selected>
-						<object class="wxPanel" name="editor_xrc_page">
-							<style>wxTAB_TRAVERSAL</style>
-						</object>
-					</object>
-				</object>
-			</object>
-		</object>
-	</object>
+<resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.5.3.0">
+    <object class="wxNotebook" name="Editor">
+        <object class="notebookpage">
+            <bitmap>images/designer.png</bitmap>
+            <label>Designer</label>
+            <selected>0</selected>
+            <object class="wxScrolledWindow" name="VisualEditor">
+                <style>wxHSCROLL|wxVSCROLL</style>
+                <bg>#c0c0c0</bg>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <option>0</option>
+                        <flag>wxLEFT|wxTOP</flag>
+                        <border>9</border>
+                        <object class="wxPanel" name="DesignerWindow">
+                            <style>wxRAISED_BORDER|wxTAB_TRAVERSAL</style>
+                            <object class="wxBoxSizer">
+                                <orient>wxVERTICAL</orient>
+                                <object class="sizeritem">
+                                    <option>0</option>
+                                    <flag>wxEXPAND</flag>
+                                    <border>5</border>
+                                    <object class="wxPanel" name="WindowTitle">
+                                        <style>wxTAB_TRAVERSAL</style>
+                                        <bg>#000000</bg>
+                                        <object class="wxBoxSizer">
+                                            <orient>wxHORIZONTAL</orient>
+                                            <object class="sizeritem">
+                                                <option>0</option>
+                                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                                <border>3</border>
+                                                <object class="wxStaticBitmap" name="BitmapTitle">
+                                                    <bitmap>images/w_icon.png</bitmap>
+                                                </object>
+                                            </object>
+                                            <object class="sizeritem">
+                                                <option>1</option>
+                                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                                <border>3</border>
+                                                <object class="wxStaticText" name="WindowLabel">
+                                                    <fg>#ffffff</fg>
+                                                    <font>
+                                                        <size>9</size>
+                                                        <family>default</family>
+                                                        <style>normal</style>
+                                                        <weight>bold</weight>
+                                                        <underlined>0</underlined>
+                                                    </font>
+                                                    <label>Title</label>
+                                                    <wrap>-1</wrap>
+                                                </object>
+                                            </object>
+                                            <object class="sizeritem">
+                                                <option>0</option>
+                                                <flag>wxALL</flag>
+                                                <border>3</border>
+                                                <object class="wxBoxSizer">
+                                                    <orient>wxHORIZONTAL</orient>
+                                                    <object class="sizeritem">
+                                                        <option>0</option>
+                                                        <flag></flag>
+                                                        <border>3</border>
+                                                        <object class="wxStaticBitmap" name="ButtonMinimize">
+                                                            <bitmap>images/w_minimize.png</bitmap>
+                                                        </object>
+                                                    </object>
+                                                    <object class="sizeritem">
+                                                        <option>0</option>
+                                                        <flag></flag>
+                                                        <border>3</border>
+                                                        <object class="wxStaticBitmap" name="ButtonMaximize">
+                                                            <bitmap>images/w_maximize.png</bitmap>
+                                                        </object>
+                                                    </object>
+                                                    <object class="sizeritem">
+                                                        <option>0</option>
+                                                        <flag></flag>
+                                                        <border>3</border>
+                                                        <object class="wxStaticBitmap" name="ButtonClose">
+                                                            <bitmap>images/w_close.png</bitmap>
+                                                        </object>
+                                                    </object>
+                                                </object>
+                                            </object>
+                                        </object>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <option>1</option>
+                                    <flag>wxEXPAND | wxALL</flag>
+                                    <border>5</border>
+                                    <object class="wxPanel" name="WindowPanel">
+                                        <style>wxTAB_TRAVERSAL</style>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="notebookpage">
+            <bitmap>images/file_cpp.png</bitmap>
+            <label>C++</label>
+            <selected>0</selected>
+            <object class="wxPanel" name="CppPanel">
+                <style>wxTAB_TRAVERSAL</style>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <option>1</option>
+                        <flag>wxEXPAND | wxALL</flag>
+                        <border>5</border>
+                        <object class="wxNotebook" name="CppBook">
+                            <object class="notebookpage">
+                                <bitmap>images/file_cpp.png</bitmap>
+                                <label>cpp</label>
+                                <selected>0</selected>
+                                <object class="wxPanel" name="CppPage">
+                                    <style>wxTAB_TRAVERSAL</style>
+                                    <object class="wxBoxSizer">
+                                        <orient>wxVERTICAL</orient>
+                                    </object>
+                                </object>
+                            </object>
+                            <object class="notebookpage">
+                                <bitmap>images/file_h.png</bitmap>
+                                <label>h</label>
+                                <selected>0</selected>
+                                <object class="wxPanel" name="HppPage">
+                                    <style>wxTAB_TRAVERSAL</style>
+                                    <object class="wxBoxSizer">
+                                        <orient>wxVERTICAL</orient>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="notebookpage">
+            <bitmap>images/file_py.png</bitmap>
+            <label>Python</label>
+            <selected>0</selected>
+            <object class="wxPanel" name="PyPanel">
+                <style>wxTAB_TRAVERSAL</style>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                </object>
+            </object>
+        </object>
+        <object class="notebookpage">
+            <bitmap>images/file_xml.png</bitmap>
+            <label>XRC</label>
+            <selected>0</selected>
+            <object class="wxPanel" name="XrcPanel">
+                <style>wxTAB_TRAVERSAL</style>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                </object>
+            </object>
+        </object>
+    </object>
 </resource>

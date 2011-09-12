@@ -54,11 +54,11 @@ fi
 
 # Build premake
 cd build
-make CONFIG=Release -C./premake4/$platform
+make CONFIG=Release -C./premake/$platform
 
 #./premake/$platform/bin/release/premake4 --file=./premake/solution.lua $unicode $wxroot $wxversion $mediactrl codeblocks
 ./premake/$platform/bin/release/premake4 --file=./premake/solution.lua $unicode $wxroot $wxversion codelite
-./premake/$platform/bin/release/premake4 --file=./premake/solution.lua $unicode $wxroot $wxversion gmake
+#./premake/$platform/bin/release/premake4 --file=./premake/solution.lua $unicode $wxroot $wxversion gmake
 
 #if [ "$platform" = "macosx" ]; then
 #   ./premake4/macosx/bin/release/premake4 --file=./premake4/solution.lua xcode3

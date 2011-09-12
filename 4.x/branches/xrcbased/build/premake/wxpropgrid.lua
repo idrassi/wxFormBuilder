@@ -23,20 +23,20 @@ project "wxPropGrid"
     end
 
     kind         "SharedLib"
-    defines      { "WXMAKINGDLL_PROPGRID", "MONOLITHIC" }
-    files        { "../../src/controls/src/propgrid/*.cpp", "../../src/controls/include/wx/propgrid/*.h" }
-    includedirs  { "../../src/controls/include" }
+    defines      {"WXMAKINGDLL_PROPGRID"}
+    files        {"../../src/controls/src/propgrid/*.cpp", "../../src/controls/include/wx/propgrid/*.h"}
+    includedirs  {"../../src/controls/include"}
     targetsuffix ( wxVersion .. wx_custom )
 
     -- Release configuration
     configuration "Release"
-        buildoptions { "-fno-strict-aliasing" }
+        buildoptions {"-fno-strict-aliasing"}
         targetname   ( wx_target .. usign .. "_propgrid-" )
         wx_config    { Libs="core" }
 
     -- Debug configuration
     configuration "Debug"
-        defines      { "__WXFB_DEBUG__" }
+        defines      {"__WXFB_DEBUG__"}
         targetname   ( wx_target .. usign .. "d_propgrid-" )
         wx_config    { Libs="core", Debug="yes" }
 

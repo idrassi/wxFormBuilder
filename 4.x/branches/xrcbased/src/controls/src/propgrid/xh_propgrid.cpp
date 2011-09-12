@@ -46,10 +46,13 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxPropertyGridXmlHandler, wxXmlResourceHandler)
 
-wxPropertyGridXmlHandler::wxPropertyGridXmlHandler()
-                     :wxXmlResourceHandler(), m_manager(NULL), m_populator(NULL)
+wxPropertyGridXmlHandler::wxPropertyGridXmlHandler() : wxXmlResourceHandler()
 {
+    m_manager = NULL;
+    m_populator = NULL;
+
     XRC_ADD_STYLE(wxTAB_TRAVERSAL);
+    XRC_ADD_STYLE(wxPG_DEFAULT_STYLE);
     XRC_ADD_STYLE(wxPG_AUTO_SORT);
     XRC_ADD_STYLE(wxPG_HIDE_CATEGORIES);
     XRC_ADD_STYLE(wxPG_BOLD_MODIFIED);
@@ -68,6 +71,11 @@ wxPropertyGridXmlHandler::wxPropertyGridXmlHandler()
     XRC_ADD_STYLE(wxPG_EX_MODE_BUTTONS);
 #if wxPG_COMPATIBILITY_1_2_0
     XRC_ADD_STYLE(wxPG_EX_TRADITIONAL_VALIDATORS);
+#endif
+
+#if wxPG_INCLUDE_MANAGER
+    XRC_ADD_STYLE(wxPG_THEME_BORDER);
+    XRC_ADD_STYLE(wxPG_NO_INTERNAL_BORDER);
 #endif
 
     AddWindowStyles();
@@ -197,6 +205,24 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
 
         // Need to call AddChildren even for non-parent properties for attributes and such
         m_populator->AddChildren(property);
+
+#if wxPG_INCLUDE_MANAGER
+        wxXmlNode *parentNode = node->GetParent();
+
+        if ( parentNode->GetName() == wxT("page") ||
+             parentNode->GetName() == wxT("property") )
+        {
+            wxASSERT( m_manager );
+
+            wxString sDesc( wxT("description") );
+            if ( HasParam( sDesc ) )
+            {
+                wxString text = GetText( sDesc );
+                property->SetHelpString( text ); // FIXME
+//              m_manager->SetDescription( label, text );
+            }
+        }
+#endif
     }
     else if ( nodeName == wxT("attribute") )
     {
@@ -315,17 +341,16 @@ bool wxPropertyGridXmlHandler::CanHandle(wxXmlNode *node)
 
     return (
             (
-             m_populator && ( name == wxT("property") ||
-                              name == wxT("attribute") ||
-                              name == wxT("choices") ||
-                              name == wxT("splitterpos")
-                            )
-            ) ||
-            (m_manager && name == wxT("page")) ||
-            (!m_populator && fOurClass(wxT("wxPropertyGrid")))
+                m_populator && ( name == wxT("property")  ||
+                                 name == wxT("attribute") ||
+                                 name == wxT("choices")   ||
+                                 name == wxT("splitterpos") )
+            )
+            || (!m_populator && fOurClass(wxT("wxPropertyGrid")))
+
 #if wxPG_INCLUDE_MANAGER
-            ||
-            (!m_populator && fOurClass(wxT("wxPropertyGridManager")))
+            || (m_manager && name == wxT("page"))
+            || (!m_populator && fOurClass(wxT("wxPropertyGridManager")))
 #endif
            );
 }

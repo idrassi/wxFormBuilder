@@ -23,7 +23,7 @@ project "wxScintilla"
     end
 
     kind         "SharedLib"
-    defines      { "WXMAKINGDLL_SCI", "MONOLITHIC", "LINK_LEXERS", "SCI_LEXER", "SCI_NAMESPACE", "__WX__" }
+    defines      { "WXMAKINGDLL_SCI", "LINK_LEXERS", "SCI_LEXER", "SCI_NAMESPACE", "__WX__" }
     files        { "../../src/controls/src/wxScintilla/*.cpp", "../../src/controls/include/wx/wxScintilla/*.h",
                    "../../src/controls/src/wxScintilla/scintilla/**.cxx", "../../src/controls/src/wxScintilla/scintilla/**.h" }
     includedirs  { "../../src/controls/include", "../../src/controls/src/wxScintilla",

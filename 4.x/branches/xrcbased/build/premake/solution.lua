@@ -1,8 +1,8 @@
 -- A solution contains projects, and defines the available configurations
-solution "wxFormBuilder"
+solution "Solution"
 
     language "C++"
-    configurations {"Release", "Debug"}
+    configurations {"Debug", "Release"}
     location       ("../../build/" .. _ACTION)
     flags          {"ExtraWarnings"}
 
@@ -48,6 +48,7 @@ newoption  {
         dofile( scriptDir .. "/wxpropgrid.lua" )
         dofile( scriptDir .. "/wxscintilla.lua" )
     end
-    dofile( scriptDir .. "/project.lua" )
-    dofile( scriptDir .. "/wxfbutils.lua" )
+    dofile( scriptDir .. "/corelibrary.lua" )
+    dofile( scriptDir .. "/application.lua" )
+    dofile( scriptDir .. "/utilities.lua" )
 

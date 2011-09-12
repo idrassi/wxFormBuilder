@@ -106,12 +106,12 @@
             <event name="OnUpdateUI"></event>
             <object class="tool" expanded="0">
                 <property name="bitmap">images/file_new.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">wxID_NEW</property>
                 <property name="kind">wxITEM_NORMAL</property>
                 <property name="label"></property>
                 <property name="name">btn_new_prj</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">Start a new project.</property>
+                <property name="tooltip">New Project (Ctrl+N)</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -120,12 +120,12 @@
             </object>
             <object class="tool" expanded="0">
                 <property name="bitmap">images/file_open.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">wxID_OPEN</property>
                 <property name="kind">wxITEM_NORMAL</property>
                 <property name="label"></property>
                 <property name="name">btn_open_prj</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">Open an existing project.</property>
+                <property name="tooltip">Open Project (Ctrl+O)</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -134,12 +134,12 @@
             </object>
             <object class="tool" expanded="0">
                 <property name="bitmap">images/file_save.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">wxID_SAVE</property>
                 <property name="kind">wxITEM_NORMAL</property>
                 <property name="label"></property>
                 <property name="name">btn_save_prj</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">Save the current project.</property>
+                <property name="tooltip">Save Project (Ctrl+S)</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -149,12 +149,12 @@
             <object class="toolSeparator" expanded="0" />
             <object class="tool" expanded="0">
                 <property name="bitmap">images/edit_undo.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">wxID_UNDO</property>
                 <property name="kind">wxITEM_NORMAL</property>
                 <property name="label"></property>
                 <property name="name">btn_undo</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">Undo the last action.</property>
+                <property name="tooltip">Undo (Ctrl+Z)</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -163,12 +163,12 @@
             </object>
             <object class="tool" expanded="0">
                 <property name="bitmap">images/edit_redo.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">wxID_REDO</property>
                 <property name="kind">wxITEM_NORMAL</property>
                 <property name="label"></property>
                 <property name="name">btn_redo</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">Redo the last action that was undone.</property>
+                <property name="tooltip">Redo (Ctrl+Y)</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -177,13 +177,13 @@
             </object>
             <object class="toolSeparator" expanded="0" />
             <object class="tool" expanded="0">
-                <property name="bitmap">images/edit-cut.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="bitmap">images/edit_cut.png; Load From File</property>
+                <property name="id">wxID_CUT</property>
                 <property name="kind">wxITEM_NORMAL</property>
                 <property name="label"></property>
                 <property name="name">btn_cut</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">Remove the selected object and place it on the clipboard.</property>
+                <property name="tooltip">Cut (Ctrl+X)</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -191,13 +191,13 @@
                 <event name="OnUpdateUI"></event>
             </object>
             <object class="tool" expanded="0">
-                <property name="bitmap">images/edit-copy.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="bitmap">images/edit_copy.png; Load From File</property>
+                <property name="id">wxID_COPY</property>
                 <property name="kind">wxITEM_NORMAL</property>
                 <property name="label"></property>
                 <property name="name">btn_copy</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">Copy the selected object to the clipboard.</property>
+                <property name="tooltip">Copy (Ctrl+C)</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -205,13 +205,13 @@
                 <event name="OnUpdateUI"></event>
             </object>
             <object class="tool" expanded="0">
-                <property name="bitmap">images/edit-paste.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="bitmap">images/edit_paste.png; Load From File</property>
+                <property name="id">wxID_PASTE</property>
                 <property name="kind">wxITEM_NORMAL</property>
                 <property name="label"></property>
                 <property name="name">btn_paste</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">Insert an object from the clipboard.</property>
+                <property name="tooltip">Paste (Ctrl+V)</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -220,12 +220,12 @@
             </object>
             <object class="tool" expanded="0">
                 <property name="bitmap">images/delete.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">wxID_DELETE</property>
                 <property name="kind">wxITEM_NORMAL</property>
                 <property name="label"></property>
                 <property name="name">btn_delete</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">Remove the selected object.</property>
+                <property name="tooltip">Delete (Ctrl+D)</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -235,12 +235,12 @@
             <object class="toolSeparator" expanded="0" />
             <object class="tool" expanded="0">
                 <property name="bitmap">images/generate.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">ID_EXECUTE</property>
                 <property name="kind">wxITEM_NORMAL</property>
                 <property name="label"></property>
                 <property name="name">btn_gen</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">Create code from the current project.</property>
+                <property name="tooltip">Generate Code (F8)</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -250,12 +250,12 @@
             <object class="toolSeparator" expanded="0" />
             <object class="tool" expanded="0">
                 <property name="bitmap">images/align_l.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">ID_ALIGN_LEFT</property>
                 <property name="kind">wxITEM_RADIO</property>
                 <property name="label"></property>
                 <property name="name">btn_align_l</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">The item will be aligned to the left of the space alotted to it by the sizer.</property>
+                <property name="tooltip">Align Left</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -264,12 +264,12 @@
             </object>
             <object class="tool" expanded="0">
                 <property name="bitmap">images/align_ch.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">ID_ALIGN_CENTER_H</property>
                 <property name="kind">wxITEM_RADIO</property>
                 <property name="label"></property>
                 <property name="name">btn_align_ch</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">The item will be centered horizontally in the space alotted to it by the sizer.</property>
+                <property name="tooltip">Align Center Horizontally</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -278,12 +278,12 @@
             </object>
             <object class="tool" expanded="0">
                 <property name="bitmap">images/align_r.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">ID_ALIGN_RIGHT</property>
                 <property name="kind">wxITEM_RADIO</property>
                 <property name="label"></property>
                 <property name="name">btn_align_r</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">The item will be aligned to the right of the space alotted to it by the sizer.</property>
+                <property name="tooltip">Align Right</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -293,12 +293,12 @@
             <object class="toolSeparator" expanded="0" />
             <object class="tool" expanded="0">
                 <property name="bitmap">images/align_t.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">ID_ALIGN_TOP</property>
                 <property name="kind">wxITEM_RADIO</property>
                 <property name="label"></property>
                 <property name="name">btn_align_t</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">The item will be aligned to the top of the space alotted to it by the sizer.</property>
+                <property name="tooltip">Align Top</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -307,12 +307,12 @@
             </object>
             <object class="tool" expanded="0">
                 <property name="bitmap">images/align_cv.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">ID_ALIGN_CENTER_V</property>
                 <property name="kind">wxITEM_RADIO</property>
                 <property name="label"></property>
                 <property name="name">btn_align_cv</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">The item will be centered vertically within space alotted to it by the sizer.</property>
+                <property name="tooltip">Align Center Vertically</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -321,12 +321,12 @@
             </object>
             <object class="tool" expanded="0">
                 <property name="bitmap">images/align_b.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">ID_ALIGN_BOTTOM</property>
                 <property name="kind">wxITEM_RADIO</property>
                 <property name="label"></property>
                 <property name="name">btn_align_b</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">The item will be aligned to the bottom of the space alotted to it by the sizer.</property>
+                <property name="tooltip">Align Bottom</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -336,12 +336,12 @@
             <object class="toolSeparator" expanded="0" />
             <object class="tool" expanded="0">
                 <property name="bitmap">images/p_expand.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">ID_EXPAND</property>
                 <property name="kind">wxITEM_CHECK</property>
                 <property name="label"></property>
                 <property name="name">btn_p_expand</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">The item will be expanded to fill the space assigned to the item.</property>
+                <property name="tooltip">Expand (Alt+W)</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -350,12 +350,12 @@
             </object>
             <object class="tool" expanded="0">
                 <property name="bitmap">images/p_stretch.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">ID_STRETCH</property>
                 <property name="kind">wxITEM_CHECK</property>
                 <property name="label"></property>
                 <property name="name">btn_p_stretch</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">The item will grow and shrink with the sizer.</property>
+                <property name="tooltip">Stretch (Alt+S)</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -365,12 +365,12 @@
             <object class="toolSeparator" expanded="0" />
             <object class="tool" expanded="0">
                 <property name="bitmap">images/border_l.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">ID_BORDER_LEFT</property>
                 <property name="kind">wxITEM_CHECK</property>
                 <property name="label"></property>
                 <property name="name">btn_border_l</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">A border will be added on the left side of the item.</property>
+                <property name="tooltip">Left Border</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -379,12 +379,12 @@
             </object>
             <object class="tool" expanded="0">
                 <property name="bitmap">images/border_r.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">ID_BORDER_RIGHT</property>
                 <property name="kind">wxITEM_CHECK</property>
                 <property name="label"></property>
                 <property name="name">btn_border_r</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">A border will be  added on the right side of the item.</property>
+                <property name="tooltip">Right Border</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -393,12 +393,12 @@
             </object>
             <object class="tool" expanded="0">
                 <property name="bitmap">images/border_t.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">ID_BORDER_TOP</property>
                 <property name="kind">wxITEM_CHECK</property>
                 <property name="label"></property>
                 <property name="name">btn_border_t</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">A border will be  added on the top of the item.</property>
+                <property name="tooltip">Top Border</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>
@@ -407,12 +407,12 @@
             </object>
             <object class="tool" expanded="0">
                 <property name="bitmap">images/border_b.png; Load From File</property>
-                <property name="id">wxID_ANY</property>
+                <property name="id">ID_BORDER_BOTTOM</property>
                 <property name="kind">wxITEM_CHECK</property>
                 <property name="label"></property>
                 <property name="name">btn_border_b</property>
-                <property name="statusbar"></property>
-                <property name="tooltip"></property>
+                <property name="statusbar">A border will be  added on the bottom of the item.</property>
+                <property name="tooltip">Bottom Border</property>
                 <event name="OnMenuSelection"></event>
                 <event name="OnToolClicked"></event>
                 <event name="OnToolEnter"></event>

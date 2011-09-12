@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.5.3.0">
+    <object class="wxNotebook" name="ObjectInspector">
+        <object class="notebookpage">
+            <bitmap>images/properties.png</bitmap>
+            <label>Properties</label>
+            <object class="wxPanel" name="ObjInspPropsPanel">
+                <style>wxTAB_TRAVERSAL</style>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <option>1</option>
+                        <flag>wxEXPAND</flag>
+                        <border>5</border>
+                        <object class="wxPropertyGridManager" name="ObjInspPropsPGMan">
+                            <style>wxTAB_TRAVERSAL|wxPG_BOLD_MODIFIED|wxPG_SPLITTER_AUTO_CENTER|wxPG_DESCRIPTION|wxPG_THEME_BORDER</style>
+                            <page>
+                                <label>Properties</label>
+                            </page>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="notebookpage">
+            <label>Events</label>
+            <bitmap>images/events.png</bitmap>
+            <object class="wxPanel" name="ObjInspEventsPanel">
+                <style>wxTAB_TRAVERSAL</style>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <option>1</option>
+                        <flag>wxEXPAND</flag>
+                        <border>5</border>
+                        <object class="wxPropertyGridManager" name="ObjInspEventsPGMan">
+                            <style>wxTAB_TRAVERSAL|wxPG_BOLD_MODIFIED|wxPG_SPLITTER_AUTO_CENTER|wxPG_DESCRIPTION|wxPG_THEME_BORDER</style>
+                            <page>
+                                <label>Events</label>
+                            </page>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </object>
+</resource>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.5.3.0">
+	<object class="wxMenuBar" name="MainMenu">
+		<label></label>
+		<object class="wxMenu" name="menu_file">
+			<label>_File</label>
+			<object class="wxMenuItem" name="menu_new">
+				<label>_New Project\tCtrl+N</label>
+				<help>Create an empty project</help>
+				<bitmap>images/file_new.png</bitmap>
+			</object>
+			<object class="wxMenuItem" name="menu_open">
+				<label>_Open...\tCtrl+O</label>
+				<help>Open a project</help>
+				<bitmap>images/file_open.png</bitmap>
+			</object>
+			<object class="wxMenuItem" name="menu_save">
+				<label>_Save\tCtrl+S</label>
+				<help>Save current project</help>
+				<bitmap>images/file_save.png</bitmap>
+			</object>
+			<object class="wxMenuItem" name="menu_save_as">
+				<label>Save _As...\tCtrl-Shift+S</label>
+				<help>Save current project as...</help>
+				<bitmap>images/file_save.png</bitmap>
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="menu_imp_xrc">
+				<label>_Import XRC...</label>
+				<help>Import XRC file</help>
+				<bitmap>images/file_xml.png</bitmap>
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="menu_gen_code">
+				<label>_Generate Code\tF8</label>
+				<help>Generate Code</help>
+				<bitmap>images/generate.png</bitmap>
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="wxID_EXIT">
+				<label>E_xit\tAlt-F4</label>
+				<help>Quit wxFormBuilder</help>
+			</object>
+		</object>
+		<object class="wxMenu" name="menu_edit">
+			<label>_Edit</label>
+			<object class="wxMenuItem" name="wxID_UNDO">
+				<label>_Undo\tCtrl+Z</label>
+				<help>Undo changes</help>
+			</object>
+			<object class="wxMenuItem" name="wxID_REDO">
+				<label>_Redo\tCtrl+Y</label>
+				<help>Redo changes</help>
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="wxID_COPY">
+				<label></label>
+				<help>Copy selected object</help>
+			</object>
+			<object class="wxMenuItem" name="wxID_CUT">
+				<label></label>
+				<help>Cut selected object</help>
+			</object>
+			<object class="wxMenuItem" name="wxID_PASTE">
+				<label></label>
+				<help>Paste on selected object</help>
+			</object>
+			<object class="wxMenuItem" name="menu_delete">
+				<label>_Delete\tCtrl+D</label>
+				<help>Delete selected object</help>
+				<bitmap>images/delete.png</bitmap>
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="menu_clip_copy">
+				<label>Copy Object To Clipboard\tCtrl+Shift+C</label>
+				<help>Copy Object To Clipboard</help>
+				<bitmap>images/edit_copy.png</bitmap>
+			</object>
+			<object class="wxMenuItem" name="menu_clip_paste">
+				<label>Paste Object To Clipboard\tCtrl+Shift+C</label>
+				<help>Paste Object To Clipboard</help>
+				<bitmap>images/edit_paste.png</bitmap>
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="menu_expand">
+				<label>Toggle _Expand\tAlt+W</label>
+				<help>Toggle wxEXPAND flag of sizeritem properties</help>
+				<bitmap>images/p_expand.png</bitmap>
+			</object>
+			<object class="wxMenuItem" name="menu_stretch">
+				<label>Toggle _Stretch\tAlt+S</label>
+				<help>Toggle option property of sizeritem properties</help>
+				<bitmap>images/p_stretch.png</bitmap>
+			</object>
+			<object class="wxMenuItem" name="wxID_UP">
+				<label>Move Up\tAlt+Up</label>
+				<help>Move Up selected object</help>
+			</object>
+			<object class="wxMenuItem" name="wxID_DOWN">
+				<label>Move Down\tAlt+Down</label>
+				<help>Move Down selected object</help>
+			</object>
+			<object class="wxMenuItem" name="wxID_BACKWARD">
+				<label>Move Left\tAlt+Left</label>
+				<help>Move Left selected object</help>
+			</object>
+			<object class="wxMenuItem" name="wxID_FORWARD">
+				<label>Move Right\tAlt+Right</label>
+				<help>Move Right selected object</help>
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="wxID_FIND">
+				<label>_Find\tCtrl+F</label>
+				<help>Find text in the active code viewer</help>
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="menu_align_l">
+				<label>Align _Left\tAlt+Shift+Left</label>
+				<help>Align item to the left</help>
+				<bitmap>images/align_l.png</bitmap>
+			</object>
+			<object class="wxMenuItem" name="menu_align_ch">
+				<label>Align Center _Horizontal\tAlt+Shift+H</label>
+				<help>Align item to the center horizontally</help>
+				<bitmap>images/align_ch.png</bitmap>
+			</object>
+			<object class="wxMenuItem" name="menu_align_r">
+				<label>Align _Right\tAlt+Shift+Right</label>
+				<help>Align item to the right</help>
+				<bitmap>images/align_r.png</bitmap>
+			</object>
+			<object class="wxMenuItem" name="menu_align_t">
+				<label>Align _Top\tAlt+Shift+Up</label>
+				<help>Align item to the top</help>
+				<bitmap>images/align_t.png</bitmap>
+			</object>
+			<object class="wxMenuItem" name="menu_align_cv">
+				<label>Align Center _Vertical\tAlt+Shift+V</label>
+				<help>Align item to the center vertically</help>
+				<bitmap>images/align_cv.png</bitmap>
+			</object>
+			<object class="wxMenuItem" name="menu_align_b">
+				<label>Align _Bottom\tAlt+Shift+Down</label>
+				<help>Align item to the bottom</help>
+				<bitmap>images/align_b.png</bitmap>
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="wxID_PREFERENCES">
+				<label>_Preferences\tAlt+O</label>
+				<help>Change global preferences</help>
+			</object>
+		</object>
+		<object class="wxMenu" name="menu_view">
+			<label>_View</label>
+			<object class="wxMenuItem" name="menu_view_xrc">
+				<label>_XRC Window\tF5</label>
+				<help>Show a preview of the XRC window</help>
+				<bitmap>images/designer.png</bitmap>
+			</object>
+		</object>
+		<object class="wxMenu" name="menu_tools">
+			<label>_Tools</label>
+			<object class="wxMenuItem" name="menu_gen_inherit">
+				<label>_Generate Inherited Class\tF6</label>
+				<help>Creates the needed files and class for proper inheritance of your designed GUI</help>
+				<bitmap>images/generate.png</bitmap>
+			</object>
+		</object>
+		<object class="wxMenu" name="menu_help">
+			<label>_Help</label>
+			<object class="wxMenuItem" name="wxID_ABOUT">
+				<label>\tF1</label>
+				<help>Show about dialog</help>
+			</object>
+			<object class="wxMenuItem" name="menu_changelog">
+				<label>_Changelog</label>
+				<help>Show Changelog</help>
+			</object>
+		</object>
+	</object>
+</resource>
