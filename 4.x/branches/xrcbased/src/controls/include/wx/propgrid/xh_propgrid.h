@@ -24,7 +24,10 @@
 #include "wx/xrc/xmlres.h"
 
 #include "wx/propgrid/propgrid.h"
-#include "wx/propgrid/manager.h"
+
+#if wxPG_INCLUDE_MANAGER
+    #include "wx/propgrid/manager.h"
+#endif
 
 #if wxUSE_XRC && wxCHECK_VERSION(2,8,0)
 
@@ -45,9 +48,12 @@ public:
     void HandlePropertyGridParams();
 
 private:
-    wxPropertyGridManager*      m_manager;
     wxPropertyGrid*             m_pg;
     wxPropertyGridPopulator*    m_populator;
+
+#if wxPG_INCLUDE_MANAGER
+    wxPropertyGridManager*      m_manager;
+#endif
 };
 
 #endif // wxUSE_XRC && wxCHECK_VERSION(2,8,0)
