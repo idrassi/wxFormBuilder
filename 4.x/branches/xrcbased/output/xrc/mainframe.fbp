@@ -156,7 +156,7 @@
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
                         <property name="maximum_size"></property>
-                        <property name="min_pane_size">2</property>
+                        <property name="min_pane_size">90</property>
                         <property name="min_size"></property>
                         <property name="minimize_button">0</property>
                         <property name="minimum_size"></property>
@@ -559,7 +559,7 @@
                                 <event name="OnSize"></event>
                                 <event name="OnUpdateUI"></event>
                                 <object class="wxBoxSizer" expanded="1">
-                                    <property name="minimum_size"></property>
+                                    <property name="minimum_size">150,-1</property>
                                     <property name="name">RightSizer</property>
                                     <property name="orient">wxVERTICAL</property>
                                     <property name="permission">none</property>
@@ -863,7 +863,7 @@
                                             <property name="max_size"></property>
                                             <property name="maximize_button">0</property>
                                             <property name="maximum_size"></property>
-                                            <property name="min_pane_size">2</property>
+                                            <property name="min_pane_size">150</property>
                                             <property name="min_size"></property>
                                             <property name="minimize_button">0</property>
                                             <property name="minimum_size"></property>
@@ -1002,7 +1002,7 @@
                                                     <event name="OnSize"></event>
                                                     <event name="OnUpdateUI"></event>
                                                     <object class="wxBoxSizer" expanded="1">
-                                                        <property name="minimum_size"></property>
+                                                        <property name="minimum_size">150,-1</property>
                                                         <property name="name">EditorSizer</property>
                                                         <property name="orient">wxVERTICAL</property>
                                                         <property name="permission">none</property>

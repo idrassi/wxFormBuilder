@@ -53,12 +53,12 @@ configuration "Release"
 if os.get() == "windows" then
     flags             {"Symbols"}
 end
-    wx_config         {}
+    wx_config         { Libs="all" }
 
 -- Debug configuration
 configuration "Debug"
     defines           {"__WXFB_DEBUG__"}
-    wx_config         {Debug="yes"}
+    wx_config         { Libs="all", Debug="yes" }
 
 -- MacOSX configuration
 configuration {"macosx", "Debug"}

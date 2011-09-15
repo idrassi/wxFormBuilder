@@ -32,6 +32,7 @@
 #define __WXFB_APP_H__
 
 #include <wx/app.h>
+#include <wx/frame.h>
 #include <wx/log.h>
 
 class MainFrame;
@@ -42,7 +43,7 @@ private:
       wxLog       *m_old_log;
       wxLogWindow *m_log;
 
-      MainFrame   *m_frame;
+      wxFrame     *m_frame;
   
 public:
       bool OnInit();

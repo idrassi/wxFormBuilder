@@ -41,10 +41,4 @@
   #define WXDLLIMPEXP_WXFBCORE
 #endif
 
-#define wxFB_XRC_DIR wxStandardPaths::Get().GetResourcesDir().BeforeLast('/') + wxFILE_SEP_PATH + wxT("wxformbuilder") + wxFILE_SEP_PATH + wxT("xrc")
-#define wxFB_XRC_DEFAULTS wxFB_XRC_DIR + wxFILE_SEP_PATH + wxT("default.xrc")
-#define wxFB_XRC_OBJ_INSP wxFB_XRC_DIR + wxFILE_SEP_PATH + wxT("objinsp.xrc")
-
-#define AppData() ( ApplicationData::Get() )
-
 #endif //__WXFBLIB_DEFS_H__

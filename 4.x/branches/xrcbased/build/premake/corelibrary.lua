@@ -32,13 +32,13 @@ end
     configuration "Release"
         buildoptions { "-fno-strict-aliasing" }
         targetname   ( "wxformbuilder" .. usign .. "_" )
-        wx_config    { Libs="core" }
+        wx_config    { Libs="all" }
 
     -- Debug configuration
     configuration "Debug"
         defines      { "__WXFB_DEBUG__" }
         targetname   ( "wxformbuilder" .. usign .. "d_" )
-        wx_config    { Libs="core", Debug="yes" }
+        wx_config    { Libs="all", Debug="yes" }
 
     configuration "windows"
         targetdir    "../../output"

@@ -28,21 +28,17 @@
 
 */
 
-#if wxUSE_XRC && wxCHECK_VERSION(2,8,0)
+#if wxUSE_XRC
 
 #include <wx/propgrid/propgrid.h>
 
-#include <wx/propgrid/xh_propgrid.h>
+#include <handlers/xh_propgrid.h>
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
 #endif
 
-#if wxCHECK_VERSION(2,9,0)
-    #define wxXML_GetAttribute(A,B,C)   (A->GetAttribute(B,C))
-#else
-    #define wxXML_GetAttribute(A,B,C)   (A->GetPropVal(B,C))
-#endif
+#define wxXML_GetAttribute(A,B,C)   (A->GetAttribute(B,C))
 
 IMPLEMENT_DYNAMIC_CLASS(wxPropertyGridXmlHandler, wxXmlResourceHandler)
 
@@ -69,19 +65,14 @@ wxPropertyGridXmlHandler::wxPropertyGridXmlHandler() : wxXmlResourceHandler()
     XRC_ADD_STYLE(wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES);
     XRC_ADD_STYLE(wxPG_EX_NO_FLAT_TOOLBAR);
     XRC_ADD_STYLE(wxPG_EX_MODE_BUTTONS);
-#if wxPG_COMPATIBILITY_1_2_0
-    XRC_ADD_STYLE(wxPG_EX_TRADITIONAL_VALIDATORS);
-#endif
 
-#if wxPG_INCLUDE_MANAGER
     XRC_ADD_STYLE(wxPG_THEME_BORDER);
     XRC_ADD_STYLE(wxPG_NO_INTERNAL_BORDER);
-#endif
 
     AddWindowStyles();
 }
 
-class wxPropertyGridXrcPopulator : public wxPropertyGridPopulator
+class WXDLLIMPEXP_WXFBCORE wxPropertyGridXrcPopulator : public wxPropertyGridPopulator
 {
 public:
     wxPropertyGridXrcPopulator( wxPropertyGridXmlHandler* handler )
@@ -206,7 +197,6 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
         // Need to call AddChildren even for non-parent properties for attributes and such
         m_populator->AddChildren(property);
 
-#if wxPG_INCLUDE_MANAGER
         wxXmlNode *parentNode = node->GetParent();
 
         if ( (parentNode->GetName() == wxT("page") ||
@@ -222,7 +212,6 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
 //              m_manager->SetDescription( label, text );
             }
         }
-#endif
     }
     else if ( nodeName == wxT("attribute") )
     {
@@ -279,7 +268,6 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
         if ( wxPropertyGridPopulator::ToLongPCT(s, &pos, m_pg->GetClientSize().x) )
             m_populator->GetState()->DoSetSplitterPosition( pos, index, false );
     }
-#if wxPG_INCLUDE_MANAGER
     else if ( nodeName == wxT("page") )
     {
         // page
@@ -320,7 +308,6 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
 
         return control;
     }
-#endif
     else
     {
         wxASSERT( false );
@@ -347,11 +334,8 @@ bool wxPropertyGridXmlHandler::CanHandle(wxXmlNode *node)
                                  name == wxT("splitterpos") )
             )
             || (!m_populator && fOurClass(wxT("wxPropertyGrid")))
-
-#if wxPG_INCLUDE_MANAGER
             || (m_manager && name == wxT("page"))
             || (!m_populator && fOurClass(wxT("wxPropertyGridManager")))
-#endif
            );
 }
 

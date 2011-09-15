@@ -128,7 +128,7 @@ function wx_config_Private(wxRoot, wxDebug, wxHost, wxVersion, wxStatic, wxUnico
     -- use wx-config to figure out build parameters
     function wx_config_for_posix()
         local configCmd = "wx-config"  -- this is the wx-config command ligne
-        if wxRoot ~= "" then configCmd = path.join(wxRoot, "bin/wx-config") end
+        if wxRoot ~= "" then configCmd = path.join(wxRoot, "wx-config") end
 
         local function checkYesNo(value, option)
             if value == "" then return "" end

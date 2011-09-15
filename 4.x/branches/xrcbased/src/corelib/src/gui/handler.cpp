@@ -23,42 +23,53 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 /**
- * @file    mainframe.h
+ * @file    handler.cpp
  * @author  Andrea Zanellato (zanellato.andrea@gmail.com)
- * @date    2011/09/07
+ * @date    2011/09/13
  * @version 0.0.1
  */
-#ifndef __WXFB_MAINFRAME_H__
-#define __WXFB_MAINFRAME_H__
+#include "gui/handler.h"
+#include "manager.h"
 
-#include <wx/frame.h>
-#include <wx/menu.h>
-#include <wx/splitter.h>
+#include <wx/dialog.h>
+#include <wx/xrc/xmlres.h>
 
-//#include <wx/propgrid/propgrid.h>
-
-class MainFrame : public wxFrame
+wxFBFrameHandler::wxFBFrameHandler( wxFrame *owner, wxSplitterWindow *leftSplitter, wxSplitterWindow *rightSplitter )
 {
-public:
-    MainFrame( wxWindow *parent = ( wxWindow * )NULL );
+    m_frame         = owner;
+    m_leftSplitter  = leftSplitter;
+    m_rightSplitter = rightSplitter;
+}
 
-private:
-    // Used to correctly restore splitter position
-    void OnAbout( wxCommandEvent& );
-    void OnExit( wxCommandEvent& );
-    void OnClose( wxCloseEvent& );
-    void OnIdle( wxIdleEvent& );
-//  void OnSplitterChanged( wxSplitterEvent &event );
+void wxFBFrameHandler::OnAbout( wxCommandEvent &event )
+{
+    wxDialog *dlg = wxFBResource::Get()->GetAboutDialog( m_frame );
+    if ( dlg )
+    {
+        dlg->ShowModal();
+        dlg->Destroy();
+    }
+}
 
-    wxMenuBar        *m_menuBar;
-/*
-    wxPropertyGrid *m_pg;
-    wxPropertyGrid *m_eg;
-*/
-    wxSplitterWindow *m_leftSplitter;
-    wxSplitterWindow *m_rightSplitter;
-    int               m_leftSplitterWidth;
-    int               m_rightSplitterWidth;
-};
+void wxFBFrameHandler::OnExit( wxCommandEvent & )
+{
+    m_frame->Close();
+}
 
-#endif //__WXFB_MAINFRAME_H__
+void wxFBFrameHandler::OnClose( wxCloseEvent & )
+{
+    m_frame->Destroy(); //TODO
+}
+
+void wxFBFrameHandler::OnIdle( wxIdleEvent & )
+{
+    m_leftSplitter->SetSashPosition( 150 );
+    m_rightSplitter->SetSashPosition( 330 );
+
+    m_frame->Disconnect( wxEVT_IDLE, wxIdleEventHandler( wxFBFrameHandler::OnIdle ), NULL, this );
+}
+
+void wxFBFrameHandler::OnNewProject( wxCommandEvent & )
+{
+    wxFBResource::Get()->NewProject(); //TODO
+}

@@ -23,21 +23,16 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 #include "main.h"
-#include "mainframe.h"
 
-#include <appdata.h>
-#include <guimanager.h>
+#include <manager.h>
 
 #include <wx/config.h>
 #include <wx/cmdline.h>
-#include <wx/image.h>
 #include <wx/stdpaths.h>
 
 #ifdef __WXMSW__
     #include <wx/sysopt.h>
 #endif
-
-#include <wx/xrc/xmlres.h>
 
 // Abnormal Termination Handling
 #if wxUSE_ON_FATAL_EXCEPTION && wxUSE_STACKWALKER
@@ -57,11 +52,19 @@ void LogStack();
 
 static const wxCmdLineEntryDesc s_cmdLineDesc[] =
 {
-    { wxCMD_LINE_SWITCH, wxT("g"), wxT("generate"), _("Generate code from passed file.") },
-    { wxCMD_LINE_OPTION, wxT("l"), wxT("language"), _("Override the code_generation property from the passed file and generate the passed languages. Separate multiple languages with commas.") },
-    { wxCMD_LINE_SWITCH, wxT("h"), wxT("help"),     _("Show this help message."), wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_HELP  },
-    { wxCMD_LINE_PARAM, NULL, NULL,                 _("File to open."),           wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
+#if wxVERSION_NUMBER < 2900
+    { wxCMD_LINE_SWITCH, wxT("g"), wxT("generate"), wxString(_("Generate code from passed file.") ) },
+    { wxCMD_LINE_OPTION, wxT("l"), wxT("language"), wxString(_("Override the code_generation property from the passed file and generate the passed languages. Separate multiple languages with commas.") ) },
+    { wxCMD_LINE_SWITCH, wxT("h"), wxT("help"),     wxString(_("Show this help message.") ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_HELP  },
+    { wxCMD_LINE_PARAM, NULL, NULL,                 wxString(_("File to open.") ),           wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
     { wxCMD_LINE_NONE }
+#else
+    { wxCMD_LINE_SWITCH, "g", "generate", wxString(_("Generate code from passed file.") ) },
+    { wxCMD_LINE_OPTION, "l", "language", wxString(_("Override the code_generation property from the passed file and generate the passed languages. Separate multiple languages with commas.") ) },
+    { wxCMD_LINE_SWITCH, "h", "help",     wxString(_("Show this help message.") ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_HELP  },
+    { wxCMD_LINE_PARAM, NULL, NULL,       wxString(_("File to open.") ),           wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
+    { wxCMD_LINE_NONE }
+#endif
 };
 
 IMPLEMENT_APP( wxFormBuilder )
@@ -85,7 +88,7 @@ int wxFormBuilder::OnRun()
 
     // Creating the wxConfig manually so there will be no space
     // The old config (if any) is returned, delete it
-    delete wxConfigBase::Set( new wxConfig( wxT("wxformbuilder/application.layout") ) );
+//    delete wxConfigBase::Set( new wxConfig( wxT("wxformbuilder/application.layout") ) );
 
     // Get the data directory
     wxStandardPathsBase& stdPaths = wxStandardPaths::Get();
@@ -182,12 +185,8 @@ int wxFormBuilder::OnRun()
             }
         }
     }
-*/
-    // Init handlers
-    wxInitAllImageHandlers();
-    wxXmlResource::Get()->InitAllHandlers();
 
-    /* Init AppData
+    // Init AppData
     try
     {
         AppDataInit();
@@ -242,31 +241,12 @@ int wxFormBuilder::OnRun()
 
     m_frame = new MainFrame( NULL ,-1, (int)style, defaultPosition, defaultSize );
 */
-    if ( !wxXmlResource::Get()->Load( wxT("./../xrc/mainmenu.xrc") ) ) return false;
-    if ( !wxXmlResource::Get()->Load( wxT("./../xrc/mainframe.xrc") ) ) return false;
-
-    m_frame = new MainFrame();
+    m_frame = wxFBResource::Get()->GetMainFrame();
 
     // Setup frame icons
-    wxString   imgPath     = wxT("./../xrc/images/logo.png");
-    wxFileName imgFileName = wxFileName( imgPath );
+    wxFileName imgFileName = wxFileName( wxFB_LOGO );
 
     imgFileName.MakeAbsolute();
-
-    if ( imgFileName.FileExists() );
-    {
-        wxIcon       ico16, ico32;
-        wxIconBundle bundle;
-        wxImage      imgLogo = wxImage( imgPath );
-
-        ico16.CopyFromBitmap( imgLogo.Scale( 16, 16 ) );
-        bundle.AddIcon( ico16 );
-
-        ico32.CopyFromBitmap( imgLogo.Scale( 32, 32 ) );
-        bundle.AddIcon( ico32 );
-
-        m_frame->SetIcons( bundle );
-    }
 
     if ( !justGenerate )
     {
@@ -330,9 +310,9 @@ int wxFormBuilder::OnRun()
     {
         return 6;
     }
-
-    AppData()->NewProject();
 /*
+    wxFBResource::Get()->NewProject();
+
 #ifdef __WXMAC__
     // document to open on startup
     if(!m_mac_file_name.IsEmpty())
@@ -353,7 +333,7 @@ bool wxFormBuilder::OnInit()
 
 int wxFormBuilder::OnExit()
 {
-    GUIManager::Free();
+//    GUIManager::Free();
 /*  MacroDictionary::Destroy();
     wxFlatNotebook::CleanUp();
     AppDataDestroy();
