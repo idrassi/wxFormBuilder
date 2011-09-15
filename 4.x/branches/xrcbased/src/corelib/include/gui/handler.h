@@ -23,44 +23,33 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 /**
- * @file    guimanager.h
+ * @file    handler.h
  * @author  Andrea Zanellato (zanellato.andrea@gmail.com)
- * @date    2011/09/07
+ * @date    2011/09/13
  * @version 0.0.1
  */
-#ifndef __WXFBLIB_GUIMANAGER_H__
-#define __WXFBLIB_GUIMANAGER_H__
+#ifndef __WXFB_HANDLER_H__
+#define __WXFB_HANDLER_H__
 
-#include "defs.h"
-#include "utils/singleton.h"
+#include <wx/event.h>
+#include <wx/frame.h>
+#include <wx/splitter.h>
 
-#include <wx/dialog.h>
-#include <wx/notebook.h>
-#include <wx/panel.h>
-#include <wx/toolbar.h>
-#include <wx/treectrl.h>
-
-class GUIManager : public Singleton< GUIManager >
+class wxFBFrameHandler : public wxEvtHandler
 {
 public:
-    wxDialog   *GetAboutDialog( wxWindow *parent );
-    wxToolBar  *GetToolBar( wxWindow *parent );
-    wxNotebook *GetEditor( wxWindow *parent );
-    wxNotebook *GetObjectInspector( wxWindow *parent );
-    wxNotebook *GetObjectPalette( wxWindow *parent );
-    wxTreeCtrl *GetObjectTree( wxWindow *parent );
+    wxFBFrameHandler( wxFrame *owner, wxSplitterWindow *leftSplitter, wxSplitterWindow *rightSplitter );
+
+    void OnAbout( wxCommandEvent &event );
+    void OnExit( wxCommandEvent &event );
+    void OnClose( wxCloseEvent &event );
+    void OnIdle( wxIdleEvent &event );
+    void OnNewProject( wxCommandEvent &event );
 
 private:
-    GUIManager();
-    virtual ~GUIManager();
-
-    wxToolBar  *m_toolBar;
-    wxNotebook *m_editor;
-    wxNotebook *m_objInsp;
-    wxNotebook *m_objPalette;
-    wxTreeCtrl *m_objTree;
-
-    friend class Singleton< GUIManager >;
+    wxFrame          *m_frame;
+    wxSplitterWindow *m_leftSplitter;
+    wxSplitterWindow *m_rightSplitter;
 };
 
-#endif //__WXFBLIB_GUIMANAGER_H__
+#endif //__WXFB_HANDLER_H__

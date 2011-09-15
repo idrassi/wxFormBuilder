@@ -10,7 +10,7 @@
             <style>wxSP_LIVE_UPDATE</style>
             <sashpos>150</sashpos>
             <gravity>0</gravity>
-            <minsize>2</minsize>
+            <minsize>90</minsize>
             <orientation>vertical</orientation>
             <object class="wxPanel" name="ObjTreePanel">
                 <style>wxTAB_TRAVERSAL</style>
@@ -50,6 +50,7 @@
                 <style>wxTAB_TRAVERSAL</style>
                 <object class="wxBoxSizer">
                     <orient>wxVERTICAL</orient>
+                    <minsize>150,-1</minsize>
                     <object class="sizeritem">
                         <option>0</option>
                         <flag>wxEXPAND</flag>
@@ -97,7 +98,7 @@
                             <style>wxSP_LIVE_UPDATE</style>
                             <sashpos>300</sashpos>
                             <gravity>1</gravity>
-                            <minsize>2</minsize>
+                            <minsize>150</minsize>
                             <orientation>vertical</orientation>
                             <object class="wxPanel" name="EditorPanel">
                                 <style>wxTAB_TRAVERSAL</style>
