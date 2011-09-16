@@ -12,11 +12,20 @@
 #ifndef _WX_PROPGRID_ADVPROPS_H_
 #define _WX_PROPGRID_ADVPROPS_H_
 
-#include <wx/font.h>
+#ifdef DOXYGEN
+    #define wxUSE_IMAGE 1
+    #define wxUSE_CHOICEDLG 1
+    #define wxUSE_DATETIME 1
+#else
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "advprops.cpp"
+    #ifndef wxPG_INCLUDE_ADVPROPS
+        #error "Include propgrid.h"
+    #endif
+
 #endif
+
+#include "props.h"
+
 
 // -----------------------------------------------------------------------
 
@@ -25,20 +34,7 @@
 // Additional Value Type Handlers
 //
 #ifndef SWIG
-
-WX_PG_DECLARE_VALUE_TYPE_WITH_DECL(wxColour,WXDLLIMPEXP_PG)
-
-WX_PG_DECLARE_VALUE_TYPE_VOIDP_WITH_DECL(wxArrayInt,WXDLLIMPEXP_PG)
-
-
-#if wxUSE_DATETIME
-#include <wx/datetime.h>
-WX_PG_DECLARE_VALUE_TYPE_BUILTIN_WITH_DECL(wxDateTime,WXDLLIMPEXP_PG)
-#endif
-
 bool WXDLLIMPEXP_PG operator == (const wxArrayInt& array1, const wxArrayInt& array2);
-
-#endif
 
 
 //
@@ -48,9 +44,11 @@ bool WXDLLIMPEXP_PG operator == (const wxArrayInt& array1, const wxArrayInt& arr
 WX_PG_DECLARE_EDITOR_WITH_DECL(SpinCtrl,WXDLLIMPEXP_PG)
 #endif
 
-#if wxUSE_DATEPICKCTRL && defined(wxPG_ALLOW_WXADV)
+#if wxUSE_DATEPICKCTRL
 WX_PG_DECLARE_EDITOR_WITH_DECL(DatePickerCtrl,WXDLLIMPEXP_PG)
 #endif
+
+#endif  // !SWIG
 
 // -----------------------------------------------------------------------
 
@@ -61,10 +59,11 @@ WX_PG_DECLARE_EDITOR_WITH_DECL(DatePickerCtrl,WXDLLIMPEXP_PG)
 
 
 #define wxPG_COLOUR_CUSTOM      0xFFFFFF
+#define wxPG_COLOUR_UNSPECIFIED (wxPG_COLOUR_CUSTOM+1)
 
-/** \class wxColourPropertyValue
-    \ingroup classes
-    \brief Because text, background and other colours tend to differ between
+/** @class wxColourPropertyValue
+    @ingroup classes
+    @brief Because text, background and other colours tend to differ between
     platforms, wxSystemColourProperty must be able to select between system
     colour and, when necessary, to pick a custom one. wxSystemColourProperty
     value makes this possible.
@@ -93,138 +92,65 @@ public:
     /** Resulting colour. Should be correct regardless of type. */
     wxColour    m_colour;
 
-    wxColourPropertyValue() { }
+    wxColourPropertyValue()
+        : wxObject()
+    {
+        m_type = 0;
+    }
 
-    inline void Init( wxUint32 type, const wxColour& colour )
+    wxColourPropertyValue( const wxColourPropertyValue& v )
+        : wxObject()
+    {
+        m_type = v.m_type;
+        m_colour = v.m_colour;
+    }
+
+    virtual ~wxColourPropertyValue()
+    {
+    }
+
+    void Init( wxUint32 type, const wxColour& colour )
     {
         m_type = type;
         m_colour = colour;
     }
 
-    inline wxColourPropertyValue( const wxColour& colour )
+    wxColourPropertyValue( const wxColour& colour )
+        : wxObject()
     {
         m_type = wxPG_COLOUR_CUSTOM;
         m_colour = colour;
     }
 
-    inline wxColourPropertyValue( wxUint32 type )
+    wxColourPropertyValue( wxUint32 type )
+        : wxObject()
     {
         m_type = type;
     }
 
-    inline wxColourPropertyValue( wxUint32 type, const wxColour& colour )
+    wxColourPropertyValue( wxUint32 type, const wxColour& colour )
+        : wxObject()
     {
         Init( type, colour );
     }
 
 #ifndef SWIG
+
+    void operator= (const wxColourPropertyValue& cpv)
+    {
+        Init( cpv.m_type, cpv.m_colour );
+    }
+
 private:
     DECLARE_DYNAMIC_CLASS(wxColourPropertyValue)
 #endif
 };
 
+
 #ifndef SWIG
 bool WXDLLIMPEXP_PG operator == (const wxColourPropertyValue&, const wxColourPropertyValue&);
 
-WX_PG_DECLARE_VALUE_TYPE_WITH_DECL(wxColourPropertyValue,WXDLLIMPEXP_PG)
-#endif
-
-/** \class wxFontPropertyValue
-    \ingroup classes
-    \brief Because the class wxFont cannot be a container for invalid font data (like default values).
-*/
-class WXDLLIMPEXP_PG wxFontPropertyValue : public wxObject
-{
-public:
-    int m_pointSize;		///< Point Size
-    int m_family;			///< Family
-    int m_style;			///< Style
-    int m_weight;			///< Weight
-    bool m_underlined;		///< Underlined
-    wxString m_faceName;	///< Face Name
-
-    inline void InitDefaults()
-    {
-		m_pointSize = -1;
-		m_family = wxFONTFAMILY_DEFAULT;
-		m_style = wxFONTSTYLE_NORMAL;
-		m_weight = wxFONTWEIGHT_NORMAL;
-		m_underlined = false;
-		m_faceName = wxEmptyString;
-    }
-
-    wxFontPropertyValue()
-    {
-    	InitDefaults();
-	}
-
-    inline wxFontPropertyValue( const wxFont& font )
-    {
-        if ( !font.IsOk() )
-        {
-        	InitDefaults();
-        }
-        else
-        {
-        	m_pointSize = font.GetPointSize();
-        	m_family = font.GetFamily();
-        	m_style = font.GetStyle();
-        	m_weight = font.GetWeight();
-        	m_underlined = font.GetUnderlined();
-        	m_faceName = font.GetFaceName();
-        }
-    }
-
-    inline wxFontPropertyValue( int pointSize,
-								int family = wxFONTFAMILY_DEFAULT,
-								int style = wxFONTSTYLE_NORMAL,
-								int weight = wxFONTWEIGHT_NORMAL,
-								bool underlined = false,
-								const wxString& faceName = wxEmptyString )
-	:
-	m_pointSize( pointSize ),
-	m_family( family ),
-	m_style( style ),
-	m_weight( weight ),
-	m_underlined( underlined ),
-	m_faceName( faceName )
-    {
-    }
-
-	wxFont GetFont() const
-	{
-		int pointSize = m_pointSize <= 0 ? wxNORMAL_FONT->GetPointSize() : m_pointSize;
-		return wxFont( pointSize, m_family, m_style, m_weight, m_underlined, m_faceName );
-	}
-
-	// Duplicate wxFont's interface for backward compatiblity
-	#define MAKE_GET_AND_SET( NAME, TYPE, VARIABLE ) 	\
-		TYPE Get##NAME() const { return VARIABLE; }		\
-		void Set##NAME( TYPE value ){ VARIABLE = value; }
-
-	MAKE_GET_AND_SET( PointSize, int, m_pointSize )
-	MAKE_GET_AND_SET( Family, int, m_family )
-	MAKE_GET_AND_SET( Style, int, m_style )
-	MAKE_GET_AND_SET( Weight, int, m_weight )
-	MAKE_GET_AND_SET( Underlined, bool, m_underlined )
-	MAKE_GET_AND_SET( FaceName, wxString, m_faceName )
-
-	// Allow implicit cast to wxFont
-	/*operator wxFont() const
-	{
-		return GetFont();
-	}*/
-
-#ifndef SWIG
-private:
-    DECLARE_DYNAMIC_CLASS(wxFontPropertyValue)
-#endif
-};
-
-#ifndef SWIG
-bool WXDLLIMPEXP_PG operator == (const wxFontPropertyValue&, const wxFontPropertyValue&);
-
-WX_PG_DECLARE_VALUE_TYPE_WITH_DECL(wxFontPropertyValue,WXDLLIMPEXP_PG)
+WX_PG_DECLARE_WXOBJECT_VARIANT_DATA(wxPGVariantDataColourPropertyValue, wxColourPropertyValue, WXDLLIMPEXP_PG)
 #endif
 
 #ifndef SWIG
@@ -239,88 +165,24 @@ WX_PG_DECLARE_VALUE_TYPE_WITH_DECL(wxFontPropertyValue,WXDLLIMPEXP_PG)
 // -----------------------------------------------------------------------
 // Declare part of custom colour property macro pairs.
 
-#define WX_PG_DECLARE_CUSTOM_COLOUR_PROPERTY_WITH_DECL(NAME,DECL) \
-extern DECL wxPGProperty* wxPG_CONSTFUNC(NAME)( const wxString& label, const wxString& name = wxPG_LABEL, const wxColourPropertyValue& value = wxPG_EMPTY_CPV ); \
-extern DECL wxPGPropertyClassInfo NAME##ClassInfo;
-
-#define WX_PG_DECLARE_CUSTOM_COLOUR_PROPERTY(NAME) \
-extern wxPGProperty* wxPG_CONSTFUNC(NAME)( const wxString& label, const wxString& name = wxPG_LABEL, const wxColourPropertyValue& value = wxPG_EMPTY_CPV ); \
-extern wxPGPropertyClassInfo NAME##ClassInfo;
-
-#define WX_PG_DECLARE_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR_WITH_DECL(NAME,DECL) \
-extern DECL wxPGProperty* wxPG_CONSTFUNC(NAME)( const wxString& label, const wxString& name = wxPG_LABEL, const wxColour& value = wxPG_COLOUR_BLACK ); \
-extern DECL wxPGPropertyClassInfo NAME##ClassInfo;
-
-#define WX_PG_DECLARE_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR(NAME) \
-extern wxPGProperty* wxPG_CONSTFUNC(NAME)( const wxString& label, const wxString& name = wxPG_LABEL, const wxColour& value = wxPG_COLOUR_BLACK ); \
-extern wxPGPropertyClassInfo NAME##ClassInfo;
-
-// Declare advanced properties.
-WX_PG_DECLARE_PROPERTY_WITH_DECL(wxFontProperty,const wxFontPropertyValue&,wxFontPropertyValue(),WXDLLIMPEXP_PG)
-WX_PG_DECLARE_PROPERTY_WITH_DECL(wxSystemColourProperty,const wxColourPropertyValue&,wxPG_EMPTY_CPV,WXDLLIMPEXP_PG)
-WX_PG_DECLARE_PROPERTY_WITH_DECL(wxCursorProperty,int,wxCURSOR_NONE,WXDLLIMPEXP_PG)
-WX_PG_DECLARE_PROPERTY_WITH_DECL(wxDateProperty,const wxDateTime&,wxDateTime(),WXDLLIMPEXP_PG)
-
 #if wxUSE_IMAGE || defined(SWIG)
-#include <wx/image.h>
-WX_PG_DECLARE_PROPERTY_WITH_DECL(wxImageFileProperty,const wxString&,wxEmptyString,WXDLLIMPEXP_PG)
-#endif
-
-WX_PG_DECLARE_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR_WITH_DECL(wxColourProperty,WXDLLIMPEXP_PG)
-
-// MultiChoice is trickier.
-
-#ifndef __WXPYTHON__
-
-extern WXDLLIMPEXP_PG wxPGProperty* wxMultiChoiceProperty(const wxString& label,
-                                                          const wxString& name,
-                                                          const wxArrayString& choices = wxArrayString(),
-                                                          const wxArrayInt& value = wxPG_EMPTY_ARRAYINT);
-
-extern WXDLLIMPEXP_PG wxPGProperty* wxMultiChoiceProperty(const wxString& label,
-                                                          const wxString& name,
-                                                          const wxPGChoices& choices,
-                                                          const wxArrayInt& value = wxPG_EMPTY_ARRAYINT);
-
-extern WXDLLIMPEXP_PG wxPGProperty* wxMultiChoiceProperty(const wxString& label,
-                                                          const wxString& name,
-                                                          const wxArrayInt& value);
-
-#else
-
-extern WXDLLIMPEXP_PG wxPGProperty* wxMultiChoiceProperty(const wxString& label,
-                                                          const wxString& name = wxPG_LABEL,
-                                                          const wxArrayString& choices = wxArrayString(),
-                                                    // This crazyness is needed for Python 2.3 (which uses
-                                                    // VC6) compatibility.
-                                                    #ifndef SWIG
-                                                          const wxArrayInt& value = (*((wxArrayInt*)NULL)));
-                                                    #else
-                                                          const wxArrayInt& value = wxArrayInt());
-                                                    #endif
-
+    #include <wx/image.h>
 #endif
 
 // -----------------------------------------------------------------------
 
-//
-// Define property classes *only* if propdev.h was included
-//
-#if defined(_WX_PROPGRID_PROPDEV_H_)
-
-//#ifndef SWIG
-
-// -----------------------------------------------------------------------
-
-class WXDLLIMPEXP_PG wxFontPropertyClass : public wxPGPropertyWithChildren
+/** @class wxFontProperty
+    @ingroup classes
+    @brief Property representing wxFont.
+*/
+class WXDLLIMPEXP_PG wxFontProperty : public wxPGProperty
 {
-    WX_PG_DECLARE_PROPERTY_CLASS()
+    WX_PG_DECLARE_PROPERTY_CLASS(wxFontProperty)
 public:
 
-    wxFontPropertyClass( const wxString& label, const wxString& name, const wxFontPropertyValue& value );
-    virtual ~wxFontPropertyClass();
-
-    WX_PG_DECLARE_PARENTAL_TYPE_METHODS()
+    wxFontProperty( const wxString& label = wxPG_LABEL, const wxString& name = wxPG_LABEL, const wxFont& value = wxFont() );
+    virtual ~wxFontProperty();
+    virtual void OnSetValue();
     virtual wxString GetValueAsString( int argFlags = 0 ) const;
 
     WX_PG_DECLARE_EVENT_METHODS()
@@ -328,7 +190,6 @@ public:
     //WX_PG_DECLARE_CUSTOM_PAINT_METHODS()
 
 protected:
-    wxFontPropertyValue m_value_wxFont;
 };
 
 // -----------------------------------------------------------------------
@@ -338,125 +199,192 @@ protected:
 #define wxPG_PROP_TRANSLATE_CUSTOM      wxPG_PROP_CLASS_SPECIFIC_1
 
 
-class WXDLLIMPEXP_PG wxSystemColourPropertyClass : public wxEnumPropertyClass
+/** @class wxSystemColourProperty
+    @ingroup classes
+    @brief Has dropdown list of wxWidgets system colours. Value used is
+    of wxColourPropertyValue type.
+*/
+class WXDLLIMPEXP_PG wxSystemColourProperty : public wxEnumProperty
 {
-    WX_PG_DECLARE_PROPERTY_CLASS()
+    WX_PG_DECLARE_PROPERTY_CLASS(wxSystemColourProperty)
 public:
 
-    wxSystemColourPropertyClass( const wxString& label, const wxString& name,
-        const wxColourPropertyValue& value );
-    ~wxSystemColourPropertyClass();
+    wxSystemColourProperty( const wxString& label = wxPG_LABEL,
+                            const wxString& name = wxPG_LABEL,
+                            const wxColourPropertyValue& value = wxColourPropertyValue() );
+    ~wxSystemColourProperty();
+
+    virtual void OnSetValue();
+    virtual bool IntToValue( wxVariant& variant, int number, int argFlags = 0 ) const;
+
+    /** Override in derived class to customize how colours are printed as strings.
+    */
+    virtual wxString ColourToString( const wxColour& col, int index ) const;
+
+    /** Returns index of entry that triggers colour picker dialog
+        (default is last).
+    */
+    virtual int GetCustomColourIndex() const;
 
     WX_PG_DECLARE_BASIC_TYPE_METHODS()
     WX_PG_DECLARE_EVENT_METHODS()
-    WX_PG_DECLARE_CUSTOM_PAINT_METHODS()
     WX_PG_DECLARE_ATTRIBUTE_METHODS()
 
-    // Helper function to show the colour dialog
-    bool QueryColourFromUser( wxPropertyGrid* propgrid, wxWindow* primary );
+    WX_PG_DECLARE_CUSTOM_PAINT_METHODS()
+    //virtual wxSize GetImageSize( int item ) const;
+    //virtual wxPGCellRenderer* GetCellRenderer( int column ) const;
 
-    // Default is to use wxSystemSettings::GetColour(index). Override to use
-    // custom colour tables etc.
-    virtual long GetColour( int index );
+    // Helper function to show the colour dialog
+    bool QueryColourFromUser( wxVariant& variant ) const;
+
+    /** Default is to use wxSystemSettings::GetColour(index). Override to use
+        custom colour tables etc.
+    */
+    virtual wxColour GetColour( int index ) const;
+
+    wxColourPropertyValue GetVal( const wxVariant* pVariant = NULL ) const;
 
 protected:
 
     // Special constructors to be used by derived classes.
-    wxSystemColourPropertyClass( const wxString& label, const wxString& name,
+    wxSystemColourProperty( const wxString& label, const wxString& name,
         const wxChar** labels, const long* values, wxPGChoices* choicesCache,
         const wxColourPropertyValue& value );
-    wxSystemColourPropertyClass( const wxString& label, const wxString& name,
+    wxSystemColourProperty( const wxString& label, const wxString& name,
         const wxChar** labels, const long* values, wxPGChoices* choicesCache,
         const wxColour& value );
 
-    void Init ( int type, const wxColour& colour );
+    void Init( int type, const wxColour& colour );
+
+    // Utility functions for internal use
+    virtual wxVariant DoTranslateVal( wxColourPropertyValue& v ) const;
+    wxVariant TranslateVal( wxColourPropertyValue& v ) const
+    {
+        return DoTranslateVal( v );
+    }
+    wxVariant TranslateVal( int type, const wxColour& colour ) const
+    {
+        wxColourPropertyValue v(type, colour);
+        return DoTranslateVal( v );
+    }
 
     // Translates colour to a int value, return wxNOT_FOUND if no match.
-    int ColToInd ( const wxColour& colour );
-
-    wxColourPropertyValue   m_value;
+    int ColToInd( const wxColour& colour ) const;
 };
 
 // -----------------------------------------------------------------------
 
-#ifndef SWIG
+WX_PG_DECLARE_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR_WITH_DECL(wxColourProperty, class WXDLLIMPEXP_PG)
 
-class WXDLLIMPEXP_PG wxCursorPropertyClass : public wxEnumPropertyClass
+// -----------------------------------------------------------------------
+
+/** @class wxCursorProperty
+    @ingroup classes
+    @brief Property representing wxCursor.
+*/
+class WXDLLIMPEXP_PG wxCursorProperty : public wxEnumProperty
 {
-    WX_PG_DECLARE_DERIVED_PROPERTY_CLASS()
-public:
+    DECLARE_DYNAMIC_CLASS(wxCursorProperty)
 
-    wxCursorPropertyClass( const wxString& label, const wxString& name, int value );
-    virtual ~wxCursorPropertyClass();
+    wxCursorProperty( const wxString& label= wxPG_LABEL,
+                      const wxString& name= wxPG_LABEL,
+                      int value = 0 );
+    virtual ~wxCursorProperty();
 
     WX_PG_DECLARE_CUSTOM_PAINT_METHODS()
+    //virtual wxSize GetImageSize( int item ) const;
+    //virtual wxPGCellRenderer* GetCellRenderer( int column ) const;
 };
-
-#endif
 
 // -----------------------------------------------------------------------
 
-#if wxUSE_IMAGE || defined(SWIG)
+#if wxUSE_IMAGE
 
 WXDLLIMPEXP_PG const wxString& wxPGGetDefaultImageWildcard();
 
-class WXDLLIMPEXP_PG wxImageFilePropertyClass : public wxFilePropertyClass
+/** @class wxImageFileProperty
+    @ingroup classes
+    @brief Property representing image file(name).
+*/
+class WXDLLIMPEXP_PG wxImageFileProperty : public wxFileProperty
 {
-    WX_PG_DECLARE_DERIVED_PROPERTY_CLASS()
+    DECLARE_DYNAMIC_CLASS(wxImageFileProperty)
 public:
 
-    wxImageFilePropertyClass( const wxString& label, const wxString& name, const wxString& value );
-    virtual ~wxImageFilePropertyClass ();
+    wxImageFileProperty( const wxString& label= wxPG_LABEL,
+                         const wxString& name = wxPG_LABEL,
+                         const wxString& value = wxEmptyString);
+    virtual ~wxImageFileProperty();
 
-    virtual void DoSetValue ( wxPGVariant value );
+    virtual void OnSetValue();
+
     WX_PG_DECLARE_CUSTOM_PAINT_METHODS()
 
 protected:
     wxBitmap*   m_pBitmap; // final thumbnail area
     wxImage*    m_pImage; // intermediate thumbnail area
-
 };
 
 #endif
 
-#if wxUSE_CHOICEDLG && !defined(SWIG) //|| defined(SWIG)
+#if wxUSE_CHOICEDLG || defined(SWIG)
 
-class WXDLLIMPEXP_PG wxMultiChoicePropertyClass : public wxPGProperty
+/** @class wxMultiChoiceProperty
+    @ingroup classes
+    @brief
+    Property that manages a value resulting from wxMultiChoiceDialog. Value is
+    array of strings. You can get value as array of choice values/indices by
+    calling wxMultiChoiceProperty::GetValueAsArrayInt().
+
+    <b>Supported special attributes:</b>
+    - "UserStringMode": If > 0, allow user to manually enter strings that are not
+      in the list of choices. If this value is 1, user strings
+      are preferably placed in front of valid choices. If value is 2, then
+      those strings will placed behind valid choices.
+*/
+class WXDLLIMPEXP_PG wxMultiChoiceProperty : public wxPGProperty
 {
-    WX_PG_DECLARE_PROPERTY_CLASS()
+    WX_PG_DECLARE_PROPERTY_CLASS(wxMultiChoiceProperty)
 public:
 
-    wxMultiChoicePropertyClass( const wxString& label,
-                                const wxString& name,
-                                const wxArrayString& strings,
-                                const wxArrayInt& value );
-    wxMultiChoicePropertyClass( const wxString& label,
-                                const wxString& name = wxPG_LABEL,
-                                const wxArrayInt& value = wxArrayInt() );
-    wxMultiChoicePropertyClass( const wxString& label,
-                                const wxString& name,
-                                const wxPGChoices& choices,
-                                const wxArrayInt& value = wxArrayInt() );
-    virtual ~wxMultiChoicePropertyClass();
+    wxMultiChoiceProperty( const wxString& label,
+                           const wxString& name,
+                           const wxArrayString& strings,
+                           const wxArrayString& value );
+#ifndef SWIG
+    wxMultiChoiceProperty( const wxString& label,
+                           const wxString& name,
+                           const wxPGChoices& choices,
+                           const wxArrayString& value = wxArrayString() );
 
-    virtual void DoSetValue( wxPGVariant value );
-    virtual wxPGVariant DoGetValue() const;
+    wxMultiChoiceProperty( const wxString& label = wxPG_LABEL,
+                           const wxString& name = wxPG_LABEL,
+                           const wxArrayString& value = wxArrayString() );
+#endif
+    virtual ~wxMultiChoiceProperty();
+
+    virtual void OnSetValue();
     virtual wxString GetValueAsString( int flags = 0 ) const;
-    virtual bool SetValueFromString( const wxString& text, int flags );
+    virtual bool StringToValue( wxVariant& variant, const wxString& text, int argFlags = 0 ) const;
     WX_PG_DECLARE_EVENT_METHODS()
 
     virtual int GetChoiceInfo( wxPGChoiceInfo* choiceinfo );
 
+    wxArrayInt GetValueAsArrayInt() const
+    {
+        return m_choices.GetValuesForStrings(m_value.GetArrayString());
+    }
+
 protected:
 
-    void SetValueI( const wxArrayInt& arr );  // I stands for internal
     void GenerateValueAsString();
 
     // Returns translation of values into string indices.
     wxArrayInt GetValueAsIndices() const;
 
-    wxPGChoices         m_choices; // Holds strings (any values given are ignored).
-    wxArrayInt          m_value_wxArrayInt;  // Actual value.
+    wxArrayString       m_valueAsStrings;  // Value as array of strings
+
+    wxPGChoices         m_choices;
 
     wxString            m_display; // Cache displayed text since generating it is relatively complicated.
 };
@@ -465,51 +393,62 @@ protected:
 
 // -----------------------------------------------------------------------
 
-#if wxUSE_DATETIME && !defined(SWIG)
+#if wxUSE_DATETIME || defined(SWIG)
 
-class WXDLLIMPEXP_PG wxDatePropertyClass : public wxPGProperty
+/** @class wxDateProperty
+    @ingroup classes
+    @brief Property representing wxDateTime.
+
+    <b>Supported special attributes:</b>
+    - "DateFormat": Determines displayed date format.
+    - "PickerStyle": Determines window style used with wxDatePickerCtrl.
+       Default is wxDP_DEFAULT | wxDP_SHOWCENTURY. Using wxDP_ALLOWNONE 
+       enables additional support for unspecified property value.
+*/
+class WXDLLIMPEXP_PG wxDateProperty : public wxPGProperty
 {
-    WX_PG_DECLARE_PROPERTY_CLASS()
+    WX_PG_DECLARE_PROPERTY_CLASS(wxDateProperty)
 public:
 
-    wxDatePropertyClass( const wxString& label, const wxString& name, const wxDateTime& value );
-    virtual ~wxDatePropertyClass();
+    wxDateProperty( const wxString& label = wxPG_LABEL,
+                    const wxString& name = wxPG_LABEL,
+                    const wxDateTime& value = wxDateTime() );
+    virtual ~wxDateProperty();
 
-    virtual void DoSetValue( wxPGVariant value );
-    virtual wxPGVariant DoGetValue() const;
+    virtual void OnSetValue();
     virtual wxString GetValueAsString( int flags = 0 ) const;
-    virtual bool SetValueFromString( const wxString& text, int flags );
+    virtual bool StringToValue( wxVariant& variant, const wxString& text, int argFlags = 0 ) const;
 
-    //WX_PG_DECLARE_EVENT_METHODS()
     WX_PG_DECLARE_ATTRIBUTE_METHODS()
 
-    inline void SetFormat( const wxString& format )
+    void SetFormat( const wxString& format )
     {
         m_format = format;
     }
 
-    inline const wxString& GetFormat() const
+    const wxString& GetFormat() const
     {
         return m_format;
     }
-
-    inline void SetDateValue( const wxDateTime& dt )
+    
+    void SetDateValue( const wxDateTime& dt )
     {
-        m_valueDateTime = dt;
+        //m_valueDateTime = dt;
+        m_value = dt;
     }
 
-    inline const wxDateTime& GetDateValue() const
+    wxDateTime GetDateValue() const
     {
-        return m_valueDateTime;
+        //return m_valueDateTime;
+        return m_value;
     }
 
-    inline long GetDatePickerStyle() const
+    long GetDatePickerStyle() const
     {
         return m_dpStyle;
     }
 
 protected:
-    wxDateTime      m_valueDateTime;
     wxString        m_format;
     long            m_dpStyle;  // DatePicker style
 
@@ -521,8 +460,46 @@ protected:
 
 // -----------------------------------------------------------------------
 
-//#endif // #ifndef SWIG
+#if wxUSE_SPINBTN
 
-#endif // _WX_PROPGRID_PROPDEV_H_
+//
+// Implement an editor control that allows using wxSpinCtrl (actually,
+// a combination of wxTextCtrl and wxSpinButton) to edit value of
+// wxIntProperty and wxFloatProperty (and similar).
+//
+// Note that new editor classes needs to be registered before use.
+// This can be accomplished using wxPGRegisterEditorClass macro, which
+// is used for SpinCtrl in wxPropertyGridInterface::RegisterAdditionalEditors
+// (see below). Registeration can also be performed in a constructor of a
+// property that is likely to require the editor in question.
+//
+
+
+#include <wx/spinbutt.h>
+#include "editors.h"
+
+
+// NOTE: Regardless that this class inherits from a working editor, it has
+//   all necessary methods to work independently. wxTextCtrl stuff is only
+//   used for event handling here.
+class WXDLLIMPEXP_PG wxPGSpinCtrlEditor : public wxPGTextCtrlEditor
+{
+    WX_PG_DECLARE_EDITOR_CLASS(wxPGSpinCtrlEditor)
+public:
+    virtual ~wxPGSpinCtrlEditor();
+
+    // See below for short explanations of what these are suppposed to do.
+    wxPG_DECLARE_CREATECONTROLS
+
+    virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
+        wxWindow* wnd, wxEvent& event ) const;
+
+private:
+    mutable wxString m_tempString;
+};
+
+#endif
+
+// -----------------------------------------------------------------------
 
 #endif // _WX_PROPGRID_ADVPROPS_H_
