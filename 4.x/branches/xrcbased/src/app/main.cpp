@@ -310,9 +310,10 @@ int wxFormBuilder::OnRun()
     {
         return 6;
     }
-/*
-    wxFBResource::Get()->NewProject();
 
+    wxFBResource::Get()->NewProject();
+    wxFBResource::Get()->LoadPlugins();
+/*
 #ifdef __WXMAC__
     // document to open on startup
     if(!m_mac_file_name.IsEmpty())

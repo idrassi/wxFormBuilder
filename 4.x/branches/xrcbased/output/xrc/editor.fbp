@@ -284,7 +284,7 @@
                                 <event name="OnSize"></event>
                                 <event name="OnUpdateUI"></event>
                                 <object class="wxBoxSizer" expanded="1">
-                                    <property name="minimum_size"></property>
+                                    <property name="minimum_size">150,-1</property>
                                     <property name="name">VisualEditorSizer</property>
                                     <property name="orient">wxVERTICAL</property>
                                     <property name="permission">none</property>
@@ -951,7 +951,7 @@
                                                         <property name="resize">Resizable</property>
                                                         <property name="row"></property>
                                                         <property name="show">1</property>
-                                                        <property name="size">-1,-1</property>
+                                                        <property name="size">150,90</property>
                                                         <property name="subclass"></property>
                                                         <property name="toolbar_pane">0</property>
                                                         <property name="tooltip"></property>

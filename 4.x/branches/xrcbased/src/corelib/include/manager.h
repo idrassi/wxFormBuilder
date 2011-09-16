@@ -31,18 +31,24 @@
 #ifndef __WXFB_RESMANAGER_H__
 #define __WXFB_RESMANAGER_H__
 
-#define wxFB_XRC_DIR            wxStandardPaths::Get().GetResourcesDir().BeforeLast('/') + wxFILE_SEP_PATH + wxT("wxformbuilder") + wxFILE_SEP_PATH + wxT("xrc")
-#define wxFB_ABOUT              wxFB_XRC_DIR + wxFILE_SEP_PATH + wxT("about.xrc")
-#define wxFB_DEFAULTS           wxFB_XRC_DIR + wxFILE_SEP_PATH + wxT("default.xrc")
-#define wxFB_DEFAULT_PROJECT    wxFB_XRC_DIR + wxFILE_SEP_PATH + wxT("project.xrc")
-#define wxFB_EDITOR             wxFB_XRC_DIR + wxFILE_SEP_PATH + wxT("editor.xrc")
-#define wxFB_MAINFRAME          wxFB_XRC_DIR + wxFILE_SEP_PATH + wxT("mainframe.xrc")
-#define wxFB_MAINMENU           wxFB_XRC_DIR + wxFILE_SEP_PATH + wxT("mainmenu.xrc")
-#define wxFB_OBJECT_INSPECTOR   wxFB_XRC_DIR + wxFILE_SEP_PATH + wxT("objinsp.xrc")
-#define wxFB_OBJECT_TREE        wxFB_XRC_DIR + wxFILE_SEP_PATH + wxT("objtree.xrc")
-#define wxFB_OBJECT_PALETTE     wxFB_XRC_DIR + wxFILE_SEP_PATH + wxT("palette.xrc")
-#define wxFB_TOOLBAR            wxFB_XRC_DIR + wxFILE_SEP_PATH + wxT("toolbar.xrc")
-#define wxFB_LOGO               wxFB_XRC_DIR + wxFILE_SEP_PATH + wxT("images/logo.png")
+#define wxFB_XRC_DIR            wxStandardPaths::Get().GetResourcesDir().BeforeLast('/') + wxFILE_SEP_PATH + wxT("wxformbuilder") + wxFILE_SEP_PATH + wxT("xrc") + wxFILE_SEP_PATH
+#define wxFB_ABOUT              wxFB_XRC_DIR + wxT("about.xrc")
+#define wxFB_DEFAULTS           wxFB_XRC_DIR + wxT("default.xrc")
+#define wxFB_DEFAULT_PROJECT    wxFB_XRC_DIR + wxT("project.xrc")
+#define wxFB_EDITOR             wxFB_XRC_DIR + wxT("editor.xrc")
+#define wxFB_MAINFRAME          wxFB_XRC_DIR + wxT("mainframe.xrc")
+#define wxFB_MAINMENU           wxFB_XRC_DIR + wxT("mainmenu.xrc")
+#define wxFB_OBJECT_INSPECTOR   wxFB_XRC_DIR + wxT("objinsp.xrc")
+#define wxFB_OBJECT_TREE        wxFB_XRC_DIR + wxT("objtree.xrc")
+#define wxFB_OBJECT_PALETTE     wxFB_XRC_DIR + wxT("palette.xrc")
+#define wxFB_TOOLBAR            wxFB_XRC_DIR + wxT("toolbar.xrc")
+#define wxFB_LOGO               wxFB_XRC_DIR + wxT("images/logo.png")
+
+#ifdef __WXMSW__
+    #define wxFB_PLUGINS_DIR    wxStandardPaths::Get().GetResourcesDir().BeforeLast('/') + wxFILE_SEP_PATH + wxT("plugins") + wxFILE_SEP_PATH
+#else
+    #define wxFB_PLUGINS_DIR    wxStandardPaths::Get().GetResourcesDir().BeforeLast('/') + wxFILE_SEP_PATH + wxT("wxformbuilder/plugins") + wxFILE_SEP_PATH
+#endif
 
 #include "defs.h"
 #include "gui/handler.h"
@@ -67,21 +73,25 @@
 class WXDLLIMPEXP_WXFBCORE wxFBResource : public wxXmlResource
 {
 public:
-    wxDialog   *GetAboutDialog( wxWindow *parent = NULL );
-    wxFrame    *GetMainFrame( wxWindow *parent = NULL, bool aui = false );
-    wxMenuBar  *GetMainMenu( wxWindow *parent = NULL );
-    wxNotebook *GetEditor( wxWindow *parent = NULL );
-    wxNotebook *GetObjectInspector( wxWindow *parent = NULL );
-    wxNotebook *GetObjectPalette( wxWindow *parent = NULL );
-    wxTreeCtrl *GetObjectTree( wxWindow *parent = NULL );
-    wxToolBar  *GetToolBar( wxWindow *parent = NULL );
+    // GUI staff
+    wxDialog                *GetAboutDialog     ( wxWindow *parent = NULL );
+    wxFrame                 *GetMainFrame       ( wxWindow *parent = NULL, bool aui = false );
+    wxMenuBar               *GetMainMenu        ( wxWindow *parent = NULL );
+    wxNotebook              *GetEditor          ( wxWindow *parent = NULL );
+    wxNotebook              *GetObjectInspector ( wxWindow *parent = NULL );
+    wxNotebook              *GetObjectPalette   ( wxWindow *parent = NULL );
+    wxTreeCtrl              *GetObjectTree      ( wxWindow *parent = NULL );
+    wxToolBar               *GetToolBar         ( wxWindow *parent = NULL );
 
-    wxPropertyGridManager *GetPGManagerProperties() { return m_pgProps; }
-    wxPropertyGridManager *GetPGManagerEvents() { return m_pgEvents; }
+    wxPropertyGridManager   *GetPGManagerProperties()   { return m_pgProps; }
+    wxPropertyGridManager   *GetPGManagerEvents()       { return m_pgEvents; }
 
-    wxPropertyGridXmlHandler *GetPGXmlHandler() { return m_pgXrcHandler; }
+    wxPropertyGridXmlHandler *GetPGXmlHandler()         { return m_pgXrcHandler; }
 
+    // App stuff
     void NewProject();
+    void LoadPlugins();
+    bool LoadPackage( const wxString& file, const wxString& iconPath = wxEmptyString );
 
     static wxFBResource *Get();
 

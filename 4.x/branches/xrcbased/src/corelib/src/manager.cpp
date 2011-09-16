@@ -30,7 +30,9 @@
  */
 #include "manager.h"
 
+#include <wx/dir.h>
 #include <wx/image.h>
+#include <wx/msgdlg.h>
 #include <wx/panel.h>
 #include <wx/propgrid/manager.h>
 #include <wx/sizer.h>
@@ -269,89 +271,104 @@ void wxFBResource::NewProject()
         }
     }
 
-/*
-    wxXmlDocument defPrj;
-    if ( !defPrj.Load( wxFB_DEFAULT_PROJECT ) ) return;
-
-    if ( m_objInsp && m_pgProps )
+    if ( m_objTree )
     {
-        wxPropertyGridPage *page = m_pgProps->GetPage( 0 );
-        if ( page )
+        m_objTree->DeleteAllItems();
+        m_objTree->AddRoot( wxT(" : ") + wxString(_("Project") ), 0 );
+    }
+}
+
+void wxFBResource::LoadPlugins()
+{
+    // Open plugins directory for iteration
+    if ( !wxDirExists( wxFB_PLUGINS_DIR ) )
+    {
+        wxString msg = _("Plugins directory") + wxT(" ") + wxFB_PLUGINS_DIR + wxT(" ") + _("doesn't exists!");
+        wxMessageBox( msg, wxT("wxFormBuilder"), wxOK | wxICON_EXCLAMATION, NULL );
+        return;
+    }
+
+    wxDir pluginsDir( wxFB_PLUGINS_DIR );
+    if ( !pluginsDir.IsOpened() ) return;
+
+    // Plugin directory (e.g.'forms')
+    wxString pluginDirName;
+    int      iconIndex       = -1;
+    bool     moreDirectories = pluginsDir.GetFirst( &pluginDirName, wxEmptyString, wxDIR_DIRS | wxDIR_HIDDEN );
+
+    // Iterate through plugin directories and load the package from the xml subdirectory
+    while ( moreDirectories )
+    {
+        // Plugin path (e.g. 'path/to/plugins/forms')
+        wxString nextPluginPath     = wxFB_PLUGINS_DIR + pluginDirName;
+
+        // XRC resource directory (e.g. 'path/to/plugins/forms/xml')
+        wxString nextPluginXmlPath  = nextPluginPath + wxFILE_SEP_PATH + wxT("xml");
+
+        // XRC icons directory (e.g. 'path/to/plugins/forms/icons')
+        wxString nextPluginIconPath = nextPluginPath + wxFILE_SEP_PATH + wxT("icons");
+
+        // Iterate through .xml files in the xml directory
+        if ( wxDirExists( nextPluginPath ) )
         {
-            LoadObject( m_objInsp, wxT("Project"), wxT("wxPropertyCategory") )
-            wxPropertyCategory *cat = wxDynamicCast( LoadObject( m_pgProps, wxT("Project"), wxT("wxPropertyCategory") ), wxPropertyCategory );
-            if ( cat )
+            if ( wxDirExists( nextPluginXmlPath ) )
             {
-                m_pgXrcHandler->InitPopulator();
-                m_pgXrcHandler->PopulatePage( m_pgProps->GetState() );
-                m_pgXrcHandler->DonePopulator();
+                wxDir pluginXmlDir( nextPluginXmlPath );
+                if ( pluginXmlDir.IsOpened() )
+                {
+                    // XRC file to check (e.g. 'frame.xrc')
+                    wxString packageXmlFile;
+                    bool     moreXmlFiles = pluginXmlDir.GetFirst( &packageXmlFile, wxT("*.xml"),
+                                                                    wxDIR_FILES | wxDIR_HIDDEN );
+                    while ( moreXmlFiles )
+                    {
+                        wxFileName nextXmlFile( nextPluginXmlPath + wxFILE_SEP_PATH + packageXmlFile );
+                        if ( !nextXmlFile.IsAbsolute() )
+                        {
+                            nextXmlFile.MakeAbsolute();
+                        }
+
+                        // Load the plugin package
+                        if ( LoadPackage( nextXmlFile.GetFullPath(), nextPluginIconPath ) );
+                        {
+                            wxString plugBmpPath = nextPluginIconPath + wxFILE_SEP_PATH + pluginDirName + wxT(".png");
+
+                            if ( wxFileExists( plugBmpPath ) )
+                            {
+                                wxImageList *imgList = m_objPalette->GetImageList();
+                                if ( !imgList )
+                                {
+                                    imgList = new wxImageList( 16, 16 );
+                                    m_objPalette->SetImageList( imgList );
+                                }
+
+                                wxBitmap pluginBmp = wxBitmap( plugBmpPath, wxBITMAP_TYPE_PNG );
+                                wxImage  pluginImg = pluginBmp.ConvertToImage().Scale( 16, 16 );
+                                iconIndex++;
+                                imgList->Add( pluginImg );
+                            }
+
+                            wxString   packageName = pluginDirName.Capitalize();
+                            wxToolBar *pluginBar   = new wxToolBar( m_objPalette, XRCID( packageName ) );
+
+                            m_objPalette->AddPage( pluginBar, packageName, false, iconIndex );
+                        }
+
+                        moreXmlFiles = pluginXmlDir.GetNext( &packageXmlFile );
+                    }
+                }
             }
         }
+
+        moreDirectories = pluginsDir.GetNext( &pluginDirName );
     }
+}
 
-//---------------------------------------------------------------------------------------------
-            wxXmlNode *propNode = defPrj.GetRoot()->GetChildren();
-
-            wxString propClass, propLabel, propName, propValue, emptyString, propData;
-            wxPGChoices *pChoices = NULL;
-
-            while ( propNode )
-            {
-                
-                name = propNode->GetName();
-
-                if ( name == wxT("property") )
-                {
-                    propClass = wxXML_GetAttribute( propNode, wxT("class"), emptyString );
-
-                    wxXmlNode *dataNode = propNode->GetChildren();
-                    propData = propNode->GetName();
-
-                    while ( dataNode )
-                    {
-                        if ( propData == wxT("label") )
-                        {
-                            propValue = dataNode->GetContent();
-                        }
-                        else if ( propData == wxT("name") )
-                        {
-                            propName = dataNode->GetContent();
-                        }
-                        else if ( propData == wxT("name") )
-                        {
-                            propName = dataNode->GetContent();
-                        }
-                    }
-
-                    wxPGProperty *prop = wxPropertyGridPopulator::Add( propClass, propLabel, propName,
-                                                                                  propValue, pChoices );
-                    page->Append( prop );
-                }
-
-                propNode = propNode->GetNext();
-            }
-//-----------------------------------------------------------------------------------------------------
-    //m_project = wxDynamicCast( LoadObject( NULL, wxT("DefaultProject"), wxT("Project") ), Project );
-
-    wxXmlDocument defPrj, newPrj;
-    if ( !defPrj.Load( wxFB_DEFAULT_PROJECT ) ) return;
-
-    newPrj = wxXmlDocument( defPrj );
-
-    wxXmlNode *prjCatNode = newPrj.GetRoot()->GetChildren()->GetChildren();
-    newPrj.GetRoot()->GetChildren()->RemoveChild( prjCatNode );
-    wxXmlNode *pgPageNode = FindResource( wxT("ObjInspPropsPGMan"), wxT("wxPropertyGridManager"), true )->GetChildren()->GetNext();
-
-    if ( pgPageNode && prjCatNode )
-    {
-        wxPropertyGridManager *pg = wxDynamicCast( wxWindow::FindWindowById( XRCID("ObjInspPropsPGMan") ), wxPropertyGridManager );
-
-        pgPageNode->InsertChildAfter( prjCatNode, pgPageNode->GetChildren() );
-
-        newPrj.SetRoot( pgPageNode );
-        newPrj.Save( wxFB_XRC_DIR + wxFILE_SEP_PATH + wxT("test.xrc") );
-    }
-*/
+bool wxFBResource::LoadPackage( const wxString& file, const wxString& iconPath )
+{
+    wxLogDebug( wxT("file path:%s"), file );
+    wxLogDebug( wxT("icon path:%s"), iconPath );
+    return true;
 }
 
 wxFBResource *wxFBResource::ms_instance = NULL;

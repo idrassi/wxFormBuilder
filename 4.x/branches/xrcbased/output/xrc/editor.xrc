@@ -7,9 +7,11 @@
             <selected>0</selected>
             <object class="wxScrolledWindow" name="VisualEditor">
                 <style>wxHSCROLL|wxVSCROLL</style>
+                <scrollrate>5,5</scrollrate>
                 <bg>#c0c0c0</bg>
                 <object class="wxBoxSizer">
                     <orient>wxVERTICAL</orient>
+                    <minsize>150,-1</minsize>
                     <object class="sizeritem">
                         <option>0</option>
                         <flag>wxLEFT|wxTOP</flag>
@@ -93,6 +95,7 @@
                                     <border>5</border>
                                     <object class="wxPanel" name="WindowPanel">
                                         <style>wxTAB_TRAVERSAL</style>
+                                        <size>150,90</size>
                                     </object>
                                 </object>
                             </object>
