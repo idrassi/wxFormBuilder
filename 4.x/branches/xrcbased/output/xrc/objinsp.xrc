@@ -10,7 +10,7 @@
             <label>Properties</label>
             <image>0</image>
             <object class="wxPropertyGridManager" name="ObjectProperties">
-                <style>wxTAB_TRAVERSAL|wxPG_BOLD_MODIFIED|wxPG_SPLITTER_AUTO_CENTER|wxPG_DESCRIPTION|wxPG_THEME_BORDER|wxPG_TOOLBAR</style>
+                <style>wxTAB_TRAVERSAL|wxPG_BOLD_MODIFIED|wxPG_SPLITTER_AUTO_CENTER|wxPG_DESCRIPTION|wxPG_THEME_BORDER</style>
                 <page>
                     <label>Properties</label>
                 </page>
