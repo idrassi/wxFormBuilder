@@ -18,6 +18,9 @@
         $(ADDITIONS_SRC_DIR)/propgrid/manager.cpp
         $(ADDITIONS_SRC_DIR)/propgrid/odcombo.cpp
         $(ADDITIONS_SRC_DIR)/propgrid/extras.cpp
+		$(ADDITIONS_SRC_DIR)/propgrid/editors.cpp
+		$(ADDITIONS_SRC_DIR)/propgrid/xh_propgrid.cpp
+		
     </set>
 
 	<!-- ************************************************************ -->
@@ -45,7 +48,10 @@
     <dll id="propgriddll" template="wx_additions_dll" cond="SHARED=='1'">
         <define>WXMAKINGDLL_PROPGRID</define>
         <sources>$(PROPGRID_SRC)</sources>
-        <wx-lib>core</wx-lib>
+        <wx-lib>xrc</wx-lib>
+		<wx-lib>xml</wx-lib>
+		<wx-lib>adv</wx-lib>
+		<wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
     </dll>
 
