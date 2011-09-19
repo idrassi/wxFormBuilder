@@ -199,8 +199,7 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
 
         wxXmlNode *parentNode = node->GetParent();
 
-        if ( (parentNode->GetName() == wxT("page") ||
-             parentNode->GetName() == wxT("property")) && m_class == wxT("wxPropertyGridManager"))
+        if ( parentNode->GetName() == wxT("page") || parentNode->GetName() == wxT("property") )
         {
             wxASSERT( m_manager );
 
@@ -208,8 +207,7 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
             if ( HasParam( sDesc ) )
             {
                 wxString text = GetText( sDesc );
-                property->SetHelpString( text ); // FIXME
-//              m_manager->SetDescription( label, text );
+                property->SetHelpString( text );
             }
         }
     }
