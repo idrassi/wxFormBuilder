@@ -32,6 +32,8 @@
 #define __WXFB_RESMANAGER_H__
 
 #define wxFB_XRC_DIR            wxStandardPaths::Get().GetResourcesDir().BeforeLast('/') + wxFILE_SEP_PATH + wxT("wxformbuilder") + wxFILE_SEP_PATH + wxT("xrc") + wxFILE_SEP_PATH
+#define wxFB_XML_DIR            wxStandardPaths::Get().GetResourcesDir().BeforeLast('/') + wxFILE_SEP_PATH + wxT("wxformbuilder") + wxFILE_SEP_PATH + wxT("xml") + wxFILE_SEP_PATH
+
 #define wxFB_ABOUT              wxFB_XRC_DIR + wxT("about.xrc")
 #define wxFB_DEFAULTS           wxFB_XRC_DIR + wxT("default.xrc")
 #define wxFB_DEFAULT_PROJECT    wxFB_XRC_DIR + wxT("project.xrc")
@@ -43,6 +45,9 @@
 #define wxFB_OBJECT_PALETTE     wxFB_XRC_DIR + wxT("palette.xrc")
 #define wxFB_TOOLBAR            wxFB_XRC_DIR + wxT("toolbar.xrc")
 #define wxFB_LOGO               wxFB_XRC_DIR + wxT("images/logo.png")
+
+#define wxFB_WND                wxFB_XML_DIR + wxT("window.xrc")
+#define wxFB_WND_TOPLEVEL       wxFB_XML_DIR + wxT("toplevel.xrc")
 
 #ifdef __WXMSW__
     #define wxFB_PLUGINS_DIR    wxStandardPaths::Get().GetResourcesDir().BeforeLast('/') + wxFILE_SEP_PATH + wxT("plugins") + wxFILE_SEP_PATH
@@ -70,6 +75,8 @@
 #include <handlers/xh_propgrid.h>
 #include <wx/propgrid/manager.h>
 
+#include <handlers/xh_stc.h>
+
 class WXDLLIMPEXP_WXFBCORE wxFBResource : public wxXmlResource
 {
 public:
@@ -91,6 +98,7 @@ public:
     // App stuff
     void NewProject();
     void LoadPlugins();
+    void LoadTemplates();
     bool LoadPackage( const wxString& file, const wxString& iconPath = wxEmptyString );
 
     static wxFBResource *Get();

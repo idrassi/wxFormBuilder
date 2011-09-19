@@ -4,7 +4,6 @@
         <object class="notebookpage">
             <bitmap>images/designer.png</bitmap>
             <label>Designer</label>
-            <selected>0</selected>
             <object class="wxScrolledWindow" name="VisualEditor">
                 <style>wxHSCROLL|wxVSCROLL</style>
                 <scrollrate>5,5</scrollrate>
@@ -121,11 +120,24 @@
                                 <bitmap>images/file_cpp.png</bitmap>
                                 <label>cpp</label>
                                 <selected>0</selected>
-                                <object class="wxPanel" name="CppPage">
-                                    <style>wxTAB_TRAVERSAL</style>
-                                    <object class="wxBoxSizer">
-                                        <orient>wxVERTICAL</orient>
-                                    </object>
+                                <object class="wxStyledTextCtrl" name="CppPage">
+                                    <font>
+                                        <family>modern</family>
+                                    </font>
+                                    <line_numbers>1</line_numbers>
+                                    <fold>1</fold>
+                                    <indentation_guides>1</indentation_guides>
+                                    <use_tabs>1</use_tabs>
+                                    <tab_indents>1</tab_indents>
+                                    <tab_width>4</tab_width>
+                                    <backspace_unindents>1</backspace_unindents>
+                                    <view_eol>0</view_eol>
+                                    <view_whitespace>1</view_whitespace>
+                                    <caret_width>2</caret_width>
+                                    <lexer>5</lexer>
+                                    <text>&#60;object class="wxStyledTextCtrl" name="CppPage"&#62;\n\t&#60;font&#62;\n\t\t&#60;family&#62;modern&#60;/family&#62;\n\t&#60;/font&#62;\n\t&#60;line__numbers&#62;1&#60;/line__numbers&#62;\n\t&#60;fold&#62;1&#60;/fold&#62;\n\t&#60;indentation__guides&#62;1&#60;/indentation__guides&#62;\n\t&#60;use__tabs&#62;1&#60;/use__tabs&#62;\n\t&#60;tab__indents&#62;1&#60;/tab__indents&#62;\n\t&#60;tab__width&#62;4&#60;/tab__width&#62;\n\t&#60;backspace__unindents&#62;1&#60;/backspace__unindents&#62;\n\t&#60;view__eol&#62;0&#60;/view__eol&#62;\n\t&#60;view__whitespace&#62;1&#60;/view__whitespace&#62;\n\t&#60;caret__width&#62;2&#60;/caret__width&#62;\n\t&#60;lexer&#62;3&#60;/lexer&#62;\n\t&#60;keywords&#62;asm auto bool break case catch char class const const__cast continue default delete do double dynamic__cast else enum explicit export extern false float for friend goto if inline int long mutable namespace new operator private protected public register reinterpret__cast return short signed sizeof static static__cast struct switch template this throw true try typedef typeid typename union unsigned using virtual void volatile wchar__t while&#60;/keywords&#62;\n&#60;/object&#62;</text>
+                                    <!--keywords>asm auto bool break case catch char class const const__cast continue default delete do double dynamic__cast else enum explicit export extern false float for friend goto if inline int long mutable namespace new operator private protected public register reinterpret__cast return short signed sizeof static static__cast struct switch template this throw true try typedef typeid typename union unsigned using virtual void volatile wchar__t while</keywords>
+                                    <text>/** Sample Class to Display\n\twxStyledTextCtrl\n*/\nclass ScintillaSampleCode\n{\nprivate:\n\tint m__privateMember;\n\npublic:\n\t// Sample Member Function\n\tint SampleFunction( int sample = 0 )\n\t{\n\t\treturn sample;\n\t}\n};\n</text-->
                                 </object>
                             </object>
                             <object class="notebookpage">

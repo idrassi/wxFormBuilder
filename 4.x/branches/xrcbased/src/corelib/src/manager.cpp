@@ -60,6 +60,7 @@ wxFBResource::wxFBResource() : wxXmlResource( wxXRC_USE_LOCALE | wxXRC_NO_SUBCLA
     m_pgXrcHandler = new wxPropertyGridXmlHandler;
 
     AddHandler( m_pgXrcHandler );
+    AddHandler( new wxStyledTextCtrlXmlHandler );
 //    AddHandler( new wxFBProjectXmlHandler );
 
     if ( !Load( wxFB_ABOUT ) ) return;
@@ -276,6 +277,61 @@ void wxFBResource::NewProject()
         m_objTree->DeleteAllItems();
         m_objTree->AddRoot( wxT(" : ") + wxString(_("Project") ), 0 );
     }
+    LoadTemplates();
+}
+
+void wxFBResource::LoadTemplates()
+{
+    if ( !Load( wxFB_WND ) ) return;
+    if ( !Load( wxFB_WND_TOPLEVEL ) ) return;
+
+    if ( m_objInsp )
+    {
+        wxPropertyGridManager *pgp = wxDynamicCast( LoadObject( m_objInsp, wxT("WindowProperties"), wxT("wxPropertyGridManager") ), wxPropertyGridManager );
+
+        if ( pgp )
+        {
+            m_objInsp->RemovePage( 0 );
+            m_objInsp->InsertPage( 0, pgp, _("Properties"), true, 0 );
+        }
+
+        wxPropertyGridManager *pge = wxDynamicCast( LoadObject( m_objInsp, wxT("WindowEvents"), wxT("wxPropertyGridManager") ), wxPropertyGridManager );
+        wxPropertyGridManager *pgt = wxDynamicCast( LoadObject( m_objInsp, wxT("TopLevelWindowEvents"), wxT("wxPropertyGridManager") ), wxPropertyGridManager );
+
+        if ( pge && pgt )
+        {
+            wxPGVIterator       it;
+            wxPropertyCategory *main = NULL;
+
+            for ( it = pge->GetVIterator( wxPG_ITERATE_ALL ); !it.AtEnd(); it.Next() )
+            {
+                wxPGProperty *p            = it.GetProperty();
+                wxPropertyCategory *evtCat = wxDynamicCast( p, wxPropertyCategory );
+
+                if ( evtCat )
+                {
+                    if ( main )
+                    {
+                        main->AppendChild( new wxPropertyCategory( p->GetLabel() ) );
+                    }
+                    else
+                    {
+                        main = new wxPropertyCategory( evtCat->GetLabel() );
+                        pgt->Append( main );
+                    }
+                }
+                else
+                {
+                    wxStringProperty *evtProp = wxDynamicCast( p, wxStringProperty );
+                    pgt->Append( new wxStringProperty( evtProp->GetLabel(), wxPG_LABEL, evtProp->GetValueAsString() ) );
+                    evtProp->SetHelpString( p->GetHelpString() );
+                }
+            }
+
+            m_objInsp->RemovePage( 1 );
+            m_objInsp->InsertPage( 1, pgt, _("Events"), false, 1 );
+        }
+    }
 }
 
 void wxFBResource::LoadPlugins()
@@ -366,8 +422,8 @@ void wxFBResource::LoadPlugins()
 
 bool wxFBResource::LoadPackage( const wxString& file, const wxString& iconPath )
 {
-    wxLogDebug( wxT("file path:%s"), file );
-    wxLogDebug( wxT("icon path:%s"), iconPath );
+//  wxLogDebug( wxT("file path:%s"), file );
+//  wxLogDebug( wxT("icon path:%s"), iconPath );
     return true;
 }
 
