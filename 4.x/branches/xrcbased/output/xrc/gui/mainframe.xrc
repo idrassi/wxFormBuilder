@@ -22,7 +22,7 @@
                         <border>5</border>
                         <object class="wxPanel" name="ObjTreeTitle">
                             <style>wxTAB_TRAVERSAL</style>
-                            <bg>#f0f0f0</bg>
+                            <bg>wxSYS_COLOUR_ACTIVECAPTION</bg>
                             <object class="wxBoxSizer">
                                 <orient>wxVERTICAL</orient>
                                 <object class="sizeritem">
@@ -65,7 +65,7 @@
                                     <border>5</border>
                                     <object class="wxPanel" name="PaletteTitle">
                                         <style>wxTAB_TRAVERSAL</style>
-                                        <bg>#f0f0f0</bg>
+                                        <bg>wxSYS_COLOUR_ACTIVECAPTION</bg>
                                         <object class="wxBoxSizer">
                                             <orient>wxVERTICAL</orient>
                                             <object class="sizeritem">
@@ -110,7 +110,7 @@
                                         <border>5</border>
                                         <object class="wxPanel" name="EditorTitle">
                                             <style>wxTAB_TRAVERSAL</style>
-                                            <bg>#f0f0f0</bg>
+                                            <bg>wxSYS_COLOUR_ACTIVECAPTION</bg>
                                             <object class="wxBoxSizer">
                                                 <orient>wxVERTICAL</orient>
                                                 <object class="sizeritem">
@@ -144,7 +144,7 @@
                                         <border>5</border>
                                         <object class="wxPanel" name="ObjInspTitle">
                                             <style>wxTAB_TRAVERSAL</style>
-                                            <bg>#f0f0f0</bg>
+                                            <bg>wxSYS_COLOUR_ACTIVECAPTION</bg>
                                             <object class="wxBoxSizer">
                                                 <orient>wxVERTICAL</orient>
                                                 <object class="sizeritem">
