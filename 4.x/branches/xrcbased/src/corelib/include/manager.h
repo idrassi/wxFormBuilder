@@ -32,32 +32,33 @@
 #define __WXFB_RESMANAGER_H__
 
 #define wxFB_XRC_DIR            wxStandardPaths::Get().GetResourcesDir().BeforeLast('/') + wxFILE_SEP_PATH + wxT("wxformbuilder") + wxFILE_SEP_PATH + wxT("xrc") + wxFILE_SEP_PATH
-#define wxFB_XML_DIR            wxStandardPaths::Get().GetResourcesDir().BeforeLast('/') + wxFILE_SEP_PATH + wxT("wxformbuilder") + wxFILE_SEP_PATH + wxT("xml") + wxFILE_SEP_PATH
 
-#define wxFB_ABOUT              wxFB_XRC_DIR + wxT("about.xrc")
-#define wxFB_DEFAULTS           wxFB_XRC_DIR + wxT("default.xrc")
-#define wxFB_DEFAULT_PROJECT    wxFB_XRC_DIR + wxT("project.xrc")
-#define wxFB_EDITOR             wxFB_XRC_DIR + wxT("editor.xrc")
-#define wxFB_MAINFRAME          wxFB_XRC_DIR + wxT("mainframe.xrc")
-#define wxFB_MAINMENU           wxFB_XRC_DIR + wxT("mainmenu.xrc")
-#define wxFB_OBJECT_INSPECTOR   wxFB_XRC_DIR + wxT("objinsp.xrc")
-#define wxFB_OBJECT_TREE        wxFB_XRC_DIR + wxT("objtree.xrc")
-#define wxFB_OBJECT_PALETTE     wxFB_XRC_DIR + wxT("palette.xrc")
-#define wxFB_TOOLBAR            wxFB_XRC_DIR + wxT("toolbar.xrc")
-#define wxFB_LOGO               wxFB_XRC_DIR + wxT("images/logo.png")
+#define wxFB_ABOUT              wxFB_XRC_DIR + wxT("gui/about.xrc")
+#define wxFB_DEFAULTS           wxFB_XRC_DIR + wxT("gui/default.xrc")
+#define wxFB_DEFAULT_PROJECT    wxFB_XRC_DIR + wxT("gui/project.xrc")
+#define wxFB_EDITOR             wxFB_XRC_DIR + wxT("gui/editor.xrc")
+#define wxFB_MAINFRAME          wxFB_XRC_DIR + wxT("gui/mainframe.xrc")
+#define wxFB_MAINMENU           wxFB_XRC_DIR + wxT("gui/mainmenu.xrc")
+#define wxFB_OBJECT_INSPECTOR   wxFB_XRC_DIR + wxT("gui/objinsp.xrc")
+#define wxFB_OBJECT_TREE        wxFB_XRC_DIR + wxT("gui/objtree.xrc")
+#define wxFB_OBJECT_PALETTE     wxFB_XRC_DIR + wxT("gui/palette.xrc")
+#define wxFB_TOOLBAR            wxFB_XRC_DIR + wxT("gui/toolbar.xrc")
+#define wxFB_LOGO               wxFB_XRC_DIR + wxT("gui/images/logo.png")
 
-#define wxFB_WND                wxFB_XML_DIR + wxT("window.xrc")
-#define wxFB_WND_TOPLEVEL       wxFB_XML_DIR + wxT("toplevel.xrc")
+#define wxFB_WND                wxFB_XRC_DIR + wxT("classes/window.xrc")
+#define wxFB_WND_TOPLEVEL       wxFB_XRC_DIR + wxT("classes/toplevel.xrc")
 
 #ifdef __WXMSW__
-    #define wxFB_PLUGINS_DIR    wxStandardPaths::Get().GetResourcesDir().BeforeLast('/') + wxFILE_SEP_PATH + wxT("plugins") + wxFILE_SEP_PATH
+    #define wxFB_PLUGINS_DIR    wxStandardPaths::Get().GetResourcesDir().BeforeLast('/') + wxFILE_SEP_PATH + wxT("xrc/plugins") + wxFILE_SEP_PATH
 #else
-    #define wxFB_PLUGINS_DIR    wxStandardPaths::Get().GetResourcesDir().BeforeLast('/') + wxFILE_SEP_PATH + wxT("wxformbuilder/plugins") + wxFILE_SEP_PATH
+    #define wxFB_PLUGINS_DIR    wxStandardPaths::Get().GetResourcesDir().BeforeLast('/') + wxFILE_SEP_PATH + wxT("wxformbuilder/xrc/plugins") + wxFILE_SEP_PATH
 #endif
 
 #include "defs.h"
-#include "gui/handler.h"
-//#include "gui/mainframe.h"
+
+#include "handlers/mainframe.h"
+#include "handlers/xh_propgrid.h"
+#include "handlers/xh_stc.h"
 
 //#include "project.h"
 
@@ -71,11 +72,6 @@
 #include <wx/toolbar.h>
 #include <wx/treectrl.h>
 #include <wx/xrc/xmlres.h>
-
-#include <handlers/xh_propgrid.h>
-#include <wx/propgrid/manager.h>
-
-#include <handlers/xh_stc.h>
 
 class WXDLLIMPEXP_WXFBCORE wxFBResource : public wxXmlResource
 {
@@ -99,7 +95,7 @@ public:
     void NewProject();
     void LoadPlugins();
     void LoadTemplates();
-    bool LoadPackage( const wxString& file, const wxString& iconPath = wxEmptyString );
+    bool CheckCtrlTemplate( const wxString& file );
 
     static wxFBResource *Get();
 

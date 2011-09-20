@@ -23,12 +23,12 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 /**
- * @file    handler.cpp
+ * @file    mainframe.cpp
  * @author  Andrea Zanellato (zanellato.andrea@gmail.com)
  * @date    2011/09/13
  * @version 0.0.1
  */
-#include "gui/handler.h"
+#include "handlers/mainframe.h"
 #include "manager.h"
 
 #include <wx/dialog.h>

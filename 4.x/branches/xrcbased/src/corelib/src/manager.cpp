@@ -152,7 +152,7 @@ wxFrame *wxFBResource::GetMainFrame( wxWindow *parent, bool aui )
             if( !inspBook || !paltBook || !treeCtrl || !editBook ) return m_frame;
 
             inspPanel->GetSizer()->Add( inspBook, 1, wxEXPAND );
-            paltPanel->GetSizer()->Add( paltBook, 1, wxEXPAND );
+            paltPanel->GetSizer()->Add( paltBook, 0, wxEXPAND );
             treePanel->GetSizer()->Add( treeCtrl, 1, wxEXPAND );
             editPanel->GetSizer()->Add( editBook, 1, wxEXPAND );
 
@@ -352,66 +352,77 @@ void wxFBResource::LoadPlugins()
     int      iconIndex       = -1;
     bool     moreDirectories = pluginsDir.GetFirst( &pluginDirName, wxEmptyString, wxDIR_DIRS | wxDIR_HIDDEN );
 
-    // Iterate through plugin directories and load the package from the xml subdirectory
+    // Iterate through plugin directories and load the package, validating each control found
     while ( moreDirectories )
     {
-        // Plugin path (e.g. 'path/to/plugins/forms')
-        wxString nextPluginPath     = wxFB_PLUGINS_DIR + pluginDirName;
+        // Plugin path (e.g. 'path/to/xrc/plugins/forms')
+        wxString nextPluginPath = wxFB_PLUGINS_DIR + pluginDirName;
 
-        // XRC resource directory (e.g. 'path/to/plugins/forms/xml')
-        wxString nextPluginXmlPath  = nextPluginPath + wxFILE_SEP_PATH + wxT("xml");
-
-        // XRC icons directory (e.g. 'path/to/plugins/forms/icons')
+        // XRC icons directory (e.g. 'path/to/xrc/plugins/forms/icons')
         wxString nextPluginIconPath = nextPluginPath + wxFILE_SEP_PATH + wxT("icons");
 
-        // Iterate through .xml files in the xml directory
-        if ( wxDirExists( nextPluginPath ) )
+        // Be sure all required directories exists
+        if ( wxDirExists( nextPluginIconPath ) )
         {
-            if ( wxDirExists( nextPluginXmlPath ) )
+            wxDir pluginDir( nextPluginPath );
+            if ( pluginDir.IsOpened() )
             {
-                wxDir pluginXmlDir( nextPluginXmlPath );
-                if ( pluginXmlDir.IsOpened() )
+                // Be sure we have a palette imagelist
+                wxImageList *imgList = m_objPalette->GetImageList();
+                if ( !imgList )
                 {
-                    // XRC file to check (e.g. 'frame.xrc')
-                    wxString packageXmlFile;
-                    bool     moreXmlFiles = pluginXmlDir.GetFirst( &packageXmlFile, wxT("*.xml"),
+                    imgList = new wxImageList( 16, 16 );
+                    m_objPalette->SetImageList( imgList );
+                }
+
+                // We can add a page in palette notebook, even if no xrc validated
+                wxString   plugBmpPath = nextPluginIconPath + wxFILE_SEP_PATH + pluginDirName + wxT(".png");
+                wxString   packageName = pluginDirName.Capitalize();
+                wxToolBar *pluginBar   = new wxToolBar( m_objPalette, XRCID( packageName ), wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL );
+
+                // The plugin icon is mandatory...
+                if ( wxFileExists( plugBmpPath ) )
+                {
+                    wxBitmap pluginBmp = wxBitmap( plugBmpPath, wxBITMAP_TYPE_PNG );
+                    wxImage  pluginImg = pluginBmp.ConvertToImage().Scale( 16, 16 );
+
+                    iconIndex++;
+                    imgList->Add( pluginImg );
+
+                    m_objPalette->AddPage( pluginBar, packageName, false, iconIndex );
+
+                    // XRC file to check (e.g.'frame.xrc')
+                    wxString xrcCtrlTemplate;
+                    bool     moreXrcFiles = pluginDir.GetFirst( &xrcCtrlTemplate, wxT("*.xrc"),
                                                                     wxDIR_FILES | wxDIR_HIDDEN );
-                    while ( moreXmlFiles )
+                    // Iterate through .xrc files in the xrc directory
+                    while ( moreXrcFiles )
                     {
-                        wxFileName nextXmlFile( nextPluginXmlPath + wxFILE_SEP_PATH + packageXmlFile );
-                        if ( !nextXmlFile.IsAbsolute() )
+                        wxFileName nextXrcFile( xrcCtrlTemplate );
+                        if ( !nextXrcFile.IsAbsolute() )
                         {
-                            nextXmlFile.MakeAbsolute();
+                            nextXrcFile.MakeAbsolute();
                         }
 
-                        // Load the plugin package
-                        if ( LoadPackage( nextXmlFile.GetFullPath(), nextPluginIconPath ) );
+                        // Validate control template and, if ok, add it to the palette
+                        if ( CheckCtrlTemplate( nextXrcFile.GetFullPath() ) );
                         {
-                            wxString plugBmpPath = nextPluginIconPath + wxFILE_SEP_PATH + pluginDirName + wxT(".png");
+                            wxString ctrlBmpPath = nextPluginIconPath + wxFILE_SEP_PATH + nextXrcFile.GetName() + wxT(".png");
 
-                            if ( wxFileExists( plugBmpPath ) )
+                            if ( wxFileExists( ctrlBmpPath ) )
                             {
-                                wxImageList *imgList = m_objPalette->GetImageList();
-                                if ( !imgList )
-                                {
-                                    imgList = new wxImageList( 16, 16 );
-                                    m_objPalette->SetImageList( imgList );
-                                }
+                                wxBitmap ctrlBmp = wxBitmap( ctrlBmpPath, wxBITMAP_TYPE_PNG );
+                                wxImage  ctrlImg = ctrlBmp.ConvertToImage().Scale( 22, 22 );
 
-                                wxBitmap pluginBmp = wxBitmap( plugBmpPath, wxBITMAP_TYPE_PNG );
-                                wxImage  pluginImg = pluginBmp.ConvertToImage().Scale( 16, 16 );
-                                iconIndex++;
-                                imgList->Add( pluginImg );
+                                // TODO: temporary name
+                                wxString label = wxT("wx") + nextXrcFile.GetName().Capitalize();
+
+                                pluginBar->AddTool( XRCID( xrcCtrlTemplate ), label, ctrlImg, wxNullBitmap, wxITEM_NORMAL, label );
                             }
-
-                            wxString   packageName = pluginDirName.Capitalize();
-                            wxToolBar *pluginBar   = new wxToolBar( m_objPalette, XRCID( packageName ) );
-
-                            m_objPalette->AddPage( pluginBar, packageName, false, iconIndex );
                         }
-
-                        moreXmlFiles = pluginXmlDir.GetNext( &packageXmlFile );
+                        moreXrcFiles = pluginDir.GetNext( &xrcCtrlTemplate );
                     }
+                    pluginBar->Realize();
                 }
             }
         }
@@ -420,7 +431,7 @@ void wxFBResource::LoadPlugins()
     }
 }
 
-bool wxFBResource::LoadPackage( const wxString& file, const wxString& iconPath )
+bool wxFBResource::CheckCtrlTemplate( const wxString& file )
 {
 //  wxLogDebug( wxT("file path:%s"), file );
 //  wxLogDebug( wxT("icon path:%s"), iconPath );
