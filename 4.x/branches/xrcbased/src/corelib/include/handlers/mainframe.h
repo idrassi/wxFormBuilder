@@ -23,13 +23,13 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 /**
- * @file    handler.h
+ * @file    mainframe.h
  * @author  Andrea Zanellato (zanellato.andrea@gmail.com)
  * @date    2011/09/13
  * @version 0.0.1
  */
-#ifndef __WXFB_HANDLER_H__
-#define __WXFB_HANDLER_H__
+#ifndef __WXFB_MAINFRAME_H__
+#define __WXFB_MAINFRAME_H__
 
 #include <wx/event.h>
 #include <wx/frame.h>
@@ -52,4 +52,4 @@ private:
     wxSplitterWindow *m_rightSplitter;
 };
 
-#endif //__WXFB_HANDLER_H__
+#endif //__WXFB_MAINFRAME_H__
