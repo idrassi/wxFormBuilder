@@ -514,7 +514,10 @@ wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
 						} 
 						bp->AppendChild( bp->CreatePropertyFilePath() );
 					}
-					Item(1)->SetValue(childVals.Item(1));
+					if(childVals.Count() > 1)
+					{
+						Item(1)->SetValue(childVals.Item(1));
+					}
 					newVal = Item(0)->GetValueAsString() + wxT("; ") + Item(1)->GetValueAsString();
 
                     break;
@@ -536,8 +539,11 @@ wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
 						
 						bp->AppendChild( bp->CreatePropertyResourceName() );  
 					}
+					if(childVals.Count() > 1)
+					{
+						Item(1)->SetValue(childVals.Item(1));
+					}
 					
-					Item(1)->SetValue(childVals.Item(1));
                     newVal = Item(0)->GetValueAsString() + wxT("; ") + Item(1)->GetValueAsString();
                     break;
                 }
@@ -560,8 +566,15 @@ wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
 						bp->AppendChild( bp->CreatePropertyIconSize() );
 					}
 					
-					Item(1)->SetValue(childVals.Item(1));
-					Item(2)->SetValue(childVals.Item(2));
+					if(childVals.Count() > 1)
+					{
+						Item(1)->SetValue(childVals.Item(1));
+					}
+					
+					if(childVals.Count() > 2)
+					{
+						Item(2)->SetValue(childVals.Item(2));
+					}
                     newVal = Item(0)->GetValueAsString() + wxT("; ") + Item(1)->GetValueAsString() + wxT("; ") + Item(2)->GetValueAsString() ;
                     break;
                 }
@@ -584,8 +597,15 @@ wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
 						bp->AppendChild( bp->CreatePropertyArtClient() );
 					}
 
-					Item(1)->SetValue(childVals.Item(1));
-					Item(2)->SetValue(childVals.Item(2));
+					if(childVals.Count() > 1)
+					{
+						Item(1)->SetValue(childVals.Item(1));
+					}
+					
+					if(childVals.Count() > 2)
+					{
+						Item(2)->SetValue(childVals.Item(2));
+					}
                     newVal = Item(0)->GetValueAsString() + wxT("; ") + Item(1)->GetValueAsString() + wxT("; ") + Item(2)->GetValueAsString();
                     break;
                 }
