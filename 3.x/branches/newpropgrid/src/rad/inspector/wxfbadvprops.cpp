@@ -170,6 +170,15 @@ static wxString gs_imageInitialPath = wxEmptyString;
 WX_PG_IMPLEMENT_PROPERTY_CLASS( wxFBBitmapProperty, wxPGProperty,
                                 wxString, const wxString&, TextCtrl )
 
+void GetChildValues( const wxString& parentValue, wxArrayString& childValues )
+{
+	childValues = wxStringTokenize( parentValue, wxT(';'), wxTOKEN_RET_EMPTY_ALL );
+	for ( wxArrayString::iterator value = childValues.begin(); value != childValues.end(); ++value )
+	{
+		value->Trim( false );
+	}	
+}
+
 wxFBBitmapProperty::wxFBBitmapProperty( const wxString& label,
                                         const wxString& name,
                                         const wxString& value ) : wxPGProperty( label, name )
@@ -183,8 +192,9 @@ void wxFBBitmapProperty::CreateChildren()
 	wxString  propValue  = m_value.GetString();
 	wxVariant thisValue  = WXVARIANT( propValue );
 	wxVariant childValue;
-	int       childIndex;
-	wxArrayString childVals = wxStringTokenize(propValue, wxT(';'), wxTOKEN_RET_EMPTY_ALL);
+	int       childIndex;	
+	wxArrayString childVals;
+	GetChildValues( propValue, childVals );
 	wxString  source;
 	if(childVals.Count() > 0)
 	{    
@@ -472,8 +482,9 @@ wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
 
 	wxFBBitmapProperty* bp = (wxFBBitmapProperty*)this;
 	
-    wxString val = thisValue.GetString();
-	wxArrayString childVals = wxStringTokenize(val, wxT(';'), wxTOKEN_RET_EMPTY_ALL);
+    wxString val = thisValue.GetString();	
+	wxArrayString childVals;
+	GetChildValues( val, childVals );
 	wxString newVal;
 
     // Find the appropriate new state
