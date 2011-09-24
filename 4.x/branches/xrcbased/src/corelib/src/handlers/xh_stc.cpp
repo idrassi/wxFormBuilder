@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        srx/xrc/xh_stc.h
+// Name:        src/xrc/xh_stc.h
 // Purpose:     Implementation of wxStyledTextCtrl XRC handler.
 // Author:      Andrea Zanellato
 // Created:     2011-09-18

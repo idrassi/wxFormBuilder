@@ -86,10 +86,6 @@ int wxFormBuilder::OnRun()
     // Using a space so the initial 'w' will not be capitalized in wxLogGUI dialogs
 //    wxApp::SetAppName( wxT( " wxFormBuilder" ) );
 
-    // Creating the wxConfig manually so there will be no space
-    // The old config (if any) is returned, delete it
-//    delete wxConfigBase::Set( new wxConfig( wxT("wxformbuilder/application.layout") ) );
-
     // Get the data directory
     wxStandardPathsBase& stdPaths = wxStandardPaths::Get();
     wxString dataDir = stdPaths.GetDataDir();
@@ -130,7 +126,7 @@ int wxFormBuilder::OnRun()
         {
             if ( language.empty() )
             {
-                wxLogError( _("Empty language option. Nothing generated.") );
+                wxLogError(_("Empty language option. Nothing generated.") );
                 return 3;
             }
             language.Replace( wxT(","), wxT("|"), true );
@@ -185,18 +181,6 @@ int wxFormBuilder::OnRun()
             }
         }
     }
-
-    // Init AppData
-    try
-    {
-        AppDataInit();
-    }
-    catch( wxFBException& ex )
-    {
-        wxLogError( _("Error loading application: %s\nwxFormBuilder cannot continue."),    ex.what() );
-        wxLog::FlushActive();
-        return 5;
-    }
 */
 #ifdef __WXMSW__
     wxSystemOptions::SetOption( wxT( "msw.remap" ), 0 );
@@ -204,44 +188,15 @@ int wxFormBuilder::OnRun()
 #endif
 
     m_frame = NULL;
-/*
-#ifndef __WXFB_DEBUG__
-    wxBitmap bitmap;
-    std::auto_ptr< cbSplashScreen > splash;
-    if ( !justGenerate )
-    {
-        if ( bitmap.LoadFile( dataDir + wxFILE_SEP_PATH + wxT( "resources" ) + wxFILE_SEP_PATH + wxT( "splash.png" ), wxBITMAP_TYPE_PNG ) )
-        {
-            splash = std::auto_ptr< cbSplashScreen >( new cbSplashScreen( bitmap, -1, 0, wxNewId() ) );
-        }
-    }
-#endif
-*/
+
     wxYield();
 
-    // Read size and position from config file
-    wxConfigBase *config = wxConfigBase::Get();
-    config->SetPath( wxT("/mainframe") );
+    m_frame = wxFBResource::Get()->GetMainFrame( NULL, true );
 
-    wxPoint defaultPosition = wxDefaultPosition;
-    wxSize  defaultSize     = wxSize( 630, 420 );
-
-    config->Read( wxT( "PosX" ),  defaultPosition.x );
-    config->Read( wxT( "PosY" ),  defaultPosition.y );
-    config->Read( wxT( "SizeW" ), defaultSize.GetWidth() );
-    config->Read( wxT( "SizeH" ), defaultSize.GetHeight() );
-/*
-    long style = config->Read( wxT("style"), wxFB_WIDE_GUI );
-    if ( style != wxFB_CLASSIC_GUI )
+    if ( !m_frame )
     {
-        style = wxFB_WIDE_GUI;
+        wxLogError(_("Error while loading the main frame.") ); return 1;
     }
-
-    config->SetPath( wxT("/") );
-
-    m_frame = new MainFrame( NULL ,-1, (int)style, defaultPosition, defaultSize );
-*/
-    m_frame = wxFBResource::Get()->GetMainFrame();
 
     // Setup frame icons
     wxFileName imgFileName = wxFileName( wxFB_LOGO );
@@ -253,11 +208,6 @@ int wxFormBuilder::OnRun()
         m_frame->Show( true );
         SetTopWindow( m_frame );
 /*
-        #ifndef __WXFB_DEBUG__
-        // turn off the splash screen
-        delete splash.release();
-        #endif
-
         #ifdef __WXFB_DEBUG__
             wxLogWindow* log = dynamic_cast< wxLogWindow* >( AppData()->GetDebugLogTarget() );
             if ( log )
@@ -310,10 +260,10 @@ int wxFormBuilder::OnRun()
     {
         return 6;
     }
-
+/*
     wxFBResource::Get()->NewProject();
     wxFBResource::Get()->LoadPlugins();
-/*
+
 #ifdef __WXMAC__
     // document to open on startup
     if(!m_mac_file_name.IsEmpty())
@@ -334,9 +284,8 @@ bool wxFormBuilder::OnInit()
 
 int wxFormBuilder::OnExit()
 {
-//    GUIManager::Free();
-/*  MacroDictionary::Destroy();
-    wxFlatNotebook::CleanUp();
+    wxFBResource::Get()->Free();
+/*
     AppDataDestroy();
 
     if( !wxTheClipboard->IsOpened() )

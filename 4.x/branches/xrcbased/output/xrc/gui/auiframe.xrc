@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.5.3.0">
+    <object class="wxAuiManager" name="AUIManager">
+        <object class="wxFrame" name="AUIFrame">
+            <style>wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL</style>
+            <size>630,480</size>
+            <title>wxFormBuilder v4.0 - beta</title>
+            <centered>1</centered>
+            <object_ref name="MainMenu" ref="MainMenu"/>
+            <object_ref name="ToolBar"  ref="ToolBar"/>
+            <object class="wxAuiPaneInfo" name="Palette">
+                <caption>Component Palette</caption>
+                <caption_visible>1</caption_visible>
+                <close_button>0</close_button>
+                <pane_border>0</pane_border>
+                <dock_fixed>1</dock_fixed>
+                <movable>0</movable>
+                <floatable>0</floatable>
+                <minsize>-1,60</minsize>
+                <direction>64</direction>
+                <object_ref name="ObjectPalette" ref="ObjectPalette"/>
+            </object>
+            <object class="wxAuiPaneInfo" name="EditorBook">
+                <caption>Editor</caption>
+                <caption_visible>1</caption_visible>
+                <maximize_button>1</maximize_button>
+                <close_button>0</close_button>
+                <pane_border>1</pane_border>
+                <movable>0</movable>
+                <default_pane/>
+                <floatable>0</floatable>
+                <direction>1</direction>
+                <row>1</row>
+                <object_ref name="Editor" ref="Editor"/>
+            </object>
+            <object class="wxAuiPaneInfo" name="ObjTree">
+                <caption>Object Tree</caption>
+                <caption_visible>1</caption_visible>
+                <close_button>0</close_button>
+                <pane_border>0</pane_border>
+                <movable>1</movable>
+                <floatable>1</floatable>
+                <top_dockable>0</top_dockable>
+                <bottom_dockable>0</bottom_dockable>
+                <min_size>175,-1</min_size>
+                <direction>16</direction>
+                <row>0</row>
+                <layer>1</layer>
+                <object_ref name="ObjectTree" ref="ObjectTree"/>
+            </object>
+            <object class="wxAuiPaneInfo" name="ObjInsp">
+                <caption>Object Properties</caption>
+                <caption_visible>1</caption_visible>
+                <close_button>0</close_button>
+                <pane_border>0</pane_border>
+                <movable>1</movable>
+                <floatable>1</floatable>
+                <top_dockable>0</top_dockable>
+                <bottom_dockable>0</bottom_dockable>
+                <direction>32</direction>
+                <row>1</row>
+                <min_size>175,-1</min_size>
+                <object_ref name="ObjectInspector" ref="ObjectInspector"/>
+            </object>
+            <object class="wxStatusBar" name="StatusBar">
+                <style>wxST_SIZEGRIP</style>
+                <fields>3</fields>
+            </object>
+        </object>
+    </object>
+</resource>
