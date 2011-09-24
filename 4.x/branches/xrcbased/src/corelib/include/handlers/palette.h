@@ -23,43 +23,14 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 /**
- * @file    main.h
+ * @file    palette.h
  * @author  Andrea Zanellato (zanellato.andrea@gmail.com)
- * @date    2011/09/07
+ * @date    2011/09/21
  * @version 0.0.1
  */
-#ifndef __WXFB_APP_H__
-#define __WXFB_APP_H__
+#ifndef __WXFB_PALETTE_H__
+#define __WXFB_PALETTE_H__
 
-#include <wx/app.h>
-#include <wx/frame.h>
-#include <wx/log.h>
 
-class MainFrame;
 
-class wxFormBuilder : public wxApp
-{
-public:
-      bool OnInit();
-
-#if wxUSE_ON_FATAL_EXCEPTION && wxUSE_STACKWALKER
-      void OnFatalException();
-#endif
-      int OnRun();
-      int OnExit();
-      ~wxFormBuilder();
-/*
-#ifdef __WXMAC__
-      wxString m_mac_file_name;
-      void MacOpenFile(const wxString &fileName);
-#endif
-*/
-private:
-      wxFrame     *m_frame;
-      wxLog       *m_old_log;
-      wxLogWindow *m_log;
-};
-
-DECLARE_APP( wxFormBuilder )
-
-#endif //__WXFB_APP_H__
+#endif //__WXFB_PALETTE_H__

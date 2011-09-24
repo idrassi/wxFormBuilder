@@ -23,15 +23,17 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 /**
- * @file    mainframe.cpp
- * @author  Andrea Zanellato (zanellato.andrea@gmail.com)
- * @date    2011/09/13
- * @version 0.0.1
+    @file    mainframe.cpp
+    @author  Andrea Zanellato (zanellato.andrea@gmail.com)
+    @date    2011/09/13
+    @version 0.0.1
  */
 #include "handlers/mainframe.h"
 #include "manager.h"
+#include "xrcconfig.h"
 
 #include <wx/dialog.h>
+#include <wx/stdpaths.h>
 #include <wx/xrc/xmlres.h>
 
 wxFBFrameHandler::wxFBFrameHandler( wxFrame *owner, wxSplitterWindow *leftSplitter, wxSplitterWindow *rightSplitter )
@@ -56,9 +58,15 @@ void wxFBFrameHandler::OnExit( wxCommandEvent & )
     m_frame->Close();
 }
 
-void wxFBFrameHandler::OnClose( wxCloseEvent & )
+void wxFBFrameHandler::OnClose( wxCloseEvent &event )
 {
-    m_frame->Destroy(); //TODO
+    if ( !SaveWarning() ) return;
+
+    SaveLayout();
+
+    XRCConfig::Get()->Free();
+
+    event.Skip();
 }
 
 void wxFBFrameHandler::OnIdle( wxIdleEvent & )
@@ -66,10 +74,63 @@ void wxFBFrameHandler::OnIdle( wxIdleEvent & )
     m_leftSplitter->SetSashPosition( 150 );
     m_rightSplitter->SetSashPosition( 330 );
 
-    m_frame->Disconnect( wxEVT_IDLE, wxIdleEventHandler( wxFBFrameHandler::OnIdle ), NULL, this );
+    m_frame->Unbind( wxEVT_IDLE, &wxFBFrameHandler::OnIdle, this );
 }
 
 void wxFBFrameHandler::OnNewProject( wxCommandEvent & )
 {
     wxFBResource::Get()->NewProject(); //TODO
+}
+
+void wxFBFrameHandler::OnToolClicked( wxCommandEvent &event )
+{
+    wxToolBar *tb = wxDynamicCast( event.GetEventObject(), wxToolBar );
+
+    if ( tb )
+    {
+        wxWindowID toolId = event.GetId();
+        wxString   clsNme = tb->GetToolShortHelp( toolId );
+        wxLogDebug( clsNme ); //TODO
+    }
+}
+
+void wxFBFrameHandler::SaveLayout()
+{
+    bool       isIconized  = m_frame->IsIconized();
+    bool       isMaximized = m_frame->IsMaximized();
+    wxString   fileName    = "wxFormBuilder.xrc";
+    XRCConfig *xrcConfig   = XRCConfig::Get();
+
+    if ( !wxFileExists( wxStandardPaths::Get().GetUserConfigDir() + wxFILE_SEP_PATH + fileName ) )
+    {
+        xrcConfig->Initialize();
+        if ( !xrcConfig->AddObjectRef("MainFrame", "MainFrameState") ) return;
+    }
+    else if ( !xrcConfig->Load( fileName ) )
+    {
+        return;
+    }
+
+    if ( !isMaximized && !isIconized )
+    {
+        xrcConfig->AddProperty("MainFrameState", "pos",  wxString::Format( "%i,%i",
+                                m_frame->GetPosition().x, m_frame->GetPosition().y ) );
+
+        xrcConfig->AddProperty("MainFrameState", "size", wxString::Format("%i,%i",
+                                m_frame->GetSize().GetWidth(), m_frame->GetSize().GetHeight() ) );
+    }
+
+    xrcConfig->AddProperty("MainFrameState", "centered", "0" );
+    xrcConfig->AddProperty("MainFrameState", "maximized", isMaximized ? "1" : "0" );
+    xrcConfig->AddProperty("MainFrameState", "iconized",  isIconized  ? "1" : "0" );
+    xrcConfig->Save( fileName );
+}
+
+bool wxFBFrameHandler::SaveWarning()
+{
+    int result = wxYES;
+
+    // TODO: Check for modified project
+
+    return ( result != wxCANCEL );
 }

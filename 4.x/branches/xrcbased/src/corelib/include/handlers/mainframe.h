@@ -35,21 +35,29 @@
 #include <wx/frame.h>
 #include <wx/splitter.h>
 
-class wxFBFrameHandler : public wxEvtHandler
+class wxFBFrameHandler
 {
 public:
-    wxFBFrameHandler( wxFrame *owner, wxSplitterWindow *leftSplitter, wxSplitterWindow *rightSplitter );
-
-    void OnAbout( wxCommandEvent &event );
-    void OnExit( wxCommandEvent &event );
+    wxFBFrameHandler( wxFrame *owner, wxSplitterWindow *leftSplitter  = NULL,
+                                      wxSplitterWindow *rightSplitter = NULL );
+    // MainFrame
     void OnClose( wxCloseEvent &event );
-    void OnIdle( wxIdleEvent &event );
-    void OnNewProject( wxCommandEvent &event );
+    void OnIdle( wxIdleEvent & );
+
+    void SaveLayout();
+    bool SaveWarning();
+
+    // MainMenu and ToolBar
+    void OnAbout( wxCommandEvent &event );
+    void OnExit( wxCommandEvent & );
+    void OnNewProject( wxCommandEvent & );
+
+    // ObjectPalette
+    void OnToolClicked( wxCommandEvent &event );
 
 private:
     wxFrame          *m_frame;
-    wxSplitterWindow *m_leftSplitter;
-    wxSplitterWindow *m_rightSplitter;
+    wxSplitterWindow *m_leftSplitter, *m_rightSplitter;
 };
 
 #endif //__WXFB_MAINFRAME_H__

@@ -37,7 +37,9 @@
 #define wxFB_DEFAULTS           wxFB_XRC_DIR + wxT("gui/default.xrc")
 #define wxFB_DEFAULT_PROJECT    wxFB_XRC_DIR + wxT("gui/project.xrc")
 #define wxFB_EDITOR             wxFB_XRC_DIR + wxT("gui/editor.xrc")
+#define wxFB_AUIFRAME           wxFB_XRC_DIR + wxT("gui/auiframe.xrc")
 #define wxFB_MAINFRAME          wxFB_XRC_DIR + wxT("gui/mainframe.xrc")
+#define wxFB_MAINFRAME_CFG      "wxFormBuilder.xrc"
 #define wxFB_MAINMENU           wxFB_XRC_DIR + wxT("gui/mainmenu.xrc")
 #define wxFB_OBJECT_INSPECTOR   wxFB_XRC_DIR + wxT("gui/objinsp.xrc")
 #define wxFB_OBJECT_TREE        wxFB_XRC_DIR + wxT("gui/objtree.xrc")
@@ -57,6 +59,7 @@
 #include "defs.h"
 
 #include "handlers/mainframe.h"
+#include "handlers/xh_aui.h"
 #include "handlers/xh_propgrid.h"
 #include "handlers/xh_stc.h"
 
@@ -85,19 +88,17 @@ public:
     wxNotebook              *GetObjectPalette   ( wxWindow *parent = NULL );
     wxTreeCtrl              *GetObjectTree      ( wxWindow *parent = NULL );
     wxToolBar               *GetToolBar         ( wxWindow *parent = NULL );
-
     wxPropertyGridManager   *GetPGManagerProperties()   { return m_pgProps; }
     wxPropertyGridManager   *GetPGManagerEvents()       { return m_pgEvents; }
-
-    wxPropertyGridXmlHandler *GetPGXmlHandler()         { return m_pgXrcHandler; }
 
     // App stuff
     void NewProject();
     void LoadPlugins();
     void LoadTemplates();
-    bool CheckCtrlTemplate( const wxString& file );
+    wxString LoadObjectFromTemplate( const wxString& file );
 
     static wxFBResource *Get();
+    void Free();
 
 protected:
     wxFBResource();
@@ -115,16 +116,21 @@ private:
     wxNotebook  *m_objPalette;
     wxTreeCtrl  *m_objTree;
 
+    wxDialog    *m_xrcDlg;
+    wxObject    *m_xrcObj;
+
     wxPropertyGridXmlHandler *m_pgXrcHandler;
 
     wxPropertyGridManager *m_pgProps;
     wxPropertyGridManager *m_pgEvents;
 
     bool m_bUsingAUI;
-
-    wxFBFrameHandler *m_handler;
+    wxAuiManager *m_mgr;
 
     static wxFBResource *ms_instance;
+
+    friend class wxFBFrameHandler;
+    wxFBFrameHandler *m_handler;
 };
 
 #endif //__WXFB_RESMANAGER_H__

@@ -29,6 +29,7 @@
  * @version 0.0.1
  */
 #include "manager.h"
+#include "xrcconfig.h"
 
 #include <wx/dir.h>
 #include <wx/image.h>
@@ -54,14 +55,18 @@ wxFBResource::wxFBResource() : wxXmlResource( wxXRC_USE_LOCALE | wxXRC_NO_SUBCLA
     m_objInspImages = NULL;
     m_pgProps = m_pgEvents = NULL;
 
+    m_xrcObj = NULL;
+    m_xrcDlg = NULL;
+
     wxInitAllImageHandlers();
     InitAllHandlers();
 
-    m_pgXrcHandler = new wxPropertyGridXmlHandler;
-
-    AddHandler( m_pgXrcHandler );
+    AddHandler( new wxPropertyGridXmlHandler );
     AddHandler( new wxStyledTextCtrlXmlHandler );
-//    AddHandler( new wxFBProjectXmlHandler );
+    AddHandler( new wxAuiXmlHandler );
+
+    Load( wxFB_MAINMENU );
+    Load( wxFB_TOOLBAR );
 
     if ( !Load( wxFB_ABOUT ) ) return;
     if ( !Load( wxFB_EDITOR ) ) return;
@@ -86,7 +91,6 @@ wxMenuBar *wxFBResource::GetMainMenu( wxWindow *parent )
 {
     if ( !m_menuBar )
     {
-        Load( wxFB_MAINMENU );
         m_menuBar  = LoadMenuBar( parent, wxT("MainMenu") );
     }
 
@@ -97,7 +101,6 @@ wxToolBar *wxFBResource::GetToolBar( wxWindow *parent )
 {
     if ( !m_toolBar )
     {
-        Load( wxFB_TOOLBAR );
         m_toolBar = LoadToolBar( parent, wxT("ToolBar") );
     }
 
@@ -115,20 +118,41 @@ wxFrame *wxFBResource::GetMainFrame( wxWindow *parent, bool aui )
     // First request
     if ( !m_frame )
     {
-        if ( !Load( wxFB_MAINFRAME ) ) return NULL;
+        // Check for mainframe template in previous saved config file and load it if any
+        wxString cfgFile    = wxStandardPaths::Get().GetUserConfigDir() + wxFILE_SEP_PATH + wxFB_MAINFRAME_CFG;
+        bool     haveConfig = false;
 
         if ( aui )
         {
-/*
             AddHandler( new wxAuiXmlHandler );
 
-            m_bUsingAUI = Load( wxFB_AUIFRAME );
-            m_frame     = LoadAuiFrame( parent, wxT("AUIFrame") );
-*/
+            if ( !Load( wxFB_AUIFRAME ) ) return NULL;
+
+            if ( wxFileExists( cfgFile ) ) haveConfig = Load( cfgFile );
+/*
+            if ( haveConfig )
+                m_frame = LoadAUIFrame( NULL, "AUIFrameState" );
+            else*/
+                m_mgr = wxDynamicCast( LoadObject( NULL, "AUIManager", "wxAuiManager" ), wxAuiManager );
+                m_frame = wxDynamicCast( wxWindow::FindWindowById( XRCID("AUIFrame") ), wxFrame );
+
+            if ( m_frame )
+                m_bUsingAUI = true;
+            else
+                return NULL;
+
+            m_handler = new wxFBFrameHandler( m_frame );
         }
         else // Not using AUI
         {
-            m_frame = LoadFrame( NULL, wxT("MainFrame") );
+            if ( !Load( wxFB_MAINFRAME ) ) return NULL;
+
+            if ( wxFileExists( cfgFile ) ) haveConfig = Load( cfgFile );
+
+            if ( haveConfig )
+                m_frame = LoadFrame( NULL, wxT("MainFrameState") );
+            else
+                m_frame = LoadFrame( NULL, wxT("MainFrame") );
 
             if ( !m_frame ) return NULL;
 
@@ -137,24 +161,24 @@ wxFrame *wxFBResource::GetMainFrame( wxWindow *parent, bool aui )
 
             if ( !leftSplitter || !rightSplitter ) return m_frame;
 
-            wxPanel *editPanel = wxDynamicCast( rightSplitter->FindWindowById( XRCID("EditorPanel") ), wxPanel );
+            wxPanel *editPanel = wxDynamicCast( rightSplitter->FindWindowById( XRCID("EditorPanel") ),  wxPanel );
             wxPanel *inspPanel = wxDynamicCast( rightSplitter->FindWindowById( XRCID("ObjInspPanel") ), wxPanel );
-            wxPanel *treePanel = wxDynamicCast( leftSplitter->FindWindowById( XRCID("ObjTreePanel") ), wxPanel );
-            wxPanel *paltPanel = wxDynamicCast( leftSplitter->FindWindowById( XRCID("PalettePanel") ), wxPanel );
+            wxPanel *treePanel = wxDynamicCast( leftSplitter->FindWindowById ( XRCID("ObjTreePanel") ), wxPanel );
+            wxPanel *paltPanel = wxDynamicCast( leftSplitter->FindWindowById ( XRCID("PalettePanel") ), wxPanel );
 
             if( !editPanel || !inspPanel || !treePanel || !paltPanel ) return m_frame;
 
-            wxNotebook *inspBook = GetObjectInspector( inspPanel );
-            wxNotebook *paltBook = GetObjectPalette( paltPanel );
-            wxTreeCtrl *treeCtrl = GetObjectTree( treePanel );
-            wxNotebook *editBook = GetEditor( editPanel );
+            GetObjectInspector( inspPanel );
+            GetObjectPalette( paltPanel );
+            GetObjectTree( treePanel );
+            GetEditor( editPanel );
 
-            if( !inspBook || !paltBook || !treeCtrl || !editBook ) return m_frame;
+            if( !m_objInsp || !m_objPalette || !m_objTree || !m_editor ) return m_frame;
 
-            inspPanel->GetSizer()->Add( inspBook, 1, wxEXPAND );
-            paltPanel->GetSizer()->Add( paltBook, 0, wxEXPAND );
-            treePanel->GetSizer()->Add( treeCtrl, 1, wxEXPAND );
-            editPanel->GetSizer()->Add( editBook, 1, wxEXPAND );
+            inspPanel->GetSizer()->Add( m_objInsp,    1, wxEXPAND );
+            paltPanel->GetSizer()->Add( m_objPalette, 0, wxEXPAND );
+            treePanel->GetSizer()->Add( m_objTree,    1, wxEXPAND );
+            editPanel->GetSizer()->Add( m_editor,     1, wxEXPAND );
 
             m_handler = new wxFBFrameHandler( m_frame, leftSplitter, rightSplitter );
 /*
@@ -163,16 +187,17 @@ wxFrame *wxFBResource::GetMainFrame( wxWindow *parent, bool aui )
             if ( pg ) m_pg = pg->GetGrid();
             if ( eg ) m_eg = eg->GetGrid();
 */
+            m_frame->SetMenuBar( GetMainMenu( m_frame ) );
+            m_frame->SetToolBar( GetToolBar( m_frame ) );
+
+            m_frame->Bind( wxEVT_IDLE, &wxFBFrameHandler::OnIdle, m_handler );
+            m_objPalette->Bind( wxEVT_COMMAND_TOOL_CLICKED, &wxFBFrameHandler::OnToolClicked, m_handler );
         }
 
-        m_frame->SetMenuBar( GetMainMenu( m_frame ) );
-        m_frame->SetToolBar( GetToolBar( m_frame ) );
-
-        m_frame->Connect( XRCID("wxID_ABOUT"), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( wxFBFrameHandler::OnAbout ),      NULL, m_handler );
-        m_frame->Connect( XRCID("wxID_NEW"),   wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( wxFBFrameHandler::OnNewProject ), NULL, m_handler );
-        m_frame->Connect( XRCID("wxID_EXIT"),  wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( wxFBFrameHandler::OnExit ),       NULL, m_handler );
-        m_frame->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( wxFBFrameHandler::OnClose ), NULL, m_handler );
-        m_frame->Connect( wxEVT_IDLE, wxIdleEventHandler( wxFBFrameHandler::OnIdle ), NULL, m_handler );
+        m_frame->Bind( wxEVT_COMMAND_TOOL_CLICKED, &wxFBFrameHandler::OnAbout,      m_handler, XRCID("wxID_ABOUT") );
+        m_frame->Bind( wxEVT_COMMAND_TOOL_CLICKED, &wxFBFrameHandler::OnNewProject, m_handler, XRCID("wxID_NEW") );
+        m_frame->Bind( wxEVT_COMMAND_TOOL_CLICKED, &wxFBFrameHandler::OnExit,       m_handler, XRCID("wxID_EXIT") );
+        m_frame->Bind( wxEVT_CLOSE_WINDOW,         &wxFBFrameHandler::OnClose,      m_handler );
     }
     // Switch GUI
     else
@@ -194,7 +219,7 @@ wxFrame *wxFBResource::GetMainFrame( wxWindow *parent, bool aui )
         }
     }
 
-    if ( wxFileName::FileExists( wxFB_LOGO ) );
+    if ( wxFileExists( wxFB_LOGO ) );
     {
         wxIcon       ico16, ico32;
         wxIconBundle bundle;
@@ -208,6 +233,9 @@ wxFrame *wxFBResource::GetMainFrame( wxWindow *parent, bool aui )
 
         m_frame->SetIcons( bundle );
     }
+
+    m_xrcDlg = new wxDialog( m_frame, wxID_ANY, "Dialog" );
+    m_xrcDlg->Hide();
 
     return m_frame;
 }
@@ -398,26 +426,21 @@ void wxFBResource::LoadPlugins()
                     // Iterate through .xrc files in the xrc directory
                     while ( moreXrcFiles )
                     {
-                        wxFileName nextXrcFile( xrcCtrlTemplate );
-                        if ( !nextXrcFile.IsAbsolute() )
-                        {
-                            nextXrcFile.MakeAbsolute();
-                        }
-
                         // Validate control template and, if ok, add it to the palette
-                        if ( CheckCtrlTemplate( nextXrcFile.GetFullPath() ) );
+                        wxString xrcFilePath = nextPluginPath + wxFILE_SEP_PATH + xrcCtrlTemplate;
+                        wxString xrcFileName = xrcCtrlTemplate.BeforeLast('.');
+                        wxString ctrlClsName = LoadObjectFromTemplate( xrcFilePath );
+
+                        if ( m_xrcObj )
                         {
-                            wxString ctrlBmpPath = nextPluginIconPath + wxFILE_SEP_PATH + nextXrcFile.GetName() + wxT(".png");
+                            wxString ctrlBmpPath = nextPluginIconPath + wxFILE_SEP_PATH + xrcFileName + wxT(".png");
 
                             if ( wxFileExists( ctrlBmpPath ) )
                             {
                                 wxBitmap ctrlBmp = wxBitmap( ctrlBmpPath, wxBITMAP_TYPE_PNG );
                                 wxImage  ctrlImg = ctrlBmp.ConvertToImage().Scale( 22, 22 );
 
-                                // TODO: temporary name
-                                wxString label = wxT("wx") + nextXrcFile.GetName().Capitalize();
-
-                                pluginBar->AddTool( XRCID( xrcCtrlTemplate ), label, ctrlImg, wxNullBitmap, wxITEM_NORMAL, label );
+                                pluginBar->AddTool( XRCID( xrcFileName ), ctrlClsName, ctrlImg, wxNullBitmap, wxITEM_NORMAL, ctrlClsName );
                             }
                         }
                         moreXrcFiles = pluginDir.GetNext( &xrcCtrlTemplate );
@@ -429,13 +452,54 @@ void wxFBResource::LoadPlugins()
 
         moreDirectories = pluginsDir.GetNext( &pluginDirName );
     }
+
+    wxWindow *window = wxDynamicCast( m_xrcObj, wxWindow );
+    if ( window )
+    {
+        if ( window->IsTopLevel() )
+        {
+//          window->Show();
+        }
+        else
+        {
+            m_xrcDlg->AddChild( window );
+            m_xrcDlg->ShowModal();
+        }
+    }
 }
 
-bool wxFBResource::CheckCtrlTemplate( const wxString& file )
+wxString wxFBResource::LoadObjectFromTemplate( const wxString& file )
 {
-//  wxLogDebug( wxT("file path:%s"), file );
-//  wxLogDebug( wxT("icon path:%s"), iconPath );
-    return true;
+    if ( !Load( file ) ) return wxEmptyString;
+
+    wxXmlDocument xrcDoc;
+    if ( !xrcDoc.Load( file ) ) return wxEmptyString;
+
+    wxXmlNode *child = xrcDoc.GetRoot()->GetChildren();
+    if ( child )
+    {
+        wxString classname = "class";
+        wxString name      = "name";
+
+        if ( child->GetName() == "object"     &&
+             child->HasAttribute( classname ) &&
+             child->HasAttribute( name ) )
+        {
+            classname = child->GetAttribute( classname );
+            name      = child->GetAttribute( name );
+
+            m_xrcObj = LoadObject( m_xrcDlg, name, classname  );
+            return classname;
+        }
+    }
+
+    return wxEmptyString;
+}
+
+void wxFBResource::Free()
+{
+    ClearHandlers();
+    delete m_handler;
 }
 
 wxFBResource *wxFBResource::ms_instance = NULL;
