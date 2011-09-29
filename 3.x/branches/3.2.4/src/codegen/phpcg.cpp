@@ -988,6 +988,22 @@ void PHPCodeGenerator::GenConstructor( PObjectBase class_obj, const EventVector 
 	m_source->Unindent();
 	m_source->WriteLn( wxT("}") );
 	m_source->WriteLn( wxT("") );
+
+	if ( class_obj->GetObjectTypeName() == wxT("wizard") && class_obj->GetChildCount() > 0 )
+    {
+        m_source->WriteLn( wxT("function AddPage($page){") );
+        m_source->Indent();
+        m_source->WriteLn( wxT("if(count($this->m_pages) > 0){") );
+        m_source->Indent();
+        m_source->WriteLn( wxT("$previous_page = $this->m_pages[count($this->m_pages)-1];") );
+        m_source->WriteLn( wxT("$page->SetPrev($previous_page);") );
+        m_source->WriteLn( wxT("$previous_page->SetNext($page);") );
+        m_source->Unindent();
+        m_source->WriteLn( wxT("}") );
+        m_source->WriteLn( wxT("$this->m_pages[] = $page;") );
+        m_source->Unindent();
+        m_source->WriteLn( wxT("}") );
+    }
 }
 
 void PHPCodeGenerator::GenDestructor( PObjectBase class_obj, const EventVector &events )
@@ -1102,7 +1118,8 @@ void PHPCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 				type == wxT("notebook")	||
 				type == wxT("auinotebook")	||
 				type == wxT("treelistctrl")	||
-				type == wxT("flatnotebook")
+				type == wxT("flatnotebook") ||
+                type == wxT("wizard")
 			)
 		{
 			wxString afterAddChild = GetCode( obj, wxT("after_addchild") );
