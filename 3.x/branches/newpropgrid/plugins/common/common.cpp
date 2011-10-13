@@ -1333,25 +1333,32 @@ void ComponentEvtHandler::OnToolAUI( wxMouseEvent& event )
 
 	if ( m_window != event.GetEventObject() ) return;
 
-	wxAuiToolBar* tb = static_cast< wxAuiToolBar* >( m_window );
-	wxAuiToolBarItem* item = tb->FindToolByPosition( event.GetX(), event.GetY() );
-
-	if ( item && item->HasDropDown() )
+	wxAuiToolBar* tb = wxDynamicCast( m_window, wxAuiToolBar );
+	if( tb )
 	{
-		wxMenu mnuPopUp;
-		wxMenuItem* m1 =  new wxMenuItem( &mnuPopUp, wxID_ANY, _("Drop Down Item 1") );
-		wxMenuItem* m2 =  new wxMenuItem( &mnuPopUp, wxID_ANY, _("Drop Down Item 2") );
-		wxMenuItem* m3 =  new wxMenuItem( &mnuPopUp, wxID_ANY, _("Drop Down Item 3") );
-		mnuPopUp.Append( m1 );
-		mnuPopUp.Append( m2 );
-		mnuPopUp.Append( m3 );
-		tb->SetToolSticky( item->GetId(), true );
-		wxRect rect = tb->GetToolRect( item->GetId() );
-		wxPoint pt = tb->ClientToScreen( rect.GetBottomLeft() );
-		pt = tb->ScreenToClient( pt );
-		tb->PopupMenu( &mnuPopUp, pt );
-		tb->SetToolSticky( item->GetId(), false );
+		wxAuiToolBarItem* item = tb->FindToolByPosition( event.GetX(), event.GetY() );
+
+		if ( item && item->HasDropDown() )
+		{
+			wxMenu mnuPopUp;
+			wxMenuItem* m1 =  new wxMenuItem( &mnuPopUp, wxID_ANY, _("Drop Down Item 1") );
+			wxMenuItem* m2 =  new wxMenuItem( &mnuPopUp, wxID_ANY, _("Drop Down Item 2") );
+			wxMenuItem* m3 =  new wxMenuItem( &mnuPopUp, wxID_ANY, _("Drop Down Item 3") );
+			mnuPopUp.Append( m1 );
+			mnuPopUp.Append( m2 );
+			mnuPopUp.Append( m3 );
+			tb->SetToolSticky( item->GetId(), true );
+			wxRect rect = tb->GetToolRect( item->GetId() );
+			wxPoint pt = tb->ClientToScreen( rect.GetBottomLeft() );
+			pt = tb->ScreenToClient( pt );
+			tb->PopupMenu( &mnuPopUp, pt );
+			tb->SetToolSticky( item->GetId(), false );
+			
+			return;
+		}
 	}
+	
+	event.Skip();
 }
 
 void ComponentEvtHandler::OnTool( wxCommandEvent& event )
