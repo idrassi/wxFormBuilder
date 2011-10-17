@@ -459,7 +459,7 @@ void TypeConv::ParseBitmapWithResource( const wxString& value, wxString* image, 
 			*source = children[0];
 		}
 	}
-wxLogDebug( wxT("TypeConv:ParseBitmap: source:%s image:%s "), source->c_str(), image->c_str() );
+	wxLogDebug( wxT("TypeConv:ParseBitmap: source:%s image:%s "), source->c_str(), image->c_str() );
 }
 
 wxString TypeConv::MakeAbsolutePath ( const wxString& filename, const wxString& basePath )
