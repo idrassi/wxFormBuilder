@@ -98,7 +98,7 @@ function wx_config_Private(wxRoot, wxDebug, wxHost, wxVersion, wxStatic, wxUnico
     if wxVersion > "2.8" then -- alphabetical comparison may fail...
     --    wxDebug = "" -- 2.9 still make debug libraries
         wxUnicode       = "yes"
-        wxLibs          = wxLibs .. "dataview,propgrid,stc"
+        wxLibs          = wxLibs .. ",propgrid,ribbon,stc"
     end
 
     -- the environment variable WXWIN override wxRoot parameter

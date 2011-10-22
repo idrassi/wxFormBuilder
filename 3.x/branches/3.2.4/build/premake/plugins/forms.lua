@@ -9,14 +9,14 @@
 -----------------------------------------------------------------------------
 project "forms-components-plugin"
     kind                "SharedLib"
-    files               {"../../../plugins/layout/forms.cpp"}
+    files               {"../../../plugins/forms/forms.cpp"}
     includedirs
     {
         "../../../sdk/tinyxml", "../../../sdk/plugin_interface"
     }
     defines             {"BUILD_DLL", "TIXML_USE_TICPP"}
     flags               {"ExtraWarnings"}
-    links               {"TiCPP", "plugin-interface"}
+    links               {"plugin-interface", "TiCPP"}
     targetname          "forms"
 
     configuration "not windows"
