@@ -11,7 +11,12 @@ project "plugin-interface"
     kind         "StaticLib"
     targetname   "fbPluginInterface"
     targetdir    "../../sdk/lib/"
-    files        {"../../sdk/plugin_interface/**.cpp", "../../sdk/plugin_interface/**.h"}
+    files
+    {
+        "../../sdk/plugin_interface/**.h",
+        "../../sdk/plugin_interface/**.cpp",
+        "../../sdk/plugin_interface/**.fbp"
+    }
     includedirs  {"../../sdk/tinyxml"}
     libdirs      {"../../sdk/lib"}
     flags        {"ExtraWarnings"}

@@ -16,7 +16,7 @@ project "layout-components-plugin"
     }
     defines             {"BUILD_DLL", "TIXML_USE_TICPP"}
     flags               {"ExtraWarnings"}
-    links               {"TiCPP", "plugin-interface"}
+    links               {"plugin-interface", "TiCPP"}
     targetname          "layout"
 
     configuration "not windows"
