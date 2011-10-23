@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<codegen language="C++">
+	
+	<templates class="wxTreeListCtrl">
+		<template name="declaration">#class* $name;</template>
+		<template name="include">
+			@#include &lt;wx/treelistctrl/treelistctrl.h&gt;
+			#ifnotnull $column_image_size
+			@{
+				#nl @#include &lt;wx/imaglist.h&gt;
+				#nl @#include &lt;wx/image.h&gt;
+			@}
+		</template>
+		<template name="construction">
+			$name = new #class( #wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} ); #nl
+			wxArrayString $name #append Choices;
+		</template>
+		<template name="settings">
+			#ifnotnull $column_image_size
+			@{
+				wxSize $name #append ImageSize = $column_image_size; #nl
+				int $name #append Index = -1; #nl
+				wxImageList* $name #append Images = new wxImageList( $name #append ImageSize.GetWidth(), $name #append ImageSize.GetHeight() ); #nl
+				$name->SetImageList( $name #append Images ); #nl
+				wxBitmap $name #append Bitmap;
+			@}
+		</template>
+	</templates>
+	
+	<templates class="wxTreeListCtrlColumn">
+		<template name="column_add">
+			#parent $name #append Choices.Clear();
+			#ifnull $choices @{ #nl @}
+			#foreach $choices
+			@{ #parent $name #append Choices.Add( #pred ); @}
+			#ifnotnull $choices @{ #nl @}
+			
+			#ifnotnull #parent $column_image_size
+			@{
+				#ifnotnull $image
+				@{
+					#parent $name #append Bitmap = $image; #nl
+					if ( #parent $name #append Bitmap.Ok() ) #nl
+					@{ #nl
+						wxImage #parent $name #append Image = #parent $name #append Bitmap.ConvertToImage(); #nl
+						#parent $name #append Images->Add( #parent $name #append Image.Scale( #parent $name #append ImageSize.GetWidth(), #parent $name #append ImageSize.GetHeight() ) ); #nl
+						#parent $name #append Index++; #nl
+					@} #nl
+					#parent $name->AddColumn( $name, $width, $alignment, #parent $name #append Index, $shown, $edit, wxTreeListColumnInfo::$editor, #parent $name #append Choices );
+				@}
+				
+				#ifnull $image
+				@{
+					#parent $name->AddColumn( $name, $width, $alignment, -1, $shown, $edit, wxTreeListColumnInfo::$editor, #parent $name #append Choices );
+				@}
+			@}
+			
+			#ifnull #parent $column_image_size
+			@{
+				#parent $name->AddColumn( $name, $width, $alignment, -1, $shown, $edit, wxTreeListColumnInfo::$editor, #parent $name #append Choices );
+			@}
+		</template>
+	</templates>
+	
+	<templates class="wxPlotCtrl">
+		<template name="declaration">#class* $name;</template>
+		<template name="construction">
+			$name = new #class(#wxparent $name, $id, $pos, $size );
+		</template>
+		<template name="settings">
+			$name->SetScrollOnThumbRelease( $scroll_on_thumb_release ); #nl			
+			
+			$name->SetDrawSymbols( $draw_symbols ); #nl
+			$name->SetDrawLines( $draw_lines ); #nl
+			$name->SetDrawSpline( $draw_spline ); #nl
+			$name->SetDrawGrid( $draw_grid ); #nl
+			#ifnotnull $grid_colour @{ $name->SetGridColour( $grid_colour ); #nl @}
+			#ifnotnull $border_colour @{ $name->SetBorderColour( $border_colour ); #nl @}
+			
+			$name->SetAreaMouseFunction( $area_mouse_function ); #nl
+			$name->SetAreaMouseMarker( $area_mouse_marker ); #nl
+			$name->SetCrossHairCursor( $crosshair_cursor ); #nl
+			
+			#ifnotnull $axis_font @{ $name->SetAxisFont( $axis_font ); #nl @}
+			#ifnotnull $axis_colour @{ $name->SetAxisColour( $axis_colour ); #nl @}
+			#ifnotnull $axis_label_font @{ $name->SetAxisLabelFont( $axis_label_font ); #nl @}
+			#ifnotnull $axis_label_colour @{ $name->SetAxisLabelColour( $axis_label_colour ); #nl @}
+			
+			$name->SetShowXAxis( $show_x_axis ); #nl
+			$name->SetShowXAxisLabel( $show_x_axis_label ); #nl
+			$name->SetXAxisLabel( $x_axis_label ); #nl
+			
+			$name->SetShowYAxis( $show_y_axis ); #nl
+			$name->SetShowYAxisLabel( $show_y_axis_label ); #nl
+			$name->SetYAxisLabel( $y_axis_label ); #nl	
+			
+			$name->SetShowPlotTitle( $show_plot_title ); #nl
+			$name->SetPlotTitle( $plot_title ); #nl
+			#ifnotnull $plot_title_font @{ $name->SetPlotTitleFont( $plot_title_font ); #nl @}
+			#ifnotnull $plot_title_colour @{ $name->SetPlotTitleColour( $plot_title_colour ); #nl @}
+			
+			$name->SetShowKey( $show_key ); #nl
+			$name->SetKeyPosition( $key_position ); #nl
+			#ifnotnull $key_font @{ $name->SetKeyFont( $key_font ); #nl @}
+			#ifnotnull $key_colour @{ $name->SetKeyColour( $key_colour ); #nl @}
+		</template>
+		<template name="include">@#include &lt;wx/plotctrl/plotctrl.h&gt;</template>
+	</templates>
+
+	<templates class="awxLed">
+		<template name="declaration">#class* $name;</template>
+		<template name="construction">
+			$name = new #class( #wxparent $name, $id, $pos, $size, $color, $window_style );
+		    #ifnotnull $state
+			  @{ #nl $name->SetState( $state ); @}
+		</template>
+		<template name="include">@#include &lt;wx/awx/led.h&gt;</template>
+	</templates>
+	
+	<templates class="wxLedBarGraph">
+		<template name="declaration">#class* $name;</template>
+		<template name="construction">
+			$name = new #class( #wxparent $name, $id, $pos, $size, $window_style ); #nl
+			$name->SetDrawingMode( $drawing_mode );#nl
+			$name->SetSizingMode( $sizing_mode ); #nl
+			$name->SetOrientation( $orientation ); #nl
+			$name->SetBarWidths( $bar_widths ); #nl
+			$name->SetNBars( $nbars ); #nl
+			$name->SetMaxValue( $max_value ); #nl
+			$name->SetMinValue( $min_value ); #nl
+		</template>
+		<template name="include">@#include &lt;wx/ledBarGraph/ledBarGraph.h&gt;</template>
+	</templates>
+	
+</codegen>
