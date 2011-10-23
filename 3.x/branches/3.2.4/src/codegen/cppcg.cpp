@@ -176,16 +176,31 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 				wxFontContainer font = TypeConv::StringToFont( value );
 
 				int pointSize = font.GetPointSize();
-				wxString size = pointSize <= 0 ? wxT( "wxNORMAL_FONT->GetPointSize()" ) : wxString::Format( wxT( "%i" ), pointSize ).c_str();
+				wxString size = pointSize <= 0 ?
+#if wxVERSION_NUMBER < 2900
+                                    wxT("wxNORMAL_FONT->GetPointSize()")
+                                    : wxString::Format( wxT("%i"), pointSize ).c_str();
 
-				result	= wxString::Format( wxT( "wxFont( %s, %i, %i, %i, %s, %s )" ),
-				                           size.c_str(),
-				                           font.GetFamily(),
-				                           font.GetStyle(),
-				                           font.GetWeight(),
-				                           ( font.GetUnderlined() ? wxT( "true" ) : wxT( "false" ) ),
-				                           ( font.m_faceName.empty() ? wxT( "wxEmptyString" ) : wxString::Format( wxT( "wxT(\"%s\")" ), font.m_faceName.c_str() ).c_str() )
-				                         );
+                result = wxString::Format
+                        (
+                            wxT("wxFont( %s, %i, %i, %i, %s, %s )" ),
+                            size.c_str(), font.GetFamily(), font.GetStyle(), font.GetWeight(),
+                            ( font.GetUnderlined() ? wxT("true") : wxT("false") ),
+                            ( font.m_faceName.empty() ? wxT("wxEmptyString")
+                            : wxString::Format( wxT("wxT(\"%s\")" ), font.m_faceName.c_str() ).c_str() )
+#else
+                                    "wxNORMAL_FONT->GetPointSize()"
+                                    : wxString::Format( "%i", pointSize );
+
+                result = wxString::Format
+                        (
+                            "wxFont( %s, %i, %i, %i, %s, %s )",
+                            size, font.GetFamily(), font.GetStyle(), font.GetWeight(),
+                            ( font.GetUnderlined() ? "true" : "false" ),
+                            ( font.m_faceName.empty() ? "wxEmptyString"
+                            : wxString::Format( "wxT(\"%s\")", font.m_faceName ) )
+#endif
+                        );
 			}
 			else
 			{

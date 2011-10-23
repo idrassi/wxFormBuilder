@@ -416,11 +416,13 @@ void VisualEditor::ClearComponents( wxWindow* parent )
 */
 void VisualEditor::Create()
 {
+#if wxVERSION_NUMBER < 2900 && !defined(__WXGTK__ )
 	if ( IsShown() )
 	{
-		Freeze(); // Prevent flickering
+        Freeze();   // Prevent flickering on wx 2.8,
+                    // Causes problems on wx 2.9 in wxGTK (e.g. wxNoteBook objects)
 	}
-	
+#endif
 	// Delete objects which had no parent
 	DeleteAbstractObjects();
 	
@@ -685,9 +687,9 @@ void VisualEditor::Create()
 			// There is no form to display
 			m_back->Show(false);
 		}
-
+#if wxVERSION_NUMBER < 2900 && !defined(__WXGTK__)
 		Thaw();
-		
+#endif
 	}
 
 	UpdateVirtualSize();
