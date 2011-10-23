@@ -688,7 +688,11 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 							if ( !addedPackage.second )
 							{
 								addedPackage.first->second->AppendPackage( packageIt->second );
+#if wxVERSION_NUMBER < 2900
 								Debug::Print( _("Merged plugins named \"%s\""), packageIt->second->GetPackageName().c_str() );
+#else
+                                Debug::Print( "Merged plugins named \"" + packageIt->second->GetPackageName() + "\"" );
+#endif
 							}
 
 						}
@@ -1290,6 +1294,7 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		if ( !handle )
 		{
 			wxString error = wxString( dlerror(), wxConvUTF8 );
+            
 			THROW_WXFBEX( wxT("Error loading library ") << path << wxT(" ") << error )
 		}
 		dlerror(); // reset errors
@@ -1303,7 +1308,11 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		if (dlsym_error)
 		{
 			wxString error = wxString( dlsym_error, wxConvUTF8 );
+#if wxVERSION_NUMBER < 2900
 			THROW_WXFBEX( path << wxT(" is not a valid component library: ") << error )
+#else
+            THROW_WXFBEX( path << " is not a valid component library: " << error )
+#endif
 			dlclose( handle );
 		}
 		else
@@ -1326,13 +1335,19 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 
 		if ( !(GetComponentLibrary && FreeComponentLibrary) )
 		{
+#if wxVERSION_NUMBER < 2900
 			THROW_WXFBEX( path << wxT(" is not a valid component library") )
+#else
+            THROW_WXFBEX( path << " is not a valid component library" )
+#endif
 		}
 
 #endif
-
+#if wxVERSION_NUMBER < 2900
 		Debug::Print( wxT("[Database::ImportComponentLibrary] Importing %s library"), path.c_str() );
-
+#else
+        Debug::Print("[Database::ImportComponentLibrary] Importing " + path + " library");
+#endif
 	// Get the component library
 	IComponentLibrary* comp_lib = GetComponentLibrary( (IManager*)manager.get() );
 
@@ -1353,7 +1368,11 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 		}
 		else
 		{
+#if wxVERSION_NUMBER < 2900
 			Debug::Print( wxT("ObjectInfo for <%s> not found while loading library <%s>"), class_name.c_str(), path.c_str() );
+#else
+            Debug::Print("ObjectInfo for <" + class_name + "> not found while loading library <" + path + ">");
+#endif
 		}
 	}
 

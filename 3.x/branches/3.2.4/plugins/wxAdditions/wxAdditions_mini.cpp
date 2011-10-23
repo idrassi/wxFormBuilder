@@ -283,7 +283,7 @@ public:
         pg->Append( new wxFileProperty( wxT("FileProperty"), wxPG_LABEL, wxEmptyString ) );
 
 #if wxVERSION_NUMBER >= 2900
-        wxPropertyGridPage* pg = pgman->AddPage( _("Second Page") );
+        wxPropertyGridPage* pg2 = pgman->AddPage( _("Second Page") );
 #else
         pgman->AddPage( _("Second Page") ); wxPropertyGridPage* pg2 = pgman->GetPage( _("Second Page") );
 #endif

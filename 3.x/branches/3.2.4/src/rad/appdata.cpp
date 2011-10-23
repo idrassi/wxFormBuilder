@@ -757,8 +757,11 @@ void ApplicationData::CreateObject( wxString name )
 {
 	try
 	{
+#if wxVERSION_NUMBER < 2900
 		Debug::Print( wxT( "[ApplicationData::CreateObject] New %s" ), name.c_str() );
-
+#else
+        Debug::Print("[ApplicationData::CreateObject] New " + name );
+#endif
 		PObjectBase old_selected = GetSelectedObject();
 		PObjectBase parent = old_selected;
 		PObjectBase obj;
@@ -2277,8 +2280,13 @@ void ApplicationData::CheckProjectTree( PObjectBase obj )
 		PObjectBase child = obj->GetChild( i );
 
 		if ( child->GetParent() != obj )
+        {
+#if wxVERSION_NUMBER < 2900
 			wxLogError( wxString::Format( wxT( "Parent of object \'%s\' is wrong!" ), child->GetPropertyAsString( wxT( "name" ) ).c_str() ) );
-
+#else
+			wxLogError( wxString::Format("Parent of object \'" + child->GetPropertyAsString("name") + "\' is wrong!") );
+#endif
+        }
 		CheckProjectTree( child );
 	}
 }
@@ -2574,7 +2582,11 @@ void ApplicationData::NotifyEvent( wxFBEvent& event )
 	if ( count == 0 )
 	{
 		count++;
+#if wxVERSION_NUMBER < 2900
 		Debug::Print( wxT( "event: %s" ), event.GetEventName().c_str() );
+#else
+		Debug::Print( "event: " + event.GetEventName() );
+#endif
 		std::vector< wxEvtHandler* >::iterator handler;
 
 		for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )
@@ -2584,7 +2596,11 @@ void ApplicationData::NotifyEvent( wxFBEvent& event )
 	}
 	else
 	{
+#if wxVERSION_NUMBER < 2900
 		Debug::Print( wxT( "Pending event: %s" ), event.GetEventName().c_str() );
+#else
+		Debug::Print( "Pending event: " + event.GetEventName() );
+#endif
 		std::vector< wxEvtHandler* >::iterator handler;
 
 		for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )

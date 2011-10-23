@@ -1059,8 +1059,17 @@ void MainFrame::OnCopy( wxCommandEvent &)
 {
 	wxWindow *focusedWindow = wxWindow::FindFocus();
 
-	if ( focusedWindow != NULL && focusedWindow->IsKindOf( CLASSINFO( wxScintilla ) ) )
-		( ( wxScintilla* )focusedWindow )->Copy();
+#if wxVERSION_NUMBER < 2900
+    if ( focusedWindow != NULL && focusedWindow->IsKindOf( CLASSINFO( wxScintilla ) ) )
+    {
+        ( ( wxScintilla* )focusedWindow )->Copy();
+    }
+#else
+    if ( focusedWindow != NULL && focusedWindow->IsKindOf( wxCLASSINFO( wxStyledTextCtrl ) ) )
+    {
+        ( ( wxStyledTextCtrl* )focusedWindow )->Copy();
+    }
+#endif
 	else
 	{
 		AppData()->CopyObject( AppData()->GetSelectedObject() );
@@ -1072,8 +1081,16 @@ void MainFrame::OnCut ( wxCommandEvent &)
 {
 	wxWindow *focusedWindow = wxWindow::FindFocus();
 
-	if ( focusedWindow != NULL && focusedWindow->IsKindOf( CLASSINFO( wxScintilla ) ) )
-		( ( wxScintilla* )focusedWindow )->Cut();
+#if wxVERSION_NUMBER < 2900
+    if ( focusedWindow != NULL && focusedWindow->IsKindOf( CLASSINFO( wxScintilla ) ) )
+    {
+        ( ( wxScintilla* )focusedWindow )->Cut();
+#else
+    if ( focusedWindow != NULL && focusedWindow->IsKindOf( wxCLASSINFO( wxStyledTextCtrl ) ) )
+    {
+        ( ( wxStyledTextCtrl* )focusedWindow )->Cut();
+#endif
+    }
 	else
 	{
 		AppData()->CutObject( AppData()->GetSelectedObject() );
@@ -1091,8 +1108,16 @@ void MainFrame::OnPaste ( wxCommandEvent &)
 {
 	wxWindow *focusedWindow = wxWindow::FindFocus();
 
-	if ( focusedWindow != NULL && focusedWindow->IsKindOf( CLASSINFO( wxScintilla ) ) )
-		( ( wxScintilla* )focusedWindow )->Paste();
+#if wxVERSION_NUMBER < 2900
+    if ( focusedWindow != NULL && focusedWindow->IsKindOf( CLASSINFO( wxScintilla ) ) )
+    {
+        ( ( wxScintilla* )focusedWindow )->Paste();
+#else
+    if ( focusedWindow != NULL && focusedWindow->IsKindOf( wxCLASSINFO( wxStyledTextCtrl ) ) )
+    {
+        ( ( wxStyledTextCtrl* )focusedWindow )->Paste();
+#endif
+    }
 	else
 	{
 		AppData()->PasteObject( AppData()->GetSelectedObject() );
