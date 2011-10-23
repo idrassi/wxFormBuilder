@@ -18,7 +18,7 @@ fi
 debug="--disable-wx-debug"
 
 #$PREMAKE_DIR/bin/premake --target cb-gcc $unicode $debug $1
-$PREMAKE_DIR/bin/premake --target cb-gcc $unicode $debug --with-wx-shared --shared $1
+$PREMAKE_DIR/bin/premake --target cl-gcc $unicode $debug --with-wx-shared --shared $1
 echo done...
 echo 
 #

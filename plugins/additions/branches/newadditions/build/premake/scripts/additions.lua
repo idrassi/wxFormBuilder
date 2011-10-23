@@ -41,7 +41,7 @@ function MakeWxAdditionsPackage( package, altTargetName, wxVer, wxVerMinor, wxCu
 
 	-- Setup the output directory options.	
 	if ( windows ) then
-		if ( ( target == "gnu" ) or ( target == "cb-gcc" ) ) then
+		if ( ( target == "gnu" ) or ( target == "cb-gcc" or target == "cl-gcc" ) ) then
 			package.bindir = "../../lib/gcc_dll"
 			package.libdir = "../../lib/gcc_lib"
 		else
