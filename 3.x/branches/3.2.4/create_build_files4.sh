@@ -3,9 +3,10 @@
 # Parse command line options
 wxroot=""
 wxpath=`wx-config --prefix`
-wxcharset=`wx-config --query-chartype`
-wxver=`wx-config --query-version`
 
+# These works only on wxWidgets 2.8.10+
+#wxcharset=`wx-config --query-chartype`
+#wxversion=`wx-config --query-version`
 for args in "$@"
 do
     haveroot=`expr "${args}" : '--wx-root=.*'`
@@ -18,17 +19,17 @@ do
         echo "                          Ignored in wxWidgets 2.9 and later."
         echo "                          Example: --disable-unicode produces an ANSI build."
         echo "                          Default: Unicode build on all versions."
-        echo "                          Current: $wxcharset"
+#       echo "                          Current: $wxcharset"
         echo
         echo "--wx-root                 Specify the wxWidgets build path,"
         echo "                          useful for wxWidgets builds not installed"
         echo "                          in your system (alternate/custom builds)"
-        echo "                          Example: --wx-root=/home/devel/wx/3.0"
+        echo "                          Example: --wx-root=/home/devel/wx/3.0/buildgtk"
         echo "                          Current: $wxpath"
-        echo
-        echo " --wx-version             Specify the wxWidgets version."
-        echo "                          Example: --wx-version=2.9"
-        echo "                          Current: $wxver"
+#       echo
+#       echo " --wx-version             Specify the wxWidgets version."
+#       echo "                          Example: --wx-version=2.9"
+#       echo "                          Current: $wxver"
         echo
         exit
     elif [ ${args} = "--disable-mediactrl" ]; then
@@ -72,7 +73,7 @@ make CONFIG=Release -C./premake/$platform
 
 #./premake/$platform/bin/release/premake4 --file=./premake/solution.lua $wxunicode $wxroot $wxversion $mediactrl codeblocks
 ./premake/$platform/bin/release/premake4 --file=./premake/solution.lua $wxunicode $wxroot $wxversion $mediactrl codelite
-#./premake/$platform/bin/release/premake4 --file=./premake/solution.lua $wxunicode $wxroot $wxversion $mediactrl gmake
+./premake/$platform/bin/release/premake4 --file=./premake/solution.lua $wxunicode $wxroot $wxversion $mediactrl gmake
 
 #if [ "$platform" = "macosx" ]; then
 #   ./premake4/macosx/bin/release/premake4 --file=./premake4/solution.lua xcode3
