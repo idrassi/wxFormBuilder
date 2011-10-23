@@ -16,12 +16,13 @@ project "wxadditions-mini-plugin"
         "../../../src/controls/include",
         "../../../sdk/tinyxml", "../../../sdk/plugin_interface"
     }
-    defines             {"BUILD_DLL", "TIXML_USE_TICPP", "SCI_NAMESPACE", "__WX__"}
+    defines             {"BUILD_DLL", "TIXML_USE_TICPP"}
     flags               {"ExtraWarnings"}
     links               {"plugin-interface", "TiCPP", "wxFlatNotebook"}
     targetname          "wxadditions-mini"
 
 if wxVersion < "2.9" then
+    defines             {"SCI_NAMESPACE", "__WX__"}
     links               {"wxPropertyGrid", "wxScintilla"}
 else
     excludes
