@@ -744,6 +744,18 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
 		libPath.Replace( wxTheApp->GetAppName().c_str(), wxT("wxformbuilder") );
 	#endif
 
+    // Renamed libraries for convenience in debug using a "-xx" wx version as suffix.
+    // This will also prevent loading debug libraries in release and vice versa,
+    // that used to cause crashes when trying to debug.
+    wxString wxver = wxT("");
+
+#ifdef __WXDEBUG__
+    #if wxVERSION_NUMBER < 2900
+        wxver = wxT("d");
+    #endif
+    wxver = wxver + wxString::Format( wxT("-%i%i"), wxMAJOR_VERSION, wxMINOR_VERSION );
+#endif
+
 	try
 	{
 		ticpp::Document doc;
@@ -761,7 +773,7 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
 			wxFileName::SetCwd( libPath );
 			try
 			{
-				wxString fullLibPath = libPath + wxFILE_SEP_PATH + _WXSTR(lib);
+				wxString fullLibPath = libPath + wxFILE_SEP_PATH + _WXSTR(lib) + wxver;
 				if ( m_importedLibraries.insert( fullLibPath ).second )
 				{
 					ImportComponentLibrary( fullLibPath, manager );
@@ -1276,12 +1288,13 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 {
 	wxString path = libfile;
 
+#if wxVERSION_NUMBER < 2900
 	// This will prevent loading debug libraries in release and vice versa
 	// That used to cause crashes when trying to debug
 	#ifdef __WXFB_DEBUG__
-		path += wxT("d");
+//		path += wxT("d");
 	#endif
-
+#endif
 	// Find the GetComponentLibrary function - all plugins must implement this
 	typedef IComponentLibrary* (*PFGetComponentLibrary)( IManager* manager );
 

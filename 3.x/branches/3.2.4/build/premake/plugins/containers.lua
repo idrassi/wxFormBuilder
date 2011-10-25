@@ -9,6 +9,7 @@
 -----------------------------------------------------------------------------
 project "containers-components-plugin"
     kind                "SharedLib"
+    targetname          "containers"
     files               {"../../../plugins/containers/containers.cpp"}
     includedirs
     {
@@ -17,7 +18,6 @@ project "containers-components-plugin"
     defines             {"BUILD_DLL", "TIXML_USE_TICPP"}
     flags               {"ExtraWarnings"}
     links               {"plugin-interface", "TiCPP"}
-    targetname          "containers"
 
     configuration "not windows"
         targetdir       "../../../output/lib/wxformbuilder"
@@ -27,6 +27,7 @@ project "containers-components-plugin"
         targetdir       "../../../output/plugins/containers"
 
     configuration "Debug"
+        targetsuffix    ( DebugSuffix )
         wx_config       { Debug="yes" }
 
     configuration "Release"

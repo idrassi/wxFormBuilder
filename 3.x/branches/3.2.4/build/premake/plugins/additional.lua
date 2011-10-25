@@ -9,6 +9,7 @@
 -----------------------------------------------------------------------------
 project "additional-components-plugin"
     kind                "SharedLib"
+    targetname          "additional"
     files               {"../../../plugins/additional/additional.cpp"}
     includedirs
     {
@@ -17,10 +18,11 @@ project "additional-components-plugin"
     defines             {"BUILD_DLL", "TIXML_USE_TICPP"}
     flags               {"ExtraWarnings"}
     links               {"plugin-interface", "TiCPP"}
-    targetname          "additional"
 
+    local libs = ""
 if wxUseMediaCtrl then
     defines             {"USE_MEDIACTRL"}
+    libs                = "media"
 end
     configuration "not windows"
         targetdir       "../../../output/lib/wxformbuilder"
@@ -30,8 +32,9 @@ end
         targetdir       "../../../output/plugins/additional"
 
     configuration "Debug"
-        wx_config       { Debug="yes" }
+        targetsuffix    ( DebugSuffix )
+        wx_config       { Libs=libs, Debug="yes" }
 
     configuration "Release"
         buildoptions    {"-fno-strict-aliasing"}
-        wx_config       {}
+        wx_config       { Libs=libs }

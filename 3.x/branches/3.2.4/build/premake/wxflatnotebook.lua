@@ -8,28 +8,28 @@
 --  Licence:     GNU General Public License Version 2
 -----------------------------------------------------------------------------
 project "wxFlatNotebook"
-    kind            "SharedLib"
-    defines         {"WXMAKINGDLL_FNB"}
+    kind                "SharedLib"
     files
     {
         "../../src/controls/src/wxFlatNotebook/*.cpp",
         "../../src/controls/include/wx/wxFlatNotebook/*.h"
     }
-    flags           {"ExtraWarnings"}
-    includedirs     {"../../src/controls/include"}
-    targetsuffix    ( wxVersion .. CustomSuffix )
-
-    configuration "windows"
-        targetdir    "../../output"
+    includedirs         {"../../src/controls/include"}
+    defines             {"WXMAKINGDLL_FNB"}
+    flags               {"ExtraWarnings"}
+    targetsuffix        ( "-" .. wxVersion )
 
     configuration "not windows"
-        targetdir    "../../output/lib/wxformbuilder"
+        targetdir       "../../output/lib/wxformbuilder"
+
+    configuration "windows"
+        targetdir       "../../output"
 
     configuration "Release"
-        buildoptions { "-fno-strict-aliasing" }
-        targetname   ( wxTarget .. wxUnicodeSign .. "_flatnotebook-" )
-        wx_config    { Libs="core,xrc" }
+        buildoptions    {"-fno-strict-aliasing"}
+        targetname      ( CustomPrefix .. "_flatnotebook" )
+        wx_config       {}
 
     configuration "Debug"
-        targetname   ( wxTarget .. wxUnicodeSign .. "d_flatnotebook-" )
-        wx_config    { Libs="core,xrc", Debug="yes" }
+        targetname      ( CustomPrefix .. wxDebugSuffix .. "_flatnotebook" )
+        wx_config       { Debug="yes" }

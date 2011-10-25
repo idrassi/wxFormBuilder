@@ -25,3 +25,6 @@ project "TiCPP"
         -- multi-process building
         flags           ("NoMinimalRebuild")
         buildoptions    ("/MP")
+
+    configuration "Debug"
+        targetsuffix    "d"

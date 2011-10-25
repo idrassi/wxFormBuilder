@@ -10,19 +10,28 @@
 -----------------------------------------------------------------------------
 solution "Solution"
     language "C++"
-    location            ( "../../build/" .. _ACTION )
-    BuildDir            = solution().location
-    CustomSuffix        = "_wxfb"
+    configurations      {"Debug", "Release"}
+
     local scriptDir     = os.getcwd()
-    os.chdir( BuildDir )
 
     dofile( scriptDir .. "/wxwidgets.lua" )
 
-    configurations      {"Debug", "Release"}
+    local wxver         = string.gsub( wxVersion, '%.', '' )
+    location            ( "../../build/" .. wxVersion .. "/" .. _ACTION )
+    BuildDir            = solution().location
+    CustomPrefix        = "wxfb_" .. wxTarget .. wxUnicodeSign
 
-if wxCompiler == "gcc" and os.is("windows") then
---  flags               {"NoImportLib"}
+if wxVersion < "2.9" then
+    DebugSuffix         = "d-" .. wxver
+else
+    DebugSuffix         = "-" .. wxver
 end
+    os.chdir( BuildDir )
+
+--if wxCompiler == "gcc" and os.is("windows") then
+--  flags               {"NoImportLib"}
+--end
+
 if wxUseUnicode then
     flags               {"Unicode"}
     defines             {"UNICODE", "_UNICODE"}
@@ -31,7 +40,6 @@ end
         defines         {"WIN32", "_WINDOWS"}
 
     configuration "Debug"
-        targetsuffix    "d"
         defines         {"DEBUG", "_DEBUG"}
         flags           {"Symbols"}
 

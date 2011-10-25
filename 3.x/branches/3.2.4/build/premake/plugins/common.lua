@@ -9,6 +9,7 @@
 -----------------------------------------------------------------------------
 project "common-components-plugin"
     kind                "SharedLib"
+    targetname          "common"
     files               {"../../../plugins/common/common.cpp"}
     includedirs
     {
@@ -17,7 +18,6 @@ project "common-components-plugin"
     defines             {"BUILD_DLL", "TIXML_USE_TICPP"}
     flags               {"ExtraWarnings"}
     links               {"plugin-interface", "TiCPP"}
-    targetname          "common"
 
     configuration "not windows"
         targetdir       "../../../output/lib/wxformbuilder"
@@ -27,6 +27,7 @@ project "common-components-plugin"
         targetdir       "../../../output/plugins/common"
 
     configuration "Debug"
+        targetsuffix    ( DebugSuffix )
         wx_config       { Debug="yes" }
 
     configuration "Release"

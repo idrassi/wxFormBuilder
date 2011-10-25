@@ -9,6 +9,7 @@
 -----------------------------------------------------------------------------
 project "forms-components-plugin"
     kind                "SharedLib"
+    targetname          "forms"
     files               {"../../../plugins/forms/forms.cpp"}
     includedirs
     {
@@ -17,7 +18,6 @@ project "forms-components-plugin"
     defines             {"BUILD_DLL", "TIXML_USE_TICPP"}
     flags               {"ExtraWarnings"}
     links               {"plugin-interface", "TiCPP"}
-    targetname          "forms"
 
     configuration "not windows"
         targetdir       "../../../output/lib/wxformbuilder"
@@ -27,6 +27,7 @@ project "forms-components-plugin"
         targetdir       "../../../output/plugins/layout"
 
     configuration "Debug"
+        targetsuffix    ( DebugSuffix )
         wx_config       { Debug="yes" }
 
     configuration "Release"
