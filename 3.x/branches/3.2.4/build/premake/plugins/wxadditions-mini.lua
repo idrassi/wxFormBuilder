@@ -9,8 +9,11 @@
 -----------------------------------------------------------------------------
 project "wxadditions-mini-plugin"
     kind                "SharedLib"
-    files               {"../../../plugins/wxAdditions/wxAdditions_mini.cpp"}
-
+    targetname          "wxadditions-mini"
+    files
+    {
+        "../../../plugins/wxAdditions/wxAdditions_mini.cpp"
+    }
     includedirs
     {
         "../../../src/controls/include",
@@ -19,7 +22,6 @@ project "wxadditions-mini-plugin"
     defines             {"BUILD_DLL", "TIXML_USE_TICPP"}
     flags               {"ExtraWarnings"}
     links               {"plugin-interface", "TiCPP", "wxFlatNotebook"}
-    targetname          "wxadditions-mini"
 
 if wxVersion < "2.9" then
     defines             {"SCI_NAMESPACE", "__WX__"}
@@ -46,8 +48,8 @@ end
         targetprefix    "lib"
         targetdir       "../../../output/plugins/wxAdditions"
 
-
     configuration "Debug"
+        targetsuffix    ( DebugSuffix )
         wx_config       { Debug="yes" }
 
     configuration "Release"

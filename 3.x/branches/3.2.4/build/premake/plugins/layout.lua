@@ -9,6 +9,7 @@
 -----------------------------------------------------------------------------
 project "layout-components-plugin"
     kind                "SharedLib"
+    targetname          "layout"
     files               {"../../../plugins/layout/layout.cpp"}
     includedirs
     {
@@ -17,7 +18,6 @@ project "layout-components-plugin"
     defines             {"BUILD_DLL", "TIXML_USE_TICPP"}
     flags               {"ExtraWarnings"}
     links               {"plugin-interface", "TiCPP"}
-    targetname          "layout"
 
     configuration "not windows"
         targetdir       "../../../output/lib/wxformbuilder"
@@ -27,6 +27,7 @@ project "layout-components-plugin"
         targetdir       "../../../output/plugins/layout"
 
     configuration "Debug"
+        targetsuffix    ( DebugSuffix )
         wx_config       { Debug="yes" }
 
     configuration "Release"

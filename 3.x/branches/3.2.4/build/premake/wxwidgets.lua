@@ -8,7 +8,10 @@
 newoption  {
     trigger     =   "wx-root",
     value       =   "PATH",
-    description =   "Path to wxwidgets root folder, by default, WXWIN envvar will be used or wx-config found in path on POSIX"
+    description = {
+                    "Path to wxwidgets root folder, by default, WXWIN envvar",
+                    "will be used or wx-config found in path on POSIX"
+    }
 }
 newoption  {
     trigger     =   "compiler",
@@ -30,8 +33,11 @@ newoption  {
     trigger     =   "wx-version",
     description =   "wxWidgets version to use"
 }
+-- Common globals
 wxCompiler      = _OPTIONS["compiler"]
-wxTarget        = "wx_gtk2"
+wxDebugSuffix   = "d"
+wxPrefix        = "wx_"
+wxTarget        = "gtk2"
 wxVersion       = _OPTIONS["wx-version"]
 wxUnicodeSign   = "u"
 wxUseMediaCtrl  = true
@@ -40,8 +46,12 @@ wxMonolithic    = true
 
 if not wxCompiler then wxCompiler = "gcc" end
 
-if      os.is("windows") then wxTarget = "wxmsw"
-elseif  os.is("macosx")  then wxTarget = "wx_mac" end
+if os.is("windows") then
+    wxPrefix = "wx"
+    wxTarget = "msw"
+elseif  os.is("macosx")  then
+    wxTarget = "mac"
+end
 -----------------------------------------------------------------------------
 -- The wx_config the parameters are.
 --          Root    : path to wx root folder. Can be left empty if WXWIN is defined
@@ -56,29 +66,37 @@ elseif  os.is("macosx")  then wxTarget = "wx_mac" end
 --          Universal : use universal configuration. Default to "no"
 --          Libs    : a list of wx libraries that you want to link with.
 --                      eg: "aui,media,html"
---                      Default to "richtext,aui,xrc,qa,html,adv,core,xml,net"; base is implicit
+--                      Default to ""; base is implicit
 --          WindowsCompiler : compiler used to compile windows libraries ( "vc" or "gcc" )
 -----------------------------------------------------------------------------
 function wx_config(options)
 
-    local wrongParam = false
-    local allowedWxOptions = {"Root", "Debug", "Host", "Version", "Static", "Unicode", "Universal", "Libs", "WindowsCompiler" }
+-- Parameter Checks
+    local wrongParam        = false
+    local allowedWxOptions  =
+    {
+        "Root", "Debug", "Host", "Version", "Static",
+        "Unicode", "Universal", "Libs", "WindowsCompiler"
+    }
     for option in pairs(options) do
         if not table.contains(allowedWxOptions, option) then
             print ("unrecognized option '"..option.. "'")
             wrongParam = true
         end
     end
-    if wrongParam then print("valid options are : '" .. table.concat(allowedWxOptions, "', '").."'") end
+    if wrongParam then
+        print("valid options are : '" .. table.concat(allowedWxOptions, "', '").."'")
+    end
 
-    local useUnicode    = "yes"
-    if _OPTIONS["disable-unicode"] and wxVersion < "2.9" then useUnicode = "no" end
-
-    local libs          = "richtext,aui,xrc,qa,html,adv,core,xml,net" -- base is implicit, std not valid
-    if not _OPTIONS["disable-mediactrl"] then
-        libs = libs .. ",media"
-    else
+-- wxMediaCtrl
+    if _OPTIONS["disable-mediactrl"] then
         wxUseMediaCtrl = false
+    end
+
+-- Unicode setup
+    local useUnicode = "yes"
+    if _OPTIONS["disable-unicode"] and wxVersion < "2.9" then
+        useUnicode = "no"
     end
 
     wx_config_Private( options.Root             or "",
@@ -88,7 +106,7 @@ function wx_config(options)
                        options.Static           or "",
                        options.Unicode          or useUnicode,
                        options.Universal        or "",
-                       options.Libs             or libs,
+                       options.Libs             or "",
                        options.WindowsCompiler  or "gcc"
                      )
 end
@@ -96,9 +114,8 @@ end
 function wx_config_Private(wxRoot, wxDebug, wxHost, wxVersion, wxStatic, wxUnicode, wxUniversal, wxLibs, wxCompiler)
     -- some options are not allowed for newer version of wxWidgets
     if wxVersion > "2.8" then -- alphabetical comparison may fail...
-    --    wxDebug = "" -- 2.9 still make debug libraries
+        wxDebugSuffix   = ""
         wxUnicode       = "yes"
-        wxLibs          = wxLibs .. ",propgrid,ribbon,stc"
     end
 
     -- the environment variable WXWIN override wxRoot parameter
@@ -117,8 +134,11 @@ function wx_config_Private(wxRoot, wxDebug, wxHost, wxVersion, wxStatic, wxUnico
         wxUnicodeSign   = ""
     end
 
-    if wxDebug == "yes" then defines {"__WXDEBUG__"}
-    elseif wxDebug == "no" then flags {"Optimize"} end
+    if wxDebug == "yes" then
+        defines         {"__WXDEBUG__"}
+    else
+        flags           {"Optimize"}
+    end
 
     if wxStatic == "yes" then
         flags { "StaticRuntime" }
@@ -130,12 +150,10 @@ function wx_config_Private(wxRoot, wxDebug, wxHost, wxVersion, wxStatic, wxUnico
     -- but wait, look at http://sites.google.com/site/wxconfig/ for one !
     function wx_config_for_windows(wxCompiler)
         local wxBuildType   = ""  -- buildtype is one of "", "u", "d" or "ud"
-        local wxDebugSuffix = "" -- debug buildsuffix is for support libraries only
 
         if wxUnicode ~= "" then wxBuildType = wxBuildType .. "u" end
         if wxDebug == "yes" then
             wxBuildType = wxBuildType .. "d"
-            wxDebugSuffix = "d"
         end
 
         local wxLibPath = path.join(wxRoot, "lib")
@@ -175,7 +193,7 @@ function wx_config_Private(wxRoot, wxDebug, wxHost, wxVersion, wxStatic, wxUnico
 
     -- use wx-config to figure out build parameters
     function wx_config_for_posix()
-        local configCmd = "wx-config"  -- this is the wx-config command ligne
+        local configCmd = "wx-config" -- this is the wx-config command line
         if wxRoot ~= "" then configCmd = path.join(wxRoot, "wx-config") end
 
         local function checkYesNo(value, option)
@@ -189,9 +207,9 @@ function wx_config_Private(wxRoot, wxDebug, wxHost, wxVersion, wxStatic, wxUnico
         configCmd = configCmd .. checkYesNo(wxUnicode,   "unicode")
         configCmd = configCmd .. checkYesNo(wxUniversal, "universal")
         if wxHost ~= "" then configCmd = configCmd .. " --host=" .. wxHost end
-        if wxVersion ~= "" then configCmd = configCmd .. " --version=" .. wxVersion end
+--      if wxVersion ~= "" then configCmd = configCmd .. " --version=" .. wxVersion end
 
-        -- set the parameters to the curent configuration
+        -- set the parameters to the current configuration
         buildoptions {"`" .. configCmd .." --cxxflags`"}
         linkoptions  {"`" .. configCmd .." --libs " .. wxLibs .. "`"}
     end

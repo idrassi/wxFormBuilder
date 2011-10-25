@@ -9,10 +9,6 @@
 -----------------------------------------------------------------------------
 project "wxScintilla"
     kind                "SharedLib"
-    defines
-    {
-        "WXMAKINGDLL_SCI","LINK_LEXERS","SCI_LEXER","SCI_NAMESPACE","__WX__"
-    }
     files
     {
         "../../src/controls/src/wxScintilla/*.cpp",
@@ -26,24 +22,27 @@ project "wxScintilla"
         "../../src/controls/src/wxScintilla/scintilla/include",
         "../../src/controls/src/wxScintilla/scintilla/src"
     }
-    targetsuffix        ( wxVersion .. CustomSuffix )
+    defines
+    {
+        "WXMAKINGDLL_SCI","LINK_LEXERS","SCI_LEXER","SCI_NAMESPACE","__WX__"
+    }
+    targetsuffix        ( "-" .. wxVersion )
 
     configuration "linux or bsd"
         defines         {"GTK"}
-        targetdir       "../../output/lib/wxformbuilder"
 
-    configuration "macosx"
+    configuration "not windows"
         targetdir       "../../output/lib/wxformbuilder"
 
     configuration "windows"
         links           {"Gdi32"}
         targetdir       "../../output"
 
+    configuration "Debug"
+        targetname      ( CustomPrefix .. wxDebugSuffix .. "_scintilla" )
+        wx_config       { Debug="yes" }
+
     configuration "Release"
         buildoptions    {"-fno-strict-aliasing"}
-        targetname      ( wxTarget .. wxUnicodeSign .. "_scintilla-" )
-        wx_config       { Libs="core" }
-
-    configuration "Debug"
-        targetname      ( wxTarget .. wxUnicodeSign .. "d_scintilla-" )
-        wx_config       { Libs="core", Debug="yes" }
+        targetname      ( CustomPrefix .. "_scintilla" )
+        wx_config       {}

@@ -9,15 +9,15 @@
 -----------------------------------------------------------------------------
 project "wxPropertyGrid"
     kind                "SharedLib"
-    defines             {"WXMAKINGDLL_PROPGRID"}
     files
     {
         "../../src/controls/src/propgrid/*.cpp",
         "../../src/controls/include/wx/propgrid/*.h"
     }
-    flags               {"ExtraWarnings"}
     includedirs         {"../../src/controls/include"}
-    targetsuffix        ( wxVersion .. CustomSuffix )
+    defines             {"WXMAKINGDLL_PROPGRID"}
+    flags               {"ExtraWarnings"}
+    targetsuffix        ( "-" .. wxVersion )
 
     configuration "not windows"
         targetdir       "../../output/lib/wxformbuilder"
@@ -27,9 +27,9 @@ project "wxPropertyGrid"
 
     configuration "Release"
         buildoptions    {"-fno-strict-aliasing"}
-        targetname      ( wxTarget .. wxUnicodeSign .. "_propgrid-" )
-        wx_config       { Libs="core,adv,xrc" }
+        targetname      ( CustomPrefix .. "_propgrid" )
+        wx_config       {}
 
     configuration "Debug"
-        targetname      ( wxTarget .. wxUnicodeSign .. "d_propgrid-" )
-        wx_config       { Libs="core,adv,xml,xrc", Debug="yes" }
+        targetname      ( CustomPrefix .. wxDebugSuffix .. "_propgrid" )
+        wx_config       { Debug="yes" }

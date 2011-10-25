@@ -24,6 +24,8 @@ project "wxFormBuilder"
     flags                   {"ExtraWarnings"}
     libdirs                 {"../../sdk/lib"}
     links                   {"TiCPP", "plugin-interface", "wxFlatNotebook"}
+
+    local libs = ""
 if wxVersion < "2.9" then
     links                   {"wxPropertyGrid", "wxScintilla"}
 else
@@ -34,6 +36,7 @@ else
         "../../../src/controls/src/propgrid/**.cpp",
         "../../../src/controls/src/wxScintilla/**.cpp"
     }
+    libs                    = "all"
 end
     configuration {"codelite", "not windows"}
         linkoptions         {"-Wl,-rpath,$$``ORIGIN/../lib/wxformbuilder"}
@@ -67,11 +70,12 @@ if wxCompiler == "gcc" then
 end
     configuration "Debug"
         defines             {"__WXFB_DEBUG__"}
-        wx_config           { Debug="yes" }
+        targetsuffix        ( DebugSuffix )
+        wx_config           { Libs=libs, Debug="yes" }
 
     configuration "Release"
         buildoptions        {"-fno-strict-aliasing"}
-        wx_config           {}
+        wx_config           { Libs=libs }
 
     if os.is("windows") then
         flags               {"Symbols"}

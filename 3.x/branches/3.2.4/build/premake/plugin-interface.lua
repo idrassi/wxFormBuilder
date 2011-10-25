@@ -8,31 +8,35 @@
 --  Licence:     GNU General Public License Version 2
 -----------------------------------------------------------------------------
 project "plugin-interface"
-    kind         "StaticLib"
-    targetname   "fbPluginInterface"
-    targetdir    "../../sdk/lib/"
+    kind                "StaticLib"
     files
     {
         "../../sdk/plugin_interface/**.h",
         "../../sdk/plugin_interface/**.cpp",
         "../../sdk/plugin_interface/**.fbp"
     }
-    includedirs  {"../../sdk/tinyxml"}
-    libdirs      {"../../sdk/lib"}
-    flags        {"ExtraWarnings"}
-    defines      {"TIXML_USE_TICPP"}
-    links        {"TiCPP"}
+    includedirs         {"../../sdk/tinyxml"}
+    libdirs             {"../../sdk/lib"}
+    targetdir           "../../sdk/lib/"
+    flags               {"ExtraWarnings"}
+    defines             {"TIXML_USE_TICPP"}
+    links               {"TiCPP"}
+    targetsuffix        ( "-" .. wxVersion )
 
 configuration "not windows"
     buildoptions {"-fPIC"}
 
  -- Visual C++ 2005/2008
 configuration "vs*"
-    defines      {"_CRT_SECURE_NO_DEPRECATE"}
+    defines             {"_CRT_SECURE_NO_DEPRECATE"}
 
 configuration "Debug"
-    wx_config    { Debug="yes" }
+    targetname          ( CustomPrefix .. wxDebugSuffix .. "_plugin-interface" )
+    wx_config           { Debug="yes" }
 
 configuration "Release"
-    buildoptions {"-fno-strict-aliasing"}
-    wx_config    {}
+    buildoptions        {"-fno-strict-aliasing"}
+    targetname          ( CustomPrefix .. "_plugin-interface" )
+    wx_config           {}
+
+
