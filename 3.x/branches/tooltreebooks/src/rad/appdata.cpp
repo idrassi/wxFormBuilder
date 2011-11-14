@@ -36,6 +36,7 @@
 #include "utils/wxfbexception.h"
 #include "codegen/cppcg.h"
 #include "codegen/pythoncg.h"
+#include "codegen/phpcg.h"
 #include "codegen/xrccg.h"
 #include "codegen/codewriter.h"
 #include "rad/xrcpreview/xrcpreview.h"
@@ -471,7 +472,7 @@ ApplicationData::ApplicationData( const wxString &rootdir )
 		m_manager( new wxFBManager ),
 		m_ipc( new wxFBIPC ),
 		m_fbpVerMajor( 1 ),
-		m_fbpVerMinor( 10 )
+		m_fbpVerMinor( 11 )
 {
 	#ifdef __WXFB_DEBUG__
 	wxLog* log = wxLog::SetActiveTarget( NULL );
@@ -521,6 +522,7 @@ PObjectBase ApplicationData::GetSelectedObject()
 PObjectBase ApplicationData::GetSelectedForm()
 {		
 	if( ( m_selObj->GetObjectTypeName() == wxT( "form" ) ) ||
+        ( m_selObj->GetObjectTypeName() == wxT("wizard") ) ||
 		( m_selObj->GetObjectTypeName() == wxT( "menubar_form" ) ) ||
 		( m_selObj->GetObjectTypeName() == wxT( "toolbar_form" ) ) )
 		return m_selObj;
@@ -755,8 +757,11 @@ void ApplicationData::CreateObject( wxString name )
 {
 	try
 	{
+#if wxVERSION_NUMBER < 2900
 		Debug::Print( wxT( "[ApplicationData::CreateObject] New %s" ), name.c_str() );
-
+#else
+        Debug::Print("[ApplicationData::CreateObject] New " + name );
+#endif
 		PObjectBase old_selected = GetSelectedObject();
 		PObjectBase parent = old_selected;
 		PObjectBase obj;
@@ -1703,7 +1708,7 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 		}
 	}
 
-	/* The file is now at at least version 1.3 */
+	/* The file is now at least version 1.3 */
 
 	if ( fileMajor < 1 || ( 1 == fileMajor && fileMinor < 4 ) )
 	{
@@ -1715,7 +1720,7 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 		}
 	}
 
-	/* The file is now at at least version 1.4 */
+	/* The file is now at least version 1.4 */
 
 	if ( fileMajor < 1 || ( 1 == fileMajor && fileMinor < 6 ) )
 	{
@@ -1756,7 +1761,7 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 		}
 	}
 
-	/* The file is now at at least version 1.6 */
+	/* The file is now at least version 1.6 */
 
 	// Version 1.7 now stores all font properties.
 	// The font property conversion is automatic because it is just an extension of the old values.
@@ -1791,12 +1796,12 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 		}
 	}
 
-	/* The file is now at at least version 1.7 */
+	/* The file is now at least version 1.7 */
 
 	// The update to 1.8 only affected project properties
 	// See ConvertProjectProperties
 
-	/* The file is now at at least version 1.8 */
+	/* The file is now at least version 1.8 */
 
 	// stringlist properties are stored in a different format as of version 1.9
 	if ( fileMajor < 1 || ( 1 == fileMajor && fileMinor < 9 ) )
@@ -1836,7 +1841,37 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 		}
 	}
 
-	/* The file is now at at least version 1.9 */
+	/* The file is now at least version 1.9 */
+	
+	// Version 1.11 now stores bitmap property in the following format:
+	// 'source'; 'data' instead of old form 'data'; 'source'
+
+	if ( fileMajor < 1 || ( 1 == fileMajor && fileMinor < 11 ) )
+	{
+		oldProps.clear();
+		oldProps.insert( "bitmap" );
+		GetPropertiesToConvert( parent, oldProps, &newProps );
+
+		std::set< ticpp::Element* >::iterator prop;
+		for ( prop = newProps.begin(); prop != newProps.end(); ++prop )
+		{
+			ticpp::Element* bitmap = *prop;
+			
+			wxString image = _WXSTR( bitmap->GetText( false ) );
+			if ( !image.empty() )
+			{
+				if( image.AfterLast( ';' ).Contains( _("Load From") ) )
+				{
+					wxString source = image.AfterLast( ';' ).Trim().Trim(false);
+					wxString data = image.BeforeLast( ';' ).Trim().Trim(false);
+					
+					bitmap->SetText( _STDSTR( source + wxT("; ") + data ) );
+				}
+			}
+		}
+	}
+	
+	/* The file is now at least version 1.11 */
 }
 
 void ApplicationData::GetPropertiesToConvert( ticpp::Node* parent, const std::set< std::string >& names, std::set< ticpp::Element* >* properties )
@@ -2076,6 +2111,17 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
 
 			codegen.GenerateInheritedClass( obj, form );
 		}
+		else if( pCodeGen && TypeConv::FlagSet( wxT("PHP"), pCodeGen->GetValue() ) )
+		{
+			PHPCodeGenerator codegen;
+			
+			const wxString& fullPath = inherFile.GetFullPath();
+			PCodeWriter php_cw( new FileCodeWriter( fullPath + wxT(".php"), useMicrosoftBOM, useUtf8 ) );
+
+			codegen.SetSourceWriter( php_cw );
+
+			codegen.GenerateInheritedClass( obj, form );
+		}
 
 		wxLogStatus( wxT( "Class generated at \'%s\'." ), path.c_str() );
 	}
@@ -2264,8 +2310,13 @@ void ApplicationData::CheckProjectTree( PObjectBase obj )
 		PObjectBase child = obj->GetChild( i );
 
 		if ( child->GetParent() != obj )
+        {
+#if wxVERSION_NUMBER < 2900
 			wxLogError( wxString::Format( wxT( "Parent of object \'%s\' is wrong!" ), child->GetPropertyAsString( wxT( "name" ) ).c_str() ) );
-
+#else
+			wxLogError( wxString::Format("Parent of object \'" + child->GetPropertyAsString("name") + "\' is wrong!") );
+#endif
+        }
 		CheckProjectTree( child );
 	}
 }
@@ -2561,7 +2612,11 @@ void ApplicationData::NotifyEvent( wxFBEvent& event )
 	if ( count == 0 )
 	{
 		count++;
+#if wxVERSION_NUMBER < 2900
 		Debug::Print( wxT( "event: %s" ), event.GetEventName().c_str() );
+#else
+		Debug::Print( "event: " + event.GetEventName() );
+#endif
 		std::vector< wxEvtHandler* >::iterator handler;
 
 		for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )
@@ -2571,7 +2626,11 @@ void ApplicationData::NotifyEvent( wxFBEvent& event )
 	}
 	else
 	{
+#if wxVERSION_NUMBER < 2900
 		Debug::Print( wxT( "Pending event: %s" ), event.GetEventName().c_str() );
+#else
+		Debug::Print( "Pending event: " + event.GetEventName() );
+#endif
 		std::vector< wxEvtHandler* >::iterator handler;
 
 		for ( handler = m_handlers.begin(); handler != m_handlers.end(); handler++ )

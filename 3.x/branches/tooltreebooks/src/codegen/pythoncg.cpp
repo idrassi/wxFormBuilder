@@ -212,16 +212,31 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
 				wxFontContainer font = TypeConv::StringToFont( value );
 
 				int pointSize = font.GetPointSize();
-				wxString size = pointSize <= 0 ? wxT("wx.NORMAL_FONT.GetPointSize()") : wxString::Format( wxT("%i"), pointSize ).c_str();
+				wxString size = pointSize <= 0 ?
+#if wxVERSION_NUMBER < 2900
+                                    wxT("wx.NORMAL_FONT.GetPointSize()")
+                                    : wxString::Format( wxT("%i"), pointSize ).c_str();
 
-				result	= wxString::Format( wxT("wx.Font( %s, %i, %i, %i, %s, %s )" ),
-											size.c_str(),
-											font.GetFamily(),
-											font.GetStyle(),
-											font.GetWeight(),
-											( font.GetUnderlined() ? wxT("True") : wxT("False") ),
-											( font.m_faceName.empty() ? wxT("wx.EmptyString") : wxString::Format( wxT("\"%s\""), font.m_faceName.c_str() ).c_str() )
-											);
+                result = wxString::Format
+                        (
+                            wxT("wx.Font( %s, %i, %i, %i, %s, %s )"),
+                            size.c_str(), font.GetFamily(), font.GetStyle(), font.GetWeight(),
+                            ( font.GetUnderlined() ? wxT("True") : wxT("False") ),
+                            ( font.m_faceName.empty() ? wxT("wx.EmptyString")
+                            : wxString::Format( wxT("\"%s\""), font.m_faceName.c_str() ).c_str() )
+#else
+                                    "wx.NORMAL_FONT.GetPointSize()"
+                                    : wxString::Format( "%i", pointSize );
+
+                result = wxString::Format
+                        (
+                            "wx.Font( %s, %i, %i, %i, %s, %s )",
+                            size, font.GetFamily(), font.GetStyle(), font.GetWeight(),
+                            ( font.GetUnderlined() ? "True" : "False" ),
+                            ( font.m_faceName.empty() ? "wx.EmptyString"
+                            : wxString::Format( "\"%s\"", font.m_faceName ) )
+#endif
+                        );
 			}
 			else
 			{
@@ -229,7 +244,7 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
 			}
 			break;
 		}
-	case PT_WXCOLOUR:
+		case PT_WXCOLOUR:
 		{
 			if ( !value.empty() )
 			{
@@ -271,7 +286,7 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
                 break;
             }
 
-            if ( source == wxT("Load From File") || source == wxT("Load From Embedded File"))
+            if ( source == _("Load From File") || source == _("Load From Embedded File"))
 			{
 			    wxString absPath;
 			    try
@@ -289,11 +304,11 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
 				
 				result << wxT("wx.Bitmap( u\"") << PythonCodeGenerator::ConvertPythonString( file ) << wxT("\", wx.BITMAP_TYPE_ANY )");
 			}
-			else if ( source == wxT("Load From Resource") )
+			else if ( source == _("Load From Resource") )
 			{
 				result << wxT("wx.Bitmap( u\"") << path << wxT("\", wx.BITMAP_TYPE_RESOURCE )");
 			}
-			else if ( source == wxT("Load From Icon Resource") )
+			else if ( source == _("Load From Icon Resource") )
 			{
                 if ( wxDefaultSize == icoSize )
                 {
@@ -304,7 +319,7 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
                     result.Printf( wxT("wx.Icon( u\"%s\", wx.BITMAP_TYPE_ICO_RESOURCE, %i, %i )"), path.c_str(), icoSize.GetWidth(), icoSize.GetHeight() );
                 }
 			}
-			else if ( source == wxT( "Load From Art Provider" ) )
+			else if ( source == _("Load From Art Provider") )
 			{
 				wxString rid = path.BeforeFirst( wxT(':') );
 				
@@ -1010,6 +1025,20 @@ void PythonCodeGenerator::GenConstructor( PObjectBase class_obj, const EventVect
 	GenEvents( class_obj, events );
 
 	m_source->Unindent();
+
+    if ( class_obj->GetObjectTypeName() == wxT("wizard") && class_obj->GetChildCount() > 0 )
+    {
+        m_source->WriteLn( wxT("def add_page(self, page):") );
+        m_source->Indent();
+        m_source->WriteLn( wxT("if self.m_pages:") );
+        m_source->Indent();
+        m_source->WriteLn( wxT("previous_page = self.m_pages[-1]") );
+        m_source->WriteLn( wxT("page.SetPrev(previous_page)") );
+        m_source->WriteLn( wxT("previous_page.SetNext(page)") );
+        m_source->Unindent();
+        m_source->WriteLn( wxT("self.m_pages.append(page)") );
+        m_source->Unindent();
+    }
 }
 
 void PythonCodeGenerator::GenDestructor( PObjectBase class_obj, const EventVector &events )
@@ -1126,7 +1155,8 @@ void PythonCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 				type == wxT("notebook")	||
 				type == wxT("auinotebook")	||
 				type == wxT("treelistctrl")	||
-				type == wxT("flatnotebook")
+				type == wxT("flatnotebook") ||
+                type == wxT("wizard")
 			)
 		{
 			wxString afterAddChild = GetCode( obj, wxT("after_addchild") );
@@ -1214,7 +1244,7 @@ void PythonCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 				wxString path, source;
 				wxSize toolsize;
 				TypeConv::ParseBitmapWithResource( oldVal, &path, &source, &toolsize );
-				if ( wxT("Load From Icon Resource") == source && wxDefaultSize == toolsize )
+				if ( _("Load From Icon Resource") == source && wxDefaultSize == toolsize )
 				{
 					prop->SetValue( wxString::Format( wxT("%s; %s [%i; %i]"), path.c_str(), source.c_str(), toolbarsize.GetWidth(), toolbarsize.GetHeight() ) );
 					m_source->WriteLn( GetCode( obj, wxT("construction") ) );
