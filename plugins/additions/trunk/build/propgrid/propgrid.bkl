@@ -32,10 +32,13 @@
         <files>
             wx/propgrid/propgrid.h
             wx/propgrid/advprops.h
+            wx/propgrid/editors.h
+            wx/propgrid/extras.h
             wx/propgrid/manager.h
             wx/propgrid/propdev.h
             wx/propgrid/odcombo.h
-            wx/propgrid/extras.h
+            wx/propgrid/props.h
+            wx/propgrid/xh_propgrid.h
         </files>
     </headers>
 

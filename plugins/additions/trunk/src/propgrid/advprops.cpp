@@ -2071,12 +2071,12 @@ bool wxDateProperty::StringToValue( wxVariant& variant, const wxString& text,
     wxDateTime dt;
 
 #if wxCHECK_VERSION(2,9,0)
-    const char* c = dt.ParseFormat(text, wxString(wxDefaultDateTimeFormat), wxDefaultDateTime, NULL);
+    if (dt.ParseFormat(text, wxString(wxDefaultDateTimeFormat), wxDefaultDateTime, NULL))
 #else
     const wxChar* c = dt.ParseFormat(text, wxDefaultDateTimeFormat);
-#endif
 
     if ( c )
+#endif
     {
         variant = dt;
         return true;
