@@ -42,7 +42,7 @@
 // Doxygen special includes
 #ifdef DOXYGEN
     #include "pg_dox_mainpage.h"
-    #include "propdev.h"
+    //#include "propdev.h"
 #endif
 
 
@@ -1637,6 +1637,11 @@ protected:
 
 inline void wxPGDoesNothing() {}
 
+#if  wxCHECK_VERSION(2,9,0)
+#define VARIANT_CAST wxDynamicCastVariantData
+#else
+#define VARIANT_CAST wxStaticCast
+#endif
 
 #define _WX_PG_IMPLEMENT_VARIANT_DATA_CLASS(CLASSNAME, DATATYPE, AS_ARG, AS_ARG_CONST, CTOR_CODE, DEFAULT_VALUE, SET_CODE) \
     WX_PG_DECLARE_DYNAMIC_CLASS_VARIANTDATA(CLASSNAME) \
@@ -1665,7 +1670,7 @@ public: \
     { \
         if ( other.GetType() != wxT(#DATATYPE) ) \
             return false; \
-        CLASSNAME* pOther = wxStaticCast(&other, CLASSNAME); \
+        CLASSNAME* pOther = VARIANT_CAST(&other, CLASSNAME); \
         return (m_value == pOther->GetValueRef()); \
     }
 
