@@ -1,3 +1,9 @@
+libwxadditions28 (2.8.10.5-0ubuntu1~lucid1) lucid; urgency=low
+
+  * Sync to upstream revision 1975
+
+ -- Michal Bližňák (PGP key for Launchpad) <michal.bliznak@gmail.com>  Mon, 19 Mar 2012 17:20:22 +0100
+
 libwxadditions28 (2.8.10.4-0ubuntu1~ppa1) karmic; urgency=low
 
   * Sync to upstream revision 1815
