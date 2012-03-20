@@ -1,3 +1,9 @@
+wxfb-wxadditions (1.12.0-0ubuntu1~lucid1) lucid; urgency=low
+
+  * Sync with upstream.
+
+ -- Michal Bližňák (PGP key for Launchpad) <michal.bliznak@gmail.com>  Mon, 19 Mar 2012 17:24:21 +0100
+
 wxfb-wxadditions (1.0.9-0ubuntu1~hardy1) hardy; urgency=low
 
   * Sync with upstrean.

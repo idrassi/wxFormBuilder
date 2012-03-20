@@ -15,8 +15,6 @@ if ! wx-config --debug >/dev/null 2>/dev/null; then
 	debug="--disable-wx-debug"
 fi
 
-debug="--disable-wx-debug"
-
 #$PREMAKE_DIR/bin/premake --target cb-gcc $unicode $debug $1
 $PREMAKE_DIR/bin/premake --target cb-gcc $unicode $debug --with-wx-shared --shared $1
 echo done...
