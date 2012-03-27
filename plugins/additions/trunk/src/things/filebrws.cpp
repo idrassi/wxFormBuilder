@@ -6,6 +6,8 @@
 // License:     wxWidgets
 /////////////////////////////////////////////////////////////////////////////
 
+#ifdef wxUSE_GENERIC_FILEDIALOG
+
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
@@ -2632,3 +2634,5 @@ wxString wxFileBrowser::GetOpenWithFileCmd(wxFileData* fd) const
     dialog.ShowModal();
     return dialog.GetOpenCommand();
 }
+
+#endif // wxUSE_GENERIC_FILEDIALOG

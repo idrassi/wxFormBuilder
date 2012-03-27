@@ -154,7 +154,7 @@ end
 table.insert( package.defines, "__WX__" )
 table.insert( package.config["Release"].defines, "NDEBUG" )
 
-if ( target == "cb-gcc" or target == "gnu" ) then
+if ( target == "cb-gcc" or target == "gnu" or target == "cl-gcc" ) then
 	table.insert( package.buildflags, "no-import-lib" )
 	table.insert( package.config["Release"].buildoptions, "-fno-strict-aliasing" )
 end
@@ -176,7 +176,7 @@ if ( OS == "windows" ) then
 	if ( options["with-wx-shared"] ) then
 		if ( target == "cb-gcc" ) then
 			table.insert( package.libpaths, "$(#WX.lib)/gcc_dll" )
-		elseif ( target == "gnu" ) then
+		elseif ( target == "gnu" or target == "cl-gcc" ) then
 			table.insert( package.libpaths, "$(WXWIN)/lib/gcc_dll" )
 		else
 			table.insert( package.libpaths, "$(WXWIN)/lib/vc_dll" )
@@ -184,7 +184,7 @@ if ( OS == "windows" ) then
 	else
 		if ( target == "cb-gcc" ) then
 			table.insert( package.libpaths, "$(#WX.lib)/gcc_lib" )
-		elseif ( target == "gnu" ) then
+		elseif ( target == "gnu" or target == "cl-gcc" ) then
 			table.insert( package.libpaths, "$(WXWIN)/lib/gcc_lib" )
 		else
 			table.insert( package.libpaths, "$(WXWIN)/lib/vc_lib" )
