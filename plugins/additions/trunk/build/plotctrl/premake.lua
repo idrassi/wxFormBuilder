@@ -25,6 +25,8 @@ if ( options["shared"] ) then
 	package.defines = { "MONOLITHIC", "WXMAKINGDLL_PLOTCTRL" }
 end
 
+package.links = {"things"}
+
 MakeWxAdditionsPackage( package, "", wx_ver, wx_ver_minor, wx_custom )
 
 -- gtk build/link options

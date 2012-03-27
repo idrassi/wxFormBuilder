@@ -10,6 +10,8 @@
 #ifndef __WX_FILEBROWSER_H__
 #define __WX_FILEBROWSER_H__
 
+#ifdef wxUSE_GENERIC_FILEDIALOG
+
 #include "wx/listctrl.h"
 #include "wx/dirctrl.h"
 #include "wx/filedlg.h"
@@ -350,5 +352,7 @@ private :
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxFileBrowser)
 };
+
+#endif // wxUSE_GENERIC_FILEDIALOG
 
 #endif // __WX_FILEBROWSER_H__
