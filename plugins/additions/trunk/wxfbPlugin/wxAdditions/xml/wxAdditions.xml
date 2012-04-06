@@ -4,9 +4,10 @@
 	<!-- All wxAdditions inherit this class so that the linker header will be included -->
 	
 	<objectinfo class="wxTreeListCtrl" icon="treelistctrl.xpm" type="treelistctrl" startgroup="1">
-		<inherits class="wxAdditions"/>
-		<inherits class="wxTreeCtrlBase"/>
+		<inherits class="wxAdditions" />
+		<inherits class="wxTreeCtrlBase" />
 		<inherits class="wxWindow" />
+		<inherits class="AUI" />
 		<property name="name" type="text" >m_treeListCtrl</property>
 		<property name="column_image_size" type="wxSize" help="Size of column images"/>
 		<property name="style" type="bitlist">
@@ -56,8 +57,9 @@
 	</objectinfo>
 	
 	<objectinfo class="wxPlotCtrl" icon="plot.xpm" type="expanded_widget" startgroup="1">
-		<inherits class="wxAdditions"/>
+		<inherits class="wxAdditions" />
 		<inherits class="wxWindow" />
+		<inherits class="AUI" />
 		<property name="name" type="text">m_plotCtrl</property>
 		<property name="sample_function" 			type="text" help="Enter test functions with x as the independent variable to see them plotted. This property does not change generated code.">sin(x)</property>
 		<property name="scroll_on_thumb_release" 	type="bool" help="Scroll the window only when the mouse button is released (for slow machines).">0</property>
@@ -118,8 +120,9 @@
 	</objectinfo>
 
 	<objectinfo class="awxLed" icon="awxled.xpm" type="widget">
-		<inherits class="wxAdditions"/>
+		<inherits class="wxAdditions" />
 		<inherits class="wxWindow" />
+		<inherits class="AUI" />
 		<property name="name" type="text" >m_awxLed</property>
 		<property name="state" type="option" >
 			<option name="awxLED_OFF" 	help="Turn the Led Off"/>
@@ -136,8 +139,9 @@
 	</objectinfo>
 
 	<objectinfo class="wxLedBarGraph" icon="ledBarGraph.xpm" type="widget">
-		<inherits class="wxAdditions"/>
+		<inherits class="wxAdditions" />
 		<inherits class="wxWindow" />
+		<inherits class="AUI" />
 		<property name="name" type="text" >m_ledbg</property>
 
 		<property name="bar_widths" type="uint" editor="SpinCtrl" help="individual bar size in pixels - sizing mode must be set to ledBG_FIXED_BAR_SIZE for this to apply" >8</property>

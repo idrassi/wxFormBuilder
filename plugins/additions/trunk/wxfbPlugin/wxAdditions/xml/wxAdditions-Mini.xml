@@ -7,8 +7,9 @@
 	</objectinfo>
 	
 	<objectinfo class="wxPropertyGrid" icon="propgrid.xpm" type="expanded_widget">
-		<inherits class="wxAdditions"/>
+		<inherits class="wxAdditions" />
 		<inherits class="wxWindow" />
+		<inherits class="AUI" />
 		<property name="style" type="bitlist">
 			<option name="wxPG_AUTO_SORT" 				help="This will cause Sort() automatically after an item is added.
 															    When inserting a lot of items in this mode, it may make sense to
@@ -49,8 +50,9 @@
 	</objectinfo>
 
 	<objectinfo class="wxPropertyGridManager" icon="propgridman.xpm" type="expanded_widget">
-		<inherits class="wxAdditions"/>
+		<inherits class="wxAdditions" />
 		<inherits class="wxWindow" />
+		<inherits class="AUI" />
 		<property name="style" type="bitlist">
 		    <option name="wxPG_AUTO_SORT" 				help="This will cause Sort() automatically after an item is added.
 															    When inserting a lot of items in this mode, it may make sense to
@@ -96,10 +98,11 @@
 	</objectinfo>
 
   <objectinfo class="wxFlatNotebook" icon="flatnotebook.xpm" type="flatnotebook">
-	<inherits class="wxAdditions"/>
+	<inherits class="wxAdditions" />
     <inherits class="wxWindow">
 		<property name="bg">wxSYS_COLOUR_BTNFACE</property>
 	</inherits>
+	<inherits class="AUI" />
     <property name="name" type="text">m_flatNotebook</property>
     <property name="has_images" type="bool" 			help="Pages have images">0</property>
     <property name="auto_scale_images" type="bool" 		help="Automatically scale page images to 16x16">0</property>
@@ -148,8 +151,9 @@
   </objectinfo>
   
   <objectinfo class="wxScintilla" icon="scintilla.xpm" smallicon="scintilla_small.xpm" type="expanded_widget">
-	<inherits class="wxAdditions"/>
+	<inherits class="wxAdditions" />
 	<inherits class="wxWindow" />
+	<inherits class="AUI" />
 	<property name="name" type="text" >m_scintilla</property>
 	<property name="folding" type="bool" help="Enable folding.">1</property>
 	<property name="line_numbers" type="bool" help="Show line numbers.">1</property>
