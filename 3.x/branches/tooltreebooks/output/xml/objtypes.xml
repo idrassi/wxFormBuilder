@@ -60,6 +60,7 @@
     <childtype name="statusbar" nmax="1" aui_nmax="1" />
     <childtype name="toolbar" nmax="1" />
     <childtype name="widget" nmax="0" />
+    <childtype name="expanded_widget" nmax="0" />
     <childtype name="container" nmax="0" />
     <childtype name="notebook" nmax="0" />
     <childtype name="auinotebook" nmax="0" />
@@ -73,13 +74,14 @@
   </objtype>
 
     <objtype name="wizard">
-        <childtype name="WizardPageSimple"/>
+        <childtype name="wizardpagesimple"/>
         <childtype name="menu" nmax="1" />
     </objtype>
 
-    <objtype name="WizardPageSimple">
+    <objtype name="wizardpagesimple">
         <childtype name="sizer" nmax="1" />
-        <childtype name="menu"  nmax="1" />
+        <childtype name="gbsizer" nmax="1" />
+        <childtype name="menu" nmax="1" />
     </objtype>
 
   <objtype name="menubar_form">
@@ -107,6 +109,7 @@
 
   <objtype name="container">
     <childtype name="sizer" nmax="1" aui_nmax="1" />
+    <childtype name="gbsizer" nmax="1" aui_nmax="1" />
     <childtype name="menu" nmax="1" aui_nmax="1" />
   </objtype>
 

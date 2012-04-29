@@ -120,7 +120,7 @@ wxString PythonTemplateParser::ValueToCode( PropertyType type, wxString value )
 			{
 				if ( m_i18n )
 				{
-					result << wxT("_(\"") << PythonCodeGenerator::ConvertPythonString(value) << wxT("\")");
+					result << wxT("_(u\"") << PythonCodeGenerator::ConvertPythonString(value) << wxT("\")");
 				}
 				else
 				{
@@ -1087,6 +1087,13 @@ void PythonCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 
 		if ( !isWidget ) // sizers
 		{
+			wxString afterAddChild = GetCode( obj, wxT( "after_addchild" ) );
+			if ( !afterAddChild.empty() )
+			{
+				m_source->WriteLn( afterAddChild );
+			}
+			m_source->WriteLn();
+				
 			if (is_widget)
 			{
 				// the parent object is not a sizer. There is no template for
@@ -1270,20 +1277,18 @@ void PythonCodeGenerator::GenDestruction( PObjectBase obj )
 	wxString _template;
 	PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( wxT( "Python" ) );
 
-	if ( !code_info )
+	if ( code_info )
 	{
-		return;
-	}
+		_template = code_info->GetTemplate( wxT( "destruction" ) );
 
-	_template = code_info->GetTemplate( wxT( "destruction" ) );
-
-	if ( !_template.empty() )
-	{
-		PythonTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
-		wxString code = parser.ParseTemplate();
-		if ( !code.empty() )
+		if ( !_template.empty() )
 		{
-			m_source->WriteLn( code );
+			PythonTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
+			wxString code = parser.ParseTemplate();
+			if ( !code.empty() )
+			{
+				m_source->WriteLn( code );
+			}
 		}
 	}
 	
@@ -1655,6 +1660,17 @@ void PythonTemplateParser::SetupModulePrefixes()
 	ADD_PREDEFINED_PREFIX( wxAUI_TB_HORZ_LAYOUT, wx.aui. );
 	ADD_PREDEFINED_PREFIX( wxAUI_TB_HORZ_TEXT, wx.aui. );
 	ADD_PREDEFINED_PREFIX( wxAUI_TB_DEFAULT_STYLE, wx.aui. );
+	
+    ADD_PREDEFINED_PREFIX( wxAUI_MGR_ALLOW_FLOATING, wx.aui. );
+    ADD_PREDEFINED_PREFIX( wxAUI_MGR_ALLOW_ACTIVE_PANE, wx.aui. );
+    ADD_PREDEFINED_PREFIX( wxAUI_MGR_TRANSPARENT_DRAG, wx.aui. );
+    ADD_PREDEFINED_PREFIX( wxAUI_MGR_TRANSPARENT_HINT, wx.aui. );
+    ADD_PREDEFINED_PREFIX( wxAUI_MGR_VENETIAN_BLINDS_HINT, wx.aui. );
+    ADD_PREDEFINED_PREFIX( wxAUI_MGR_RECTANGLE_HINT, wx.aui. );
+    ADD_PREDEFINED_PREFIX( wxAUI_MGR_HINT_FADE, wx.aui. );
+    ADD_PREDEFINED_PREFIX( wxAUI_MGR_NO_VENETIAN_BLINDS_FADE, wx.aui. );
+    ADD_PREDEFINED_PREFIX( wxAUI_MGR_LIVE_RESIZE, wx.aui. );
+    ADD_PREDEFINED_PREFIX( wxAUI_MGR_DEFAULT, wx.aui. );
 	
 	ADD_PREDEFINED_PREFIX( wxAC_DEFAULT_STYLE, wx.animate. );
 	ADD_PREDEFINED_PREFIX( wxAC_NO_AUTORESIZE, wx.animate. );

@@ -681,11 +681,11 @@ void ApplicationData::RemoveEmptyItems( PObjectBase obj )
 		RemoveEmptyItems( obj->GetChild( i ) );
 }
 
-PObjectBase  ApplicationData::SearchSizerInto( PObjectBase obj )
+PObjectBase ApplicationData::SearchSizerInto( PObjectBase obj )
 {
 	PObjectBase theSizer;
 
-	if ( obj->GetObjectInfo()->IsSubclassOf( wxT("sizer") ) )
+	if ( obj->GetObjectInfo()->IsSubclassOf( wxT("sizer") ) || obj->GetObjectInfo()->IsSubclassOf( wxT("gbsizer") ) )
 		theSizer = obj;
 	else
 	{
@@ -1635,9 +1635,10 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 	{
 		// The property 'option' became 'proportion'
 
-		if ( objClass == "sizeritem" || objClass == "spacer" )
+		if ( objClass == "sizeritem" ||  objClass == "gbsizeritem" || objClass == "spacer" )
 		{
 			oldProps.clear();
+			newProps.clear();
 			oldProps.insert( "option" );
 			GetPropertiesToConvert( parent, oldProps, &newProps );
 
@@ -1671,6 +1672,7 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 
 		// Transfer the window styles
 		oldProps.clear();
+		newProps.clear();
 
 		oldProps.insert( "style" );
 
@@ -1693,6 +1695,7 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 
 		// Transfer the window extra styles
 		oldProps.clear();
+		newProps.clear();
 
 		oldProps.insert( "style" );
 
@@ -1735,6 +1738,7 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 			spacer.SetAttribute( "class", "spacer" );
 
 			oldProps.clear();
+			newProps.clear();
 			oldProps.insert( "width" );
 			GetPropertiesToConvert( parent, oldProps, &newProps );
 
@@ -1747,6 +1751,7 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 			}
 
 			oldProps.clear();
+			newProps.clear();
 			oldProps.insert( "height" );
 			GetPropertiesToConvert( parent, oldProps, &newProps );
 
@@ -1774,6 +1779,7 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 		if ( objClass == "Dialog" )
 		{
 			oldProps.clear();
+			newProps.clear();
 			oldProps.insert( "style" );
 			GetPropertiesToConvert( parent, oldProps, &newProps );
 
@@ -1844,11 +1850,12 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 	/* The file is now at least version 1.9 */
 	
 	// Version 1.11 now stores bitmap property in the following format:
-	// 'source'; 'data' instead of old form 'data'; 'source'
+	// 'source'; 'data' instead of old form 'data'; 'source'.
 
 	if ( fileMajor < 1 || ( 1 == fileMajor && fileMinor < 11 ) )
 	{
 		oldProps.clear();
+		newProps.clear();
 		oldProps.insert( "bitmap" );
 		GetPropertiesToConvert( parent, oldProps, &newProps );
 
@@ -1869,6 +1876,25 @@ void ApplicationData::ConvertObject( ticpp::Element* parent, int fileMajor, int 
 				}
 			}
 		}
+		
+		/* oldProps.clear();
+		newProps.clear();
+		oldProps.insert( "choices" );
+		GetPropertiesToConvert( parent, oldProps, &newProps );
+
+		for ( prop = newProps.begin(); prop != newProps.end(); ++prop )
+		{
+			ticpp::Element* choices = *prop;
+			
+			wxString content = _WXSTR( choices->GetText( false ) );
+			if ( !content.empty() )
+			{
+				content.Replace( wxT("\" \""), wxT(";") );
+				content.Replace( wxT("\""), wxT("") );
+				
+				choices->SetText( _STDSTR( content ) );
+			}
+		}*/
 	}
 	
 	/* The file is now at least version 1.11 */
@@ -2005,7 +2031,11 @@ void ApplicationData::NewProject()
 
 void ApplicationData::GenerateCode( bool panelOnly )
 {
+#ifdef USE_FLATNOTEBOOK
 	NotifyCodeGeneration( panelOnly );
+#else
+	NotifyCodeGeneration( panelOnly, true );
+#endif
 }
 
 void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString className, wxString path, wxString file )
@@ -2185,9 +2215,9 @@ void ApplicationData::MoveHierarchy( PObjectBase obj, bool up )
 			{
 				nextSizer = nextSizer->GetParent();
 			}
-			while ( nextSizer && !nextSizer->GetObjectInfo()->IsSubclassOf( wxT("sizer") ) );
+			while ( nextSizer && !nextSizer->GetObjectInfo()->IsSubclassOf( wxT("sizer") ) && !nextSizer->GetObjectInfo()->IsSubclassOf( wxT("gbsizer") ) );
 
-			if ( nextSizer && nextSizer->GetObjectInfo()->IsSubclassOf( wxT("sizer") ) )
+			if ( nextSizer && ( nextSizer->GetObjectInfo()->IsSubclassOf( wxT("sizer") ) || nextSizer->GetObjectInfo()->IsSubclassOf( wxT("gbsizer") ) ) )
 			{
 				PCommand cmdReparent( new ReparentObjectCmd( sizeritem, nextSizer ) );
 				Execute( cmdReparent );
@@ -2286,7 +2316,7 @@ void ApplicationData::ToggleStretchLayout( PObjectBase obj )
 		return;
 	}
 
-	if ( parent->GetObjectTypeName() != wxT("sizeritem") )
+	if ( parent->GetObjectTypeName() != wxT("sizeritem") && parent->GetObjectTypeName() != wxT("gbsizeritem") )
 	{
 		return;
 	}
@@ -2605,11 +2635,11 @@ void ApplicationData::RemoveHandler( wxEvtHandler* handler )
 	}
 }
 
-void ApplicationData::NotifyEvent( wxFBEvent& event )
+void ApplicationData::NotifyEvent( wxFBEvent& event, bool forcedelayed )
 {
 	static int count = 0;
 
-	if ( count == 0 )
+	if ( !forcedelayed && count == 0 )
 	{
 		count++;
 #if wxVERSION_NUMBER < 2900
@@ -2688,14 +2718,14 @@ void ApplicationData::NotifyEventHandlerModified( PEvent evtHandler )
 	NotifyEvent( event );
 }
 
-void ApplicationData::NotifyCodeGeneration( bool panelOnly )
+void ApplicationData::NotifyCodeGeneration( bool panelOnly, bool forcedelayed )
 {
 	wxFBEvent event( wxEVT_FB_CODE_GENERATION );
 
 	// Using the previously unused Id field in the event to carry a boolean
 	event.SetId( ( panelOnly ? 1 : 0 ) );
 
-	NotifyEvent( event );
+	NotifyEvent( event, forcedelayed );
 }
 
 void ApplicationData::NotifyProjectRefresh()

@@ -20,21 +20,24 @@ project "wxFormBuilder"
         "../../src", "../../src/boost", "../../src/controls/include",
         "../../sdk/tinyxml", "../../sdk/plugin_interface"
     }
-    defines                 {"NO_GCC_PRAGMA", "TIXML_USE_TICPP"}
+    defines                 {"NO_GCC_PRAGMA", "TIXML_USE_TICPP", "APPEND_WXVERSION"}
     flags                   {"ExtraWarnings"}
     libdirs                 {"../../sdk/lib"}
-    links                   {"TiCPP", "plugin-interface", "wxFlatNotebook"}
+    links                   {"TiCPP", "plugin-interface"}
 
     local libs = ""
 if wxVersion < "2.9" then
-    links                   {"wxPropertyGrid", "wxScintilla"}
+	defines					{"USE_FLATNOTEBOOK"}
+    links                   {"wxPropertyGrid", "wxScintilla", "wxFlatNotebook"}
 else
     excludes
     {
         "../../../src/controls/include/wx/propgrid/**.h",
         "../../../src/controls/include/wx/wxScintilla/**.h",
+        "../../../src/controls/include/wx/wxFlatNotebook/**.h",
         "../../../src/controls/src/propgrid/**.cpp",
-        "../../../src/controls/src/wxScintilla/**.cpp"
+        "../../../src/controls/src/wxScintilla/**.cpp",
+        "../../../src/controls/src/wxFlatNotebook/**.cpp"
     }
     libs                    = "all"
 end

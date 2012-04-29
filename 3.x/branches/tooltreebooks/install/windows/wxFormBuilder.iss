@@ -9,7 +9,7 @@
 
 #define UNICODE 1
 
-#define MyAppVer "3.3.0"
+#define MyAppVer "3.3.3"
 #define MyAppName "wxFormBuilder"
 #define MyAppPublisher "Jose Antonio Hurtado"
 #define MyAppURL "http://wxformbuilder.org"
@@ -65,9 +65,9 @@ Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:Ad
 
 [Files]
 #if defined UNICODE
-Source: ..\..\output\*; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: .svn\*, *d.exe, *d.dll, wxmsw28ud_*, wxmsw28umd_*, Thumbs.db
+Source: ..\..\output\*; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: .svn\*, *d.exe, *d.dll, wxmsw28ud_*, wxmsw28umd_*, Thumbs.db, *.a
 #else
-Source: files9x\*; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: .svn\*, *d.exe, *d.dll, wxmsw28ud_*, wxmsw28umd_*, Thumbs.db
+Source: files9x\*; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: .svn\*, *d.exe, *d.dll, wxmsw28ud_*, wxmsw28umd_*, Thumbs.db, *.a
 #endif
 Source: source\*; DestDir: {app}\source; Flags: ignoreversion recursesubdirs createallsubdirs; Components: main\srccode
 

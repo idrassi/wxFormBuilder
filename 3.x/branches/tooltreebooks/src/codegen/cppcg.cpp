@@ -1283,7 +1283,7 @@ void CppCodeGenerator::GenSubclassSets( PObjectBase obj, std::set< wxString >* s
 		}
 
 		//get namespaces
-		wxString originalValue = nameVal;
+		/*wxString originalValue = nameVal;
 		int delimiter = nameVal.Find( wxT( "::" ) ) ;
 		if ( wxNOT_FOUND == delimiter )
 		{
@@ -1324,7 +1324,7 @@ void CppCodeGenerator::GenSubclassSets( PObjectBase obj, std::set< wxString >* s
 
 			// Got a subclass
 			subclasses->insert( subClassDeclar );
-		}
+		}*/
 
 		// Now get the header
 		std::map< wxString, wxString >::iterator header;
@@ -1357,18 +1357,18 @@ void CppCodeGenerator::GenSubclassSets( PObjectBase obj, std::set< wxString >* s
 		}
 
 		wxString include = wxT( "#include \"" ) + headerVal + wxT( "\"" );
-		if ( pkg->GetPackageName() == wxT( "Forms" ) )
-		{
+		/*if ( pkg->GetPackageName() == wxT( "Forms" ) )
+		{*/
 			std::vector< wxString >::iterator it = std::find( headerIncludes->begin(), headerIncludes->end(), include );
 			if ( headerIncludes->end() == it )
 			{
 				headerIncludes->push_back( include );
 			}
-		}
+		/*}
 		else
 		{
 			sourceIncludes->insert( include );
-		}
+		}*/
 	}
 }
 
@@ -1599,6 +1599,13 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 
 		if ( !isWidget ) // sizers
 		{
+			wxString afterAddChild = GetCode( obj, wxT( "after_addchild" ) );
+			if ( !afterAddChild.empty() )
+			{
+				m_source->WriteLn( afterAddChild );
+			}
+			m_source->WriteLn();
+			
 			if ( is_widget )
 			{
 				// the parent object is not a sizer. There is no template for
@@ -1711,7 +1718,7 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 	          type == wxT( "listbookpage" )		||
 	          type == wxT( "choicebookpage" )	||
 	          type == wxT( "auinotebookpage" )  ||
-              type == wxT("WizardPageSimple")
+              type == wxT("wizardpagesimple")
 	        )
 	{
 		GenConstruction( obj->GetChild( 0 ), false );
@@ -1894,20 +1901,18 @@ void CppCodeGenerator::GenDestruction( PObjectBase obj )
 	wxString _template;
 	PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( wxT( "C++" ) );
 
-	if ( !code_info )
+	if ( code_info )
 	{
-		return;
-	}
+		_template = code_info->GetTemplate( wxT( "destruction" ) );
 
-	_template = code_info->GetTemplate( wxT( "destruction" ) );
-
-	if ( !_template.empty() )
-	{
-		CppTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
-		wxString code = parser.ParseTemplate();
-		if ( !code.empty() )
+		if ( !_template.empty() )
 		{
-			m_source->WriteLn( code );
+			CppTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
+			wxString code = parser.ParseTemplate();
+			if ( !code.empty() )
+			{
+				m_source->WriteLn( code );
+			}
 		}
 	}
 	

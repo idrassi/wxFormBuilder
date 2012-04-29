@@ -80,10 +80,9 @@ ObjectInspector::ObjectInspector( wxWindow* parent, int id, int style )
     AppData()->AddHandler( this->GetEventHandler() );
     m_currentSel = PObjectBase();
 
+#ifdef USE_FLATNOTEBOOK
     long nbStyle;
-
     wxConfigBase* config = wxConfigBase::Get();
-
     config->Read( wxT("/mainframe/objectInspector/notebook_style"), &nbStyle, wxFNB_NO_X_BUTTON | wxFNB_NO_NAV_BUTTONS | wxFNB_NODRAG | wxFNB_DROPDOWN_TABS_LIST | wxFNB_FF2 | wxFNB_CUSTOM_DLG );
 
     m_nb = new wxFlatNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, FNB_STYLE_OVERRIDES( nbStyle ) );
@@ -92,6 +91,9 @@ ObjectInspector::ObjectInspector( wxWindow* parent, int id, int style )
     m_icons.Add( AppBitmaps::GetBitmap( wxT("properties"), 16 ) );
     m_icons.Add( AppBitmaps::GetBitmap( wxT("events"), 16 ) );
     m_nb->SetImageList( &m_icons );
+#else
+	m_nb = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP );
+#endif
 
     // The colour of property grid description looks ugly if we don't set this colour
     m_nb->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
@@ -110,6 +112,11 @@ ObjectInspector::ObjectInspector( wxWindow* parent, int id, int style )
 
     m_nb->AddPage( m_pg, _("Properties"), false, 0 );
     m_nb->AddPage( m_eg, _("Events"),     false, 1 );
+	
+#ifndef USE_FLATNOTEBOOK
+	m_nb->SetPageBitmap( 0, AppBitmaps::GetBitmap( wxT("properties"), 16 ) );
+	m_nb->SetPageBitmap( 1, AppBitmaps::GetBitmap( wxT("events"), 16 ) );
+#endif
 
     wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( m_nb, 1, wxALL | wxEXPAND, 0 );
@@ -130,7 +137,9 @@ void ObjectInspector::SavePosition()
     // Save Layout
     wxConfigBase* config = wxConfigBase::Get();
     config->Write( wxT("/mainframe/objectInspector/DescBoxHeight" ), m_pg->GetDescBoxHeight() );
+#ifdef USE_FLATNOTEBOOK
     config->Write( wxT("/mainframe/objectInspector/notebook_style"), m_nb->GetWindowStyleFlag() );
+#endif
 }
 
 void ObjectInspector::Create( bool force )
@@ -271,11 +280,11 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
     {
         result = new wxUIntProperty( name, wxPG_LABEL, (unsigned)prop->GetValueAsInteger() );
     }
-      else if (type == PT_WXSTRING || type == PT_WXSTRING_I18N)
-      {
-        result = new wxLongStringProperty( name, wxPG_LABEL, prop->GetValueAsText() );
-      }
-      else if (type == PT_TEXT)
+	else if (type == PT_WXSTRING || type == PT_WXSTRING_I18N)
+    {
+		result = new wxLongStringProperty( name, wxPG_LABEL, prop->GetValueAsText() );
+	}
+	else if (type == PT_TEXT)
     {
         result = new wxLongStringProperty( name, wxPG_LABEL, prop->GetValueAsString() );
         result->ChangeFlag( wxPG_PROP_NO_ESCAPE, true );
@@ -370,8 +379,7 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
     }
     else if (type == PT_WXFONT)
     {
-        wxFontContainer container = TypeConv::StringToFont( prop->GetValueAsString() );
-        result = new wxFontProperty( name, wxPG_LABEL, container.GetFont() );
+        result = new wxFBFontProperty( name, wxPG_LABEL, TypeConv::StringToFont( prop->GetValueAsString() ) );
     }
     else if (type == PT_WXCOLOUR)
     {
@@ -421,10 +429,12 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
     }
     else if ( type == PT_PARENT )
     {
-//      wxPGProperty* parent = new wxPGProperty( name, wxPG_LABEL );
-//      parent->SetValueFromString( prop->GetValueAsString(), wxPG_FULL_VALUE );
-        wxPGProperty* parent = new wxStringProperty( name, wxPG_LABEL, wxT("<composed>") );
-        parent->SetValueFromString( prop->GetValueAsString() );
+		result = new wxPGProperty( name, wxPG_LABEL );
+		
+		/*wxPGProperty* parent = new wxPGProperty( name, wxPG_LABEL );
+		parent->SetValueFromString( prop->GetValueAsString(), wxPG_FULL_VALUE );
+        //wxPGProperty* parent = new wxStringProperty( name, wxPG_LABEL, wxT("<composed>") );
+        //parent->SetValueFromString( prop->GetValueAsString() );
 
         PPropertyInfo prop_desc = prop->GetPropertyInfo();
         std::list< PropertyChild >* children = prop_desc->GetChildren();
@@ -432,11 +442,11 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
         for ( it = children->begin(); it != children->end(); ++it )
         {
             wxPGProperty* child = new wxStringProperty( it->m_name, wxPG_LABEL, wxEmptyString );
-//          parent->AppendChild( child );
+			parent->AppendChild( child );
             m_pg->SetPropertyHelpString( child, it->m_description );
         }
 
-        result = parent;
+        result = parent;*/
     }
     else // Unknown property
     {
@@ -484,9 +494,28 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
 						e.SetString( bp->GetName() + wxT(":") + prop->GetValue() );
 						GetEventHandler()->AddPendingEvent( e );
 						
-                        // AppData()->ModifyProperty( prop, bp->GetValueAsString() );
+                        //AppData()->ModifyProperty( prop, bp->GetValueAsString() );
                     }
                 }
+				else if( propType == PT_PARENT )
+				{
+					PPropertyInfo prop_desc = prop->GetPropertyInfo();
+					std::list< PropertyChild >* children = prop_desc->GetChildren();
+					std::list< PropertyChild >::iterator it;
+					wxArrayString values = wxStringTokenize( prop->GetValueAsString(), wxT(";"), wxTOKEN_RET_EMPTY_ALL );
+					size_t i = 0;
+					wxString value;
+					
+					for ( it = children->begin(); it != children->end(); ++it )
+					{
+						if( values.GetCount() > i ) value = values[i++].Trim().Trim(false);
+						else value = wxT("");
+						
+						wxPGProperty* child = new wxStringProperty( it->m_name, wxPG_LABEL, value );
+						id->AppendChild( child );
+						m_pg->SetPropertyHelpString( child, it->m_description );
+					}
+				}
             }
 
             wxString customEditor = propInfo->GetCustomEditor();
@@ -504,6 +533,8 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
                 // Most common classes will be showed with a slightly different colour.
                 if (name == wxT("wxWindow"))
                     m_pg->SetPropertyBackgroundColour(id,wxColour(255,255,205)); // yellow
+				else if (name == wxT("AUI"))
+                    m_pg->SetPropertyBackgroundColour(id,wxColour(240,240,255)); // light blue
                 else if (name == wxT("sizeritem") || name == wxT("gbsizeritem") || name == wxT("sizeritembase") )
                     m_pg->SetPropertyBackgroundColour(id,wxColour(220,255,255)); // cyan
             }
@@ -565,6 +596,8 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
                 // Most common classes will be showed with a slightly different colour.
                 if (name == wxT("wxWindow"))
                     m_eg->SetPropertyBackgroundColour( id, wxColour( 255, 255, 205 ) ); // Yellow
+				else if (name == wxT("AUI Events"))
+                    m_eg->SetPropertyBackgroundColour( id, wxColour(240,240,255) ); // light blue
                 else if (name == wxT("sizeritem") || name == wxT("gbsizeritem") || name == wxT("sizeritembase") )
                     m_eg->SetPropertyBackgroundColour( id, wxColour( 220, 255, 255 ) ); // Cyan
             }
@@ -678,7 +711,7 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
             {
                 // Use typeconv to properly handle locale
                 double val = m_pg->GetPropertyValueAsDouble( propPtr );
-                AppData()->ModifyProperty( prop, TypeConv::FloatToString( val ) );
+                ModifyProperty( prop, TypeConv::FloatToString( val ) );
                 break;
             }
             case PT_TEXT:
@@ -686,13 +719,13 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
             case PT_INT:
             case PT_UINT:
             {
-                AppData()->ModifyProperty( prop, m_pg->GetPropertyValueAsString( propPtr ) );
+                ModifyProperty( prop, m_pg->GetPropertyValueAsString( propPtr ) );
                 break;
             }
             case PT_OPTION:
             {
                 wxString value = m_pg->GetPropertyValueAsString( propPtr );
-                AppData()->ModifyProperty( prop, value );
+                ModifyProperty( prop, value );
 
                 // Update displayed description for the new selection
                 PPropertyInfo prop_desc = prop->GetPropertyInfo();
@@ -722,15 +755,16 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
             }
             case PT_PARENT:
             {
-                AppData()->ModifyProperty( prop, propPtr->GetValueAsString( wxPG_FULL_VALUE ) );
+                ModifyProperty( prop, propPtr->GetValueAsString( wxPG_FULL_VALUE ) );
+				/* ModifyProperty( prop, m_pg->GetPropertyValueAsString( propPtr ) ); */
                 break;
             }
             case PT_WXSTRING:
             case PT_WXSTRING_I18N:
             {
                 // ObjectInspector's text strings are formatted.
-                wxString value = m_pg->GetPropertyValueAsString( propPtr );
-                AppData()->ModifyProperty( prop, value );
+                wxString value = TypeConv::TextToString( m_pg->GetPropertyValueAsString( propPtr ) );
+                ModifyProperty( prop, value );
                 break;
             }
             case PT_BOOL:
@@ -748,10 +782,10 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
 #endif
                     }
                     else
-                        AppData()->ModifyProperty( prop, m_pg->GetPropertyValueAsBool( propPtr ) ? wxT("1") : wxT("0") );
+                        ModifyProperty( prop, m_pg->GetPropertyValueAsBool( propPtr ) ? wxT("1") : wxT("0") );
                 }
                 else
-                    AppData()->ModifyProperty( prop, m_pg->GetPropertyValueAsBool( propPtr ) ? wxT("1") : wxT("0") );
+                    ModifyProperty( prop, m_pg->GetPropertyValueAsBool( propPtr ) ? wxT("1") : wxT("0") );
                 break;
             }
             case PT_BITLIST:
@@ -759,7 +793,7 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
                 wxString aux = m_pg->GetPropertyValueAsString( propPtr );
                 aux.Replace( wxT(" "), wxT("") );
                 aux.Replace( wxT(","), wxT("|") );
-                AppData()->ModifyProperty( prop, aux );
+                ModifyProperty( prop, aux );
                 break;
             }
             case PT_WXPOINT:
@@ -769,7 +803,7 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
 #else
                 wxPoint point = wxPointRefFromVariant( event.GetPropertyValue () );
 #endif
-                AppData()->ModifyProperty( prop, wxString::Format(  wxT("%i,%i"), point.x, point.y ) );
+                ModifyProperty( prop, wxString::Format(  wxT("%i,%i"), point.x, point.y ) );
                 break;
             }
             case PT_WXSIZE:
@@ -779,20 +813,12 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
 #else
                 wxSize size = wxSizeRefFromVariant( event.GetPropertyValue() );
 #endif
-                AppData()->ModifyProperty( prop, wxString::Format( wxT("%i,%i"), size.GetWidth(), size.GetHeight() ) );
+                ModifyProperty( prop, wxString::Format( wxT("%i,%i"), size.GetWidth(), size.GetHeight() ) );
                 break;
             }
             case PT_WXFONT:
             {
-                wxFont font;
-                font << event.GetPropertyValue();
-                wxFontContainer container( font.GetPointSize(),
-                                           font.GetFamily(),
-                                           font.GetStyle(),
-                                           font.GetWeight(),
-                                           font.GetUnderlined(),
-                                           font.GetFaceName() );
-                AppData()->ModifyProperty( prop, TypeConv::FontToString( container ) );
+				ModifyProperty( prop, event.GetPropertyValue().GetString() );
                 break;
             }
             case PT_WXCOLOUR:
@@ -801,14 +827,14 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
                 colour << event.GetPropertyValue();
                 switch ( colour.m_type ) {
                 case wxSYS_COLOUR_MAX:
-                    AppData()->ModifyProperty( prop, wxT("") );
+                    ModifyProperty( prop, wxT("") );
                     break;
                 case wxPG_COLOUR_CUSTOM:
-                    AppData()->ModifyProperty( prop, TypeConv::ColourToString( colour.m_colour ) );
+                    ModifyProperty( prop, TypeConv::ColourToString( colour.m_colour ) );
                     break;
                 default:
                     wxString sCol = TypeConv::SystemColourToString( colour.m_type );
-                    AppData()->ModifyProperty( prop, sCol );
+                    ModifyProperty( prop, sCol );
                 }
                 break;
             }
@@ -816,7 +842,7 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
             case PT_UINTLIST:
             {
                 IntList il( event.GetPropertyValue(), PT_UINTLIST == prop->GetType() );
-                AppData()->ModifyProperty( prop, il.ToString() );
+                ModifyProperty( prop, il.ToString() );
                 break;
             }
             case PT_BITMAP:
@@ -832,7 +858,7 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
 
 				// Handle changes in values, as needed
 				wxVariant thisValue  = WXVARIANT(bmpVal);
-
+				
 #if wxVERSION_NUMBER >= 2900
 				wxVariant newVal = 
                 propPtr->ChildChanged( thisValue, (int)event.GetProperty()->GetIndexInParent(), childValue );
@@ -840,10 +866,10 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
 				propPtr->ChildChanged( thisValue, event.GetProperty()->GetIndexInParent(), childValue );
 #endif
 
- #if wxVERSION_NUMBER >= 2900
-				AppData()->ModifyProperty( prop, newVal.GetString() );
+#if wxVERSION_NUMBER >= 2900
+				ModifyProperty( prop, newVal.GetString() );
 #else
-				AppData()->ModifyProperty( prop, bmpVal);
+				ModifyProperty( prop, bmpVal);
 #endif
 				
 				if( event.GetProperty()->GetIndexInParent() > 0 )
@@ -858,7 +884,8 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
             }
 
             default:
-                AppData()->ModifyProperty( prop, event.GetPropertyValue() );
+                //ModifyProperty( prop, event.GetPropertyValue() );
+                ModifyProperty( prop, propPtr->GetValueAsString() );
         }
     }
 }
@@ -984,12 +1011,7 @@ void ObjectInspector::OnPropertyModified( wxFBPropertyEvent& event )
 		}
         break;
     case PT_WXFONT:
-        {
-            wxFontContainer container = TypeConv::StringToFont( prop->GetValueAsString() );
-            wxVariant value;
-            value << container.GetFont();
-            pgProp->SetValue( value );
-        }
+		pgProp->SetValue( WXVARIANT( prop->GetValueAsString() ) );
         break;
     case PT_WXCOLOUR:
         {
@@ -1132,7 +1154,7 @@ void ObjectInspector::AutoGenerateId(PObjectBase objectChanged, PProperty propCh
                             wxString idString;
                             idString << wxT("ID_");
                             idString << name->GetValueAsString().Upper();
-                            AppData()->ModifyProperty( prop, idString);
+                            ModifyProperty( prop, idString);
 
                             wxPGProperty *pgid = m_pg->GetPropertyByLabel(wxT("id"));
                             if ( !pgid ) return;
@@ -1145,7 +1167,7 @@ void ObjectInspector::AutoGenerateId(PObjectBase objectChanged, PProperty propCh
                     prop = objectChanged->GetProperty(wxT("id"));
                     if ( prop )
                     {
-                        AppData()->ModifyProperty( prop, wxT("wxID_ANY"));
+                        ModifyProperty( prop, wxT("wxID_ANY"));
                         wxPGProperty *pgid = m_pg->GetPropertyByLabel(wxT("id"));
                         if ( !pgid ) return;
                         m_pg->SetPropertyValue( pgid, wxT("wxID_ANY") );
@@ -1172,4 +1194,11 @@ void ObjectInspector::OnBitmapPropertyChanged( wxCommandEvent& event )
 			bp->UpdateChildValues( propVal );
 		}
 	}
+}
+
+void ObjectInspector::ModifyProperty( PProperty prop, const wxString& str )
+{
+	AppData()->RemoveHandler( this->GetEventHandler() );
+	AppData()->ModifyProperty( prop, str );
+	AppData()->AddHandler( this->GetEventHandler() );
 }

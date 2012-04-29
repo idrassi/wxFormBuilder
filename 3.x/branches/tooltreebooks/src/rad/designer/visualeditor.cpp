@@ -238,7 +238,10 @@ void VisualEditor::ScanPanes( wxWindow* parent)
 			PObjectInfo obj_info = obj->GetObjectInfo();
 			wxString cname = obj_info->GetObjectType()->GetName();
 			
-			if( cname == wxT("widget") || cname == wxT("toolbar") || cname == wxT("container") )
+			if( cname == wxT("widget") || 
+				cname == wxT("expanded_widget") ||
+				cname == wxT("toolbar") ||
+				cname == wxT("container") )
 			{
 				wxAuiPaneInfo inf = m_auimgr->GetPane(*child);
 				if(inf.IsOk())
@@ -530,10 +533,10 @@ void VisualEditor::Create()
 			// --- AUI
 			if(  m_form->GetObjectTypeName() == wxT("form") )
 			{
-				if(  m_form->GetPropertyAsInteger( wxT("aui_managed")) == 1)
+				if(  m_form->GetPropertyAsInteger( wxT("aui_managed") ) == 1)
 				{
 					m_auipanel = new wxPanel( m_back->GetFrameContentPanel() );
-					m_auimgr = new wxAuiManager( m_auipanel );
+					m_auimgr = new wxAuiManager( m_auipanel, m_form->GetPropertyAsInteger( wxT("aui_manager_style") ) );
 				}
 			}
 
@@ -688,6 +691,7 @@ void VisualEditor::Create()
 		{
 			// There is no form to display
 			m_back->Show(false);
+			Refresh();
 		}
 #if wxVERSION_NUMBER < 2900 && !defined(__WXGTK__)
 		Thaw();
@@ -876,6 +880,7 @@ void VisualEditor::SetupWindow( PObjectBase obj, wxWindow* window )
 	//AUI
 	wxString tname = obj->GetObjectInfo()->GetObjectType()->GetName();
 	if( m_auimgr && ( tname == wxT("widget") ||
+					tname == wxT("expanded_widget") ||
 					tname == wxT("container") || 
 					tname == wxT("notebook") ||
 					tname == wxT("auinotebook") ||
@@ -898,11 +903,12 @@ void VisualEditor::SetupWindow( PObjectBase obj, wxWindow* window )
 }
 
 void VisualEditor::SetupAui( PObjectBase obj, wxWindow* window )
-{
-	m_auimgr->AddPane( window );
+{	
+	wxAuiPaneInfo info;
 	
-	wxAuiPaneInfo& info = m_auimgr->GetPane( window );
-	
+	// check whether the object contains AUI info...
+	if( !obj->GetProperty( wxT("aui_name") ) ) return;
+
 	wxString name = obj->GetPropertyAsString( wxT("aui_name") );
 	if( name != wxT("") ) info.Name( name );
 	
@@ -964,6 +970,7 @@ void VisualEditor::SetupAui( PObjectBase obj, wxWindow* window )
     if( !obj->IsNull( wxT("aui_layer") ) ) info.Layer( obj->GetPropertyAsInteger( wxT("aui_layer") ));
 	if( !obj->GetPropertyAsInteger( wxT("show") ) ) info.Hide();
 
+	m_auimgr->AddPane( window, info );
 }
 
 void VisualEditor::SetupWizard( PObjectBase obj, wxWindow *window, bool pageAdding )
@@ -1036,6 +1043,11 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 		Debug::Print( wxT("The event object is NULL - why?") );
 		return;
 	}
+	
+	// highlight parent toolbar instead of its children
+	PObjectBase toolbar = obj->FindNearAncestor( wxT("toolbar") );
+	if( !toolbar ) toolbar = obj->FindNearAncestor( wxT("toolbar_form") );
+	if( toolbar ) obj = toolbar;
 
 	// Make sure this is a visible object
 	ObjectBaseMap::iterator it = m_baseobjects.find( obj.get() );
@@ -1065,7 +1077,7 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 		}
 	}
 
-    if ( obj->GetObjectInfo()->GetObjectTypeName() == wxT("WizardPageSimple") )
+    if ( obj->GetObjectInfo()->GetObjectTypeName() == wxT("wizardpagesimple") )
     {
         ObjectBaseMap::iterator pageIt = m_baseobjects.find( obj.get() );
         WizardPageSimple* wizpage = wxDynamicCast( pageIt->second, WizardPageSimple );
@@ -1090,7 +1102,7 @@ void VisualEditor::OnObjectSelected( wxFBObjectEvent &event )
 				ObjectBaseMap::iterator parentIt = m_baseobjects.find( parent.get() );
 				if ( parentIt != m_baseobjects.end() )
 				{
-                    if ( parent->GetObjectInfo()->GetObjectTypeName() == wxT("WizardPageSimple") )
+                    if ( parent->GetObjectInfo()->GetObjectTypeName() == wxT("wizardpagesimple") )
                     {
                         WizardPageSimple* wizpage = wxDynamicCast( parentIt->second, WizardPageSimple );
 
@@ -1226,7 +1238,7 @@ DesignerWindow::DesignerWindow( wxWindow *parent, int id, const wxPoint& pos, co
 :
 wxInnerFrame(parent, id, pos, size, style)
 {
-  ShowTitleBar(false);
+	ShowTitleBar(false);
 	SetGrid( 10, 10 );
 	m_selSizer = NULL;
 	m_selItem = NULL;
@@ -1259,13 +1271,13 @@ void DesignerWindow::OnPaint(wxPaintEvent &event)
 		dc.SetDeviceOrigin( origin.x, origin.y );
 		HighlightSelection( dc );
 	}
-
+	
 	event.Skip();
 }
 
 void DesignerWindow::DrawRectangle( wxDC& dc, const wxPoint& point, const wxSize& size, PObjectBase object )
 {
-	bool isSizer = ( object->GetObjectInfo()->IsSubclassOf( wxT("sizer") ) );
+	bool isSizer = ( object->GetObjectInfo()->IsSubclassOf( wxT("sizer") ) || object->GetObjectInfo()->IsSubclassOf( wxT("gbsizer") ) );
 	int min = ( isSizer ? 0 : 1 );
 
 	int border = object->GetParent()->GetPropertyAsInteger( wxT("border") );
@@ -1288,9 +1300,22 @@ void DesignerWindow::DrawRectangle( wxDC& dc, const wxPoint& point, const wxSize
 
 void DesignerWindow::HighlightSelection( wxDC& dc )
 {
-	// do not highlight if AUI is used
+	// do not highlight if AUI is used in floating mode
 	VisualEditor *editor = wxDynamicCast( GetParent(), VisualEditor );
-	if( editor && editor->m_auimgr ) return ;
+	if( editor && editor->m_auimgr )
+	{
+		wxWindow *windowItem =  wxDynamicCast( m_selItem, wxWindow );
+		while( windowItem )
+		{
+			wxAuiPaneInfo info = editor->m_auimgr->GetPane( windowItem );
+			if( info.IsOk() )
+			{
+				if( info.IsFloating() ) return;
+				else break;
+			}
+			windowItem = windowItem->GetParent();
+		}
+	}
 	
 	wxSize size;
 	PObjectBase object = m_selObj.lock();
@@ -1302,6 +1327,7 @@ void DesignerWindow::HighlightSelection( wxDC& dc )
 		dc.SetPen( bluePen );
 		dc.SetBrush( *wxTRANSPARENT_BRUSH );
 		PObjectBase sizerParent = object->FindNearAncestorByBaseClass( wxT("sizer") );
+		if( !sizerParent ) sizerParent = object->FindNearAncestorByBaseClass( wxT("gbsizer") );
 		if ( sizerParent && sizerParent->GetParent() )
 		{
 			DrawRectangle( dc, point, size, sizerParent );
@@ -1498,22 +1524,6 @@ DesignerWindow::HighlightPaintHandler::HighlightPaintHandler(wxWindow *win)
 
 void DesignerWindow::HighlightPaintHandler::OnPaint(wxPaintEvent &event)
 {
-//	wxPaintDC dc(this);
-/*	wxSize size = GetSize();
-	dc.SetPen(*wxBLACK_PEN);
-	for ( int i = 0; i < size.GetWidth(); i += m_x )
-	{
-		for ( int j = 0; j < size.GetHeight(); j += m_y )
-		{
-			dc.DrawPoint( i - 1, j - 1 );
-		}
-	}*/
-
-	/*if ( m_actPanel == this)
-	{
-		HighlightSelection( dc );
-	}*/
-
 	wxWindow *aux = m_window;
 	while (!aux->IsKindOf(CLASSINFO(DesignerWindow))) aux = aux->GetParent();
 	DesignerWindow *dsgnWin = (DesignerWindow*) aux;
@@ -1522,6 +1532,6 @@ void DesignerWindow::HighlightPaintHandler::OnPaint(wxPaintEvent &event)
 		wxPaintDC dc(m_window);
 		dsgnWin->HighlightSelection(dc);
 	}
-
+	
 	event.Skip();
 }

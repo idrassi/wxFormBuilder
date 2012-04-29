@@ -19,7 +19,7 @@ solution "wxFormBuilder-Solution"
     local wxver         = string.gsub( wxVersion, '%.', '' )
     location            ( "../../build/" .. wxVersion .. "/" .. _ACTION )
     BuildDir            = solution().location
-    CustomPrefix        = "wxfb_" .. wxTarget .. wxUnicodeSign
+	CustomPrefix        = "wx_" .. wxTarget .. wxUnicodeSign
 
 if wxVersion < "2.9" then
     DebugSuffix         = "d-" .. wxver
@@ -43,17 +43,20 @@ end
         defines         {"DEBUG", "_DEBUG"}
         flags           {"Symbols"}
 
-    if wxCompiler == "gcc" then
-        buildoptions    {"-O0"}
-    end
+		if wxCompiler == "gcc" then
+			buildoptions    {"-O0"}
+		end
 
     configuration "Release"
+		if wxCompiler == "gcc" then
+			linkoptions {"-s"}
+		end
         defines         {"NDEBUG"}
         flags           {"OptimizeSpeed"}
 
     dofile( scriptDir .. "/ticpp.lua" )
     dofile( scriptDir .. "/plugin-interface.lua" )
-    dofile( scriptDir .. "/wxflatnotebook.lua" )
+	dofile( scriptDir .. "/wxflatnotebook.lua" )
 
 if wxVersion < "2.9" then
     dofile( scriptDir .. "/wxpropgrid.lua" )

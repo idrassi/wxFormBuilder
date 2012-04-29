@@ -203,23 +203,23 @@ wxString PHPTemplateParser::ValueToCode( PropertyType type, wxString value )
 				int pointSize = font.GetPointSize();
 				wxString size = pointSize <= 0 ?
 #if wxVERSION_NUMBER < 2900
-                                    wxT("10 /*wxNORMAL_FONT->GetPointSize() Not implemented on wxPHP*/")
+                                    wxT("wxNORMAL_FONT->GetPointSize()")
                                     : wxString::Format( wxT("%i"), pointSize ).c_str();
 
                 result = wxString::Format
                         (
-                            wxT("new wxFont( %s, %i, %i, %i, %s, %s ) Not implemented on wxPHP*/" ),
+                            wxT("new wxFont( %s, %i, %i, %i, %s, %s )" ),
                             size.c_str(), font.GetFamily(), font.GetStyle(), font.GetWeight(),
                             ( font.GetUnderlined() ? wxT("true") : wxT("false") ),
                             ( font.m_faceName.empty() ? wxT("wxEmptyString")
                             : wxString::Format( wxT("\"%s\""), font.m_faceName.c_str() ).c_str() )
 #else
-                                    "10 /*wxNORMAL_FONT->GetPointSize() Not implemented on wxPHP*/"
+                                    "wxNORMAL_FONT->GetPointSize()"
                                     : wxString::Format( "%i", pointSize );
 
                 result = wxString::Format
                         (
-                            "new wxFont( %s, %i, %i, %i, %s, %s ) Not implemented on wxPHP*/",
+                            "new wxFont( %s, %i, %i, %i, %s, %s )",
                             size, font.GetFamily(), font.GetStyle(), font.GetWeight(),
                             ( font.GetUnderlined() ? "true" : "false" ),
                             ( font.m_faceName.empty() ? "wxEmptyString"
@@ -870,7 +870,7 @@ void PHPCodeGenerator::GenSubclassSets( PObjectBase obj, std::set< wxString >* s
 			return;
 		}
 
-		wxString include = wxT("from ") + headerVal + wxT(" import ") + nameVal;
+		wxString include = wxT("include_once ") + headerVal + wxT(";");
 		std::vector< wxString >::iterator it = std::find( headerIncludes->begin(), headerIncludes->end(), include );
 		if ( headerIncludes->end() == it )
 		{
@@ -1078,6 +1078,13 @@ void PHPCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 
 		if ( !isWidget ) // sizers
 		{
+			wxString afterAddChild = GetCode( obj, wxT( "after_addchild" ) );
+			if ( !afterAddChild.empty() )
+			{
+				m_source->WriteLn( afterAddChild );
+			}
+			m_source->WriteLn();
+				
 			if (is_widget)
 			{
 				// the parent object is not a sizer. There is no template for
@@ -1241,20 +1248,18 @@ void PHPCodeGenerator::GenDestruction( PObjectBase obj )
 	wxString _template;
 	PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( wxT( "PHP" ) );
 
-	if ( !code_info )
+	if ( code_info )
 	{
-		return;
-	}
+		_template = code_info->GetTemplate( wxT( "destruction" ) );
 
-	_template = code_info->GetTemplate( wxT( "destruction" ) );
-
-	if ( !_template.empty() )
-	{
-		PHPTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
-		wxString code = parser.ParseTemplate();
-		if ( !code.empty() )
+		if ( !_template.empty() )
 		{
-			m_source->WriteLn( code );
+			PHPTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
+			wxString code = parser.ParseTemplate();
+			if ( !code.empty() )
+			{
+				m_source->WriteLn( code );
+			}
 		}
 	}
 
@@ -1281,7 +1286,8 @@ void PHPCodeGenerator::FindMacros( PObjectBase obj, std::vector<wxString>* macro
 			if( value.IsEmpty() ) continue;
 
 			// Skip wx IDs
-            if ( m_predMacros.end() == m_predMacros.find( value ) )
+            if ( ( ! value.Contains( wxT("XRCID" ) ) ) &&
+				 ( m_predMacros.end() == m_predMacros.find( value ) ) )
             {
                 if ( macros->end() == std::find( macros->begin(), macros->end(), value ) )
                 {
