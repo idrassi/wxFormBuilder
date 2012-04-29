@@ -1,9 +1,53 @@
 			wxFormBuilder ChangeLog
 ********************************************************************************
-11/14/2011 Version 3.03.00 (Beta)
+04/06/2012 Version 3.03.03 (Beta)
+* ID: 3510480 - Subclass not displayed after reloading a project in 3.3.2.
+* ID: 3506972 - Generating Python code.
+* ID: 3148236 - Configure wxAuiManager + AUI-related properties aren't shown for widgets/forms where it has no sense.
+* Fixed code generation for wxToolBar/wxAuiToolBar if parent form is managed by AUI.
+* wxAdditions widgets (such are wxPropertyGrid, wxScintilla, etc.) can be placed directly to the AUI-managed frame as well.
+* Offers validators just for those controls where it has a sense.
+* Improved highlighting of widgets if AUI is used.
+* AUI notebook is used instead of FlatNotebook if wxFB built with wxWidgets 2.9.x and later.
+* Fixed various bugs if wxFB built with wxWidgets 2.9.x and later.
+* Fixed Python code generation for tool placed inside stand-alone toolbar.
+
+02/10/2012 Version 3.03.02 (Beta)
+* ID: 3470209 - wxDIRCTRL_MULTIPLE Style missing for wxGenericDirCtrl.
+* ID: 3472032 - Error in svn trunk 3.3-1 beta version generating python code.
+* ID: 3480059 - Gettext, Unicode and wxPython.
+* ID: 3486641 - XRC import does not accept CENTRE attributes.
+* ID: 3482829 - Default font is targeted to the current machine.
+* ID: 3460028 - Offer "default" value for fonts.
+* ID: 3488348 - Newlines in wxStaticText.
+* ID: 3493539 - Generate Inherited Class deletes additional includes (c++).
+
+01/17/2012 Version 3.03.01 (Beta)
+* Fixed code generation for bitmaps provided by wxArtProvider - John Labenski.
+^ Added support for custom resource and client wxArtProvider's IDs in bitmap properties - John Labenski.
+* ID: 3437910 - Fixed codegeneration for context menus assigned to subclassed controls.
+* ID: 3435478 - Fixed crash on loading icon from resource.
+* ID: 3432356 - Possible bug with generated code for wxGridBagSizer.
+* ID: 3396919 - Bug on AUI toolbar buttons.
+* ID: 3395468 - wxChoice missing wxCB_SORT style.
+^ Added ability to set default selection for wxComboBox/wxBitmapComboBox.
+* ID: 3432383 - Missing delete for wxMenu object.
+* ID: 3417877 - Generated cpp file leads to compiler warnings.
+* ID: 3462454 - Fixed wxListCtrl code generation for wxEVT_COMMAND_LIST_COL_RIGHT_CLICK event.
+* wxFB source code can be built with wxWidgets 2.9.2 - Andrea Zanellato, Eran Ifrah.
+
+12/02/2011 Version 3.03.00 (Beta)
 * Fixed improper placement of a comma at the end of the C/C++ enum list - Andrea Zanellato.
 + Added support for wxWizard - Andrea Zanellato.
 + Added support for PHP code generation - JGM.
+^ Combo box component (wxComboBox) now supports value change from visual designer.
+* Fixed gridbag sizer so it can be added directly to any container without need of 
+  another underlying sizer.
+^ Added missing IDs to wxArtProvider bitmap source.
+* Fixed AUI pane buttons.
+* Fixed AUI code generation for wxToolBar/wxAuiToolBar.
+^ Drop-down menu associated with AUI toolbar's tool now shows its real content in designer.
+^ Context menu associated with a widget is shown in designer after RMB click.
 
 11/08/2011 Version 3.02.03 (Beta)
 * Several toolbars can be inserted directly into AUI-managed frames.

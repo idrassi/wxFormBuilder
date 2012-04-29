@@ -33,6 +33,7 @@
 #include <wx/file.h>
 #include <wx/log.h>
 #include <wx/tokenzr.h>
+#include <wx/regex.h>
 
 // -----------------------------------------------------------------------
 // wxFBSizeProperty
@@ -52,7 +53,7 @@ wxFBSizeProperty::~wxFBSizeProperty() {}
 
 void wxFBSizeProperty::RefreshChildren()
 {
-    if ( !GetChildCount() ) return;
+    if ( GetChildCount() < 2 ) return;
 
 #if wxVERSION_NUMBER < 2900
     const wxSize& size = wxSizeFromVariant( m_value );
@@ -60,8 +61,10 @@ void wxFBSizeProperty::RefreshChildren()
     const wxSize& size = wxSizeRefFromVariant( m_value );
 #endif
 
-    Item(0)->SetValue( (long)size.x );
-    Item(1)->SetValue( (long)size.y );
+	if( ! &size ) return;
+
+	Item(0)->SetValue( (long)size.x );
+	Item(1)->SetValue( (long)size.y );
 }
 
 #if wxVERSION_NUMBER < 2900
@@ -78,6 +81,13 @@ wxFBSizeProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVariant&
     wxSize& size = wxSizeRefFromVariant( thisValue );
 #endif
 
+	if( ! &size ) return
+#if wxVERSION_NUMBER < 2900
+   ;
+#else
+    wxVariant();
+#endif
+	
     int val = childValue.GetLong();
     switch ( childIndex )
     {
@@ -115,13 +125,15 @@ wxFBPointProperty::~wxFBPointProperty() { }
 
 void wxFBPointProperty::RefreshChildren()
 {
-    if ( !GetChildCount() ) return;
+    if ( GetChildCount() < 2 ) return;
 
 #if wxVERSION_NUMBER < 2900
     const wxPoint& point = wxPointFromVariant( m_value );
 #else
     const wxPoint& point = wxPointRefFromVariant( m_value );
 #endif
+
+	if( ! &point ) return;
 
     Item(0)->SetValue( (long)point.x );
     Item(1)->SetValue( (long)point.y );
@@ -141,6 +153,13 @@ wxFBPointProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVariant
     wxPoint& point = wxPointRefFromVariant( thisValue );
 #endif
 
+	if( ! &point ) return
+#if wxVERSION_NUMBER < 2900
+   ;
+#else
+    wxVariant();
+#endif
+	
     int val = childValue.GetLong();
     switch ( childIndex )
     {
@@ -172,10 +191,28 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS( wxFBBitmapProperty, wxPGProperty,
 
 void wxFBBitmapProperty::GetChildValues( const wxString& parentValue, wxArrayString& childValues ) const
 {
-	childValues = wxStringTokenize( parentValue, wxT(';'), wxTOKEN_RET_EMPTY_ALL );
+	// some properties can contain value like "[-1;-1]" which must be modified due to use of ";" as a
+	// string separator
+	wxString values = parentValue;
+	
+	wxRegEx regex( wxT("\\[.+;.+\\]") );
+	if( regex.IsValid() )
+	{
+		if( regex.Matches( values ) )
+		{
+			wxString sizeVal = regex.GetMatch( values );
+			sizeVal.Replace( wxT(";"), wxT("<semicolon>") );
+			sizeVal.Replace( wxT("["), wxT("") );
+			sizeVal.Replace( wxT("]"), wxT("") );
+			regex.Replace( &values, sizeVal );
+		}
+	}
+	
+	childValues = wxStringTokenize( values, wxT(';'), wxTOKEN_RET_EMPTY_ALL );
 	for ( wxArrayString::iterator value = childValues.begin(); value != childValues.end(); ++value )
 	{
 		value->Trim( false );
+		value->Replace( wxT("<semicolon>"), wxT(";") );
 	}
 }
 
@@ -184,7 +221,6 @@ wxFBBitmapProperty::wxFBBitmapProperty( const wxString& label,
                                         const wxString& value ) : wxPGProperty( label, name )
 {
     SetValue( WXVARIANT( value ) );
-	
 }
 
 void wxFBBitmapProperty::CreateChildren()
@@ -192,7 +228,7 @@ void wxFBBitmapProperty::CreateChildren()
 	wxString  propValue  = m_value.GetString();
 	wxVariant thisValue  = WXVARIANT( propValue );
 	wxVariant childValue;
-	int       childIndex;	
+	int       childIndex = 0;	
 	wxArrayString childVals;
 	GetChildValues( propValue, childVals );
 	wxString  source;
@@ -235,11 +271,8 @@ void wxFBBitmapProperty::CreateChildren()
 
 wxPGProperty *wxFBBitmapProperty::CreatePropertySource( int sourceIndex )
 {
-#if wxVERSION_NUMBER < 2900
     wxPGChoices sourceChoices;
-#else
-    wxArrayString sourceChoices;
-#endif
+
     // Add 'source' property (common for all other children)
     sourceChoices.Add(_("Load From File") );
     sourceChoices.Add(_("Load From Embedded File") );
@@ -298,11 +331,8 @@ wxPGProperty *wxFBBitmapProperty::CreatePropertyIconSize()
 
 wxPGProperty *wxFBBitmapProperty::CreatePropertyArtId()
 {
-#if wxVERSION_NUMBER < 2900
     wxPGChoices artIdChoices;
-#else
-    wxArrayString artIdChoices;
-#endif
+
     // Create 'id' property ('Load From Art Provider' only)
     artIdChoices.Add(wxT("wxART_ADD_BOOKMARK"));
     artIdChoices.Add(wxT("wxART_DEL_BOOKMARK "));
@@ -318,13 +348,20 @@ wxPGProperty *wxFBBitmapProperty::CreatePropertyArtId()
     artIdChoices.Add(wxT("wxART_GO_TO_PARENT"));
     artIdChoices.Add(wxT("wxART_GO_HOME"));
     artIdChoices.Add(wxT("wxART_FILE_OPEN"));
+    artIdChoices.Add(wxT("wxART_FILE_SAVE"));
+    artIdChoices.Add(wxT("wxART_FILE_SAVE_AS"));
     artIdChoices.Add(wxT("wxART_PRINT"));
     artIdChoices.Add(wxT("wxART_HELP"));
     artIdChoices.Add(wxT("wxART_TIP"));
     artIdChoices.Add(wxT("wxART_REPORT_VIEW"));
     artIdChoices.Add(wxT("wxART_LIST_VIEW"));
     artIdChoices.Add(wxT("wxART_NEW_DIR"));
+    artIdChoices.Add(wxT("wxART_HARDDISK"));
+    artIdChoices.Add(wxT("wxART_FLOPPY"));
+    artIdChoices.Add(wxT("wxART_CDROM"));
+    artIdChoices.Add(wxT("wxART_REMOVABLE"));
     artIdChoices.Add(wxT("wxART_FOLDER"));
+    artIdChoices.Add(wxT("wxART_FOLDER_OPEN"));
     artIdChoices.Add(wxT("wxART_GO_DIR_UP"));
     artIdChoices.Add(wxT("wxART_EXECUTABLE_FILE"));
     artIdChoices.Add(wxT("wxART_NORMAL_FILE"));
@@ -335,6 +372,16 @@ wxPGProperty *wxFBBitmapProperty::CreatePropertyArtId()
     artIdChoices.Add(wxT("wxART_WARNING"));
     artIdChoices.Add(wxT("wxART_INFORMATION"));
     artIdChoices.Add(wxT("wxART_MISSING_IMAGE"));
+    artIdChoices.Add(wxT("wxART_COPY"));
+    artIdChoices.Add(wxT("wxART_CUT"));
+    artIdChoices.Add(wxT("wxART_PASTE"));
+    artIdChoices.Add(wxT("wxART_DELETE"));
+    artIdChoices.Add(wxT("wxART_NEW"));
+    artIdChoices.Add(wxT("wxART_UNDO"));
+    artIdChoices.Add(wxT("wxART_REDO"));
+    artIdChoices.Add(wxT("wxART_QUIT"));
+    artIdChoices.Add(wxT("wxART_FIND"));
+    artIdChoices.Add(wxT("wxART_FIND_AND_REPLACE"));
 
     artIdChoices.Add(wxT("gtk-about"));
     artIdChoices.Add(wxT("gtk-add"));
@@ -436,19 +483,20 @@ wxPGProperty *wxFBBitmapProperty::CreatePropertyArtId()
     artIdChoices.Add(wxT("gtk-zoom-in"));
     artIdChoices.Add(wxT("gtk-zoom-out"));
 
-    wxPGProperty *propArtId = new wxEnumProperty( wxT("id"), wxPG_LABEL, artIdChoices, -1 );
-    propArtId->SetHelpString(_("wxArtID unique identifier of the bitmap. IDs with prefix 'gtk-' are available under wxGTK only.") );
+#if wxVERSION_NUMBER < 2900
+	wxPGProperty *propArtId = new wxEditEnumProperty( wxT("id"), wxPG_LABEL, artIdChoices, wxT("") );
+#else
+    wxPGProperty *propArtId = new wxEditEnumProperty( wxT("id"), wxPG_LABEL, artIdChoices );
+#endif    
+    propArtId->SetHelpString(_("Choose a wxArtID unique identifier of the bitmap or enter a wxArtID for your custom wxArtProvider. IDs with prefix 'gtk-' are available under wxGTK only.") );
 
     return propArtId;
 }
 
 wxPGProperty *wxFBBitmapProperty::CreatePropertyArtClient()
 {
-#if wxVERSION_NUMBER < 2900
     wxPGChoices artClientChoices;
-#else
-    wxArrayString artClientChoices;
-#endif
+
     // Create 'client' property ('Load From Art Provider' only)
     artClientChoices.Add(wxT("wxART_TOOLBAR"));
     artClientChoices.Add(wxT("wxART_MENU"));
@@ -459,8 +507,12 @@ wxPGProperty *wxFBBitmapProperty::CreatePropertyArtClient()
     artClientChoices.Add(wxT("wxART_MESSAGE_BOX"));
     artClientChoices.Add(wxT("wxART_OTHER"));
 
-    wxPGProperty *propArtClient = new wxEnumProperty( wxT("client"), wxPG_LABEL, artClientChoices, -1 );
-    propArtClient->SetHelpString(_("wxArtClient identifier of the client (i.e. who is asking for the bitmap).") );
+#if wxVERSION_NUMBER < 2900
+	wxPGProperty *propArtClient = new wxEditEnumProperty( wxT("client"), wxPG_LABEL, artClientChoices, wxT("") );
+#else
+    wxPGProperty *propArtClient = new wxEditEnumProperty( wxT("client"), wxPG_LABEL, artClientChoices );
+#endif    
+    propArtClient->SetHelpString(_("Choose a wxArtClient identifier of the client (i.e. who is asking for the bitmap) or enter a wxArtClient for your custom wxArtProvider.") );
 
     return propArtClient;
 }
@@ -478,13 +530,12 @@ wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
                                   int        childIndex,
                                   wxVariant& childValue ) const
 {
-
 	wxFBBitmapProperty* bp = (wxFBBitmapProperty*)this;
 	
     wxString val = thisValue.GetString();	
 	wxArrayString childVals;
 	GetChildValues( val, childVals );
-	wxString newVal;
+	wxString newVal = val;
 
     // Find the appropriate new state
     switch ( childIndex )
@@ -515,10 +566,10 @@ wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
 						bp->AppendChild( bp->CreatePropertyFilePath() );
 					}
 					
-					if( childVals.GetCount() > 2)
-					{
+					if( childVals.GetCount() == 2 )
 						newVal = childVals.Item(0) + wxT("; ") + childVals.Item(1);
-					}
+					else if( childVals.GetCount() > 1 )
+						newVal = childVals.Item(0) + wxT("; ");
 					
                     break;
                 }
@@ -539,11 +590,11 @@ wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
 						bp->AppendChild( bp->CreatePropertyResourceName() );  
 					}
 					
-					if( childVals.GetCount() > 2)
-					{
+					if( childVals.GetCount() == 2)
 						newVal = childVals.Item(0) + wxT("; ") + childVals.Item(1);
-					}
-					
+					else if( childVals.GetCount() > 1 )
+						newVal = childVals.Item(0) + wxT("; ");
+						
                     break;
                 }
                 // 'Load From Icon Resource'
@@ -564,10 +615,10 @@ wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
 						bp->AppendChild( bp->CreatePropertyIconSize() );
 					}
 					
-					if( childVals.GetCount() > 3)
-					{
-						newVal = childVals.Item(0) + wxT("; ") + childVals.Item(1) + wxT("; ") + childVals.Item(2);
-					}
+					if( childVals.GetCount() == 3)
+						newVal = childVals.Item(0) + wxT("; ") + childVals.Item(1) + wxT("; [") + childVals.Item(2) + wxT("]");
+					else if( childVals.GetCount() > 1 )
+						newVal = childVals.Item(0) + wxT("; ; []");
 					
                     break;
                 }
@@ -589,11 +640,10 @@ wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
 						bp->AppendChild( bp->CreatePropertyArtClient() );
 					}
 					
-					if( childVals.GetCount() > 3)
-					{
+					if( childVals.GetCount() == 3)
 						newVal = childVals.Item(0) + wxT("; ") + childVals.Item(1) + wxT("; ") + childVals.Item(2);
-					}
-			
+					else if( childVals.GetCount() > 1 )
+						newVal = childVals.Item(0) + wxT("; ; ");
                     break;
                 }
             }
@@ -636,7 +686,6 @@ wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
         bp->SetValue( ret );
 
 #if wxVERSION_NUMBER >= 2900
-
         return ret;
 #else
         thisValue = ret;
@@ -731,8 +780,7 @@ wxString wxFBBitmapProperty::GetValueAsString( int argFlags ) const
     GenerateComposedValue(text, argFlags);
     return text;
 #else
-    // TODO: 2.9 version?
-    return wxEmptyString;
+    return GenerateComposedValue();
 #endif
 }
 
@@ -904,3 +952,238 @@ void wxPGSliderEditor::SetValueToUnspecified( wxPGProperty* WXUNUSED( property )
 }
 
 #endif //wxUSE_SLIDER
+
+// -----------------------------------------------------------------------
+// wxFBFontProperty
+// -----------------------------------------------------------------------
+
+#include <wx/fontdlg.h>
+#include <wx/fontenum.h>
+
+static const wxChar* gs_fp_es_family_labels[] = {
+    wxT("Default"), wxT("Decorative"),
+    wxT("Roman"), wxT("Script"),
+    wxT("Swiss"), wxT("Modern"),
+#if wxCHECK_VERSION(2,8,0)
+    wxT("Teletype"), wxT("Unknown"),
+#endif
+    (const wxChar*) NULL
+};
+
+static long gs_fp_es_family_values[] = {
+    wxFONTFAMILY_DEFAULT, wxFONTFAMILY_DECORATIVE,
+    wxFONTFAMILY_ROMAN, wxFONTFAMILY_SCRIPT,
+    wxFONTFAMILY_SWISS, wxFONTFAMILY_MODERN,
+#if wxCHECK_VERSION(2,8,0)
+    wxFONTFAMILY_TELETYPE, wxFONTFAMILY_UNKNOWN
+#endif
+};
+
+static const wxChar* gs_fp_es_style_labels[] = {
+    wxT("Normal"),
+    wxT("Slant"),
+    wxT("Italic"),
+    (const wxChar*) NULL
+};
+
+static long gs_fp_es_style_values[] = {
+    wxNORMAL,
+    wxSLANT,
+    wxITALIC
+};
+
+static const wxChar* gs_fp_es_weight_labels[] = {
+    wxT("Normal"),
+    wxT("Light"),
+    wxT("Bold"),
+    (const wxChar*) NULL
+};
+
+static long gs_fp_es_weight_values[] = {
+    wxNORMAL,
+    wxLIGHT,
+    wxBOLD
+};
+
+WX_PG_IMPLEMENT_PROPERTY_CLASS(wxFBFontProperty,wxPGProperty,
+                               wxFont,const wxFont&,TextCtrlAndButton)
+
+
+wxFBFontProperty::wxFBFontProperty( const wxString& label, const wxString& name,
+                                const wxFontContainer& value )
+    : wxPGProperty(label,name)
+{
+    SetValue( WXVARIANT( TypeConv::FontToString(value) ) );
+
+    // Initialize font family choices list
+    if ( !wxPGGlobalVars->m_fontFamilyChoices )
+    {
+        wxFontEnumerator enumerator;
+        enumerator.EnumerateFacenames();
+
+#if wxMINOR_VERSION > 6
+        wxArrayString faceNames = enumerator.GetFacenames();
+#else
+        wxArrayString& faceNames = *enumerator.GetFacenames();
+#endif
+
+        faceNames.Sort();
+		faceNames.Insert( wxEmptyString, 0 );
+
+        wxPGGlobalVars->m_fontFamilyChoices = new wxPGChoices(faceNames);
+    }
+
+    wxString emptyString(wxEmptyString);
+
+    AddPrivateChild( new wxIntProperty( _("Point Size"), wxT("Point Size"),
+					 value.m_pointSize) );
+
+    AddPrivateChild( new wxEnumProperty(_("Family"), wxT("Family"),
+                     gs_fp_es_family_labels,gs_fp_es_family_values,
+                     value.m_family) );
+
+    wxString faceName = value.m_faceName;
+    // If font was not in there, add it now
+    if ( faceName.length() &&
+         wxPGGlobalVars->m_fontFamilyChoices->Index(faceName) == wxNOT_FOUND )
+        wxPGGlobalVars->m_fontFamilyChoices->AddAsSorted(faceName);
+
+    wxPGProperty* p = new wxEnumProperty(_("Face Name"), wxT("Face Name"),
+                                         *wxPGGlobalVars->m_fontFamilyChoices);
+
+    p->SetValueFromString(faceName, wxPG_FULL_VALUE);
+
+    AddPrivateChild( p );
+
+    AddPrivateChild( new wxEnumProperty(_("Style"), wxT("Style"),
+              gs_fp_es_style_labels,gs_fp_es_style_values,value.m_style) );
+
+    AddPrivateChild( new wxEnumProperty(_("Weight"), wxT("Weight"),
+              gs_fp_es_weight_labels,gs_fp_es_weight_values,value.m_weight) );
+
+    AddPrivateChild( new wxBoolProperty(_("Underlined"), wxT("Underlined"),
+              value.m_underlined) );
+}
+
+wxFBFontProperty::~wxFBFontProperty() { }
+
+void wxFBFontProperty::OnSetValue()
+{
+	// do nothing
+}
+
+wxString wxFBFontProperty::GetValueAsString( int argFlags ) const
+{
+    return wxPGProperty::GetValueAsString(argFlags);
+}
+
+bool wxFBFontProperty::OnEvent( wxPropertyGrid* propgrid, wxWindow* WXUNUSED(primary),
+                              wxEvent& event )
+{
+    if ( propgrid->IsMainButtonEvent(event) )
+    {
+        // Update value from last minute changes
+
+#if wxVERSION_NUMBER < 2900
+        PrepareValueForDialogEditing(propgrid);
+#endif
+
+        wxFontData data;
+        wxFont font = TypeConv::StringToFont( m_value.GetString() );
+
+        data.SetInitialFont( font );
+        data.SetColour(*wxBLACK);
+
+        wxFontDialog dlg(propgrid, data);
+        if ( dlg.ShowModal() == wxID_OK )
+        {
+            propgrid->EditorsValueWasModified();
+
+			wxFontContainer fcont( dlg.GetFontData().GetChosenFont() );
+	
+            wxVariant variant = WXVARIANT( TypeConv::FontToString( fcont ) );
+            SetValueInEvent( variant );
+			
+            return true;
+        }
+    }
+    return false;
+}
+
+void wxFBFontProperty::RefreshChildren()
+{
+#if wxVERSION_NUMBER < 2900
+    if ( !GetCount() ) return;
+#endif
+	
+	wxString fstr = m_value.GetString();
+	wxFontContainer font = TypeConv::StringToFont( fstr );
+	
+	Item(0)->SetValue( font.m_pointSize );
+	Item(1)->SetValue( font.m_family );
+	Item(2)->SetValueFromString( font.m_faceName, wxPG_FULL_VALUE );
+	Item(3)->SetValue( font.m_style );
+	Item(4)->SetValue( font.m_weight );
+	Item(5)->SetValue( font.m_underlined );
+}
+
+#if wxVERSION_NUMBER < 2900
+    void
+#else
+    wxVariant
+#endif
+wxFBFontProperty::ChildChanged( wxVariant& thisValue, int ind, wxVariant& childValue ) const
+{
+	wxFontContainer font = TypeConv::StringToFont( thisValue.GetString() );
+
+    if ( ind == 0 )
+    {
+		font.m_pointSize = childValue.GetLong();
+    }
+    else if ( ind == 1 )
+    {
+        int fam = childValue.GetLong();
+        if ( fam < wxDEFAULT ||
+             fam > wxTELETYPE )
+             fam = wxDEFAULT;
+		font.m_family = fam;
+    }
+    else if ( ind == 2 )
+    {
+        wxString faceName;
+        int faceIndex = childValue.GetLong();
+
+        if ( faceIndex >= 0 )
+            faceName = wxPGGlobalVars->m_fontFamilyChoices->GetLabel(faceIndex);
+
+		font.m_faceName = faceName;
+    }
+    else if ( ind == 3 )
+    {
+        int st = childValue.GetLong();
+        if ( st != wxFONTSTYLE_NORMAL &&
+             st != wxFONTSTYLE_SLANT &&
+             st != wxFONTSTYLE_ITALIC )
+             st = wxFONTWEIGHT_NORMAL;
+		font.m_style = st;
+    }
+    else if ( ind == 4 )
+    {
+        int wt = childValue.GetLong();
+        if ( wt != wxFONTWEIGHT_NORMAL &&
+             wt != wxFONTWEIGHT_LIGHT &&
+             wt != wxFONTWEIGHT_BOLD )
+             wt = wxFONTWEIGHT_NORMAL;
+		font.m_weight = wt;
+    }
+    else if ( ind == 5 )
+    {
+		font.m_underlined = childValue.GetBool();
+    }
+	
+	thisValue = WXVARIANT( TypeConv::FontToString( font ) );
+	
+#if wxVERSION_NUMBER >= 2900
+	return thisValue;
+#endif
+}

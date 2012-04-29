@@ -19,10 +19,10 @@ project "additional-components-plugin"
     flags               {"ExtraWarnings"}
     links               {"plugin-interface", "TiCPP"}
 
-    local libs = ""
+    local libs = "std,richtext"
 if wxUseMediaCtrl then
     defines             {"USE_MEDIACTRL"}
-    libs                = "media"
+    libs                = libs .. ",media"
 end
     configuration "not windows"
         targetdir       "../../../output/lib/wxformbuilder"

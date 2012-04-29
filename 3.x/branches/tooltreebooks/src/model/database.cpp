@@ -433,7 +433,7 @@ void ObjectDatabase::SetDefaultLayoutProperties(PObjectBase sizeritem)
 
 	PProperty proportion = sizeritem->GetProperty( wxT("proportion") );
 
-	if ( childInfo->IsSubclassOf( wxT("sizer") ) || obj_type == wxT("splitter") || childInfo->GetClassName() == wxT("spacer") )
+	if ( childInfo->IsSubclassOf( wxT("sizer") ) || childInfo->IsSubclassOf( wxT("gbsizer") ) || obj_type == wxT("splitter") || childInfo->GetClassName() == wxT("spacer") )
 	{
 		if ( proportion )
 		{
@@ -751,11 +751,13 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
     // that used to cause crashes when trying to debug.
     wxString wxver = wxT("");
 
-#ifdef __WXDEBUG__
+#ifdef DEBUG 
     #if wxVERSION_NUMBER < 2900
         wxver = wxT("d");
     #endif
-    wxver = wxver + wxString::Format( wxT("-%i%i"), wxMAJOR_VERSION, wxMINOR_VERSION );
+	#ifdef APPEND_WXVERSION
+		wxver = wxver + wxString::Format( wxT("-%i%i"), wxMAJOR_VERSION, wxMINOR_VERSION );
+	#endif
 #endif
 
 	try
@@ -872,10 +874,10 @@ bool ObjectDatabase::HasCppProperties(wxString type)
 			type == wxT("toolbar")			||
 			type == wxT("tool")				||
 			type == wxT("splitter")			||
-			type == wxT("sizer")			||
 			type == wxT("treelistctrl")		||
+			type == wxT("sizer")			||
 			type == wxT("gbsizer")          ||
-            type == wxT("WizardPageSimple")
+            type == wxT("wizardpagesimple")
 			);
 }
 
@@ -1260,7 +1262,7 @@ bool ObjectDatabase::ShowInPalette(wxString type)
 {
 	return (type == wxT("form")					||
             type == wxT("wizard")               ||
-            type == wxT("WizardPageSimple")     ||
+            type == wxT("wizardpagesimple")     ||
 			type == wxT("menubar_form")			||
 			type == wxT("toolbar_form")			||
 			type == wxT("sizer")				||
