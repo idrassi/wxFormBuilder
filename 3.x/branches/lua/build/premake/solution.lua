@@ -56,18 +56,18 @@ end
 
     dofile( scriptDir .. "/ticpp.lua" )
     dofile( scriptDir .. "/plugin-interface.lua" )
-	dofile( scriptDir .. "/wxflatnotebook.lua" )
 
 if wxVersion < "2.9" then
+	dofile( scriptDir .. "/wxflatnotebook.lua" )
     dofile( scriptDir .. "/wxpropgrid.lua" )
     dofile( scriptDir .. "/wxscintilla.lua" )
+	dofile( scriptDir .. "/plugins/wxadditions-mini.lua" )
 end
     dofile( scriptDir .. "/plugins/additional.lua" )
     dofile( scriptDir .. "/plugins/common.lua" )
     dofile( scriptDir .. "/plugins/containers.lua" )
     dofile( scriptDir .. "/plugins/forms.lua" )
     dofile( scriptDir .. "/plugins/layout.lua" )
-    dofile( scriptDir .. "/plugins/wxadditions-mini.lua" )
     dofile( scriptDir .. "/wxformbuilder.lua" )
     dofile( scriptDir .. "/utilities.lua" )
 
