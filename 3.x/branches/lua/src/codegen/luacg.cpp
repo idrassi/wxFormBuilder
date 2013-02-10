@@ -1259,7 +1259,9 @@ void LuaCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget, wxString
 					sub2 = obj->GetChild(1)->GetChild(0);
 
 					wxString _template;
-					if ( obj->GetProperty( wxT("splitmode") )->GetValue() == wxT("wxSPLIT_VERTICAL") )
+					bool bSplitVertical = false;
+					wxString strMode = obj->GetProperty( wxT("splitmode") )->GetValue();
+					if ( bSplitVertical = (strMode == wxT("wxSPLIT_VERTICAL")) )
 					{
 						_template = wxT("#utbl$name:SplitVertically( ");
 					}
@@ -1270,6 +1272,7 @@ void LuaCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget, wxString
 				
 					_template = _template + wxT("#utbl") + sub1->GetProperty( wxT("name") )->GetValue() +
 						wxT(", #utbl") + sub2->GetProperty( wxT("name") )->GetValue() + wxT(", $sashpos )");
+					_template = _template + wxT("#nl #utbl$name") + wxT(":SetSplitMode(") + wxString::Format(wxT("%d"),(bSplitVertical ? 1 : 0)) + wxT(")");
 					_template.Replace(wxT("#utbl"), m_strUITable + wxT("."));
 					
 					LuaTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_strUserIDsVec );
