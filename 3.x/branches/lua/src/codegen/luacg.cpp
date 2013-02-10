@@ -1225,18 +1225,15 @@ void LuaCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget, wxString
 				// It's not a good practice to embed templates into the source code,
 				// because you will need to recompile...
 				
-				wxString _template =	wxT("#utbl")  + strClassName + wxT(":SetSizer( #utbl$name ) #nl ") + wxT("#utbl") + 
-										strClassName + wxT(":Layout()") +
-										wxT("#ifnull #parent $size") +
-										wxT("@{ #nl #utbl$name:Fit( #utbl" +  strClassName + wxT(" ) @}"));
-										
-			/*wxString _template =	wxT("#utbl#wxparent :SetSizer( #utbl$name ) #nl #utbl#wxparent:Layout()") 
-																wxT("#ifnull #parent $size") 
-																wxT("@{ #nl #utbl$name:Fit( #utbl#wxparent  ) @}");*/
-				_template.Replace(wxT("#utbl"), m_strUITable + wxT("."));
+				wxString _template =	wxT("#utbl#parent$name:SetSizer( #utbl$name ) #nl")
+										wxT("#utbl#parent$name:Layout()")
+										wxT("#ifnull #parent $size")
+										wxT("@{ #nl #utbl$name:Fit( #utbl#wxparent $name ) @}");
 
 				LuaTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_strUserIDsVec );
-				m_source->WriteLn(parser.ParseTemplate());
+				wxString res  = parser.ParseTemplate();
+				res.Replace(parser.RootWxParentToCode(),wxT(""));
+				m_source->WriteLn(res);
 			}
 		}
 		else if ( type == wxT("splitter") )
