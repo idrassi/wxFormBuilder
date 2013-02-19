@@ -1400,8 +1400,25 @@ void MainFrame::OnAuiNotebookPageChanged( wxAuiNotebookEvent& event )
 					}
 				}
 				break;
+				
+			case 4: // Lua panel
+				if( (m_lua != NULL) && (m_rightSplitter != NULL) )
+				{
+					panel_size = m_lua->GetClientSize();
+					sash_pos = m_rightSplitter->GetSashPosition();
 
-			case 4: // XRC panel
+					Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > Lua panel: width = %d sash pos = %d"), panel_size.GetWidth(), sash_pos);
+
+					if(panel_size.GetWidth() > sash_pos)
+					{
+						// set the sash position
+						Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > reset sash position"));
+						m_rightSplitter->SetSashPosition(panel_size.GetWidth());
+					}
+				}
+				break;
+
+			case 5: // XRC panel
 				if((m_xrc != NULL) && (m_rightSplitter != NULL))
 				{
 					panel_size = m_xrc->GetClientSize();
@@ -1418,22 +1435,7 @@ void MainFrame::OnAuiNotebookPageChanged( wxAuiNotebookEvent& event )
 				}
 				break;
 				
-			case 5: // Lua panel
-				if( (m_lua != NULL) && (m_rightSplitter != NULL) )
-				{
-					panel_size = m_lua->GetClientSize();
-					sash_pos = m_rightSplitter->GetSashPosition();
-
-					Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > Lua panel: width = %d sash pos = %d"), panel_size.GetWidth(), sash_pos);
-
-					if(panel_size.GetWidth() > sash_pos)
-					{
-						// set the sash position
-						Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > reset sash position"));
-						m_rightSplitter->SetSashPosition(panel_size.GetWidth());
-					}
-				}
-				break;
+			
 
 			default:
 				if(m_visualEdit != NULL)
@@ -1617,8 +1619,8 @@ wxWindow * MainFrame::CreateDesignerWindow( wxWindow *parent )
 	m_icons.Add( AppBitmaps::GetBitmap( wxT( "c++" ), 16 ) );
 	m_icons.Add( AppBitmaps::GetBitmap( wxT( "python" ), 16 ) );
 	m_icons.Add( AppBitmaps::GetBitmap( wxT( "php" ), 16 ) );
-	m_icons.Add( AppBitmaps::GetBitmap( wxT( "xrc" ), 16 ) );
 	m_icons.Add( AppBitmaps::GetBitmap( wxT( "lua" ), 16 ) );
+	m_icons.Add( AppBitmaps::GetBitmap( wxT( "xrc" ), 16 ) );
 	m_notebook->SetImageList( &m_icons );
 #else
 	m_notebook = new wxAuiNotebook( parent, ID_EDITOR_FNB, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP );
@@ -1651,17 +1653,19 @@ wxWindow * MainFrame::CreateDesignerWindow( wxWindow *parent )
 	m_notebook->SetPageBitmap( 3, AppBitmaps::GetBitmap( wxT( "designer" ), 16 ) );
 #endif
 
+	m_lua = new LuaPanel(m_notebook, -1);
+	m_notebook->AddPage(m_lua,wxT( "Lua" ), false, 4 );
+#ifndef USE_FLATNOTEBOOK
+	m_notebook->SetPageBitmap( 5, AppBitmaps::GetBitmap( wxT( "lua" ), 16 ) );
+#endif
+
 	m_xrc = new XrcPanel( m_notebook, -1 );
-	m_notebook->AddPage( m_xrc, wxT( "XRC" ), false, 4 );
+	m_notebook->AddPage( m_xrc, wxT( "XRC" ), false, 5 );
 #ifndef USE_FLATNOTEBOOK
 	m_notebook->SetPageBitmap( 4, AppBitmaps::GetBitmap( wxT( "xrc" ), 16 ) );
 #endif
 
-	m_lua = new LuaPanel(m_notebook, -1);
-	m_notebook->AddPage(m_lua,wxT( "Lua" ), false, 5 );
-#ifndef USE_FLATNOTEBOOK
-	m_notebook->SetPageBitmap( 5, AppBitmaps::GetBitmap( wxT( "lua" ), 16 ) );
-#endif
+
 
 	return m_notebook;
 }
