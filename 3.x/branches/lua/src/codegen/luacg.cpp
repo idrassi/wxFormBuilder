@@ -1228,7 +1228,7 @@ void LuaCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget, wxString
 				wxString _template =	wxT("#utbl#parent$name:SetSizer( #utbl$name ) #nl")
 										wxT("#utbl#parent$name:Layout()")
 										wxT("#ifnull #parent $size")
-										wxT("@{ #nl #utbl$name:Fit( #utbl#wxparent $name ) @}");
+										wxT("@{ #nl #utbl$name:Fit( #utbl#parent $name ) @}");
 
 				LuaTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_strUserIDsVec );
 				wxString res  = parser.ParseTemplate();
