@@ -49,9 +49,9 @@ Lua code generation written by
 			#ifparenttypeequal "container"
 				@{ #utbl#parent $name:Connect( wx.wxEVT_RIGHT_DOWN, #utbl#parent $name #append OnContextMenu ) @}
 			#ifparenttypeequal "form"
-				@{ #utbl$name:Connect( wx.wxEVT_RIGHT_DOWN, #utbl#parent $name #append OnContextMenu ) @}
+				@{ #utbl#parent$name:Connect( wx.wxEVT_RIGHT_DOWN, #utbl#parent $name #append OnContextMenu ) @}
 			#ifparenttypeequal "tool"
-				@{ #utbl$name:Connect( wx.aui.EVT_AUITOOLBAR_TOOL_DROPDOWN, #utbl#parent $name #append OnDropDownMenu ) @}
+				@{ #utbl#parent$name:Connect( wx.aui.EVT_AUITOOLBAR_TOOL_DROPDOWN, #utbl#parent $name #append OnDropDownMenu ) @}
 		@}@}
 		#ifparenttypeequal "menubar"
 		@{
@@ -69,27 +69,27 @@ Lua code generation written by
 			#ifparenttypeequal "widget"
 			@{
 				function #utbl#parent $name #append OnContextMenu(  event ) #indent #nl
-				#utbl#parent $name:PopupMenu( #utbl$name, event.GetPosition() ) #nl #unindent #nl end
+				#utbl#parent $name:PopupMenu( #utbl$name, event:GetPosition() ) #nl #unindent #nl end
 			@}
 			#ifparenttypeequal "container"
 			@{
 				function #utbl#parent $name #append OnContextMenu(  event ) #indent #nl
-				#utbl#parent $name:PopupMenu( #utbl$name, event.GetPosition() ) #nl #unindent #nl end
+				#utbl#parent $name:PopupMenu( #utbl$name, event:GetPosition() ) #nl #unindent #nl end
 			@}
 			#ifparenttypeequal "form"
 			@{
 				function #utbl#parent $name #append OnContextMenu(  event ) #indent #nl
-				#utbl#parent$name:PopupMenu( #utbl$name, event.GetPosition() ) #nl #unindent #nl end
+				#utbl#parent$name:PopupMenu( #utbl$name, event:GetPosition() ) #nl #unindent #nl end
 			@}
 			#ifparenttypeequal "tool"
 			@{
 				function #utbl#parent $name #append OnDropDownMenu( event ) #indent #nl
 				if event.IsDropDownClicked() == True  then #indent #nl
-					#utbl#wxparent $name:SetToolSticky( event.GetId(), True ) #nl
-					local rect = #utbl#wxparent $name:GetToolRect( event.GetId() ) #nl
-					local pt = #utbl#wxparent$name:ScreenToClient( #utbl#wxparent $name:ClientToScreen( rect.GetBottomLeft() ) ); #nl
+					#utbl#wxparent $name:SetToolSticky( event:GetId(), True ) #nl
+					local rect = #utbl#wxparent $name:GetRect( event:GetId() ) #nl
+					local pt = #utbl#wxparent$name:ScreenToClient( #utbl#wxparent $name:ClientToScreen( rect:GetBottomLeft() ) ); #nl
 					#utbl#wxparent $name:PopupMenu( #utbl#wxparent$name, pt ) #nl
-					#utbl#wxparent $name:SetToolSticky( event.GetId(), False ) #nl #unindent end #unindent #nl end
+					#utbl#wxparent $name:SetToolSticky( event:GetId(), False ) #nl #unindent end #unindent #nl end
 			@}
 		@}@}
 	</template>
@@ -102,7 +102,7 @@ Lua code generation written by
 
   <templates class="wxMenuItem">
 	<template name="construction">
-        #utbl$name = #class( #utbl#parent $name, $id, $label #ifnotnull $shortcut @{ + u"\t" + $shortcut @}, $help, $kind )</template>
+        #utbl$name = #class( #utbl#parent $name, $id, $label #ifnotnull $shortcut @{ .."\t" .. $shortcut @}, $help, $kind )</template>
     <template name="settings">
 		#ifnotnull $bitmap
 		@{
