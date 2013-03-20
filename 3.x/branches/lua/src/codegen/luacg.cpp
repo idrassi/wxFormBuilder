@@ -428,7 +428,7 @@ wxString LuaCodeGenerator::ConvertLuaString( wxString text )
 	return result;
 }
 
-void LuaCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectBase form )
+void LuaCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectBase form,const  wxString & genFileFullPath)
 {
 	if (!userClasses)
 	{
@@ -444,6 +444,12 @@ void LuaCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectB
 
 	// Start file
 	wxString code = GetCode( userClasses, wxT("file_comment") );
+	m_source->WriteLn( code );
+	
+	wxString fullGenPath = genFileFullPath;
+	fullGenPath.Replace(wxT("\\"), wxT("\\\\"));
+	
+	code = wxT("package.path = \"") + fullGenPath + wxT(".lua\"");
 	m_source->WriteLn( code );
 
 	code = GetCode( userClasses, wxT("source_include") );
@@ -609,10 +615,11 @@ bool LuaCodeGenerator::GenerateCode( PObjectBase project )
 	if ( propNamespace )
 	{
 		m_strUITable = propNamespace->GetValueAsString();
-		if(m_strUITable.length() > 0){
-			code = m_strUITable +  wxT(" = {} \n");
-			m_source->WriteLn( code );
+		if(m_strUITable.length() <= 0){
+			m_strUITable = wxT("UI");//default value ... m_strUITable shouldn't be empty
 		}
+		code = m_strUITable +  wxT(" = {} \n");
+		m_source->WriteLn( code );
 	}
 	
 	
