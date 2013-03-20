@@ -167,7 +167,7 @@ Lua code generation written by
 		@{
 		#ifequal #parent $aui_managed "1"
 		@{ #nl
-			#utbl#wxparent$name.m_mgr:AddPane( #utbl$name, wxaui.wxAuiPaneInfo()#ifnotnull $aui_name
+			#utbl#parent$name.m_mgr:AddPane( #utbl$name, wxaui.wxAuiPaneInfo()#ifnotnull $aui_name
 			@{:Name( $aui_name )@}:$docking()#ifnotnull $caption 
 			@{:Caption( $caption )@}#ifequal $caption_visible "0"
 			@{:CaptionVisible( $caption_visible )@}#ifequal $close_button "0"

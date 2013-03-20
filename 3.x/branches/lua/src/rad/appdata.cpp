@@ -2162,7 +2162,7 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
 
 			codegen.SetSourceWriter( lua_cw );
 
-			codegen.GenerateInheritedClass( obj, form );
+			codegen.GenerateInheritedClass( obj, form, genFileFullPath );
 		}
 
 		wxLogStatus( wxT( "Class generated at \'%s\'." ), path.c_str() );

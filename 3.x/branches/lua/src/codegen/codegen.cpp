@@ -376,7 +376,10 @@ void TemplateParser::ParseLuaTable()
 	PProperty propNs= project->GetProperty( wxT( "ui_table" ) );
 	if ( propNs )
 	{
-		m_out <<propNs->GetValueAsString() + wxT(".");
+		wxString strTableName = propNs->GetValueAsString();
+		if(strTableName.length() <= 0)
+			strTableName = wxT("UI");
+		m_out <<strTableName + wxT(".");
 	}
 }
 

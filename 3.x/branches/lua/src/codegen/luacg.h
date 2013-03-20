@@ -243,7 +243,7 @@ public:
 	/**
 	* Generate an inherited class
 	*/
-	void GenerateInheritedClass( PObjectBase userClasses, PObjectBase form );
+	void GenerateInheritedClass( PObjectBase userClasses, PObjectBase form,const wxString & genFileFullPath );
 };
 
 
