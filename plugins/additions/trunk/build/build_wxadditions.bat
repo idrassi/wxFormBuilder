@@ -120,13 +120,14 @@ goto SHOW_OPTIONS
 :SHOW_OPTIONS
 echo.
 echo      Compiler Options:
-echo           MINGW  = MinGW Gcc v3.x.x compiler
-echo           MINGW4 = MinGW Gcc v4.x.x compiler
-echo           VCTK   = Visual C++ 7.1 Toolkit
-echo           VC71   = Visual C++ 7.1
-echo           VC80   = Visual C++ 8.0
-echo           VC90   = Visual C++ 9.0
-echo           VC100  = Visual C++ 10.0
+echo           MINGW    = MinGW Gcc v3.x.x compiler
+echo           MINGW4   = MinGW Gcc v4.x.x compiler
+echo           VCTK     = Visual C++ 7.1 Toolkit
+echo           VC71     = Visual C++ 7.1
+echo           VC80     = Visual C++ 8.0
+echo           VC90     = Visual C++ 9.0
+echo           VC100    = Visual C++ 10.0
+echo           VC100_64 = Visual C++ 10.0 64bit
 echo.
 goto END
 
