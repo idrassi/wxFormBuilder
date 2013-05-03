@@ -2,13 +2,13 @@
 ::**************************************************************************
 :: File:           build_wxadditions.bat
 :: Version:        1.07
-:: Name:           RJP Computing 
+:: Name:           RJP Computing
 :: Date:           11/09/2009
 :: Description:    Use this to build all the projects for wxAdditions.
 ::                 Make sure to add the calls to any additions made to the
 ::                 wxAdditions library.
 ::
-:: Prerequistes:   
+:: Prerequistes:
 ::**************************************************************************
 
 if (%1) == () goto ERROR
@@ -114,7 +114,7 @@ goto SHOW_USAGE
 
 :SHOW_USAGE
 echo.
-echo Usage: "wxBuild_default.bat <Compiler{MINGW|VCTK|VC71|VC80|VC90}>"
+echo Usage: "wxBuild_default.bat <Compiler{MINGW|VCTK|VC71|VC80|VC90|VC100}>"
 goto SHOW_OPTIONS
 
 :SHOW_OPTIONS
@@ -126,6 +126,7 @@ echo           VCTK   = Visual C++ 7.1 Toolkit
 echo           VC71   = Visual C++ 7.1
 echo           VC80   = Visual C++ 8.0
 echo           VC90   = Visual C++ 9.0
+echo           VC100  = Visual C++ 10.0
 echo.
 goto END
 
