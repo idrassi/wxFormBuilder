@@ -24,9 +24,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * @file codeparser.h
- * @author 
- * @date 
- * @brief 
+ * @author
+ * @date
+ * @brief
  */
 #ifndef CODEPARSER_H_INCLUDED
 #define CODEPARSER_H_INCLUDED
@@ -57,19 +57,19 @@ public:
 	 */
 	void SetHeading( wxString heading );
 
-	/* Stores any code/documentation located between the previous function and the current function. */
+	/** Stores any code/documentation located between the previous function and the current function. */
 	void SetDocumentation( wxString documentation )
 	{
 		m_documentation = documentation;
 	}
 
-	/** Retrieves the body code. */
+	/** Retrieves the body of the function. */
 	wxString GetContents()
 	{
 		return m_functionContents;
 	}
 
-	/** Retrieves the documentation. */
+	/** Retrieves the documentation. Basically anything between the function declaration and the previous function*/
 	wxString GetDocumentation()
 	{
 		return m_documentation;
@@ -87,9 +87,11 @@ protected:
 WX_DECLARE_STRING_HASH_MAP( Function*, FunctionMap );
 #define funcIterator FunctionMap::iterator
 
+class CppTemplateParser;
+
 /**
  * @class CodeParser
- * Parses the source and header files for all code added to the generated.
+ * Parses the source and header files for all code added to the files after generation.
  */
 class CodeParser
 {
@@ -111,10 +113,10 @@ public:
 	{
 		return m_userMemebers;
 	}
-	
+
 	/** Returns the Documentation of a function by name. */
 	wxString GetFunctionDocumentation( wxString function );
-	  
+
 	/** Returns the contents of a function by name and then removes it from the list of remaining functions. */
 	wxString GetFunctionContents( wxString function );
 
@@ -148,7 +150,7 @@ class CCodeParser : public CodeParser
 private:
 	wxString m_hFile; /**< @todo Description needed. */
 	wxString m_cFile; /**< @todo Description needed. */
-	
+
 public:
 	/** Constructor. */
 	CCodeParser() {}
@@ -187,15 +189,15 @@ public:
 	/** Extracts the contents of the generated class declaration. */
 	void ParseCClass( wxString code );
 
-	/** @todo Description needed. */
-	wxString ParseSourceFunctions( wxString code );
+	/** parses cpp file for functions and stores their contents in a hashmap with the function names as keys. */
+	void ParseSourceFunctions( wxString code );
 
-	/** @todo Description needed. */
+	/** searches code for code blocks starting at function start, returns contents of block. */
 	wxString ParseBrackets( wxString code, int& functionStart );
 
-	/** @todo Description needed. */
+	/** retrieves class members declared after the generated memebers */
 	void ParseCUserMembers( wxString code );
-	
+
 /***************/
 };
 
