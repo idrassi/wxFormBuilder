@@ -369,7 +369,7 @@ public:
 						//FIXME : try to fix why the reparent is not fully working
 						control->Reparent(tb);
 					}
-					
+
 					tb->AddControl( control );
 				}
 			}
@@ -710,10 +710,10 @@ public:
 			wxImage img( choices[i].BeforeFirst( wxChar(58) ) );
 			bcombo->Append(choices[i].AfterFirst( wxChar(58) ), wxBitmap(img));
 		}
-			
+
 		return bcombo;
 	}
-	
+
 	ticpp::Element* ExportToXrc(IObject *obj)
 	{
 		ObjectToXrcFilter xrc( obj, "wxBitmapComboBox", obj->GetPropertyAsString("name") );
@@ -956,7 +956,7 @@ public:
 
 		return tc;
 	}
-	
+
 	virtual void Cleanup( wxObject* obj )
     {
     }
@@ -1810,12 +1810,10 @@ BEGIN_LIBRARY()
 	WINDOW_COMPONENT( "wxRadioBox", RadioBoxComponent )
 	MACRO(wxRA_SPECIFY_ROWS)
 	MACRO(wxRA_SPECIFY_COLS)
-	MACRO(wxRA_USE_CHECKBOX)
 
 	WINDOW_COMPONENT( "wxRadioButton", RadioButtonComponent )
 	MACRO(wxRB_GROUP)
 	MACRO(wxRB_SINGLE)
-	MACRO(wxRB_USE_CHECKBOX)
 
 	WINDOW_COMPONENT( "wxCheckBox", CheckBoxComponent )
 	MACRO(wxCHK_2STATE)
