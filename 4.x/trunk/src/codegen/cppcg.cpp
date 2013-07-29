@@ -177,7 +177,7 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 
 				int pointSize = font.GetPointSize();
 				wxString size = pointSize <= 0 ? "wxNORMAL_FONT->GetPointSize()" : wxString::Format( "%i", pointSize );
-				
+
 				wxString ffname =  ( font.m_faceName.empty() ? "wxEmptyString" : "\"" + font.m_faceName + "\")" );
 				result	= wxString::Format("wxFont( %s, %i, %i, %i, %s, %s )",
 				                           size.c_str(),
@@ -379,9 +379,8 @@ void CppCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectB
 		wxLogError( _("This not a UserClasses object") );
 		return;
 	}
-
 	m_inheritedCodeParser.ParseCFiles(userClasses->GetPropertyAsString( _("name") ));
-	
+
 	//(FileCodeWriter*)m_header->
 	wxString type = userClasses->GetPropertyAsString("type");
 	wxString userCode;
@@ -398,7 +397,7 @@ void CppCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectB
 	code = GetCode( userClasses, "header_include" );
 	m_header->WriteLn( code );
 	m_header->WriteLn( wxEmptyString );
-	m_header->WriteLn("//// end generated include");
+	m_header->WriteLn("/** Any code above this line will be overwritten. Place user includes and defines below */");
 
 	m_header->WriteLn( m_inheritedCodeParser.GetUserIncludes() );
 	if ( !userCode.IsEmpty() )
@@ -487,7 +486,7 @@ void CppCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectB
 	code = GetCode( userClasses, type + "_cons_decl" );
 	m_header->WriteLn( code );
 	m_header->Unindent();
-	m_header->WriteLn("//// end generated class members");
+	m_header->WriteLn("/** Any code above this line will be overwritten. Place members below */");
 
 	userCode = m_inheritedCodeParser.GetUserMembers();
 	if ( !userCode.IsEmpty() )
@@ -1800,9 +1799,9 @@ void CppCodeGenerator::GenDestruction( PObjectBase obj )
 void CppCodeGenerator::GenAddToolbar( PObjectInfo info, PObjectBase obj )
 {
 	wxArrayString arrCode;
-	
+
 	GetAddToolbarCode( info, obj, arrCode );
-	
+
 	for( size_t i = 0; i < arrCode.GetCount(); i++ ) m_source->WriteLn( arrCode[i] );
 }
 
@@ -1824,7 +1823,7 @@ void CppCodeGenerator::GetAddToolbarCode( PObjectInfo info, PObjectBase obj, wxA
 			if( codelines.Index( code ) == wxNOT_FOUND )
 				codelines.Add( code );
 	}
-	
+
 	// Proceeding recursively with the base classes
 	for ( unsigned int i = 0; i < info->GetBaseClassCount(); i++ )
 	{
