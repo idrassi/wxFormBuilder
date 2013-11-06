@@ -10,7 +10,7 @@ else
 endif
 
 get-orig-source:
-	svn export https://wxformbuilder.svn.sourceforge.net/svnroot/wxformbuilder/plugins/additions/trunk/wxfbPlugin wxfb-wxadditions
+	svn export svn://svn.code.sf.net/p/wxformbuilder/code/plugins/additions/trunk/wxfbPlugin wxfb-wxadditions
 	
 	cd $(CURDIR)/wxfb-wxadditions && install/linux/create_src_tarball.sh
 	rm -rf $(CURDIR)/wxfb-wxadditions
