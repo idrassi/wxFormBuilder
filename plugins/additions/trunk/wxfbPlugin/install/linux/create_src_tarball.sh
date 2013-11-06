@@ -29,7 +29,7 @@ function make_src_tarball
 	# create Makefiles
 
 	  # Build premake
-	  PREMAKE_DIR=../build/premake
+	  PREMAKE_DIR=../../../../build/premake
 	  make -C$PREMAKE_DIR/src -f../build/Makefile
 
 	  # Use premake to generate Makefiles
