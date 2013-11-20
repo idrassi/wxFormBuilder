@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<codegen language="Python">
-	
-	<templates class="wxTreeListCtrl">
-		<template name="construction">
-			-- WARNING: wxLUA code generation isn't supported for this widget yet. #nl
-			#utbl$name = wx.wxWindow( #utbl#wxparent $name )
-		</template>
-	</templates>
-	
-	<templates class="wxTreeListCtrlColumn">
-		<template name="column_add"/>
-	</templates>
+<codegen language="Lua">
 	
 	<templates class="wxPlotCtrl">
 		<template name="construction">
