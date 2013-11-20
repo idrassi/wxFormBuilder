@@ -23,8 +23,4 @@ dofile( "awx/awx4.lua" )
 dofile( "things/things4.lua" )
 dofile( "plotctrl/plotctrl4.lua" )
 dofile( "ledBarGraph/ledBarGraph4.lua" )
---dofile( "treelistctrl/treelistctrl4.lua" )
---dofile( "propgrid/propgrid4.lua" )
 dofile( "wxFlatNotebook/wxFlatNotebook4.lua" )
---dofile( "wxScintilla/wxScintilla4.lua" )
-
