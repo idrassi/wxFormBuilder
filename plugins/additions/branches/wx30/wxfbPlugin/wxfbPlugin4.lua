@@ -12,6 +12,11 @@
 project( "wxAdditions_Plugin" )
 kind	"SharedLib"
 
+wx.Configure( true )
+
+targetname( "wxadditions" )
+targetprefix( "lib" )
+
 function CommonSetup()
 	defines			{
 						"TIXML_USE_TICPP",
@@ -29,13 +34,13 @@ function CommonSetup()
 					}
 	libdirs			{
 						"lib"
+						"../gcc" .. _OPTIONS["compiler-version"] or "" .. "_dll"
 					}
 	links			{
 						"plugin-interface",
 						"TiCPP",
 						wx.LibName( "plotctrl", isDebug ),
 						wx.LibName( "things", isDebug ),
-						--wx.LibName( "treelistctrl", isDebug ),
 						wx.LibName( "awx", isDebug ),
 						wx.LibName( "ledbargraph", isDebug ),
 					}
@@ -43,4 +48,4 @@ function CommonSetup()
 end
 
 CommonSetup()
-wx.Configure( true )
+
