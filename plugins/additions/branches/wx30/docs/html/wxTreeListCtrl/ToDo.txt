@@ -1,0 +1,9 @@
+TO DO:
+======
+- unicode support ?
+
+
+Future enhancements:
+====================
+- very very long term: unification between wxTreeListCtrl, wxGrid, wxDataViewCtrl, wxTreeMultiCtrl, wxTreeCtrl....
+

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<codegen language="Python">
+	<templates class="wxAdditions">
+	</templates>
+	
+	<templates class="wxPropertyGrid">
+		<template name="construction">
+			-- WARNING: wxLUA code generation isn't supported for this widget yet. #nl
+			#utbl$name = wx.wxWindow( #utbl#wxparent $name )
+		</template>
+	</templates>
+
+	<templates class="wxPropertyGridManager">
+		<template name="construction">
+			-- WARNING: wxLUA code generation isn't supported for this widget yet. #nl
+			#utbl$name = wx.wxWindow( #utbl#wxparent $name )
+		</template>
+	</templates>
+
+
+	<templates class="wxFlatNotebook">
+		<template name="construction">
+			-- WARNING: wxLUA code generation isn't supported for this widget yet. #nl
+			#utbl$name = wx.wxWindow( #utbl#wxparent $name )
+		</template>
+	</templates>
+
+	<templates class="flatnotebookpage">
+		<template name="page_add"/>
+	</templates>
+	
+	<templates class="wxScintilla">
+		<template name="construction">
+			-- WARNING: wxLUA code generation isn't supported for this widget yet. #nl
+			#utbl$name = wx.wxWindow( #utbl#wxparent $name )
+		</template>
+	</templates>
+
+</codegen>
