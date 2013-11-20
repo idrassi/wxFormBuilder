@@ -34,7 +34,7 @@ function CommonSetup()
 					}
 	libdirs			{
 						"lib",
-						"../gcc" .. _OPTIONS["compiler-version"] or "" .. "_dll"
+						"../gcc" .. ( _OPTIONS["compiler-version"] or "" ) .. "_dll"
 					}
 	links			{
 						"plugin-interface",
