@@ -209,7 +209,7 @@ void wxLedBarGraph::OnPaint( wxPaintEvent& )
 		if( ! drawMe ){
 			//led off
 			dim = .15;
-		}else if (  maxedOut && (i == m_nBars -1 || i == 0) || (i == m_nBars/2) && m_mode == ledBG_DOUBLE_SIDED ) {
+		}else if (  maxedOut && (i == m_nBars -1 || i == 0) || (i == m_nBars/2) && (m_mode == ledBG_DOUBLE_SIDED) ) {
             //max it out, dude!
             dim = 1;
         }else{
