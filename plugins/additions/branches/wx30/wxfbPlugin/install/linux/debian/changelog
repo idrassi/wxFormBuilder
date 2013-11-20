@@ -1,0 +1,35 @@
+wxfb-wxadditions (1.14.0-0ubuntu1~precise1) precise; urgency=low
+
+  * sync with upstream.
+
+ -- Michal Bližňák (PGP key for Launchpad) <michal.bliznak@gmail.com>  Wed, 06 Nov 2013 12:54:38 +0100
+
+wxfb-wxadditions (1.13.0-0ubuntu1~lucid1) lucid; urgency=low
+
+  * sync with upstream.
+
+ -- Michal Bližňák (PGP key for Launchpad) <michal.bliznak@gmail.com>  Thu, 05 Apr 2012 15:12:28 +0200
+
+wxfb-wxadditions (1.12.0-0ubuntu1~lucid1) lucid; urgency=low
+
+  * Sync with upstream.
+
+ -- Michal Bližňák (PGP key for Launchpad) <michal.bliznak@gmail.com>  Mon, 19 Mar 2012 17:24:21 +0100
+
+wxfb-wxadditions (1.0.9-0ubuntu1~hardy1) hardy; urgency=low
+
+  * Sync with upstrean.
+
+ -- Ryan Pusztai <rpusztai@gmail.com>  Wed, 17 Nov 2010 15:24:22 -0500
+
+wxfb-wxadditions (1.0.6-0ubuntu1~intrepid1) intrepid; urgency=low
+
+  * Updated wxTreeListCtrl.
+
+ -- Ryan Mulder <rjmyst3@gmail.com>  Sun, 08 Feb 2009 16:46:22 -0500
+ 
+wxfb-wxadditions (1.0.5-0ubuntu1~intrepid1) intrepid; urgency=low
+
+  * Initial Release.
+
+ -- Ryan Mulder <rjmyst3@gmail.com>  Thu,  16 Oct 2008 22:16:25 -0400
