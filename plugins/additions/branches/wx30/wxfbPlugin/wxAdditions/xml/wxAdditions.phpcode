@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <codegen language="PHP">
 	
-	<templates class="wxTreeListCtrl">
-		<template name="construction">
-			@/* WARNING: PHP code generation isn't supported for this widget yet. */#nl
-			@$this->$name = new wxWindow( #wxparent $name );
-		</template>
-	</templates>
-	
-	<templates class="wxTreeListCtrlColumn">
-		<template name="column_add"/>
-	</templates>
-	
 	<templates class="wxPlotCtrl">
 		<template name="construction">
 			@/* WARNING: PHP code generation isn't supported for this widget yet. */#nl
