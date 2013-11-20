@@ -38,6 +38,12 @@ newoption
 	description = "Link against the monolithic build"
 }
 
+newoption
+{
+	trigger = "targetdir-base",
+	description = "Base target directory. Defaults to ../../"
+}
+
 -- Namespace
 wx = {}
 
@@ -45,6 +51,7 @@ local wxVer = _OPTIONS["wx-version"] or "28"
 local compilerVersion = _OPTIONS["compiler-version"] or ""
 local toolchain = iif( ActionUsesGCC(), "gcc", "vc" ) .. compilerVersion
 local unicodeSuffix = iif( _OPTIONS["unicode"], "u", "" )
+local targetDirBase = _OPTIONS["targetdir-base"] or "../../"
 
 if ActionUsesMSVC() and 30 <= tonumber( wxVer ) then
 	if _ACTION == "vs2005" then
@@ -124,7 +131,7 @@ function wx.Configure( shouldSetTarget )
 		end
 		local setupHincludeDir = libDir .. "/msw" .. unicodeSuffix
 		local setupHincludeDir64 = libDir64 .. "/msw" .. unicodeSuffix
-		local targetDir = "../../lib/gcc_dll"
+		local targetDir = targetDirBase .. "lib/gcc_dll"
 				
 		configuration { "Debug", "not x64" }
 			AddSystemPath( setupHincludeDir .. "d" )
@@ -188,10 +195,10 @@ function wx.Configure( shouldSetTarget )
 			   targetname 	( wx.LibName( targetName, false ) )
 			   
 			configuration	{ "x64" }
-				targetdir	( "../../" .. toolchain .. "_x64_" .. linktype )
+				targetdir	( targetDirBase .. toolchain .. "_x64_" .. linktype )
 			 
 			configuration	{ "not x64" }
-				targetdir	( "../../" .. toolchain .. "_" .. linktype )
+				targetdir	( targetDirBase .. toolchain .. "_" .. linktype )
 
 		end
 		configuration( {} )
@@ -218,12 +225,12 @@ function wx.Configure( shouldSetTarget )
 			if not ( kindVal == "WindowedApp" or kindVal == "ConsoleApp" ) then
 				configuration 	{ "Debug" }
 				   targetname 	{ wx.LibName( targetName, true ) }	--"`wx-config --debug=yes --basename`_"..targetName.."-`wx-config --release`"
-					targetdir	{ "../../lib" }
+					targetdir	{ targetDirBase .. "lib" }
 					linkoptions ( "-Wl,-soname,lib" .. wx.LibName( targetName, true ) .. ".so" )
 				
 				configuration 	{ "Release" }
 				   targetname 	{ wx.LibName( targetName ) }	--"`wx-config --basename`_"..targetName.."-`wx-config --release`"
-					targetdir	{ "../../lib" }
+					targetdir	{ targetDirBase .. "lib" }
 					linkoptions ( "-Wl,-soname,lib" .. wx.LibName( targetName ) .. ".so" )
 			end
 		end
