@@ -23,17 +23,17 @@ function CommonSetup()
 						"BUILD_DLL",
 					}
 	includedirs 	{
-						"../include", 
-						"sdk/tinyxml", 
+						"../include",
+						"sdk/tinyxml",
 						"sdk/plugin_interface"
 					}
-	files			{ 
+	files			{
 						"*.cpp",
 						"*.h",
 						"*.lua",
 					}
 	libdirs			{
-						"lib"
+						"lib",
 						"../gcc" .. _OPTIONS["compiler-version"] or "" .. "_dll"
 					}
 	links			{
