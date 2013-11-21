@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <codegen language="PHP">
 	
+	<templates class="wxFlatNotebook">
+		<template name="construction">
+			@/* WARNING: PHP code generation isn't supported for this widget yet. */#nl
+			@$this->$name = new wxWindow( #wxparent $name );
+		</template>
+	</templates>
+
+	<templates class="flatnotebookpage">
+		<template name="page_add"/>
+	</templates>
+	
 	<templates class="wxPlotCtrl">
 		<template name="construction">
 			@/* WARNING: PHP code generation isn't supported for this widget yet. */#nl

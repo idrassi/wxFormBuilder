@@ -1,6 +1,81 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <codegen language="C++">
 	
+	<templates class="wxFlatNotebook">
+		<template name="declaration">
+			#class* $name;
+			#ifequal $has_images "1"
+			@{
+				#nl wxFlatNotebookImageList $name #append Images;
+			@}
+		</template>
+		<template name="construction">$name = new #class(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @});</template>
+		<template name="include">
+			@#include &lt;wx/wxFlatNotebook/wxFlatNotebook.h&gt;
+			#ifequal $auto_scale_images "1"
+	        @{
+	            #nl @#include &lt;wx/image.h&gt;
+	        @}
+		</template>
+		<template name="settings">
+	        #ifequal $has_images "1"
+			@{
+	    		int $name #append Index = 0; #nl
+	    		$name->SetImageList( &amp;$name #append Images );
+				#ifequal $auto_scale_images "1"
+				@{
+			 		#nl wxBitmap $name #append Bitmap; #nl
+	    			wxImage $name #append Image;
+	    		@}
+			@}
+			#nl $name->SetCustomizeOptions( $customize_options );
+		</template>
+		<template name="evt_entry_OnFlatNotebookPageChanged">EVT_FLATNOTEBOOK_PAGE_CHANGED( $id, #handler )</template>
+		<template name="evt_connect_OnFlatNotebookPageChanged">$name->Connect( wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CHANGED, #handler, NULL, this );</template>
+		<template name="evt_entry_OnFlatNotebookPageChanging">EVT_FLATNOTEBOOK_PAGE_CHANGING( $id, #handler )</template>
+		<template name="evt_connect_OnFlatNotebookPageChanging">$name->Connect( wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CHANGING, #handler, NULL, this );</template>
+		<template name="evt_entry_OnFlatNotebookPageClosed">EVT_FLATNOTEBOOK_PAGE_CLOSED( $id, #handler )</template>
+		<template name="evt_connect_OnFlatNotebookPageClosed">$name->Connect( wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CLOSED, #handler, NULL, this );</template>
+		<template name="evt_entry_OnFlatNotebookPageClosing">EVT_FLATNOTEBOOK_PAGE_CLOSING( $id, #handler )</template>
+		<template name="evt_connect_OnFlatNotebookPageClosing">$name->Connect( wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CLOSING, #handler, NULL, this );</template>
+		<template name="evt_entry_OnFlatNotebookPageContextMenu">EVT_FLATNOTEBOOK_CONTEXT_MENU( $id, #handler )</template>
+		<template name="evt_connect_OnFlatNotebookPageContextMenu">$name->Connect( wxEVT_COMMAND_FLATNOTEBOOK_CONTEXT_MENU, #handler, NULL, this );</template>
+	</templates>
+
+	<templates class="flatnotebookpage">
+		<template name="page_add">
+			#ifequal #parent $has_images "1"
+	        @{
+	            #ifnotnull $bitmap
+	            @{
+			        #ifequal #parent $auto_scale_images "1"
+			        @{
+	                	#parent $name #append Bitmap = $bitmap; #nl
+		                if ( #parent $name #append Bitmap.Ok() ) #nl
+		                @{ #nl
+			                #parent $name #append Image = #parent $name #append Bitmap.ConvertToImage(); #nl
+			                #parent $name #append Images.Add( #parent $name #append Image.Scale( 16, 16 ) ); #nl
+                        @} #nl
+					@}
+					#ifnotequal #parent $auto_scale_images "1"
+			        @{
+			            #parent $name #append Images.Add( $bitmap ); #nl
+			        @}
+				    #parent $name->AddPage( #child $name, $label, $select, #parent $name #append Index ); #nl
+					#parent $name #append Index++;
+	            @}
+	            #ifnull $bitmap
+	        	@{
+	        	    #parent $name->AddPage( #child $name, $label, $select );
+	        	@}
+	        @}
+	        #ifnotequal #parent $has_images "1"
+	        @{
+				#parent $name->AddPage( #child $name, $label, $select );
+   			@}
+		</template>
+	</templates>
+	
 	<templates class="wxPlotCtrl">
 		<template name="declaration">#class* $name;</template>
 		<template name="construction">
