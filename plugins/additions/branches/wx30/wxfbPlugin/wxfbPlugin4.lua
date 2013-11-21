@@ -43,6 +43,7 @@ function CommonSetup()
 						wx.LibName( "things", isDebug ),
 						wx.LibName( "awx", isDebug ),
 						wx.LibName( "ledbargraph", isDebug ),
+						wx.LibName( "flatnotebook", isDebug ),
 					}
 	Configure()
 end
