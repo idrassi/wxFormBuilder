@@ -80,6 +80,12 @@ echo %WXBUILD_APPNAME% v%WXBUILD_VERSION%
 echo.
 call :PREMAKE
 %BUILD_CMD_RELEASE%
+goto COPY_DLL
+
+:COPY_DLL
+echo Copying DLLs for plugin...
+copy gcc%COMPILER_VERSION%_dll\*.dll wxAdditions
+copy ..\gcc%COMPILER_VERSION%_dll\*um_*.dll wxAdditions
 goto END
 
 :END
