@@ -3,7 +3,7 @@
 
 	<!-- All wxAdditions inherit this class so that the linker header will be included -->
 	
-	<objectinfo class="wxPlotCtrl" icon="plot.xpm" type="expanded_widget" startgroup="1">
+	<objectinfo class="wxPlotCtrl" icon="plot.xpm" type="expanded_widget" startgroup="0">
 		<inherits class="wxAdditions" />
 		<inherits class="wxWindow" />
 		<inherits class="AUI" />
