@@ -59,7 +59,7 @@
 		<property name="select" type="bool" help="Select Page when Adding">0</property>
 	</objectinfo>
 	
-	<objectinfo class="wxTreeListCtrl" icon="treelistctrl.xpm" type="treelistctrl" startgroup="1">
+	<objectinfo class="wxadditions::wxTreeListCtrl" icon="treelistctrl.xpm" type="treelistctrl" startgroup="1">
 		<inherits class="wxAdditions" />
 		<inherits class="wxTreeCtrlBase" />
 		<inherits class="wxWindow" />
@@ -87,7 +87,7 @@
 		</property>
 	</objectinfo>
 	
-	<objectinfo class="wxTreeListCtrlColumn" icon="treelistctrlcolumn.xpm" type="treelistctrlcolumn">
+	<objectinfo class="wxadditions::wxTreeListCtrlColumn" icon="treelistctrlcolumn.xpm" type="treelistctrlcolumn">
 		<property name="name" type="wxString_i18n" help="The title of the column">Column</property>
 		<property name="width" type="uint" help="Column size.">100</property>
 		<property name="alignment"	type="option" help="Verticle alignment of column text. This includes the label text.">
