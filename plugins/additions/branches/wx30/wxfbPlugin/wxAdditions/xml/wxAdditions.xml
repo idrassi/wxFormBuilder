@@ -59,7 +59,60 @@
 		<property name="select" type="bool" help="Select Page when Adding">0</property>
 	</objectinfo>
 	
-	<objectinfo class="wxPlotCtrl" icon="plot.xpm" type="expanded_widget" startgroup="1">
+	<objectinfo class="wxTreeListCtrl" icon="treelistctrl.xpm" type="treelistctrl" startgroup="1">
+		<inherits class="wxAdditions" />
+		<inherits class="wxTreeCtrlBase" />
+		<inherits class="wxWindow" />
+		<inherits class="AUI" />
+		<property name="name" type="text" >m_treeListCtrl</property>
+		<property name="column_image_size" type="wxSize" help="Size of column images"/>
+		<property name="style" type="bitlist">
+			<option name="wxTR_EDIT_LABELS"             help="Use this style if you wish the user to be able to edit labels in the tree list control."/>
+			<option name="wxTR_NO_BUTTONS"              help="For convenience to document that no buttons are to be drawn."/>
+			<option name="wxTR_HAS_BUTTONS"             help="Use this style to show + and - buttons to the left of parent items."/>
+			<option name="wxTR_TWIST_BUTTONS"           help="Use this style to show Mac-style twister buttons to the left of parent items. If both wxTR_HAS_BUTTONS and wxTR_TWIST_BUTTONS are given, twister buttons are generated."/>
+			<option name="wxTR_NO_LINES"                help="Use this style to hide vertical level connectors."/>
+			<option name="wxTR_FULL_ROW_HIGHLIGHT"      help="Use this style to have the background colour and the selection highlight extend over the entire horizontal row of the tree list control window."/>
+			<option name="wxTR_LINES_AT_ROOT"           help="Use this style to show lines between root nodes. Only applicable if wxTR_HIDE_ROOT is set and wxTR_NO_LINES is not set."/>
+			<option name="wxTR_HIDE_ROOT"               help="Use this style to suppress the display of the root node, effectively causing the first-level nodes to appear as a series of root nodes."/>
+			<option name="wxTR_ROW_LINES"               help="Use this style to draw a contrasting border between displayed rows."/>
+			<option name="wxTR_HAS_VARIABLE_ROW_HEIGHT" help="Use this style to cause row heights to be just big enough to fit the content. If not set, all rows use the largest row height. The default is that this flag is unset."/>
+			<option name="wxTR_COLUMN_LINES"            help="Use this style to draw a contrasting border between displayed columns."/>
+			<option name="wxTR_SINGLE"                  help="For convenience to document that only one item may be selected at a time. Selecting another item causes the current selection, if any, to be deselected. This is the default."/>
+			<option name="wxTR_MULTIPLE"                help="Use this style to allow a range of items to be selected. If a second range is selected, the current range, if any, is deselected."/>
+			<option name="wxTR_EXTENDED"                help="Use this style to allow disjoint items to be selected. (Only partially implemented; may not work in all cases.)"/>
+			<option name="wxTR_DEFAULT_STYLE"           help="The set of flags that are closest to the defaults for the native control for a particular toolkit."/>
+			<option name="wxTR_VIRTUAL"                 help="The application provides items text on demand."/>
+			wxTR_DEFAULT_STYLE
+		</property>
+	</objectinfo>
+	
+	<objectinfo class="wxTreeListCtrlColumn" icon="treelistctrlcolumn.xpm" type="treelistctrlcolumn">
+		<property name="name" type="wxString_i18n" help="The title of the column">Column</property>
+		<property name="width" type="uint" help="Column size.">100</property>
+		<property name="alignment"	type="option" help="Verticle alignment of column text. This includes the label text.">
+			<option name="wxALIGN_LEFT" 	help="Align column left."/>
+			<option name="wxALIGN_CENTRE" help="Align column centered."/>
+			<option name="wxALIGN_RIGHT" 	help="Align column right."/>
+			wxALIGN_LEFT
+		</property>
+		<property name="image" type="bitmap" help="Column image"/>
+		<property name="shown" type="bool" help="Controls if the column should be shown.">1</property>
+		<property name="edit" type="bool" help="Controls if the column contents can be edited.">0</property>
+		<property name="editor" type="option" help="The editor for the contents.">
+				<option name="Text"		help="Text Control."/>
+				<option name="TextInteger"		help="wxTextCtrl with an Integer Validator."/>
+				<option name="TextFloat"		help="wxTextCtrl with an Float Validator."/>
+				<option name="TextAscii"		help="wxTextCtrl with an Ascii Validator."/>
+				<option name="Combo"	help="wxComboBox (see 'choices' property)"/>
+				<option name="Choice"	help="wxChoice (see 'choices' property)"/>
+				<option name="Spin"		help="wxSpinCtrl"/>
+				Text
+			</property>
+		<property name="choices" type="stringlist" help="Available choices for Choice and Combo editors."></property>
+	</objectinfo>
+	
+	<objectinfo class="wxPlotCtrl" icon="plot.xpm" type="expanded_widget" startgroup="2">
 		<inherits class="wxAdditions" />
 		<inherits class="wxWindow" />
 		<inherits class="AUI" />

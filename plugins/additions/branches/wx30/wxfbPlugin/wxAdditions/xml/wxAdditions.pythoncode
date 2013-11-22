@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <codegen language="Python">
 	
+	<templates class="wxTreeListCtrl">
+		<template name="construction">
+			@# WARNING: wxPython code generation isn't supported for this widget yet. #nl
+			self.$name = wx.Window( #wxparent $name )
+		</template>
+	</templates>
+	
+	<templates class="wxTreeListCtrlColumn">
+		<template name="column_add"/>
+	</templates>
+	
 	<templates class="wxFlatNotebook">
 		<template name="construction">
 			@# WARNING: wxPython code generation isn't supported for this widget yet. #nl
