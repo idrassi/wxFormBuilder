@@ -9,10 +9,10 @@
 
 -- GENERAL SETUP -------------------------------------------------------------
 --
-project( "plotctrl" )
+project( "treelistctrl" )
 if _OPTIONS[ "shared-libraries" ] then
 	kind	"SharedLib"
-	defines	{ "MONOLITHIC", "WXMAKINGDLL_PLOTCTRL" }
+	defines	{ "MONOLITHIC", "WXMAKINGDLL_TREELISTCTRL" }
 else
 	kind	"StaticLib"
 end
@@ -21,10 +21,8 @@ function CommonSetup()
 	defines			{}
 	includedirs 	{ "../../include" }
 	files			{ 
-						"../../src/plotctrl/*.cpp",
-						"../../src/plotctrl/*.c",
-						"../../include/wx/plotctrl/*.h",
-						"../../src/plotctrl/*.hh",
+						"../../src/treelistctrl/*.cpp",
+						"../../include/wx/treelistctrl/*.h",
 					}
 	Configure()
 end
