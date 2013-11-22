@@ -76,6 +76,67 @@
 		</template>
 	</templates>
 	
+	<templates class="wxTreeListCtrl">
+		<template name="declaration">#class* $name;</template>
+		<template name="include">
+			@#include &lt;wx/treelistctrl/treelistctrl.h&gt;
+			#ifnotnull $column_image_size
+			@{
+				#nl @#include &lt;wx/imaglist.h&gt;
+				#nl @#include &lt;wx/image.h&gt;
+			@}
+		</template>
+		<template name="construction">
+			$name = new #class( #wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} ); #nl
+			wxArrayString $name #append Choices;
+		</template>
+		<template name="settings">
+			#ifnotnull $column_image_size
+			@{
+				wxSize $name #append ImageSize = $column_image_size; #nl
+				int $name #append Index = -1; #nl
+				wxImageList* $name #append Images = new wxImageList( $name #append ImageSize.GetWidth(), $name #append ImageSize.GetHeight() ); #nl
+				$name->SetImageList( $name #append Images ); #nl
+				wxBitmap $name #append Bitmap;
+			@}
+		</template>
+	</templates>
+	
+	<templates class="wxTreeListCtrlColumn">
+		<template name="column_add">
+			#parent $name #append Choices.Clear();
+			#ifnull $choices @{ #nl @}
+			#foreach $choices
+			@{ #parent $name #append Choices.Add( #pred ); @}
+			#ifnotnull $choices @{ #nl @}
+			
+			#ifnotnull #parent $column_image_size
+			@{
+				#ifnotnull $image
+				@{
+					#parent $name #append Bitmap = $image; #nl
+					if ( #parent $name #append Bitmap.Ok() ) #nl
+					@{ #nl
+						wxImage #parent $name #append Image = #parent $name #append Bitmap.ConvertToImage(); #nl
+						#parent $name #append Images->Add( #parent $name #append Image.Scale( #parent $name #append ImageSize.GetWidth(), #parent $name #append ImageSize.GetHeight() ) ); #nl
+						#parent $name #append Index++; #nl
+					@} #nl
+					#parent $name->AddColumn( $name, $width, $alignment, #parent $name #append Index, $shown, $edit, wxTreeListColumnInfo::$editor, #parent $name #append Choices );
+				@}
+				
+				#ifnull $image
+				@{
+					#parent $name->AddColumn( $name, $width, $alignment, -1, $shown, $edit, wxTreeListColumnInfo::$editor, #parent $name #append Choices );
+				@}
+			@}
+			
+			#ifnull #parent $column_image_size
+			@{
+				#parent $name->AddColumn( $name, $width, $alignment, -1, $shown, $edit, wxTreeListColumnInfo::$editor, #parent $name #append Choices );
+			@}
+		</template>
+	</templates>
+	
 	<templates class="wxPlotCtrl">
 		<template name="declaration">#class* $name;</template>
 		<template name="construction">
