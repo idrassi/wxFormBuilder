@@ -76,7 +76,7 @@
 		</template>
 	</templates>
 	
-	<templates class="wxTreeListCtrl">
+	<templates class="wxadditions::wxTreeListCtrl">
 		<template name="declaration">#class* $name;</template>
 		<template name="include">
 			@#include &lt;wx/treelistctrl/treelistctrl.h&gt;
@@ -102,7 +102,7 @@
 		</template>
 	</templates>
 	
-	<templates class="wxTreeListCtrlColumn">
+	<templates class="wxadditions::wxTreeListCtrlColumn">
 		<template name="column_add">
 			#parent $name #append Choices.Clear();
 			#ifnull $choices @{ #nl @}
@@ -121,18 +121,18 @@
 						#parent $name #append Images->Add( #parent $name #append Image.Scale( #parent $name #append ImageSize.GetWidth(), #parent $name #append ImageSize.GetHeight() ) ); #nl
 						#parent $name #append Index++; #nl
 					@} #nl
-					#parent $name->AddColumn( $name, $width, $alignment, #parent $name #append Index, $shown, $edit, wxTreeListColumnInfo::$editor, #parent $name #append Choices );
+					#parent $name->AddColumn( $name, $width, $alignment, #parent $name #append Index, $shown, $edit, wxadditions::wxTreeListColumnInfo::$editor, #parent $name #append Choices );
 				@}
 				
 				#ifnull $image
 				@{
-					#parent $name->AddColumn( $name, $width, $alignment, -1, $shown, $edit, wxTreeListColumnInfo::$editor, #parent $name #append Choices );
+					#parent $name->AddColumn( $name, $width, $alignment, -1, $shown, $edit, wxadditions::wxTreeListColumnInfo::$editor, #parent $name #append Choices );
 				@}
 			@}
 			
 			#ifnull #parent $column_image_size
 			@{
-				#parent $name->AddColumn( $name, $width, $alignment, -1, $shown, $edit, wxTreeListColumnInfo::$editor, #parent $name #append Choices );
+				#parent $name->AddColumn( $name, $width, $alignment, -1, $shown, $edit, wxadditions::wxTreeListColumnInfo::$editor, #parent $name #append Choices );
 			@}
 		</template>
 	</templates>

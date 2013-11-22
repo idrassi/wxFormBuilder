@@ -44,14 +44,6 @@
 #include <wx/imaglist.h>
 #include <wx/window.h>
 
-#if wxCHECK_VERSION(2,9,0)
-	#define WXTREELISTCONTROL wxadditions::wxTreeListCtrl
-	#define WXTREELISTCOLUMNINFO wxadditions::wxTreeListColumnInfo
-#else
-	#define WXTREELISTCONTROL wxTreeListCtrl
-	#define WXTREELISTCOLUMNINFO wxTreeListColumnInfo
-#endif
-
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -89,7 +81,7 @@ END_EVENT_TABLE()
 class wxTreeListCtrlComponent : public ComponentBase
 {
 public:
-	void AddImageList( IObject* obj, WXTREELISTCONTROL* treeListCtrl )
+	void AddImageList( IObject* obj, wxadditions::wxTreeListCtrl* treeListCtrl )
 	{
 		if ( obj->IsNull( _("column_image_size") ) )
 		{
@@ -110,7 +102,7 @@ public:
 
     wxObject* Create(IObject *obj, wxObject *parent)
     {
-        WXTREELISTCONTROL* treeListCtrl = new WXTREELISTCONTROL( (wxWindow *)parent, -1,
+        wxadditions::wxTreeListCtrl* treeListCtrl = new wxadditions::wxTreeListCtrl( (wxWindow *)parent, -1,
                 obj->GetPropertyAsPoint(_("pos")),
                 obj->GetPropertyAsSize(_("size")),
                 obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
@@ -127,7 +119,7 @@ public:
     void OnCreated( wxObject* wxobject, wxWindow* wxparent )
     {
 		// initialize tree
-		WXTREELISTCONTROL* treeListCtrl = wxDynamicCast( wxparent, WXTREELISTCONTROL );
+		wxadditions::wxTreeListCtrl* treeListCtrl = wxDynamicCast( wxparent, wxadditions::wxTreeListCtrl );
 		int colCount = treeListCtrl->GetColumnCount();
 
 		// Check for columns
@@ -163,7 +155,7 @@ public:
         treeListCtrl->ExpandAll( root );
     }
 
-    void FillItem( WXTREELISTCONTROL* treeListCtrl, wxTreeItemId itemId, int colCount, int row )
+    void FillItem( wxadditions::wxTreeListCtrl* treeListCtrl, wxTreeItemId itemId, int colCount, int row )
     {
     	for ( int i = 0; i < colCount; ++i )
 		{
@@ -179,7 +171,7 @@ public:
 	{
 		// Easy read-only property access
 		IObject* obj = GetManager()->GetIObject( wxobject );
-		WXTREELISTCONTROL* treeList = wxDynamicCast( wxparent, WXTREELISTCONTROL );
+		wxadditions::wxTreeListCtrl* treeList = wxDynamicCast( wxparent, wxadditions::wxTreeListCtrl );
 
 		// Error checking
 		if ( !( obj && treeList ) )
@@ -232,7 +224,7 @@ public:
 void TreeListCtrlEvtHandler::OnColClick( wxListEvent& event )
 {
 	// Select the appropriate column
-	WXTREELISTCONTROL* tlc = wxDynamicCast( m_window, WXTREELISTCONTROL );
+	wxadditions::wxTreeListCtrl* tlc = wxDynamicCast( m_window, wxadditions::wxTreeListCtrl );
 	if ( tlc != NULL )
 	{
 		m_manager->SelectObject( m_manager->GetChild( m_window, event.GetColumn() ) );
@@ -242,7 +234,7 @@ void TreeListCtrlEvtHandler::OnColClick( wxListEvent& event )
 void TreeListCtrlEvtHandler::OnColEndDrag( wxListEvent& event )
 {
 	// Set the width property for the column.
-	WXTREELISTCONTROL* tlc = wxDynamicCast( m_window, WXTREELISTCONTROL );
+	wxadditions::wxTreeListCtrl* tlc = wxDynamicCast( m_window, wxadditions::wxTreeListCtrl );
 	if ( tlc != NULL )
 	{
 		wxObject* col = m_manager->GetChild( m_window, event.GetColumn() );
@@ -255,7 +247,7 @@ void TreeListCtrlEvtHandler::OnColEndDrag( wxListEvent& event )
 void TreeListCtrlEvtHandler::OnLeftDClick( wxMouseEvent& event )
 {
 	// Set the width property for the column.
-	WXTREELISTCONTROL* tlc = wxDynamicCast( m_window, WXTREELISTCONTROL );
+	wxadditions::wxTreeListCtrl* tlc = wxDynamicCast( m_window, wxadditions::wxTreeListCtrl );
 	if ( tlc != NULL )
 	{
 		int count = m_manager->GetChildCount( tlc );
@@ -699,7 +691,7 @@ MACRO(ledBG_ORIENT_VERTICAL)
 MACRO(ledBG_ORIENT_HORIZONTAL)
 
 // wxTreeListCtrl
-WINDOW_COMPONENT( "wxTreeListCtrl", wxTreeListCtrlComponent )
+WINDOW_COMPONENT( "wxadditions::wxTreeListCtrl", wxTreeListCtrlComponent )
 MACRO(wxTR_EDIT_LABELS)
 MACRO(wxTR_NO_BUTTONS)
 MACRO(wxTR_HAS_BUTTONS)
@@ -716,16 +708,16 @@ MACRO(wxTR_MULTIPLE)
 MACRO(wxTR_EXTENDED)
 MACRO(wxTR_DEFAULT_STYLE)
 MACRO(wxTR_VIRTUAL)
-lib->RegisterMacro( wxT("Text"), WXTREELISTCOLUMNINFO::Text );
-lib->RegisterMacro( wxT("TextInteger"), WXTREELISTCOLUMNINFO::TextInteger );
-lib->RegisterMacro( wxT("TextFloat"), WXTREELISTCOLUMNINFO::TextFloat );
-lib->RegisterMacro( wxT("TextAscii"), WXTREELISTCOLUMNINFO::TextAscii );
-lib->RegisterMacro( wxT("Combo"), WXTREELISTCOLUMNINFO::Combo );
-lib->RegisterMacro( wxT("Choice"), WXTREELISTCOLUMNINFO::Choice );
-lib->RegisterMacro( wxT("Spin"), WXTREELISTCOLUMNINFO::Spin );
+lib->RegisterMacro( wxT("Text"), wxadditions::wxTreeListColumnInfo::Text );
+lib->RegisterMacro( wxT("TextInteger"), wxadditions::wxTreeListColumnInfo::TextInteger );
+lib->RegisterMacro( wxT("TextFloat"), wxadditions::wxTreeListColumnInfo::TextFloat );
+lib->RegisterMacro( wxT("TextAscii"), wxadditions::wxTreeListColumnInfo::TextAscii );
+lib->RegisterMacro( wxT("Combo"), wxadditions::wxTreeListColumnInfo::Combo );
+lib->RegisterMacro( wxT("Choice"), wxadditions::wxTreeListColumnInfo::Choice );
+lib->RegisterMacro( wxT("Spin"), wxadditions::wxTreeListColumnInfo::Spin );
 
 // wxTreeListCtrl
-ABSTRACT_COMPONENT( "wxTreeListCtrlColumn", wxTreeListCtrlColumnComponent )
+ABSTRACT_COMPONENT( "wxadditions::wxTreeListCtrlColumn", wxTreeListCtrlColumnComponent )
 
 // wxFlatNotebook
 WINDOW_COMPONENT("wxFlatNotebook",FlatNotebookComponent)
