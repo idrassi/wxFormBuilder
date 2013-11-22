@@ -26,6 +26,7 @@ function CommonSetup()
 						"../../include/wx/plotctrl/*.h",
 						"../../src/plotctrl/*.hh",
 					}
+	links			{ "things" }
 	Configure()
 end
 
