@@ -6,7 +6,7 @@
 		<property name="use_wxAddition" type="bool" help="Use the wxAddition library.">1</property>
 	</objectinfo>
 	
-	<objectinfo class="wxFlatNotebook" icon="flatnotebook.xpm" type="flatnotebook" startgroup="0">
+	<objectinfo class="wxFlatNotebook" icon="flatnotebook.xpm" type="flatnotebook">
 		<inherits class="wxAdditions" />
 		<inherits class="wxWindow">
 			<property name="bg">wxSYS_COLOUR_BTNFACE</property>
@@ -112,7 +112,7 @@
 		<property name="choices" type="stringlist" help="Available choices for Choice and Combo editors."></property>
 	</objectinfo>
 	
-	<objectinfo class="wxPlotCtrl" icon="plot.xpm" type="expanded_widget" startgroup="2">
+	<objectinfo class="wxPlotCtrl" icon="plot.xpm" type="expanded_widget" startgroup="1">
 		<inherits class="wxAdditions" />
 		<inherits class="wxWindow" />
 		<inherits class="AUI" />
