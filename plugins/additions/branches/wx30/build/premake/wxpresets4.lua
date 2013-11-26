@@ -49,10 +49,6 @@ wx = {}
 
 local wxVer = _OPTIONS["wx-version"] or "28"
 local compilerVersion = _OPTIONS["compiler-version"] or ""
-local toolchain = iif( ActionUsesGCC(), "gcc", "vc" ) .. compilerVersion
-local unicodeSuffix = iif( _OPTIONS["unicode"], "u", "" )
-local targetDirBase = _OPTIONS["targetdir-base"] or "../../"
-
 if ActionUsesMSVC() and 30 <= tonumber( wxVer ) then
 	if _ACTION == "vs2005" then
 		compilerVersion = "80"
@@ -68,6 +64,10 @@ if ActionUsesMSVC() and 30 <= tonumber( wxVer ) then
 		error( "Unsupported version of Visual Studio" )
 	end
 end
+
+local toolchain = iif( ActionUsesGCC(), "gcc", "vc" ) .. compilerVersion
+local unicodeSuffix = iif( _OPTIONS["unicode"], "u", "" )
+local targetDirBase = _OPTIONS["targetdir-base"] or "../../"
 
 if os.is("windows") then
 	if _OPTIONS["wx-root"] and "" ~= _OPTIONS["wx-root"] then
