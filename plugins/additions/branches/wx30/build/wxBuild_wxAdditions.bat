@@ -179,10 +179,10 @@ goto START
 echo %WXBUILD_APPNAME% v%WXBUILD_VERSION%
 echo.
 
-if %2 == LIB   goto LIB_BUILD
-if %2 == lib   goto LIB_BUILD
-if %2 == DLL   goto DLL_BUILD
-if %2 == dll   goto DLL_BUILD
+if %2 == LIB   goto LIB_BUILD_UNICODE
+if %2 == lib   goto LIB_BUILD_UNICODE
+if %2 == DLL   goto DLL_BUILD_UNICODE
+if %2 == dll   goto DLL_BUILD_UNICODE
 if %2 == ALL   goto ALL_BUILD
 if %2 == all   goto ALL_BUILD
 if %2 == NULL  goto SECIFIC_BUILD
@@ -198,41 +198,6 @@ goto %3
 :ALL_BUILD
 echo Compiling all versions.
 echo.
-goto LIB_BUILD
-
-:LIB_BUILD
-echo Building libs's...
-echo.
-goto LIB_DEBUG
-
-:LIB_DEBUG
-echo Compiling lib debug...
-set SHARED_LIBRARIES=
-set DYNAMIC_LINK=
-set UNICODE=
-set MONOLITHIC=
-call :PREMAKE
-%BUILD_CMD_DEBUG%
-
-echo.
-:: Check for specific mode.
-if %2 == null goto END
-if %2 == NULL goto END
-goto LIB_RELEASE
-
-:LIB_RELEASE
-echo Compiling lib release...
-set SHARED_LIBRARIES=
-set DYNAMIC_LINK=
-set UNICODE=
-set MONOLITHIC=
-call :PREMAKE
-%BUILD_CMD_RELEASE%
-
-echo.
-:: Check for specific mode.
-if %2 == null goto END
-if %2 == NULL goto END
 goto LIB_BUILD_UNICODE
 
 :LIB_BUILD_UNICODE
@@ -268,44 +233,9 @@ echo.
 :: Check for specific mode.
 if %2 == null goto END
 if %2 == NULL goto END
-goto LIB_BUILD_MONO
-
-::_____________________________________________________________________________
-:LIB_BUILD_MONO
-echo Building Monolithic lib's...
-echo.
-goto LIB_DEBUG_MONO
-
-:LIB_DEBUG_MONO
-echo Compiling lib debug monolithic...
-set SHARED_LIBRARIES=
-set DYNAMIC_LINK=
-set UNICODE=
-set MONOLITHIC=--monolithic
-call :PREMAKE
-%BUILD_CMD_DEBUG%
-
-echo.
-:: Check for specific mode.
-if %2 == null goto END
-if %2 == NULL goto END
-goto LIB_RELEASE_MONO
-
-:LIB_RELEASE_MONO
-echo Compiling lib release monolithic...
-set SHARED_LIBRARIES=
-set DYNAMIC_LINK=
-set UNICODE=
-set MONOLITHIC=--monolithic
-call :PREMAKE
-%BUILD_CMD_RELEASE%
-
-echo.
-:: Check for specific mode.
-if %2 == null goto END
-if %2 == NULL goto END
 goto LIB_BUILD_MONO_UNICODE
 
+::_____________________________________________________________________________
 :LIB_BUILD_MONO_UNICODE
 echo Building Monolithic Unicode lib's...
 echo.
@@ -337,47 +267,12 @@ call :PREMAKE
 
 echo.
 :: Check for build all
-if %2 == all goto DLL_BUILD
-if %2 == ALL goto DLL_BUILD
+if %2 == all goto DLL_BUILD_UNICODE
+if %2 == ALL goto DLL_BUILD_UNICODE
 :: Check for specific mode.
 if %2 == null goto END
 if %2 == NULL goto END
 goto END
-
-:DLL_BUILD
-echo Building Dll's...
-echo.
-goto DLL_DEBUG
-
-:DLL_DEBUG
-echo Compiling dll debug...
-set SHARED_LIBRARIES=--shared-libraries
-set DYNAMIC_LINK=--wx-shared
-set UNICODE=
-set MONOLITHIC=
-call :PREMAKE
-%BUILD_CMD_DEBUG%
-
-echo.
-:: Check for specific mode.
-if %2 == null goto END
-if %2 == NULL goto END
-goto DLL_RELEASE
-
-:DLL_RELEASE
-echo Compiling dll release...
-set SHARED_LIBRARIES=--shared-libraries
-set DYNAMIC_LINK=--wx-shared
-set UNICODE=
-set MONOLITHIC=
-call :PREMAKE
-%BUILD_CMD_RELEASE%
-
-echo.
-:: Check for specific mode.
-if %2 == null goto END
-if %2 == NULL goto END
-goto DLL_BUILD_UNICODE
 
 :DLL_BUILD_UNICODE
 echo Building Unicode Dll's...
@@ -405,41 +300,6 @@ set SHARED_LIBRARIES=--shared-libraries
 set DYNAMIC_LINK=--wx-shared
 set UNICODE=--unicode
 set MONOLITHIC=
-call :PREMAKE
-%BUILD_CMD_RELEASE%
-
-echo.
-:: Check for specific mode.
-if %2 == null goto END
-if %2 == NULL goto END
-goto DLL_BUILD_MONO
-
-:DLL_BUILD_MONO
-echo Building Monolithic Dll's...
-echo.
-goto DLL_DEBUG_MONO
-
-:DLL_DEBUG_MONO
-echo Compiling dll debug monolithic...
-set SHARED_LIBRARIES=--shared-libraries
-set DYNAMIC_LINK=--wx-shared
-set UNICODE=
-set MONOLITHIC=--monolithic
-call :PREMAKE
-%BUILD_CMD_DEBUG%
-
-echo.
-:: Check for specific mode.
-if %2 == null goto END
-if %2 == NULL goto END
-goto DLL_RELEASE_MONO
-
-:DLL_RELEASE_MONO
-echo Compiling dll release monolithic...
-set SHARED_LIBRARIES=--shared-libraries
-set DYNAMIC_LINK=--wx-shared
-set UNICODE=
-set MONOLITHIC=--monolithic
 call :PREMAKE
 %BUILD_CMD_RELEASE%
 
@@ -539,13 +399,11 @@ echo           ALL   = Builds all the targets (Recommended).
 echo           NULL  = Used so that you can specify a specific target. (See below)
 echo.
 echo      Specific Options(Used with NULL):
-echo           LIB_DEBUG, LIB_RELEASE, LIB_DEBUG_UNICODE, LIB_RELEASE_UNICODE,
-echo            LIB_DEBUG_MONO, LIB_RELEASE_MONO, LIB_DEBUG_MONO_UNICODE, 
-echo            LIB_RELEASE_MONO_UNICODE,
+echo           LIB_DEBUG_UNICODE, LIB_RELEASE_UNICODE,
+echo           LIB_DEBUG_MONO_UNICODE, LIB_RELEASE_MONO_UNICODE,
 echo.
-echo           DLL_DEBUG, DLL_RELEASE, DLL_DEBUG_UNICODE, DLL_RELEASE_UNICODE,
-echo            DLL_DEBUG_MONO, DLL_RELEASE_MONO, DLL_DEBUG_MONO_UNICODE,
-echo            DLL_RELEASE_MONO_UNICODE
+echo           DLL_DEBUG_UNICODE, DLL_RELEASE_UNICODE,
+echo           DLL_DEBUG_MONO_UNICODE, DLL_RELEASE_MONO_UNICODE
 echo.
 echo      Options:
 echo           --wx-root    Specify the path to the wxWidgets source/libraries. Defaults
@@ -559,7 +417,7 @@ echo.
 echo           wxBuild_default.bat VCTK LIB
 echo             Builds just the static libraries with Visual C++ 7.1 Toolkit.
 echo.
-echo           wxBuild_default.bat VCTK NULL LIB_RELEASE
+echo           wxBuild_default.bat VCTK NULL LIB_RELEASE_UNICODE
 echo             Builds only the release static library with Visual C++ 7.1 Toolkit
 goto END
 
