@@ -2,8 +2,64 @@
 <package name="wxAdditions" lib="libwxadditions" icon="plot16x16.png" desc="wxWidgets contributed controls">
 
 	<!-- All wxAdditions inherit this class so that the linker header will be included -->
+	<objectinfo class="wxAdditions" type="interface">
+		<property name="use_wxAddition" type="bool" help="Use the wxAddition library.">1</property>
+	</objectinfo>
 	
-	<objectinfo class="wxTreeListCtrl" icon="treelistctrl.xpm" type="treelistctrl" startgroup="1">
+	<objectinfo class="wxFlatNotebook" icon="flatnotebook.xpm" type="flatnotebook">
+		<inherits class="wxAdditions" />
+		<inherits class="wxWindow">
+			<property name="bg">wxSYS_COLOUR_BTNFACE</property>
+		</inherits>
+		<inherits class="AUI" />
+		<property name="name" type="text">m_flatNotebook</property>
+		<property name="has_images" type="bool" 			help="Pages have images">0</property>
+		<property name="auto_scale_images" type="bool" 		help="Automatically scale page images to 16x16">0</property>
+		<property name="style" type="bitlist">
+			<option name="wxFNB_DEFAULT_STYLE"					help="Defined as wxFNB_MOUSE_MIDDLE_CLOSES_TABS" />
+			<option name="wxFNB_VC71" 							help="Use Visual Studio 2003 (VC7.1) Style for tabs"/>
+			<option name="wxFNB_FANCY_TABS" 					help="Use fancy style - square tabs filled with gradient coloring"/>
+			<option name="wxFNB_TABS_BORDER_SIMPLE" 			help="Draw thin border around the page"/>
+			<option name="wxFNB_NO_X_BUTTON" 					help="Do not display the 'X' button"/>
+			<option name="wxFNB_NO_NAV_BUTTONS" 				help="Do not display the Right / Left arrows"/>
+			<option name="wxFNB_MOUSE_MIDDLE_CLOSES_TABS" 		help="Use the mouse middle button for cloing tabs"/>
+			<option name="wxFNB_BOTTOM" 						help="Place tabs at bottom - the default is to place them at top"/>
+			<option name="wxFNB_NODRAG" 						help="Disable dragging of tabs"/>
+			<option name="wxFNB_VC8" 							help="Use Visual Studio 2005 (VC8.0) Style for tabs"/>
+			<option name="wxFNB_X_ON_TAB" 						help="Place 'X' on a tab"/>
+			<option name="wxFNB_BACKGROUND_GRADIENT" 			help="Draw tabs with a background gradiant."/>
+			<option name="wxFNB_COLORFUL_TABS" 					help="Draw colorful tabs."/>
+			<option name="wxFNB_DCLICK_CLOSES_TABS" 			help="Close tab using double click"/>
+			<option name="wxFNB_SMART_TABS" 					help="Cycle through tabs with Ctrl+[Shift]+T"/>
+			<option name="wxFNB_DROPDOWN_TABS_LIST" 			help="Show a drop down tab list instead of navigation buttons"/>
+			<option name="wxFNB_ALLOW_FOREIGN_DND" 				help="Allow drag'n'drop between different wxFlatNotebooks"/>
+			<option name="wxFNB_FF2"							help="Firefox 2 tabs style."/>
+			<option name="wxFNB_CUSTOM_DLG"						help="Right-click in the empty area of the tab bar to open a customize dialog."/>
+			wxFNB_DEFAULT_STYLE
+		</property>
+		<property name="customize_options" type="bitlist">
+			<option name="wxFNB_CUSTOM_TAB_LOOK"			help="Allow customizing the tab appearance"/>
+			<option name="wxFNB_CUSTOM_ORIENTATION"			help="Allow customizing the tab orientation (upper | bottom)"/>
+			<option name="wxFNB_CUSTOM_FOREIGN_DRAG"		help="Allow accept foreign tabs"/>
+			<option name="wxFNB_CUSTOM_LOCAL_DRAG"			help="Allow local drag and drop"/>
+			<option name="wxFNB_CUSTOM_CLOSE_BUTTON"		help="Allow customizing close button"/>
+			<option name="wxFNB_CUSTOM_ALL"					help="wxFNB_CUSTOM_TAB_LOOK | wxFNB_CUSTOM_ORIENTATION | wxFNB_CUSTOM_FOREIGN_DRAG | wxFNB_CUSTOM_LOCAL_DRAG | wxFNB_CUSTOM_CLOSE_BUTTON"/>
+			wxFNB_CUSTOM_ALL
+		</property>
+		<event name="OnFlatNotebookPageChanged" class="wxFlatNotebookEvent" help="The page selection was changed. Processes a wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CHANGED event." />
+		<event name="OnFlatNotebookPageChanging" class="wxFlatNotebookEvent" help="The page selection is about to be changed. Processes a wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CHANGING event. This event can be vetoed." />
+		<event name="OnFlatNotebookPageClosed" class="wxFlatNotebookEvent" help="The page was closed. Processes a wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CLOSED event." />
+		<event name="OnFlatNotebookPageClosing" class="wxFlatNotebookEvent" help="The page is about to be closed. Processes a wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CLOSING event. This event can be vetoed." />
+		<event name="OnFlatNotebookPageContextMenu" class="wxFlatNotebookEvent" help="The context menu was activated. Processes a wxEVT_COMMAND_FLATNOTEBOOK_CONTEXT_MENU event." />
+	</objectinfo>
+
+	<objectinfo class="flatnotebookpage" icon="flatnotebook.xpm" type="flatnotebookpage">
+		<property name="label" type="wxString_i18n" help="The title of the page">a page</property>
+		<property name="bitmap" type="bitmap" help="Page Image"/>
+		<property name="select" type="bool" help="Select Page when Adding">0</property>
+	</objectinfo>
+	
+	<objectinfo class="wxadditions::wxTreeListCtrl" icon="treelistctrl.xpm" type="treelistctrl" startgroup="1">
 		<inherits class="wxAdditions" />
 		<inherits class="wxTreeCtrlBase" />
 		<inherits class="wxWindow" />
@@ -31,7 +87,7 @@
 		</property>
 	</objectinfo>
 	
-	<objectinfo class="wxTreeListCtrlColumn" icon="treelistctrlcolumn.xpm" type="treelistctrlcolumn">
+	<objectinfo class="wxadditions::wxTreeListCtrlColumn" icon="treelistctrlcolumn.xpm" type="treelistctrlcolumn">
 		<property name="name" type="wxString_i18n" help="The title of the column">Column</property>
 		<property name="width" type="uint" help="Column size.">100</property>
 		<property name="alignment"	type="option" help="Verticle alignment of column text. This includes the label text.">
