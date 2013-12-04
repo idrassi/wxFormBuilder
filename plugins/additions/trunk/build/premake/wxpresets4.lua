@@ -47,7 +47,7 @@ newoption
 -- Namespace
 wx = {}
 
-local wxVer = _OPTIONS["wx-version"] or "28"
+local wxVer = _OPTIONS["wx-version"] or "30"
 local compilerVersion = _OPTIONS["compiler-version"] or ""
 if ActionUsesMSVC() and 30 <= tonumber( wxVer ) then
 	if _ACTION == "vs2005" then
@@ -66,8 +66,8 @@ if ActionUsesMSVC() and 30 <= tonumber( wxVer ) then
 end
 
 local toolchain = iif( ActionUsesGCC(), "gcc", "vc" ) .. compilerVersion
-local unicodeSuffix = iif( _OPTIONS["unicode"], "u", "" )
-local targetDirBase = _OPTIONS["targetdir-base"] or "../../"
+local unicodeSuffix = ""
+local targetDirBase = ""
 
 if os.is("windows") then
 	if _OPTIONS["wx-root"] and "" ~= _OPTIONS["wx-root"] then
@@ -90,6 +90,8 @@ end
 ---	Configure a C/C++ package to use wxWidgets
 --	wx.Configure( package, shouldSetTarget = true, wxVer = "28" )
 function wx.Configure( shouldSetTarget )
+	unicodeSuffix = iif( _OPTIONS["unicode"], "u", "" )
+	targetDirBase = _OPTIONS["targetdir-base"] or "../../"
 	-- Set the default values.
 	if shouldSetTarget == nil then shouldSetTarget = true end
 	local targetName = project().name
@@ -224,13 +226,13 @@ function wx.Configure( shouldSetTarget )
 		if shouldSetTarget then
 			if not ( kindVal == "WindowedApp" or kindVal == "ConsoleApp" ) then
 				configuration 	{ "Debug" }
-				   targetname 	{ wx.LibName( targetName, true ) }	--"`wx-config --debug=yes --basename`_"..targetName.."-`wx-config --release`"
-					targetdir	{ targetDirBase .. "lib" }
+					targetname 	( wx.LibName( targetName, true ) )	--"`wx-config --debug=yes --basename`_"..targetName.."-`wx-config --release`"
+					targetdir	( targetDirBase .. "lib" )
 					linkoptions ( "-Wl,-soname,lib" .. wx.LibName( targetName, true ) .. ".so" )
 				
 				configuration 	{ "Release" }
-				   targetname 	{ wx.LibName( targetName ) }	--"`wx-config --basename`_"..targetName.."-`wx-config --release`"
-					targetdir	{ targetDirBase .. "lib" }
+					targetname 	( wx.LibName( targetName ) )	--"`wx-config --basename`_"..targetName.."-`wx-config --release`"
+					targetdir	( targetDirBase .. "lib" )
 					linkoptions ( "-Wl,-soname,lib" .. wx.LibName( targetName ) .. ".so" )
 			end
 		end
@@ -243,8 +245,6 @@ function wx.LibName( targetName, isDebug )
 	local name = ""
 	-- Make the parameters optional.
 	local debug = ""
-	local unicode = ""
-	local wx_ver = wxVer
 	if isDebug then debug = "d" end
 
 	if "windows" == os.get() then
@@ -255,13 +255,13 @@ function wx.LibName( targetName, isDebug )
 		name = "wxmsw" .. wxVer .. unicodeSuffix .. monolithic .. debug .. "_" .. targetName .. "_" .. toolchain
 		
 	elseif "linux" == os.get() then
-		wx_ver = wx_ver:sub( 1, 1 ).."."..wx_ver:sub( 2 )
-		name = "wx_gtk2"..unicode..debug.."_"..targetName:lower().."-"..wx_ver
+		local wx_ver = wxVer:sub( 1, 1 ).."."..wxVer:sub( 2 )
+		name = "wx_gtk2" .. unicodeSuffix .. debug .. "_" .. targetName:lower() .. "-" .. wx_ver
 		--print( name )
 	else
 		local debug = "no"
 		if isDebug then debug = "yes" end
-		name = "`wx-config --debug="..debug.." --basename`_"..targetName.."-`wx-config --release`"
+		name = "`wx-config --debug=" .. debug .. " --basename`_" .. targetName .. "-`wx-config --release`"
 	end
 
 	return name

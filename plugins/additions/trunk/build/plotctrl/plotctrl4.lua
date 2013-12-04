@@ -17,18 +17,21 @@ else
 	kind	"StaticLib"
 end
 
-function CommonSetup()
-	defines			{}
-	includedirs 	{ "../../include" }
-	files			{ 
-						"../../src/plotctrl/*.cpp",
-						"../../src/plotctrl/*.c",
-						"../../include/wx/plotctrl/*.h",
-						"../../src/plotctrl/*.hh",
-					}
-	links			{ "things" }
-	Configure()
+defines			{}
+includedirs 	{ "../../include" }
+files			{ 
+					"../../src/plotctrl/*.cpp",
+					"../../src/plotctrl/*.c",
+					"../../include/wx/plotctrl/*.h",
+					"../../src/plotctrl/*.hh",
+				}
+links			{ "things" }
+
+-- gtk build/link options
+if os.is( "linux" ) then
+	buildoptions	{ "`pkg-config gtk+-2.0 --cflags`" }
+	linkoptions		{ "`pkg-config gtk+-2.0 --libs`" }
 end
 
-CommonSetup()
+Configure()
 wx.Configure( true )
