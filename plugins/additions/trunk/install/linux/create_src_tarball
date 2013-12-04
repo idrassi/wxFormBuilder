@@ -29,26 +29,18 @@ function make_src_tarball
 	cd build
 	
 	# create Makefiles
+	# Use premake to generate Makefiles
+	premake4 --shared-libraries gmake
 
-	  # Build premake
-	  PREMAKE_DIR=premake
-	  make -C$PREMAKE_DIR/src -f../build/Makefile
-
-	  # Use premake to generate Makefiles
-	  $PREMAKE_DIR/bin/premake --linux --target gnu --unicode --with-wx-shared --shared
-
-	  # remove premake, as it is no longer necessary
-	  rm -rf $PREMAKE_DIR
-	
 	cd ..
 	
 	# use a temporary directory
-	tmpdir=libwxadditions28-$1 #.orig
+	tmpdir=libwxadditions30-$1
 
 	cp -R $basedir   ../$tmpdir
 	cd ..
 
-	tar czf libwxadditions28_$1.orig.tar.gz $tmpdir
+	tar czf libwxadditions30_$1.orig.tar.gz $tmpdir
 	rm -rf $tmpdir
 }
 

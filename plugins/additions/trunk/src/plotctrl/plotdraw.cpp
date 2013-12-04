@@ -14,6 +14,7 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+#include "wx/version.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -54,7 +55,7 @@
 // Consts
 //-----------------------------------------------------------------------------
 
-#if defined(__WXGTK__) && wxPLOTCTRL_FAST_GRAPHICS
+#if defined(__WXGTK__) && wxPLOTCTRL_FAST_GRAPHICS && (wxMAJOR_VERSION < 3)
 
 extern "C" {
     #include <gdk/gdk.h>

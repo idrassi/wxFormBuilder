@@ -18,6 +18,12 @@ solution			"wxAdditions"
 configurations 		{ "Release", "Debug" }
 targetdir			"bin"
 
+EnableOption( "unicode" )
+
+if os.is( "linux" ) then
+	EnableOption( "wx-shared" )
+end
+
 -- Add projects here.
 dofile( "awx/awx4.lua" )
 dofile( "things/things4.lua" )
