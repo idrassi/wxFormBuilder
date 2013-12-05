@@ -12,7 +12,12 @@
 dofile( "../build/premake/presets4.lua" )
 dofile( "../build/premake/wxpresets4.lua" )
 
-EnableOption( "force-32bit" )
+if os.is( "windows" ) then
+	EnableOption( "force-32bit" )
+else
+end
+EnableOption( "unicode" )
+EnableOption( "wx-shared" )
 EnableOption( "monolithic" )
 
 -- PROJECT SETTINGS -----------------------------------------------------------

@@ -66,8 +66,6 @@ if ActionUsesMSVC() and 30 <= tonumber( wxVer ) then
 end
 
 local toolchain = iif( ActionUsesGCC(), "gcc", "vc" ) .. compilerVersion
-local unicodeSuffix = ""
-local targetDirBase = ""
 
 if os.is("windows") then
 	if _OPTIONS["wx-root"] and "" ~= _OPTIONS["wx-root"] then
@@ -90,8 +88,8 @@ end
 ---	Configure a C/C++ package to use wxWidgets
 --	wx.Configure( package, shouldSetTarget = true, wxVer = "28" )
 function wx.Configure( shouldSetTarget )
-	unicodeSuffix = iif( _OPTIONS["unicode"], "u", "" )
-	targetDirBase = _OPTIONS["targetdir-base"] or "../../"
+	local unicodeSuffix = iif( _OPTIONS["unicode"], "u", "" )
+	local targetDirBase = _OPTIONS["targetdir-base"] or "../../"
 	-- Set the default values.
 	if shouldSetTarget == nil then shouldSetTarget = true end
 	local targetName = project().name
@@ -243,6 +241,7 @@ end
 
 function wx.LibName( targetName, isDebug )
 	local name = ""
+	local unicodeSuffix = iif( _OPTIONS["unicode"], "u", "" )
 	-- Make the parameters optional.
 	local debug = ""
 	if isDebug then debug = "d" end
