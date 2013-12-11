@@ -11,7 +11,7 @@ SETLOCAL
 set WXBUILD_VERSION=1.00
 set WXBUILD_APPNAME=wxBuild_wxFormBuilderPlugin
 :: MinGW4-w64 Gcc install location. This must match your systems configuration.
-set MINGW4_W64_DIR=C:\MinGW4
+set MINGW4_W64_DIR=C:\GCC\MinGW-w64\4.8.1
 set MINGW4_W64_GCC4VER=48
 
 ::Configuration Parameters
