@@ -195,10 +195,10 @@ function wx.Configure( shouldSetTarget )
 			   targetname 	( wx.LibName( targetName, false ) )
 			   
 			configuration	{ "x64" }
-				targetdir	( targetDirBase .. toolchain .. "_x64_" .. linktype )
+				targetdir	( targetDirBase .. "lib/" .. toolchain .. "_x64_" .. linktype )
 			 
 			configuration	{ "not x64" }
-				targetdir	( targetDirBase .. toolchain .. "_" .. linktype )
+				targetdir	( targetDirBase .. "lib/" .. toolchain .. "_" .. linktype )
 
 		end
 		configuration( {} )

@@ -32,7 +32,7 @@ files			{
 libdirs			{
 					"lib",
 					"../lib",
-					"../gcc" .. _OPTIONS["compiler-version"] .. "_dll"
+					"../lib/gcc" .. _OPTIONS["compiler-version"] .. "_dll"
 				}
 links			{
 					"plugin-interface",
