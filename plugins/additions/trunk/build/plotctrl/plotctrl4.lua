@@ -19,7 +19,7 @@ end
 
 defines			{}
 includedirs 	{ "../../include" }
-files			{ 
+files			{
 					"../../src/plotctrl/*.cpp",
 					"../../src/plotctrl/*.c",
 					"../../include/wx/plotctrl/*.h",
@@ -34,4 +34,5 @@ if os.is( "linux" ) then
 end
 
 Configure()
+targetsuffix( "" )
 wx.Configure( true )

@@ -20,11 +20,12 @@ end
 function CommonSetup()
 	defines			{}
 	includedirs 	{ "../../include" }
-	files			{ 
+	files			{
 						"../../src/treelistctrl/*.cpp",
 						"../../include/wx/treelistctrl/*.h",
 					}
 	Configure()
+	targetsuffix( "" )
 end
 
 CommonSetup()

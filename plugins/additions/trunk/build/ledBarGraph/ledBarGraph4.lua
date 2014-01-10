@@ -20,11 +20,12 @@ end
 function CommonSetup()
 	defines			{}
 	includedirs 	{ "../../include" }
-	files			{ 
+	files			{
 						"../../src/ledBarGraph/*.cpp",
 						"../../include/wx/ledBarGraph/*.h",
 					}
 	Configure()
+	targetsuffix( "" )
 end
 
 CommonSetup()
