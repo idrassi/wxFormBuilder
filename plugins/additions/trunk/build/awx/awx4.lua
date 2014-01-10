@@ -20,11 +20,12 @@ end
 function CommonSetup()
 	defines			{}
 	includedirs 	{ "../../include" }
-	files			{ 
+	files			{
 						"../../src/awx/*.cpp",
 						"../../include/wx/awx/*.h",
 					}
 	Configure()
+	targetsuffix( "" )
 end
 
 CommonSetup()

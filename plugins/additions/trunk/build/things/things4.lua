@@ -20,15 +20,16 @@ end
 function CommonSetup()
 	defines			{}
 	includedirs 	{ "../../include" }
-	files			{ 
+	files			{
 						"../../src/things/*.cpp",
 						"../../include/wx/things/*.h",
 					}
-	excludes 		{ 
+	excludes 		{
 						"../../src/things/matrix2d.*",
 						"../../include/wx/things/matrix2d.h",
 					}
 	Configure()
+	targetsuffix( "" )
 end
 
 CommonSetup()

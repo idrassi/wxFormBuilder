@@ -20,11 +20,12 @@ end
 function CommonSetup()
 	defines			{}
 	includedirs 	{ "../../include" }
-	files			{ 
+	files			{
 						"../../src/wxFlatNotebook/*.cpp",
 						"../../include/wx/wxFlatNotebook/*.h",
 					}
 	Configure()
+	targetsuffix( "" )
 end
 
 CommonSetup()
