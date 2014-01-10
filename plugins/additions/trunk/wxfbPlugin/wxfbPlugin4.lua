@@ -12,6 +12,8 @@
 project			"wxAdditions_Plugin"
 kind			"SharedLib"
 targetname		"wxadditions"
+targetprefix	"lib"
+targetdir		"wxAdditions"
 
 defines			{
 					"TIXML_USE_TICPP",
