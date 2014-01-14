@@ -11,7 +11,7 @@ endif
 get-orig-source:
 	svn export svn://svn.code.sf.net/p/wxformbuilder/code/plugins/additions/trunk/wxfbPlugin wxfb-wxadditions
 	
-	cd $(CURDIR)/wxfb-wxadditions && install/linux/create_src_tarball.sh
+	cd $(CURDIR)/wxfb-wxadditions && install/linux/create_src_tarball
 	rm -rf $(CURDIR)/wxfb-wxadditions
 
 configure: configure-stamp
