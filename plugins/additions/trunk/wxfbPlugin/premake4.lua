@@ -9,8 +9,8 @@
 
 -- INCLUDES -------------------------------------------------------------------
 --
-dofile( "../build/premake/presets4.lua" )
-dofile( "../build/premake/wxpresets4.lua" )
+dofile( "build/premake/presets4.lua" )
+dofile( "build/premake/wxpresets4.lua" )
 
 if os.is( "windows" ) then
 	EnableOption( "force-32bit" )
