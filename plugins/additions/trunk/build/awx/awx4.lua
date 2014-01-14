@@ -17,16 +17,13 @@ else
 	kind	"StaticLib"
 end
 
-function CommonSetup()
-	defines			{}
-	includedirs 	{ "../../include" }
-	files			{
-						"../../src/awx/*.cpp",
-						"../../include/wx/awx/*.h",
-					}
-	Configure()
-	targetsuffix( "" )
-end
+defines			{}
+includedirs 	{ "../../include" }
+files			{
+					"../../src/awx/*.cpp",
+					"../../include/wx/awx/*.h",
+				}
+targetsuffix( "" )
 
-CommonSetup()
+Configure()
 wx.Configure( true )

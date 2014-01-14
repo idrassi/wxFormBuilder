@@ -1,9 +1,9 @@
 -- ----------------------------------------------------------------------------
---	Author:		Ryan Pusztai <csteenwyk@gmail.com>
---	Date:		11/13/2013
+--	Author:		Ryan Pusztai <rjpcomputing@gmail.com>
+--	Date:		08/11/2008
 --	Version:	1.00
 --
---	Copyright (C) 2013 Chris Steenwyk
+--	Copyright (C) 2008 Ryan Pusztai
 --
 --	Permission is hereby granted, free of charge, to any person obtaining a copy
 --	of this software and associated documentation files (the "Software"), to deal
@@ -50,6 +50,12 @@ newoption
 
 newoption
 {
+   trigger     = "release-with-debug-symbols",
+   description = "Adds Debug symbols to the release build."
+}
+
+newoption
+{
    trigger     = "no-extra-warnings",
    description = "Do not enable extra warnings."
 }
@@ -68,19 +74,49 @@ if os.is("windows") then
 	}
 end
 
+newoption
+{
+	trigger		= "with-gprof",
+	description	= "Enable information to be added for profiling by gprof"
+}
+
+newoption
+{
+	trigger		= "with-gcov",
+	description	= "Enable information to be added for profiling by gcov"
+}
+
+newoption
+{
+	trigger		= "with-trace",
+	description	= "Enable trace statements"
+}
+
 if os.is("linux") then
 	newoption
 	{
 		trigger		= "rpath",
 		description	= "Linux only, set rpath on the linker line to find shared libraries next to executable"
 	}
-
-	newoption
-	{
-		trigger		= "soname",
-		description	= "Linux only, set soname on the linker line"
-	}
 end
+
+newoption
+{
+   trigger     = "large-address-aware",
+   description = "Enable large address awareness for 32-bit programs which allow them to access memory > the 2GB limit."
+}
+
+newoption
+{
+	trigger		= "openmp",
+	description	= "Enable OpenMP support which will add the OPENMP_ENABLED define."
+}
+
+newoption
+{
+	trigger = "teamcity",
+	description = "Supplied when invoked by TeamCity"
+}
 
 presets.cpp11Option = "c++11"
 newoption
@@ -115,6 +151,39 @@ end
 
 if _OPTIONS["shared-libraries"] then
 	EnableOption( "dynamic-runtime" )
+end
+
+function presets.GccRoot()
+	if not os.is("windows") then
+		return ""
+	end
+	
+	local gccRoot = os.getenv( "GCC_ROOT" )
+	if not gccRoot then
+		gccRoot = "C:\\MinGW4"
+	end
+	if not os.isdir( gccRoot ) then
+		error( "No valid GCC installed at'" .. gccRoot .. "', make sure the environment variable 'GCC_ROOT' points to a valid GCC installation" )
+	end
+	return gccRoot
+end
+
+function presets.GccBinDir()
+	if not os.is("windows") then
+		return ""
+	end
+	
+	return presets.GccRoot() .. "\\bin\\"
+end
+
+function presets.GetGccVersion()
+	local cmdline = presets.GccBinDir() .. "gcc --version" 
+	local file = assert( io.popen( cmdline ))
+	local output = file:read( '*all' )
+	file:close()
+
+	local major, minor, build = output:match( "(%d+).(%d+).(%d+)" )
+	return major .. minor
 end
 
 ---	Configures a target with  a set of this pre-configuration.
@@ -243,9 +312,43 @@ function Configure()
 		end
 	end
 
-    if _OPTIONS[ presets.cpp11Option ] and ActionUsesGCC() then
-        buildoptions  { "-std=c++11" }
-    end
+	if _OPTIONS["openmp"] then
+		defines "OPENMP_ENABLED"
+
+		if ActionUsesGCC() then
+			buildoptions ( "-fopenmp" )
+			if kindVal ~= "StaticLib" then
+				links		 ( { "gomp", "pthread" } )
+			end
+			linkoptions	 ( "-fopenmp" )
+		elseif ActionUsesMSVC() then
+			buildoptions ( "/openmp" )
+		end
+	end
+	
+	if _OPTIONS["with-gprof"] then
+                print( "Using gprof for this build..." )
+		if ActionUsesGCC() then
+			-- Add profiling information
+                        buildoptions( "-pg" )
+                        linkoptions( "-pg" )
+		else
+			error( "gprof can only be used with gcc" )
+		end
+	end
+
+	if _OPTIONS["with-gcov"] then
+		if ActionUsesGCC() then
+			-- Add coverage information
+			configuration( "Debug" )
+				buildoptions( { "-fprofile-arcs", "-ftest-coverage" } )
+				if kindVal ~= "StaticLib" then
+					links( "gcov" )
+				end
+		else
+			error( "gcov can only be used with gcc" )
+		end
+	end
 
 	-- targetdir, implibdir, and libdirs defaults --------------------------------------
 	configuration "x32 or native"
@@ -253,7 +356,9 @@ function Configure()
 			if "StaticLib" == kindVal then
 				targetdir( solution().basedir .. "/lib" )
 			else
-				targetdir( solution().basedir .. "/bin" )
+				if nil == gpack or (gpack and not gpack.invoked) then
+					targetdir( solution().basedir .. "/bin" )
+				end
 			end
 		end
 		if nil == next( SolutionLibDirs( false ) ) then
@@ -262,11 +367,23 @@ function Configure()
 		--[[ TODO: When the build agents are upgraded to premake 4.4, enable this line. Until then, we rely on the fact that
 				our linux build agents all use 64-bit linux.
 		]]
-		if os.is( "windows" ) then --or ( os.is( "linux" ) and not os.is64bit() ) then
+		--if os.is( "windows" ) or ( os.is( "linux" ) and not os.is64bit() ) then
+		if os.is( "windows" ) then
 			if ActionUsesGCC() then
 				buildoptions( "-m32" )
 				linkoptions( "-m32" )
 				resoptions( "-F pe-i386" )
+			end
+			
+			if not ( kindVal == "StaticLib" ) then
+				if _OPTIONS[ "large-address-aware" ] or _OPTIONS["large-address-aware"] == "yes" then
+					if ActionUsesGCC() then
+						linkoptions( "-Wl,--large-address-aware" )
+					end
+					if ActionUsesMSVC() then
+						linkoptions( "/LARGEADDRESSAWARE" )
+					end
+				end
 			end
 		end
 
@@ -276,7 +393,9 @@ function Configure()
 			if "StaticLib" == kindVal then
 				targetdir( solution().basedir .. "/lib64" )
 			else
-				targetdir( solution().basedir .. "/bin64" )
+				if nil == gpack or (gpack and not gpack.invoked) then
+					targetdir( solution().basedir .. "/bin64" )
+				end
 			end
 		end
 		if nil == next( SolutionLibDirs( false ) ) then
@@ -313,7 +432,7 @@ function Configure()
 		objdir( ".obju/" .. iif( _ACTION, _ACTION, "" ) )
 
 	-- COMPILER SPECIFIC SETUP ----------------------------------------------------
-	--
+	--		
 	configuration( "gmake or codelite or codeblocks or xcode3" )
 		buildoptions( { "-Wno-unknown-pragmas", "-Wno-deprecated", "-fno-strict-aliasing" } )
 		if os.get() == "windows" then
@@ -340,7 +459,13 @@ function Configure()
 			"/wd 4503" -- disable warning: "decorated name length exceeded, name was truncated"
 		}
 
-	configuration( "vs2008 or vs2010 or vs2012" )
+	configuration( { "vs*", "release-with-debug-symbols", "Release", "not StaticLib" } )
+		linkoptions "/DEBUG"
+
+        configuration( { "release-with-debug-symbols", "Release" } )
+		flags( "Symbols" )
+
+	configuration( "vs*", "not vs2005" )
 		-- multi-process building
 		flags( "NoMinimalRebuild" )
 		buildoptions( "/MP" )
@@ -380,15 +505,96 @@ function Configure()
 			linkoptions( "-Wl,-rpath," .. rpath )
 		end
 
-		-- Set soname
-		local sonameOption = _OPTIONS[ "soname" ]
-		if sonameOption then
-			if "no" ~= sonameOption and "" ~= sonameOption then
-				linkoptions( "-Wl,-soname," .. sonameOption )
+	configuration(cfg.terms)
+
+end
+
+--[[	Configure a C/C++ project to use a library.
+--  @param libName			{string} Name of the library
+--  @param includePath		{string} [DEF] Path to include directory
+--  @param sharedOptionName	{string} [DEF] Name of option controlling dynamic linkage
+--  @param usingDllDefine	{string} [DEF] Define for using the library as a dll.
+--	Appended to project setup:
+--		includedirs	(	"../" .. includePath or libName	)
+--		links		(	libName							)
+--		if _OPTIONS[ sharedOptionName or ( string.lower( libName ) .. "-shared" ) ] then
+--			defines( usingDllDefine or ( string.upper( libName ) .. "_USING_DLL" ) )
+--		end
+--
+--	Example:
+--		ConfigureLibrary( "boost_utils" )
+--]]
+
+function ConfigureLibrary( libName, includePath, sharedOptionName, usingDllDefine )
+
+	if not libName then
+		error( "ConfigureLibrary needs the name of the library", 2 )
+	end
+
+	if type( libName ) ~= "string" then
+		error( "ConfigureLibrary expects the name of the library as a string", 2 )
+	end
+
+	local kindVal = presets.GetCustomValue( "kind" ) or ""
+	if ( kindVal ~= "StaticLib" ) then
+		links( libName )
+	end
+
+	local function CheckDirOrLowercaseDir( dir )
+		local lowerDir = string.lower( dir )
+		if os.isdir( dir ) then
+			return dir
+		elseif os.isdir( lowerDir ) then
+			return lowerDir
+		else
+			local supplimentalErrorMsg = ""
+			if dir ~= lowerDir then
+				supplimentalErrorMsg = "or '" .. lowerDir .. "' "
 			end
+			error( "ConfigureLibrary( " .. libName .. " ): The additional include directory '" .. dir .. "' " .. supplimentalErrorMsg .. "does not exist", 4 )
+		end
+	end
+
+	local function AddIncludeDirWithValidation( dir )
+		dir = CheckDirOrLowercaseDir( dir )
+		local success, msg = pcall( includedirs, dir )
+		if not success then
+			error( "ConfigureLibrary( " .. libName .. " ): " .. msg, 3 )
+		end
+	end
+
+	if includePath then
+		AddIncludeDirWithValidation( includePath )
+	else
+		if unittest and unittest.projectUnderTestKind then
+			kindVal = unittest.projectUnderTestKind
 		end
 
-	configuration(cfg.terms)
+		presets.Trace( "Configuring " .. libName .. " for " .. project().name .. ", when " .. project().name .. " is a " .. kindVal )
+
+		local upPath = "../" .. libName
+		local downPath = libName
+
+		if ( kindVal == "StaticLib" ) then
+			AddIncludeDirWithValidation( upPath )
+		elseif ( kindVal == "SharedLib" ) then
+			local hasUpPath, upPath = pcall( CheckDirOrLowercaseDir, upPath )
+			local hasDownPath, downPath = pcall( CheckDirOrLowercaseDir, downPath )
+			if hasDownPath then
+				AddIncludeDirWithValidation( downPath )
+			elseif hasUpPath then
+				AddIncludeDirWithValidation( upPath )
+			else
+				error( "ConfigureLibrary( " .. libName .. " ): The additional include directory cannot be determined because '" .. upPath .. "' and '" .. downPath .. "'", 3 )
+			end
+		else
+			AddIncludeDirWithValidation( downPath )
+		end
+	end
+
+	if _OPTIONS[ sharedOptionName or ( string.lower( libName ) .. "-shared" ) ] then
+		defines( usingDllDefine or ( string.upper( libName ) .. "_USING_DLL" ) )
+	end
 end
 
 -- Adds path as a system path in gcc so warnings are ignored
@@ -405,6 +611,127 @@ function AddSystemPath( path )
 	end
 end
 
+---	Removes a single value in a table.
+--	@param tbl Table to seach in.
+--	@param value String of the value to remove in tbl.
+function iRemoveEntry( tbl, value )
+	for i, val in ipairs( tbl ) do
+		if type( val ) == "table" then
+			if true == iRemoveEntry( val, value ) then
+				return true
+			end
+		else
+			if val == value then
+				table.remove( tbl, i )
+				return true
+			end
+		end
+	end
+
+	return false
+end
+
+function TableWrite( tbl, indent )
+	indent = indent or "\t"
+	local function FormatKey( k )
+		if type( k ) == "string" then
+			return k --'"' .. k .. '"]'
+		elseif type( k ) == "number" then
+			return "[" .. k .. "]"
+		else
+			return tostring( k )
+		end
+	end
+
+	local function FormatValue( v )
+		if type( v ) == "string" then
+			return '"' .. v .. '"'
+		else
+			return tostring( v )
+		end
+	end
+
+	local retVal = ""
+	local indentCount = 0
+	local function Stringify( tbl, indent )
+		-- Start the table brace
+		retVal = retVal .. indent:rep( indentCount ) .. "{\n"
+		-- Indent the contents
+		indentCount = indentCount + 1
+		for key, value in pairs( tbl ) do
+			if type( value ) == "table" then
+				Stringify( value, indent )
+			else
+				retVal = retVal .. string.format( "%s%s = %s,\n", indent:rep( indentCount ), FormatKey( key ), FormatValue( value ) )
+			end
+		end
+		-- Unindent to add the closing table brace
+		indentCount = indentCount - 1
+		-- End the table brace
+		retVal = retVal .. indent:rep( indentCount ) .. "}\n"
+
+		return retVal
+	end
+
+	return Stringify( tbl, indent )
+end
+
+function pprint( tbl, indent )
+	print( TableWrite( tbl, indent ) ); io.stdout:flush()
+end
+
+---	Assumptions: Tool SubWCRev is installed
+--	Make a version to be maintained by subversion
+--	@param name of the file to be created for versioning ( nameOfFile.template must exist as the template for created file )
+--	@example
+--
+--	#include "DeviceComm.h"
+--
+--	namespace devcomm
+--	{
+--		unsigned long DeviceComm::GetBuildNumber()
+--		{
+--			return $WCREV$;
+--		}
+--	}
+--	$WCREV$ will be replaced by svn revision of working copy by tool SubWCRev
+function MakeVersion( nameOfFile, workingDirectory )
+	workingDirectory = workingDirectory or "./"
+	if (type(nameOfFile) ~= "string") then
+		error( "MakeVersion expects nameOfFile as string, but it was passed as: " .. type(nameOfFile), 2 )
+	end
+	if (type(workingDirectory) ~= "string") then
+		error( "MakeVersion expects workingDirectory as string, but it was passed as: " .. type(workingDirectory), 2 )
+	end
+	local svnwcrev
+	if ( os.is( "windows" ) ) then
+		svnwcrev = "C:/Program Files/TortoiseSVN/bin/SubWCRev.exe"
+		if not os.isfile( svnwcrev )  then
+			-- TortoiseSVN is not installed in the default location, so now it is required
+			-- to be their PATH.
+			svnwcrev = "SubWCRev.exe"
+		end
+	else
+		svnwcrev = "svnwcrev"
+	end
+
+	local nameOfTemplate = nameOfFile .. '.template'
+	local cmd = '"' .. svnwcrev .. '" ' .. workingDirectory .. ' ' .. nameOfTemplate .. ' ' .. nameOfFile
+	prebuildcommands { cmd }
+
+	-- Check if the file is already added to the package's file table.
+	if not table.contains( configuration().files, nameOfFile ) then
+		-- Only add it because it isn't already there.
+		io.popen( cmd )
+		files { nameOfFile }
+	end
+
+	-- add template file to project so the template can be easily updated
+	if not table.contains( configuration().files, nameOfTemplate ) then
+		files { nameOfTemplate }
+	end
+end
+
 function SolutionTargetDir( setError )
 	setError = setError or false
 	local sln = solution()
@@ -414,6 +741,18 @@ function SolutionTargetDir( setError )
 
 	if setError then
 		error( "targetdir has not been set on the solution", 2 )
+	end
+end
+
+function SolutionObjDir( setError )
+	setError = setError or false
+	local sln = solution()
+	if ( sln.blocks[1] and sln.blocks[1].objdir ) then
+		return solution().blocks[1].objdir
+	end
+
+	if setError then
+		error( "objdir has not been set on the solution", 2 )
 	end
 end
 
@@ -481,6 +820,156 @@ function presets.CopyFile( sourcePath, destinationDirectory )
 	end
 end
 
+function WindowsCopy( ... )
+	if os.is( "windows" ) then
+		presets.CopyFile( ... )
+	end
+end
+
+function CopyDebugCRT( destinationDirectory )
+	CopyCRT( destinationDirectory, true, false )
+end
+
+function Copy64BitCRT( destinationDirectory )
+	CopyCRT( destinationDirectory, false, true )
+end
+
+function Copy64BitDebugCRT( destinationDirectory )
+	CopyCRT( destinationDirectory, true, true )
+end
+
+-- Copy the redist runtime dlls
+function CopyCRT( destinationDirectory, copyDebugCRT, copy64Bit )
+
+	if nil == copy64Bit then
+		copy64Bit = ( "x64" == presets.platform )
+	end
+
+	if ( os.get() == "windows" ) then
+		local sourcePath = ""
+		if ActionUsesMSVC() then
+			local vsdir = ""
+			local vcname = ""
+			local arch = "x86"
+			if copy64Bit then
+				arch = "x64"
+			end
+
+			if _ACTION == "vs2005" then
+				vsdir = "Microsoft Visual Studio 8"
+				vcname = "VC80"
+			elseif _ACTION == "vs2008" then
+				vsdir = "Microsoft Visual Studio 9.0"
+				vcname = "VC90"
+			elseif _ACTION == "vs2010" then
+				vsdir = "Microsoft Visual Studio 10.0"
+				vcname = "VC100"
+			elseif _ACTION == "vs2012" then
+				vsdir = "Microsoft Visual Studio 11.0"
+				vcname = "VC110"
+			elseif _ACTION == "vs2013" then
+				vsdir = "Microsoft Visual Studio 12.0"
+				vcname = "VC120"
+			end
+
+			local libsToCopy = {}
+			local programFiles = os.getenv( "ProgramFiles" )
+			if copyDebugCRT then
+				libsToCopy = os.matchfiles(programFiles  .. '/' .. vsdir .. '/VC/redist/Debug_NonRedist/'..arch..'/Microsoft.' .. vcname .. '.DebugCRT/*' )
+			else
+				local crtPath = programFiles .. '/' .. vsdir .. '/VC/redist/'..arch..'/Microsoft.' .. vcname .. '.CRT/*'
+				libsToCopy = os.matchfiles(crtPath)
+				print ( "found " .. #libsToCopy .. " crt files to copy from " .. crtPath )
+			end
+			if _OPTIONS["openmp"] then
+				local ompPath = programFiles .. '/' .. vsdir .. '/VC/redist/'..arch..'/Microsoft.' .. vcname .. '.OPENMP/*'
+				local ompLibs = {}
+				ompLibs = os.matchfiles(ompPath)
+				for _, lib in ipairs( ompLibs ) do
+					table.insert( libsToCopy, lib )
+				end
+			end
+			for _, lib in ipairs( libsToCopy ) do
+				WindowsCopy( lib, destinationDirectory )
+			end
+		elseif ActionUsesGCC() then
+			local gccBin = presets.GccBinDir()
+			local gccVersionBefore48 = tonumber( presets.GetGccVersion() ) < 48
+			if gccVersionBefore48 then
+				WindowsCopy( gccBin .. "mingwm10.dll", destinationDirectory )
+				WindowsCopy( gccBin .. "libgcc_s_dw2-1.dll", destinationDirectory )
+			end
+
+			if _OPTIONS["openmp"] then
+				
+				if gccVersionBefore48 then
+					WindowsCopy( presets.GccRoot() .. "\\lib\\gcc\\mingw32\\bin\\libgomp-1.dll", SolutionTargetDir() )
+					WindowsCopy( gccBin .. "pthreadGC2.dll", SolutionTargetDir() )
+				else
+					if copy64Bit then
+						WindowsCopy( gccBin .. "libgomp_64-1.dll", SolutionTargetDir() )
+					else
+						WindowsCopy( gccBin .. "libgomp-1.dll", SolutionTargetDir() )
+					end
+				end
+			end
+		end
+	end
+end
+
+---
+-- Convert a file to a c header file for includsion as an array
+-- @param sourceFile	The name of the file to convert
+-- @param destFile		[DEF] The name of the destination file, defaults to path.getname( sourceFile ) .. ".h"
+-- @param destFile		[DEF] The name of the variable, defaults to path.getname( sourceFile )
+-- Adapted from
+-- http://lua-users.org/wiki/BinToCee
+-- Original author: Mark Edgar
+-- Licensed under the same terms as Lua (MIT license).
+--
+function presets.Bin2C( sourceFile, destFile, variableName, dataType )
+
+	local content = assert( io.open( sourceFile,"rb" ) ):read"*all"
+
+	presets.Trace( "Bin2C content size: " .. content:len() )
+
+	local dump do
+		local numberTable={}
+		for i = 0, 255 do
+			numberTable[ string.char( i ) ] = ("0x%02X,"):format( i )
+		end
+		function dump( str )
+			return ( str:gsub( ".", numberTable ):gsub( ("."):rep(75), "%0\n\t" ) )
+		end
+	end
+
+	local filename = path.getname( sourceFile )
+	variableName = variableName or string.lower( string.gsub( filename, "%.", "_" ) )
+	destFile = destFile or filename .. ".h"
+	local headerGuard = string.upper( string.gsub( path.getname( destFile ), "%.", "_" ) )
+	local arrayDataType = dataType or "unsigned char"
+	local output = assert( io.open( destFile, "w" ) )
+	assert( output:write (
+	"/* code automatically generated by bin2c -- DO NOT EDIT */\n",
+	"#ifndef ", headerGuard, "\n",
+	"#define ", headerGuard, "\n\n",
+	"static const " .. arrayDataType .. " ", variableName, "[] = \n",
+	"{\n\t",
+	dump(content), "\n",
+	"};\n\n",
+	"#endif //", headerGuard, "\n" ) )
+	assert( output:flush() );
+end
+
+---
+-- call print if 'with-trace' is on
+--
+function presets.Trace( ... )
+	if _OPTIONS["with-trace"] then
+		print( ... ); io.stdout:flush()
+	end
+end
+
 ---
 -- return true if platform will be included in the generated solution
 --
@@ -495,9 +984,36 @@ function VS2012ExpressHeader(sln)
 end
 
 if (_ACTION == "vs2012")  and os.isfile( os.getenv("VS110COMNTOOLS") .. "..\\IDE\\WDExpress.exe" ) then
+	assert( premake.vstudio.sln2005.header )
 	premake.vstudio.sln2005.header = VS2012ExpressHeader
 end
 
+-- hack to inject the soname for gcc shared libraries
+local premakesGccGetLdFlags = premake.gcc.getldflags
+function GccLdFlagsWithSoName( cfg )
+	local ldflags = premakesGccGetLdFlags( cfg )
+	
+	if cfg.kind == "SharedLib" then
+		table.insert( ldflags, "-Wl,-soname," .. cfg.linktarget.name ) -- the '.1' should be the major version of the shared library being produced. need a way to pass it in, but it will probably be a built in feature of premake, someday.
+	end
+	
+	return ldflags
+end
+
+-- hack to set flags for just cpp files
+local premakesGccGetCxxFlags = premake.gcc.getcxxflags
+function GccCxxFlags( cfg )
+	local cxxflags = premakesGccGetCxxFlags( cfg )
+	if _OPTIONS[ presets.cpp11Option ] then
+		table.insert( cxxflags, "-std=c++11" )
+	end
+	return cxxflags
+end
+
+if ActionUsesGCC() then	
+	premake.gcc.getldflags = GccLdFlagsWithSoName
+	premake.gcc.getcxxflags = GccCxxFlags
+end
 
 function presets.VerifyDllVersion( envPath, relPathToDLL, strName )
 
@@ -507,7 +1023,7 @@ function presets.VerifyDllVersion( envPath, relPathToDLL, strName )
 	if _ACTION:find( "vs" ) then
 		local dllPath = envPath .. relPathToDLL
 		local dumpBinPath = "../../VC/bin/dumpbin.exe"
-		local vscomntools = ""
+		local vscomntools = nil
 		local expectedVersion = "0"
 		if _ACTION == "vs2005" then
 			vscomntools = os.getenv( "VS80COMNTOOLS" )
