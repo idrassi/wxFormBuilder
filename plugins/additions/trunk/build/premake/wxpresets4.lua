@@ -188,11 +188,19 @@ function wx.Configure( shouldSetTarget )
 		defines { "__WXMSW__" }
 		-- Set the targets.
 		if shouldSetTarget and not ( kindVal == "WindowedApp" or kindVal == "ConsoleApp" ) then
-			configuration	{ "Debug" }
-			   targetname	( wx.LibName( targetName, true ) )
+			configuration	{ "Debug", "StaticLib" }
+			   targetname	( wx.LibName( targetName, true, false ) )
+			   
+			configuration	{ "Debug", "SharedLib" }
+			   implibname	( wx.LibName( targetName, true, false ) )
+			   targetname	( wx.LibName( targetName, true, true ) )
 
-			configuration	{ "Release" }
-			   targetname 	( wx.LibName( targetName, false ) )
+			configuration	{ "Release", "StaticLib" }
+			   targetname 	( wx.LibName( targetName, false, false ) )
+			 
+			configuration	{ "Release", "SharedLib" }
+			   implibname	( wx.LibName( targetName, false, false ) )
+			   targetname 	( wx.LibName( targetName, false, true ) )
 			   
 			configuration	{ "x64" }
 				targetdir	( targetDirBase .. "lib/" .. toolchain .. "_x64_" .. linktype )
@@ -239,7 +247,7 @@ function wx.Configure( shouldSetTarget )
 	configuration( {} )
 end
 
-function wx.LibName( targetName, isDebug )
+function wx.LibName( targetName, isDebug, sharedLibrary )
 	local name = ""
 	local unicodeSuffix = iif( _OPTIONS["unicode"], "u", "" )
 	-- Make the parameters optional.
@@ -251,7 +259,11 @@ function wx.LibName( targetName, isDebug )
 		local vc8 = ""
 
 		if _OPTIONS["monolithic"] then monolithic = "m" end		
-		name = "wxmsw" .. wxVer .. unicodeSuffix .. monolithic .. debug .. "_" .. targetName .. "_" .. toolchain
+		local toolchainSuffix = ""
+		if sharedLibrary then
+			toolchainSuffix = "_" .. toolchain
+		end
+		name = "wxmsw" .. wxVer .. unicodeSuffix .. monolithic .. debug .. "_" .. targetName .. toolchainSuffix
 		
 	elseif "linux" == os.get() then
 		local wx_ver = wxVer:sub( 1, 1 ).."."..wxVer:sub( 2 )
