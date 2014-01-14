@@ -1,3 +1,10 @@
+libwxadditions30 (3.0.10.5-0ubuntu1~precise1) precise; urgency=low
+
+  * Sync to upstream
+  * Updated to building against wxWidgets 3.0
+
+ -- Ryan Pusztai <rpusztai@gmail.com>  Tue, 14 Jan 2014 10:57:55 -0500
+
 libwxadditions28 (2.8.10.5-0ubuntu1~lucid1) lucid; urgency=low
 
   * Sync to upstream revision 1975
