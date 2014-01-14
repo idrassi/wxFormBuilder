@@ -32,7 +32,8 @@ function make_src_tarball
 	
 	# use a temporary directory
 	tmpdir=wxfb-wxadditions-$1 #.orig
-
+	#mkdir ../$tmpdir
+	
 	cp -R $basedir   ../$tmpdir
 	cd ..
 
@@ -51,7 +52,7 @@ fi
 cat "$changelog" |
 while read line;
 do
- version=`expr match "$line" '.*\([0-9]\.[0-9]\{1,2\}\.[0-9]\+\.[0-9]\+\)'`
+ version=`expr match "$line" '.*\([0-9]\.[0-9]\{1,2\}\.[0-9]\+\)'`
  if [ -n "$version" ]
  then
  echo "$version"
