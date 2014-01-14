@@ -16,8 +16,8 @@ build: build-stamp
 build-stamp: configure-stamp 
 	dh_testdir
 	
-	$(MAKE) -C$(CURDIR)/build CONFIG=Release
-	$(MAKE) -C$(CURDIR)/build CONFIG=Debug
+	$(MAKE) -C$(CURDIR)/build config=release
+	$(MAKE) -C$(CURDIR)/build config=debug
 
 	touch $@
 
@@ -26,30 +26,24 @@ clean:
 	dh_testroot
 	rm -f build-stamp configure-stamp
 
-	$(MAKE) -C$(CURDIR)/build CONFIG=Release clean
-	$(MAKE) -C$(CURDIR)/build CONFIG=Debug clean
+	$(MAKE) -C$(CURDIR)/build config=release clean
+	$(MAKE) -C$(CURDIR)/build config=debug clean
 
 	dh_clean 
 
 install: build
-	dh_testdir
-	dh_testroot
-	dh_clean -k 
-	dh_installdirs
-
-	$(CURDIR)/build/install $(CURDIR)/debian/libwxadditions30/usr
-	$(CURDIR)/build/install-dbg $(CURDIR)/debian/libwxadditions30-dbg/usr
-	$(CURDIR)/build/install-dev $(CURDIR)/debian/libwxadditions30-dev/usr
 
 binary-indep: build install
 
 binary-arch: build install
 	dh_testdir
 	dh_testroot
+	dh_clean -k 
+	dh_installdirs
 	dh_installchangelogs 
 	dh_installdocs
 	dh_installexamples
-#	dh_install
+	dh_install
 #	dh_installmenu
 #	dh_installdebconf	
 #	dh_installlogrotate
