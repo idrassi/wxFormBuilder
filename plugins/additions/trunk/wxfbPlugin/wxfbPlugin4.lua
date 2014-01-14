@@ -31,9 +31,11 @@ files			{
 				}
 libdirs			{
 					"lib",
-					"../lib",
-					--"../lib/gcc" .. _OPTIONS["compiler-version"] .. "_dll"
+					"../lib"
 				}
+if os.is( "windows" ) then
+	libdirs { "../lib/gcc" .. _OPTIONS["compiler-version"] .. "_dll" }
+end
 links			{
 					"plugin-interface",
 					"TiCPP",
