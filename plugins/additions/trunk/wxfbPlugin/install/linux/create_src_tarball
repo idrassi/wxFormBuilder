@@ -25,14 +25,10 @@ function make_src_tarball
 
 	# root source dir
 	basedir=.
-	
-	cd build
-	
+		
 	# create Makefiles
 	# Use premake to generate Makefiles
 	premake4 --shared-libraries gmake
-
-	cd ..
 	
 	# use a temporary directory
 	tmpdir=wxfb-wxadditions-$1 #.orig
