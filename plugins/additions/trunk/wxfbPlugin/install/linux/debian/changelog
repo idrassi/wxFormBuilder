@@ -1,4 +1,4 @@
-wxfb-wxadditions (1.15.0-1ubuntu1~precise1) precise; urgency=low
+wxfb-wxadditions (1.15.1-0ubuntu1~precise1) precise; urgency=low
 
   * sync with upstream.
   * Updated to build against wxWidgets 3.0.
