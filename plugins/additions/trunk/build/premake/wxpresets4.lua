@@ -192,14 +192,12 @@ function wx.Configure( shouldSetTarget )
 			   targetname	( wx.LibName( targetName, true, false ) )
 			   
 			configuration	{ "Debug", "SharedLib" }
-			   implibname	( wx.LibName( targetName, true, false ) )
 			   targetname	( wx.LibName( targetName, true, true ) )
 
 			configuration	{ "Release", "StaticLib" }
 			   targetname 	( wx.LibName( targetName, false, false ) )
 			 
 			configuration	{ "Release", "SharedLib" }
-			   implibname	( wx.LibName( targetName, false, false ) )
 			   targetname 	( wx.LibName( targetName, false, true ) )
 			   
 			configuration	{ "x64" }
