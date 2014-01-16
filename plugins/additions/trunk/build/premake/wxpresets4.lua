@@ -129,6 +129,10 @@ function wx.Configure( shouldSetTarget )
 		if ActionUsesGCC() then
 			libDir64 = rootPrefix .. "/" .. toolchain .. "_" .. linktype .. "_x64"
 		end
+		if not os.isdir( libDir64 ) then
+			libDir64 = rootPrefix .. "64/" .. toolchain .. "_" .. linktype
+		end
+		
 		local setupHincludeDir = libDir .. "/msw" .. unicodeSuffix
 		local setupHincludeDir64 = libDir64 .. "/msw" .. unicodeSuffix
 		local targetDir = targetDirBase .. "lib/gcc_dll"
