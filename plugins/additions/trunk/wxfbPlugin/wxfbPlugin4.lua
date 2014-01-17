@@ -39,12 +39,12 @@ end
 links			{
 					"plugin-interface",
 					"TiCPP",
-					wx.LibName( "treelistctrl", isDebug ),
-					wx.LibName( "plotctrl", isDebug ),
-					wx.LibName( "things", isDebug ),
-					wx.LibName( "awx", isDebug ),
-					wx.LibName( "ledbargraph", isDebug ),
-					wx.LibName( "flatnotebook", isDebug ),
+					wx.LibName( "treelistctrl", isDebug, true ),
+					wx.LibName( "plotctrl", isDebug, true ),
+					wx.LibName( "things", isDebug, true ),
+					wx.LibName( "awx", isDebug, true ),
+					wx.LibName( "ledbargraph", isDebug, true ),
+					wx.LibName( "flatnotebook", isDebug, true ),
 				}
 
 Configure()
