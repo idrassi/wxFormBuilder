@@ -56,7 +56,7 @@
 			
 		configuration { "macosx", "gmake" }
 			buildoptions { "-mmacosx-version-min=10.1" }
-			linkoptions { "-lstdc++-static", "-mmacosx-version-min=10.1" }
+			linkoptions { "-mmacosx-version-min=10.1" }
 
 		configuration { "not windows", "not solaris" }
 			linkoptions { "-rdynamic" }
