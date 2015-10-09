@@ -119,7 +119,7 @@ public:
     void OnCreated( wxObject* wxobject, wxWindow* wxparent )
     {
 		// initialize tree
-		wxadditions::wxTreeListCtrl* treeListCtrl = wxDynamicCast( wxparent, wxadditions::wxTreeListCtrl );
+		wxadditions::wxTreeListCtrl* treeListCtrl = wxDynamicCast( wxobject, wxadditions::wxTreeListCtrl );
 		int colCount = treeListCtrl->GetColumnCount();
 
 		// Check for columns
