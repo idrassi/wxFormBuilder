@@ -38,6 +38,10 @@ if %1 == VC120    	    goto SETUP_VC120_BUILD_ENVIRONMENT
 if %1 == vc120    	    goto SETUP_VC120_BUILD_ENVIRONMENT
 if %1 == VC120_64 	    goto SETUP_VC120_64_BUILD_ENVIRONMENT
 if %1 == vc120_64 	    goto SETUP_VC120_64_BUILD_ENVIRONMENT
+if %1 == VC140    	    goto SETUP_VC140_BUILD_ENVIRONMENT
+if %1 == vc140    	    goto SETUP_VC140_BUILD_ENVIRONMENT
+if %1 == VC140_64 	    goto SETUP_VC140_64_BUILD_ENVIRONMENT
+if %1 == vc140_64 	    goto SETUP_VC140_64_BUILD_ENVIRONMENT
 if %1 == MINGW4_W64	    goto SETUP_MINGW4_W64_BUILD_ENVIRONMENT
 if %1 == mingw4_w64     goto SETUP_MINGW4_W64_BUILD_ENVIRONMENT
 if %1 == MINGW4_W64_64  goto SETUP_MINGW4_W64_64_BUILD_ENVIRONMENT
@@ -151,6 +155,24 @@ goto START
 echo Setting environment for Visual C++ 12.0 64-bit...
 echo.
 set ACTION=vs2013
+set PLATFORM=x64
+call :GENERATE_BUILD_CMD_VC
+goto START
+
+:SETUP_VC140_BUILD_ENVIRONMENT
+:: Add the VC 2015 includes.
+echo Setting environment for Visual C++ 14.0...
+echo.
+set ACTION=vs2015
+set PLATFORM=x32
+call :GENERATE_BUILD_CMD_VC
+goto START
+
+:SETUP_VC140_64_BUILD_ENVIRONMENT
+:: Add the VC 2015 64-bit includes.
+echo Setting environment for Visual C++ 14.0 64-bit...
+echo.
+set ACTION=vs2015
 set PLATFORM=x64
 call :GENERATE_BUILD_CMD_VC
 goto START
