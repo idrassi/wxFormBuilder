@@ -60,6 +60,8 @@ if ActionUsesMSVC() and 30 <= tonumber( wxVer ) then
 		compilerVersion = "110"
 	elseif _ACTION == "vs2013" then
 		compilerVersion = "120"
+	elseif _ACTION == "vs2015" then
+		compilerVersion = "140"
 	else
 		error( "Unsupported version of Visual Studio" )
 	end

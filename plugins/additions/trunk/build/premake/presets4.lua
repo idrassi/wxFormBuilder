@@ -870,6 +870,9 @@ function CopyCRT( destinationDirectory, copyDebugCRT, copy64Bit )
 			elseif _ACTION == "vs2013" then
 				vsdir = "Microsoft Visual Studio 12.0"
 				vcname = "VC120"
+			elseif _ACTION == "vs2015" then
+				vsdir = "Microsoft Visual Studio 14.0"
+				vcname = "VC140"
 			end
 
 			local libsToCopy = {}
@@ -1040,6 +1043,9 @@ function presets.VerifyDllVersion( envPath, relPathToDLL, strName )
 		elseif _ACTION == "vs2013" then
 			vscomntools = os.getenv( "VS120COMNTOOLS" )
 			expectedVersion = "12.00"
+		elseif _ACTION == "vs2015" then
+			vscomntools = os.getenv( "VS140COMNTOOLS" )
+			expectedVersion = "14.00"
 		end
 
 		if vscomntools then
