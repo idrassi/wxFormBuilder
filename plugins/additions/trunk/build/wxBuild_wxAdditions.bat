@@ -74,8 +74,8 @@ exit /b
 
 :GETMSBUILDPATH
 set MSBUILDPATH=
-if exist "%ProgramFiles%\MSBuild\12.0\bin" set MSBUILDPATH="%ProgramFiles%\MSBuild\12.0\bin\MSBuild.exe"
-if exist "%ProgramFiles(x86)%\MSBuild\12.0\bin" set MSBUILDPATH="%ProgramFiles(x86)%\MSBuild\12.0\bin\MSBuild.exe"
+if exist "%ProgramFiles%\MSBuild\14.0\bin" set MSBUILDPATH="%ProgramFiles%\MSBuild\14.0\bin\MSBuild.exe"
+if exist "%ProgramFiles(x86)%\MSBuild\14.0\bin" set MSBUILDPATH="%ProgramFiles(x86)%\MSBuild\14.0\bin\MSBuild.exe"
 IF not (%MSBUILDPATH%) == () exit /b
 IF (%MSBUILDPATH%) == () (
 	set REGPATH="HKLM\software\wow6432node\microsoft\visualstudio\sxs\vc7"
