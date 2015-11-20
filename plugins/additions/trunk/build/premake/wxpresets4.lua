@@ -159,16 +159,35 @@ function wx.Configure( shouldSetTarget )
 
 		-- Set wxWidgets libraries to link. The order we insert matters for the linker.
 		local wxLibs = { "wxmsw" .. wxVer .. unicodeSuffix } --, "wxexpat", "wxjpeg", "wxpng", "wxregex" .. unicodeSuffix, "wxtiff", "wxzlib" }
-
+		
+		local thirdPartyDir = os.getenv( "WXBUILD_3RD_PARTY" )
+		if thirdPartyDir then
+			table.insert( wxLibs, "jpeg-static" )
+			table.insert( wxLibs, "png" )
+			table.insert( wxLibs, "tiff" )
+			table.insert( wxLibs, "z" )
+		end
+		
+		local function SetLibDirs( mode )
+			if thirdPartyDir then			
+				local compiler = iif( ActionUsesGCC(), "mingw", _ACTION )
+				local arch = iff( presets.platform == "x64", "x64", "" )
+				local path = thirdPartyDir .. "/lib" .. arch .. "/" .. compiler .. "/link-static/runtime-dynamic/" .. mode
+				libdirs { path }
+			end
+		end
+		
 		configuration { "Debug", "not StaticLib" }
 			for _, lib in ipairs( wxLibs ) do
 				links { lib .. "d" }
 			end
+			SetLibDirs( "debug" )
 
 		configuration { "Release", "not StaticLib" }
 			for _, lib in ipairs( wxLibs ) do
 				links { lib }
 			end
+			SetLibDirs( "release" )
 
 		configuration { "not StaticLib" }
 			local winLibs =
