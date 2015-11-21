@@ -161,6 +161,12 @@ function wx.Configure( shouldSetTarget )
 		local wxLibs = { "wxmsw" .. wxVer .. unicodeSuffix } --, "wxexpat", "wxjpeg", "wxpng", "wxregex" .. unicodeSuffix, "wxtiff", "wxzlib" }
 		
 		local thirdPartyDir = os.getenv( "WXBUILD_3RD_PARTY" )
+		local compiler = iif( ActionUsesGCC(), "mingw", _ACTION )
+		local arch = iff( presets.platform == "x64", "x64", "" )
+		if not os.isdir( thirdPartyDir .. "/lib" .. arch .. "/" .. compiler ) then
+			thirdPartyDir = nil
+		end
+			
 		if thirdPartyDir then
 			table.insert( wxLibs, "jpeg-static" )
 			table.insert( wxLibs, "png" )
@@ -170,8 +176,6 @@ function wx.Configure( shouldSetTarget )
 		
 		local function SetLibDirs( mode )
 			if thirdPartyDir then			
-				local compiler = iif( ActionUsesGCC(), "mingw", _ACTION )
-				local arch = iff( presets.platform == "x64", "x64", "" )
 				local path = thirdPartyDir .. "/lib" .. arch .. "/" .. compiler .. "/link-static/runtime-dynamic/" .. mode
 				libdirs { path }
 			end
