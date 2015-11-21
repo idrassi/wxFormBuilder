@@ -160,9 +160,16 @@ function wx.Configure( shouldSetTarget )
 		-- Set wxWidgets libraries to link. The order we insert matters for the linker.
 		local wxLibs = { "wxmsw" .. wxVer .. unicodeSuffix } --, "wxexpat", "wxjpeg", "wxpng", "wxregex" .. unicodeSuffix, "wxtiff", "wxzlib" }
 		
+		local function GetArch()
+			if "x64" == presets.platform then
+				return "x64"
+			end
+			return ""
+		end
+		
 		local thirdPartyDir = os.getenv( "WXBUILD_3RD_PARTY" )
 		local compiler = iif( ActionUsesGCC(), "mingw", _ACTION )
-		local arch = iff( presets.platform == "x64", "x64", "" )
+		local arch = GetArch()
 		if not os.isdir( thirdPartyDir .. "/lib" .. arch .. "/" .. compiler ) then
 			thirdPartyDir = nil
 		end
