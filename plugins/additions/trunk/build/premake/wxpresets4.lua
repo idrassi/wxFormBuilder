@@ -170,7 +170,7 @@ function wx.Configure( shouldSetTarget )
 		local thirdPartyDir = os.getenv( "WXBUILD_3RD_PARTY" )
 		local compiler = iif( ActionUsesGCC(), "mingw", _ACTION )
 		local arch = GetArch()
-		if not os.isdir( thirdPartyDir .. "/lib" .. arch .. "/" .. compiler ) then
+		if not os.isdir( thirdPartyDir .. "/include/jpeg-turbo/" .. compiler ) then
 			thirdPartyDir = nil
 		end
 			
