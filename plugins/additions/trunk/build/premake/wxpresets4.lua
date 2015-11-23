@@ -2,6 +2,7 @@
 --	Name:		wxpresents4.lua, a Premake4 script
 --	Author:		Ben Cleveland, based on wxpresents.lua by Ryan Pusztai
 --	Date:		11/24/2010
+--	Date:		11/24/2010
 --	Version:	1.00
 --
 --	Notes:
@@ -167,24 +168,20 @@ function wx.Configure( shouldSetTarget )
 			return ""
 		end
 		
-		local thirdPartyDir = os.getenv( "WXBUILD_3RD_PARTY" )
-		local compiler = iif( ActionUsesGCC(), "mingw", _ACTION )
-		local arch = GetArch()
-		if thirdPartyDir and not os.isdir( thirdPartyDir .. "/include/jpeg-turbo/" .. compiler ) then
-			thirdPartyDir = nil
-		end
-			
-		if thirdPartyDir then
-			table.insert( wxLibs, "jpeg-static" )
-			table.insert( wxLibs, "png" )
-			table.insert( wxLibs, "tiff" )
-			table.insert( wxLibs, "z" )
+		if not _OPTIONS["wx-shared"] then
+			local thirdPartyDir = os.getenv( "WXBUILD_3RD_PARTY" )
+			local compiler = iif( ActionUsesGCC(), "mingw", _ACTION )
+			local arch = GetArch()
+			if thirdPartyDir and not os.isdir( thirdPartyDir .. "/include/jpeg-turbo/" .. compiler ) then
+				thirdPartyDir = nil
+			end
 		end
 		
-		local function SetLibDirs( mode )
+		local function SetThirdPartyConfig( mode )
 			if thirdPartyDir then			
 				local path = thirdPartyDir .. "/lib" .. arch .. "/" .. compiler .. "/link-static/runtime-dynamic/" .. mode
 				libdirs { path }
+				links{ "jpeg-static", "png", "tiff", "z" }
 			end
 		end
 		
@@ -192,13 +189,13 @@ function wx.Configure( shouldSetTarget )
 			for _, lib in ipairs( wxLibs ) do
 				links { lib .. "d" }
 			end
-			SetLibDirs( "debug" )
+			SetThirdPartyConfig( "debug" )
 
 		configuration { "Release", "not StaticLib" }
 			for _, lib in ipairs( wxLibs ) do
 				links { lib }
 			end
-			SetLibDirs( "release" )
+			SetThirdPartyConfig( "release" )
 
 		configuration { "not StaticLib" }
 			local winLibs =
