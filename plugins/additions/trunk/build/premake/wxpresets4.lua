@@ -162,7 +162,7 @@ function wx.Configure( shouldSetTarget )
 		
 		local function GetArch()
 			if "x64" == presets.platform then
-				return "x64"
+				return "64"
 			end
 			return ""
 		end
@@ -170,7 +170,7 @@ function wx.Configure( shouldSetTarget )
 		local thirdPartyDir = os.getenv( "WXBUILD_3RD_PARTY" )
 		local compiler = iif( ActionUsesGCC(), "mingw", _ACTION )
 		local arch = GetArch()
-		if not os.isdir( thirdPartyDir .. "/include/jpeg-turbo/" .. compiler ) then
+		if thirdPartyDir and not os.isdir( thirdPartyDir .. "/include/jpeg-turbo/" .. compiler ) then
 			thirdPartyDir = nil
 		end
 			
