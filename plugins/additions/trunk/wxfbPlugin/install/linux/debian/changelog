@@ -1,3 +1,9 @@
+wxfb-wxadditions (1.15.2-0ubuntu1~wily1) wily; urgency=low
+
+  * sync with upstream.
+
+ -- Ryan Pusztai <rpusztai@gmail.com>  Mon, 15 Feb 2016 16:34:35 -0500
+
 wxfb-wxadditions (1.15.1-0ubuntu1~precise1) precise; urgency=low
 
   * sync with upstream.
@@ -41,7 +47,7 @@ wxfb-wxadditions (1.0.6-0ubuntu1~intrepid1) intrepid; urgency=low
   * Updated wxTreeListCtrl.
 
  -- Ryan Mulder <rjmyst3@gmail.com>  Sun, 08 Feb 2009 16:46:22 -0500
- 
+
 wxfb-wxadditions (1.0.5-0ubuntu1~intrepid1) intrepid; urgency=low
 
   * Initial Release.
