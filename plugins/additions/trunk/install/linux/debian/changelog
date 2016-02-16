@@ -1,3 +1,9 @@
+libwxadditions30 (3.0.10.7-0ubuntu1~wily1) wily; urgency=low
+
+  * Fixed installing to the wrong location.
+
+ -- Ryan Pusztai <rpusztai@gmail.com>  Mon, 15 Feb 2016 16:36:31 -0500
+
 libwxadditions30 (3.0.10.6-0ubuntu1~precise1) precise; urgency=low
 
   * Fixed installing to the wrong location.
@@ -22,14 +28,14 @@ libwxadditions28 (2.8.10.4-0ubuntu1~ppa1) karmic; urgency=low
   * Sync to upstream revision 1815
 
  -- Ryan Pusztai <rpusztai@gmail.com>  Wed, 17 Nov 2010 09:39:18 -0500
- 
+
 libwxadditions28 (2.8.10.1-0ubuntu1~karmic1) karmic; urgency=low
 
   * Remove debug libs from libwxadditions package
   * Updated wxTreeListCtrl
 
  -- Ryan Mulder <rjmyst3@gmail.com>  Sat, 07 Feb 2009 22:38:25 -0500
- 
+
 libwxadditions28 (2.8.7-0ubuntu1~hardy1) hardy; urgency=low
 
   * Initial release
