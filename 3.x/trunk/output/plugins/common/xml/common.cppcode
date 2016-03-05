@@ -58,7 +58,7 @@ Written by
     <template name="include">@#include &lt;wx/textctrl.h&gt;</template>
     <template name="construction">$name = new #class( #wxparent $name, $id, $value, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, wxDefaultValidator, $window_name @} );</template>
 	<template name="settings">
-		#ifnotequal $maxlength "0"
+		#ifnotnull $maxlength
 		@{
 			@#ifdef __WXGTK__#nl
 				if ( !$name->HasFlag( wxTE_MULTILINE ) )#nl
