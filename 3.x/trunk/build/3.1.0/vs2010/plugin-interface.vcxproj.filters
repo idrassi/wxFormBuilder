@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<Filter Include="sdk">
+			<UniqueIdentifier>{8081B6E8-8E27-0840-973D-E2933F159484}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="sdk\plugin_interface">
+			<UniqueIdentifier>{CC72B935-C51E-F542-B40C-82FC94D6E495}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="sdk\plugin_interface\forms">
+			<UniqueIdentifier>{558B58EA-5D23-DF49-B78D-902FA559CF21}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\..\sdk\plugin_interface\component.h">
+			<Filter>sdk\plugin_interface</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\sdk\plugin_interface\fontcontainer.h">
+			<Filter>sdk\plugin_interface</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\sdk\plugin_interface\plugin.h">
+			<Filter>sdk\plugin_interface</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\sdk\plugin_interface\xrcconv.h">
+			<Filter>sdk\plugin_interface</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\sdk\plugin_interface\forms\wizard.h">
+			<Filter>sdk\plugin_interface\forms</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\..\sdk\plugin_interface\xrcconv.cpp">
+			<Filter>sdk\plugin_interface</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\sdk\plugin_interface\forms\wizard.cpp">
+			<Filter>sdk\plugin_interface\forms</Filter>
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\..\sdk\plugin_interface\forms\wizard.fbp">
+			<Filter>sdk\plugin_interface\forms</Filter>
+		</None>
+	</ItemGroup>
+</Project>

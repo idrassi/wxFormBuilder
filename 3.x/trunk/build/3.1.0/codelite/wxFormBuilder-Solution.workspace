@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeLite_Workspace Name="wxFormBuilder-Solution" Database="./wxFormBuilder-Solution.tags">
+  <Project Name="TiCPP" Path="TiCPP.project" Active="Yes" />
+  <Project Name="plugin-interface" Path="plugin-interface.project" Active="No" />
+  <Project Name="additional-components-plugin" Path="additional-components-plugin.project" Active="No" />
+  <Project Name="common-components-plugin" Path="common-components-plugin.project" Active="No" />
+  <Project Name="containers-components-plugin" Path="containers-components-plugin.project" Active="No" />
+  <Project Name="forms-components-plugin" Path="forms-components-plugin.project" Active="No" />
+  <Project Name="layout-components-plugin" Path="layout-components-plugin.project" Active="No" />
+  <Project Name="wxFormBuilder" Path="wxFormBuilder.project" Active="No" />
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Debug" Selected="yes">
+      <Project Name="TiCPP" ConfigName="Debug"/>
+      <Project Name="plugin-interface" ConfigName="Debug"/>
+      <Project Name="additional-components-plugin" ConfigName="Debug"/>
+      <Project Name="common-components-plugin" ConfigName="Debug"/>
+      <Project Name="containers-components-plugin" ConfigName="Debug"/>
+      <Project Name="forms-components-plugin" ConfigName="Debug"/>
+      <Project Name="layout-components-plugin" ConfigName="Debug"/>
+      <Project Name="wxFormBuilder" ConfigName="Debug"/>
+    </WorkspaceConfiguration>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="TiCPP" ConfigName="Release"/>
+      <Project Name="plugin-interface" ConfigName="Release"/>
+      <Project Name="additional-components-plugin" ConfigName="Release"/>
+      <Project Name="common-components-plugin" ConfigName="Release"/>
+      <Project Name="containers-components-plugin" ConfigName="Release"/>
+      <Project Name="forms-components-plugin" ConfigName="Release"/>
+      <Project Name="layout-components-plugin" ConfigName="Release"/>
+      <Project Name="wxFormBuilder" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+</CodeLite_Workspace>

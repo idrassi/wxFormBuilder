@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<Filter Include="plugins">
+			<UniqueIdentifier>{621C7278-05A8-5D45-9516-8F5AAFD502A5}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="plugins\layout">
+			<UniqueIdentifier>{9761CB69-8D2B-D34C-ADF3-397621DDBEA0}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\..\plugins\layout\layout.cpp">
+			<Filter>plugins\layout</Filter>
+		</ClCompile>
+	</ItemGroup>
+</Project>

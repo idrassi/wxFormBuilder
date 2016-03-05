@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<Filter Include="plugins">
+			<UniqueIdentifier>{73A1F171-98EB-6B41-AE0C-86755D9B3690}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="plugins\additional">
+			<UniqueIdentifier>{9D8E73BE-7865-1E49-AB2A-F755D6827D1E}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\..\plugins\additional\additional.cpp">
+			<Filter>plugins\additional</Filter>
+		</ClCompile>
+	</ItemGroup>
+</Project>

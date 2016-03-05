@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeLite_Project Name="containers-components-plugin">
+  <VirtualDirectory Name="plugins">
+    <VirtualDirectory Name="containers">
+      <File Name="../../../plugins/containers/containers.cpp"/>
+    </VirtualDirectory>
+  </VirtualDirectory>
+  <Settings Type="Dynamic Library">
+    <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Dynamic Library">
+      <General OutputFile="../../../output/plugins/containers/libcontainers-310.dll" IntermediateDirectory="obj/Debug/containers-components-plugin" Command="./libcontainers-310.dll" CommandArguments="" WorkingDirectory="../../../output/plugins/containers" PauseExecWhenProcTerminates="yes"/>
+      <Compiler Required="yes" Options="-g;-Wall">
+        <IncludePath Value="../../../sdk/tinyxml"/>
+        <IncludePath Value="../../../sdk/plugin_interface"/>
+        <IncludePath Value="../../../../../../../../libraries/wxWidgets-3.1.0/lib/vc_dll/mswud"/>
+        <IncludePath Value="../../../../../../../../libraries/wxWidgets-3.1.0/include"/>
+        <Preprocessor Value="UNICODE"/>
+        <Preprocessor Value="_UNICODE"/>
+        <Preprocessor Value="WIN32"/>
+        <Preprocessor Value="_WINDOWS"/>
+        <Preprocessor Value="DEBUG"/>
+        <Preprocessor Value="_DEBUG"/>
+        <Preprocessor Value="BUILD_DLL"/>
+        <Preprocessor Value="TIXML_USE_TICPP"/>
+        <Preprocessor Value="__WXDEBUG__"/>
+        <Preprocessor Value="WXUSINGDLL"/>
+        <Preprocessor Value="__WXMSW__"/>
+      </Compiler>
+      <Linker Required="yes" Options="-shared;-Wl,--out-implib=&quot;../../../output/plugins/containers/libcontainers-310.a&quot;">
+        <LibraryPath Value="../../../../../../../../libraries/wxWidgets-3.1.0/lib/vc_dll" />
+        <LibraryPath Value="../../../sdk/lib" />
+        <Library Value="wx_mswud_plugin-interface-3.1.0" />
+        <Library Value="ticppd" />
+        <Library Value="wxmsw310ud" />
+      </Linker>
+      <ResourceCompiler Required="no" Options=""/>
+      <CustomBuild Enabled="no">
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+        <SingleFileCommand></SingleFileCommand>
+        <MakefileGenerationCommand></MakefileGenerationCommand>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory></WorkingDirectory>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild></CustomPreBuild>
+      </AdditionalRules>
+    </Configuration>
+    <Configuration Name="Release" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Dynamic Library">
+      <General OutputFile="../../../output/plugins/containers/libcontainers.dll" IntermediateDirectory="obj/Release/containers-components-plugin" Command="./libcontainers.dll" CommandArguments="" WorkingDirectory="../../../output/plugins/containers" PauseExecWhenProcTerminates="yes"/>
+      <Compiler Required="yes" Options="-Wall;-O2;-fno-strict-aliasing">
+        <IncludePath Value="../../../sdk/tinyxml"/>
+        <IncludePath Value="../../../sdk/plugin_interface"/>
+        <IncludePath Value="../../../../../../../../libraries/wxWidgets-3.1.0/lib/vc_dll/mswu"/>
+        <IncludePath Value="../../../../../../../../libraries/wxWidgets-3.1.0/include"/>
+        <Preprocessor Value="UNICODE"/>
+        <Preprocessor Value="_UNICODE"/>
+        <Preprocessor Value="WIN32"/>
+        <Preprocessor Value="_WINDOWS"/>
+        <Preprocessor Value="NDEBUG"/>
+        <Preprocessor Value="BUILD_DLL"/>
+        <Preprocessor Value="TIXML_USE_TICPP"/>
+        <Preprocessor Value="WXUSINGDLL"/>
+        <Preprocessor Value="__WXMSW__"/>
+      </Compiler>
+      <Linker Required="yes" Options="-s;-shared;-Wl,--out-implib=&quot;../../../output/plugins/containers/libcontainers.a&quot;">
+        <LibraryPath Value="../../../../../../../../libraries/wxWidgets-3.1.0/lib/vc_dll" />
+        <LibraryPath Value="../../../sdk/lib" />
+        <Library Value="wx_mswu_plugin-interface-3.1.0" />
+        <Library Value="ticpp" />
+        <Library Value="wxmsw310u" />
+      </Linker>
+      <ResourceCompiler Required="no" Options=""/>
+      <CustomBuild Enabled="no">
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+        <SingleFileCommand></SingleFileCommand>
+        <MakefileGenerationCommand></MakefileGenerationCommand>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory></WorkingDirectory>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild></CustomPreBuild>
+      </AdditionalRules>
+    </Configuration>
+  </Settings>
+  <Dependencies name="Debug">
+    <Project Name="plugin-interface"/>
+    <Project Name="TiCPP"/>
+  </Dependencies>
+  <Dependencies name="Release">
+    <Project Name="plugin-interface"/>
+    <Project Name="TiCPP"/>
+  </Dependencies>
+</CodeLite_Project>

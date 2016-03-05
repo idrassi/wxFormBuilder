@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<Filter Include="plugins">
+			<UniqueIdentifier>{8FF88319-B282-344C-8DBD-ABBBAA234BB6}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="plugins\common">
+			<UniqueIdentifier>{9321F719-6CA9-9F4E-8222-7505C90275A1}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\..\plugins\common\common.cpp">
+			<Filter>plugins\common</Filter>
+		</ClCompile>
+	</ItemGroup>
+</Project>

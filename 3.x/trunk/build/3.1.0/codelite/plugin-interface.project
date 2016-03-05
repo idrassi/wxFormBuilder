@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeLite_Project Name="plugin-interface">
+  <VirtualDirectory Name="sdk">
+    <VirtualDirectory Name="plugin_interface">
+      <VirtualDirectory Name="forms">
+        <File Name="../../../sdk/plugin_interface/forms/wizard.h"/>
+        <File Name="../../../sdk/plugin_interface/forms/wizard.cpp"/>
+        <File Name="../../../sdk/plugin_interface/forms/wizard.fbp"/>
+      </VirtualDirectory>
+      <File Name="../../../sdk/plugin_interface/component.h"/>
+      <File Name="../../../sdk/plugin_interface/fontcontainer.h"/>
+      <File Name="../../../sdk/plugin_interface/plugin.h"/>
+      <File Name="../../../sdk/plugin_interface/xrcconv.h"/>
+      <File Name="../../../sdk/plugin_interface/xrcconv.cpp"/>
+    </VirtualDirectory>
+  </VirtualDirectory>
+  <Settings Type="Static Library">
+    <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Static Library">
+      <General OutputFile="../../../sdk/lib/libwx_mswud_plugin-interface-3.1.0.a" IntermediateDirectory="obj/Debug/plugin-interface" Command="./libwx_mswud_plugin-interface-3.1.0.a" CommandArguments="" WorkingDirectory="../../../sdk/lib" PauseExecWhenProcTerminates="yes"/>
+      <Compiler Required="yes" Options="-g;-Wall">
+        <IncludePath Value="../../../sdk/tinyxml"/>
+        <IncludePath Value="../../../../../../../../libraries/wxWidgets-3.1.0/lib/vc_dll/mswud"/>
+        <IncludePath Value="../../../../../../../../libraries/wxWidgets-3.1.0/include"/>
+        <Preprocessor Value="UNICODE"/>
+        <Preprocessor Value="_UNICODE"/>
+        <Preprocessor Value="WIN32"/>
+        <Preprocessor Value="_WINDOWS"/>
+        <Preprocessor Value="DEBUG"/>
+        <Preprocessor Value="_DEBUG"/>
+        <Preprocessor Value="TIXML_USE_TICPP"/>
+        <Preprocessor Value="__WXDEBUG__"/>
+        <Preprocessor Value="WXUSINGDLL"/>
+        <Preprocessor Value="__WXMSW__"/>
+      </Compiler>
+      <Linker Required="yes" Options="">
+      </Linker>
+      <ResourceCompiler Required="no" Options=""/>
+      <CustomBuild Enabled="no">
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+        <SingleFileCommand></SingleFileCommand>
+        <MakefileGenerationCommand></MakefileGenerationCommand>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory></WorkingDirectory>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild></CustomPreBuild>
+      </AdditionalRules>
+    </Configuration>
+    <Configuration Name="Release" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Static Library">
+      <General OutputFile="../../../sdk/lib/libwx_mswu_plugin-interface-3.1.0.a" IntermediateDirectory="obj/Release/plugin-interface" Command="./libwx_mswu_plugin-interface-3.1.0.a" CommandArguments="" WorkingDirectory="../../../sdk/lib" PauseExecWhenProcTerminates="yes"/>
+      <Compiler Required="yes" Options="-Wall;-O2;-fno-strict-aliasing">
+        <IncludePath Value="../../../sdk/tinyxml"/>
+        <IncludePath Value="../../../../../../../../libraries/wxWidgets-3.1.0/lib/vc_dll/mswu"/>
+        <IncludePath Value="../../../../../../../../libraries/wxWidgets-3.1.0/include"/>
+        <Preprocessor Value="UNICODE"/>
+        <Preprocessor Value="_UNICODE"/>
+        <Preprocessor Value="WIN32"/>
+        <Preprocessor Value="_WINDOWS"/>
+        <Preprocessor Value="NDEBUG"/>
+        <Preprocessor Value="TIXML_USE_TICPP"/>
+        <Preprocessor Value="WXUSINGDLL"/>
+        <Preprocessor Value="__WXMSW__"/>
+      </Compiler>
+      <Linker Required="yes" Options="-s">
+      </Linker>
+      <ResourceCompiler Required="no" Options=""/>
+      <CustomBuild Enabled="no">
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+        <SingleFileCommand></SingleFileCommand>
+        <MakefileGenerationCommand></MakefileGenerationCommand>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory></WorkingDirectory>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild></CustomPreBuild>
+      </AdditionalRules>
+    </Configuration>
+  </Settings>
+  <Dependencies name="Debug">
+  </Dependencies>
+  <Dependencies name="Release">
+  </Dependencies>
+</CodeLite_Project>

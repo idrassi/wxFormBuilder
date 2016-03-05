@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeLite_Project Name="wxFormBuilder">
+  <VirtualDirectory Name="src">
+    <VirtualDirectory Name="codegen">
+      <File Name="../../../src/codegen/codegen.h"/>
+      <File Name="../../../src/codegen/codeparser.h"/>
+      <File Name="../../../src/codegen/codewriter.h"/>
+      <File Name="../../../src/codegen/cppcg.h"/>
+      <File Name="../../../src/codegen/luacg.h"/>
+      <File Name="../../../src/codegen/phpcg.h"/>
+      <File Name="../../../src/codegen/pythoncg.h"/>
+      <File Name="../../../src/codegen/xrccg.h"/>
+      <File Name="../../../src/codegen/codegen.cpp"/>
+      <File Name="../../../src/codegen/codeparser.cpp"/>
+      <File Name="../../../src/codegen/codewriter.cpp"/>
+      <File Name="../../../src/codegen/cppcg.cpp"/>
+      <File Name="../../../src/codegen/luacg.cpp"/>
+      <File Name="../../../src/codegen/phpcg.cpp"/>
+      <File Name="../../../src/codegen/pythoncg.cpp"/>
+      <File Name="../../../src/codegen/xrccg.cpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="model">
+      <File Name="../../../src/model/database.h"/>
+      <File Name="../../../src/model/objectbase.h"/>
+      <File Name="../../../src/model/types.h"/>
+      <File Name="../../../src/model/xrcfilter.h"/>
+      <File Name="../../../src/model/database.cpp"/>
+      <File Name="../../../src/model/objectbase.cpp"/>
+      <File Name="../../../src/model/types.cpp"/>
+      <File Name="../../../src/model/xrcfilter.cpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="rad">
+      <VirtualDirectory Name="codeeditor">
+        <File Name="../../../src/rad/codeeditor/codeeditor.h"/>
+        <File Name="../../../src/rad/codeeditor/codeeditor.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="cpppanel">
+        <File Name="../../../src/rad/cpppanel/cpppanel.h"/>
+        <File Name="../../../src/rad/cpppanel/cpppanel.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="dataobject">
+        <File Name="../../../src/rad/dataobject/dataobject.h"/>
+        <File Name="../../../src/rad/dataobject/dataobject.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="designer">
+        <File Name="../../../src/rad/designer/innerframe.h"/>
+        <File Name="../../../src/rad/designer/menubar.h"/>
+        <File Name="../../../src/rad/designer/visualeditor.h"/>
+        <File Name="../../../src/rad/designer/visualobj.h"/>
+        <File Name="../../../src/rad/designer/window_buttons.h"/>
+        <File Name="../../../src/rad/designer/innerframe.cpp"/>
+        <File Name="../../../src/rad/designer/menubar.cpp"/>
+        <File Name="../../../src/rad/designer/visualeditor.cpp"/>
+        <File Name="../../../src/rad/designer/visualobj.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="geninheritclass">
+        <File Name="../../../src/rad/geninheritclass/geninhertclass.h"/>
+        <File Name="../../../src/rad/geninheritclass/geninhertclass_gui.h"/>
+        <File Name="../../../src/rad/geninheritclass/geninhertclass.cpp"/>
+        <File Name="../../../src/rad/geninheritclass/geninhertclass_gui.cpp"/>
+        <File Name="../../../src/rad/geninheritclass/GenInheritedDlg.fbp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="inspector">
+        <File Name="../../../src/rad/inspector/objinspect.h"/>
+        <File Name="../../../src/rad/inspector/wxfbadvprops.h"/>
+        <File Name="../../../src/rad/inspector/objinspect.cpp"/>
+        <File Name="../../../src/rad/inspector/wxfbadvprops.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="luapanel">
+        <File Name="../../../src/rad/luapanel/luapanel.h"/>
+        <File Name="../../../src/rad/luapanel/luapanel.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="objecttree">
+        <File Name="../../../src/rad/objecttree/objecttree.h"/>
+        <File Name="../../../src/rad/objecttree/objecttree.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="phppanel">
+        <File Name="../../../src/rad/phppanel/phppanel.h"/>
+        <File Name="../../../src/rad/phppanel/phppanel.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="pythonpanel">
+        <File Name="../../../src/rad/pythonpanel/pythonpanel.h"/>
+        <File Name="../../../src/rad/pythonpanel/pythonpanel.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="xrcpanel">
+        <File Name="../../../src/rad/xrcpanel/xrcpanel.h"/>
+        <File Name="../../../src/rad/xrcpanel/xrcpanel.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="xrcpreview">
+        <File Name="../../../src/rad/xrcpreview/xrcpreview.h"/>
+        <File Name="../../../src/rad/xrcpreview/xrcpreview.cpp"/>
+      </VirtualDirectory>
+      <File Name="../../../src/rad/about.h"/>
+      <File Name="../../../src/rad/appdata.h"/>
+      <File Name="../../../src/rad/auitabart.h"/>
+      <File Name="../../../src/rad/bitmaps.h"/>
+      <File Name="../../../src/rad/cmdproc.h"/>
+      <File Name="../../../src/rad/customkeys.h"/>
+      <File Name="../../../src/rad/genericpanel.h"/>
+      <File Name="../../../src/rad/mainframe.h"/>
+      <File Name="../../../src/rad/menueditor.h"/>
+      <File Name="../../../src/rad/palette.h"/>
+      <File Name="../../../src/rad/title.h"/>
+      <File Name="../../../src/rad/wxfbevent.h"/>
+      <File Name="../../../src/rad/wxfbmanager.h"/>
+      <File Name="../../../src/rad/about.cpp"/>
+      <File Name="../../../src/rad/appdata.cpp"/>
+      <File Name="../../../src/rad/bitmaps.cpp"/>
+      <File Name="../../../src/rad/cmdproc.cpp"/>
+      <File Name="../../../src/rad/customkeys.cpp"/>
+      <File Name="../../../src/rad/genericpanel.cpp"/>
+      <File Name="../../../src/rad/mainframe.cpp"/>
+      <File Name="../../../src/rad/menueditor.cpp"/>
+      <File Name="../../../src/rad/palette.cpp"/>
+      <File Name="../../../src/rad/title.cpp"/>
+      <File Name="../../../src/rad/wxfbevent.cpp"/>
+      <File Name="../../../src/rad/wxfbmanager.cpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="utils">
+      <File Name="../../../src/utils/annoyingdialog.h"/>
+      <File Name="../../../src/utils/debug.h"/>
+      <File Name="../../../src/utils/encodingutils.h"/>
+      <File Name="../../../src/utils/filetocarray.h"/>
+      <File Name="../../../src/utils/stringutils.h"/>
+      <File Name="../../../src/utils/typeconv.h"/>
+      <File Name="../../../src/utils/wxfbdefs.h"/>
+      <File Name="../../../src/utils/wxfbexception.h"/>
+      <File Name="../../../src/utils/wxfbipc.h"/>
+      <File Name="../../../src/utils/wxlogstring.h"/>
+      <File Name="../../../src/utils/annoyingdialog.cpp"/>
+      <File Name="../../../src/utils/encodingutils.cpp"/>
+      <File Name="../../../src/utils/filetocarray.cpp"/>
+      <File Name="../../../src/utils/stringutils.cpp"/>
+      <File Name="../../../src/utils/typeconv.cpp"/>
+      <File Name="../../../src/utils/wxfbipc.cpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="boost">
+      <VirtualDirectory Name="config">
+        <VirtualDirectory Name="abi">
+          <File Name="../../../src/boost/config/abi/borland_prefix.hpp"/>
+          <File Name="../../../src/boost/config/abi/borland_suffix.hpp"/>
+          <File Name="../../../src/boost/config/abi/msvc_prefix.hpp"/>
+          <File Name="../../../src/boost/config/abi/msvc_suffix.hpp"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="compiler">
+          <File Name="../../../src/boost/config/compiler/borland.hpp"/>
+          <File Name="../../../src/boost/config/compiler/comeau.hpp"/>
+          <File Name="../../../src/boost/config/compiler/common_edg.hpp"/>
+          <File Name="../../../src/boost/config/compiler/compaq_cxx.hpp"/>
+          <File Name="../../../src/boost/config/compiler/digitalmars.hpp"/>
+          <File Name="../../../src/boost/config/compiler/gcc.hpp"/>
+          <File Name="../../../src/boost/config/compiler/greenhills.hpp"/>
+          <File Name="../../../src/boost/config/compiler/hp_acc.hpp"/>
+          <File Name="../../../src/boost/config/compiler/intel.hpp"/>
+          <File Name="../../../src/boost/config/compiler/kai.hpp"/>
+          <File Name="../../../src/boost/config/compiler/metrowerks.hpp"/>
+          <File Name="../../../src/boost/config/compiler/mpw.hpp"/>
+          <File Name="../../../src/boost/config/compiler/sgi_mipspro.hpp"/>
+          <File Name="../../../src/boost/config/compiler/sunpro_cc.hpp"/>
+          <File Name="../../../src/boost/config/compiler/vacpp.hpp"/>
+          <File Name="../../../src/boost/config/compiler/visualc.hpp"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="platform">
+          <File Name="../../../src/boost/config/platform/aix.hpp"/>
+          <File Name="../../../src/boost/config/platform/amigaos.hpp"/>
+          <File Name="../../../src/boost/config/platform/beos.hpp"/>
+          <File Name="../../../src/boost/config/platform/bsd.hpp"/>
+          <File Name="../../../src/boost/config/platform/cygwin.hpp"/>
+          <File Name="../../../src/boost/config/platform/hpux.hpp"/>
+          <File Name="../../../src/boost/config/platform/irix.hpp"/>
+          <File Name="../../../src/boost/config/platform/linux.hpp"/>
+          <File Name="../../../src/boost/config/platform/macos.hpp"/>
+          <File Name="../../../src/boost/config/platform/solaris.hpp"/>
+          <File Name="../../../src/boost/config/platform/win32.hpp"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="stdlib">
+          <File Name="../../../src/boost/config/stdlib/dinkumware.hpp"/>
+          <File Name="../../../src/boost/config/stdlib/libcomo.hpp"/>
+          <File Name="../../../src/boost/config/stdlib/libstdcpp3.hpp"/>
+          <File Name="../../../src/boost/config/stdlib/modena.hpp"/>
+          <File Name="../../../src/boost/config/stdlib/msl.hpp"/>
+          <File Name="../../../src/boost/config/stdlib/roguewave.hpp"/>
+          <File Name="../../../src/boost/config/stdlib/sgi.hpp"/>
+          <File Name="../../../src/boost/config/stdlib/stlport.hpp"/>
+          <File Name="../../../src/boost/config/stdlib/vacpp.hpp"/>
+        </VirtualDirectory>
+        <File Name="../../../src/boost/config/abi_prefix.hpp"/>
+        <File Name="../../../src/boost/config/abi_suffix.hpp"/>
+        <File Name="../../../src/boost/config/auto_link.hpp"/>
+        <File Name="../../../src/boost/config/posix_features.hpp"/>
+        <File Name="../../../src/boost/config/requires_threads.hpp"/>
+        <File Name="../../../src/boost/config/select_compiler_config.hpp"/>
+        <File Name="../../../src/boost/config/select_platform_config.hpp"/>
+        <File Name="../../../src/boost/config/select_stdlib_config.hpp"/>
+        <File Name="../../../src/boost/config/suffix.hpp"/>
+        <File Name="../../../src/boost/config/user.hpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="detail">
+        <File Name="../../../src/boost/detail/algorithm.hpp"/>
+        <File Name="../../../src/boost/detail/allocator.hpp"/>
+        <File Name="../../../src/boost/detail/atomic_count.hpp"/>
+        <File Name="../../../src/boost/detail/atomic_count_gcc.hpp"/>
+        <File Name="../../../src/boost/detail/atomic_count_linux.hpp"/>
+        <File Name="../../../src/boost/detail/atomic_count_pthreads.hpp"/>
+        <File Name="../../../src/boost/detail/atomic_count_win32.hpp"/>
+        <File Name="../../../src/boost/detail/bad_weak_ptr.hpp"/>
+        <File Name="../../../src/boost/detail/binary_search.hpp"/>
+        <File Name="../../../src/boost/detail/call_traits.hpp"/>
+        <File Name="../../../src/boost/detail/catch_exceptions.hpp"/>
+        <File Name="../../../src/boost/detail/compressed_pair.hpp"/>
+        <File Name="../../../src/boost/detail/dynamic_bitset.hpp"/>
+        <File Name="../../../src/boost/detail/interlocked.hpp"/>
+        <File Name="../../../src/boost/detail/in_place_factory.hpp"/>
+        <File Name="../../../src/boost/detail/in_place_factory_prefix.hpp"/>
+        <File Name="../../../src/boost/detail/in_place_factory_suffix.hpp"/>
+        <File Name="../../../src/boost/detail/is_incrementable.hpp"/>
+        <File Name="../../../src/boost/detail/iterator.hpp"/>
+        <File Name="../../../src/boost/detail/lightweight_mutex.hpp"/>
+        <File Name="../../../src/boost/detail/lightweight_test.hpp"/>
+        <File Name="../../../src/boost/detail/limits.hpp"/>
+        <File Name="../../../src/boost/detail/lwm_gcc.hpp"/>
+        <File Name="../../../src/boost/detail/lwm_irix.hpp"/>
+        <File Name="../../../src/boost/detail/lwm_linux.hpp"/>
+        <File Name="../../../src/boost/detail/lwm_nop.hpp"/>
+        <File Name="../../../src/boost/detail/lwm_pthreads.hpp"/>
+        <File Name="../../../src/boost/detail/lwm_win32.hpp"/>
+        <File Name="../../../src/boost/detail/lwm_win32_cs.hpp"/>
+        <File Name="../../../src/boost/detail/lwm_win32_nt.hpp"/>
+        <File Name="../../../src/boost/detail/named_template_params.hpp"/>
+        <File Name="../../../src/boost/detail/none.hpp"/>
+        <File Name="../../../src/boost/detail/none_t.hpp"/>
+        <File Name="../../../src/boost/detail/numeric_traits.hpp"/>
+        <File Name="../../../src/boost/detail/ob_call_traits.hpp"/>
+        <File Name="../../../src/boost/detail/ob_compressed_pair.hpp"/>
+        <File Name="../../../src/boost/detail/quick_allocator.hpp"/>
+        <File Name="../../../src/boost/detail/reference_content.hpp"/>
+        <File Name="../../../src/boost/detail/select_type.hpp"/>
+        <File Name="../../../src/boost/detail/shared_array_nmt.hpp"/>
+        <File Name="../../../src/boost/detail/shared_count.hpp"/>
+        <File Name="../../../src/boost/detail/shared_ptr_nmt.hpp"/>
+        <File Name="../../../src/boost/detail/sp_counted_base.hpp"/>
+        <File Name="../../../src/boost/detail/sp_counted_base_cw_ppc.hpp"/>
+        <File Name="../../../src/boost/detail/sp_counted_base_cw_x86.hpp"/>
+        <File Name="../../../src/boost/detail/sp_counted_base_gcc_ia64.hpp"/>
+        <File Name="../../../src/boost/detail/sp_counted_base_gcc_ppc.hpp"/>
+        <File Name="../../../src/boost/detail/sp_counted_base_gcc_x86.hpp"/>
+        <File Name="../../../src/boost/detail/sp_counted_base_nt.hpp"/>
+        <File Name="../../../src/boost/detail/sp_counted_base_pt.hpp"/>
+        <File Name="../../../src/boost/detail/sp_counted_base_w32.hpp"/>
+        <File Name="../../../src/boost/detail/sp_counted_impl.hpp"/>
+        <File Name="../../../src/boost/detail/templated_streams.hpp"/>
+        <File Name="../../../src/boost/detail/typed_in_place_factory.hpp"/>
+        <File Name="../../../src/boost/detail/workaround.hpp"/>
+      </VirtualDirectory>
+      <File Name="../../../src/boost/assert.hpp"/>
+      <File Name="../../../src/boost/checked_delete.hpp"/>
+      <File Name="../../../src/boost/config.hpp"/>
+      <File Name="../../../src/boost/enable_shared_from_this.hpp"/>
+      <File Name="../../../src/boost/intrusive_ptr.hpp"/>
+      <File Name="../../../src/boost/scoped_array.hpp"/>
+      <File Name="../../../src/boost/scoped_ptr.hpp"/>
+      <File Name="../../../src/boost/shared_array.hpp"/>
+      <File Name="../../../src/boost/shared_ptr.hpp"/>
+      <File Name="../../../src/boost/smart_ptr.hpp"/>
+      <File Name="../../../src/boost/throw_exception.hpp"/>
+      <File Name="../../../src/boost/weak_ptr.hpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="dbg_stack_trace">
+      <File Name="../../../src/dbg_stack_trace/stack.hpp"/>
+      <File Name="../../../src/dbg_stack_trace/stack.cpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="md5">
+      <File Name="../../../src/md5/md5.hh"/>
+      <File Name="../../../src/md5/md5.cc"/>
+    </VirtualDirectory>
+    <File Name="../../../src/maingui.h"/>
+    <File Name="../../../src/pch.h"/>
+    <File Name="../../../src/splashscreen.h"/>
+    <File Name="../../../src/maingui.cpp"/>
+    <File Name="../../../src/splashscreen.cpp"/>
+    <File Name="../../../src/wxFormBuilder.rc"/>
+  </VirtualDirectory>
+  <Settings Type="Executable">
+    <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Executable">
+      <General OutputFile="../../../output/wxFormBuilder-310.exe" IntermediateDirectory="obj/Debug/wxFormBuilder" Command="./wxFormBuilder-310.exe" CommandArguments="" WorkingDirectory="../../../output" PauseExecWhenProcTerminates="no"/>
+      <Compiler Required="yes" Options="-g;-Wall">
+        <IncludePath Value="../../../src"/>
+        <IncludePath Value="../../../src/boost"/>
+        <IncludePath Value="../../../sdk/tinyxml"/>
+        <IncludePath Value="../../../sdk/plugin_interface"/>
+        <IncludePath Value="../../../../../../../../libraries/wxWidgets-3.1.0/lib/vc_dll/mswud"/>
+        <IncludePath Value="../../../../../../../../libraries/wxWidgets-3.1.0/include"/>
+        <Preprocessor Value="UNICODE"/>
+        <Preprocessor Value="_UNICODE"/>
+        <Preprocessor Value="WIN32"/>
+        <Preprocessor Value="_WINDOWS"/>
+        <Preprocessor Value="DEBUG"/>
+        <Preprocessor Value="_DEBUG"/>
+        <Preprocessor Value="NO_GCC_PRAGMA"/>
+        <Preprocessor Value="TIXML_USE_TICPP"/>
+        <Preprocessor Value="APPEND_WXVERSION"/>
+        <Preprocessor Value="__WXFB_DEBUG__"/>
+        <Preprocessor Value="__WXDEBUG__"/>
+        <Preprocessor Value="WXUSINGDLL"/>
+        <Preprocessor Value="__WXMSW__"/>
+      </Compiler>
+      <Linker Required="yes" Options="-mwindows">
+        <LibraryPath Value="../../../sdk/lib" />
+        <LibraryPath Value="../../../output" />
+        <LibraryPath Value="../../../../../../../../libraries/wxWidgets-3.1.0/lib/vc_dll" />
+        <Library Value="ticppd" />
+        <Library Value="wx_mswud_plugin-interface-3.1.0" />
+        <Library Value="wxmsw310ud" />
+      </Linker>
+      <ResourceCompiler Required="yes" Options="-DUNICODE;-D_UNICODE;-DWIN32;-D_WINDOWS;-DDEBUG;-D_DEBUG;-DNO_GCC_PRAGMA;-DTIXML_USE_TICPP;-DAPPEND_WXVERSION;-D__WXFB_DEBUG__;-D__WXDEBUG__;-DWXUSINGDLL;-D__WXMSW__;">
+        <IncludePath Value="../../../src"/>
+        <IncludePath Value="../../../src/boost"/>
+        <IncludePath Value="../../../sdk/tinyxml"/>
+        <IncludePath Value="../../../sdk/plugin_interface"/>
+        <IncludePath Value="../../../../../../../../libraries/wxWidgets-3.1.0/lib/vc_dll/mswud"/>
+        <IncludePath Value="../../../../../../../../libraries/wxWidgets-3.1.0/include"/>
+      </ResourceCompiler>
+      <CustomBuild Enabled="no">
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+        <SingleFileCommand></SingleFileCommand>
+        <MakefileGenerationCommand></MakefileGenerationCommand>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory></WorkingDirectory>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild></CustomPreBuild>
+      </AdditionalRules>
+    </Configuration>
+    <Configuration Name="Release" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Executable">
+      <General OutputFile="../../../output/wxFormBuilder.exe" IntermediateDirectory="obj/Release/wxFormBuilder" Command="./wxFormBuilder.exe" CommandArguments="" WorkingDirectory="../../../output" PauseExecWhenProcTerminates="no"/>
+      <Compiler Required="yes" Options="-Wall;-g;-O2;-fno-strict-aliasing">
+        <IncludePath Value="../../../src"/>
+        <IncludePath Value="../../../src/boost"/>
+        <IncludePath Value="../../../sdk/tinyxml"/>
+        <IncludePath Value="../../../sdk/plugin_interface"/>
+        <IncludePath Value="../../../../../../../../libraries/wxWidgets-3.1.0/lib/vc_dll/mswu"/>
+        <IncludePath Value="../../../../../../../../libraries/wxWidgets-3.1.0/include"/>
+        <Preprocessor Value="UNICODE"/>
+        <Preprocessor Value="_UNICODE"/>
+        <Preprocessor Value="WIN32"/>
+        <Preprocessor Value="_WINDOWS"/>
+        <Preprocessor Value="NDEBUG"/>
+        <Preprocessor Value="NO_GCC_PRAGMA"/>
+        <Preprocessor Value="TIXML_USE_TICPP"/>
+        <Preprocessor Value="APPEND_WXVERSION"/>
+        <Preprocessor Value="WXUSINGDLL"/>
+        <Preprocessor Value="__WXMSW__"/>
+      </Compiler>
+      <Linker Required="yes" Options="-mwindows">
+        <LibraryPath Value="../../../sdk/lib" />
+        <LibraryPath Value="../../../output" />
+        <LibraryPath Value="../../../../../../../../libraries/wxWidgets-3.1.0/lib/vc_dll" />
+        <Library Value="ticpp" />
+        <Library Value="wx_mswu_plugin-interface-3.1.0" />
+        <Library Value="wxmsw310u" />
+      </Linker>
+      <ResourceCompiler Required="yes" Options="-DUNICODE;-D_UNICODE;-DWIN32;-D_WINDOWS;-DNDEBUG;-DNO_GCC_PRAGMA;-DTIXML_USE_TICPP;-DAPPEND_WXVERSION;-DWXUSINGDLL;-D__WXMSW__;">
+        <IncludePath Value="../../../src"/>
+        <IncludePath Value="../../../src/boost"/>
+        <IncludePath Value="../../../sdk/tinyxml"/>
+        <IncludePath Value="../../../sdk/plugin_interface"/>
+        <IncludePath Value="../../../../../../../../libraries/wxWidgets-3.1.0/lib/vc_dll/mswu"/>
+        <IncludePath Value="../../../../../../../../libraries/wxWidgets-3.1.0/include"/>
+      </ResourceCompiler>
+      <CustomBuild Enabled="no">
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+        <SingleFileCommand></SingleFileCommand>
+        <MakefileGenerationCommand></MakefileGenerationCommand>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory></WorkingDirectory>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild></CustomPreBuild>
+      </AdditionalRules>
+    </Configuration>
+  </Settings>
+  <Dependencies name="Debug">
+    <Project Name="TiCPP"/>
+    <Project Name="plugin-interface"/>
+  </Dependencies>
+  <Dependencies name="Release">
+    <Project Name="TiCPP"/>
+    <Project Name="plugin-interface"/>
+  </Dependencies>
+</CodeLite_Project>

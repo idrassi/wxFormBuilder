@@ -1,0 +1,775 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<Filter Include="src">
+			<UniqueIdentifier>{40B34E9E-ED57-6546-9C79-7AC89F2978F8}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\codegen">
+			<UniqueIdentifier>{212EC44C-4617-4C49-8755-BC9671F9C14F}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\model">
+			<UniqueIdentifier>{621C56E9-C840-514D-BF25-9121F5862D1E}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\rad">
+			<UniqueIdentifier>{D525F673-CA83-E944-94CE-2A9A0C511721}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\rad\codeeditor">
+			<UniqueIdentifier>{C0682382-38C2-484E-BE61-EE4F34758182}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\rad\cpppanel">
+			<UniqueIdentifier>{282768DE-9D2D-5040-855D-B5ACF13850CA}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\rad\dataobject">
+			<UniqueIdentifier>{4A643675-37BD-7B41-8CC7-9167D338A21A}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\rad\designer">
+			<UniqueIdentifier>{D75A0755-0FDB-7744-890E-479DB24BCFCB}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\rad\geninheritclass">
+			<UniqueIdentifier>{D9A2E852-BBB5-4F42-A6D3-E7F78CD551A3}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\rad\inspector">
+			<UniqueIdentifier>{819AE765-FAC6-1C48-B86E-6657E20210E4}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\rad\luapanel">
+			<UniqueIdentifier>{C9224274-5076-9B4E-8D23-61E9A9619DF7}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\rad\objecttree">
+			<UniqueIdentifier>{6D0F38BD-334D-7744-B724-3324330BF4B0}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\rad\phppanel">
+			<UniqueIdentifier>{196FC6FB-0405-7040-83D1-F2AB877F3AE1}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\rad\pythonpanel">
+			<UniqueIdentifier>{36C14BF6-4299-9841-9807-F89C823104C6}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\rad\xrcpanel">
+			<UniqueIdentifier>{ECDFA87E-4FF5-394D-80C7-9860554E566D}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\rad\xrcpreview">
+			<UniqueIdentifier>{AB31403F-EB57-1248-A2FA-D313A2D081F5}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\utils">
+			<UniqueIdentifier>{F88739DD-90D8-D743-83E6-3683E284F18F}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\boost">
+			<UniqueIdentifier>{998F867D-3286-2249-A632-4BF0D8455F40}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\boost\config">
+			<UniqueIdentifier>{33C52BC0-44DC-1143-A16B-6FF8E2D874F8}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\boost\config\abi">
+			<UniqueIdentifier>{14D1F921-ECF2-3846-94CE-DDDCABD11FC3}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\boost\config\compiler">
+			<UniqueIdentifier>{3D1D1EB2-C18B-614B-8728-7912982CC0A1}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\boost\config\platform">
+			<UniqueIdentifier>{9B30C5E2-B106-6B47-907B-19625D8C03A8}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\boost\config\stdlib">
+			<UniqueIdentifier>{EC1AFAF4-CBCA-254C-86CA-DABF48A121B2}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\boost\detail">
+			<UniqueIdentifier>{87BE9AE4-F89D-814C-B9B0-9687E42BC505}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\dbg_stack_trace">
+			<UniqueIdentifier>{7A1570AE-55D7-B14D-B7DA-3FF12A3DA52D}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\md5">
+			<UniqueIdentifier>{0751688A-B6F3-8243-B0FA-3E4A716FDF26}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\..\src\maingui.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\pch.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\splashscreen.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\codegen\codegen.h">
+			<Filter>src\codegen</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\codegen\codeparser.h">
+			<Filter>src\codegen</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\codegen\codewriter.h">
+			<Filter>src\codegen</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\codegen\cppcg.h">
+			<Filter>src\codegen</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\codegen\luacg.h">
+			<Filter>src\codegen</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\codegen\phpcg.h">
+			<Filter>src\codegen</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\codegen\pythoncg.h">
+			<Filter>src\codegen</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\codegen\xrccg.h">
+			<Filter>src\codegen</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\model\database.h">
+			<Filter>src\model</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\model\objectbase.h">
+			<Filter>src\model</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\model\types.h">
+			<Filter>src\model</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\model\xrcfilter.h">
+			<Filter>src\model</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\about.h">
+			<Filter>src\rad</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\appdata.h">
+			<Filter>src\rad</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\auitabart.h">
+			<Filter>src\rad</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\bitmaps.h">
+			<Filter>src\rad</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\cmdproc.h">
+			<Filter>src\rad</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\customkeys.h">
+			<Filter>src\rad</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\genericpanel.h">
+			<Filter>src\rad</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\mainframe.h">
+			<Filter>src\rad</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\menueditor.h">
+			<Filter>src\rad</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\palette.h">
+			<Filter>src\rad</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\title.h">
+			<Filter>src\rad</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\wxfbevent.h">
+			<Filter>src\rad</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\wxfbmanager.h">
+			<Filter>src\rad</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\codeeditor\codeeditor.h">
+			<Filter>src\rad\codeeditor</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\cpppanel\cpppanel.h">
+			<Filter>src\rad\cpppanel</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\dataobject\dataobject.h">
+			<Filter>src\rad\dataobject</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\designer\innerframe.h">
+			<Filter>src\rad\designer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\designer\menubar.h">
+			<Filter>src\rad\designer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\designer\visualeditor.h">
+			<Filter>src\rad\designer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\designer\visualobj.h">
+			<Filter>src\rad\designer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\designer\window_buttons.h">
+			<Filter>src\rad\designer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\geninheritclass\geninhertclass.h">
+			<Filter>src\rad\geninheritclass</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\geninheritclass\geninhertclass_gui.h">
+			<Filter>src\rad\geninheritclass</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\inspector\objinspect.h">
+			<Filter>src\rad\inspector</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\inspector\wxfbadvprops.h">
+			<Filter>src\rad\inspector</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\luapanel\luapanel.h">
+			<Filter>src\rad\luapanel</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\objecttree\objecttree.h">
+			<Filter>src\rad\objecttree</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\phppanel\phppanel.h">
+			<Filter>src\rad\phppanel</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\pythonpanel\pythonpanel.h">
+			<Filter>src\rad\pythonpanel</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\xrcpanel\xrcpanel.h">
+			<Filter>src\rad\xrcpanel</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\rad\xrcpreview\xrcpreview.h">
+			<Filter>src\rad\xrcpreview</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\utils\annoyingdialog.h">
+			<Filter>src\utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\utils\debug.h">
+			<Filter>src\utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\utils\encodingutils.h">
+			<Filter>src\utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\utils\filetocarray.h">
+			<Filter>src\utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\utils\stringutils.h">
+			<Filter>src\utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\utils\typeconv.h">
+			<Filter>src\utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\utils\wxfbdefs.h">
+			<Filter>src\utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\utils\wxfbexception.h">
+			<Filter>src\utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\utils\wxfbipc.h">
+			<Filter>src\utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\utils\wxlogstring.h">
+			<Filter>src\utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\assert.hpp">
+			<Filter>src\boost</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\checked_delete.hpp">
+			<Filter>src\boost</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config.hpp">
+			<Filter>src\boost</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\enable_shared_from_this.hpp">
+			<Filter>src\boost</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\intrusive_ptr.hpp">
+			<Filter>src\boost</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\scoped_array.hpp">
+			<Filter>src\boost</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\scoped_ptr.hpp">
+			<Filter>src\boost</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\shared_array.hpp">
+			<Filter>src\boost</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\shared_ptr.hpp">
+			<Filter>src\boost</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\smart_ptr.hpp">
+			<Filter>src\boost</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\throw_exception.hpp">
+			<Filter>src\boost</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\weak_ptr.hpp">
+			<Filter>src\boost</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\abi_prefix.hpp">
+			<Filter>src\boost\config</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\abi_suffix.hpp">
+			<Filter>src\boost\config</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\auto_link.hpp">
+			<Filter>src\boost\config</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\posix_features.hpp">
+			<Filter>src\boost\config</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\requires_threads.hpp">
+			<Filter>src\boost\config</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\select_compiler_config.hpp">
+			<Filter>src\boost\config</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\select_platform_config.hpp">
+			<Filter>src\boost\config</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\select_stdlib_config.hpp">
+			<Filter>src\boost\config</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\suffix.hpp">
+			<Filter>src\boost\config</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\user.hpp">
+			<Filter>src\boost\config</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\abi\borland_prefix.hpp">
+			<Filter>src\boost\config\abi</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\abi\borland_suffix.hpp">
+			<Filter>src\boost\config\abi</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\abi\msvc_prefix.hpp">
+			<Filter>src\boost\config\abi</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\abi\msvc_suffix.hpp">
+			<Filter>src\boost\config\abi</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\compiler\borland.hpp">
+			<Filter>src\boost\config\compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\compiler\comeau.hpp">
+			<Filter>src\boost\config\compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\compiler\common_edg.hpp">
+			<Filter>src\boost\config\compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\compiler\compaq_cxx.hpp">
+			<Filter>src\boost\config\compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\compiler\digitalmars.hpp">
+			<Filter>src\boost\config\compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\compiler\gcc.hpp">
+			<Filter>src\boost\config\compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\compiler\greenhills.hpp">
+			<Filter>src\boost\config\compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\compiler\hp_acc.hpp">
+			<Filter>src\boost\config\compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\compiler\intel.hpp">
+			<Filter>src\boost\config\compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\compiler\kai.hpp">
+			<Filter>src\boost\config\compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\compiler\metrowerks.hpp">
+			<Filter>src\boost\config\compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\compiler\mpw.hpp">
+			<Filter>src\boost\config\compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\compiler\sgi_mipspro.hpp">
+			<Filter>src\boost\config\compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\compiler\sunpro_cc.hpp">
+			<Filter>src\boost\config\compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\compiler\vacpp.hpp">
+			<Filter>src\boost\config\compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\compiler\visualc.hpp">
+			<Filter>src\boost\config\compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\platform\aix.hpp">
+			<Filter>src\boost\config\platform</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\platform\amigaos.hpp">
+			<Filter>src\boost\config\platform</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\platform\beos.hpp">
+			<Filter>src\boost\config\platform</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\platform\bsd.hpp">
+			<Filter>src\boost\config\platform</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\platform\cygwin.hpp">
+			<Filter>src\boost\config\platform</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\platform\hpux.hpp">
+			<Filter>src\boost\config\platform</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\platform\irix.hpp">
+			<Filter>src\boost\config\platform</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\platform\linux.hpp">
+			<Filter>src\boost\config\platform</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\platform\macos.hpp">
+			<Filter>src\boost\config\platform</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\platform\solaris.hpp">
+			<Filter>src\boost\config\platform</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\platform\win32.hpp">
+			<Filter>src\boost\config\platform</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\stdlib\dinkumware.hpp">
+			<Filter>src\boost\config\stdlib</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\stdlib\libcomo.hpp">
+			<Filter>src\boost\config\stdlib</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\stdlib\libstdcpp3.hpp">
+			<Filter>src\boost\config\stdlib</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\stdlib\modena.hpp">
+			<Filter>src\boost\config\stdlib</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\stdlib\msl.hpp">
+			<Filter>src\boost\config\stdlib</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\stdlib\roguewave.hpp">
+			<Filter>src\boost\config\stdlib</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\stdlib\sgi.hpp">
+			<Filter>src\boost\config\stdlib</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\stdlib\stlport.hpp">
+			<Filter>src\boost\config\stdlib</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\config\stdlib\vacpp.hpp">
+			<Filter>src\boost\config\stdlib</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\algorithm.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\allocator.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\atomic_count.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\atomic_count_gcc.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\atomic_count_linux.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\atomic_count_pthreads.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\atomic_count_win32.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\bad_weak_ptr.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\binary_search.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\call_traits.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\catch_exceptions.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\compressed_pair.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\dynamic_bitset.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\interlocked.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\in_place_factory.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\in_place_factory_prefix.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\in_place_factory_suffix.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\is_incrementable.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\iterator.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\lightweight_mutex.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\lightweight_test.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\limits.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\lwm_gcc.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\lwm_irix.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\lwm_linux.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\lwm_nop.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\lwm_pthreads.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\lwm_win32.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\lwm_win32_cs.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\lwm_win32_nt.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\named_template_params.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\none.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\none_t.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\numeric_traits.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\ob_call_traits.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\ob_compressed_pair.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\quick_allocator.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\reference_content.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\select_type.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\shared_array_nmt.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\shared_count.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\shared_ptr_nmt.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\sp_counted_base.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\sp_counted_base_cw_ppc.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\sp_counted_base_cw_x86.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\sp_counted_base_gcc_ia64.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\sp_counted_base_gcc_ppc.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\sp_counted_base_gcc_x86.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\sp_counted_base_nt.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\sp_counted_base_pt.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\sp_counted_base_w32.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\sp_counted_impl.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\templated_streams.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\typed_in_place_factory.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\boost\detail\workaround.hpp">
+			<Filter>src\boost\detail</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\src\dbg_stack_trace\stack.hpp">
+			<Filter>src\dbg_stack_trace</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\..\src\maingui.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\splashscreen.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\codegen\codegen.cpp">
+			<Filter>src\codegen</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\codegen\codeparser.cpp">
+			<Filter>src\codegen</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\codegen\codewriter.cpp">
+			<Filter>src\codegen</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\codegen\cppcg.cpp">
+			<Filter>src\codegen</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\codegen\luacg.cpp">
+			<Filter>src\codegen</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\codegen\phpcg.cpp">
+			<Filter>src\codegen</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\codegen\pythoncg.cpp">
+			<Filter>src\codegen</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\codegen\xrccg.cpp">
+			<Filter>src\codegen</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\dbg_stack_trace\stack.cpp">
+			<Filter>src\dbg_stack_trace</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\model\database.cpp">
+			<Filter>src\model</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\model\objectbase.cpp">
+			<Filter>src\model</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\model\types.cpp">
+			<Filter>src\model</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\model\xrcfilter.cpp">
+			<Filter>src\model</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\about.cpp">
+			<Filter>src\rad</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\appdata.cpp">
+			<Filter>src\rad</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\bitmaps.cpp">
+			<Filter>src\rad</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\cmdproc.cpp">
+			<Filter>src\rad</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\customkeys.cpp">
+			<Filter>src\rad</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\genericpanel.cpp">
+			<Filter>src\rad</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\mainframe.cpp">
+			<Filter>src\rad</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\menueditor.cpp">
+			<Filter>src\rad</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\palette.cpp">
+			<Filter>src\rad</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\title.cpp">
+			<Filter>src\rad</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\wxfbevent.cpp">
+			<Filter>src\rad</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\wxfbmanager.cpp">
+			<Filter>src\rad</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\codeeditor\codeeditor.cpp">
+			<Filter>src\rad\codeeditor</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\cpppanel\cpppanel.cpp">
+			<Filter>src\rad\cpppanel</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\dataobject\dataobject.cpp">
+			<Filter>src\rad\dataobject</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\designer\innerframe.cpp">
+			<Filter>src\rad\designer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\designer\menubar.cpp">
+			<Filter>src\rad\designer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\designer\visualeditor.cpp">
+			<Filter>src\rad\designer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\designer\visualobj.cpp">
+			<Filter>src\rad\designer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\geninheritclass\geninhertclass.cpp">
+			<Filter>src\rad\geninheritclass</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\geninheritclass\geninhertclass_gui.cpp">
+			<Filter>src\rad\geninheritclass</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\inspector\objinspect.cpp">
+			<Filter>src\rad\inspector</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\inspector\wxfbadvprops.cpp">
+			<Filter>src\rad\inspector</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\luapanel\luapanel.cpp">
+			<Filter>src\rad\luapanel</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\objecttree\objecttree.cpp">
+			<Filter>src\rad\objecttree</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\phppanel\phppanel.cpp">
+			<Filter>src\rad\phppanel</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\pythonpanel\pythonpanel.cpp">
+			<Filter>src\rad\pythonpanel</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\xrcpanel\xrcpanel.cpp">
+			<Filter>src\rad\xrcpanel</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\rad\xrcpreview\xrcpreview.cpp">
+			<Filter>src\rad\xrcpreview</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\utils\annoyingdialog.cpp">
+			<Filter>src\utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\utils\encodingutils.cpp">
+			<Filter>src\utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\utils\filetocarray.cpp">
+			<Filter>src\utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\utils\stringutils.cpp">
+			<Filter>src\utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\utils\typeconv.cpp">
+			<Filter>src\utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\utils\wxfbipc.cpp">
+			<Filter>src\utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\src\md5\md5.cc">
+			<Filter>src\md5</Filter>
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\..\src\md5\md5.hh">
+			<Filter>src\md5</Filter>
+		</None>
+		<None Include="..\..\..\src\rad\geninheritclass\GenInheritedDlg.fbp">
+			<Filter>src\rad\geninheritclass</Filter>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<ResourceCompile Include="..\..\..\src\wxFormBuilder.rc">
+			<Filter>src</Filter>
+		</ResourceCompile>
+	</ItemGroup>
+</Project>

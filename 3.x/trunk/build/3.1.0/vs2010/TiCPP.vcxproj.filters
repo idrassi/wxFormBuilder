@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<Filter Include="sdk">
+			<UniqueIdentifier>{8B73F7F9-9088-7F44-BFD9-4EADF4F5A047}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="sdk\tinyxml">
+			<UniqueIdentifier>{0DBA8D1E-0025-DD4D-A8DC-D1379ABACD9B}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\..\sdk\tinyxml\ticpp.h">
+			<Filter>sdk\tinyxml</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\sdk\tinyxml\ticppapi.h">
+			<Filter>sdk\tinyxml</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\sdk\tinyxml\ticpprc.h">
+			<Filter>sdk\tinyxml</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\sdk\tinyxml\tinystr.h">
+			<Filter>sdk\tinyxml</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\sdk\tinyxml\tinyxml.h">
+			<Filter>sdk\tinyxml</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\..\sdk\tinyxml\ticpp.cpp">
+			<Filter>sdk\tinyxml</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\sdk\tinyxml\tinystr.cpp">
+			<Filter>sdk\tinyxml</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\sdk\tinyxml\tinyxml.cpp">
+			<Filter>sdk\tinyxml</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\sdk\tinyxml\tinyxmlerror.cpp">
+			<Filter>sdk\tinyxml</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\sdk\tinyxml\tinyxmlparser.cpp">
+			<Filter>sdk\tinyxml</Filter>
+		</ClCompile>
+	</ItemGroup>
+</Project>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<Filter Include="plugins">
+			<UniqueIdentifier>{5C133B87-3012-1748-BE54-1962494B063E}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="plugins\containers">
+			<UniqueIdentifier>{1CCA4207-9C69-EB4D-961C-CB74646F5B2B}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\..\plugins\containers\containers.cpp">
+			<Filter>plugins\containers</Filter>
+		</ClCompile>
+	</ItemGroup>
+</Project>
