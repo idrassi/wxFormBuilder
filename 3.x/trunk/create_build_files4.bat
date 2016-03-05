@@ -107,6 +107,9 @@ ECHO.
 build\premake\windows\premake4.exe --file=build/premake/solution.lua --wx-root=%wxroot% --wx-version=%wxver% --compiler=%compiler% %compilerversion% %unicode% %mediactrl% %usewxconfig% gmake
 ECHO.
 
+build\premake\windows\premake4.exe --file=build/premake/solution.lua --wx-root=%wxroot% --wx-version=%wxver% --compiler=%compiler% %compilerversion% %unicode% %mediactrl% %usewxconfig% vs2010
+ECHO.
+
 ECHO Done generating all project files for wxFormBuilder.
 :End
 
