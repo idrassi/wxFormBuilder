@@ -60,14 +60,17 @@ Written by
 	<template name="settings">
 		#ifnotnull $maxlength
 		@{
-			@#ifdef __WXGTK__#nl
-				if ( !$name->HasFlag( wxTE_MULTILINE ) )#nl
-				{#nl
+			#ifnotequal $maxlength "0"
+			@{
+				@#ifdef __WXGTK__#nl
+					if ( !$name->HasFlag( wxTE_MULTILINE ) )#nl
+					{#nl
+						$name->SetMaxLength( $maxlength );#nl
+					}#nl
+				@#else#nl
 					$name->SetMaxLength( $maxlength );#nl
-				}#nl
-			@#else#nl
-				$name->SetMaxLength( $maxlength );#nl
-			@#endif
+				@#endif
+			@}
 		@}
 	</template>
     <template name="evt_entry_OnText">EVT_TEXT( $id, #handler )</template>
