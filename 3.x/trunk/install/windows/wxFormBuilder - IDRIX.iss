@@ -52,7 +52,7 @@ BeveledLabel=wxFormBuilder v3.5.2-4RC2 (IDRIX BUILD)
 Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked
 
 [Files]
-Source: ..\..\output\*; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: .svn\*, .git\*, *.bat, *.cer, *.pdb, *.exp, *.lib, *d.exe, *d.dll, wxmsw30ud_*, wxmsw30umd_*, Thumbs.db, *.a
+Source: ..\..\output\*; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: .svn\*, .git\*, *.bat, *.cer, *.crt, *.pdb, *.exp, *.lib, *d.exe, *d.dll, wxmsw30ud_*, wxmsw30umd_*, Thumbs.db, *.a
 
 
 [Icons]
