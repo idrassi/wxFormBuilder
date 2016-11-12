@@ -36,3 +36,49 @@
 
 //wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
 A ICON MOVEABLE PURE LOADONCALL DISCARDABLE "wxFormBuilder.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral resources
+
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 3,5,2,4
+ PRODUCTVERSION 3,5,2,4
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "CompanyName", "IDRIX"
+            VALUE "FileDescription", "A RAD tool for wxWidgets GUI design"
+            VALUE "FileVersion", "3.5.2.4"
+            VALUE "InternalName", "wxFormBuilder.exe"
+            VALUE "LegalCopyright", "Copyright (C) 2016 José Antonio Hurtado, Juan Antonio Ortega"
+            VALUE "OriginalFilename", "wxFormBuilder.exe"
+            VALUE "ProductName", "wxFormBuilder (IDRIX Build)"
+            VALUE "ProductVersion", "3.5.2.4"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1200
+    END
+END
+
+// Neutral resources
+/////////////////////////////////////////////////////////////////////////////
