@@ -1,5 +1,14 @@
 			wxFormBuilder ChangeLog
 ********************************************************************************
+05/09/2016 Version 3.05.02.04 (RC2)
+* added wxTreeListCtrl and wxSimpleBook
+* fix setting MaxLength on GTK multiline text controls
+* Added support for VS2015
+* generating wxFont with the enum names instead of values
+* add support for the wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED event.
+* Fix leaking of helpProviders if more than one is ::Set()
+* SendSizeEvent to property grid after construction to prevent GTK message on stderr about invalid size
+
 10/01/2015 Version 3.05.02 (RC2)
 * #162 Setting extra style interferres with base class
 * #159 Generated code for wxDataViewCtrl & co. is wrong/inconsistent
