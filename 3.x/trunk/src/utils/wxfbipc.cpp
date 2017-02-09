@@ -182,6 +182,13 @@ bool wxFBIPC::VerifySingleInstance( const wxString& file, bool switchTo )
     return false;
 }
 
+#if defined (__WXMSW__) && (_MSC_VER <= 1700)
+template<class T, class U>
+std::unique_ptr<T> make_unique(U&& u) {
+  return std::unique_ptr<T>(new T(std::forward<U>(u)));
+}
+#endif
+
 bool wxFBIPC::CreateServer( const wxString& name )
 {
 	// Suspend logging, because error messages here are not useful
@@ -189,7 +196,11 @@ bool wxFBIPC::CreateServer( const wxString& name )
 	wxLogNull stopLogging;
 	#endif
 
+	#if defined (__WXMSW__) && (_MSC_VER <= 1700)
+	auto server = make_unique<AppServer>(name);
+	#else
 	auto server = std::make_unique<AppServer>(name);
+	#endif
 
 	#ifdef __WXMSW__
 		if ( server->Create( name ) )
