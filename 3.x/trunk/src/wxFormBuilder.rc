@@ -48,8 +48,8 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,5,2,4
- PRODUCTVERSION 3,5,2,4
+ FILEVERSION 3,6,0,0
+ PRODUCTVERSION 3,6,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -66,12 +66,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "IDRIX"
             VALUE "FileDescription", "A RAD tool for wxWidgets GUI design"
-            VALUE "FileVersion", "3.5.2.4"
+            VALUE "FileVersion", "3.6.0.0"
             VALUE "InternalName", "wxFormBuilder.exe"
-            VALUE "LegalCopyright", "Copyright (C) 2016 José Antonio Hurtado, Juan Antonio Ortega"
+            VALUE "LegalCopyright", "Copyright (C) 2017 José Antonio Hurtado, Juan Antonio Ortega"
             VALUE "OriginalFilename", "wxFormBuilder.exe"
             VALUE "ProductName", "wxFormBuilder (IDRIX Build)"
-            VALUE "ProductVersion", "3.5.2.4"
+            VALUE "ProductVersion", "3.6.0.0"
         END
     END
     BLOCK "VarFileInfo"

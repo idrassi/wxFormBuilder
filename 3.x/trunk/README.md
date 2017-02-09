@@ -1,29 +1,9 @@
-# wxFormBuilder [![Build status](https://ci.appveyor.com/api/projects/status/yxpn19g0st7l9r8x?svg=true)](https://ci.appveyor.com/project/jhasse/wxformbuilder-461d5)
+# wxFormBuilder [![Build status](https://ci.appveyor.com/api/projects/status/yxpn19g0st7l9r8x/branch/master?svg=true)](https://ci.appveyor.com/project/jhasse/wxformbuilder-461d5/branch/master)
 
-## Install From Repositories
+## Download Binaries
 
-0. Add PPA for wxWidgets v3.0 (Ubuntu 12.04-13.10)
-
-	```sh
-	sudo add-apt-repository -y ppa:wxformbuilder/wxwidgets
-	sudo apt-get update
-	```
-1. Pre-requisites (Ubuntu 12.04 LTS)
-
-	```sh
-	sudo apt-get install libwxgtk3.0-0 libwxgtk-media3.0-0
-	```
-2. Add PPA for wxFormBuilder (Ubuntu 12.04-13.10)
-
-	```sh
-	sudo add-apt-repository -y ppa:wxformbuilder/release
-	sudo apt-get update
-	```
-3. Install wxFormBuilder
-
-	```sh
-	sudo apt-get install wxformbuilder
-	```
+### Windows
+* wxWidgets 3.0 32-bit [Download](https://ci.appveyor.com/api/projects/jhasse/wxformbuilder-461d5/artifacts/wxFormBuilder_win32.zip?branch=master) (last successful build)
 
 ## Install From Source
 
@@ -32,10 +12,10 @@
 Install [MSYS2](http://msys2.github.io/) and run the following inside a MinGW 32 bit shell:
 
 ```sh
-pacman -S --needed mingw-w64-i686-wxWidgets git winpty make
+pacman -S --needed mingw-w64-i686-wxWidgets git make mingw-w64-i686-binutils mingw-w64-i686-gcc mingw-w64-i686-boost
 git clone --recursive --depth=1 https://github.com/wxFormBuilder/wxFormBuilder
 cd wxFormBuilder
-winpty cmd.exe /C "create_build_files4.bat --wx-root=/mingw32/bin --force-wx-config --disable-mediactrl"
+cmd.exe /C "create_build_files4.bat --wx-root=/mingw32/bin --force-wx-config --disable-mediactrl"
 ln -s /mingw32/include/binutils/bfd.h /mingw32/include/bfd.h
 ln -s /mingw32/include/binutils/symcat.h /mingw32/include/symcat.h
 ln -s /mingw32/lib/binutils/libbfd.a /mingw32/lib/libbfd.a
@@ -46,41 +26,34 @@ sed 's!-lbfd!-lbfd -lz!g' *.make -i
 make config=release
 ```
 
-### Ubuntu Linux
+Run:
 
-0. Add PPA for wxWidgets v3.0 (Ubuntu 12.04-13.10)
+```sh
+cd ../../../output/
+./wxFormBuilder.exe
+```
 
-	```sh
-	sudo add-apt-repository -y ppa:wxformbuilder/wxwidgets
-	```
-1. Pre-requisites (Ubuntu 12.04 LTS)
+### Linux
 
-	```sh
-	sudo apt-get install libwxgtk3.0-0 libwxgtk3.0-dev libwxgtk-media3.0-dev
-	```
-2. Download source code
+Pre-requisites for Ubuntu:
 
-	```sh
-	cd ~/src/
-	git clone https://github.com/wxFormBuilder/wxFormBuilder.git
-	```
-3. Prepare build files
+```sh
+sudo apt-get install libwxgtk3.0-dev libwxgtk-media3.0-dev libboost-dev
+```
 
-	```sh
-	cd wxFormBuilder
-	git submodule init
-	git submodule update
-	./create_build_files4.sh
-	```
-4. Build
+Download and build:
 
-	```sh
-	cd build/3.0/gmake
-	make config=release
-	```
-4. Test
+```sh
+git clone --recursive --depth=1 https://github.com/wxFormBuilder/wxFormBuilder
+cd wxFormBuilder
+./create_build_files4.sh
+cd build/3.0/gmake
+make config=release
+```
 
-	```sh
-	cd ../../../output/bin/
-	./wxformbuilder
-	```
+Run:
+
+```sh
+cd ../../../output/bin/
+./wxformbuilder
+```

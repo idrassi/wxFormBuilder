@@ -11,7 +11,7 @@
 
 [Setup]
 AppName=wxFormBuilder (IDRIX Build)
-AppVerName=wxFormBuilder 3.5.2-4RC2 (IDRIX Build)
+AppVerName=wxFormBuilder 3.6.0 (IDRIX Build)
 AppPublisher=IDRIX
 AppPublisherURL=https://www.idrix.fr
 AppSupportURL=http://wxformbuilder.org
@@ -20,14 +20,14 @@ DefaultDirName={pf}\wxFormBuilder (IDRIX Build)
 DisableDirPage=false
 DefaultGroupName=wxFormBuilder (IDRIX Build)
 DisableProgramGroupPage=false
-OutputBaseFilename=wxFormBuilder_v3.5.2-4RC2_IDRIX
+OutputBaseFilename=wxFormBuilder_v3.6.0_IDRIX
 
 Compression=lzma/ultra
 SolidCompression=true
 InternalCompressLevel=ultra
 OutputDir=.
 ShowLanguageDialog=yes
-AppVersion="3.5.2-4RC2"
+AppVersion="3.6.0"
 AppendDefaultGroupName=false
 AllowNoIcons=true
 WizardImageFile=compiler:WizModernImage-IS.bmp
@@ -35,7 +35,7 @@ WizardSmallImageFile=compiler:WizModernSmallImage-IS.bmp
 SetupIconFile=support\wxFormBuilder.ico
 UninstallDisplayIcon={app}\wxFormBuilder.exe
 ChangesAssociations=true
-VersionInfoVersion=3.5.2.4
+VersionInfoVersion=3.6.0.0
 VersionInfoDescription=wxFormBuilder (IDRIX Build)
 InfoAfterFile=..\..\output\Changelog.txt
 LicenseFile=..\..\output\license.txt
@@ -46,7 +46,7 @@ SignTool=signtool81 sign /v /a /n "IDRIX SARL" /i GlobalSign /ac C:\Dev\GlobalSi
 SignedUninstaller=True
 
 [Messages]
-BeveledLabel=wxFormBuilder v3.5.2-4RC2 (IDRIX BUILD)
+BeveledLabel=wxFormBuilder v3.6.0 (IDRIX BUILD)
 
 [Tasks]
 Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked
