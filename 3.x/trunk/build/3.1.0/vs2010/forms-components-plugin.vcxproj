@@ -53,7 +53,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\sdk\tinyxml;..\..\..\sdk\plugin_interface;C:\dev\libraries\wxWidgets-3.1.0\lib\vc_dll\mswud;C:\dev\libraries\wxWidgets-3.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\sdk\tinyxml;..\..\..\sdk\plugin_interface;C:\dev\libraries\wxWidgets-3.0.4\lib\vc_dll\mswud;C:\dev\libraries\wxWidgets-3.0.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>UNICODE;_UNICODE;WIN32;_WINDOWS;DEBUG;_DEBUG;BUILD_DLL;TIXML_USE_TICPP;__WXDEBUG__;WXUSINGDLL;__WXMSW__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -67,12 +67,12 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>UNICODE;_UNICODE;WIN32;_WINDOWS;DEBUG;_DEBUG;BUILD_DLL;TIXML_USE_TICPP;__WXDEBUG__;WXUSINGDLL;__WXMSW__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\sdk\tinyxml;..\..\..\sdk\plugin_interface;C:\dev\libraries\wxWidgets-3.1.0\lib\vc_dll\mswud;C:\dev\libraries\wxWidgets-3.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\sdk\tinyxml;..\..\..\sdk\plugin_interface;C:\dev\libraries\wxWidgets-3.0.4\lib\vc_dll\mswud;C:\dev\libraries\wxWidgets-3.0.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\..\..\sdk\lib\wx_mswud_plugin-interface-3.1.lib;..\..\..\sdk\lib\ticppd.lib;wxmsw31ud.lib;comctl32.lib;rpcrt4.lib;winmm.lib;advapi32.lib;wsock32.lib;Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)libforms-31.dll</OutputFile>
-      <AdditionalLibraryDirectories>C:\dev\libraries\wxWidgets-3.1.0\lib\vc_dll;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\dev\libraries\wxWidgets-3.0.4\lib\vc_dll;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDataBaseFileName>$(OutDir)libforms-31.pdb</ProgramDataBaseFileName>
@@ -84,7 +84,7 @@
     <ClCompile>
       <AdditionalOptions>-fno-strict-aliasing %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Full</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\sdk\tinyxml;..\..\..\sdk\plugin_interface;C:\dev\libraries\wxWidgets-3.1.0\lib\vc_dll\mswu;C:\dev\libraries\wxWidgets-3.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\sdk\tinyxml;..\..\..\sdk\plugin_interface;C:\dev\libraries\wxWidgets-3.0.4\lib\vc_dll\mswu;C:\dev\libraries\wxWidgets-3.0.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>UNICODE;_UNICODE;WIN32;_WINDOWS;NDEBUG;BUILD_DLL;TIXML_USE_TICPP;WXUSINGDLL;__WXMSW__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
@@ -98,12 +98,12 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>UNICODE;_UNICODE;WIN32;_WINDOWS;NDEBUG;BUILD_DLL;TIXML_USE_TICPP;WXUSINGDLL;__WXMSW__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\sdk\tinyxml;..\..\..\sdk\plugin_interface;C:\dev\libraries\wxWidgets-3.1.0\lib\vc_dll\mswu;C:\dev\libraries\wxWidgets-3.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\sdk\tinyxml;..\..\..\sdk\plugin_interface;C:\dev\libraries\wxWidgets-3.0.4\lib\vc_dll\mswu;C:\dev\libraries\wxWidgets-3.0.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\..\..\sdk\lib\wx_mswu_plugin-interface-3.1.lib;..\..\..\sdk\lib\ticpp.lib;comctl32.lib;rpcrt4.lib;winmm.lib;advapi32.lib;wsock32.lib;Dbghelp.lib;wxbase31u.lib;wxbase31u_net.lib;wxbase31u_xml.lib;wxexpat.lib;wxjpeg.lib;wxmsw31u_adv.lib;wxmsw31u_aui.lib;wxmsw31u_core.lib;wxmsw31u_gl.lib;wxmsw31u_html.lib;wxmsw31u_media.lib;wxmsw31u_propgrid.lib;wxmsw31u_qa.lib;wxmsw31u_ribbon.lib;wxmsw31u_richtext.lib;wxmsw31u_stc.lib;wxmsw31u_webview.lib;wxmsw31u_xrc.lib;wxpng.lib;wxregexu.lib;wxscintilla.lib;wxtiff.lib;wxzlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\..\sdk\lib\wx_mswu_plugin-interface-3.1.lib;..\..\..\sdk\lib\ticpp.lib;comctl32.lib;rpcrt4.lib;winmm.lib;advapi32.lib;wsock32.lib;Dbghelp.lib;wxbase30u.lib;wxbase30u_net.lib;wxbase30u_xml.lib;wxexpat.lib;wxjpeg.lib;wxmsw30u_adv.lib;wxmsw30u_aui.lib;wxmsw30u_core.lib;wxmsw30u_gl.lib;wxmsw30u_html.lib;wxmsw30u_media.lib;wxmsw30u_propgrid.lib;wxmsw30u_qa.lib;wxmsw30u_ribbon.lib;wxmsw30u_richtext.lib;wxmsw30u_stc.lib;wxmsw30u_webview.lib;wxmsw30u_xrc.lib;wxpng.lib;wxregexu.lib;wxscintilla.lib;wxtiff.lib;wxzlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)libforms.dll</OutputFile>
-      <AdditionalLibraryDirectories>C:\dev\libraries\wxWidgets-3.1.0\lib\vc_dll;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\dev\libraries\wxWidgets-3.0.4\lib\vc_dll;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <OptimizeReferences>true</OptimizeReferences>
