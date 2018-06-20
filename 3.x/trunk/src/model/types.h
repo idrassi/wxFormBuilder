@@ -15,7 +15,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 // Written by
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -29,14 +29,14 @@
 #include <vector>
 #include <wx/string.h>
 #include <map>
-#include <boost/smart_ptr.hpp>
+#include <memory>
 
 #include "wx/wx.h"
 
 class ObjectType;
 
-typedef boost::shared_ptr<ObjectType> PObjectType;
-typedef boost::weak_ptr<ObjectType> WPObjectType;
+typedef std::shared_ptr<ObjectType> PObjectType;
+typedef std::weak_ptr<ObjectType> WPObjectType;
 
 /**
  * Representa el tipo de objeto.
@@ -115,7 +115,7 @@ private:
 	 * @note vamos a usar smart-pointers de tipo "weak" ya que puede haber muchas
 	 *       referencias cruzadas.
 	 */
-	typedef std::map<WPObjectType, ChildCount> ChildTypeMap;
+	typedef std::map<WPObjectType, ChildCount, std::owner_less<WPObjectType>> ChildTypeMap;
 
 	int m_id;        /**< identificador numérico del tipo de objeto */
 	wxString m_name;   /**< cadena de texto asociado al tipo */

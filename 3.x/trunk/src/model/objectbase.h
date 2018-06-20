@@ -15,7 +15,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 // Written by
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -42,7 +42,7 @@
 
 #include "wx/wx.h"
 #include <component.h>
-
+#include <memory>
 #include "utils/wxfbdefs.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -81,6 +81,7 @@ public:
 	wxString m_name;
 	wxString m_defaultValue;
 	wxString m_description;
+	PropertyType m_type;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -275,7 +276,7 @@ namespace ticpp
 	class Element;
 }
 
-class ObjectBase : public IObject, public boost::enable_shared_from_this<ObjectBase>
+class ObjectBase : public IObject, public std::enable_shared_from_this<ObjectBase>
 {
 	friend class wxFBDataObject;
 private:
@@ -332,6 +333,8 @@ public:
 
 	/// Gets the parent object
 	PObjectBase GetParent () { return m_parent.lock(); }
+
+	PObjectBase GetNonSizerParent ();
 
 	/// Links the object to a parent
 	void SetParent(PObjectBase parent)  { m_parent = parent; }
@@ -466,7 +469,7 @@ public:
 	* Obtiene un hijo del objeto.
 	*/
 	PObjectBase GetChild (unsigned int idx);
-	
+
 	PObjectBase GetChild (unsigned int idx, const wxString& type);
 
 	/**
@@ -530,7 +533,7 @@ public:
 	wxArrayInt    GetPropertyAsArrayInt (const wxString& pname);
 	wxArrayString GetPropertyAsArrayString  (const wxString& pname);
 	wxString GetChildFromParentProperty( const wxString& parentName, const wxString& childName );
-	
+
 	IObject* GetChildPtr (unsigned int idx) { return GetChild(idx).get(); }
 };
 

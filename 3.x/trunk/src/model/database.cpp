@@ -15,7 +15,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 // Written by
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -1212,6 +1212,10 @@ void ObjectDatabase::ParseProperties( ticpp::Element* elem_obj, PObjectInfo obj_
 				std::string child_description;
 				elem_child->GetAttributeOrDefault( DESCRIPTION_TAG, &child_description, "" );
 				child.m_description = _WXSTR( child_description );
+				
+				std::string child_type;
+				elem_child->GetAttributeOrDefault( "type", &child_type, "wxString" );
+				child.m_type = ParsePropertyType( _WXSTR( child_type ) );
 
 				// Get default value
 				try

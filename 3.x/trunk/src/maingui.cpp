@@ -15,7 +15,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 // Written by
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -44,8 +44,10 @@
 #include "utils/typeconv.h"
 #include "model/objectbase.h"
 
-#if wxVERSION_NUMBER >= 2905
+#if wxVERSION_NUMBER >= 2905 && wxVERSION_NUMBER <= 3100
 #include <wx/xrc/xh_auinotbk.h>
+#elif wxVERSION_NUMBER > 3100
+#include <wx/xrc/xh_aui.h>
 #endif
 
 // Abnormal Termination Handling
@@ -210,8 +212,10 @@ int MyApp::OnRun()
 	// Init handlers
 	wxInitAllImageHandlers();
 	wxXmlResource::Get()->InitAllHandlers();
-	#if wxVERSION_NUMBER >= 2905
+	#if wxVERSION_NUMBER >= 2905 && wxVERSION_NUMBER <= 3100
 	wxXmlResource::Get()->AddHandler(new wxAuiNotebookXmlHandler);
+	#elif wxVERSION_NUMBER > 3100
+	wxXmlResource::Get()->AddHandler(new wxAuiXmlHandler);
 	#endif
 
 	// Init AppData

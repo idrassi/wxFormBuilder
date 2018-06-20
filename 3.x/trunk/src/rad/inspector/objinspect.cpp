@@ -15,7 +15,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 // Written by
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -42,6 +42,7 @@
 #include "model/objectbase.h"
 #include "utils/debug.h"
 #include "utils/typeconv.h"
+#include "utils/wxfbexception.h"
 
 #include "rad/appdata.h"
 #include "rad/bitmaps.h"
@@ -518,7 +519,20 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
 						if( values.GetCount() > i ) value = values[i++].Trim().Trim(false);
 						else value = wxT("");
 
-						wxPGProperty* child = new wxStringProperty( it->m_name, wxPG_LABEL, value );
+						wxPGProperty* child = nullptr;
+						if( PT_BOOL == it->m_type )
+						{
+							child = new wxBoolProperty( it->m_name, wxPG_LABEL, value.IsEmpty() || (value == it->m_name) );
+						}
+						else if( PT_WXSTRING == it->m_type )
+						{
+							child = new wxStringProperty( it->m_name, wxPG_LABEL, value );
+						}
+						else
+						{
+							THROW_WXFBEX( wxT("Invalid Child Property Type: ") << it->m_type );
+						}
+						
 						id->AppendChild( child );
 						m_pg->SetPropertyHelpString( child, it->m_description );
 					}
@@ -805,7 +819,8 @@ void ObjectInspector::OnPropertyGridChanged( wxPropertyGridEvent& event )
 			case PT_PARENT:
 			{
 #if wxVERSION_NUMBER >= 2900
-				ModifyProperty( prop, propPtr->GenerateComposedValue( ));
+				wxVariant value = propPtr->GetValue();
+				ModifyProperty( prop, propPtr->ValueToString( value, wxPG_FULL_VALUE ));
 #else
 				ModifyProperty( prop, propPtr->GetValueAsString( wxPG_FULL_VALUE ) );
 #endif

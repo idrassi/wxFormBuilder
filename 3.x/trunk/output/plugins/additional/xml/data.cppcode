@@ -15,7 +15,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 Written by
   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -322,7 +322,7 @@ Written by
 	<template name="evt_connect_OnGridLabelLeftDClick">$name->Connect( wxEVT_GRID_LABEL_LEFT_DCLICK, #handler, NULL, this );</template>
 	<template name="evt_entry_OnGridLabelRightDClick">EVT_GRID_LABEL_RIGHT_DCLICK( #handler )</template>
 	<template name="evt_connect_OnGridLabelRightDClick">$name->Connect( wxEVT_GRID_LABEL_RIGHT_DCLICK, #handler, NULL, this );</template>
-	<template name="evt_entry_OnGridCellChange">EVT_GRID_CELL_CHANGE( #handler )</template>
+	<template name="evt_entry_OnGridCellChange">EVT_GRID_CELL_CHANGED( #handler )</template>
 	<template name="evt_connect_OnGridCellChange">$name->Connect( wxEVT_GRID_CELL_CHANGED, #handler, NULL, this );</template>
 	<template name="evt_entry_OnGridSelectCell">EVT_GRID_SELECT_CELL( #handler )</template>
 	<template name="evt_connect_OnGridSelectCell">$name->Connect( wxEVT_GRID_SELECT_CELL, #handler, NULL, this );</template>

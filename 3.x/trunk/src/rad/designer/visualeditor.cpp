@@ -15,7 +15,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 // Written by
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -30,6 +30,7 @@
 #include "utils/typeconv.h"
 #include "utils/debug.h"
 #include "menubar.h"
+#include "wx/collpane.h"
 #include "wx/statline.h"
 #include "rad/designer/resizablepanel.h"
 #include "rad/wxfbevent.h"
@@ -507,14 +508,12 @@ void VisualEditor::Create()
 				backSize.SetHeight( maxSize.GetHeight() );
 			}
 
-			// Modify size property to match
 			if ( size != backSize )
 			{
-				PProperty psize = m_form->GetProperty( wxT("size") );
-				if ( psize )
-				{
-					AppData()->ModifyProperty( psize, TypeConv::SizeToString( backSize ) );
-				}
+				// Since we could be called by VisualEditor::OnPropertyModified we mustn't trigger a
+				// modify event again. Creating a delayed event won't work either, as this would
+				// mess up the undo/redo stack. Therefore we just log about the invalid size:
+				LogDebug("size is NOT between of minimum_size and maximum_size");
 			}
 
 			// --- [2] Set the color of the form -------------------------------
@@ -795,6 +794,13 @@ void VisualEditor::Generate( PObjectBase obj, wxWindow* wxparent, wxObject* pare
 	m_wxobjects.insert( wxObjectMap::value_type( createdObject, obj ) );
 	m_baseobjects.insert( ObjectBaseMap::value_type( obj.get(), createdObject ) );
 
+	// Access to collapsible pane
+	wxCollapsiblePane* collpane = wxDynamicCast( createdObject, wxCollapsiblePane );
+	if ( collpane != NULL ) {
+		createdWindow = collpane->GetPane();
+		createdObject = createdWindow;
+	}
+
 	// New wxparent for the window's children
 	wxWindow* new_wxparent = ( createdWindow ? createdWindow : wxparent );
 
@@ -805,7 +811,7 @@ void VisualEditor::Generate( PObjectBase obj, wxWindow* wxparent, wxObject* pare
 	}
 
 	comp->OnCreated( createdObject, wxparent );
-	
+
 	// If the created object is a sizer and the parent object is a window, set the sizer to the window
 	if (
 			( createdSizer != NULL && NULL != wxDynamicCast( parentObject, wxWindow ) )

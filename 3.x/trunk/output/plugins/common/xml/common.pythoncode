@@ -15,7 +15,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 Written by
   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -30,8 +30,13 @@ Python code generation written by
 	<template name="construction">
 		self.$name = #class( #wxparent $name, $id, $label, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, wx.DefaultValidator, $window_name @} )</template>
 	<template name="settings">
-    		#ifnotequal $default "0"
-    		@{ self.$name.SetDefault() @}</template>
+		#ifequal $markup "1" @{
+			self.$name.SetLabelMarkup( $label ) #nl
+		@}
+		#ifnotequal $default "0" @{
+			self.$name.SetDefault() #nl
+		@}
+	</template>
 	<template name="evt_connect_OnButtonClick">self.$name.Bind( wx.EVT_BUTTON, #handler )</template>
   </templates>
 
@@ -41,15 +46,15 @@ Python code generation written by
 	<template name="settings">
   		#ifnotnull $disabled
   		@{ #nl self.$name.SetBitmapDisabled( $disabled ) @}
-  		
+
   		#ifnotnull $selected
   		@{ #nl self.$name.SetBitmapSelected( $selected ) @}
-  		
+
   		#ifnotnull $focus
   		@{ #nl self.$name.SetBitmapFocus( $focus ) @}
-  		
+
   		#ifnotnull $hover
-  		@{ #nl self.$name.SetBitmapHover( $hover ) @}
+  		@{ #nl self.$name.SetBitmapCurrent( $hover ) @}
   	</template>
   </templates>
 
@@ -69,7 +74,12 @@ Python code generation written by
 
   <templates class="wxStaticText">
 	<template name="construction">self.$name = #class( #wxparent $name, $id, $label, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @} )</template>
-  	<template name="settings">self.$name.Wrap( $wrap )</template>
+	<template name="settings">
+		#ifequal $markup "1" @{
+			self.$name.SetLabelMarkup( $label ) #nl
+		@}
+		self.$name.Wrap( $wrap ) #nl
+	</template>
   </templates>
 
   <templates class="wxCheckBox">
@@ -97,7 +107,7 @@ Python code generation written by
 	<template name="evt_connect_OnText">self.$name.Bind( wx.EVT_TEXT, #handler )</template>
 	<template name="evt_connect_OnTextEnter">self.$name.Bind( wx.EVT_TEXT_ENTER, #handler )</template>
   </templates>
-  
+
   <templates class="wxBitmapComboBox">
 	<template name="construction">
 		self.$name = wx.combo.BitmapComboBox( #wxparent $name, $id, $value, $pos, $size, "", $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, wx.DefaultValidator, $window_name @} )
@@ -159,7 +169,7 @@ Python code generation written by
 
   <templates class="wxAnimationCtrl">
     <template name="construction">
-		self.$name = #class( #wxparent $name, $id, wx.animate.NullAnimation, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @} )
+		self.$name = #class( #wxparent $name, $id, wx.adv.NullAnimation, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @} )
 		#ifnotnull $animation
 		@{ #nl self.$name.LoadFile( $animation ) @}
     </template>
@@ -169,7 +179,7 @@ Python code generation written by
 		#ifequal $play "1"
 		@{ #nl self.$name.Play() @}
     </template>
-    <template name="include">import wx.animate</template>
+    <template name="include">import wx.adv</template>
   </templates>
 
   <templates class="wxStaticLine">
@@ -205,7 +215,7 @@ Python code generation written by
 		#ifnotnull $choices
 		@{
 			$name #append Choices = [ $choices ] #nl
-			
+
 		@}
 		#ifnull $choices
 		@{

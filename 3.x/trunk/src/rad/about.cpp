@@ -15,7 +15,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 // Written by
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -71,7 +71,7 @@ class HtmlWindow : public wxHtmlWindow
     }
 };
 
-AboutDialog::AboutDialog(wxWindow *parent, int id) : wxDialog(parent,id,wxT("About..."),wxDefaultPosition,wxSize(485,470))//wxSize(308,248))
+AboutDialog::AboutDialog(wxWindow *parent, int id) : wxDialog(parent,id,wxT("About..."))
 {
 #if 0
   wxBoxSizer *sizer2;
@@ -134,6 +134,7 @@ AboutDialog::AboutDialog(wxWindow *parent, int id) : wxDialog(parent,id,wxT("Abo
   mainSizer->Add(new wxButton(this, wxID_OK, wxT("OK")), 0, wxALIGN_CENTER | wxBOTTOM, 5);
 
   SetSizerAndFit(mainSizer);
+  Center();
 }
 
 void AboutDialog::OnButtonEvent (wxCommandEvent &)

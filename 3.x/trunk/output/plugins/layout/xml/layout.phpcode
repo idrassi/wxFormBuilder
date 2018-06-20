@@ -15,7 +15,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 Written by
   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -44,7 +44,7 @@ PHP code generation writen by
   <templates class="gbsizeritem">
     <template name="window_add">@$#parent $name->Add( @$this->#child $name, new wxGBPosition( $row, $column ), new wxGBSpan( $rowspan, $colspan ), $flag, $border ); #nl</template>
     <template name="sizer_add">@$#parent $name->Add( #child $name, new wxGBPosition( $row, $column ), new wxGBSpan( $rowspan, $colspan ), $flag, $border ); #nl</template>
-    <template name="spacer_add">@$#parent $name->AddSpacer( #child $width, #child $height, new wxGBPosition( $row, $column ), new wxGBSpan( $rowspan, $colspan ), $flag, $border ); #nl</template>
+    <template name="spacer_add">@$#parent $name->Add( #child $width, #child $height, new wxGBPosition( $row, $column ), new wxGBSpan( $rowspan, $colspan ), $flag, $border ); #nl</template>
   </templates>
 
   <templates class="wxBoxSizer">

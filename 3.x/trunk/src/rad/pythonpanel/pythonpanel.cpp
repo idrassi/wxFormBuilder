@@ -15,7 +15,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 // Written by
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -295,6 +295,14 @@ void PythonPanel::OnCodeGeneration( wxFBEvent& event )
 			return;
 		}
 	}
+
+	bool useSpaces = false;
+	PProperty pUseSpaces = project->GetProperty( wxT( "indent_with_spaces" ) );
+	if (pUseSpaces)
+	{
+		useSpaces = ( pUseSpaces->GetValueAsInteger() ? true : false );
+	}
+	m_pythonCW->SetIndentWithSpaces(useSpaces);
 	
 	// Generate code in the panel
 	if ( doPanel )
@@ -364,6 +372,7 @@ void PythonPanel::OnCodeGeneration( wxFBEvent& event )
 			}
 
 			PCodeWriter python_cw( new FileCodeWriter( path + file + wxT( ".py" ), useMicrosoftBOM, useUtf8 ) );
+			python_cw->SetIndentWithSpaces( useSpaces );
 
 			codegen.SetSourceWriter( python_cw );
 			codegen.GenerateCode( project );

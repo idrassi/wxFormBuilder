@@ -15,7 +15,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 // Written by
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -37,6 +37,7 @@ private:
 	// Current indentation level in the file
 	int m_indent;
 	int m_cols;
+	bool m_indent_with_spaces;
 
 protected:
 	/// Write a wxString.
@@ -71,6 +72,9 @@ public:
 
 	/// Writes a text string into the code.
 	void Write( wxString code );
+
+	// Sets the option to indent with spaces
+	void SetIndentWithSpaces( bool on );
 
 	/// Deletes all the code previously written.
 	virtual void Clear() = 0;

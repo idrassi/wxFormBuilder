@@ -1,4 +1,4 @@
-# wxFormBuilder [![Build status](https://ci.appveyor.com/api/projects/status/yxpn19g0st7l9r8x/branch/master?svg=true)](https://ci.appveyor.com/project/jhasse/wxformbuilder-461d5/branch/master)
+# wxFormBuilder [![Build status](https://ci.appveyor.com/api/projects/status/yxpn19g0st7l9r8x/branch/master?svg=true)](https://ci.appveyor.com/project/jhasse/wxformbuilder-461d5/branch/master) [![Build Status](https://travis-ci.org/wxFormBuilder/wxFormBuilder.svg?branch=master)](https://travis-ci.org/wxFormBuilder/wxFormBuilder)
 
 ## Download Binaries
 
@@ -56,4 +56,31 @@ Run:
 ```sh
 cd ../../../output/bin/
 ./wxformbuilder
+```
+
+### macOS
+
+Pre-requisites for macOS can be installed via [Homebrew](https://brew.sh/):
+
+```sh
+brew install wxmac boost dylibbundler
+```
+
+Note: Building with Xcode currently does not work without issues (see [issue #247](https://github.com/wxFormBuilder/wxFormBuilder/issues/247)). Therefore it is recommended to build with GNU make like for Linux as described below.
+
+Download and build like for Linux (except that currently MediaCtrl needs to be disabled, because wxMac installed via Homebrew does not support it - see [issue #283](https://github.com/wxFormBuilder/wxFormBuilder/issues/283)):
+
+```sh
+git clone --recursive --depth=1 https://github.com/wxFormBuilder/wxFormBuilder
+cd wxFormBuilder
+./create_build_files4.sh --disable-mediactrl
+cd build/3.0/gmake
+make config=release
+```
+
+Run:
+
+```sh
+cd ../../../output/
+open wxFormBuilder.app
 ```

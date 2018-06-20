@@ -16,7 +16,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 // Written by
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -979,7 +979,8 @@ void MainFrame::UpdateFrame()
 		file = fn.GetName();
 	}
 
-	SetTitle( wxString::Format( wxT("%s%s - wxFormBuilder v3.6.0"), AppData()->IsModified() ? wxT("*") : wxT(""), file.c_str() ) );
+	SetTitle(wxString::Format(wxT("%s%s - wxFormBuilder (IDRIX Build) v3.7.0"),
+	                          AppData()->IsModified() ? wxT("*") : wxT(""), file.c_str()));
 	GetStatusBar()->SetStatusText( filename, STATUS_FIELD_PATH );
 
 	// Enable/Disable toolbar and menu entries

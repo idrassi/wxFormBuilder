@@ -1,0 +1,12 @@
+build/???/
+output/bin/
+output/lib*/
+output/share/
+output/*.exe
+output/plugins/**/*.a
+output/plugins/**/*.dll
+sdk/lib/
+install/windows/source
+install/windows/*.exe
+.vscode/*.db
+/.vscode/*cache*/

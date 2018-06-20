@@ -15,7 +15,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 // Written by
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -329,7 +329,7 @@ wxPGProperty *wxFBBitmapProperty::CreatePropertyArtId()
 
     // Create 'id' property ('Load From Art Provider' only)
     artIdChoices.Add(wxT("wxART_ADD_BOOKMARK"));
-    artIdChoices.Add(wxT("wxART_DEL_BOOKMARK "));
+    artIdChoices.Add(wxT("wxART_DEL_BOOKMARK"));
     artIdChoices.Add(wxT("wxART_HELP_SIDE_PANEL"));
     artIdChoices.Add(wxT("wxART_HELP_SETTINGS"));
     artIdChoices.Add(wxT("wxART_HELP_BOOK"));
@@ -344,6 +344,8 @@ wxPGProperty *wxFBBitmapProperty::CreatePropertyArtId()
     artIdChoices.Add(wxT("wxART_FILE_OPEN"));
     artIdChoices.Add(wxT("wxART_FILE_SAVE"));
     artIdChoices.Add(wxT("wxART_FILE_SAVE_AS"));
+    artIdChoices.Add(wxT("wxART_GOTO_FIRST"));
+    artIdChoices.Add(wxT("wxART_GOTO_LAST"));
     artIdChoices.Add(wxT("wxART_PRINT"));
     artIdChoices.Add(wxT("wxART_HELP"));
     artIdChoices.Add(wxT("wxART_TIP"));
@@ -373,9 +375,14 @@ wxPGProperty *wxFBBitmapProperty::CreatePropertyArtId()
     artIdChoices.Add(wxT("wxART_NEW"));
     artIdChoices.Add(wxT("wxART_UNDO"));
     artIdChoices.Add(wxT("wxART_REDO"));
+    artIdChoices.Add(wxT("wxART_PLUS"));
+    artIdChoices.Add(wxT("wxART_MINUS"));
+    artIdChoices.Add(wxT("wxART_CLOSE"));
     artIdChoices.Add(wxT("wxART_QUIT"));
     artIdChoices.Add(wxT("wxART_FIND"));
     artIdChoices.Add(wxT("wxART_FIND_AND_REPLACE"));
+    artIdChoices.Add(wxT("wxART_FULL_SCREEN"));
+    artIdChoices.Add(wxT("wxART_EDIT"));
 
     artIdChoices.Add(wxT("gtk-about"));
     artIdChoices.Add(wxT("gtk-add"));

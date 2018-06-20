@@ -15,7 +15,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 // Written by
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -477,7 +477,7 @@ bool PHPCodeGenerator::GenerateCode( PObjectBase project )
 		wxT(" * PHP code generated with wxFormBuilder (version ") wxT(__DATE__) wxT(")\n")
 		wxT(" * http://www.wxformbuilder.org/\n")
 		wxT(" *\n")
-		wxT(" * PLEASE DO \"NOT\" EDIT THIS FILE!\n")
+		wxT(" * PLEASE DO *NOT* EDIT THIS FILE!\n")
 		wxT(" */\n") );
 
 	m_source->WriteLn( code );
@@ -753,6 +753,13 @@ wxString PHPCodeGenerator::GetCode(PObjectBase obj, wxString name, bool silent)
 	}
 
 	_template = code_info->GetTemplate(name);
+
+	PObjectBase parent = obj->GetNonSizerParent();
+	if ( parent && ( parent->GetClassName() == wxT( "wxCollapsiblePane" ) ) )
+	{
+		wxString parentTemplate = wxT( "#wxparent $name" );
+		_template.Replace( parentTemplate, parentTemplate + wxT( "->GetPane()" ) );
+	}
 
 	PHPTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 	wxString code = parser.ParseTemplate();
@@ -1083,10 +1090,17 @@ void PHPCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 				// It's not a good practice to embed templates into the source code,
 				// because you will need to recompile...
 
-				wxString _template =	wxT("#wxparent $name->SetSizer( @$$name ); #nl")
-										wxT("#wxparent $name->Layout();")
-										wxT("#ifnull #parent $size")
-										wxT("@{ #nl @$$name->Fit( #wxparent $name ); @}");
+				wxString _template;
+				wxString parentPostfix;
+				if ( obj->GetParent()->GetClassName() == wxT( "wxCollapsiblePane" ) )
+					parentPostfix = "->GetPane()";
+				else
+					parentPostfix = wxEmptyString;
+
+				_template = wxT( "#wxparent $name" ) + parentPostfix + wxT( "->SetSizer( @$$name ); #nl" )
+					    wxT( "#wxparent $name" ) + parentPostfix + wxT( "->Layout();" )
+					    wxT( "#ifnull #parent $size" )
+					    wxT( "@{ #nl @$$name->Fit( #wxparent $name" ) + parentPostfix + wxT( " ); @}" );
 
 				PHPTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath );
 				m_source->WriteLn(parser.ParseTemplate());

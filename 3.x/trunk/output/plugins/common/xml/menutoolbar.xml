@@ -15,7 +15,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 Written by
   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -27,7 +27,7 @@ Written by
     <property name="name" type="text">m_statusBar</property>
     <property name="fields" type="uint"  help="Number of fields in the statusbar.">1</property>
     <property name="style" type="bitlist">
-      <option name="wxST_SIZEGRIP"       help="On Windows, displays a gripper at right-hand side of the status bar." />wxST_SIZEGRIP</property>
+      <option name="wxSTB_SIZEGRIP"       help="On Windows, displays a gripper at right-hand side of the status bar." />wxSTB_SIZEGRIP</property>
   </objectinfo>
 
   <objectinfo class="wxMenuBar" icon="menubar.xpm" type="menubar" startgroup="1">

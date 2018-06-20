@@ -15,7 +15,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 // Written by
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -29,6 +29,7 @@
 #include "utils/wxfbdefs.h"
 #include "model/database.h"
 #include "rad/cmdproc.h"
+#include <memory>
 #include <set>
 
 namespace ticpp
@@ -87,7 +88,7 @@ class ApplicationData
 		PwxFBManager m_manager;
 
 		// Prevent more than one instance of a project
-		boost::shared_ptr< wxFBIPC > m_ipc;
+		std::shared_ptr< wxFBIPC > m_ipc;
 
 
 		typedef std::vector< wxEvtHandler* > HandlerVector;

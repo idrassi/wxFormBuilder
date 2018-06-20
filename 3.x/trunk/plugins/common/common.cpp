@@ -15,7 +15,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 // Written by
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -47,7 +47,7 @@
 class wxIndependentStatusBar : public wxStatusBar
 {
 public:
-	wxIndependentStatusBar( wxWindow *parent, wxWindowID id = wxID_ANY, long style = wxST_SIZEGRIP, const wxString& name = wxStatusBarNameStr )
+	wxIndependentStatusBar( wxWindow *parent, wxWindowID id = wxID_ANY, long style = wxSTB_SIZEGRIP, const wxString& name = wxStatusBarNameStr )
 	:
 	wxStatusBar( parent, id, style, name )
 	{
@@ -186,11 +186,17 @@ public:
 
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
-		wxButton* button = new wxButton((wxWindow*)parent,-1,
-			obj->GetPropertyAsString(_("label")),
+		wxString label = obj->GetPropertyAsString( _("label") );
+		wxButton* button = new wxButton((wxWindow*)parent, -1,
+			label,
 			obj->GetPropertyAsPoint(_("pos")),
 			obj->GetPropertyAsSize(_("size")),
 			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+
+#if wxCHECK_VERSION( 2, 9, 2 )
+		if ( obj->GetPropertyAsInteger( _("markup") ) )
+			button->SetLabelMarkup( label );
+#endif
 
 		if ( obj->GetPropertyAsInteger( _("default") ) != 0 )
 		{
@@ -368,13 +374,19 @@ public:
 
 	wxObject* Create(IObject *obj, wxObject *parent)
 	{
-		wxStaticText* st = new wxStaticText((wxWindow *)parent,-1,
-			obj->GetPropertyAsString(_("label")),
+		wxString label = obj->GetPropertyAsString( _("label") );
+		wxStaticText* st = new wxStaticText((wxWindow *)parent, -1,
+			label,
 			obj->GetPropertyAsPoint(_("pos")),
 			obj->GetPropertyAsSize(_("size")),
 			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
 
 		st->Wrap( obj->GetPropertyAsInteger( _("wrap") ) );
+
+#if wxCHECK_VERSION( 2, 9, 2 )
+		if ( obj->GetPropertyAsInteger( _("markup") ) )
+			st->SetLabelMarkup( label );
+#endif
 
 		return st;
 	}
@@ -1767,7 +1779,7 @@ MACRO(wxRB_USE_CHECKBOX)
 #endif
 
 // wxStatusBar
-MACRO(wxST_SIZEGRIP)
+MACRO(wxSTB_SIZEGRIP)
 
 // wxMenuBar
 MACRO(wxMB_DOCKABLE)

@@ -15,7 +15,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 // Written by
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
@@ -48,8 +48,8 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,6,0,0
- PRODUCTVERSION 3,6,0,0
+ FILEVERSION 3,7,0,0
+ PRODUCTVERSION 3,7,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -66,12 +66,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "IDRIX"
             VALUE "FileDescription", "A RAD tool for wxWidgets GUI design"
-            VALUE "FileVersion", "3.6.0.0"
+            VALUE "FileVersion", "3.7.0.0"
             VALUE "InternalName", "wxFormBuilder.exe"
-            VALUE "LegalCopyright", "Copyright (C) 2017 José Antonio Hurtado, Juan Antonio Ortega"
+            VALUE "LegalCopyright", "Copyright (C) 2018 José Antonio Hurtado, Juan Antonio Ortega"
             VALUE "OriginalFilename", "wxFormBuilder.exe"
             VALUE "ProductName", "wxFormBuilder (IDRIX Build)"
-            VALUE "ProductVersion", "3.6.0.0"
+            VALUE "ProductVersion", "3.7.0.0"
         END
     END
     BLOCK "VarFileInfo"
