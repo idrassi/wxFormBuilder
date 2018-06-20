@@ -11,7 +11,7 @@
 
 [Setup]
 AppName=wxFormBuilder (IDRIX Build)
-AppVerName=wxFormBuilder 3.6.0 (IDRIX Build)
+AppVerName=wxFormBuilder 3.7.0 (IDRIX Build)
 AppPublisher=IDRIX
 AppPublisherURL=https://www.idrix.fr
 AppSupportURL=http://wxformbuilder.org
@@ -20,14 +20,14 @@ DefaultDirName={pf}\wxFormBuilder (IDRIX Build)
 DisableDirPage=false
 DefaultGroupName=wxFormBuilder (IDRIX Build)
 DisableProgramGroupPage=false
-OutputBaseFilename=wxFormBuilder_v3.6.0_IDRIX
+OutputBaseFilename=wxFormBuilder_v3.7.0_IDRIX
 
 Compression=lzma/ultra
 SolidCompression=true
 InternalCompressLevel=ultra
 OutputDir=.
 ShowLanguageDialog=yes
-AppVersion="3.6.0"
+AppVersion="3.7.0"
 AppendDefaultGroupName=false
 AllowNoIcons=true
 WizardImageFile=compiler:WizModernImage-IS.bmp
@@ -35,7 +35,7 @@ WizardSmallImageFile=compiler:WizModernSmallImage-IS.bmp
 SetupIconFile=support\wxFormBuilder.ico
 UninstallDisplayIcon={app}\wxFormBuilder.exe
 ChangesAssociations=true
-VersionInfoVersion=3.6.0.0
+VersionInfoVersion=3.7.0.0
 VersionInfoDescription=wxFormBuilder (IDRIX Build)
 InfoAfterFile=..\..\output\Changelog.txt
 LicenseFile=..\..\output\license.txt
@@ -46,7 +46,7 @@ SignTool=signtool81 sign /v /a /n "IDRIX SARL" /i GlobalSign /ac C:\Dev\GlobalSi
 SignedUninstaller=True
 
 [Messages]
-BeveledLabel=wxFormBuilder v3.6.0 (IDRIX BUILD)
+BeveledLabel=wxFormBuilder v3.7.0 (IDRIX BUILD)
 
 [Tasks]
 Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked
@@ -54,6 +54,24 @@ Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:Ad
 [Files]
 Source: ..\..\output\*; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: .svn\*, .git\*, *.bat, *.cer, *.crt, *.pdb, *.exp, *.lib, *d.exe, *d.dll, wxmsw30ud_*, wxmsw30umd_*, Thumbs.db, *.a
 
+[InstallDelete]
+; delete wxWidget 3.1 dlls
+Name: {app}\wxbase31u_net_vc_custom.dll; Type: files
+Name: {app}\wxbase31u_vc_custom.dll; Type: files
+Name: {app}\wxbase31u_xml_vc_custom.dll; Type: files
+Name: {app}\wxmsw31u_adv_vc_custom.dll; Type: files
+Name: {app}\wxmsw31u_aui_vc_custom.dll; Type: files
+Name: {app}\wxmsw31u_core_vc_custom.dll; Type: files
+Name: {app}\wxmsw31u_gl_vc_custom.dll; Type: files
+Name: {app}\wxmsw31u_html_vc_custom.dll; Type: files
+Name: {app}\wxmsw31u_media_vc_custom.dll; Type: files
+Name: {app}\wxmsw31u_propgrid_vc_custom.dll; Type: files
+Name: {app}\wxmsw31u_qa_vc_custom.dll; Type: files
+Name: {app}\wxmsw31u_ribbon_vc_custom.dll; Type: files
+Name: {app}\wxmsw31u_richtext_vc_custom.dll; Type: files
+Name: {app}\wxmsw31u_stc_vc_custom.dll; Type: files
+Name: {app}\wxmsw31u_webview_vc_custom.dll; Type: files
+Name: {app}\wxmsw31u_xrc_vc_custom.dll; Type: files
 
 [Icons]
 Name: {group}\wxFormBuilder (IDRIX Build); Filename: {app}\wxFormBuilder.exe
